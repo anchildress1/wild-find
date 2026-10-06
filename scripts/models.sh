@@ -34,10 +34,15 @@ fetch() {
     # A full-size corrupt copy would otherwise sit beside the new download and double the disk needed.
     rm -f "$CACHE/$file"
     url="https://huggingface.co/$(prop "$model" repo)/resolve/$(prop "$model" revision)/$file"
-    part="$CACHE/$file.part"
+    # Keyed by revision so a re-pin never resumes bytes from the old revision's partial file.
+    part="$CACHE/$file.$(prop "$model" revision).part"
+    for stale in "$CACHE/$file".*.part; do [ "$stale" = "$part" ] || rm -f "$stale"; done
     echo "→ fetching $file"
     # The CDN host behind the redirect moves; trust comes from bytes + SHA-256, never the host.
-    curl -fL --proto '=https' --proto-redir '=https' --retry 3 -C - -o "$part" "$url"
+    # A complete .part (killed between curl and mv) would make curl -C - fail with HTTP 416.
+    if [ ! -f "$part" ] || [ "$(size_of "$part")" != "$(prop "$model" bytes)" ]; then
+      curl -fL --proto '=https' --proto-redir '=https' --retry 3 -C - -o "$part" "$url"
+    fi
     mv "$part" "$CACHE/$file"
     verify_local "$model" || { rm -f "$CACHE/$file"; die "$file failed size/SHA-256 check; deleted"; }
     echo "✓ $file verified"
