@@ -2,6 +2,7 @@ package dev.anchildress1.wildfind.ui
 
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -12,14 +13,16 @@ import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import dev.anchildress1.wildfind.core.sprite.SpriteSheet
 import org.json.JSONObject
 
-/** Plays the Briar sprite sheet [name] from `assets/briar/` per the PRD sheet contract. */
+/** Plays the Briar sprite sheet [name] from `assets/briar/` per the PRD sheet contract, at its native pixel size. */
 @Composable
 fun BriarSprite(name: String, description: String, modifier: Modifier = Modifier) {
     val assets = LocalContext.current.assets
@@ -41,13 +44,11 @@ fun BriarSprite(name: String, description: String, modifier: Modifier = Modifier
         val start = withFrameNanos { it }
         while (true) withFrameNanos { frame = sheet.frameAt(it - start) }
     }
-    Canvas(modifier.semantics { contentDescription = description }) {
+    // One sheet pixel per screen pixel: generated frames turn soft when scaled up.
+    val frameSize = IntSize(sheet.frameWidth, sheet.frameHeight)
+    val dpSize = with(LocalDensity.current) { DpSize(frameSize.width.toDp(), frameSize.height.toDp()) }
+    Canvas(modifier.size(dpSize).semantics { contentDescription = description }) {
         val (x, y) = sheet.offsetOf(frame)
-        drawImage(
-            image,
-            srcOffset = IntOffset(x, y),
-            srcSize = IntSize(sheet.frameWidth, sheet.frameHeight),
-            dstSize = IntSize(size.width.toInt(), size.height.toInt()),
-        )
+        drawImage(image, srcOffset = IntOffset(x, y), srcSize = frameSize, dstSize = frameSize)
     }
 }

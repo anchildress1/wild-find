@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
@@ -27,7 +26,7 @@ class MainActivity : ComponentActivity() {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    BriarSprite("idle", stringResource(R.string.briar_description), Modifier.size(280.dp))
+                    BriarSprite("idle", stringResource(R.string.briar_description))
                     Text(stringResource(R.string.leave_it_rule), style = MaterialTheme.typography.headlineMedium)
                 }
             }
