@@ -196,7 +196,6 @@ flowchart TD
         M["Downloaded model<br/>Gemma 4 E2B, 2.59 GB"]
         A1 --> A2 --> A3 --> A4 --> A5
         M --> A4
-        M --> A5
     end
 
     SHIP --> A1
