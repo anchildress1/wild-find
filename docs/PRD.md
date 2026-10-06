@@ -406,8 +406,8 @@ The final generated assets are the source of truth for Briar's look; the Rive ri
 | Asset | Used in | File |
 | --- | --- | --- |
 | Logo | Splash, About | Path pending (Open Questions) |
-| Briar rig parts | Body parts, tail segments, turnaround; source for the Rive rig | assets/source/wild-find-briar-rig-1.png |
-| Briar face parts | Head bases, eyes, lids, brows, mouths, muzzle, 24 expression heads | assets/source/wild-find-briar-rig-2b.png (2a is an earlier pass) |
+| Briar body parts | Head, torso (front, back, sides), limbs, paws, tail segments, scarf, backpack, props; source for the Rive rig | assets/source/wild-find-briar-master-rig-1.png |
+| Briar face parts | Eyes, irises, pupils, lids, brows, mouths and interiors, teeth, noses, blush, whiskers | assets/source/wild-find-briar-master-rig-2.png |
 | Concept board | Poses, icon ideas, palette; reference only, broken alpha | assets/source/wild-find-sprite-1.png |
 | Briar rig | Rive state machine: welcome; searching or hint; success or found; retry or not quite; hunt complete | Path pending |
 | Category icons | One per icon\_category: tree, flower, fern, grass, vine, shrub, moss, other | Path pending |
