@@ -82,7 +82,7 @@ Every call below is settled; open items live in Open Questions.
 | Images | Category illustrations in v1; licensed photos in v3 |
 | UI | Animation-first; Jetpack Compose hosts camera and chrome; Rive state machines animate the opener and Briar, the mascot; no React |
 | Distribution | GitHub Release APK plus first-launch model download; outdoor demo video |
-| Credits | README and About screen credit Gemma, BioCLIP 2.5 Mobile, BioCLIP 2.5, OpenCLIP, iNaturalist, and Wikipedia |
+| Credits | README and About screen credit Gemma, BioCLIP 2.5 Mobile, BioCLIP 2.5, TinyCLIP, OpenCLIP, iNaturalist, and Wikipedia |
 | Prize categories | Best Use of Gemma in; DigitalOcean dropped |
 | Later versions | Tiebreaker shot in v2; licensed photos in v3 |
 
@@ -126,9 +126,9 @@ Ten P0s ship the hunt; one P1 follows; four P2s shape the design now. Requiremen
 | R3 | Grass tutorial | The first-ever hunt opens with grass, followed by 3 normal targets; any grass close-up passes; the plant gate counts lawn as grass; done in under 60 seconds; never repeats once completed |
 | R4 | Target pick | 3 targets per hunt by sighting-weighted random from eligible words; a hazard is never a target |
 | R5 | Verify | Follows the Runtime Logic verify table, live while the camera is open; a find needs the subject in close range and the target top-1 on the reticle crop at or above its verify\_floor for 3 frames in a row, then auto-captures; a hazard match shows a warning and gives no star; no result is ever presented as evidence of safety |
-| R6 | Hints | Tap for a hint; levels 1 and 3 are precomputed from the fact card at hunt start; level 2 uses the most recent failed verify photo, otherwise the current camera frame at tap time, with no separate hint photo; guards reject the target name, "I see", "there is", numbers not on the card, and anything over 20 words; retry once, then a template hint |
+| R6 | Hints | Tap for a hint; levels 1 and 3 are precomputed from the fact card at hunt start; level 2 reads the current camera frame at tap time, with no separate hint photo; guards reject the target name, "I see", "there is", numbers not on the card, and anything over 20 words; retry once, then a template hint |
 | R7 | Privacy | Android coarse location permission only; no fine location requested; coordinates rounded again before the query; no photo or precise location leaves the device; no account; no analytics |
-| R8 | Offline | Both models on-device; a cached hunt completes in airplane mode; with no cache and no network, the bundled West Georgia fallback list runs the hunt |
+| R8 | Offline | All three models on-device; a cached hunt completes in airplane mode; with no cache and no network, the bundled West Georgia fallback list runs the hunt |
 | R9 | Model delivery | Pinned artifacts from Data Contracts; free storage checked before download, with a clear message showing the space needed; Wi-Fi only; resumable; progress shown; SHA-256 verified before load |
 | R15 | Hunt complete | The last target passes, a short success animation plays, the stars show, then Hunt Again or Home; only the current hunt's state persists |
 
@@ -143,13 +143,13 @@ Ten P0s ship the hunt; one P1 follows; four P2s shape the design now. Requiremen
 | ID | Requirement | Design constraint now |
 | --- | --- | --- |
 | R11 | Medium and High difficulty | Grouping level is a config value, not code |
-| R12 | Tiebreaker shot | Verify accepts more than one photo per target |
+| R12 | Tiebreaker shot | Verify accepts more than one capture per target |
 | R13 | Licensed reference photos (v3) | A target's image comes from its icon\_category now and can take an attributed photo later |
 | R14 | iOS | Game logic stays out of Android-only code |
 
 ## Non-Functional Requirements
 
-Latency, heat, and memory targets are guesses until the Day-1 gate measures them on the test phone.
+Day-1 measurements on the test phone are in hole 4; heat and hint latency are still unmeasured.
 
 | Area | Target | Verified by |
 | --- | --- | --- |
@@ -174,17 +174,17 @@ Build time runs once on the laptop and ships its files in the app; at app time n
 %%{init: {'theme': 'default'}}%%
 flowchart TD
     accTitle: wild-find architecture
-    accDescr: Build time runs once on a laptop and ships menu, hazards, labels, and a fallback list inside the app. At app time the phone runs the opener, local menu, hunt pick, hints, and verification. Photos and precise location never leave the phone.
+    accDescr: Build time runs once on a laptop and ships the menu, hazards, label vectors, the plant gate, and a fallback list inside the app. At app time the phone runs the opener, local menu, hunt pick, hints, and live verification with a plant gate and BioCLIP. Photos and precise location never leave the phone.
 
     subgraph build["Build time · laptop, once"]
         B1["1. Gemma writes kid words<br/>no fungi or poison"]
         B2["2. iNat name search<br/>group ID; keep 25+ sightings here"]
         B3["3. Fact cards<br/>Gemma drafts, Claude fact-checks"]
-        B4["4. BioCLIP text encoder<br/>vectors for words, hazards, scenes"]
+        B4["4. Text encoders<br/>BioCLIP: words, hazards<br/>TinyCLIP: plant gate"]
         B1 --> B2 --> B3 --> B4
     end
 
-    SHIP["Ships inside the app<br/>menu, hazards, labels, fallback"]
+    SHIP["Ships inside the app<br/>menu, hazards, labels,<br/>plant gate, fallback"]
     B4 --> SHIP
 
     subgraph app["App time · the phone, every hunt"]
@@ -192,8 +192,8 @@ flowchart TD
         A2["Local menu<br/>coarse region; 25+ sightings"]
         A3["Pick the hunt<br/>grass first, then 3 weighted"]
         A4["Hint on tap<br/>Gemma reads the scene; card facts"]
-        A5["Verify live<br/>focus distance: walk closer<br/>BioCLIP on the reticle crop"]
-        M["Models on the phone<br/>Gemma 4 E2B, 2.59 GB<br/>BioCLIP Mobile, 47.0 MB"]
+        A5["Verify live, 5 frames a second<br/>TinyCLIP: is it a plant?<br/>focus distance: walk closer<br/>BioCLIP: which plant?"]
+        M["Downloaded models<br/>Gemma 4 E2B, 2.59 GB<br/>BioCLIP Mobile, 47.0 MB"]
         A1 --> A2 --> A3 --> A4 --> A5
         M --> A4
         M --> A5
@@ -214,7 +214,7 @@ flowchart TD
     E4 --> M
 ```
 
-The core loop runs live in the camera: focus distance decides "walk closer", and BioCLIP verifies the plant group on the reticle crop.
+The core loop runs live in the camera: TinyCLIP rejects non-plants, focus distance decides "walk closer", and BioCLIP verifies the plant group on the reticle crop.
 
 ## Build Pipeline
 
@@ -230,11 +230,11 @@ Runs once on the laptop in Python with uv; a word ships only after it passes eve
 8. **Ship review:** Ashley reviews the final menu before it ships
 9. **Embeddings:** the BioCLIP 2.5 ViT-H text encoder writes one vector per menu word and hazard (text format per hole 3); the TinyCLIP text encoder writes the plant-gate vectors
 10. **Fallback:** the same gates produce fallback\_october\_west\_georgia.json from October sightings, with no live counts
-11. **Output:** menu.json, hazards.json, labels.npy, labels.json, and the fallback file
+11. **Output:** menu.json, hazards.json, labels.npy, labels.json, the plant gate (plant_gate.onnx, plant_gate.json), and the fallback file
 
 **Hazard plant labels:** poison ivy, poison oak, poison sumac, pokeweed, Carolina horsenettle; the fact-check confirms each.
 
-**Plant-gate labels:** plant, leaves, tree, grass, flower, moss, fern vs person, child, screen, phone, road, sidewalk, car, dog, room, building. Day 1 showed BioCLIP Mobile can't score non-plant labels (hole 17), so these go to TinyCLIP.
+**Plant-gate labels:** plant, leaves, tree, grass, flower, moss, fern vs person, child, screen, phone, road, sidewalk, car, dog, room, building. A frame is a plant when the plant labels' combined softmax share is over 0.5.
 
 **Ambiguous-name denylist:** blocks target names that are themselves ambiguous or hazardous common names. A safe taxon is not blocked just because its word appears inside a longer hazard name, so oak stays. Starter list, maintained by hand: ivy, sumac. Berry-named targets are allowed unless the name itself is hazardous.
 
@@ -265,7 +265,7 @@ Rules:
 
 ## Data Contracts
 
-Five files ship in the app, two pinned models download once, and every cache entry is versioned so a rebuild never serves stale data.
+Seven files ship in the app, two pinned models download once, and every cache entry is versioned so a rebuild never serves stale data.
 
 **Shipped in the app**
 
@@ -275,6 +275,8 @@ Five files ship in the app, two pinned models download once, and every cache ent
 | hazards.json | Hazard plant labels (name, taxon\_id) and the two opener hazards (name, rule) | Build pipeline, from NIOSH |
 | labels.npy | One 1024-d unit vector per menu word and hazard | BioCLIP 2.5 ViT-H text encoder |
 | labels.json | Parallel list: id and kind (word, hazard) | Build pipeline |
+| plant\_gate.onnx | TinyCLIP ViT-8M/16 image encoder, fp32 (about 33 MB), with CLIP normalization baked in | Build pipeline, from wkcn/TinyCLIP-ViT-8M-16-Text-3M-YFCC15M @ a2a8c6eaa2549ad66eb7c31b85022bf58273a26c |
+| plant\_gate.json | Plant and not-plant labels with their 512-d TinyCLIP text vectors | Build pipeline |
 | fallback\_october\_west\_georgia.json | Targets common in the region in October; no live counts | Build pipeline |
 
 **menu.json**
@@ -308,7 +310,7 @@ icon\_category is one of tree, flower, fern, grass, vine, shrub, moss, other. ve
 
 The build-time text encoder is pinned too, laptop only: BioCLIP 2.5 ViT-H, imageomics/bioclip-2.5-vith14 @ 6e3d04e3d6522012c88181085c5ae666e14c45cd.
 
-Download from `https://huggingface.co/<repo>/resolve/<revision>/<file>`. Check free storage first. Integrity comes from the SHA-256 above, read from the Hugging Face file listing on October 5, 2026, never from a displayed size.
+Download from `https://huggingface.co/<repo>/resolve/<revision>/<file>`. Check free storage first. Integrity comes from the SHA-256 above, read from the Hugging Face file listing on October 5 and 6, 2026, never from a displayed size. fp32 only: on the test phone, ONNX Runtime returned NaN for BioCLIP's fp16 file.
 
 **Cache entry**
 
@@ -328,7 +330,8 @@ A mismatch on schema\_version, menu\_version, region, or month discards the entr
 
 | Model | Input | Output |
 | --- | --- | --- |
-| BioCLIP 2.5 Mobile | 224 x 224 RGB, values 0 to 1, rotation normalized; normalization is baked in | 1024-d unit vector; score is a dot product with labels.npy rows |
+| TinyCLIP plant gate | 224 x 224 RGB reticle crop, values 0 to 1; normalization is baked in | 512-d unit vector; softmax over plant\_gate.json rows |
+| BioCLIP 2.5 Mobile | 224 x 224 RGB reticle crop, values 0 to 1, rotation normalized; normalization is baked in | 1024-d unit vector; score is a dot product with labels.npy rows |
 | Gemma, scene call | Scene image plus the fixed tag list | JSON array of tags |
 | Gemma, hint call | Fact card, tags, hint level | One line, 20 words or fewer |
 
@@ -344,7 +347,7 @@ One query per hunt, requiring at most three paginated HTTP requests. month means
 
 ## Runtime Logic
 
-Verify runs on live camera frames, about 5 per second, with no Gemma call. The hazard check runs first as an extra warning; a find needs the subject in close range and the target on top for 3 frames in a row; no result ever means a plant is safe.
+Verify runs on live camera frames, about 5 per second, with no Gemma call. The plant gate runs first, then the hazard check as an extra warning; a find needs the subject in close range and the target on top for 3 frames in a row; no result ever means a plant is safe.
 
 **Verify, checked in order**
 
@@ -359,8 +362,6 @@ Verify runs on live camera frames, about 5 per second, with no Gemma call. The h
 
 The back camera reports focus distance as approximate (Day 1); the close-range threshold is set on the device (hole 19). BioCLIP scoring labels per frame: this hunt's targets, other locally eligible words, and hazards. A missed hazard never reads as safe: "Look. Photograph. Leave it where it grows." stays the rule on every screen.
 
-Day 1: BioCLIP Mobile can't reject non-plants. 6 of 22 free non-plant photos scored a plant target top-1, and a portrait scored oak higher than a real oak. TinyCLIP ViT-8M kept 16 of 16 plant photos and passed 0 real non-plants, so it gates every frame first.
-
 ```
 pass = target_score > runner_up_score          // top-1 is always required
        && target_score >= target.verify_floor
@@ -374,7 +375,7 @@ margin stays null unless the calibration set shows it cuts false passes.
 | Level | Built from | When | Example (made up) |
 | --- | --- | --- | --- |
 | 1 | Card: where | Precomputed at hunt start | "Ferns like shady, damp spots." |
-| 2 | Card: where, plus scene tags | On tap; the scene is the last failed verify photo, else the current camera frame | "That shady spot by the fence looks fern-friendly." |
+| 2 | Card: where, plus scene tags | On tap; the scene is the current camera frame | "That shady spot by the fence looks fern-friendly." |
 | 3 | Card: shape | Precomputed at hunt start | "Look for leaves shaped like green feathers." |
 
 Scene tags: shade, sun, water, tree, lawn, rocks, fence, path, woods edge. Guards run on every hint before it shows.
@@ -435,6 +436,7 @@ Each choice below buys speed or privacy for v1 and names the point where it gets
 | Choice | What it costs | Revisit when |
 | --- | --- | --- |
 | BioCLIP 2.5 Mobile over full BioCLIP | Trained on plants only; misses 28% at species level | Medium difficulty ships, or the holdout set misses 90% |
+| TinyCLIP plant gate before BioCLIP | A third model: about 33 MB in the APK and 10 to 20 ms a frame; chosen on 38 test photos | Holdout non-plant false-pass rate over 5% |
 | Deterministic framing, no Gemma boxes | Approximate focus distance is coarse; clutter inside the reticle can lower the target's score | Holdout false-pass rate over 5%, or the field test shows wrong "walk closer" calls |
 | One iNaturalist query at app time | Needs signal once per region and month; coarse coordinates and request metadata reach iNaturalist | A fully offline mode is required |
 | Menu built for one region | Testers outside west Georgia get the coverage message | A second region: rerun the build gates for it |
@@ -451,14 +453,14 @@ No blockers remain; every hole below closes or falls back during the Day-1 gate 
 
 | # | Hole | Why it matters | Fix | Severity |
 | --- | --- | --- | --- | --- |
-| 3 | Label text format | Day 1: with common names, a white oak photo scored "poison oak" top-1 on both the teacher and the mobile model; scientific names put oak top-1 on both | Plant labels embed as "a photo of <scientific name>."; scene labels use common words in the same template ("a photo of lawn."); confirm on the calibration set | High |
+| 3 | Label text format | Day 1: with common names, a white oak photo scored "poison oak" top-1 on both the teacher and the mobile model; scientific names put oak top-1 on both | BioCLIP labels embed as "a photo of <scientific name>."; confirm on the calibration set | High |
 | 4 | Latency | Day 1: verify is BioCLIP alone, 60 ms per crop, so live frames fit easily. Gemma (hints only) loads in 4.0 s warm, 9.9 s first ever, peaks at 2.9 GB, and took 2.3 to 2.9 s per warm vision call (measured on box prompts before boxing was dropped). Level-2 hint latency is still unmeasured | Measure the hint call in the gate harness (S05) | Medium |
 | 5 | Kids read hints on screen | Reading pulls eyes down, against the theme | Read hints aloud with Android's on-device text-to-speech; confirm an offline voice on the test phone | High |
 | 8 | Loose Gemma boxes | Resolved on Day 1: verify no longer uses Gemma boxes | None | Low |
 | 10 | Heat and battery | Live BioCLIP at about 5 frames a second plus the camera; Gemma only on hint taps | The gate harness runs a 20-minute live-camera session | Medium |
 | 12 | Home Wi-Fi download | A Vestige model download broke when Hugging Face moved its redirect CDN and the app had the old host pinned; filtered networks can also block the CDN | Pin the Hugging Face start URL, never the CDN host; trust bytes + SHA-256; re-resolve redirects on resume; the Day-1 gate runs the full download and an interrupted resume on the test phone | High |
 | 13 | No telemetry | Field failures stay invisible by design | Debug builds only: a local log the developer can export | Medium |
-| 17 | BioCLIP Mobile vs non-plant labels | Resolved on Day 1: BioCLIP Mobile can't reject non-plants, so TinyCLIP ViT-8M gates plant vs not-plant before it | Pin and test TinyCLIP on the phone (S06) | Low |
+| 17 | BioCLIP Mobile vs non-plant labels | Resolved on Day 1: 6 of 22 free non-plant photos scored a plant target top-1, and a portrait scored oak (0.592) above a real oak (0.572). TinyCLIP ViT-8M kept 16 of 16 plant photos and passed 0 real non-plants, so it gates every frame first | Export, ship, and test TinyCLIP on the phone (S06) | Low |
 | 18 | Gemma file variant | Resolved on Day 1: the pinned generic file loads and runs on the GPU backend, so the GPU-only build isn't needed | Keep the pinned file | Low |
 | 19 | Approximate focus distance | The back camera reports focus distance as approximate, so "walk closer" may fire too early or late | Set the close-range threshold by pointing the test phone at near and far plants; tune in the field test | Medium |
 
@@ -492,7 +494,7 @@ Two questions block the build; three can wait.
 
 ## Milestones
 
-Day 1 is a go or no-go gate: both models must run on the test phone before UI or content work starts.
+Day 1 is a go or no-go gate: every runtime model must run on the test phone before UI or content work starts.
 
 1. Oct 6, 2026: the Day-1 gate. All must pass:
    - BioCLIP Mobile loads on the test phone
@@ -506,6 +508,7 @@ Day 1 is a go or no-go gate: both models must run on the test phone before UI or
    - Phone RAM recorded
    - A 20-minute session doesn't throttle right away
    - Scene and non-plant labels tested against BioCLIP Mobile
+   - TinyCLIP plant gate matches the laptop on the phone
    - The full first-launch download succeeds
    - Resume after an interrupted download succeeds
    - SHA-256 verification succeeds
@@ -523,7 +526,8 @@ Gate outcomes: the scene labels failed, so TinyCLIP gates non-plants; Gemma was 
 - [Touch Grass challenge post](https://dev.to/devteam/join-the-hacktoberfest-open-source-ai-challenge-week-1-touch-grass-2450-in-prizes-across-17-4pom) and [HF26 hub and FAQ](https://dev.to/challenges/hf26)
 - [BioCLIP 2.5 Mobile model card](https://huggingface.co/crazedcodernate/bioclip-2.5-mobile-fastvit) and [BioCLIP 2 model card](https://huggingface.co/imageomics/bioclip-2)
 - [pybioclip](https://pypi.org/project/pybioclip) for rank-level prediction
-- [Gemma 4 on Hugging Face](https://huggingface.co/blog/gemma4) for object detection with boxes
+- [TinyCLIP paper](https://arxiv.org/pdf/2309.12314) and [TinyCLIP ViT-8M/16 weights](https://huggingface.co/wkcn/TinyCLIP-ViT-8M-16-Text-3M-YFCC15M), MIT
+- [Gemma 4 on Hugging Face](https://huggingface.co/blog/gemma4) for vision and box output
 - [Gemma 4 E2B LiteRT-LM repository](https://huggingface.co/litert-community/gemma-4-E2B-it-litert-lm), the pinned artifact source
 - [Seek vs iNaturalist](https://help.inaturalist.org/en/support/solutions/articles/151000169914-what-is-the-difference-between-inaturalist-and-seek-by-inaturalist-)
 - [iNat rate limits](https://forum.inaturalist.org/t/discrepancy-between-documented-rate-limit-observed-rate-limit/8612)
