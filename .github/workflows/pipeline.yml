@@ -1,0 +1,39 @@
+name: Pipeline
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "pipeline/**"
+      - ".github/workflows/pipeline.yml"
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+    paths:
+      - "pipeline/**"
+      - ".github/workflows/pipeline.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Ruff
+    if: github.event.pull_request.draft == false || github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: pipeline/uv.lock
+
+      - name: Lint and format check
+        run: make pipeline-lint

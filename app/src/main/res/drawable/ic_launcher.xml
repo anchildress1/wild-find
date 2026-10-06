@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Replaced by the final logo from assets/source once it lands. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path
+        android:fillColor="#2E7D32"
+        android:pathData="M24,4C14,14 10,24 24,44C38,24 34,14 24,4Z" />
+</vector>

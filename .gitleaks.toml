@@ -1,0 +1,12 @@
+title = "wild-find gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Pinned public model checksums from docs/PRD.md; exact values only."
+regexTarget = "match"
+regexes = [
+  '''181938105e0eefd105961417e8da75903eacda102c4fce9ce90f50b97139a63c''',
+  '''b152ee0b3fe8f7b6e01f27a580fa74fbec53c0519e4dccaebdb9e289d140c579''',
+]

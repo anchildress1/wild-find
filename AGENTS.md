@@ -1,0 +1,35 @@
+# AGENTS.md
+
+Spec of record: `docs/PRD.md`. Work queue: `docs/stories.md`. A change that contradicts the PRD updates the PRD in the same commit.
+
+## Layout
+
+| Path | Owns | Rule |
+| --- | --- | --- |
+| `core/` | Game logic: contracts, region, sightings, cache, hunt pick, verify decision, hint guards | Pure Kotlin JVM. No `android.*` imports. Every rule is unit-tested here |
+| `app/` | Compose UI, Rive, CameraX, LiteRT-LM, ONNX Runtime, model download, iNat HTTP | Thin adapters over `core`. Logic that can run on the JVM moves to `core` |
+| `pipeline/` | Build-time menu, fact cards, label embeddings | uv only. Outputs land in `app/src/main/assets/` |
+| `assets/source/` | Original art | Reference input. Never edit or regenerate |
+
+## Hard rules
+
+- Kid copy never says safe, harmless, not poisonous, or okay to touch.
+- No photo or device coordinate leaves the phone. Network = iNat `species_counts` + Hugging Face model download. Nothing else.
+- No analytics, crash SDKs, accounts, or remote config.
+- Region membership = rounded whole-degree key match. The iNat query sends the region center.
+- Open-weight models only at app time. Never swap the inference runtime (LiteRT-LM, ONNX Runtime) to dodge a gap.
+- No iOS, KMP, `expect`/`actual`, or Vestige code.
+- Pinned model bytes and SHA-256 live in `docs/PRD.md` Data Contracts. Change them there first.
+
+## UI
+
+- Animation-first. Every screen transition and state change is animated; no static form or list screens.
+- The mascot and the opener are Rive state machines. Game events drive Rive inputs; Compose never draws mascot frames.
+- 48 dp touch targets, content descriptions, no color-only signal, sunlight contrast.
+- Invoke `/compose-skill` before touching `@Composable` code. Invoke `/litertlm-android-sdk` before touching Gemma code.
+
+## Checks
+
+- `make ai-checks` before every commit. Warnings fail the build.
+- `make setup` once per clone (lefthook + uv sync).
+- Unrunnable check (on-device, field, airplane mode) → stop and hand it to the user. Never tick it yourself.

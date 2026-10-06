@@ -1,0 +1,17 @@
+build:
+  maxIssues: 0
+
+config:
+  validation: true
+  warningsAsErrors: true
+
+naming:
+  FunctionNaming:
+    ignoreAnnotated: ['Composable']
+
+style:
+  UnusedPrivateMember:
+    ignoreAnnotated: ['Preview']
+  MagicNumber:
+    ignorePropertyDeclaration: true
+    ignoreLocalVariableDeclaration: true
