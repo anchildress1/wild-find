@@ -1,9 +1,11 @@
 import hashlib
+import json
 
 import numpy as np
 import pytest
 from PIL import Image
 
+from wild_find_pipeline import reference
 from wild_find_pipeline.paths import MANIFEST, pin, verified_artifact
 from wild_find_pipeline.reference import SIZE, image_input, ranked, square_fixture
 
@@ -95,3 +97,27 @@ def test_verified_artifact_rejects_missing_file(artifact):
 
     with pytest.raises(ValueError, match="missing"):
         verified_artifact("toy", cache, manifest)
+
+
+def run_gate(monkeypatch, tmp_path, winner: int) -> int:
+    """Run main() with stub models where label `winner` scores 1 and every other label 0 (label 0 is the word)."""
+    labels = 1 + 5 + 6
+    monkeypatch.setattr(reference, "REFERENCE_DIR", tmp_path / "ref")
+    monkeypatch.setattr(reference, "fetch_fixture", lambda: Image.new("RGB", (300, 400)))
+    monkeypatch.setattr(reference, "verified_artifact", lambda model: tmp_path / "model.onnx")
+    monkeypatch.setattr(reference, "embed_image", lambda path, x: np.eye(labels)[winner])
+    monkeypatch.setattr(reference, "embed_texts", lambda texts: np.eye(len(texts)))
+    return reference.main()
+
+
+def test_main_writes_nothing_when_the_fixture_word_is_not_top_1(monkeypatch, tmp_path):
+    assert run_gate(monkeypatch, tmp_path, winner=1) == 1
+    assert not (tmp_path / "ref").exists()
+
+
+def test_main_writes_fixture_and_reference_when_the_gate_passes(monkeypatch, tmp_path):
+    assert run_gate(monkeypatch, tmp_path, winner=0) == 0
+
+    written = json.loads((tmp_path / "ref" / "reference.json").read_text())
+    assert ranked(written["scores"])[0][0] == reference.FIXTURE_WORD
+    assert written["fixture"]["sha256"] == hashlib.sha256((tmp_path / "ref" / "fixture.png").read_bytes()).hexdigest()

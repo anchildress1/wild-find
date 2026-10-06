@@ -18,8 +18,6 @@ FIXTURE_WORD = "oak"
 FIXTURE_TAXON = "Quercus"
 FIXTURE_URL = "https://inaturalist-open-data.s3.amazonaws.com/photos/664105168/medium.jpg"
 FIXTURE_SOURCE = "https://www.inaturalist.org/observations/363799243 (CC0)"
-TEACHER_REPO = "imageomics/bioclip-2.5-vith14"
-TEACHER_REVISION = "6e3d04e3d6522012c88181085c5ae666e14c45cd"
 USER_AGENT = "wild-find-pipeline/0.1 (+https://github.com/anchildress1/wild-find)"
 
 
@@ -60,9 +58,10 @@ def embed_texts(texts: list[str]) -> np.ndarray:
     import torch
     from huggingface_hub import snapshot_download
 
+    teacher = pin("teacher")
     local = snapshot_download(
-        TEACHER_REPO,
-        revision=TEACHER_REVISION,
+        teacher["repo"],
+        revision=teacher["revision"],
         cache_dir=MODEL_CACHE / "hf",
         allow_patterns=["open_clip_config.json", "open_clip_model.safetensors", "*.txt", "tokenizer*", "vocab.json"],
     )
@@ -74,12 +73,17 @@ def embed_texts(texts: list[str]) -> np.ndarray:
     return torch.nn.functional.normalize(vectors, dim=-1).numpy()
 
 
-def main() -> int:
-    """Write fixture.png and reference.json only when the fixture word is top-1; otherwise return 1."""
-    bioclip = pin("bioclip")
+def fetch_fixture() -> Image.Image:
+    """Download the fixture photo from iNaturalist."""
     request = urllib.request.Request(FIXTURE_URL, headers={"User-Agent": USER_AGENT})
     with urllib.request.urlopen(request, timeout=30) as response:
-        fixture = square_fixture(Image.open(io.BytesIO(response.read())))
+        return Image.open(io.BytesIO(response.read()))
+
+
+def main() -> int:
+    """Write fixture.png and reference.json only when the fixture word is top-1; otherwise return 1."""
+    bioclip, teacher = pin("bioclip"), pin("teacher")
+    fixture = square_fixture(fetch_fixture())
 
     buffer = io.BytesIO()
     fixture.save(buffer, format="PNG")
@@ -103,7 +107,7 @@ def main() -> int:
             "word": FIXTURE_WORD,
         },
         "image_model": {"file": bioclip["file"], "sha256": bioclip["sha256"]},
-        "text_model": {"repo": TEACHER_REPO, "revision": TEACHER_REVISION},
+        "text_model": {"repo": teacher["repo"], "revision": teacher["revision"]},
         "image_embedding": image_vector.astype(float).tolist(),
         "labels": [
             {"id": label, "kind": kind, "text": prompt(text), "vector": text_vectors[i].astype(float).tolist()}
