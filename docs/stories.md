@@ -47,7 +47,7 @@ Both models run on the test phone, or nothing else starts.
 - [ ] **S32 Location** — coarse permission only, manual region pick on deny; coverage message off-region; R2, R7
 - [ ] **S33 iNat client** — one query, ≤ 3 pages (≤ 6 on the widen path), named User-Agent, 429 Retry-After; R2
 - [ ] **S34 Camera + verify flow** — CameraX preview at about 5 fps: autofocus distance → "walk closer"; reticle crop → BioCLIP → S25 → auto-capture and kid message; R5
-- [ ] **S35 Hints** — levels 1/3 precomputed at hunt start, level 2 from last failed photo or current frame; R6
+- [ ] **S35 Hints** — levels 1/3 precomputed at hunt start, level 2 from the current camera frame at tap time; R6
 - [ ] **S36 Hunt complete** — success animation, stars, Hunt Again / Home; R15
 - [ ] **S37 Offline** — airplane-mode hunt from cache or bundled fallback; R8
 - [ ] **S38 Lifecycle** — Gemma released on background, reloaded on resume; hunt state restored

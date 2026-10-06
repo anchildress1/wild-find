@@ -234,7 +234,7 @@ Runs once on the laptop in Python with uv; a word ships only after it passes eve
 
 **Hazard plant labels:** poison ivy, poison oak, poison sumac, pokeweed, Carolina horsenettle; the fact-check confirms each.
 
-**Plant-gate labels:** plant, leaves, tree, grass, flower, moss, fern vs person, child, screen, phone, road, sidewalk, car, dog, room, building. A frame is a plant when the plant labels' combined softmax share is over 0.5.
+**Plant-gate labels:** plant, leaves, tree, grass, flower, moss, fern vs person, child, screen, phone, road, sidewalk, car, dog, room, building. Scores are cosine similarity times TinyCLIP's learned scale (50.0), then softmaxed; a frame is a plant when the plant labels' combined share is over 0.5. Raw cosines softmaxed without the scale give different verdicts.
 
 **Ambiguous-name denylist:** blocks target names that are themselves ambiguous or hazardous common names. A safe taxon is not blocked just because its word appears inside a longer hazard name, so oak stays. Starter list, maintained by hand: ivy, sumac. Berry-named targets are allowed unless the name itself is hazardous.
 
@@ -276,8 +276,8 @@ Eight files ship in the app, one pinned model downloads once, and every cache en
 | labels.npy | One 1024-d unit vector per menu word and hazard | BioCLIP 2.5 ViT-H text encoder |
 | labels.json | Parallel list: id and kind (word, hazard) | Build pipeline |
 | flora\_student\_fp32.onnx | BioCLIP 2.5 Mobile image encoder, fp32; pinned below and SHA-256 checked at build time | Build pipeline, from crazedcodernate/bioclip-2.5-mobile-fastvit @ 29b474ea2a5d72b4646f036ead9441e0a22a5c62 |
-| plant\_gate.onnx | TinyCLIP ViT-8M/16 image encoder, fp32 (about 33 MB), with CLIP normalization baked in | Build pipeline, from wkcn/TinyCLIP-ViT-8M-16-Text-3M-YFCC15M @ a2a8c6eaa2549ad66eb7c31b85022bf58273a26c |
-| plant\_gate.json | Plant and not-plant labels with their 512-d TinyCLIP text vectors | Build pipeline |
+| plant\_gate.onnx | TinyCLIP ViT-8M/16 image encoder, fp32 (about 33 MB), with CLIP normalization baked in | Build pipeline, exported from the pinned TinyCLIP weights below |
+| plant\_gate.json | Plant and not-plant labels, their 512-d TinyCLIP text vectors, and TinyCLIP's learned logit scale (exp(logit\_scale) = 50.0) | Build pipeline |
 | fallback\_october\_west\_georgia.json | Targets common in the region in October; no live counts | Build pipeline |
 
 **menu.json**
@@ -307,6 +307,7 @@ icon\_category is one of tree, flower, fern, grass, vine, shrub, moss, other. ve
 | Model | Delivery | Repo and revision | File | Bytes | SHA-256 |
 | --- | --- | --- | --- | --- | --- |
 | Gemma 4 E2B | Downloaded on first launch | litert-community/gemma-4-E2B-it-litert-lm @ b3ca0d2f076785a8f4b2219ddbd2bdb99954eae1 | gemma-4-E2B-it.litertlm | 2,588,147,712 | 181938105e0eefd105961417e8da75903eacda102c4fce9ce90f50b97139a63c |
+| TinyCLIP ViT-8M/16 | Build input; exported to plant\_gate.onnx inside the APK | wkcn/TinyCLIP-ViT-8M-16-Text-3M-YFCC15M @ a2a8c6eaa2549ad66eb7c31b85022bf58273a26c | model.safetensors | 93,812,468 | 9339ee3d736344d0ddcaa6c03edc9f89688f08caaea5401220885233da726fcc |
 | BioCLIP 2.5 Mobile | Bundled in the APK | crazedcodernate/bioclip-2.5-mobile-fastvit @ 29b474ea2a5d72b4646f036ead9441e0a22a5c62 | flora\_student\_fp32.onnx | 46,986,589 | 8624d44af3727b69a41dc2035c37018a30753b8d9c93ab8801a0c724dd42510f |
 
 The build-time text encoder is pinned too, laptop only: BioCLIP 2.5 ViT-H, imageomics/bioclip-2.5-vith14 @ 6e3d04e3d6522012c88181085c5ae666e14c45cd.
@@ -331,7 +332,7 @@ A mismatch on schema\_version, menu\_version, region, or month discards the entr
 
 | Model | Input | Output |
 | --- | --- | --- |
-| TinyCLIP plant gate | 224 x 224 RGB reticle crop, values 0 to 1; normalization is baked in | 512-d unit vector; softmax over plant\_gate.json rows |
+| TinyCLIP plant gate | 224 x 224 RGB reticle crop, values 0 to 1; normalization is baked in | 512-d unit vector; softmax over 50.0 × cosine against plant\_gate.json rows |
 | BioCLIP 2.5 Mobile | 224 x 224 RGB reticle crop, values 0 to 1, rotation normalized; normalization is baked in | 1024-d unit vector; score is a dot product with labels.npy rows |
 | Gemma, scene call | Scene image plus the fixed tag list | JSON array of tags |
 | Gemma, hint call | Fact card, tags, hint level | One line, 20 words or fewer |

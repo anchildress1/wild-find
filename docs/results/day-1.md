@@ -93,7 +93,7 @@ Fixture: a CC0 white oak, [iNaturalist 211670015](https://www.inaturalist.org/ob
 - A portrait scored higher for oak than a real oak did, so no score floor can separate them.
 - Scene labels misfired too: a child playing scored "screen", a computer monitor "person", and a laptop "lawn".
 
-**TinyCLIP gates plants cleanly.** A frame counts as a plant when the plant labels' combined softmax share is over 0.5.
+**TinyCLIP gates plants cleanly.** Scores are cosine similarity times TinyCLIP's learned scale (exp(logit_scale) = 50.0 for ViT-8M/16), softmaxed; a frame counts as a plant when the plant labels' combined share is over 0.5.
 
 | Model | Image-side size | Plants kept | Non-plants passed |
 | --- | --- | --- | --- |
