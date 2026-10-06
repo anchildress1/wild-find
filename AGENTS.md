@@ -7,7 +7,7 @@ Spec of record: `docs/PRD.md`. Work queue: `docs/stories.md`. A change that cont
 | Path | Owns | Rule |
 | --- | --- | --- |
 | `core/` | Game logic: contracts, region, sightings, cache, hunt pick, verify decision, hint guards | Pure Kotlin JVM. No `android.*` imports. Every rule is unit-tested here |
-| `app/` | Compose UI, Rive, CameraX, LiteRT-LM, ONNX Runtime, model download, iNat HTTP | Thin adapters over `core`. Logic that can run on the JVM moves to `core` |
+| `app/` | Compose UI, sprite playback, CameraX, LiteRT-LM, ONNX Runtime, model download, iNat HTTP | Thin adapters over `core`. Logic that can run on the JVM moves to `core` |
 | `pipeline/` | Build-time menu, fact cards, label embeddings | uv only. Committed shipped outputs land in `app/src/main/assets/`; generated bundled models and tables in gitignored `app/generated/assets/` (`make assets`); test references in `app/src/androidTest/assets/` |
 | `assets/source/` | Original art | Reference input. Never edit or regenerate |
 
@@ -24,7 +24,7 @@ Spec of record: `docs/PRD.md`. Work queue: `docs/stories.md`. A change that cont
 ## UI
 
 - Animation-first. Every screen transition and state change is animated; no static form or list screens.
-- Briar (the mascot) and the opener are Rive state machines. Game events drive Rive inputs; Compose never draws Briar's frames.
+- Briar (the mascot) and the opener are finished sprite sheets per the PRD sprite sheet contract. Game events pick the state; Compose plays the frames and never draws or composites Briar itself.
 - 48 dp touch targets, content descriptions, no color-only signal, sunlight contrast.
 - Invoke `/compose-skill` before touching `@Composable` code. Invoke `/litertlm-android-sdk` before touching Gemma code.
 

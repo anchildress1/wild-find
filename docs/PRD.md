@@ -80,7 +80,7 @@ Every call below is settled; open items live in Open Questions.
 | Fact cards | Gemma drafts from Wikipedia; Claude fact-checks at build time in a manual Claude Code pass; the post discloses it |
 | Location | Android coarse location only, rounded to whole degrees; the device is in a region only when its rounded key equals that region's key; the query always sends the region center, never device coordinates; manual region pick supported |
 | Images | Category illustrations in v1; licensed photos in v3 |
-| UI | Animation-first; Jetpack Compose hosts camera and chrome; Rive state machines animate the opener and Briar, the mascot; no React |
+| UI | Animation-first; Jetpack Compose hosts camera and chrome and plays sprite sheets for the opener and Briar, the mascot; no Rive, no React |
 | Distribution | GitHub Release APK with BioCLIP Mobile and the TinyCLIP plant gate inside; Gemma downloads on first launch; outdoor demo video |
 | Credits | README and About screen credit Gemma, BioCLIP 2.5 Mobile, BioCLIP 2.5, TinyCLIP, OpenCLIP, iNaturalist, and Wikipedia |
 | Prize categories | Best Use of Gemma in; DigitalOcean dropped |
@@ -404,20 +404,22 @@ Only the current hunt's state persists; there is no history, streak, or sharing.
 
 ## Visual System
 
-The final generated assets are the source of truth for Briar's look; the Rive rig is built from the layered rigging sheet; frame-by-frame sprite sheets are out because AI-drawn frames drift in proportion and can't play as cycles.
+Briar and the opener play finished sprite sheets, one per state. A Rive rig was dropped on Oct 6: the rig sheets' parts were drawn at mismatched sizes and didn't assemble into a usable Briar. The rig sheets stay as reference.
+
+**Sprite sheet contract:** each state is `app/src/main/assets/briar/<state>.png` plus `<state>.json`. The PNG is a grid of equal frames, left to right, then top to bottom, on a transparent background. The JSON is `{"frame_width": 512, "frame_height": 512, "frames": 12, "columns": 4, "fps": 12, "loop": true}`. States: `welcome`, `searching`, `found`, `retry`, `complete`. A looping state's last frame must flow into its first.
 
 | Asset | Used in | File |
 | --- | --- | --- |
 | Logo | Splash, About | Path pending (Open Questions) |
-| Briar body parts | Ears, head, muzzle, neck fur with scarf, torso (front, back, sides), limbs, paws, tail segments; source for the Rive rig | assets/source/wild-find-briar-master-rig-1.png |
+| Briar body parts | Ears, head, muzzle, neck fur with scarf, torso (front, back, sides), limbs, paws, tail segments; reference only | assets/source/wild-find-briar-master-rig-1.png |
 | Briar alternate body | Unlabeled alternate torsos, head turns, tails, and limbs; reference only, no names or pivots | assets/source/wild-find-briar-master-rig-1b.png |
-| Briar face parts | Eyes, irises, pupils, lids, brows, mouths and interiors, teeth, noses, blush, whiskers; drawn at a different scale than the head, so each family needs a uniform fit scale | assets/source/wild-find-briar-master-rig-2.png |
-| Briar accessories | Scarves, backpack, hats, handheld props, environment bits, FX | assets/source/wild-find-briar-master-rig-3.png |
-| Briar rigging spec | Pivots, bone ends, hierarchy, draw order, rotation limits, and source exceptions for the Rive build | assets/source/briar-4-rigging-specification.pdf |
+| Briar face parts | Eyes, irises, pupils, lids, brows, mouths and interiors, teeth, noses, blush, whiskers; reference only | assets/source/wild-find-briar-master-rig-2.png |
+| Briar accessories | Scarves, backpack, hats, handheld props, environment bits, FX; reference only | assets/source/wild-find-briar-master-rig-3.png |
+| Briar rigging spec | Pivots, hierarchy, and limits written for the dropped Rive rig; reference only | assets/source/briar-4-rigging-specification.pdf |
 | Concept board | Poses, icon ideas, palette; reference only, broken alpha | assets/source/wild-find-sprite-1.png |
-| Briar rig | Rive state machine: welcome; searching or hint; success or found; retry or not quite; hunt complete | Path pending |
+| Briar sprite sheets | One sheet per state: welcome; searching or hint; found; retry; hunt complete | app/src/main/assets/briar/ (pending art) |
 | Category icons | One per icon\_category: tree, flower, fern, grass, vine, shrub, moss, other | Path pending |
-| Opener art | Bees and snakes, with poison ivy drawn in | Path pending |
+| Opener art | Bees and snakes, with poison ivy drawn in; a sprite sheet under the same contract | Path pending |
 
 - Animation-first interactions; illustrations, not licensed photos, in v1
 - Kid copy principle: "Look. Photograph. Leave it where it grows."
@@ -501,7 +503,7 @@ Two questions block the build; three can wait.
 
 **Blocking**
 
-- [ ] Visual: who builds Briar's Rive rig and the opener, and by when? Logo and category icons still need paths
+- [ ] Visual: when do Briar's five sprite sheets and the opener sheet land? Logo and category icons still need paths
 - [ ] Legal: do coarse location plus whole-degree rounding clear the precise-geolocation bar?
 
 **Non-blocking**
