@@ -77,13 +77,13 @@ The vestige download broke when Hugging Face moved its redirect CDN (`cas-bridge
 
 ## Open holes
 
-New holes found while drafting these stories. PRD holes 3, 4, 5, 10, 12, 13, 19 still stand. H-numbers below are this file's own list, separate from PRD hole numbers.
+New holes found while drafting these stories. PRD holes 3, 4, 5, 10, 12, 13, 17, 19 still stand. H-numbers below are this file's own list, separate from PRD hole numbers.
 
 | # | Hole | Proposed fix | Severity |
 | --- | --- | --- | --- |
 | H1 | Grass tutorial target isn't in any contract: no taxon, label row, or floor | Ship grass (Poaceae) as a flagged `tutorial` entry in `menu.json` with its own label row and floor | High |
 | H2 | "Only the current hunt persists" vs flags that must survive (opener seen, tutorial done, models verified) | Allow a fixed list of app flags; no history beyond them | Low |
-| H3 | Widened 150 km counts get cached under the same key as 75 km counts | Add `radius_km` to the cache entry; mismatch discards | Medium |
+| H3 | Widened 150 km counts get cached under the same key as 75 km counts | Resolved: the PRD cache entry carries `radius_km`; mismatch discards | Low |
 | H4 | R10 never says what judges "still rooted" | Gemma yes/no call on the found crop; P1, decide before S40 | Medium |
 | H5 | Fallback file is October-only; offline cold starts after October get October targets | Accept for v1; note in the post | Low |
 | H6 | Hazard false alarms on safe plants | Resolved on Day 1 by scoring hazards against BioCLIP's species table (4,271 species plus *T. pubescens*) (warn when a hazard species is in the top 5): 48 of 52 hazards caught, 1 of 253 safe photos warned. Against menu labels alone, magnolia warned 10 of 10 and honeysuckle 9 of 10 | Low |

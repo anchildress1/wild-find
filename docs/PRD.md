@@ -155,7 +155,7 @@ Day-1 measurements on the test phone are in hole 4; heat and hint latency are st
 | --- | --- | --- |
 | Privacy | No photo or precise location leaves the device; gameplay requests carry only coarse region coordinates plus ordinary request metadata such as IP address | Network log on the test phone |
 | Offline | A full hunt runs in airplane mode from the cache or the bundled fallback list | Field test |
-| Verify latency | Each analyzed live frame under 200 ms (TinyCLIP on the reticle crop and full frame, plus BioCLIP); the first eligible frame to Found under 1.5 s | Gate harness (S05) |
+| Verify latency | Each analyzed live frame under 200 ms (TinyCLIP on the reticle crop and full frame, plus BioCLIP on up to both); the first eligible frame to Found under 1.5 s | Gate harness (S05) |
 | Hint latency | Under 5 s for level 2; levels 1 and 3 are precomputed (unmeasured) | Day-1 gate |
 | Download size | Gemma 2,588,147,712 bytes, fetched after install; the APK carries BioCLIP (46,986,589 bytes), the plant gate (about 33 MB), and the species table (about 17.5 MB) | Day-1 gate |
 | Storage | Free space checked before the download starts | Day-1 gate |
@@ -325,11 +325,12 @@ Gemma downloads from `https://huggingface.co/<repo>/resolve/<revision>/<file>`; 
   "menu_version": "2026-10-07",
   "region": "34_-85",
   "month": 10,
+  "radius_km": 75,
   "sightings": { "47851": 272 }
 }
 ```
 
-A mismatch on schema\_version, menu\_version, region, or month discards the entry and refetches.
+radius\_km is 75, or 150 after the widen, so widened counts never pass as 75 km counts. A mismatch on schema\_version, menu\_version, region, month, or radius\_km discards the entry and refetches.
 
 **Model inputs and outputs**
 
@@ -430,7 +431,7 @@ Every failure degrades to a playable hunt or a plain message; none crash or stal
 | iNat unreachable, matching cache exists | Use the cached entry |
 | iNat unreachable, no matching cache | Use the bundled West Georgia fallback list |
 | iNat returns 429 | Wait per Retry-After, then use the cache or the fallback list |
-| Cache schema or menu version mismatch | Discard the entry and refetch |
+| Cache entry mismatch (schema, menu, region, month, or radius) | Discard the entry and refetch |
 | Fewer than 3 eligible words | Widen the radius to 150 km once, one extra query of up to three requests; still short, show "wild-find covers west Georgia for now" |
 | Not enough free storage | Stop before downloading and show the space needed |
 | Model download fails | Resume where it stopped; Wi-Fi only |
