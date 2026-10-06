@@ -1,4 +1,4 @@
-.PHONY: setup build install fetch-models push-models reference test pipeline-test lint ktlint detekt android-lint pipeline-lint shellcheck actionlint secret-scan ai-checks clean
+.PHONY: setup build install device-test fetch-models push-models reference test pipeline-test lint ktlint detekt android-lint pipeline-lint shellcheck actionlint secret-scan ai-checks clean
 
 SHELL := /bin/bash
 
@@ -7,7 +7,7 @@ SHELL_ANDROID_SERIAL := $(ANDROID_SERIAL)
 SHELL_WILDFIND_PACKAGE := $(WILDFIND_PACKAGE)
 -include .env
 ANDROID_SERIAL := $(or $(SHELL_ANDROID_SERIAL),$(ANDROID_SERIAL))
-WILDFIND_PACKAGE := $(or $(SHELL_WILDFIND_PACKAGE),$(WILDFIND_PACKAGE))
+WILDFIND_PACKAGE := $(or $(SHELL_WILDFIND_PACKAGE),$(WILDFIND_PACKAGE),dev.anchildress1.wildfind.debug)
 export WILDFIND_PACKAGE
 # adb treats an empty ANDROID_SERIAL as a device named ""; export it only when set.
 ifneq ($(strip $(ANDROID_SERIAL)),)
@@ -36,6 +36,12 @@ build:
 # -r keeps app data, so a sideloaded model survives reinstalls.
 install: build
 	adb install -r -d app/build/outputs/apk/debug/app-debug.apk
+
+# On-device instrumented tests. Not connectedAndroidTest: it uninstalls the app afterwards, deleting the sideloaded model.
+device-test: install
+	$(GRADLE) :app:assembleDebugAndroidTest
+	adb install -r -d app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+	@adb shell am instrument -w $(WILDFIND_PACKAGE).test/androidx.test.runner.AndroidJUnitRunner | tee /dev/stderr | grep -q '^OK ('
 
 fetch-models:
 	./scripts/models.sh fetch

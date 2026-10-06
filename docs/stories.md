@@ -10,7 +10,7 @@ Both models run on the test phone, or nothing else starts.
 
 - [x] **S01 Sideload models** (Makefile) — `make fetch-models` pulls and verifies both pins into `.models/`; `make push-models` streams them into the debug app's `no_backup/models` over adb and verifies SHA-256 on the device; hole 12
 - [x] **S02 BioCLIP reference** (pipeline) — `make reference` embeds a CC0 northern red oak fixture (iNat 363799243, 3 agreeing IDs) and the word, hazard, and scene labels into `app/src/androidTest/assets/reference/`; fails unless the fixture word is top-1
-- [ ] **S03 BioCLIP on device** (app) — ONNX Runtime loads `flora_student_fp16.onnx`; fixture embedding matches S02 within tolerance; labels score correctly
+- [x] **S03 BioCLIP on device** (app) — ONNX Runtime loads `flora_student_fp32.onnx` (fp16 returns NaN on ARM); `make device-test` passes: cosine 1.0000 to the S02 reference, oak top-1, load 135 ms, embed 58 ms on the test phone
 - [ ] **S04 Gemma boxes** (core + app) — LiteRT-LM loads E2B; box call returns JSON that the core box parser accepts (clamp, reject inverted/zero-area, keep 5 largest)
 - [ ] **S05 Gate harness** (app, debug only) — records verify latency, hint latency, RAM, and a 20-minute thermal run to a local exportable log; holes 4, 10, 13, 18
 - [ ] **S06 Scene label verdict** (app) — scene + non-plant labels vs BioCLIP Mobile; on failure switch to the Gemma plant / non-plant / screen fallback; hole 17
