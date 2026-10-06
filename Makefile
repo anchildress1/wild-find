@@ -1,4 +1,4 @@
-.PHONY: setup build install device-test focus-probe assets hazard-vectors fetch-models push-models reference test pipeline-test lint ktlint detekt android-lint pipeline-lint shellcheck actionlint secret-scan ai-checks clean
+.PHONY: setup build install device-test focus-probe assets sprites hazard-vectors fetch-models push-models reference test pipeline-test lint ktlint detekt android-lint pipeline-lint shellcheck actionlint secret-scan ai-checks clean
 
 SHELL := /bin/bash
 
@@ -62,6 +62,10 @@ push-models:
 # Bundled models and tables into app/generated/assets (gitignored); every app build needs them.
 assets:
 	$(UV) run --group reference python -W error -m wild_find_pipeline.assets
+
+# Repacks Briar's source sprite sheets into the committed app/src/main/assets/briar/.
+sprites:
+	$(UV) run python -W error -m wild_find_pipeline.sprites
 
 # Rebuilds the committed hazard_vectors.json; pulls the 3.9 GB BioCLIP teacher (as does reference), so CI runs neither.
 hazard-vectors:
