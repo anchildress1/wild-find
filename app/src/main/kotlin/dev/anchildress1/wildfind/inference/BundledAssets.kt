@@ -6,6 +6,9 @@ import dev.anchildress1.wildfind.core.tensor.Npy
 import dev.anchildress1.wildfind.core.verify.PlantGate
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.FileInputStream
+import java.nio.ByteBuffer
+import java.nio.channels.FileChannel
 
 /**
  * Models and tables `make assets` bundles into the APK.
@@ -13,11 +16,11 @@ import org.json.JSONObject
  * @property assets the app's asset manager
  */
 class BundledAssets(private val assets: AssetManager) {
-    /** BioCLIP 2.5 Mobile image encoder bytes. */
-    fun bioclipModel(): ByteArray = bytes(BIOCLIP)
+    /** BioCLIP 2.5 Mobile image encoder, memory-mapped from the APK. */
+    fun bioclipModel(): ByteBuffer = mapped(BIOCLIP)
 
-    /** TinyCLIP plant-gate image encoder bytes. */
-    fun plantGateModel(): ByteArray = bytes(PLANT_GATE)
+    /** TinyCLIP plant-gate image encoder, memory-mapped from the APK. */
+    fun plantGateModel(): ByteBuffer = mapped(PLANT_GATE)
 
     /** Plant-gate labels and scale from `plant_gate.json`. */
     fun plantGate(): PlantGate {
@@ -53,6 +56,13 @@ class BundledAssets(private val assets: AssetManager) {
     data class Species(val scientific: String, val hazard: Boolean)
 
     private fun bytes(name: String) = assets.open(name).use { it.readBytes() }
+
+    // openFd only works on stored entries; app/build.gradle.kts keeps .onnx uncompressed. The mapping outlives the fd.
+    private fun mapped(name: String): ByteBuffer = assets.openFd(name).use { fd ->
+        FileInputStream(fd.fileDescriptor).channel.use {
+            it.map(FileChannel.MapMode.READ_ONLY, fd.startOffset, fd.declaredLength)
+        }
+    }
 
     private fun floats(array: JSONArray) = FloatArray(array.length()) { array.getDouble(it).toFloat() }
 

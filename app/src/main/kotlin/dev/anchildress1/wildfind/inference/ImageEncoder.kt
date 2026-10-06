@@ -5,6 +5,7 @@ import ai.onnxruntime.OrtEnvironment
 import ai.onnxruntime.OrtSession
 import android.graphics.Bitmap
 import android.graphics.Color
+import java.nio.ByteBuffer
 import java.nio.FloatBuffer
 
 /**
@@ -12,7 +13,7 @@ import java.nio.FloatBuffer
  *
  * Both graphs take an `image` input of plain 0..1 RGB and apply their own normalization.
  */
-class ImageEncoder(model: ByteArray) : AutoCloseable {
+class ImageEncoder(model: ByteBuffer) : AutoCloseable {
     private val env = OrtEnvironment.getEnvironment()
     private val options = OrtSession.SessionOptions()
     private val session = env.createSession(model, options)

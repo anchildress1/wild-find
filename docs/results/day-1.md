@@ -197,8 +197,8 @@ The back camera (ID 0, 6.3 mm) reports focus calibration `APPROXIMATE` and no mi
 | Export vs the Day-1 measurement path, on all 307 Day-1 photos (reticle crop) | largest plant-share difference 0.0000024; 0 verdict flips ([check_plant_gate_export.py](day-1/check_plant_gate_export.py)) |
 | Fixture plant share: laptop export, Day-1 path, phone | 0.986990, 0.986990, 0.986990 |
 | Phone vs laptop embedding cosine | 0.9999999889 |
-| Plant gate on the phone | load 220 ms, one embedding 40 ms |
-| BioCLIP on the phone, loaded from the APK | load 353 ms (was 128 to 138 ms from a sideloaded file), one embedding 45 ms, cosine 0.9999999988 |
+| Plant gate on the phone | load 220 ms read into the heap, 73 ms memory-mapped; one embedding 30 to 40 ms |
+| BioCLIP on the phone, loaded from the APK | load 353 ms read into the heap, 115 ms memory-mapped (128 to 138 ms from a sideloaded file); one embedding 45 to 65 ms; cosine 0.9999999988 |
 
 ## Still unmeasured
 

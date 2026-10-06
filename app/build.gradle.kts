@@ -31,6 +31,11 @@ android {
         compose = true
     }
 
+    androidResources {
+        // Stored, not deflated, so BundledAssets can memory-map the models instead of inflating them onto the heap.
+        noCompress += "onnx"
+    }
+
     lint {
         warningsAsErrors = true
         abortOnError = true

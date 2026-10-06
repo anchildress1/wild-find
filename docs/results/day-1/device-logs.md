@@ -95,3 +95,13 @@ PlantGateParity: load 220 ms, embed 40 ms
 PlantGateParity: cosine to laptop reference: 0.9999999889085937, plant share 0.9869904087790642
 OK (3 tests)
 ```
+
+Same tests after the models switched to memory-mapped, uncompressed APK entries:
+
+```
+BioclipParity: load 115 ms, embed 65 ms
+BioclipParity: cosine to laptop reference: 0.9999999987512017
+PlantGateParity: load 73 ms, embed 30 ms
+PlantGateParity: cosine to laptop reference: 0.9999999889085937, plant share 0.9869904087790642
+OK (3 tests)
+```
