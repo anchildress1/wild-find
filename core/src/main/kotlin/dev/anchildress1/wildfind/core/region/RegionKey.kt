@@ -10,7 +10,7 @@ data class RegionKey(val lat: Int, val lng: Int) {
     override fun toString(): String = "${lat}_$lng"
 
     companion object {
-        /** The only v1 region: a 75 km radius around (34, -85), covering Carrollton. */
+        /** The only supported v1 key; the iNat query covers 75 km around its center, (34, -85). */
         val WEST_GEORGIA = RegionKey(34, -85)
         private val SUPPORTED = setOf(WEST_GEORGIA)
 
