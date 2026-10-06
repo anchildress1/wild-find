@@ -123,7 +123,7 @@ Ten P0s ship the hunt; one P1 follows; four P2s shape the design now. Requiremen
 | --- | --- | --- |
 | R1 | Safety opener | First launch shows bees and snakes, with poison ivy drawn into the art; one rule: "Look. Photograph. Leave it where it grows."; no copy says safe, harmless, not poisonous, or okay to touch; replayable from the menu |
 | R2 | Hunt list | One iNaturalist query per hunt, requiring at most three paginated HTTP requests: coarse region coordinates, current calendar month across all available years, plants, research grade; a result counts toward a target when its taxon id equals the target's taxon\_id or the target's taxon\_id is in its ancestor\_ids; eligible at 25+ sightings; fewer than 3 eligible widens the radius to 150 km once; cached under the versioned cache key; location denied falls back to a manual region pick; fewer than 3 eligible words shows the coverage message |
-| R3 | Grass tutorial | The first-ever hunt opens with grass, followed by 3 normal targets; a grass close-up passes when TinyCLIP calls the reticle crop a plant and grass is in BioCLIP's top 3 (50 of 52 CC0 grass photos on Day 1; top-1 alone passed 45); the plant gate counts lawn as grass; the hazard check doesn't run during the tutorial, because 9 of 54 grass photos warned against the menu labels on Day 1 (1 of 54 against the species table), and the leave-it rule stays on screen; done in under 60 seconds; never repeats once completed |
+| R3 | Grass tutorial | The first-ever hunt opens with grass, followed by 3 normal targets; a grass close-up passes when TinyCLIP calls the reticle crop a plant and grass is in BioCLIP's top 3 of the fixed tutorial label set, the 11 labels Day 1 measured (Poaceae, Quercus, Polypodiopsida, Trifolium, Pinus, Taraxacum, and the 5 hazard species), never the hunt's full label universe (50 of 52 CC0 grass photos on Day 1; top-1 alone passed 45); the plant gate counts lawn as grass; the hazard check doesn't run during the tutorial, because 9 of 54 grass photos warned against the menu labels on Day 1 (1 of 54 against the species table), and the leave-it rule stays on screen; done in under 60 seconds; never repeats once completed |
 | R4 | Target pick | 3 targets per hunt by sighting-weighted random from eligible words; a hazard is never a target |
 | R5 | Verify | Follows the Runtime Logic verify table, live while the camera is open; a find needs the subject in close range and the target top-1 on the reticle crop at or above its verify\_floor for 3 frames in a row, then auto-captures; a hazard match shows a warning and gives no star; no result is ever presented as evidence of safety |
 | R6 | Hints | Tap for a hint; levels 1 and 3 are precomputed from the fact card at hunt start; level 2 reads the current camera frame at tap time, with no separate hint photo; guards reject the target name, "I see", "there is", numbers not on the card, and anything over 20 words; retry once, then a template hint |
@@ -227,13 +227,13 @@ Runs once on the laptop in Python with uv; a word ships only after it passes eve
 6. **Cards:** the Wikipedia description, found via the taxon's wikipedia\_url, goes to Gemma with the card prompt, which also picks icon\_category
 7. **Fact-check:** in a manual Claude Code pass, Claude checks every fact against its source text, every word-to-taxon match, and every icon\_category; failures print for review
 8. **Ship review:** Ashley reviews the final menu before it ships
-9. **Embeddings:** the BioCLIP 2.5 ViT-H text encoder writes one vector per menu word and hazard (text format per hole 3); the TinyCLIP text encoder writes the plant-gate vectors
+9. **Embeddings:** the BioCLIP 2.5 ViT-H text encoder writes one vector per menu word and per tutorial label (text format per hole 3); the TinyCLIP text encoder writes the plant-gate vectors
 10. **Fallback:** the same gates produce fallback\_october\_west\_georgia.json from October sightings, with no live counts
 11. **Output:** menu.json, hazards.json, labels.npy, labels.json, the plant gate (plant_gate.onnx, plant_gate.json), and the fallback file
 
 **Hazard species:** every *Toxicodendron* species (poison ivy, poison oak, poison sumac), *Phytolacca americana* (pokeweed), and *Solanum carolinense* (Carolina horsenettle); the fact-check confirms each.
 
-**Plant-gate labels:** plant, leaves, tree, grass, flower, moss, fern vs person, child, screen, phone, road, sidewalk, car, dog, room, building. Scores are cosine similarity times TinyCLIP's learned scale (50.0), then softmaxed; a frame is a plant when the plant labels' combined share is over 0.5. Raw cosines softmaxed without the scale give different verdicts.
+**Plant-gate prompts** (exact strings, no trailing period, as measured on Day 1): "a photo of " followed by a plant, leaves, a tree, grass, a flower, moss, a fern vs a person, a child, a screen, a phone, a road, a sidewalk, a car, a dog, a room, a building. Scores are cosine similarity times TinyCLIP's learned scale (50.0), then softmaxed; a frame is a plant when the plant labels' combined share is over 0.5. Raw cosines softmaxed without the scale give different verdicts.
 
 **Ambiguous-name denylist:** blocks target names that are themselves ambiguous or hazardous common names. A safe taxon is not blocked just because its word appears inside a longer hazard name, so oak stays. Starter list, maintained by hand: ivy, sumac. Berry-named targets are allowed unless the name itself is hazardous.
 
@@ -274,8 +274,8 @@ Ten files ship in the app, one pinned model downloads once, and every cache entr
 | hazards.json | Hazard species (name, taxon\_id, scientific name) and the two opener hazards (name, rule) | Build pipeline, from NIOSH |
 | species\_table.npy | BioCLIP Mobile's 4,271-species text table plus a row for each hazard species it lacks (today: *Toxicodendron pubescens*); 1024-d unit vectors | Build pipeline, from the pinned taxa\_table.npy |
 | species\_labels.json | Scientific name per species\_table row, with a hazard flag | Build pipeline, from the pinned taxa\_labels.json |
-| labels.npy | One 1024-d unit vector per menu word | BioCLIP 2.5 ViT-H text encoder |
-| labels.json | Parallel list: id per menu word | Build pipeline |
+| labels.npy | One 1024-d unit vector per menu word, plus the 11 fixed tutorial labels (R3) | BioCLIP 2.5 ViT-H text encoder |
+| labels.json | Parallel list: id per menu word or tutorial label | Build pipeline |
 | flora\_student\_fp32.onnx | BioCLIP 2.5 Mobile image encoder, fp32; pinned below and SHA-256 checked at build time | Build pipeline, from crazedcodernate/bioclip-2.5-mobile-fastvit @ 29b474ea2a5d72b4646f036ead9441e0a22a5c62 |
 | plant\_gate.onnx | TinyCLIP ViT-8M/16 image encoder, fp32 (about 33 MB), with CLIP normalization baked in | Build pipeline, exported from the pinned TinyCLIP weights below |
 | plant\_gate.json | Plant and not-plant labels, their 512-d TinyCLIP text vectors, and TinyCLIP's learned logit scale (exp(logit\_scale) = 50.0) | Build pipeline |
@@ -335,10 +335,12 @@ A mismatch on schema\_version, menu\_version, region, or month discards the entr
 
 | Model | Input | Output |
 | --- | --- | --- |
-| TinyCLIP plant gate | 224 x 224 RGB reticle crop and full frame, values 0 to 1, rotation normalized (the same inputs BioCLIP gets); normalization is baked in | 512-d unit vector; softmax over 50.0 × cosine against plant\_gate.json rows |
+| TinyCLIP plant gate | 224 x 224 RGB reticle crop and full frame, values 0 to 1, rotation normalized (the same inputs BioCLIP gets; crops below); normalization is baked in | 512-d unit vector; softmax over 50.0 × cosine against plant\_gate.json rows |
 | BioCLIP 2.5 Mobile | 224 x 224 RGB reticle crop, plus the full frame when TinyCLIP calls it a plant; values 0 to 1, rotation normalized; normalization is baked in. The reticle embedding is reused for target scoring | 1024-d unit vector; targets score against labels.npy rows, hazards against species\_table.npy rows |
 | Gemma, scene call | Scene image plus the fixed tag list | JSON array of tags |
 | Gemma, hint call | Fact card, tags, hint level | One line, 20 words or fewer |
+
+**Crops** (the geometry Day 1 measured): both come from the rotation-normalized analysis frame. Full frame: the center square with side equal to the shorter edge. Reticle crop: the center square with side 60% of the shorter edge. Each is resized bicubic to 224 x 224. The on-screen circle is drawn inscribed in the reticle square after mapping analysis coordinates to preview coordinates, so the kid aims at the pixels the models read.
 
 **The iNaturalist query**
 
@@ -365,7 +367,7 @@ Verify runs on live camera frames, about 5 per second, with no Gemma call. Each 
 | 5 | The target is top-1 on the reticle crop, at or above its verify\_floor and past the margin if calibration adopts one, for 3 frames in a row | Auto-capture, then Found | Yes |
 | 6 | Anything else | Reticle guidance ("Put the plant in the circle"), with the hint button | No |
 
-The back camera reports focus distance as approximate (Day 1); the close-range threshold is set on the device (hole 19). BioCLIP target labels per frame: this hunt's targets and other locally eligible words; hazards score against the species table. The grass tutorial skips row 1 (R3). A missed hazard never reads as safe: "Look. Photograph. Leave it where it grows." stays the rule on every screen.
+The back camera reports focus distance as approximate (Day 1); the close-range threshold is set on the device (hole 19). BioCLIP target labels per frame: this hunt's targets and other locally eligible words; hazards score against the species table. The grass tutorial skips row 1 and scores only its fixed label set (R3). A missed hazard never reads as safe: "Look. Photograph. Leave it where it grows." stays the rule on every screen.
 
 ```
 pass = target_score > runner_up_score          // top-1 is always required
@@ -471,7 +473,7 @@ No blockers remain; every hole below closes or falls back during the Day-1 gate 
 | 10 | Heat and battery | Live BioCLIP at about 5 frames a second plus the camera; Gemma only on hint taps | The gate harness runs a 20-minute live-camera session | Medium |
 | 12 | Home Wi-Fi download | A Vestige model download broke when Hugging Face moved its redirect CDN and the app had the old host pinned; filtered networks can also block the CDN | Pin the Hugging Face start URL, never the CDN host; trust bytes + SHA-256; re-resolve redirects on resume; the Day-1 gate runs the full download and an interrupted resume on the test phone | High |
 | 13 | No telemetry | Field failures stay invisible by design | Debug builds only: a local log the developer can export | Medium |
-| 17 | BioCLIP Mobile vs non-plant labels | Resolved on Day 1: 18 of 74 free non-plant photos scored a plant target top-1 on the reticle crop (25 of 74 on the full frame), and a portrait scored oak (0.592) above a real oak (0.572). TinyCLIP ViT-8M kept 176 of 176 plant photos and passed 2 of 74 non-plants on the full frame, so it gates every frame first | Export, ship, and test TinyCLIP on the phone (S06) | Low |
+| 17 | BioCLIP Mobile vs non-plant labels | Laptop side resolved on Day 1: 18 of 74 free non-plant photos scored a plant target top-1 on the reticle crop (25 of 74 on the full frame), and a portrait scored oak (0.592) above a real oak (0.572). TinyCLIP ViT-8M kept 176 of 176 plant photos and passed 2 of 74 non-plants on the full frame, so it gates every frame first. Open until the phone matches the laptop: BioCLIP fp16 was right on the laptop and NaN on the phone | Export, ship, and pass TinyCLIP phone parity (S06) before verify depends on it | High |
 | 18 | Gemma file variant | Resolved on Day 1: the pinned generic file loads and runs on the GPU backend, so the GPU-only build isn't needed | Keep the pinned file | Low |
 | 19 | Approximate focus distance | The back camera reports focus distance as approximate, so "walk closer" may fire too early or late | Set the close-range threshold by pointing the test phone at near and far plants; tune in the field test | Medium |
 
