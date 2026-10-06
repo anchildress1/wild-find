@@ -8,7 +8,7 @@ Module key: **core** = pure Kotlin, JVM-tested · **app** = Android · **pipelin
 
 Every runtime model (TinyCLIP, BioCLIP, Gemma) runs on the test phone, or nothing else starts.
 
-- [x] **S01 Sideload models** (Makefile) — `make fetch-models` pulls and verifies both pins into `.models/`; `make push-models` streams them into the debug app's `no_backup/models` over adb and verifies SHA-256 on the device; hole 12
+- [x] **S01 Sideload models** (Makefile) — `make fetch-models` pulls and verifies the Gemma pin into `.models/`; `make push-models` streams it into the debug app's `no_backup/models` over adb and verifies SHA-256 on the device; hole 12
 - [x] **S02 BioCLIP reference** (pipeline) — `make reference` embeds a CC0 northern red oak fixture (iNat 363799243, 3 agreeing IDs) and the word, hazard, and scene labels into `app/src/androidTest/assets/reference/`; fails unless the fixture word is top-1
 - [x] **S03 BioCLIP on device** (app) — ONNX Runtime loads `flora_student_fp32.onnx` (fp16 returns NaN on ARM); `make device-test` passes: cosine 1.0000 to the S02 reference, oak top-1, load 135 ms, embed 58 ms on the test phone
 - [x] **S04 Gemma on device** — E2B loads on the GPU without out-of-memory (2.1 GB loaded, 2.9 GB peak; 4.0 s warm load) and answers vision prompts in 2.3–2.9 s; too slow for the verify path, so boxing was dropped for deterministic live verify
