@@ -8,7 +8,7 @@ config:
 comments:
   UndocumentedPublicClass:
     active: true
-    searchInInnerObject: false
+    ignoreDefaultCompanionObject: true
     excludes: ['**/test/**', '**/androidTest/**']
   UndocumentedPublicFunction:
     active: true
