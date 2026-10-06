@@ -21,6 +21,7 @@ sdk env install
 make setup
 make ai-checks
 make install   # debug APK to a connected phone
+make fetch-models push-models   # sideload the pinned models to that phone
 ```
 
 ## Credits

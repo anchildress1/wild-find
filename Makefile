@@ -1,4 +1,4 @@
-.PHONY: setup build install test lint ktlint detekt android-lint pipeline-lint secret-scan ai-checks clean
+.PHONY: setup build install fetch-models push-models test lint ktlint detekt android-lint pipeline-lint secret-scan ai-checks clean
 
 SHELL := /bin/bash
 
@@ -15,8 +15,15 @@ setup:
 build:
 	$(GRADLE) :app:assembleDebug
 
+# -r keeps app data, so a sideloaded model survives reinstalls.
 install: build
 	adb install -r -d app/build/outputs/apk/debug/app-debug.apk
+
+fetch-models:
+	./scripts/models.sh fetch
+
+push-models:
+	./scripts/models.sh push
 
 test:
 	$(GRADLE) :core:test :core:koverVerify

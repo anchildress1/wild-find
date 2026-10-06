@@ -19,7 +19,7 @@ Spec of record: `docs/PRD.md`. Work queue: `docs/stories.md`. A change that cont
 - Region membership = rounded whole-degree key match. The iNat query sends the region center.
 - Open-weight models only at app time. Never swap the inference runtime (LiteRT-LM, ONNX Runtime) to dodge a gap.
 - No iOS, KMP, `expect`/`actual`, or Vestige code.
-- Pinned model bytes and SHA-256 live in `docs/PRD.md` Data Contracts. Change them there first.
+- Model pins live in `core/src/main/resources/models.properties`; `docs/PRD.md` Data Contracts mirrors them. Change both in one commit.
 
 ## UI
 
@@ -32,4 +32,6 @@ Spec of record: `docs/PRD.md`. Work queue: `docs/stories.md`. A change that cont
 
 - `make ai-checks` before every commit. Warnings fail the build.
 - `make setup` once per clone (lefthook + uv sync).
+- `make fetch-models` then `make push-models` sideloads the pinned models to the test phone.
+- Never `adb uninstall` the app on the test phone; it deletes the 2.6 GB model. `make install` keeps data.
 - Unrunnable check (on-device, field, airplane mode) → stop and hand it to the user. Never tick it yourself.

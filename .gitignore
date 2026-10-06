@@ -37,3 +37,6 @@ keystore.properties
 # OS
 .DS_Store
 .claude/
+
+# Local model cache for sideloading
+.models/
