@@ -63,7 +63,7 @@ push-models:
 assets:
 	$(UV) run --group reference python -W error -m wild_find_pipeline.assets
 
-# Rebuilds the committed hazard_vectors.json; pulls the 3.9 GB BioCLIP teacher, so CI never runs it.
+# Rebuilds the committed hazard_vectors.json; pulls the 3.9 GB BioCLIP teacher (as does reference), so CI runs neither.
 hazard-vectors:
 	$(UV) run --group reference python -W error -m wild_find_pipeline.hazard_vectors
 
