@@ -41,7 +41,8 @@ class BioclipParityTest {
             }
         }
 
-        val cosine = dot(embedding, floats(reference.getJSONArray("image_embedding"))) / norm(embedding)
+        val expected = floats(reference.getJSONArray("image_embedding"))
+        val cosine = dot(embedding, expected) / (norm(embedding) * norm(expected))
         Log.i(TAG, "cosine to laptop reference: $cosine")
         assertTrue("cosine $cosine below $MIN_COSINE", cosine >= MIN_COSINE)
 
@@ -67,8 +68,9 @@ class BioclipParityTest {
     private companion object {
         const val TAG = "BioclipParity"
 
-        // fp16 kernels differ between the laptop's and the phone's ONNX Runtime CPU paths; 0.999 still catches
-        // any preprocessing mistake (channel order, scaling, normalization), which drops cosine far lower.
+        // Phone (ARM NEON) and laptop ONNX Runtime CPU kernels round fp32 math differently, so allow tiny drift.
+        // 0.999 still catches any preprocessing mistake (channel order, scaling, normalization),
+        // which drops cosine far lower.
         const val MIN_COSINE = 0.999
     }
 }

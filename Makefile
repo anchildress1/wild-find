@@ -40,7 +40,7 @@ install: build
 # On-device instrumented tests. Not connectedAndroidTest: it uninstalls the app afterwards, deleting the sideloaded model.
 device-test: install
 	$(GRADLE) :app:assembleDebugAndroidTest
-	adb install -r -d app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+	adb install -r -d -t app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
 	@adb shell am instrument -w $(WILDFIND_PACKAGE).test/androidx.test.runner.AndroidJUnitRunner | tee /dev/stderr | grep -q '^OK ('
 
 fetch-models:

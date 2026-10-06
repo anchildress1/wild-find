@@ -11,7 +11,8 @@ import java.nio.FloatBuffer
 /** BioCLIP 2.5 Mobile image encoder: a 224x224 RGB bitmap in, a unit 1024-d embedding out. */
 class BioclipImageEncoder(modelFile: File) : AutoCloseable {
     private val env = OrtEnvironment.getEnvironment()
-    private val session = env.createSession(modelFile.path, OrtSession.SessionOptions())
+    private val options = OrtSession.SessionOptions()
+    private val session = env.createSession(modelFile.path, options)
 
     /** Embeds [bitmap], which must be exactly [SIZE]x[SIZE]; resizing and cropping are the caller's job. */
     fun embed(bitmap: Bitmap): FloatArray {
@@ -26,7 +27,11 @@ class BioclipImageEncoder(modelFile: File) : AutoCloseable {
         }
     }
 
-    override fun close() = session.close()
+    // The options own a native handle and must outlive the session built from them.
+    override fun close() {
+        session.close()
+        options.close()
+    }
 
     // The ONNX graph applies ImageNet normalization itself, so pixels go in as plain 0..1 RGB.
     private fun chwInput(bitmap: Bitmap): FloatBuffer {
