@@ -406,13 +406,14 @@ Only the current hunt's state persists; there is no history, streak, or sharing.
 
 Briar and the opener play finished sprite sheets, one per state. A Rive rig was dropped on Oct 6: the rig sheets' parts were drawn at mismatched sizes and didn't assemble into a usable Briar, and the sheets were removed.
 
-**Sprite sheet contract:** each state is `app/src/main/assets/briar/<state>.png` plus `<state>.json`. The PNG is a grid of equal frames, left to right, then top to bottom, on a transparent background. The JSON is `{"frame_width": 512, "frame_height": 512, "frames": 12, "columns": 4, "fps": 12, "loop": true}`. States: `welcome`, `searching`, `found`, `retry`, `complete`; until their art exists, every state plays `idle`. A looping state's last frame must flow into its first. The build repacks source sheets onto whole-pixel cells, so a source sheet may have fractional cell sizes.
+**Sprite sheet contract:** each state is `app/src/main/assets/briar/<state>.png` plus `<state>.json`. The PNG is a grid of equal frames, left to right, then top to bottom, on a transparent background. The JSON is `{"frame_width": 512, "frame_height": 512, "frames": 12, "columns": 4, "fps": 12, "loop": true}`. States: `welcome`, `searching`, `found`, `retry`, `complete`; until their art exists, every state plays `idle`. A looping state's last frame must flow into its first. The build finds each source frame by its outline and plants every frame on the same feet point, so a source sheet's frames needn't sit on an even grid.
 
 | Asset | Used in | File |
 | --- | --- | --- |
 | Logo | Splash, About | Path pending (Open Questions) |
 | Concept board | Poses, icon ideas, palette; reference only, broken alpha | assets/source/wild-find-sprite-1.png |
-| Briar idle loop | 8-frame idle (head turn, blink), source for `idle`; plays for every state until per-state art exists | assets/source/briar-idle-sprites-twigs.png |
+| Briar idle loop | 16-frame idle, source for `idle`; plays for every state until per-state art exists | assets/source/briar-sprite-16.png |
+| Briar idle loop, earlier | 8-frame idle (head turn, blink); unused | assets/source/briar-idle-sprites-twigs.png |
 | Briar sprite sheets | Per-state sheets: welcome; searching or hint; found; retry; hunt complete | app/src/main/assets/briar/ (only `idle` so far) |
 | Category icons | One per icon\_category: tree, flower, fern, grass, vine, shrub, moss, other | Path pending |
 | Opener art | Bees and snakes, with poison ivy drawn in; a sprite sheet under the same contract | Path pending |

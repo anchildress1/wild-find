@@ -3,34 +3,78 @@
 import json
 import math
 import sys
-from itertools import pairwise
 
+import numpy as np
 from PIL import Image
+from scipy import ndimage
 
 from wild_find_pipeline.paths import REPO
 
 SOURCE = REPO / "assets/source"
 OUT = REPO / "app/src/main/assets/briar"
-# name: (source file, columns, rows, fps); source cells may be fractional, e.g. 1774 / 4 = 443.5 px.
-SHEETS = {"idle": ("briar-idle-sprites-twigs.png", 4, 2, 8)}
+# name: (source file, columns, rows, fps)
+SHEETS = {"idle": ("briar-sprite-16.png", 4, 4, 8)}
+# Rows of each frame's lowest pixels that count as its feet.
+FEET_ROWS = 24
+# Soft fur edges sit outside the alpha > 128 outline; grow the outline this far to keep them.
+EDGE = 6
+
+
+def frames_of(source: Image.Image, columns: int, rows: int) -> list[Image.Image]:
+    """Cut out each frame by its own outline, in reading order.
+
+    Generated sheets don't keep frames on an even grid, so frames are found by connected alpha, not cell edges.
+    """
+    alpha = np.asarray(source)[..., 3]
+    labels, count = ndimage.label(alpha > 128)
+    sizes = ndimage.sum(np.ones_like(labels), labels, range(1, count + 1))
+    biggest = np.argsort(sizes)[::-1][: columns * rows] + 1
+    if len(biggest) < columns * rows or sizes[biggest[-1] - 1] < sizes[biggest[0] - 1] / 2:
+        raise ValueError(f"expected {columns * rows} frames of similar size")
+    boxes = ndimage.find_objects(labels)
+    # Reading order: bucket by row from the frame's vertical center, then left to right.
+    row_height = source.height / rows
+    order = sorted(
+        biggest,
+        key=lambda i: (int((boxes[i - 1][0].start + boxes[i - 1][0].stop) / 2 // row_height), boxes[i - 1][1].start),
+    )
+    frames = []
+    for i in order:
+        keep = ndimage.binary_dilation(labels == i, iterations=EDGE) & (alpha > 0)
+        ys, xs = np.nonzero(keep)
+        rgba = np.asarray(source).copy()
+        rgba[..., 3] = np.where(keep, rgba[..., 3], 0)
+        frames.append(Image.fromarray(rgba).crop((xs.min(), ys.min(), xs.max() + 1, ys.max() + 1)))
+    return frames
+
+
+def feet(frame: Image.Image) -> tuple[float, int]:
+    """Anchor point: horizontal center of the lowest FEET_ROWS rows of solid pixels, and the bottom row."""
+    alpha = np.asarray(frame)[..., 3] > 128
+    bottom = int(np.nonzero(alpha.any(axis=1))[0].max())
+    _, xs = np.nonzero(alpha[max(0, bottom - FEET_ROWS) : bottom + 1])
+    return float(xs.mean()), bottom
 
 
 def repack(source: Image.Image, columns: int, rows: int) -> tuple[Image.Image, int]:
-    """Cut a columns x rows grid at rounded cell edges and paste each frame onto a square whole-pixel cell.
+    """Place every frame on a square whole-pixel cell with its feet at one shared point, so the loop stays planted.
 
-    Every frame gets the same offset inside its cell, so frames stay registered to within a pixel.
     Returns the repacked sheet and its cell size.
     """
-    xs = [round(i * source.width / columns) for i in range(columns + 1)]
-    ys = [round(j * source.height / rows) for j in range(rows + 1)]
-    widest = max(b - a for a, b in pairwise(xs))
-    tallest = max(b - a for a, b in pairwise(ys))
-    cell = 8 * math.ceil(max(widest, tallest) / 8)
+    frames = frames_of(source, columns, rows)
+    anchors = [feet(f) for f in frames]
+    left = max(ax for ax, _ in anchors)
+    right = max(f.width - ax for f, (ax, _) in zip(frames, anchors, strict=True))
+    above = max(ay for _, ay in anchors)
+    below = max(f.height - ay for f, (_, ay) in zip(frames, anchors, strict=True))
+    cell = 8 * math.ceil(max(left + right, above + below) / 8)
+    # Shared feet point inside every cell, centered on the frames' combined extent.
+    fx = (cell - (left + right)) / 2 + left
+    fy = (cell - (above + below)) / 2 + above
     sheet = Image.new("RGBA", (cell * columns, cell * rows))
-    for row in range(rows):
-        for col in range(columns):
-            frame = source.crop((xs[col], ys[row], xs[col + 1], ys[row + 1]))
-            sheet.paste(frame, (col * cell + (cell - widest) // 2, row * cell + (cell - tallest) // 2))
+    for n, (frame, (ax, ay)) in enumerate(zip(frames, anchors, strict=True)):
+        col, row = n % columns, n // columns
+        sheet.alpha_composite(frame, (col * cell + round(fx - ax), row * cell + round(fy - ay)))
     return sheet, cell
 
 
