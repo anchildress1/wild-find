@@ -20,9 +20,9 @@ You need SDKMAN!, the Android SDK, uv, lefthook, ktlint, detekt, shellcheck, act
 sdk env install
 cp .env.example .env   # local overrides; never committed
 make setup
+make assets   # bundled models and tables; every APK build needs them (first run pulls about 160 MB of pinned files)
 make ai-checks
 make install   # debug APK to a connected phone
-make assets   # bundled models and tables; first run pulls the pinned files (3.9 GB text encoder)
 make fetch-models push-models   # sideload Gemma to that phone
 ```
 
