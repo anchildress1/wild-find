@@ -56,7 +56,7 @@ Every runtime model (TinyCLIP, BioCLIP, Gemma) runs on the test phone, or nothin
 
 ## Ship · Oct 9–11
 
-- [ ] **S50 Calibration** — ~30 free photos (CC0 or public domain, iNaturalist research grade) → per-target floors + margin decision
+- [ ] **S50 Calibration** — ~30 free photos (CC0 or public domain, iNaturalist research grade) → per-target floors + target margin decision; the hazard rule needs no calibration
 - [ ] **S51 Holdout** — 20–30 free photos, never used in calibration, including non-plant negatives (screens, people, pavement) → pass rate ≥ 90%, false pass ≤ 5%, hazard false-alarm rate recorded (H6)
 - [ ] **S52 Field test** — screen time per target, find rate after a hint, and the wide-shot false-pass rate measured live on the test phone, since "walk closer" depends on real autofocus readings
 - [ ] **S53 Release** — release keystore (local, never committed), R8 minify, signed APK on a GitHub Release, About screen credits; install the release build on the test phone and run a full first-launch download from it; H10
@@ -86,7 +86,7 @@ New holes found while drafting these stories. PRD holes 3, 4, 5, 10, 12, 13, 19 
 | H3 | Widened 150 km counts get cached under the same key as 75 km counts | Add `radius_km` to the cache entry; mismatch discards | Medium |
 | H4 | R10 never says what judges "still rooted" | Gemma yes/no call on the found crop; P1, decide before S40 | Medium |
 | H5 | Fallback file is October-only; offline cold starts after October get October targets | Accept for v1; note in the post | Low |
-| H6 | Hazard false alarms on safe plants: on Day 1, 9 of 52 CC0 grass photos (2 of 23 lawn grasses) and 2 of 2 clover photos had a hazard top-1; a 0.05 hazard-over-plant margin still left 5 of 52 grass photos warning, while poison ivy cleared it by 0.093 and 0.276. White oak beat poison oak by only 0.022 on the mobile model | Grass tutorial skips the hazard check (R3); for regular hunts, decide the hazard margin from the calibration set and track the false-alarm rate on the holdout | High |
+| H6 | Hazard false alarms on safe plants | Resolved on Day 1 by scoring hazards against BioCLIP's species table (4,271 species plus *T. pubescens*) (warn when a hazard species is in the top 5): 48 of 52 hazards caught, 1 of 265 safe photos warned. Against menu labels alone, magnolia warned 10 of 10 and honeysuckle 9 of 10 | Low |
 | H7 | Build-time menu gate uses 75 km while the app can widen to 150 km | Widened hunts may surface fewer words; accept, or run the gate at 150 km | Medium |
 | H8 | LiteRT-LM Python ships as a CLI; prompt-in, JSON-out scripting is unverified | Verify on Day 2 before S10; fall back to transformers in uv | Medium |
 | H10 | No release keystore plan for the GitHub Release APK | Local keystore, never committed; `keystore.properties` gitignored | Low |
