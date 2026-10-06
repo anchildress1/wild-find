@@ -27,7 +27,7 @@ make fetch-models push-models   # sideload the pinned models to that phone
 
 ## Credits
 
-Gemma, BioCLIP 2.5 Mobile, BioCLIP 2.5, OpenCLIP, iNaturalist, and Wikipedia.
+Gemma, BioCLIP 2.5 Mobile, BioCLIP 2.5, TinyCLIP, OpenCLIP, iNaturalist, and Wikipedia.
 
 ## License
 

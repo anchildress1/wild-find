@@ -332,7 +332,7 @@ A mismatch on schema\_version, menu\_version, region, or month discards the entr
 | Model | Input | Output |
 | --- | --- | --- |
 | TinyCLIP plant gate | 224 x 224 RGB reticle crop and full frame, values 0 to 1, rotation normalized (the same inputs BioCLIP gets); normalization is baked in | 512-d unit vector; softmax over 50.0 × cosine against plant\_gate.json rows |
-| BioCLIP 2.5 Mobile | 224 x 224 RGB reticle crop, values 0 to 1, rotation normalized; normalization is baked in | 1024-d unit vector; score is a dot product with labels.npy rows |
+| BioCLIP 2.5 Mobile | 224 x 224 RGB reticle crop, plus the full frame when TinyCLIP calls it a plant; values 0 to 1, rotation normalized; normalization is baked in. The reticle embedding is reused for target scoring | 1024-d unit vector; score is a dot product with labels.npy rows |
 | Gemma, scene call | Scene image plus the fixed tag list | JSON array of tags |
 | Gemma, hint call | Fact card, tags, hint level | One line, 20 words or fewer |
 
@@ -348,7 +348,7 @@ One query per hunt, requiring at most three paginated HTTP requests. month means
 
 ## Runtime Logic
 
-Verify runs on live camera frames, about 5 per second, with no Gemma call. Each frame is rotation-normalized once. TinyCLIP checks both the reticle crop and the full frame, and the hazard check runs on every region it calls a plant, so a hazard anywhere in view warns while a person or a screen never does. Then the reticle plant gate, then close range; a find needs the target on top for 3 frames in a row; no result ever means a plant is safe.
+Verify runs on live camera frames, about 5 per second, with no Gemma call. Each frame is rotation-normalized once. TinyCLIP checks both the reticle crop and the full frame, and the hazard check runs on every region it calls a plant, so a hazard that dominates the reticle crop or the whole frame warns while a person or a screen never does. A small hazard off to the side of a bigger safe plant can be missed; detection is an extra warning, never a guarantee. Then the reticle plant gate, then close range; a find needs the target on top for 3 frames in a row; no result ever means a plant is safe.
 
 **Verify, checked in order**
 
@@ -455,7 +455,7 @@ No blockers remain; every hole below closes or falls back during the Day-1 gate 
 | # | Hole | Why it matters | Fix | Severity |
 | --- | --- | --- | --- | --- |
 | 3 | Label text format | Day 1: with common names, a white oak photo scored "poison oak" top-1 on both the teacher and the mobile model; scientific names put oak top-1 on both | BioCLIP labels embed as "a photo of <scientific name>."; confirm on the calibration set | High |
-| 4 | Latency | Day 1: verify is BioCLIP alone, 60 ms per crop, so live frames fit easily. Gemma (hints only) loads in 4.0 s warm, 9.9 s first ever, peaks at 2.9 GB, and took 2.3 to 2.9 s per warm vision call (measured on box prompts before boxing was dropped). Level-2 hint latency is still unmeasured | Measure the hint call in the gate harness (S05) | Medium |
+| 4 | Latency | Day 1 measured parts, not the whole per-frame path: one BioCLIP embedding takes 58 to 60 ms (one run 132 ms); TinyCLIP on the phone is unmeasured. A live frame now runs TinyCLIP twice plus BioCLIP up to twice, so the 200 ms target is unproven. Gemma (hints only) loads in 4.0 s warm, 9.9 s first ever, peaks at 2.9 GB, and took 2.3 to 2.9 s per warm vision call. Level-2 hint latency is unmeasured | The gate harness (S05) benchmarks the full per-frame verify path and the hint call on the phone; if a frame runs over 200 ms, analyze fewer frames a second | High |
 | 5 | Kids read hints on screen | Reading pulls eyes down, against the theme | Read hints aloud with Android's on-device text-to-speech; confirm an offline voice on the test phone | High |
 | 8 | Loose Gemma boxes | Resolved on Day 1: verify no longer uses Gemma boxes | None | Low |
 | 10 | Heat and battery | Live BioCLIP at about 5 frames a second plus the camera; Gemma only on hint taps | The gate harness runs a 20-minute live-camera session | Medium |
