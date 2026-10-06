@@ -1,4 +1,4 @@
-.PHONY: setup build install fetch-models push-models test lint ktlint detekt android-lint pipeline-lint secret-scan ai-checks clean
+.PHONY: setup build install fetch-models push-models reference test pipeline-test lint ktlint detekt android-lint pipeline-lint secret-scan ai-checks clean
 
 SHELL := /bin/bash
 
@@ -25,8 +25,15 @@ fetch-models:
 push-models:
 	./scripts/models.sh push
 
-test:
+# Day-1 parity reference for the on-device BioCLIP check; needs make fetch-models first.
+reference:
+	$(UV) run --group reference python -W error -m wild_find_pipeline.reference
+
+test: pipeline-test
 	$(GRADLE) :core:test :core:koverVerify
+
+pipeline-test:
+	$(UV) run pytest pipeline/tests
 
 lint: ktlint detekt android-lint pipeline-lint
 

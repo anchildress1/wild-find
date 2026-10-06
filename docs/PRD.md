@@ -306,6 +306,8 @@ icon\_category is one of tree, flower, fern, grass, vine, shrub, moss, other. ve
 | Gemma 4 E2B | litert-community/gemma-4-E2B-it-litert-lm @ b3ca0d2f076785a8f4b2219ddbd2bdb99954eae1 | gemma-4-E2B-it.litertlm | 2,588,147,712 | 181938105e0eefd105961417e8da75903eacda102c4fce9ce90f50b97139a63c |
 | BioCLIP 2.5 Mobile | crazedcodernate/bioclip-2.5-mobile-fastvit @ 29b474ea2a5d72b4646f036ead9441e0a22a5c62 | flora\_student\_fp16.onnx | 23,849,085 | b152ee0b3fe8f7b6e01f27a580fa74fbec53c0519e4dccaebdb9e289d140c579 |
 
+The build-time text encoder is pinned too, laptop only: BioCLIP 2.5 ViT-H, imageomics/bioclip-2.5-vith14 @ 6e3d04e3d6522012c88181085c5ae666e14c45cd.
+
 Download from `https://huggingface.co/<repo>/resolve/<revision>/<file>`. Check free storage first. Integrity comes from the SHA-256 above, read from the Hugging Face file listing on October 5, 2026, never from a displayed size.
 
 **Cache entry**
@@ -459,7 +461,7 @@ No blockers remain; every hole below closes or falls back during the Day-1 gate 
 
 | # | Hole | Why it matters | Fix | Severity |
 | --- | --- | --- | --- | --- |
-| 3 | Label text format | BioCLIP learned taxonomic and common names; a bare "clover" may score poorly | Build label text the way pybioclip does, then compare against plain words on the calibration set | High |
+| 3 | Label text format | Day 1: with common names, a white oak photo scored "poison oak" top-1 on both the teacher and the mobile model; scientific names put oak top-1 on both | Plant labels embed as "a photo of <scientific name>."; scene labels use common words in the same template ("a photo of lawn."); confirm on the calibration set | High |
 | 4 | Latency is unmeasured | A verify runs a Gemma vision call plus BioCLIP; a level-2 hint runs Gemma twice | The Day-1 gate measures both; if too slow, cut Gemma calls and keep the architecture | High |
 | 5 | Kids read hints on screen | Reading pulls eyes down, against the theme | Read hints aloud with Android's on-device text-to-speech; confirm an offline voice on the test phone | High |
 | 8 | Loose Gemma boxes | One E2B test saw a box drift off its object | Pad crops 15%; check boxes on the calibration set | Medium |

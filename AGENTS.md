@@ -8,7 +8,7 @@ Spec of record: `docs/PRD.md`. Work queue: `docs/stories.md`. A change that cont
 | --- | --- | --- |
 | `core/` | Game logic: contracts, region, sightings, cache, hunt pick, verify decision, hint guards | Pure Kotlin JVM. No `android.*` imports. Every rule is unit-tested here |
 | `app/` | Compose UI, Rive, CameraX, LiteRT-LM, ONNX Runtime, model download, iNat HTTP | Thin adapters over `core`. Logic that can run on the JVM moves to `core` |
-| `pipeline/` | Build-time menu, fact cards, label embeddings | uv only. Outputs land in `app/src/main/assets/` |
+| `pipeline/` | Build-time menu, fact cards, label embeddings | uv only. Shipped outputs land in `app/src/main/assets/`; test references in `app/src/androidTest/assets/` |
 | `assets/source/` | Original art | Reference input. Never edit or regenerate |
 
 ## Hard rules

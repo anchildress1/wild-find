@@ -9,7 +9,7 @@ Module key: **core** = pure Kotlin, JVM-tested · **app** = Android · **pipelin
 Both models run on the test phone, or nothing else starts.
 
 - [x] **S01 Sideload models** (Makefile) — `make fetch-models` pulls and verifies both pins into `.models/`; `make push-models` streams them into the debug app's `no_backup/models` over adb and verifies SHA-256 on the device; hole 12
-- [ ] **S02 BioCLIP reference** (pipeline) — embed one fixture image and the scene + hazard labels on the laptop; write expected vectors
+- [x] **S02 BioCLIP reference** (pipeline) — `make reference` embeds a CC0 northern red oak fixture (iNat 363799243, 3 agreeing IDs) and the word, hazard, and scene labels into `app/src/androidTest/assets/reference/`; fails unless the fixture word is top-1
 - [ ] **S03 BioCLIP on device** (app) — ONNX Runtime loads `flora_student_fp16.onnx`; fixture embedding matches S02 within tolerance; labels score correctly
 - [ ] **S04 Gemma boxes** (core + app) — LiteRT-LM loads E2B; box call returns JSON that the core box parser accepts (clamp, reject inverted/zero-area, keep 5 largest)
 - [ ] **S05 Gate harness** (app, debug only) — records verify latency, hint latency, RAM, and a 20-minute thermal run to a local exportable log; holes 4, 10, 13, 18
@@ -84,7 +84,7 @@ New holes found while drafting these stories. PRD holes 3, 4, 5, 8, 10, 12, 13, 
 | H3 | Widened 150 km counts get cached under the same key as 75 km counts | Add `radius_km` to the cache entry; mismatch discards | Medium |
 | H4 | R10 never says what judges "still rooted" | Gemma yes/no call on the found crop; P1, decide before S40 | Medium |
 | H5 | Fallback file is October-only; offline cold starts after October get October targets | Accept for v1; note in the post | Low |
-| H6 | No metric for false hazard warnings on common plants, which kill the fun | Track hazard false-alarm rate on the holdout set | Medium |
+| H6 | Hazard check runs first, and on Day 1 the mobile model put white oak only 0.022 above poison oak (teacher: 0.069); its embedding sits at 0.81 cosine to the teacher's | Track hazard false-alarm rate on the holdout set; decide whether a hazard must beat the target by a margin before it warns | High |
 | H7 | Build-time menu gate uses 75 km while the app can widen to 150 km | Widened hunts may surface fewer words; accept, or run the gate at 150 km | Medium |
 | H8 | LiteRT-LM Python ships as a CLI; prompt-in, JSON-out scripting is unverified | Verify on Day 2 before S10; fall back to transformers in uv | Medium |
 | H10 | No release keystore plan for the GitHub Release APK | Local keystore, never committed; `keystore.properties` gitignored | Low |

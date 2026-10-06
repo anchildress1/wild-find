@@ -5,11 +5,15 @@ on:
     branches: [main]
     paths:
       - "pipeline/**"
+      - "core/src/main/resources/models.properties"
+      - "Makefile"
       - ".github/workflows/pipeline.yml"
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
     paths:
       - "pipeline/**"
+      - "core/src/main/resources/models.properties"
+      - "Makefile"
       - ".github/workflows/pipeline.yml"
   workflow_dispatch:
 
@@ -19,7 +23,7 @@ concurrency:
 
 jobs:
   lint:
-    name: Ruff
+    name: Lint and test
     if: github.event.pull_request.draft == false || github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -37,3 +41,6 @@ jobs:
 
       - name: Lint and format check
         run: make pipeline-lint
+
+      - name: Unit tests
+        run: make pipeline-test
