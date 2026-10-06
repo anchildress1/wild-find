@@ -7,8 +7,17 @@ dependencies = ["numpy>=2.3", "pillow>=11.3"]
 
 [dependency-groups]
 dev = ["gitlint-rai>=1.0.3", "pytest>=9.1.1", "ruff>=0.16.10"]
-# Model runtimes for `make reference` only; lint and unit tests never import them.
-reference = ["huggingface-hub>=0.35", "onnxruntime>=1.23", "open-clip-torch>=3.3.0", "torch>=2.9", "torchvision>=0.29"]
+# Model runtimes for `make reference` and `make assets` only; lint and unit tests never import them.
+reference = [
+    "huggingface-hub>=0.35",
+    "onnx>=1.23.2",
+    "onnxruntime>=1.23",
+    "onnxscript>=0.7.2",
+    "open-clip-torch>=3.3.0",
+    "torch>=2.9",
+    "torchvision>=0.29",
+    "transformers>=5.19.0",
+]
 
 [tool.uv]
 # gitlint-core's trusted-deps extra hard-pins vulnerable click (PYSEC-2026-2132) and sh (CVE-2026-54552).

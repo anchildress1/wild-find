@@ -34,6 +34,31 @@ android {
     }
 }
 
+androidComponents {
+    onVariants { variant ->
+        // Bundled models and tables from make assets; gitignored, never committed.
+        variant.sources.assets?.addStaticSourceDirectory("generated/assets")
+    }
+}
+
+// Without these files the APK installs fine and fails on the first camera frame, so no build may skip them.
+val checkBundledAssets = tasks.register("checkBundledAssets") {
+    val dir = layout.projectDirectory.dir("generated/assets")
+    val required = listOf(
+        "flora_student_fp32.onnx",
+        "plant_gate.onnx",
+        "plant_gate.json",
+        "species_table.npy",
+        "species_labels.json",
+    )
+    doLast {
+        val missing = required.filterNot { dir.file(it).asFile.isFile }
+        if (missing.isNotEmpty()) throw GradleException("missing bundled assets $missing; run make assets")
+    }
+}
+
+tasks.named("preBuild") { dependsOn(checkBundledAssets) }
+
 kotlin {
     jvmToolchain(25)
     compilerOptions {

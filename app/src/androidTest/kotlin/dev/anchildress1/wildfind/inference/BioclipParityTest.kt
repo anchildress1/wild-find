@@ -10,7 +10,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.File
 import kotlin.math.sqrt
 
 /** Day-1 gate: the on-device encoder must reproduce the laptop reference from `make reference`. */
@@ -20,18 +19,14 @@ class BioclipParityTest {
     private val reference = JSONObject(
         instrumentation.context.assets.open("reference/reference.json").bufferedReader().use { it.readText() },
     )
-    private val modelFile = File(
-        instrumentation.targetContext.noBackupFilesDir,
-        "models/" + reference.getJSONObject("image_model").getString("file"),
-    )
+    private val bundled = BundledAssets(instrumentation.targetContext.assets)
 
     @Test
     fun fixtureEmbeddingMatchesTheLaptopReferenceAndPicksTheFixtureWord() {
-        assertTrue("model missing; run make push-models", modelFile.isFile)
         val bitmap = instrumentation.context.assets.open("reference/fixture.png").use(BitmapFactory::decodeStream)
 
         val loadStart = System.nanoTime()
-        val encoder = BioclipImageEncoder(modelFile)
+        val encoder = ImageEncoder(bundled.bioclipModel())
         val loadMs = (System.nanoTime() - loadStart) / 1e6
         val embedding = encoder.use {
             it.embed(bitmap) // warm-up run, excluded from timing

@@ -1,4 +1,4 @@
-.PHONY: setup build install device-test focus-probe fetch-models push-models reference test pipeline-test lint ktlint detekt android-lint pipeline-lint shellcheck actionlint secret-scan ai-checks clean
+.PHONY: setup build install device-test focus-probe assets hazard-vectors fetch-models push-models reference test pipeline-test lint ktlint detekt android-lint pipeline-lint shellcheck actionlint secret-scan ai-checks clean
 
 SHELL := /bin/bash
 
@@ -56,9 +56,18 @@ fetch-models:
 push-models:
 	./scripts/models.sh push
 
-# Day-1 parity reference for the on-device BioCLIP check; needs make fetch-models first.
-reference:
+# Bundled models and tables into app/generated/assets (gitignored); every app build needs them.
+assets:
+	$(UV) run --group reference python -W error -m wild_find_pipeline.assets
+
+# Rebuilds the committed hazard_vectors.json; pulls the 3.9 GB BioCLIP teacher, so CI never runs it.
+hazard-vectors:
+	$(UV) run --group reference python -W error -m wild_find_pipeline.hazard_vectors
+
+# Parity references for the on-device tests: BioCLIP (Day 1) and the bundled plant gate.
+reference: assets
 	$(UV) run --group reference python -W error -m wild_find_pipeline.reference
+	$(UV) run --group reference python -W error -m wild_find_pipeline.gate_reference
 
 test: pipeline-test
 	$(GRADLE) :core:test :core:koverVerify
