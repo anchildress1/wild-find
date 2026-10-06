@@ -69,9 +69,12 @@ object Npy {
         require("'descr': '<f4'" in header) { "expected little-endian float32: $header" }
         require("'fortran_order': False" in header) { "expected C order: $header" }
         val (rows, cols) = requireNotNull(SHAPE.find(header)) { "expected a 2-D shape: $header" }
-            .destructured.let { (r, c) -> r.toInt() to c.toInt() }
+            .destructured.let { (r, c) -> r.toLongOrNull() to c.toLongOrNull() }
+        // Long math, so a malformed shape can't wrap to a small or negative Int count.
+        val count = if (rows != null && cols != null) rows * cols else -1L
+        require(rows != null && cols != null && count in 0..Int.MAX_VALUE.toLong()) { "shape too large: $header" }
         val floats = buffer.position(dataStart + headerLength).slice().order(ByteOrder.LITTLE_ENDIAN).asFloatBuffer()
-        require(floats.remaining() == rows * cols) { "expected ${rows * cols} values, got ${floats.remaining()}" }
-        return FloatMatrix(rows, cols, FloatArray(rows * cols).also { floats.get(it) })
+        require(floats.remaining().toLong() == count) { "expected $count values, got ${floats.remaining()}" }
+        return FloatMatrix(rows.toInt(), cols.toInt(), FloatArray(count.toInt()).also { floats.get(it) })
     }
 }

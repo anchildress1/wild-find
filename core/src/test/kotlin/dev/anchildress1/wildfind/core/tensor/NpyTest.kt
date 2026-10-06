@@ -114,4 +114,18 @@ class NpyTest {
 
         assertThrows<IllegalArgumentException> { Npy.floatMatrix(bytes) }
     }
+
+    @Test
+    fun `rejects a shape whose count wraps an Int to zero`() {
+        assertThrows<IllegalArgumentException> {
+            Npy.floatMatrix(npy(header.replace("(2, 3)", "(65536, 65536)"), values))
+        }
+    }
+
+    @Test
+    fun `rejects a shape too large for a Long`() {
+        val huge = header.replace("(2, 3)", "(99999999999999999999, 1)")
+
+        assertThrows<IllegalArgumentException> { Npy.floatMatrix(npy(huge, values)) }
+    }
 }
