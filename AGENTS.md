@@ -31,9 +31,10 @@ Spec of record: `docs/PRD.md`. Work queue: `docs/stories.md`. A change that cont
 ## Checks
 
 - `make ai-checks` before every commit. Warnings fail the build.
+- Every measurement (latency, memory, accuracy, model comparisons) goes into `docs/results/` the same day, with date, device, versions, and inputs. The challenge post is written from it; numbers that only live in chat are lost.
 - `make setup` once per clone (lefthook + uv sync).
 - Local settings live in `.env` (copy `.env.example`). New variables go in `.env.example` with a one-line comment. Never commit `.env`.
 - Public Kotlin and Python API gets a one-line KDoc/docstring; detekt and ruff `D1` enforce it. Inline comments explain why, never what.
 - `make fetch-models` then `make push-models` sideloads the pinned models to the test phone.
 - Never `adb uninstall` the app on the test phone; it deletes the 2.6 GB model. `make install` keeps data.
-- Unrunnable check (on-device, field, airplane mode) → stop and hand it to the user. Never tick it yourself.
+- Check that needs the user (field test, airplane mode, anything physical) → stop and hand it over; never tick it yourself. Automated on-device tests run with `make device-test` when the phone is attached; tick those on a logged pass.

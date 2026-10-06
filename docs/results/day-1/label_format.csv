@@ -1,0 +1,49 @@
+photo,format,model,label,prompt,score,student_teacher_image_cosine
+white_oak_211670015.jpg,common,mobile,oak,a photo of oak.,0.365782,0.809539
+white_oak_211670015.jpg,common,mobile,poison oak,a photo of poison oak.,0.455915,0.809539
+white_oak_211670015.jpg,common,mobile,poison ivy,a photo of poison ivy.,0.398964,0.809539
+white_oak_211670015.jpg,common,mobile,poison sumac,a photo of poison sumac.,0.338560,0.809539
+white_oak_211670015.jpg,common,mobile,pokeweed,a photo of pokeweed.,0.193442,0.809539
+white_oak_211670015.jpg,common,mobile,Carolina horsenettle,a photo of Carolina horsenettle.,0.299219,0.809539
+white_oak_211670015.jpg,common,teacher,oak,a photo of oak.,0.329061,0.809539
+white_oak_211670015.jpg,common,teacher,poison oak,a photo of poison oak.,0.387925,0.809539
+white_oak_211670015.jpg,common,teacher,poison ivy,a photo of poison ivy.,0.351666,0.809539
+white_oak_211670015.jpg,common,teacher,poison sumac,a photo of poison sumac.,0.290135,0.809539
+white_oak_211670015.jpg,common,teacher,pokeweed,a photo of pokeweed.,0.189375,0.809539
+white_oak_211670015.jpg,common,teacher,Carolina horsenettle,a photo of Carolina horsenettle.,0.218022,0.809539
+white_oak_211670015.jpg,scientific,mobile,oak,a photo of Quercus.,0.477667,0.809539
+white_oak_211670015.jpg,scientific,mobile,poison oak,a photo of Toxicodendron pubescens.,0.456133,0.809539
+white_oak_211670015.jpg,scientific,mobile,poison ivy,a photo of Toxicodendron radicans.,0.392408,0.809539
+white_oak_211670015.jpg,scientific,mobile,poison sumac,a photo of Toxicodendron vernix.,0.347275,0.809539
+white_oak_211670015.jpg,scientific,mobile,pokeweed,a photo of Phytolacca americana.,0.370351,0.809539
+white_oak_211670015.jpg,scientific,mobile,Carolina horsenettle,a photo of Solanum carolinense.,0.391890,0.809539
+white_oak_211670015.jpg,scientific,teacher,oak,a photo of Quercus.,0.413711,0.809539
+white_oak_211670015.jpg,scientific,teacher,poison oak,a photo of Toxicodendron pubescens.,0.330837,0.809539
+white_oak_211670015.jpg,scientific,teacher,poison ivy,a photo of Toxicodendron radicans.,0.345327,0.809539
+white_oak_211670015.jpg,scientific,teacher,poison sumac,a photo of Toxicodendron vernix.,0.305080,0.809539
+white_oak_211670015.jpg,scientific,teacher,pokeweed,a photo of Phytolacca americana.,0.300267,0.809539
+white_oak_211670015.jpg,scientific,teacher,Carolina horsenettle,a photo of Solanum carolinense.,0.318597,0.809539
+white_oak_211670015.jpg,taxonomic,mobile,oak,a photo of Plantae Tracheophyta Magnoliopsida Fagales Fagaceae Quercus.,0.476046,0.809539
+white_oak_211670015.jpg,taxonomic,mobile,poison oak,a photo of Plantae Tracheophyta Magnoliopsida Sapindales Anacardiaceae Toxicodendron pubescens.,0.456578,0.809539
+white_oak_211670015.jpg,taxonomic,mobile,poison ivy,a photo of Plantae Tracheophyta Magnoliopsida Sapindales Anacardiaceae Toxicodendron radicans.,0.394690,0.809539
+white_oak_211670015.jpg,taxonomic,mobile,poison sumac,a photo of Plantae Tracheophyta Magnoliopsida Sapindales Anacardiaceae Toxicodendron vernix.,0.348150,0.809539
+white_oak_211670015.jpg,taxonomic,mobile,pokeweed,a photo of Plantae Tracheophyta Magnoliopsida Caryophyllales Phytolaccaceae Phytolacca americana.,0.369591,0.809539
+white_oak_211670015.jpg,taxonomic,mobile,Carolina horsenettle,a photo of Plantae Tracheophyta Magnoliopsida Solanales Solanaceae Solanum carolinense.,0.390758,0.809539
+white_oak_211670015.jpg,taxonomic,teacher,oak,a photo of Plantae Tracheophyta Magnoliopsida Fagales Fagaceae Quercus.,0.412372,0.809539
+white_oak_211670015.jpg,taxonomic,teacher,poison oak,a photo of Plantae Tracheophyta Magnoliopsida Sapindales Anacardiaceae Toxicodendron pubescens.,0.331660,0.809539
+white_oak_211670015.jpg,taxonomic,teacher,poison ivy,a photo of Plantae Tracheophyta Magnoliopsida Sapindales Anacardiaceae Toxicodendron radicans.,0.347137,0.809539
+white_oak_211670015.jpg,taxonomic,teacher,poison sumac,a photo of Plantae Tracheophyta Magnoliopsida Sapindales Anacardiaceae Toxicodendron vernix.,0.306648,0.809539
+white_oak_211670015.jpg,taxonomic,teacher,pokeweed,a photo of Plantae Tracheophyta Magnoliopsida Caryophyllales Phytolaccaceae Phytolacca americana.,0.300101,0.809539
+white_oak_211670015.jpg,taxonomic,teacher,Carolina horsenettle,a photo of Plantae Tracheophyta Magnoliopsida Solanales Solanaceae Solanum carolinense.,0.318188,0.809539
+white_oak_211670015.jpg,taxonomic+common,mobile,oak,a photo of Plantae Tracheophyta Magnoliopsida Fagales Fagaceae Quercus with common name oak.,0.405288,0.809539
+white_oak_211670015.jpg,taxonomic+common,mobile,poison oak,a photo of Plantae Tracheophyta Magnoliopsida Sapindales Anacardiaceae Toxicodendron pubescens with common name poison oak.,0.456335,0.809539
+white_oak_211670015.jpg,taxonomic+common,mobile,poison ivy,a photo of Plantae Tracheophyta Magnoliopsida Sapindales Anacardiaceae Toxicodendron radicans with common name poison ivy.,0.397261,0.809539
+white_oak_211670015.jpg,taxonomic+common,mobile,poison sumac,a photo of Plantae Tracheophyta Magnoliopsida Sapindales Anacardiaceae Toxicodendron vernix with common name poison sumac.,0.351235,0.809539
+white_oak_211670015.jpg,taxonomic+common,mobile,pokeweed,a photo of Plantae Tracheophyta Magnoliopsida Caryophyllales Phytolaccaceae Phytolacca americana with common name pokeweed.,0.281500,0.809539
+white_oak_211670015.jpg,taxonomic+common,mobile,Carolina horsenettle,a photo of Plantae Tracheophyta Magnoliopsida Solanales Solanaceae Solanum carolinense with common name Carolina horsenettle.,0.377735,0.809539
+white_oak_211670015.jpg,taxonomic+common,teacher,oak,a photo of Plantae Tracheophyta Magnoliopsida Fagales Fagaceae Quercus with common name oak.,0.378135,0.809539
+white_oak_211670015.jpg,taxonomic+common,teacher,poison oak,a photo of Plantae Tracheophyta Magnoliopsida Sapindales Anacardiaceae Toxicodendron pubescens with common name poison oak.,0.344100,0.809539
+white_oak_211670015.jpg,taxonomic+common,teacher,poison ivy,a photo of Plantae Tracheophyta Magnoliopsida Sapindales Anacardiaceae Toxicodendron radicans with common name poison ivy.,0.347738,0.809539
+white_oak_211670015.jpg,taxonomic+common,teacher,poison sumac,a photo of Plantae Tracheophyta Magnoliopsida Sapindales Anacardiaceae Toxicodendron vernix with common name poison sumac.,0.310145,0.809539
+white_oak_211670015.jpg,taxonomic+common,teacher,pokeweed,a photo of Plantae Tracheophyta Magnoliopsida Caryophyllales Phytolaccaceae Phytolacca americana with common name pokeweed.,0.257178,0.809539
+white_oak_211670015.jpg,taxonomic+common,teacher,Carolina horsenettle,a photo of Plantae Tracheophyta Magnoliopsida Solanales Solanaceae Solanum carolinense with common name Carolina horsenettle.,0.305322,0.809539
