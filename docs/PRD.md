@@ -157,7 +157,7 @@ Latency, heat, and memory targets are guesses until the Day-1 gate measures them
 | Offline | A full hunt runs in airplane mode from the cache or the bundled fallback list | Field test |
 | Verify latency | Under 5 s from shutter to result (unmeasured) | Day-1 gate |
 | Hint latency | Under 5 s for level 2; levels 1 and 3 are precomputed (unmeasured) | Day-1 gate |
-| Download size | Gemma 2,588,147,712 bytes plus BioCLIP 23,849,085 bytes, fetched after install | Day-1 gate |
+| Download size | Gemma 2,588,147,712 bytes plus BioCLIP 46,986,589 bytes, fetched after install | Day-1 gate |
 | Storage | Free space checked before the download starts | Day-1 gate |
 | Memory | Gemma loads once per session and is released when the app goes to the background; RAM recorded | Day-1 gate |
 | Heat and battery | A 20-minute session runs without immediate throttling (unmeasured) | Day-1 gate |
@@ -193,7 +193,7 @@ flowchart TD
         A3["Pick the hunt<br/>grass first, then 3 weighted"]
         A4["Hint on tap<br/>Gemma reads the scene; card facts"]
         A5["Verify the photo<br/>Gemma boxes every plant<br/>BioCLIP verifies each crop"]
-        M["Models on the phone<br/>Gemma 4 E2B, 2.59 GB<br/>BioCLIP Mobile, 23.8 MB"]
+        M["Models on the phone<br/>Gemma 4 E2B, 2.59 GB<br/>BioCLIP Mobile, 47.0 MB"]
         A1 --> A2 --> A3 --> A4 --> A5
         M --> A4
         M --> A5
@@ -304,7 +304,7 @@ icon\_category is one of tree, flower, fern, grass, vine, shrub, moss, other. ve
 | Model | Repo and revision | File | Bytes | SHA-256 |
 | --- | --- | --- | --- | --- |
 | Gemma 4 E2B | litert-community/gemma-4-E2B-it-litert-lm @ b3ca0d2f076785a8f4b2219ddbd2bdb99954eae1 | gemma-4-E2B-it.litertlm | 2,588,147,712 | 181938105e0eefd105961417e8da75903eacda102c4fce9ce90f50b97139a63c |
-| BioCLIP 2.5 Mobile | crazedcodernate/bioclip-2.5-mobile-fastvit @ 29b474ea2a5d72b4646f036ead9441e0a22a5c62 | flora\_student\_fp16.onnx | 23,849,085 | b152ee0b3fe8f7b6e01f27a580fa74fbec53c0519e4dccaebdb9e289d140c579 |
+| BioCLIP 2.5 Mobile | crazedcodernate/bioclip-2.5-mobile-fastvit @ 29b474ea2a5d72b4646f036ead9441e0a22a5c62 | flora\_student\_fp32.onnx | 46,986,589 | 8624d44af3727b69a41dc2035c37018a30753b8d9c93ab8801a0c724dd42510f |
 
 The build-time text encoder is pinned too, laptop only: BioCLIP 2.5 ViT-H, imageomics/bioclip-2.5-vith14 @ 6e3d04e3d6522012c88181085c5ae666e14c45cd.
 

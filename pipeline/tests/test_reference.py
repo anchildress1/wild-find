@@ -47,8 +47,8 @@ def test_ranked_orders_by_score_descending():
 def test_pin_reads_bioclip_from_the_shared_manifest():
     bioclip = pin("bioclip")
 
-    assert bioclip["file"] == "flora_student_fp16.onnx"
-    assert bioclip["bytes"] == "23849085"
+    assert bioclip["file"] == "flora_student_fp32.onnx"
+    assert bioclip["bytes"] == "46986589"
     assert len(bioclip["sha256"]) == 64
 
 
