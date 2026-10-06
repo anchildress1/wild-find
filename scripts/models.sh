@@ -31,6 +31,8 @@ fetch() {
     local file url part
     file="$(prop "$model" file)"
     if verify_local "$model"; then echo "✓ $file already verified"; continue; fi
+    # A full-size corrupt copy would otherwise sit beside the new download and double the disk needed.
+    rm -f "$CACHE/$file"
     url="https://huggingface.co/$(prop "$model" repo)/resolve/$(prop "$model" revision)/$file"
     part="$CACHE/$file.part"
     echo "→ fetching $file"
@@ -62,6 +64,8 @@ push() {
       && [ "$(runas sha256sum "$remote" | cut -d' ' -f1)" = "$sha" ]; then
       echo "✓ $file already on device"; continue
     fi
+    # Drop any invalid copy first so repairing a 2.6 GB model never needs room for two.
+    runas rm -f "$remote" "$remote.part"
     echo "→ streaming $file ($bytes bytes)"
     # exec-in streams straight into app storage: one copy on device, no /data/local/tmp staging.
     device exec-in "run-as $PACKAGE sh -c 'umask 077 && cat > $remote.part'" < "$CACHE/$file"
