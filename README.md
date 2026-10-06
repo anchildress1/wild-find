@@ -22,7 +22,8 @@ cp .env.example .env   # local overrides; never committed
 make setup
 make ai-checks
 make install   # debug APK to a connected phone
-make fetch-models push-models   # sideload the pinned models to that phone
+make assets   # bundled models and tables; first run pulls the pinned files (3.9 GB text encoder)
+make fetch-models push-models   # sideload Gemma to that phone
 ```
 
 ## Credits

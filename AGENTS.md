@@ -35,6 +35,8 @@ Spec of record: `docs/PRD.md`. Work queue: `docs/stories.md`. A change that cont
 - `make setup` once per clone (lefthook + uv sync).
 - Local settings live in `.env` (copy `.env.example`). New variables go in `.env.example` with a one-line comment. Never commit `.env`.
 - Public Kotlin and Python API gets a one-line KDoc/docstring; detekt and ruff `D1` enforce it. Inline comments explain why, never what.
-- `make fetch-models` then `make push-models` sideloads the pinned models to the test phone.
+- `make assets` builds the bundled models and tables into gitignored `app/generated/assets`; every build fails without them. CI runs it with a cache.
+- `make hazard-vectors` is the only step that pulls the 3.9 GB BioCLIP teacher; commit its `pipeline/data/hazard_vectors.json`. CI never runs it.
+- `make fetch-models` then `make push-models` sideloads Gemma to the test phone.
 - Never `adb uninstall` the app on the test phone; it deletes the 2.6 GB model. `make install` keeps data.
 - Check that needs the user (field test, airplane mode, anything physical) → stop and hand it over; never tick it yourself. Automated on-device tests run with `make device-test` when the phone is attached; tick those on a logged pass.

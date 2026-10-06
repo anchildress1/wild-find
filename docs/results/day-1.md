@@ -108,7 +108,7 @@ A frame is a plant when the plant labels' combined softmax share is over 0.5 (sc
 | ViT-40M/32 | Full frame | 175 | 52 | 2 | 5 |
 | ViT-40M/32 | Reticle | 176 | 52 | 3 | 5 |
 
-The table counts photos that pass as plants. Mixed scenes passing is correct when vegetation fills the frame. These are laptop numbers; TinyCLIP parity and latency on the phone are unmeasured (S05, S06).
+The table counts photos that pass as plants. Mixed scenes passing is correct when vegetation fills the frame. These are laptop numbers; the phone matches them (below).
 
 ## Hazard warnings
 
@@ -188,10 +188,21 @@ The back camera (ID 0, 6.3 mm) reports focus calibration `APPROXIMATE` and no mi
 - Rule: diopters × zoom ≥ 2.0 while focused, else "walk closer".
 - Raw logs: [focus-probe-run1.log](day-1/focus-probe-run1.log), [run 2](day-1/focus-probe-run2-can.log), [run 3](day-1/focus-probe-run3-soda.log), [run 4](day-1/focus-probe-run4-zoom.log). Not measured: plants, outdoors, beyond about 1 m (S52).
 
+## Bundled plant gate and species table on the phone (S06, S08b)
+
+`make assets` exports TinyCLIP ViT-8M/16's image encoder to `plant_gate.onnx` (fp32, 33,730,790 bytes, CLIP normalization baked in; torch 2.14.1 dynamo exporter, Transformers 5.19.0) and writes `plant_gate.json` (17 gate prompts, logit scale 50.0043). It also builds the species table: the pinned 4,271 rows plus *Toxicodendron pubescens*, 7 rows flagged as hazards (*Toxicodendron diversilobum*, *radicans*, *rydbergii*, *vernix*, *pubescens*, *Phytolacca americana*, *Solanum carolinense*). All five files load from the APK.
+
+| Check | Result |
+| --- | --- |
+| Export vs the Day-1 measurement path, on all 307 Day-1 photos (reticle crop) | largest plant-share difference 0.0000024; 0 verdict flips ([check_plant_gate_export.py](day-1/check_plant_gate_export.py)) |
+| Fixture plant share: laptop export, Day-1 path, phone | 0.986990, 0.986990, 0.986990 |
+| Phone vs laptop embedding cosine | 0.9999999889 |
+| Plant gate on the phone | load 220 ms, one embedding 40 ms |
+| BioCLIP on the phone, loaded from the APK | load 353 ms (was 128 to 138 ms from a sideloaded file), one embedding 45 ms, cosine 0.9999999988 |
+
 ## Still unmeasured
 
 - The full per-frame verify path on the phone: TinyCLIP twice plus BioCLIP up to twice (S05)
 - Level-2 hint latency (S05)
 - A 20-minute live-camera heat run (S05)
-- TinyCLIP parity on the phone (S06)
 - The full Gemma download, resume, and low-storage handling (S07)

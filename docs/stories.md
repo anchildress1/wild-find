@@ -14,10 +14,10 @@ Every runtime model (TinyCLIP, BioCLIP, Gemma) runs on the test phone, or nothin
 - [x] **S04 Gemma on device** — E2B loads on the GPU without out-of-memory (2.1 GB loaded, 2.9 GB peak; 4.0 s warm load) and answers vision prompts in 2.3–2.9 s; too slow for the verify path, so boxing was dropped for deterministic live verify
 - [x] **S09 Close-range threshold** — `make focus-probe` logged live `LENS_FOCUS_DISTANCE` at far, closer, full-frame, and too-close shots, plus pinch zoom, on the test phone (a can, not a plant); rule: diopters × zoom ≥ 2.0 while autofocus reports focused; PRD hole 19
 - [ ] **S05 Gate harness** (app, debug only) — records per-frame verify time, first-eligible-frame to Found, hint latency, RAM, and a 20-minute live-camera thermal run to a local exportable log; holes 4, 10, 13
-- [ ] **S06 Plant gate** (pipeline + app) — export TinyCLIP ViT-8M's image encoder to fp32 ONNX plus text vectors for the exact Day-1 gate prompts; pin it; on-device parity test; gate every frame before BioCLIP; PRD hole 17
+- [x] **S06 Plant gate** (pipeline + app) — export TinyCLIP ViT-8M's image encoder to fp32 ONNX plus text vectors for the exact Day-1 gate prompts; pin it; `PlantGate` in core; on-device parity passes (cosine 0.99999999, 40 ms per embedding); S34 gates every frame with it; PRD hole 17
 - [ ] **S07 Gemma download** (core + app) — R9, Gemma only; see Download rules below; proven on the test phone: full pull, kill mid-pull + resume, Wi-Fi drop + resume, bad-hash retry
 - [x] **S08 Debug/release side by side** (app) — debug uses `applicationIdSuffix = ".debug"` so a release install never wipes the debug app's 2.6 GB model on the one test phone
-- [ ] **S08b Bundle the small models** (build) — `make` fetches BioCLIP and the taxa table and labels (SHA-checked), builds species_table.npy and species_labels.json (missing hazard species appended, hazard flags set), and exports TinyCLIP into gitignored generated assets; CI does the same with a cache; the app loads all of them from the APK
+- [x] **S08b Bundle the small models** (build) — `make assets` fetches BioCLIP and the taxa table and labels (SHA-checked), builds species_table.npy and species_labels.json (missing hazard species appended, hazard flags set), and exports TinyCLIP into gitignored `app/generated/assets`; the one missing hazard row comes from the committed `pipeline/data/hazard_vectors.json` (`make hazard-vectors`, the only step that needs the 3.9 GB teacher); CI runs `make assets` with a cache; any build without the assets fails; the app loads all of them from the APK
 
 ## Build pipeline · Oct 7
 
@@ -46,7 +46,7 @@ Every runtime model (TinyCLIP, BioCLIP, Gemma) runs on the test phone, or nothin
 - [ ] **S31 Safety opener** — R1, placeholder art, replayable, banned-copy check in tests
 - [ ] **S32 Location** — coarse permission only, manual region pick on deny; coverage message off-region; R2, R7
 - [ ] **S33 iNat client** — one query, ≤ 3 pages (≤ 6 on the widen path), named User-Agent, 429 Retry-After; R2
-- [ ] **S34 Camera + verify flow** — CameraX preview at about 5 fps: rotation-normalize the frame once; cut the PRD crops (center square, 60% reticle); TinyCLIP on the reticle crop and full frame; BioCLIP hazard check on each region TinyCLIP calls a plant; reticle plant gate → BioCLIP target; autofocus distance → "walk closer"; S25 → auto-capture and kid message; R5
+- [ ] **S34 Camera + verify flow** — gate every frame with `PlantGate` before BioCLIP; CameraX preview at about 5 fps: rotation-normalize the frame once; cut the PRD crops (center square, 60% reticle); TinyCLIP on the reticle crop and full frame; BioCLIP hazard check on each region TinyCLIP calls a plant; reticle plant gate → BioCLIP target; autofocus distance → "walk closer"; S25 → auto-capture and kid message; R5
 - [ ] **S35 Hints** — levels 1/3 precomputed at hunt start, level 2 from the current camera frame at tap time; R6
 - [ ] **S36 Hunt complete** — success animation, stars, Hunt Again / Home; R15
 - [ ] **S37 Offline** — airplane-mode hunt from cache or bundled fallback; R8
@@ -77,7 +77,7 @@ The vestige download broke when Hugging Face moved its redirect CDN (`cas-bridge
 
 ## Open holes
 
-New holes found while drafting these stories. PRD holes 3, 4, 5, 10, 12, 13, 17, 19 still stand (19 only until the field test). H-numbers below are this file's own list, separate from PRD hole numbers.
+New holes found while drafting these stories. PRD holes 3, 4, 5, 10, 12, 13, 19 still stand (19 only until the field test). H-numbers below are this file's own list, separate from PRD hole numbers.
 
 | # | Hole | Proposed fix | Severity |
 | --- | --- | --- | --- |
