@@ -1,91 +1,253 @@
-set	file	license	source
-non-plant	computer_monitor_1.jpg	CC0	https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b6/Bottom_Edge_Of_Computer_Monitor_Touch_Table.png/500px-Bottom_Edge_Of_Computer_Monitor_Touch_Table.png
-non-plant	computer_monitor_2.jpg	CC0	https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Code_on_computer_monitor_%28Unsplash%29.jpg/500px-Code_on_computer_monitor_%28Unsplash%29.jpg
-non-plant	smartphone_display_3.jpg	CC0	https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6f/A_comparative_display_of_default_system_fonts_from_five_major_Chinese_smartphone_brands.png/500px-A_comparative_display_of_default_system_fonts_from_five_major_Chinese_smartphone_brands.png
-non-plant	smartphone_display_4.jpg	CC0	https://thumb.wikimedia.org/wikipedia/commons/thumb/8/89/Smartphone_display_screen.jpg/500px-Smartphone_display_screen.jpg
-non-plant	laptop_screen_5.jpg	CC0	https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9c/Dual_touch_screen_laptop.jpg/500px-Dual_touch_screen_laptop.jpg
-non-plant	laptop_screen_6.jpg	CC0	https://thumb.wikimedia.org/wikipedia/commons/thumb/3/37/Laptop_with_many_charts_on_screen_on_cluttered_desk.jpg/500px-Laptop_with_many_charts_on_screen_on_cluttered_desk.jpg
-non-plant	asphalt_road_7.jpg	CC0	https://thumb.wikimedia.org/wikipedia/commons/thumb/3/32/Machine_crushing_asphalt.jpg/500px-Machine_crushing_asphalt.jpg
-non-plant	asphalt_road_8.jpg	CC0	https://thumb.wikimedia.org/wikipedia/commons/thumb/d/da/Snow_on_the_asphalt_road_in_Beijing.jpg/500px-Snow_on_the_asphalt_road_in_Beijing.jpg
-non-plant	concrete_sidewalk_9.jpg	Public domain	https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c9/Brick_sidewalk_in_Chicago.JPG/500px-Brick_sidewalk_in_Chicago.JPG
-non-plant	concrete_sidewalk_10.jpg	Public domain	https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f2/Concrete_sidewalk_construction.jpg/500px-Concrete_sidewalk_construction.jpg
-non-plant	portrait_woman_11.jpg	Public domain	https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c5/%28Venice%29_Portrait_of_young_woman_by_Rosalba_Carriera_-_Gallerie_Accademia.jpg/500px-%28Venice%29_Portrait_of_young_woman_by_Rosalba_Carriera_-_Gallerie_Accademia.jpg
-non-plant	portrait_woman_12.jpg	Public domain	https://thumb.wikimedia.org/wikipedia/commons/thumb/2/24/Frances_Benjamin_Johnston%2C_Self-Portrait_%28as_%22New_Woman%22%29%2C_1896.jpg/500px-Frances_Benjamin_Johnston%2C_Self-Portrait_%28as_%22New_Woman%22%29%2C_1896.jpg
-non-plant	child_playing_13.jpg	Public domain	https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5f/Child_goose_Louvre_Ma40.jpg/500px-Child_goose_Louvre_Ma40.jpg
-non-plant	child_playing_14.jpg	Public domain	https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/Child_goose_Louvre_Ma40_n2.jpg/500px-Child_goose_Louvre_Ma40_n2.jpg
-non-plant	living_room_15.jpg	Public domain	https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0c/Kiljander%2C_Elna._Living_room_plan%2C_1935.jpg/500px-Kiljander%2C_Elna._Living_room_plan%2C_1935.jpg
-non-plant	living_room_16.jpg	CC0	https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/Living_room_in_apartment_of_Condom%C3%ADnio_do_Edif%C3%ADcio_Zaher%2C_Le_Blond%2C_Rio_de_Janeiro%2C_Brazil.jpg/500px-Living_room_in_apartment_of_Condom%C3%ADnio_do_Edif%C3%ADcio_Zaher%2C_Le_Blond%2C_Rio_de_Janeiro%2C_Brazil.jpg
-non-plant	dog_17.jpg	CC0	https://thumb.wikimedia.org/wikipedia/commons/thumb/3/37/Mixed-breed_dogs_in_Serles.jpg/500px-Mixed-breed_dogs_in_Serles.jpg
-non-plant	dog_18.jpg	Public domain	https://thumb.wikimedia.org/wikipedia/commons/thumb/8/82/P_S_Kr%C3%B8yer_1899_-_Sommeraften_ved_Skagens_strand._Kunstneren_og_hans_hustru.jpg/500px-P_S_Kr%C3%B8yer_1899_-_Sommeraften_ved_Skagens_strand._Kunstneren_og_hans_hustru.jpg
-non-plant	car_19.jpg	Public domain	https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c0/A_Brouhot_car_in_Paris%2C_1910.jpg/500px-A_Brouhot_car_in_Paris%2C_1910.jpg
-non-plant	car_20.jpg	CC0	https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7c/Auto_op_de_Place_de_l%27%C3%89toile%2C_in_de_koplamp_is_de_weerspiegeling_van_de_Arc_de_T%2C_Bestanddeelnr_191-0354.jpg/500px-Auto_op_de_Place_de_l%27%C3%89toile%2C_in_de_koplamp_is_de_weerspiegeling_van_de_Arc_de_T%2C_Bestanddeelnr_191-0354.jpg
-non-plant	lawn_mowed_21.jpg	CC0	https://thumb.wikimedia.org/wikipedia/commons/thumb/4/47/%27Newly_Mowed_Lawn_with_Weeping_Trees%27_by_Vincent_Van_Gogh%2C_1888.jpg/500px-%27Newly_Mowed_Lawn_with_Weeping_Trees%27_by_Vincent_Van_Gogh%2C_1888.jpg
-non-plant	lawn_mowed_22.jpg	Public domain	https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/Lawn_Mowing_DVIDS119604.jpg/500px-Lawn_Mowing_DVIDS119604.jpg
-plant	oak_1.jpg	CC0	https://www.inaturalist.org/observations/135252942
-plant	oak_2.jpg	CC0	https://www.inaturalist.org/observations/8477937
-plant	fern_1.jpg	CC0	https://www.inaturalist.org/observations/230779728
-plant	fern_2.jpg	CC0	https://www.inaturalist.org/observations/357799245
-plant	clover_1.jpg	CC0	https://www.inaturalist.org/observations/27143896
-plant	clover_2.jpg	CC0	https://www.inaturalist.org/observations/98944920
-plant	pine_1.jpg	CC0	https://www.inaturalist.org/observations/1462536
-plant	pine_2.jpg	CC0	https://www.inaturalist.org/observations/162092423
-plant	dandelion_1.jpg	CC0	https://www.inaturalist.org/observations/365455520
-plant	dandelion_2.jpg	CC0	https://www.inaturalist.org/observations/101884538
-plant	grass_1.jpg	CC0	https://www.inaturalist.org/observations/47059937
-plant	grass_2.jpg	CC0	https://www.inaturalist.org/observations/102528944
-plant	moss_1.jpg	CC0	https://www.inaturalist.org/observations/83899790
-plant	moss_2.jpg	CC0	https://www.inaturalist.org/observations/106882916
-plant	poisonivy_1.jpg	CC0	https://www.inaturalist.org/observations/40392436
-plant	poisonivy_2.jpg	CC0	https://www.inaturalist.org/observations/159325968
-grass	grass_236380113.jpg	CC0	https://www.inaturalist.org/observations/236380113
-grass	grass_77707956.jpg	CC0	https://www.inaturalist.org/observations/77707956
-grass	grass_7872367.jpg	CC0	https://www.inaturalist.org/observations/7872367
-grass	grass_173869047.jpg	CC0	https://www.inaturalist.org/observations/173869047
-grass	grass_154415697.jpg	CC0	https://www.inaturalist.org/observations/154415697
-grass	grass_296659010.jpg	CC0	https://www.inaturalist.org/observations/296659010
-grass	grass_8498527.jpg	CC0	https://www.inaturalist.org/observations/8498527
-grass	grass_74700812.jpg	CC0	https://www.inaturalist.org/observations/74700812
-grass	grass_316210519.jpg	CC0	https://www.inaturalist.org/observations/316210519
-grass	grass_377482183.jpg	CC0	https://www.inaturalist.org/observations/377482183
-grass	grass_377471108.jpg	CC0	https://www.inaturalist.org/observations/377471108
-grass	grass_378253206.jpg	CC0	https://www.inaturalist.org/observations/378253206
-grass	grass_135189154.jpg	CC0	https://www.inaturalist.org/observations/135189154
-grass	grass_135427649.jpg	CC0	https://www.inaturalist.org/observations/135427649
-grass	grass_237659126.jpg	CC0	https://www.inaturalist.org/observations/237659126
-grass	grass_295152432.jpg	CC0	https://www.inaturalist.org/observations/295152432
-grass	grass_351436420.jpg	CC0	https://www.inaturalist.org/observations/351436420
-grass	grass_295592913.jpg	CC0	https://www.inaturalist.org/observations/295592913
-grass	grass_348391973.jpg	CC0	https://www.inaturalist.org/observations/348391973
-grass	grass_170173654.jpg	CC0	https://www.inaturalist.org/observations/170173654
-grass	grass_53684067.jpg	CC0	https://www.inaturalist.org/observations/53684067
-grass	grass_303516861.jpg	CC0	https://www.inaturalist.org/observations/303516861
-grass	grass_305790189.jpg	CC0	https://www.inaturalist.org/observations/305790189
-grass	grass_330436491.jpg	CC0	https://www.inaturalist.org/observations/330436491
-grass	grass_186771405.jpg	CC0	https://www.inaturalist.org/observations/186771405
-grass	grass_7870802.jpg	CC0	https://www.inaturalist.org/observations/7870802
-grass	grass_272094434.jpg	CC0	https://www.inaturalist.org/observations/272094434
-grass	grass_26326668.jpg	CC0	https://www.inaturalist.org/observations/26326668
-grass	grass_32624622.jpg	CC0	https://www.inaturalist.org/observations/32624622
-grass	lawn_45980991.jpg	CC0	https://www.inaturalist.org/observations/45980991
-grass	lawn_114051027.jpg	CC0	https://www.inaturalist.org/observations/114051027
-grass	lawn_97354508.jpg	CC0	https://www.inaturalist.org/observations/97354508
-grass	lawn_91483513.jpg	CC0	https://www.inaturalist.org/observations/91483513
-grass	lawn_127194613.jpg	CC0	https://www.inaturalist.org/observations/127194613
-grass	lawn_150536682.jpg	CC0	https://www.inaturalist.org/observations/150536682
-grass	lawn_127362421.jpg	CC0	https://www.inaturalist.org/observations/127362421
-grass	lawn_173273463.jpg	CC0	https://www.inaturalist.org/observations/173273463
-grass	lawn_316745594.jpg	CC0	https://www.inaturalist.org/observations/316745594
-grass	lawn_336602143.jpg	CC0	https://www.inaturalist.org/observations/336602143
-grass	lawn_125107257.jpg	CC0	https://www.inaturalist.org/observations/125107257
-grass	lawn_341810778.jpg	CC0	https://www.inaturalist.org/observations/341810778
-grass	lawn_250873860.jpg	CC0	https://www.inaturalist.org/observations/250873860
-grass	lawn_250390361.jpg	CC0	https://www.inaturalist.org/observations/250390361
-grass	lawn_368459775.jpg	CC0	https://www.inaturalist.org/observations/368459775
-grass	lawn_187127381.jpg	CC0	https://www.inaturalist.org/observations/187127381
-grass	lawn_46413391.jpg	CC0	https://www.inaturalist.org/observations/46413391
-grass	lawn_65731819.jpg	CC0	https://www.inaturalist.org/observations/65731819
-grass	lawn_197068291.jpg	CC0	https://www.inaturalist.org/observations/197068291
-grass	lawn_226635883.jpg	CC0	https://www.inaturalist.org/observations/226635883
-grass	lawn_103738138.jpg	CC0	https://www.inaturalist.org/observations/103738138
-grass	lawn_212637121.jpg	CC0	https://www.inaturalist.org/observations/212637121
-grass	lawn_90616877.jpg	CC0	https://www.inaturalist.org/observations/90616877
+set	file	license	source_page	photo_url
+non-plant	computer_monitor_1.jpg	CC0	https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b6/Bottom_Edge_Of_Computer_Monitor_Touch_Table.png/500px-Bottom_Edge_Of_Computer_Monitor_Touch_Table.png	https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b6/Bottom_Edge_Of_Computer_Monitor_Touch_Table.png/500px-Bottom_Edge_Of_Computer_Monitor_Touch_Table.png
+non-plant	computer_monitor_2.jpg	CC0	https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Code_on_computer_monitor_%28Unsplash%29.jpg/500px-Code_on_computer_monitor_%28Unsplash%29.jpg	https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Code_on_computer_monitor_%28Unsplash%29.jpg/500px-Code_on_computer_monitor_%28Unsplash%29.jpg
+non-plant	smartphone_display_3.jpg	CC0	https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6f/A_comparative_display_of_default_system_fonts_from_five_major_Chinese_smartphone_brands.png/500px-A_comparative_display_of_default_system_fonts_from_five_major_Chinese_smartphone_brands.png	https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6f/A_comparative_display_of_default_system_fonts_from_five_major_Chinese_smartphone_brands.png/500px-A_comparative_display_of_default_system_fonts_from_five_major_Chinese_smartphone_brands.png
+non-plant	smartphone_display_4.jpg	CC0	https://thumb.wikimedia.org/wikipedia/commons/thumb/8/89/Smartphone_display_screen.jpg/500px-Smartphone_display_screen.jpg	https://thumb.wikimedia.org/wikipedia/commons/thumb/8/89/Smartphone_display_screen.jpg/500px-Smartphone_display_screen.jpg
+non-plant	laptop_screen_5.jpg	CC0	https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9c/Dual_touch_screen_laptop.jpg/500px-Dual_touch_screen_laptop.jpg	https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9c/Dual_touch_screen_laptop.jpg/500px-Dual_touch_screen_laptop.jpg
+non-plant	laptop_screen_6.jpg	CC0	https://thumb.wikimedia.org/wikipedia/commons/thumb/3/37/Laptop_with_many_charts_on_screen_on_cluttered_desk.jpg/500px-Laptop_with_many_charts_on_screen_on_cluttered_desk.jpg	https://thumb.wikimedia.org/wikipedia/commons/thumb/3/37/Laptop_with_many_charts_on_screen_on_cluttered_desk.jpg/500px-Laptop_with_many_charts_on_screen_on_cluttered_desk.jpg
+non-plant	asphalt_road_7.jpg	CC0	https://thumb.wikimedia.org/wikipedia/commons/thumb/3/32/Machine_crushing_asphalt.jpg/500px-Machine_crushing_asphalt.jpg	https://thumb.wikimedia.org/wikipedia/commons/thumb/3/32/Machine_crushing_asphalt.jpg/500px-Machine_crushing_asphalt.jpg
+non-plant	asphalt_road_8.jpg	CC0	https://thumb.wikimedia.org/wikipedia/commons/thumb/d/da/Snow_on_the_asphalt_road_in_Beijing.jpg/500px-Snow_on_the_asphalt_road_in_Beijing.jpg	https://thumb.wikimedia.org/wikipedia/commons/thumb/d/da/Snow_on_the_asphalt_road_in_Beijing.jpg/500px-Snow_on_the_asphalt_road_in_Beijing.jpg
+non-plant	concrete_sidewalk_9.jpg	Public domain	https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c9/Brick_sidewalk_in_Chicago.JPG/500px-Brick_sidewalk_in_Chicago.JPG	https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c9/Brick_sidewalk_in_Chicago.JPG/500px-Brick_sidewalk_in_Chicago.JPG
+non-plant	concrete_sidewalk_10.jpg	Public domain	https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f2/Concrete_sidewalk_construction.jpg/500px-Concrete_sidewalk_construction.jpg	https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f2/Concrete_sidewalk_construction.jpg/500px-Concrete_sidewalk_construction.jpg
+non-plant	portrait_woman_11.jpg	Public domain	https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c5/%28Venice%29_Portrait_of_young_woman_by_Rosalba_Carriera_-_Gallerie_Accademia.jpg/500px-%28Venice%29_Portrait_of_young_woman_by_Rosalba_Carriera_-_Gallerie_Accademia.jpg	https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c5/%28Venice%29_Portrait_of_young_woman_by_Rosalba_Carriera_-_Gallerie_Accademia.jpg/500px-%28Venice%29_Portrait_of_young_woman_by_Rosalba_Carriera_-_Gallerie_Accademia.jpg
+non-plant	portrait_woman_12.jpg	Public domain	https://thumb.wikimedia.org/wikipedia/commons/thumb/2/24/Frances_Benjamin_Johnston%2C_Self-Portrait_%28as_%22New_Woman%22%29%2C_1896.jpg/500px-Frances_Benjamin_Johnston%2C_Self-Portrait_%28as_%22New_Woman%22%29%2C_1896.jpg	https://thumb.wikimedia.org/wikipedia/commons/thumb/2/24/Frances_Benjamin_Johnston%2C_Self-Portrait_%28as_%22New_Woman%22%29%2C_1896.jpg/500px-Frances_Benjamin_Johnston%2C_Self-Portrait_%28as_%22New_Woman%22%29%2C_1896.jpg
+non-plant	child_playing_13.jpg	Public domain	https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5f/Child_goose_Louvre_Ma40.jpg/500px-Child_goose_Louvre_Ma40.jpg	https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5f/Child_goose_Louvre_Ma40.jpg/500px-Child_goose_Louvre_Ma40.jpg
+non-plant	child_playing_14.jpg	Public domain	https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/Child_goose_Louvre_Ma40_n2.jpg/500px-Child_goose_Louvre_Ma40_n2.jpg	https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/Child_goose_Louvre_Ma40_n2.jpg/500px-Child_goose_Louvre_Ma40_n2.jpg
+non-plant	living_room_15.jpg	Public domain	https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0c/Kiljander%2C_Elna._Living_room_plan%2C_1935.jpg/500px-Kiljander%2C_Elna._Living_room_plan%2C_1935.jpg	https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0c/Kiljander%2C_Elna._Living_room_plan%2C_1935.jpg/500px-Kiljander%2C_Elna._Living_room_plan%2C_1935.jpg
+non-plant	living_room_16.jpg	CC0	https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/Living_room_in_apartment_of_Condom%C3%ADnio_do_Edif%C3%ADcio_Zaher%2C_Le_Blond%2C_Rio_de_Janeiro%2C_Brazil.jpg/500px-Living_room_in_apartment_of_Condom%C3%ADnio_do_Edif%C3%ADcio_Zaher%2C_Le_Blond%2C_Rio_de_Janeiro%2C_Brazil.jpg	https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/Living_room_in_apartment_of_Condom%C3%ADnio_do_Edif%C3%ADcio_Zaher%2C_Le_Blond%2C_Rio_de_Janeiro%2C_Brazil.jpg/500px-Living_room_in_apartment_of_Condom%C3%ADnio_do_Edif%C3%ADcio_Zaher%2C_Le_Blond%2C_Rio_de_Janeiro%2C_Brazil.jpg
+non-plant	dog_17.jpg	CC0	https://thumb.wikimedia.org/wikipedia/commons/thumb/3/37/Mixed-breed_dogs_in_Serles.jpg/500px-Mixed-breed_dogs_in_Serles.jpg	https://thumb.wikimedia.org/wikipedia/commons/thumb/3/37/Mixed-breed_dogs_in_Serles.jpg/500px-Mixed-breed_dogs_in_Serles.jpg
+non-plant	dog_18.jpg	Public domain	https://thumb.wikimedia.org/wikipedia/commons/thumb/8/82/P_S_Kr%C3%B8yer_1899_-_Sommeraften_ved_Skagens_strand._Kunstneren_og_hans_hustru.jpg/500px-P_S_Kr%C3%B8yer_1899_-_Sommeraften_ved_Skagens_strand._Kunstneren_og_hans_hustru.jpg	https://thumb.wikimedia.org/wikipedia/commons/thumb/8/82/P_S_Kr%C3%B8yer_1899_-_Sommeraften_ved_Skagens_strand._Kunstneren_og_hans_hustru.jpg/500px-P_S_Kr%C3%B8yer_1899_-_Sommeraften_ved_Skagens_strand._Kunstneren_og_hans_hustru.jpg
+non-plant	car_19.jpg	Public domain	https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c0/A_Brouhot_car_in_Paris%2C_1910.jpg/500px-A_Brouhot_car_in_Paris%2C_1910.jpg	https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c0/A_Brouhot_car_in_Paris%2C_1910.jpg/500px-A_Brouhot_car_in_Paris%2C_1910.jpg
+non-plant	car_20.jpg	CC0	https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7c/Auto_op_de_Place_de_l%27%C3%89toile%2C_in_de_koplamp_is_de_weerspiegeling_van_de_Arc_de_T%2C_Bestanddeelnr_191-0354.jpg/500px-Auto_op_de_Place_de_l%27%C3%89toile%2C_in_de_koplamp_is_de_weerspiegeling_van_de_Arc_de_T%2C_Bestanddeelnr_191-0354.jpg	https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7c/Auto_op_de_Place_de_l%27%C3%89toile%2C_in_de_koplamp_is_de_weerspiegeling_van_de_Arc_de_T%2C_Bestanddeelnr_191-0354.jpg/500px-Auto_op_de_Place_de_l%27%C3%89toile%2C_in_de_koplamp_is_de_weerspiegeling_van_de_Arc_de_T%2C_Bestanddeelnr_191-0354.jpg
+non-plant	lawn_mowed_21.jpg	CC0	https://thumb.wikimedia.org/wikipedia/commons/thumb/4/47/%27Newly_Mowed_Lawn_with_Weeping_Trees%27_by_Vincent_Van_Gogh%2C_1888.jpg/500px-%27Newly_Mowed_Lawn_with_Weeping_Trees%27_by_Vincent_Van_Gogh%2C_1888.jpg	https://thumb.wikimedia.org/wikipedia/commons/thumb/4/47/%27Newly_Mowed_Lawn_with_Weeping_Trees%27_by_Vincent_Van_Gogh%2C_1888.jpg/500px-%27Newly_Mowed_Lawn_with_Weeping_Trees%27_by_Vincent_Van_Gogh%2C_1888.jpg
+non-plant	lawn_mowed_22.jpg	Public domain	https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/Lawn_Mowing_DVIDS119604.jpg/500px-Lawn_Mowing_DVIDS119604.jpg	https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/Lawn_Mowing_DVIDS119604.jpg/500px-Lawn_Mowing_DVIDS119604.jpg
+plant	oak_1.jpg	CC0	https://www.inaturalist.org/observations/135252942	https://inaturalist-open-data.s3.amazonaws.com/photos/230659710/medium.jpeg
+plant	oak_2.jpg	CC0	https://www.inaturalist.org/observations/8477937	https://inaturalist-open-data.s3.amazonaws.com/photos/11304773/medium.jpeg
+plant	fern_1.jpg	CC0	https://www.inaturalist.org/observations/230779728	https://inaturalist-open-data.s3.amazonaws.com/photos/409802490/medium.jpeg
+plant	fern_2.jpg	CC0	https://www.inaturalist.org/observations/357799245	https://inaturalist-open-data.s3.amazonaws.com/photos/652638756/medium.jpg
+plant	clover_1.jpg	CC0	https://www.inaturalist.org/observations/27143896	https://inaturalist-open-data.s3.amazonaws.com/photos/42203045/medium.jpg
+plant	clover_2.jpg	CC0	https://www.inaturalist.org/observations/98944920	https://inaturalist-open-data.s3.amazonaws.com/photos/164847704/medium.jpg
+plant	pine_1.jpg	CC0	https://www.inaturalist.org/observations/1462536	https://inaturalist-open-data.s3.amazonaws.com/photos/1813546/medium.jpg
+plant	pine_2.jpg	CC0	https://www.inaturalist.org/observations/162092423	https://inaturalist-open-data.s3.amazonaws.com/photos/280243946/medium.jpeg
+plant	dandelion_1.jpg	CC0	https://www.inaturalist.org/observations/365455520	https://inaturalist-open-data.s3.amazonaws.com/photos/667236196/medium.jpg
+plant	dandelion_2.jpg	CC0	https://www.inaturalist.org/observations/101884538	https://inaturalist-open-data.s3.amazonaws.com/photos/170210756/medium.jpeg
+plant	grass_1.jpg	CC0	https://www.inaturalist.org/observations/47059937	https://inaturalist-open-data.s3.amazonaws.com/photos/74633964/medium.jpg
+plant	grass_2.jpg	CC0	https://www.inaturalist.org/observations/102528944	https://inaturalist-open-data.s3.amazonaws.com/photos/171412946/medium.jpeg
+plant	moss_1.jpg	CC0	https://www.inaturalist.org/observations/83899790	https://inaturalist-open-data.s3.amazonaws.com/photos/137831879/medium.jpeg
+plant	moss_2.jpg	CC0	https://www.inaturalist.org/observations/106882916	https://inaturalist-open-data.s3.amazonaws.com/photos/179650171/medium.jpeg
+plant	poisonivy_1.jpg	CC0	https://www.inaturalist.org/observations/40392436	https://inaturalist-open-data.s3.amazonaws.com/photos/64125587/medium.jpg
+plant	poisonivy_2.jpg	CC0	https://www.inaturalist.org/observations/159325968	https://inaturalist-open-data.s3.amazonaws.com/photos/275267964/medium.jpeg
+grass	grass_236380113.jpg	CC0	https://www.inaturalist.org/observations/236380113	https://inaturalist-open-data.s3.amazonaws.com/photos/420524679/medium.jpeg
+grass	grass_77707956.jpg	CC0	https://www.inaturalist.org/observations/77707956	https://inaturalist-open-data.s3.amazonaws.com/photos/127109665/medium.jpg
+grass	grass_7872367.jpg	CC0	https://www.inaturalist.org/observations/7872367	https://inaturalist-open-data.s3.amazonaws.com/photos/10375394/medium.jpg
+grass	grass_173869047.jpg	CC0	https://www.inaturalist.org/observations/173869047	https://inaturalist-open-data.s3.amazonaws.com/photos/302015508/medium.jpg
+grass	grass_154415697.jpg	CC0	https://www.inaturalist.org/observations/154415697	https://inaturalist-open-data.s3.amazonaws.com/photos/266811889/medium.jpeg
+grass	grass_296659010.jpg	CC0	https://www.inaturalist.org/observations/296659010	https://inaturalist-open-data.s3.amazonaws.com/photos/534193002/medium.jpg
+grass	grass_8498527.jpg	CC0	https://www.inaturalist.org/observations/8498527	https://inaturalist-open-data.s3.amazonaws.com/photos/11336992/medium.jpg
+grass	grass_74700812.jpg	CC0	https://www.inaturalist.org/observations/74700812	https://inaturalist-open-data.s3.amazonaws.com/photos/122121046/medium.jpg
+grass	grass_316210519.jpg	CC0	https://www.inaturalist.org/observations/316210519	https://inaturalist-open-data.s3.amazonaws.com/photos/571295810/medium.jpg
+grass	grass_377482183.jpg	CC0	https://www.inaturalist.org/observations/377482183	https://inaturalist-open-data.s3.amazonaws.com/photos/690295971/medium.jpg
+grass	grass_377471108.jpg	CC0	https://www.inaturalist.org/observations/377471108	https://inaturalist-open-data.s3.amazonaws.com/photos/690275362/medium.jpg
+grass	grass_378253206.jpg	CC0	https://www.inaturalist.org/observations/378253206	https://inaturalist-open-data.s3.amazonaws.com/photos/691782221/medium.jpg
+grass	grass_135189154.jpg	CC0	https://www.inaturalist.org/observations/135189154	https://inaturalist-open-data.s3.amazonaws.com/photos/230540729/medium.jpg
+grass	grass_135427649.jpg	CC0	https://www.inaturalist.org/observations/135427649	https://inaturalist-open-data.s3.amazonaws.com/photos/230977270/medium.jpg
+grass	grass_237659126.jpg	CC0	https://www.inaturalist.org/observations/237659126	https://inaturalist-open-data.s3.amazonaws.com/photos/422993126/medium.jpeg
+grass	grass_295152432.jpg	CC0	https://www.inaturalist.org/observations/295152432	https://inaturalist-open-data.s3.amazonaws.com/photos/531316863/medium.jpg
+grass	grass_351436420.jpg	CC0	https://www.inaturalist.org/observations/351436420	https://inaturalist-open-data.s3.amazonaws.com/photos/641335454/medium.jpg
+grass	grass_295592913.jpg	CC0	https://www.inaturalist.org/observations/295592913	https://inaturalist-open-data.s3.amazonaws.com/photos/532153609/medium.jpg
+grass	grass_348391973.jpg	CC0	https://www.inaturalist.org/observations/348391973	https://inaturalist-open-data.s3.amazonaws.com/photos/635379349/medium.jpg
+grass	grass_170173654.jpg	CC0	https://www.inaturalist.org/observations/170173654	https://inaturalist-open-data.s3.amazonaws.com/photos/295116577/medium.jpeg
+grass	grass_53684067.jpg	CC0	https://www.inaturalist.org/observations/53684067	https://inaturalist-open-data.s3.amazonaws.com/photos/85393753/medium.jpg
+grass	grass_303516861.jpg	CC0	https://www.inaturalist.org/observations/303516861	https://inaturalist-open-data.s3.amazonaws.com/photos/547064633/medium.jpg
+grass	grass_305790189.jpg	CC0	https://www.inaturalist.org/observations/305790189	https://inaturalist-open-data.s3.amazonaws.com/photos/551386324/medium.jpg
+grass	grass_330436491.jpg	CC0	https://www.inaturalist.org/observations/330436491	https://inaturalist-open-data.s3.amazonaws.com/photos/599191747/medium.jpg
+grass	grass_186771405.jpg	CC0	https://www.inaturalist.org/observations/186771405	https://inaturalist-open-data.s3.amazonaws.com/photos/326468635/medium.jpeg
+grass	grass_7870802.jpg	CC0	https://www.inaturalist.org/observations/7870802	https://inaturalist-open-data.s3.amazonaws.com/photos/10372743/medium.jpg
+grass	grass_272094434.jpg	CC0	https://www.inaturalist.org/observations/272094434	https://inaturalist-open-data.s3.amazonaws.com/photos/489493767/medium.jpeg
+grass	grass_26326668.jpg	CC0	https://www.inaturalist.org/observations/26326668	https://inaturalist-open-data.s3.amazonaws.com/photos/40872709/medium.jpeg
+grass	grass_32624622.jpg	CC0	https://www.inaturalist.org/observations/32624622	https://inaturalist-open-data.s3.amazonaws.com/photos/51185215/medium.jpg
+grass	lawn_45980991.jpg	CC0	https://www.inaturalist.org/observations/45980991	https://inaturalist-open-data.s3.amazonaws.com/photos/72933692/medium.jpg
+grass	lawn_114051027.jpg	CC0	https://www.inaturalist.org/observations/114051027	https://inaturalist-open-data.s3.amazonaws.com/photos/192632147/medium.jpeg
+grass	lawn_97354508.jpg	CC0	https://www.inaturalist.org/observations/97354508	https://inaturalist-open-data.s3.amazonaws.com/photos/161897585/medium.jpg
+grass	lawn_91483513.jpg	CC0	https://www.inaturalist.org/observations/91483513	https://inaturalist-open-data.s3.amazonaws.com/photos/151331355/medium.jpeg
+grass	lawn_127194613.jpg	CC0	https://www.inaturalist.org/observations/127194613	https://inaturalist-open-data.s3.amazonaws.com/photos/215911970/medium.jpeg
+grass	lawn_150536682.jpg	CC0	https://www.inaturalist.org/observations/150536682	https://inaturalist-open-data.s3.amazonaws.com/photos/259593841/medium.jpeg
+grass	lawn_127362421.jpg	CC0	https://www.inaturalist.org/observations/127362421	https://inaturalist-open-data.s3.amazonaws.com/photos/216216622/medium.jpeg
+grass	lawn_173273463.jpg	CC0	https://www.inaturalist.org/observations/173273463	https://inaturalist-open-data.s3.amazonaws.com/photos/300889843/medium.jpg
+grass	lawn_316745594.jpg	CC0	https://www.inaturalist.org/observations/316745594	https://inaturalist-open-data.s3.amazonaws.com/photos/572277234/medium.jpg
+grass	lawn_336602143.jpg	CC0	https://www.inaturalist.org/observations/336602143	https://inaturalist-open-data.s3.amazonaws.com/photos/611713344/medium.jpg
+grass	lawn_125107257.jpg	CC0	https://www.inaturalist.org/observations/125107257	https://inaturalist-open-data.s3.amazonaws.com/photos/212135524/medium.jpg
+grass	lawn_341810778.jpg	CC0	https://www.inaturalist.org/observations/341810778	https://inaturalist-open-data.s3.amazonaws.com/photos/622329259/medium.jpg
+grass	lawn_250873860.jpg	CC0	https://www.inaturalist.org/observations/250873860	https://inaturalist-open-data.s3.amazonaws.com/photos/448773211/medium.jpeg
+grass	lawn_250390361.jpg	CC0	https://www.inaturalist.org/observations/250390361	https://inaturalist-open-data.s3.amazonaws.com/photos/447803209/medium.jpeg
+grass	lawn_368459775.jpg	CC0	https://www.inaturalist.org/observations/368459775	https://inaturalist-open-data.s3.amazonaws.com/photos/672977874/medium.jpg
+grass	lawn_187127381.jpg	CC0	https://www.inaturalist.org/observations/187127381	https://inaturalist-open-data.s3.amazonaws.com/photos/327180014/medium.jpeg
+grass	lawn_46413391.jpg	CC0	https://www.inaturalist.org/observations/46413391	https://inaturalist-open-data.s3.amazonaws.com/photos/73614117/medium.jpg
+grass	lawn_65731819.jpg	CC0	https://www.inaturalist.org/observations/65731819	https://inaturalist-open-data.s3.amazonaws.com/photos/105845610/medium.jpg
+grass	lawn_197068291.jpg	CC0	https://www.inaturalist.org/observations/197068291	https://inaturalist-open-data.s3.amazonaws.com/photos/346996974/medium.jpg
+grass	lawn_226635883.jpg	CC0	https://www.inaturalist.org/observations/226635883	https://inaturalist-open-data.s3.amazonaws.com/photos/401970329/medium.jpeg
+grass	lawn_103738138.jpg	CC0	https://www.inaturalist.org/observations/103738138	https://inaturalist-open-data.s3.amazonaws.com/photos/173694569/medium.jpeg
+grass	lawn_212637121.jpg	CC0	https://www.inaturalist.org/observations/212637121	https://inaturalist-open-data.s3.amazonaws.com/photos/375758714/medium.jpeg
+grass	lawn_90616877.jpg	CC0	https://www.inaturalist.org/observations/90616877	https://inaturalist-open-data.s3.amazonaws.com/photos/149784928/medium.jpg
+label-format	white_oak_211670015.jpg	CC0	https://www.inaturalist.org/observations/211670015	https://inaturalist-open-data.s3.amazonaws.com/photos/374168243/medium.jpg
+fixture	red_oak_363799243.jpg	CC0	https://www.inaturalist.org/observations/363799243	https://inaturalist-open-data.s3.amazonaws.com/photos/664105168/medium.jpg
+plant	oak_398522729.jpg	CC0	https://www.inaturalist.org/observations/398522729	https://inaturalist-open-data.s3.amazonaws.com/photos/731065025/medium.jpg
+plant	oak_398522443.jpg	CC0	https://www.inaturalist.org/observations/398522443	https://inaturalist-open-data.s3.amazonaws.com/photos/731064423/medium.jpg
+plant	oak_43604874.jpg	CC0	https://www.inaturalist.org/observations/43604874	https://inaturalist-open-data.s3.amazonaws.com/photos/69177805/medium.jpg
+plant	oak_309119391.jpg	CC0	https://www.inaturalist.org/observations/309119391	https://inaturalist-open-data.s3.amazonaws.com/photos/557773568/medium.jpg
+plant	oak_53007204.jpg	CC0	https://www.inaturalist.org/observations/53007204	https://inaturalist-open-data.s3.amazonaws.com/photos/84291272/medium.jpeg
+plant	oak_318311909.jpg	CC0	https://www.inaturalist.org/observations/318311909	https://inaturalist-open-data.s3.amazonaws.com/photos/575277212/medium.jpg
+plant	oak_363790437.jpg	CC0	https://www.inaturalist.org/observations/363790437	https://inaturalist-open-data.s3.amazonaws.com/photos/664088098/medium.jpg
+plant	oak_328991174.jpg	CC0	https://www.inaturalist.org/observations/328991174	https://inaturalist-open-data.s3.amazonaws.com/photos/596269341/medium.jpg
+plant	oak_314494391.jpg	CC0	https://www.inaturalist.org/observations/314494391	https://inaturalist-open-data.s3.amazonaws.com/photos/568026981/medium.jpg
+plant	oak_237720737.jpg	CC0	https://www.inaturalist.org/observations/237720737	https://inaturalist-open-data.s3.amazonaws.com/photos/423107584/medium.jpeg
+plant	pine_71622438.jpg	CC0	https://www.inaturalist.org/observations/71622438	https://inaturalist-open-data.s3.amazonaws.com/photos/116637336/medium.jpg
+plant	pine_360502159.jpg	CC0	https://www.inaturalist.org/observations/360502159	https://inaturalist-open-data.s3.amazonaws.com/photos/657818500/medium.jpg
+plant	pine_109885814.jpg	CC0	https://www.inaturalist.org/observations/109885814	https://inaturalist-open-data.s3.amazonaws.com/photos/185284511/medium.jpeg
+plant	pine_360501929.jpg	CC0	https://www.inaturalist.org/observations/360501929	https://inaturalist-open-data.s3.amazonaws.com/photos/657818102/medium.jpg
+plant	pine_353810852.jpg	CC0	https://www.inaturalist.org/observations/353810852	https://inaturalist-open-data.s3.amazonaws.com/photos/645504619/medium.jpg
+plant	pine_305411590.jpg	CC0	https://www.inaturalist.org/observations/305411590	https://inaturalist-open-data.s3.amazonaws.com/photos/550665015/medium.jpg
+plant	pine_368827308.jpg	CC0	https://www.inaturalist.org/observations/368827308	https://inaturalist-open-data.s3.amazonaws.com/photos/673677103/medium.jpg
+plant	pine_274979130.jpg	CC0	https://www.inaturalist.org/observations/274979130	https://inaturalist-open-data.s3.amazonaws.com/photos/494217284/medium.jpg
+plant	pine_277025434.jpg	CC0	https://www.inaturalist.org/observations/277025434	https://inaturalist-open-data.s3.amazonaws.com/photos/497440656/medium.jpg
+plant	pine_197008810.jpg	CC0	https://www.inaturalist.org/observations/197008810	https://inaturalist-open-data.s3.amazonaws.com/photos/346875513/medium.jpeg
+plant	maple_185909345.jpg	CC0	https://www.inaturalist.org/observations/185909345	https://inaturalist-open-data.s3.amazonaws.com/photos/324775039/medium.jpg
+plant	maple_354467072.jpg	CC0	https://www.inaturalist.org/observations/354467072	https://inaturalist-open-data.s3.amazonaws.com/photos/646651342/medium.jpg
+plant	maple_295533115.jpg	CC0	https://www.inaturalist.org/observations/295533115	https://inaturalist-open-data.s3.amazonaws.com/photos/532036769/medium.jpg
+plant	maple_295533286.jpg	CC0	https://www.inaturalist.org/observations/295533286	https://inaturalist-open-data.s3.amazonaws.com/photos/532037126/medium.jpg
+plant	maple_292509018.jpg	CC0	https://www.inaturalist.org/observations/292509018	https://inaturalist-open-data.s3.amazonaws.com/photos/526395302/medium.jpg
+plant	maple_285639441.jpg	CC0	https://www.inaturalist.org/observations/285639441	https://inaturalist-open-data.s3.amazonaws.com/photos/513429650/medium.jpg
+plant	maple_72135812.jpg	CC0	https://www.inaturalist.org/observations/72135812	https://inaturalist-open-data.s3.amazonaws.com/photos/117554008/medium.jpeg
+plant	maple_74594102.jpg	CC0	https://www.inaturalist.org/observations/74594102	https://inaturalist-open-data.s3.amazonaws.com/photos/121932772/medium.jpg
+plant	maple_241038100.jpg	CC0	https://www.inaturalist.org/observations/241038100	https://inaturalist-open-data.s3.amazonaws.com/photos/429526046/medium.jpg
+plant	maple_174967757.jpg	CC0	https://www.inaturalist.org/observations/174967757	https://inaturalist-open-data.s3.amazonaws.com/photos/304030175/medium.jpg
+plant	sweetgum_267797916.jpg	CC0	https://www.inaturalist.org/observations/267797916	https://inaturalist-open-data.s3.amazonaws.com/photos/481294863/medium.jpg
+plant	sweetgum_186693668.jpg	CC0	https://www.inaturalist.org/observations/186693668	https://inaturalist-open-data.s3.amazonaws.com/photos/326318358/medium.jpg
+plant	sweetgum_93428583.jpg	CC0	https://www.inaturalist.org/observations/93428583	https://inaturalist-open-data.s3.amazonaws.com/photos/154843191/medium.jpeg
+plant	sweetgum_96329510.jpg	CC0	https://www.inaturalist.org/observations/96329510	https://inaturalist-open-data.s3.amazonaws.com/photos/160019429/medium.jpeg
+plant	sweetgum_75817784.jpg	CC0	https://www.inaturalist.org/observations/75817784	https://inaturalist-open-data.s3.amazonaws.com/photos/124065127/medium.jpg
+plant	sweetgum_388029933.jpg	CC0	https://www.inaturalist.org/observations/388029933	https://inaturalist-open-data.s3.amazonaws.com/photos/710615001/medium.jpg
+plant	sweetgum_162228324.jpg	CC0	https://www.inaturalist.org/observations/162228324	https://inaturalist-open-data.s3.amazonaws.com/photos/280491055/medium.jpeg
+plant	sweetgum_235845659.jpg	CC0	https://www.inaturalist.org/observations/235845659	https://inaturalist-open-data.s3.amazonaws.com/photos/419496728/medium.jpeg
+plant	sweetgum_196672785.jpg	CC0	https://www.inaturalist.org/observations/196672785	https://inaturalist-open-data.s3.amazonaws.com/photos/346196203/medium.jpg
+plant	sweetgum_267206868.jpg	CC0	https://www.inaturalist.org/observations/267206868	https://inaturalist-open-data.s3.amazonaws.com/photos/480167934/medium.jpeg
+plant	fern_198652148.jpg	CC0	https://www.inaturalist.org/observations/198652148	https://inaturalist-open-data.s3.amazonaws.com/photos/350178396/medium.jpeg
+plant	fern_357862311.jpg	CC0	https://www.inaturalist.org/observations/357862311	https://inaturalist-open-data.s3.amazonaws.com/photos/652758435/medium.jpg
+plant	fern_322314909.jpg	CC0	https://www.inaturalist.org/observations/322314909	https://inaturalist-open-data.s3.amazonaws.com/photos/583049486/medium.jpg
+plant	fern_143646740.jpg	CC0	https://www.inaturalist.org/observations/143646740	https://inaturalist-open-data.s3.amazonaws.com/photos/246389380/medium.jpeg
+plant	fern_162459455.jpg	CC0	https://www.inaturalist.org/observations/162459455	https://inaturalist-open-data.s3.amazonaws.com/photos/280936407/medium.jpeg
+plant	fern_174559357.jpg	CC0	https://www.inaturalist.org/observations/174559357	https://inaturalist-open-data.s3.amazonaws.com/photos/303268773/medium.jpg
+plant	fern_190724351.jpg	CC0	https://www.inaturalist.org/observations/190724351	https://inaturalist-open-data.s3.amazonaws.com/photos/334460241/medium.jpg
+plant	fern_324782570.jpg	CC0	https://www.inaturalist.org/observations/324782570	https://inaturalist-open-data.s3.amazonaws.com/photos/587919652/medium.jpg
+plant	fern_113298380.jpg	CC0	https://www.inaturalist.org/observations/113298380	https://inaturalist-open-data.s3.amazonaws.com/photos/191441120/medium.jpeg
+plant	fern_7288531.jpg	CC0	https://www.inaturalist.org/observations/7288531	https://inaturalist-open-data.s3.amazonaws.com/photos/9427292/medium.jpg
+plant	clover_360420143.jpg	CC0	https://www.inaturalist.org/observations/360420143	https://inaturalist-open-data.s3.amazonaws.com/photos/657664227/medium.jpg
+plant	clover_116135166.jpg	CC0	https://www.inaturalist.org/observations/116135166	https://inaturalist-open-data.s3.amazonaws.com/photos/196010295/medium.jpeg
+plant	clover_21647604.jpg	CC0	https://www.inaturalist.org/observations/21647604	https://inaturalist-open-data.s3.amazonaws.com/photos/33514857/medium.jpeg
+plant	clover_148398490.jpg	CC0	https://www.inaturalist.org/observations/148398490	https://inaturalist-open-data.s3.amazonaws.com/photos/255544550/medium.jpeg
+plant	clover_166931416.jpg	CC0	https://www.inaturalist.org/observations/166931416	https://inaturalist-open-data.s3.amazonaws.com/photos/289115378/medium.jpg
+plant	clover_295532142.jpg	CC0	https://www.inaturalist.org/observations/295532142	https://inaturalist-open-data.s3.amazonaws.com/photos/532034650/medium.jpg
+plant	clover_347184606.jpg	CC0	https://www.inaturalist.org/observations/347184606	https://inaturalist-open-data.s3.amazonaws.com/photos/632993096/medium.jpg
+plant	clover_368882118.jpg	CC0	https://www.inaturalist.org/observations/368882118	https://inaturalist-open-data.s3.amazonaws.com/photos/673783924/medium.jpg
+plant	clover_391225110.jpg	CC0	https://www.inaturalist.org/observations/391225110	https://inaturalist-open-data.s3.amazonaws.com/photos/716834003/medium.jpg
+plant	clover_270225229.jpg	CC0	https://www.inaturalist.org/observations/270225229	https://inaturalist-open-data.s3.amazonaws.com/photos/485950156/medium.jpeg
+plant	dandelion_345312783.jpg	CC0	https://www.inaturalist.org/observations/345312783	https://inaturalist-open-data.s3.amazonaws.com/photos/629285572/medium.jpg
+plant	dandelion_21582736.jpg	CC0	https://www.inaturalist.org/observations/21582736	https://inaturalist-open-data.s3.amazonaws.com/photos/33407222/medium.jpeg
+plant	dandelion_108365053.jpg	CC0	https://www.inaturalist.org/observations/108365053	https://inaturalist-open-data.s3.amazonaws.com/photos/182435819/medium.jpeg
+plant	dandelion_109409921.jpg	CC0	https://www.inaturalist.org/observations/109409921	https://inaturalist-open-data.s3.amazonaws.com/photos/184394290/medium.jpeg
+plant	dandelion_201936576.jpg	CC0	https://www.inaturalist.org/observations/201936576	https://inaturalist-open-data.s3.amazonaws.com/photos/356553018/medium.jpeg
+plant	dandelion_114940138.jpg	CC0	https://www.inaturalist.org/observations/114940138	https://inaturalist-open-data.s3.amazonaws.com/photos/194034564/medium.jpg
+plant	dandelion_39469049.jpg	CC0	https://www.inaturalist.org/observations/39469049	https://inaturalist-open-data.s3.amazonaws.com/photos/62624234/medium.jpeg
+plant	dandelion_65700688.jpg	CC0	https://www.inaturalist.org/observations/65700688	https://inaturalist-open-data.s3.amazonaws.com/photos/105789193/medium.jpeg
+plant	dandelion_143959013.jpg	CC0	https://www.inaturalist.org/observations/143959013	https://inaturalist-open-data.s3.amazonaws.com/photos/246983555/medium.jpeg
+plant	dandelion_96999892.jpg	CC0	https://www.inaturalist.org/observations/96999892	https://inaturalist-open-data.s3.amazonaws.com/photos/161230473/medium.jpeg
+plant	moss_206167235.jpg	CC0	https://www.inaturalist.org/observations/206167235	https://inaturalist-open-data.s3.amazonaws.com/photos/364618373/medium.jpg
+plant	moss_327767764.jpg	CC0	https://www.inaturalist.org/observations/327767764	https://inaturalist-open-data.s3.amazonaws.com/photos/593846951/medium.jpg
+plant	moss_99283572.jpg	CC0	https://www.inaturalist.org/observations/99283572	https://inaturalist-open-data.s3.amazonaws.com/photos/165475485/medium.jpeg
+plant	moss_74700272.jpg	CC0	https://www.inaturalist.org/observations/74700272	https://inaturalist-open-data.s3.amazonaws.com/photos/122120116/medium.jpg
+plant	moss_150743932.jpg	CC0	https://www.inaturalist.org/observations/150743932	https://inaturalist-open-data.s3.amazonaws.com/photos/259988322/medium.jpeg
+plant	moss_35300641.jpg	CC0	https://www.inaturalist.org/observations/35300641	https://inaturalist-open-data.s3.amazonaws.com/photos/55649792/medium.jpeg
+plant	moss_297775299.jpg	CC0	https://www.inaturalist.org/observations/297775299	https://inaturalist-open-data.s3.amazonaws.com/photos/536307782/medium.jpg
+plant	moss_22263131.jpg	CC0	https://www.inaturalist.org/observations/22263131	https://inaturalist-open-data.s3.amazonaws.com/photos/34475481/medium.jpg
+plant	moss_257263778.jpg	CC0	https://www.inaturalist.org/observations/257263778	https://inaturalist-open-data.s3.amazonaws.com/photos/461463917/medium.jpeg
+plant	moss_265577121.jpg	CC0	https://www.inaturalist.org/observations/265577121	https://inaturalist-open-data.s3.amazonaws.com/photos/477053267/medium.jpeg
+plant	magnolia_351718841.jpg	CC0	https://www.inaturalist.org/observations/351718841	https://inaturalist-open-data.s3.amazonaws.com/photos/641886059/medium.jpg
+plant	magnolia_357301974.jpg	CC0	https://www.inaturalist.org/observations/357301974	https://inaturalist-open-data.s3.amazonaws.com/photos/651665183/medium.jpg
+plant	magnolia_219012133.jpg	CC0	https://www.inaturalist.org/observations/219012133	https://inaturalist-open-data.s3.amazonaws.com/photos/387608859/medium.jpg
+plant	magnolia_251177662.jpg	CC0	https://www.inaturalist.org/observations/251177662	https://inaturalist-open-data.s3.amazonaws.com/photos/449380526/medium.jpeg
+plant	magnolia_371399763.jpg	CC0	https://www.inaturalist.org/observations/371399763	https://inaturalist-open-data.s3.amazonaws.com/photos/678569976/medium.jpg
+plant	magnolia_60627713.jpg	CC0	https://www.inaturalist.org/observations/60627713	https://inaturalist-open-data.s3.amazonaws.com/photos/96958714/medium.jpg
+plant	magnolia_60606688.jpg	CC0	https://www.inaturalist.org/observations/60606688	https://inaturalist-open-data.s3.amazonaws.com/photos/96923080/medium.jpg
+plant	magnolia_164228758.jpg	CC0	https://www.inaturalist.org/observations/164228758	https://inaturalist-open-data.s3.amazonaws.com/photos/284129361/medium.jpeg
+plant	magnolia_118925907.jpg	CC0	https://www.inaturalist.org/observations/118925907	https://inaturalist-open-data.s3.amazonaws.com/photos/200989266/medium.jpeg
+plant	magnolia_80465557.jpg	CC0	https://www.inaturalist.org/observations/80465557	https://inaturalist-open-data.s3.amazonaws.com/photos/131887585/medium.jpg
+plant	violet_272831934.jpg	CC0	https://www.inaturalist.org/observations/272831934	https://inaturalist-open-data.s3.amazonaws.com/photos/490884694/medium.jpg
+plant	violet_347694786.jpg	CC0	https://www.inaturalist.org/observations/347694786	https://inaturalist-open-data.s3.amazonaws.com/photos/633995531/medium.jpg
+plant	violet_156481315.jpg	CC0	https://www.inaturalist.org/observations/156481315	https://inaturalist-open-data.s3.amazonaws.com/photos/270589937/medium.jpg
+plant	violet_74595584.jpg	CC0	https://www.inaturalist.org/observations/74595584	https://inaturalist-open-data.s3.amazonaws.com/photos/121935530/medium.jpg
+plant	violet_113009335.jpg	CC0	https://www.inaturalist.org/observations/113009335	https://inaturalist-open-data.s3.amazonaws.com/photos/190931041/medium.jpeg
+plant	violet_109797658.jpg	CC0	https://www.inaturalist.org/observations/109797658	https://inaturalist-open-data.s3.amazonaws.com/photos/185120329/medium.jpeg
+plant	violet_153884718.jpg	CC0	https://www.inaturalist.org/observations/153884718	https://inaturalist-open-data.s3.amazonaws.com/photos/265839407/medium.jpeg
+plant	violet_151894066.jpg	CC0	https://www.inaturalist.org/observations/151894066	https://inaturalist-open-data.s3.amazonaws.com/photos/262152698/medium.jpeg
+plant	violet_343819870.jpg	CC0	https://www.inaturalist.org/observations/343819870	https://inaturalist-open-data.s3.amazonaws.com/photos/626376497/medium.jpg
+plant	violet_7871180.jpg	CC0	https://www.inaturalist.org/observations/7871180	https://inaturalist-open-data.s3.amazonaws.com/photos/10373212/medium.jpg
+plant	honeysuckle_3323351.jpg	CC0	https://www.inaturalist.org/observations/3323351	https://inaturalist-open-data.s3.amazonaws.com/photos/3838926/medium.jpg
+plant	honeysuckle_300966429.jpg	CC0	https://www.inaturalist.org/observations/300966429	https://inaturalist-open-data.s3.amazonaws.com/photos/542306894/medium.jpg
+plant	honeysuckle_19540307.jpg	CC0	https://www.inaturalist.org/observations/19540307	https://inaturalist-open-data.s3.amazonaws.com/photos/30073447/medium.jpeg
+plant	honeysuckle_28400905.jpg	CC0	https://www.inaturalist.org/observations/28400905	https://inaturalist-open-data.s3.amazonaws.com/photos/44271142/medium.jpeg
+plant	honeysuckle_36945277.jpg	CC0	https://www.inaturalist.org/observations/36945277	https://inaturalist-open-data.s3.amazonaws.com/photos/58484866/medium.jpeg
+plant	honeysuckle_161677638.jpg	CC0	https://www.inaturalist.org/observations/161677638	https://inaturalist-open-data.s3.amazonaws.com/photos/279475153/medium.jpeg
+plant	honeysuckle_79931175.jpg	CC0	https://www.inaturalist.org/observations/79931175	https://inaturalist-open-data.s3.amazonaws.com/photos/130959525/medium.jpeg
+plant	honeysuckle_74726760.jpg	CC0	https://www.inaturalist.org/observations/74726760	https://inaturalist-open-data.s3.amazonaws.com/photos/122168338/medium.jpg
+plant	honeysuckle_24854627.jpg	CC0	https://www.inaturalist.org/observations/24854627	https://inaturalist-open-data.s3.amazonaws.com/photos/38442250/medium.jpg
+plant	honeysuckle_345692495.jpg	CC0	https://www.inaturalist.org/observations/345692495	https://inaturalist-open-data.s3.amazonaws.com/photos/630036113/medium.jpg
+plant	poison_ivy_187310885.jpg	CC0	https://www.inaturalist.org/observations/187310885	https://inaturalist-open-data.s3.amazonaws.com/photos/327539223/medium.jpg
+plant	poison_ivy_120385547.jpg	CC0	https://www.inaturalist.org/observations/120385547	https://inaturalist-open-data.s3.amazonaws.com/photos/203605382/medium.jpeg
+plant	poison_ivy_267986184.jpg	CC0	https://www.inaturalist.org/observations/267986184	https://inaturalist-open-data.s3.amazonaws.com/photos/481654623/medium.jpg
+plant	poison_ivy_161804350.jpg	CC0	https://www.inaturalist.org/observations/161804350	https://inaturalist-open-data.s3.amazonaws.com/photos/279709241/medium.jpg
+plant	poison_ivy_177285710.jpg	CC0	https://www.inaturalist.org/observations/177285710	https://inaturalist-open-data.s3.amazonaws.com/photos/308320728/medium.jpeg
+plant	poison_ivy_170203141.jpg	CC0	https://www.inaturalist.org/observations/170203141	https://inaturalist-open-data.s3.amazonaws.com/photos/295171442/medium.jpeg
+plant	poison_ivy_293267010.jpg	CC0	https://www.inaturalist.org/observations/293267010	https://inaturalist-open-data.s3.amazonaws.com/photos/527833442/medium.jpg
+plant	poison_ivy_207844923.jpg	CC0	https://www.inaturalist.org/observations/207844923	https://inaturalist-open-data.s3.amazonaws.com/photos/367683404/medium.jpg
+plant	poison_ivy_13112921.jpg	CC0	https://www.inaturalist.org/observations/13112921	https://inaturalist-open-data.s3.amazonaws.com/photos/19112683/medium.jpeg
+plant	poison_ivy_274901221.jpg	CC0	https://www.inaturalist.org/observations/274901221	https://inaturalist-open-data.s3.amazonaws.com/photos/494092076/medium.jpg
+plant	poison_oak_357861641.jpg	CC0	https://www.inaturalist.org/observations/357861641	https://inaturalist-open-data.s3.amazonaws.com/photos/652757299/medium.jpg
+plant	poison_oak_154626076.jpg	CC0	https://www.inaturalist.org/observations/154626076	https://inaturalist-open-data.s3.amazonaws.com/photos/267192839/medium.jpeg
+plant	poison_oak_388255640.jpg	CC0	https://www.inaturalist.org/observations/388255640	https://inaturalist-open-data.s3.amazonaws.com/photos/711060002/medium.jpg
+plant	poison_oak_27883238.jpg	CC0	https://www.inaturalist.org/observations/27883238	https://inaturalist-open-data.s3.amazonaws.com/photos/43427840/medium.jpeg
+plant	poison_oak_247037740.jpg	CC0	https://www.inaturalist.org/observations/247037740	https://inaturalist-open-data.s3.amazonaws.com/photos/441132301/medium.jpeg
+plant	poison_oak_118524258.jpg	CC0	https://www.inaturalist.org/observations/118524258	https://inaturalist-open-data.s3.amazonaws.com/photos/200264462/medium.jpg
+plant	poison_oak_239391316.jpg	CC0	https://www.inaturalist.org/observations/239391316	https://inaturalist-open-data.s3.amazonaws.com/photos/426353977/medium.jpeg
+plant	poison_oak_98440726.jpg	CC0	https://www.inaturalist.org/observations/98440726	https://inaturalist-open-data.s3.amazonaws.com/photos/163894686/medium.jpg
+plant	poison_oak_46634260.jpg	CC0	https://www.inaturalist.org/observations/46634260	https://inaturalist-open-data.s3.amazonaws.com/photos/73963858/medium.jpeg
+plant	poison_oak_14221611.jpg	CC0	https://www.inaturalist.org/observations/14221611	https://inaturalist-open-data.s3.amazonaws.com/photos/21099690/medium.jpg
+plant	poison_sumac_387448086.jpg	CC0	https://www.inaturalist.org/observations/387448086	https://inaturalist-open-data.s3.amazonaws.com/photos/709486814/medium.jpg
+plant	poison_sumac_3140581.jpg	CC0	https://www.inaturalist.org/observations/3140581	https://inaturalist-open-data.s3.amazonaws.com/photos/3634442/medium.jpg
+plant	poison_sumac_396031193.jpg	CC0	https://www.inaturalist.org/observations/396031193	https://inaturalist-open-data.s3.amazonaws.com/photos/726232163/medium.jpg
+plant	poison_sumac_396810195.jpg	CC0	https://www.inaturalist.org/observations/396810195	https://inaturalist-open-data.s3.amazonaws.com/photos/727720056/medium.jpg
+plant	poison_sumac_397844618.jpg	CC0	https://www.inaturalist.org/observations/397844618	https://inaturalist-open-data.s3.amazonaws.com/photos/729734409/medium.jpg
+plant	poison_sumac_183875536.jpg	CC0	https://www.inaturalist.org/observations/183875536	https://inaturalist-open-data.s3.amazonaws.com/photos/320861803/medium.jpeg
+plant	poison_sumac_233122366.jpg	CC0	https://www.inaturalist.org/observations/233122366	https://inaturalist-open-data.s3.amazonaws.com/photos/414360534/medium.jpeg
+plant	poison_sumac_81163949.jpg	CC0	https://www.inaturalist.org/observations/81163949	https://inaturalist-open-data.s3.amazonaws.com/photos/133093913/medium.jpeg
+plant	poison_sumac_241642163.jpg	CC0	https://www.inaturalist.org/observations/241642163	https://inaturalist-open-data.s3.amazonaws.com/photos/430691846/medium.jpeg
+plant	poison_sumac_189283633.jpg	CC0	https://www.inaturalist.org/observations/189283633	https://inaturalist-open-data.s3.amazonaws.com/photos/331534980/medium.jpg
+plant	pokeweed_60455060.jpg	CC0	https://www.inaturalist.org/observations/60455060	https://inaturalist-open-data.s3.amazonaws.com/photos/96669752/medium.jpeg
+plant	pokeweed_230542881.jpg	CC0	https://www.inaturalist.org/observations/230542881	https://inaturalist-open-data.s3.amazonaws.com/photos/409361438/medium.jpeg
+plant	pokeweed_124308350.jpg	CC0	https://www.inaturalist.org/observations/124308350	https://inaturalist-open-data.s3.amazonaws.com/photos/210685593/medium.jpeg
+plant	pokeweed_348788863.jpg	CC0	https://www.inaturalist.org/observations/348788863	https://inaturalist-open-data.s3.amazonaws.com/photos/636170524/medium.jpg
+plant	pokeweed_210262679.jpg	CC0	https://www.inaturalist.org/observations/210262679	https://inaturalist-open-data.s3.amazonaws.com/photos/371926108/medium.jpeg
+plant	pokeweed_29634110.jpg	CC0	https://www.inaturalist.org/observations/29634110	https://inaturalist-open-data.s3.amazonaws.com/photos/46258474/medium.jpeg
+plant	pokeweed_388023321.jpg	CC0	https://www.inaturalist.org/observations/388023321	https://inaturalist-open-data.s3.amazonaws.com/photos/710601809/medium.jpg
+plant	pokeweed_157764467.jpg	CC0	https://www.inaturalist.org/observations/157764467	https://inaturalist-open-data.s3.amazonaws.com/photos/272729655/medium.jpg
+plant	pokeweed_87058636.jpg	CC0	https://www.inaturalist.org/observations/87058636	https://inaturalist-open-data.s3.amazonaws.com/photos/143503861/medium.jpeg
+plant	pokeweed_166650461.jpg	CC0	https://www.inaturalist.org/observations/166650461	https://inaturalist-open-data.s3.amazonaws.com/photos/288603601/medium.jpeg
+plant	horsenettle_128063257.jpg	CC0	https://www.inaturalist.org/observations/128063257	https://inaturalist-open-data.s3.amazonaws.com/photos/217490101/medium.jpeg
+plant	horsenettle_265551501.jpg	CC0	https://www.inaturalist.org/observations/265551501	https://inaturalist-open-data.s3.amazonaws.com/photos/477004687/medium.jpg
+plant	horsenettle_217820218.jpg	CC0	https://www.inaturalist.org/observations/217820218	https://inaturalist-open-data.s3.amazonaws.com/photos/385383452/medium.jpeg
+plant	horsenettle_166822583.jpg	CC0	https://www.inaturalist.org/observations/166822583	https://inaturalist-open-data.s3.amazonaws.com/photos/288917444/medium.jpg
+plant	horsenettle_7378512.jpg	CC0	https://www.inaturalist.org/observations/7378512	https://inaturalist-open-data.s3.amazonaws.com/photos/9573160/medium.jpg
+plant	horsenettle_294427611.jpg	CC0	https://www.inaturalist.org/observations/294427611	https://inaturalist-open-data.s3.amazonaws.com/photos/529952467/medium.jpg
+plant	horsenettle_127279141.jpg	CC0	https://www.inaturalist.org/observations/127279141	https://inaturalist-open-data.s3.amazonaws.com/photos/216064359/medium.jpeg
+plant	horsenettle_317558499.jpg	CC0	https://www.inaturalist.org/observations/317558499	https://inaturalist-open-data.s3.amazonaws.com/photos/573835861/medium.jpg
+plant	horsenettle_363487826.jpg	CC0	https://www.inaturalist.org/observations/363487826	https://inaturalist-open-data.s3.amazonaws.com/photos/663512454/medium.jpg
+plant	horsenettle_298443769.jpg	CC0	https://www.inaturalist.org/observations/298443769	https://inaturalist-open-data.s3.amazonaws.com/photos/537576899/medium.jpg

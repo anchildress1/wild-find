@@ -1,0 +1,66 @@
+
+## Label format (white oak, iNat 211670015)
+
+common            mobile   top-1 poison oak    | poison oak 0.456, poison ivy 0.399, oak 0.366
+common            teacher  top-1 poison oak    | poison oak 0.388, poison ivy 0.352, oak 0.329
+scientific        mobile   top-1 oak           | oak 0.478, poison oak 0.456, poison ivy 0.392
+scientific        teacher  top-1 oak           | oak 0.414, poison ivy 0.345, poison oak 0.331
+taxonomic         mobile   top-1 oak           | oak 0.476, poison oak 0.457, poison ivy 0.395
+taxonomic         teacher  top-1 oak           | oak 0.412, poison ivy 0.347, poison oak 0.332
+taxonomic+common  mobile   top-1 poison oak    | poison oak 0.456, oak 0.405, poison ivy 0.397
+taxonomic+common  teacher  top-1 oak           | oak 0.378, poison ivy 0.348, poison oak 0.344
+mobile vs teacher image cosine: 0.809539
+
+## BioCLIP Mobile on non-plants (labels: 5 targets, 5 hazards, 6 scenes)
+
+reticle: 5/22 non-plants top-1 is a plant target: asphalt_road_7.jpg=oak 0.540, asphalt_road_8.jpg=oak 0.555, car_19.jpg=fern 0.508, portrait_woman_11.jpg=oak 0.592, portrait_woman_12.jpg=oak 0.516
+full: 7/22 non-plants top-1 is a plant target: asphalt_road_7.jpg=oak 0.477, car_19.jpg=oak 0.467, car_20.jpg=pine 0.539, dog_17.jpg=fern 0.489, portrait_woman_11.jpg=oak 0.551, portrait_woman_12.jpg=oak 0.496, smartphone_display_4.jpg=fern 0.520
+
+## TinyCLIP plant gate (plant share > 0.5)
+
+TinyCLIP-ViT-39M-16-Text-19M-YFCC15M [full] passes as plant: fixture 1/1, grass 52/52, label-format 1/1, non-plant 1/22, plant 176/176
+    plant groups not fully kept: none
+TinyCLIP-ViT-39M-16-Text-19M-YFCC15M [reticle] passes as plant: fixture 1/1, grass 52/52, label-format 1/1, non-plant 1/22, plant 175/176
+    plant groups not fully kept: pine 11/12
+TinyCLIP-ViT-40M-32-Text-19M-LAION400M [full] passes as plant: fixture 1/1, grass 52/52, label-format 1/1, non-plant 2/22, plant 175/176
+    plant groups not fully kept: sweetgum 9/10
+TinyCLIP-ViT-40M-32-Text-19M-LAION400M [reticle] passes as plant: fixture 1/1, grass 52/52, label-format 1/1, non-plant 1/22, plant 176/176
+    plant groups not fully kept: none
+TinyCLIP-ViT-8M-16-Text-3M-YFCC15M [full] passes as plant: fixture 1/1, grass 52/52, label-format 1/1, non-plant 1/22, plant 176/176
+    plant groups not fully kept: none
+TinyCLIP-ViT-8M-16-Text-3M-YFCC15M [reticle] passes as plant: fixture 1/1, grass 51/52, label-format 1/1, non-plant 1/22, plant 175/176
+    plant groups not fully kept: pine 11/12
+
+## Hazard warnings (labels: grass, oak, fern, clover, pine, dandelion + 5 hazards; no scenes)
+
+group                 n   hazard top-1   >0.02   >0.05   >0.10   median gap   min gap
+clover                12       2              0       0       0   -0.087       -0.208
+dandelion             12       0              0       0       0   -0.214       -0.293
+fern                  12       3              0       0       0   -0.051       -0.164
+fixture                1       0              0       0       0   -0.068       -0.068
+grass                 54       9              6       5       1   -0.076       -0.250
+honeysuckle           10       9              9       8       5   +0.101       -0.015
+horsenettle           10      10             10      10      10   +0.382       +0.128
+label-format           1       0              0       0       0   -0.022       -0.022
+magnolia              10      10              8       4       3   +0.041       +0.009
+maple                 10       7              7       7       2   +0.074       -0.045
+moss                  12       1              0       0       0   -0.068       -0.232
+non-plant             22       0              0       0       0   -0.087       -0.173
+oak                   12       1              1       0       0   -0.068       -0.168
+pine                  12       2              1       0       0   -0.077       -0.222
+poison_ivy            10       9              9       9       9   +0.368       -0.093
+poison_oak            10      10             10      10       9   +0.306       +0.085
+poison_sumac          10      10             10      10      10   +0.281       +0.147
+poisonivy              2       2              2       2       1   +0.276       +0.093
+pokeweed              10      10             10      10      10   +0.236       +0.188
+sweetgum              10       6              4       4       1   +0.005       -0.080
+violet                10       6              5       2       1   +0.020       -0.024
+
+## Tutorial rule: grass rank on the reticle crop (labels: 6 targets + 5 hazards)
+
+fixture           n=  1  grass top-1:   0  grass in top 3:   0
+grass             n= 52  grass top-1:  45  grass in top 3:  50
+hazard plants     n= 50  grass top-1:   0  grass in top 3:   2
+label-format      n=  1  grass top-1:   0  grass in top 3:   0
+non-grass plants  n=126  grass top-1:  11  grass in top 3:  45
+non-plant         n= 22  grass top-1:  11  grass in top 3:  19
