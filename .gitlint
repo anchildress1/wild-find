@@ -1,0 +1,9 @@
+# No [general] section and no --contrib: either one rebuilds the rule set and drops the gitlint-rai rules.
+[title-max-length]
+line-length=72
+
+[title-match-regex]
+regex=^(feat|fix|chore|docs|style|refactor|perf|test|build|ci|revert)(\([a-z0-9._/-]+\))?!?: \S
+
+[body-max-line-length]
+line-length=100

@@ -1,0 +1,98 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "**/*.md"
+      - "docs/**"
+      - "pipeline/**"
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+    paths-ignore:
+      - "**/*.md"
+      - "docs/**"
+      - "pipeline/**"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  android:
+    name: Lint, test, build
+    if: github.event.pull_request.draft == false || github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '25'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+
+      - name: Install ktlint
+        run: |
+          curl -sSLO --proto '=https' --tlsv1.2 https://github.com/pinterest/ktlint/releases/download/1.8.0/ktlint
+          sudo install -m 755 ktlint /usr/local/bin/ktlint
+
+      - name: Run ktlint
+        run: ktlint --log-level=error
+
+      - name: Run detekt
+        run: |
+          curl -sSLo detekt.jar --proto '=https' --tlsv1.2 https://github.com/detekt/detekt/releases/download/v1.23.8/detekt-cli-1.23.8-all.jar
+          java -jar detekt.jar --build-upon-default-config --config detekt.yml --input core/src,app/src
+
+      - name: Test core with coverage gate
+        run: ./gradlew --warning-mode=fail :core:test :core:koverVerify
+
+      - name: Android lint
+        run: ./gradlew --warning-mode=fail :app:lintDebug
+
+      - name: Assemble debug APK
+        run: ./gradlew --warning-mode=fail :app:assembleDebug
+
+      - name: Upload reports
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: reports
+          path: |
+            core/build/reports/
+            app/build/reports/
+          retention-days: 14
+
+  gitlint:
+    name: Commit message lint
+    if: github.event_name == 'pull_request' && github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: pipeline/uv.lock
+
+      - name: Lint commits in PR range
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: uv run --project pipeline gitlint-rai --ignore-stdin --commits "$BASE_SHA..$HEAD_SHA"

@@ -1,0 +1,11 @@
+title = "wild-find gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Public model checksums trip the generic high-entropy rule."
+regexTarget = "match"
+regexes = [
+  '''[0-9a-f]{64}''',
+]

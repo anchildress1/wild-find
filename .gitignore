@@ -1,0 +1,39 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+.kotlin/
+
+# Android
+*.apk
+*.aab
+local.properties
+captures/
+.cxx/
+
+# IDE
+.idea/
+*.iml
+
+# Python
+.venv/
+__pycache__/
+.ruff_cache/
+.pytest_cache/
+
+# Models: downloaded at runtime or sideloaded with adb, never committed
+*.litertlm
+*.onnx
+*.safetensors
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+keystore.properties
+
+# OS
+.DS_Store
+.claude/

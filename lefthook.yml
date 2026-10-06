@@ -1,0 +1,27 @@
+pre-commit:
+  commands:
+    ktlint-format:
+      glob: '**/*.{kt,kts}'
+      run: ktlint --log-level=error -F {staged_files}
+      stage_fixed: true
+    detekt:
+      glob: '**/*.{kt,kts}'
+      run: make detekt
+    ruff:
+      glob: 'pipeline/**/*.py'
+      run: make pipeline-lint
+    actionlint:
+      glob: '.github/workflows/*.yml'
+      run: actionlint {staged_files}
+    secret-scan:
+      run: gitleaks git --staged --redact
+
+commit-msg:
+  commands:
+    gitlint:
+      run: uv run --project pipeline gitlint-rai --msg-filename {1}
+
+pre-push:
+  commands:
+    ai-checks:
+      run: make ai-checks
