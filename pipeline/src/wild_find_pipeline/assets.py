@@ -95,7 +95,16 @@ def export_plant_gate(local: Path, out: Path) -> tuple[np.ndarray, float]:
 
 def hazard_vectors(names: list[str]) -> dict[str, np.ndarray]:
     """Committed teacher vectors for every hazard species the pinned table lacks; raises when one is missing."""
-    stored = json.loads(HAZARD_VECTORS.read_text())["species"]
+    stored_file = json.loads(HAZARD_VECTORS.read_text())
+    teacher = pin("teacher")
+    # Rows from another teacher revision, or picked against another species list, embed in a different
+    # space or miss a hazard, and nothing downstream would notice.
+    if (
+        stored_file["text_model"] != {"repo": teacher["repo"], "revision": teacher["revision"]}
+        or stored_file.get("taxa_labels_sha256") != pin("taxa_labels")["sha256"]
+    ):
+        raise ValueError(f"{HAZARD_VECTORS.name} predates the current teacher or taxa pins; run make hazard-vectors")
+    stored = stored_file["species"]
     lacking = lacking_hazards(names)
     if missing := [taxon for taxon in lacking if taxon not in stored]:
         raise ValueError(f"no stored vector for {missing}; run make hazard-vectors")

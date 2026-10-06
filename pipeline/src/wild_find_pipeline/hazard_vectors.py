@@ -19,6 +19,7 @@ def main() -> int:
         json.dumps(
             {
                 "text_model": {"repo": teacher["repo"], "revision": teacher["revision"]},
+                "taxa_labels_sha256": pin("taxa_labels")["sha256"],
                 "species": {
                     taxon: vector.astype(float).tolist() for taxon, vector in zip(lacking, vectors, strict=True)
                 },

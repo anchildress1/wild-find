@@ -9,6 +9,7 @@ import pytest
 from wild_find_pipeline import assets, paths
 from wild_find_pipeline.assets import plant_share, species_table
 from wild_find_pipeline.labels import HAZARDS, is_hazard, lacking_hazards
+from wild_find_pipeline.paths import pin
 
 
 def test_plant_share_sums_the_scaled_softmax_of_plant_labels():
@@ -119,7 +120,15 @@ def test_ensure_artifact_rejects_downloaded_bytes_that_miss_the_pins(pinned, mon
 @pytest.fixture
 def stored(tmp_path, monkeypatch):
     path = tmp_path / "hazard_vectors.json"
-    path.write_text(json.dumps({"species": {"Toxicodendron pubescens": [0.6, 0.8]}}))
+    path.write_text(
+        json.dumps(
+            {
+                "text_model": {"repo": pin("teacher")["repo"], "revision": pin("teacher")["revision"]},
+                "taxa_labels_sha256": pin("taxa_labels")["sha256"],
+                "species": {"Toxicodendron pubescens": [0.6, 0.8]},
+            }
+        )
+    )
     monkeypatch.setattr(assets, "HAZARD_VECTORS", path)
 
 
@@ -134,4 +143,19 @@ def test_hazard_vectors_returns_only_hazards_the_table_lacks(stored):
 
 def test_hazard_vectors_fails_when_a_lacking_hazard_has_no_stored_vector(stored):
     with pytest.raises(ValueError, match="make hazard-vectors"):
+        assets.hazard_vectors(["Toxicodendron radicans"])
+
+
+@pytest.mark.parametrize(
+    "stale",
+    [
+        {"text_model": {"repo": "imageomics/bioclip-2.5-vith14", "revision": "old"}},
+        {"taxa_labels_sha256": "0" * 64},
+    ],
+)
+def test_hazard_vectors_rejects_rows_built_against_other_pins(stored, stale):
+    path = assets.HAZARD_VECTORS
+    path.write_text(json.dumps({**json.loads(path.read_text()), **stale}))
+
+    with pytest.raises(ValueError, match="predates"):
         assets.hazard_vectors(["Toxicodendron radicans"])

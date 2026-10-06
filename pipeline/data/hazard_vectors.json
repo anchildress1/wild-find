@@ -3,6 +3,7 @@
   "repo": "imageomics/bioclip-2.5-vith14",
   "revision": "6e3d04e3d6522012c88181085c5ae666e14c45cd"
  },
+ "taxa_labels_sha256": "adb36a6af884fda71ad3d633c20ede66862b335915a282ea613604409b6d4d7f",
  "species": {
   "Toxicodendron pubescens": [
    0.005667191930115223,
