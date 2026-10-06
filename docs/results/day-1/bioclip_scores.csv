@@ -1,38 +1,4 @@
 set,photo,region,label,kind,prompt,score
-non-plant,computer_monitor_1.jpg,full,grass,plant,a photo of Poaceae.,0.489836
-non-plant,computer_monitor_1.jpg,full,oak,plant,a photo of Quercus.,0.395214
-non-plant,computer_monitor_1.jpg,full,fern,plant,a photo of Polypodiopsida.,0.450585
-non-plant,computer_monitor_1.jpg,full,clover,plant,a photo of Trifolium.,0.428867
-non-plant,computer_monitor_1.jpg,full,pine,plant,a photo of Pinus.,0.362563
-non-plant,computer_monitor_1.jpg,full,dandelion,plant,a photo of Taraxacum.,0.428405
-non-plant,computer_monitor_1.jpg,full,poison ivy,hazard,a photo of Toxicodendron radicans.,0.415154
-non-plant,computer_monitor_1.jpg,full,poison oak,hazard,a photo of Toxicodendron pubescens.,0.447741
-non-plant,computer_monitor_1.jpg,full,poison sumac,hazard,a photo of Toxicodendron vernix.,0.451390
-non-plant,computer_monitor_1.jpg,full,pokeweed,hazard,a photo of Phytolacca americana.,0.397370
-non-plant,computer_monitor_1.jpg,full,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.346269
-non-plant,computer_monitor_1.jpg,full,lawn,scene,a photo of lawn.,0.413733
-non-plant,computer_monitor_1.jpg,full,field,scene,a photo of field.,0.433558
-non-plant,computer_monitor_1.jpg,full,weedy garden bed,scene,a photo of weedy garden bed.,0.429795
-non-plant,computer_monitor_1.jpg,full,pavement,scene,a photo of pavement.,0.453171
-non-plant,computer_monitor_1.jpg,full,person,scene,a photo of person.,0.470485
-non-plant,computer_monitor_1.jpg,full,screen,scene,a photo of screen.,0.437730
-non-plant,computer_monitor_1.jpg,reticle,grass,plant,a photo of Poaceae.,0.532085
-non-plant,computer_monitor_1.jpg,reticle,oak,plant,a photo of Quercus.,0.422230
-non-plant,computer_monitor_1.jpg,reticle,fern,plant,a photo of Polypodiopsida.,0.486710
-non-plant,computer_monitor_1.jpg,reticle,clover,plant,a photo of Trifolium.,0.448535
-non-plant,computer_monitor_1.jpg,reticle,pine,plant,a photo of Pinus.,0.410668
-non-plant,computer_monitor_1.jpg,reticle,dandelion,plant,a photo of Taraxacum.,0.427033
-non-plant,computer_monitor_1.jpg,reticle,poison ivy,hazard,a photo of Toxicodendron radicans.,0.372442
-non-plant,computer_monitor_1.jpg,reticle,poison oak,hazard,a photo of Toxicodendron pubescens.,0.393500
-non-plant,computer_monitor_1.jpg,reticle,poison sumac,hazard,a photo of Toxicodendron vernix.,0.421316
-non-plant,computer_monitor_1.jpg,reticle,pokeweed,hazard,a photo of Phytolacca americana.,0.341543
-non-plant,computer_monitor_1.jpg,reticle,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.372949
-non-plant,computer_monitor_1.jpg,reticle,lawn,scene,a photo of lawn.,0.474518
-non-plant,computer_monitor_1.jpg,reticle,field,scene,a photo of field.,0.441267
-non-plant,computer_monitor_1.jpg,reticle,weedy garden bed,scene,a photo of weedy garden bed.,0.426131
-non-plant,computer_monitor_1.jpg,reticle,pavement,scene,a photo of pavement.,0.476411
-non-plant,computer_monitor_1.jpg,reticle,person,scene,a photo of person.,0.488905
-non-plant,computer_monitor_1.jpg,reticle,screen,scene,a photo of screen.,0.470870
 non-plant,computer_monitor_2.jpg,full,grass,plant,a photo of Poaceae.,0.371294
 non-plant,computer_monitor_2.jpg,full,oak,plant,a photo of Quercus.,0.367083
 non-plant,computer_monitor_2.jpg,full,fern,plant,a photo of Polypodiopsida.,0.465118
@@ -67,40 +33,6 @@ non-plant,computer_monitor_2.jpg,reticle,weedy garden bed,scene,a photo of weedy
 non-plant,computer_monitor_2.jpg,reticle,pavement,scene,a photo of pavement.,0.450943
 non-plant,computer_monitor_2.jpg,reticle,person,scene,a photo of person.,0.433580
 non-plant,computer_monitor_2.jpg,reticle,screen,scene,a photo of screen.,0.509902
-non-plant,smartphone_display_3.jpg,full,grass,plant,a photo of Poaceae.,0.503458
-non-plant,smartphone_display_3.jpg,full,oak,plant,a photo of Quercus.,0.536960
-non-plant,smartphone_display_3.jpg,full,fern,plant,a photo of Polypodiopsida.,0.514030
-non-plant,smartphone_display_3.jpg,full,clover,plant,a photo of Trifolium.,0.455788
-non-plant,smartphone_display_3.jpg,full,pine,plant,a photo of Pinus.,0.502769
-non-plant,smartphone_display_3.jpg,full,dandelion,plant,a photo of Taraxacum.,0.412568
-non-plant,smartphone_display_3.jpg,full,poison ivy,hazard,a photo of Toxicodendron radicans.,0.402470
-non-plant,smartphone_display_3.jpg,full,poison oak,hazard,a photo of Toxicodendron pubescens.,0.438109
-non-plant,smartphone_display_3.jpg,full,poison sumac,hazard,a photo of Toxicodendron vernix.,0.443067
-non-plant,smartphone_display_3.jpg,full,pokeweed,hazard,a photo of Phytolacca americana.,0.401137
-non-plant,smartphone_display_3.jpg,full,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.381343
-non-plant,smartphone_display_3.jpg,full,lawn,scene,a photo of lawn.,0.503768
-non-plant,smartphone_display_3.jpg,full,field,scene,a photo of field.,0.478182
-non-plant,smartphone_display_3.jpg,full,weedy garden bed,scene,a photo of weedy garden bed.,0.505024
-non-plant,smartphone_display_3.jpg,full,pavement,scene,a photo of pavement.,0.477905
-non-plant,smartphone_display_3.jpg,full,person,scene,a photo of person.,0.533602
-non-plant,smartphone_display_3.jpg,full,screen,scene,a photo of screen.,0.578544
-non-plant,smartphone_display_3.jpg,reticle,grass,plant,a photo of Poaceae.,0.525273
-non-plant,smartphone_display_3.jpg,reticle,oak,plant,a photo of Quercus.,0.506648
-non-plant,smartphone_display_3.jpg,reticle,fern,plant,a photo of Polypodiopsida.,0.535106
-non-plant,smartphone_display_3.jpg,reticle,clover,plant,a photo of Trifolium.,0.477509
-non-plant,smartphone_display_3.jpg,reticle,pine,plant,a photo of Pinus.,0.506031
-non-plant,smartphone_display_3.jpg,reticle,dandelion,plant,a photo of Taraxacum.,0.447111
-non-plant,smartphone_display_3.jpg,reticle,poison ivy,hazard,a photo of Toxicodendron radicans.,0.407173
-non-plant,smartphone_display_3.jpg,reticle,poison oak,hazard,a photo of Toxicodendron pubescens.,0.438592
-non-plant,smartphone_display_3.jpg,reticle,poison sumac,hazard,a photo of Toxicodendron vernix.,0.423804
-non-plant,smartphone_display_3.jpg,reticle,pokeweed,hazard,a photo of Phytolacca americana.,0.411978
-non-plant,smartphone_display_3.jpg,reticle,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.404504
-non-plant,smartphone_display_3.jpg,reticle,lawn,scene,a photo of lawn.,0.529351
-non-plant,smartphone_display_3.jpg,reticle,field,scene,a photo of field.,0.495214
-non-plant,smartphone_display_3.jpg,reticle,weedy garden bed,scene,a photo of weedy garden bed.,0.506985
-non-plant,smartphone_display_3.jpg,reticle,pavement,scene,a photo of pavement.,0.508732
-non-plant,smartphone_display_3.jpg,reticle,person,scene,a photo of person.,0.534453
-non-plant,smartphone_display_3.jpg,reticle,screen,scene,a photo of screen.,0.580208
 non-plant,smartphone_display_4.jpg,full,grass,plant,a photo of Poaceae.,0.508285
 non-plant,smartphone_display_4.jpg,full,oak,plant,a photo of Quercus.,0.483789
 non-plant,smartphone_display_4.jpg,full,fern,plant,a photo of Polypodiopsida.,0.520127
@@ -339,40 +271,6 @@ non-plant,concrete_sidewalk_10.jpg,reticle,weedy garden bed,scene,a photo of wee
 non-plant,concrete_sidewalk_10.jpg,reticle,pavement,scene,a photo of pavement.,0.497180
 non-plant,concrete_sidewalk_10.jpg,reticle,person,scene,a photo of person.,0.528427
 non-plant,concrete_sidewalk_10.jpg,reticle,screen,scene,a photo of screen.,0.568494
-non-plant,portrait_woman_11.jpg,full,grass,plant,a photo of Poaceae.,0.428515
-non-plant,portrait_woman_11.jpg,full,oak,plant,a photo of Quercus.,0.551368
-non-plant,portrait_woman_11.jpg,full,fern,plant,a photo of Polypodiopsida.,0.421537
-non-plant,portrait_woman_11.jpg,full,clover,plant,a photo of Trifolium.,0.427701
-non-plant,portrait_woman_11.jpg,full,pine,plant,a photo of Pinus.,0.476086
-non-plant,portrait_woman_11.jpg,full,dandelion,plant,a photo of Taraxacum.,0.444281
-non-plant,portrait_woman_11.jpg,full,poison ivy,hazard,a photo of Toxicodendron radicans.,0.478660
-non-plant,portrait_woman_11.jpg,full,poison oak,hazard,a photo of Toxicodendron pubescens.,0.470691
-non-plant,portrait_woman_11.jpg,full,poison sumac,hazard,a photo of Toxicodendron vernix.,0.461090
-non-plant,portrait_woman_11.jpg,full,pokeweed,hazard,a photo of Phytolacca americana.,0.420778
-non-plant,portrait_woman_11.jpg,full,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.397055
-non-plant,portrait_woman_11.jpg,full,lawn,scene,a photo of lawn.,0.461607
-non-plant,portrait_woman_11.jpg,full,field,scene,a photo of field.,0.403845
-non-plant,portrait_woman_11.jpg,full,weedy garden bed,scene,a photo of weedy garden bed.,0.446864
-non-plant,portrait_woman_11.jpg,full,pavement,scene,a photo of pavement.,0.447349
-non-plant,portrait_woman_11.jpg,full,person,scene,a photo of person.,0.496155
-non-plant,portrait_woman_11.jpg,full,screen,scene,a photo of screen.,0.529243
-non-plant,portrait_woman_11.jpg,reticle,grass,plant,a photo of Poaceae.,0.450452
-non-plant,portrait_woman_11.jpg,reticle,oak,plant,a photo of Quercus.,0.592472
-non-plant,portrait_woman_11.jpg,reticle,fern,plant,a photo of Polypodiopsida.,0.456007
-non-plant,portrait_woman_11.jpg,reticle,clover,plant,a photo of Trifolium.,0.395886
-non-plant,portrait_woman_11.jpg,reticle,pine,plant,a photo of Pinus.,0.498296
-non-plant,portrait_woman_11.jpg,reticle,dandelion,plant,a photo of Taraxacum.,0.415669
-non-plant,portrait_woman_11.jpg,reticle,poison ivy,hazard,a photo of Toxicodendron radicans.,0.480661
-non-plant,portrait_woman_11.jpg,reticle,poison oak,hazard,a photo of Toxicodendron pubescens.,0.485293
-non-plant,portrait_woman_11.jpg,reticle,poison sumac,hazard,a photo of Toxicodendron vernix.,0.501931
-non-plant,portrait_woman_11.jpg,reticle,pokeweed,hazard,a photo of Phytolacca americana.,0.449407
-non-plant,portrait_woman_11.jpg,reticle,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.406899
-non-plant,portrait_woman_11.jpg,reticle,lawn,scene,a photo of lawn.,0.458736
-non-plant,portrait_woman_11.jpg,reticle,field,scene,a photo of field.,0.404945
-non-plant,portrait_woman_11.jpg,reticle,weedy garden bed,scene,a photo of weedy garden bed.,0.390935
-non-plant,portrait_woman_11.jpg,reticle,pavement,scene,a photo of pavement.,0.412231
-non-plant,portrait_woman_11.jpg,reticle,person,scene,a photo of person.,0.503399
-non-plant,portrait_woman_11.jpg,reticle,screen,scene,a photo of screen.,0.563668
 non-plant,portrait_woman_12.jpg,full,grass,plant,a photo of Poaceae.,0.471700
 non-plant,portrait_woman_12.jpg,full,oak,plant,a photo of Quercus.,0.496091
 non-plant,portrait_woman_12.jpg,full,fern,plant,a photo of Polypodiopsida.,0.459879
@@ -475,40 +373,6 @@ non-plant,child_playing_14.jpg,reticle,weedy garden bed,scene,a photo of weedy g
 non-plant,child_playing_14.jpg,reticle,pavement,scene,a photo of pavement.,0.429761
 non-plant,child_playing_14.jpg,reticle,person,scene,a photo of person.,0.514752
 non-plant,child_playing_14.jpg,reticle,screen,scene,a photo of screen.,0.567208
-non-plant,living_room_15.jpg,full,grass,plant,a photo of Poaceae.,0.517979
-non-plant,living_room_15.jpg,full,oak,plant,a photo of Quercus.,0.494482
-non-plant,living_room_15.jpg,full,fern,plant,a photo of Polypodiopsida.,0.482402
-non-plant,living_room_15.jpg,full,clover,plant,a photo of Trifolium.,0.454244
-non-plant,living_room_15.jpg,full,pine,plant,a photo of Pinus.,0.437930
-non-plant,living_room_15.jpg,full,dandelion,plant,a photo of Taraxacum.,0.438350
-non-plant,living_room_15.jpg,full,poison ivy,hazard,a photo of Toxicodendron radicans.,0.393553
-non-plant,living_room_15.jpg,full,poison oak,hazard,a photo of Toxicodendron pubescens.,0.450441
-non-plant,living_room_15.jpg,full,poison sumac,hazard,a photo of Toxicodendron vernix.,0.388297
-non-plant,living_room_15.jpg,full,pokeweed,hazard,a photo of Phytolacca americana.,0.373063
-non-plant,living_room_15.jpg,full,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.413129
-non-plant,living_room_15.jpg,full,lawn,scene,a photo of lawn.,0.481610
-non-plant,living_room_15.jpg,full,field,scene,a photo of field.,0.471638
-non-plant,living_room_15.jpg,full,weedy garden bed,scene,a photo of weedy garden bed.,0.516505
-non-plant,living_room_15.jpg,full,pavement,scene,a photo of pavement.,0.510367
-non-plant,living_room_15.jpg,full,person,scene,a photo of person.,0.512012
-non-plant,living_room_15.jpg,full,screen,scene,a photo of screen.,0.499624
-non-plant,living_room_15.jpg,reticle,grass,plant,a photo of Poaceae.,0.502914
-non-plant,living_room_15.jpg,reticle,oak,plant,a photo of Quercus.,0.440549
-non-plant,living_room_15.jpg,reticle,fern,plant,a photo of Polypodiopsida.,0.433605
-non-plant,living_room_15.jpg,reticle,clover,plant,a photo of Trifolium.,0.438484
-non-plant,living_room_15.jpg,reticle,pine,plant,a photo of Pinus.,0.392415
-non-plant,living_room_15.jpg,reticle,dandelion,plant,a photo of Taraxacum.,0.434514
-non-plant,living_room_15.jpg,reticle,poison ivy,hazard,a photo of Toxicodendron radicans.,0.389265
-non-plant,living_room_15.jpg,reticle,poison oak,hazard,a photo of Toxicodendron pubescens.,0.430892
-non-plant,living_room_15.jpg,reticle,poison sumac,hazard,a photo of Toxicodendron vernix.,0.347578
-non-plant,living_room_15.jpg,reticle,pokeweed,hazard,a photo of Phytolacca americana.,0.362116
-non-plant,living_room_15.jpg,reticle,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.427345
-non-plant,living_room_15.jpg,reticle,lawn,scene,a photo of lawn.,0.440159
-non-plant,living_room_15.jpg,reticle,field,scene,a photo of field.,0.432518
-non-plant,living_room_15.jpg,reticle,weedy garden bed,scene,a photo of weedy garden bed.,0.523990
-non-plant,living_room_15.jpg,reticle,pavement,scene,a photo of pavement.,0.511361
-non-plant,living_room_15.jpg,reticle,person,scene,a photo of person.,0.456195
-non-plant,living_room_15.jpg,reticle,screen,scene,a photo of screen.,0.417513
 non-plant,living_room_16.jpg,full,grass,plant,a photo of Poaceae.,0.544719
 non-plant,living_room_16.jpg,full,oak,plant,a photo of Quercus.,0.496673
 non-plant,living_room_16.jpg,full,fern,plant,a photo of Polypodiopsida.,0.503744
@@ -577,40 +441,6 @@ non-plant,dog_17.jpg,reticle,weedy garden bed,scene,a photo of weedy garden bed.
 non-plant,dog_17.jpg,reticle,pavement,scene,a photo of pavement.,0.420221
 non-plant,dog_17.jpg,reticle,person,scene,a photo of person.,0.490719
 non-plant,dog_17.jpg,reticle,screen,scene,a photo of screen.,0.526384
-non-plant,dog_18.jpg,full,grass,plant,a photo of Poaceae.,0.438572
-non-plant,dog_18.jpg,full,oak,plant,a photo of Quercus.,0.414544
-non-plant,dog_18.jpg,full,fern,plant,a photo of Polypodiopsida.,0.441753
-non-plant,dog_18.jpg,full,clover,plant,a photo of Trifolium.,0.401241
-non-plant,dog_18.jpg,full,pine,plant,a photo of Pinus.,0.451777
-non-plant,dog_18.jpg,full,dandelion,plant,a photo of Taraxacum.,0.391779
-non-plant,dog_18.jpg,full,poison ivy,hazard,a photo of Toxicodendron radicans.,0.321112
-non-plant,dog_18.jpg,full,poison oak,hazard,a photo of Toxicodendron pubescens.,0.286226
-non-plant,dog_18.jpg,full,poison sumac,hazard,a photo of Toxicodendron vernix.,0.320022
-non-plant,dog_18.jpg,full,pokeweed,hazard,a photo of Phytolacca americana.,0.350731
-non-plant,dog_18.jpg,full,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.256668
-non-plant,dog_18.jpg,full,lawn,scene,a photo of lawn.,0.390257
-non-plant,dog_18.jpg,full,field,scene,a photo of field.,0.384289
-non-plant,dog_18.jpg,full,weedy garden bed,scene,a photo of weedy garden bed.,0.371814
-non-plant,dog_18.jpg,full,pavement,scene,a photo of pavement.,0.417609
-non-plant,dog_18.jpg,full,person,scene,a photo of person.,0.427303
-non-plant,dog_18.jpg,full,screen,scene,a photo of screen.,0.464740
-non-plant,dog_18.jpg,reticle,grass,plant,a photo of Poaceae.,0.460146
-non-plant,dog_18.jpg,reticle,oak,plant,a photo of Quercus.,0.377240
-non-plant,dog_18.jpg,reticle,fern,plant,a photo of Polypodiopsida.,0.447344
-non-plant,dog_18.jpg,reticle,clover,plant,a photo of Trifolium.,0.395027
-non-plant,dog_18.jpg,reticle,pine,plant,a photo of Pinus.,0.420461
-non-plant,dog_18.jpg,reticle,dandelion,plant,a photo of Taraxacum.,0.362027
-non-plant,dog_18.jpg,reticle,poison ivy,hazard,a photo of Toxicodendron radicans.,0.288206
-non-plant,dog_18.jpg,reticle,poison oak,hazard,a photo of Toxicodendron pubescens.,0.245464
-non-plant,dog_18.jpg,reticle,poison sumac,hazard,a photo of Toxicodendron vernix.,0.264419
-non-plant,dog_18.jpg,reticle,pokeweed,hazard,a photo of Phytolacca americana.,0.311672
-non-plant,dog_18.jpg,reticle,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.233067
-non-plant,dog_18.jpg,reticle,lawn,scene,a photo of lawn.,0.404229
-non-plant,dog_18.jpg,reticle,field,scene,a photo of field.,0.395941
-non-plant,dog_18.jpg,reticle,weedy garden bed,scene,a photo of weedy garden bed.,0.393580
-non-plant,dog_18.jpg,reticle,pavement,scene,a photo of pavement.,0.424873
-non-plant,dog_18.jpg,reticle,person,scene,a photo of person.,0.442583
-non-plant,dog_18.jpg,reticle,screen,scene,a photo of screen.,0.472474
 non-plant,car_19.jpg,full,grass,plant,a photo of Poaceae.,0.469621
 non-plant,car_19.jpg,full,oak,plant,a photo of Quercus.,0.466903
 non-plant,car_19.jpg,full,fern,plant,a photo of Polypodiopsida.,0.441114
@@ -679,40 +509,6 @@ non-plant,car_20.jpg,reticle,weedy garden bed,scene,a photo of weedy garden bed.
 non-plant,car_20.jpg,reticle,pavement,scene,a photo of pavement.,0.437927
 non-plant,car_20.jpg,reticle,person,scene,a photo of person.,0.478049
 non-plant,car_20.jpg,reticle,screen,scene,a photo of screen.,0.514398
-mixed,lawn_mowed_21.jpg,full,grass,plant,a photo of Poaceae.,0.494102
-mixed,lawn_mowed_21.jpg,full,oak,plant,a photo of Quercus.,0.505149
-mixed,lawn_mowed_21.jpg,full,fern,plant,a photo of Polypodiopsida.,0.497158
-mixed,lawn_mowed_21.jpg,full,clover,plant,a photo of Trifolium.,0.477867
-mixed,lawn_mowed_21.jpg,full,pine,plant,a photo of Pinus.,0.532763
-mixed,lawn_mowed_21.jpg,full,dandelion,plant,a photo of Taraxacum.,0.435762
-mixed,lawn_mowed_21.jpg,full,poison ivy,hazard,a photo of Toxicodendron radicans.,0.352865
-mixed,lawn_mowed_21.jpg,full,poison oak,hazard,a photo of Toxicodendron pubescens.,0.345017
-mixed,lawn_mowed_21.jpg,full,poison sumac,hazard,a photo of Toxicodendron vernix.,0.345258
-mixed,lawn_mowed_21.jpg,full,pokeweed,hazard,a photo of Phytolacca americana.,0.384792
-mixed,lawn_mowed_21.jpg,full,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.303258
-mixed,lawn_mowed_21.jpg,full,lawn,scene,a photo of lawn.,0.472068
-mixed,lawn_mowed_21.jpg,full,field,scene,a photo of field.,0.471024
-mixed,lawn_mowed_21.jpg,full,weedy garden bed,scene,a photo of weedy garden bed.,0.500880
-mixed,lawn_mowed_21.jpg,full,pavement,scene,a photo of pavement.,0.482850
-mixed,lawn_mowed_21.jpg,full,person,scene,a photo of person.,0.501753
-mixed,lawn_mowed_21.jpg,full,screen,scene,a photo of screen.,0.540011
-mixed,lawn_mowed_21.jpg,reticle,grass,plant,a photo of Poaceae.,0.511694
-mixed,lawn_mowed_21.jpg,reticle,oak,plant,a photo of Quercus.,0.488547
-mixed,lawn_mowed_21.jpg,reticle,fern,plant,a photo of Polypodiopsida.,0.472297
-mixed,lawn_mowed_21.jpg,reticle,clover,plant,a photo of Trifolium.,0.464565
-mixed,lawn_mowed_21.jpg,reticle,pine,plant,a photo of Pinus.,0.509218
-mixed,lawn_mowed_21.jpg,reticle,dandelion,plant,a photo of Taraxacum.,0.433225
-mixed,lawn_mowed_21.jpg,reticle,poison ivy,hazard,a photo of Toxicodendron radicans.,0.334526
-mixed,lawn_mowed_21.jpg,reticle,poison oak,hazard,a photo of Toxicodendron pubescens.,0.330256
-mixed,lawn_mowed_21.jpg,reticle,poison sumac,hazard,a photo of Toxicodendron vernix.,0.359180
-mixed,lawn_mowed_21.jpg,reticle,pokeweed,hazard,a photo of Phytolacca americana.,0.381514
-mixed,lawn_mowed_21.jpg,reticle,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.316199
-mixed,lawn_mowed_21.jpg,reticle,lawn,scene,a photo of lawn.,0.485096
-mixed,lawn_mowed_21.jpg,reticle,field,scene,a photo of field.,0.463521
-mixed,lawn_mowed_21.jpg,reticle,weedy garden bed,scene,a photo of weedy garden bed.,0.464989
-mixed,lawn_mowed_21.jpg,reticle,pavement,scene,a photo of pavement.,0.468973
-mixed,lawn_mowed_21.jpg,reticle,person,scene,a photo of person.,0.486082
-mixed,lawn_mowed_21.jpg,reticle,screen,scene,a photo of screen.,0.513105
 mixed,lawn_mowed_22.jpg,full,grass,plant,a photo of Poaceae.,0.493569
 mixed,lawn_mowed_22.jpg,full,oak,plant,a photo of Quercus.,0.402207
 mixed,lawn_mowed_22.jpg,full,fern,plant,a photo of Polypodiopsida.,0.457325
@@ -8567,74 +8363,6 @@ plant,horsenettle_298443769.jpg,reticle,weedy garden bed,scene,a photo of weedy 
 plant,horsenettle_298443769.jpg,reticle,pavement,scene,a photo of pavement.,0.274800
 plant,horsenettle_298443769.jpg,reticle,person,scene,a photo of person.,0.196813
 plant,horsenettle_298443769.jpg,reticle,screen,scene,a photo of screen.,0.272675
-non-plant,np_dog_145478988.jpg,full,grass,plant,a photo of Poaceae.,0.432348
-non-plant,np_dog_145478988.jpg,full,oak,plant,a photo of Quercus.,0.438155
-non-plant,np_dog_145478988.jpg,full,fern,plant,a photo of Polypodiopsida.,0.489046
-non-plant,np_dog_145478988.jpg,full,clover,plant,a photo of Trifolium.,0.388874
-non-plant,np_dog_145478988.jpg,full,pine,plant,a photo of Pinus.,0.432843
-non-plant,np_dog_145478988.jpg,full,dandelion,plant,a photo of Taraxacum.,0.390092
-non-plant,np_dog_145478988.jpg,full,poison ivy,hazard,a photo of Toxicodendron radicans.,0.373481
-non-plant,np_dog_145478988.jpg,full,poison oak,hazard,a photo of Toxicodendron pubescens.,0.329401
-non-plant,np_dog_145478988.jpg,full,poison sumac,hazard,a photo of Toxicodendron vernix.,0.291271
-non-plant,np_dog_145478988.jpg,full,pokeweed,hazard,a photo of Phytolacca americana.,0.336471
-non-plant,np_dog_145478988.jpg,full,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.310828
-non-plant,np_dog_145478988.jpg,full,lawn,scene,a photo of lawn.,0.397138
-non-plant,np_dog_145478988.jpg,full,field,scene,a photo of field.,0.403444
-non-plant,np_dog_145478988.jpg,full,weedy garden bed,scene,a photo of weedy garden bed.,0.405781
-non-plant,np_dog_145478988.jpg,full,pavement,scene,a photo of pavement.,0.435598
-non-plant,np_dog_145478988.jpg,full,person,scene,a photo of person.,0.403306
-non-plant,np_dog_145478988.jpg,full,screen,scene,a photo of screen.,0.471151
-non-plant,np_dog_145478988.jpg,reticle,grass,plant,a photo of Poaceae.,0.482172
-non-plant,np_dog_145478988.jpg,reticle,oak,plant,a photo of Quercus.,0.493635
-non-plant,np_dog_145478988.jpg,reticle,fern,plant,a photo of Polypodiopsida.,0.502426
-non-plant,np_dog_145478988.jpg,reticle,clover,plant,a photo of Trifolium.,0.425374
-non-plant,np_dog_145478988.jpg,reticle,pine,plant,a photo of Pinus.,0.464382
-non-plant,np_dog_145478988.jpg,reticle,dandelion,plant,a photo of Taraxacum.,0.408605
-non-plant,np_dog_145478988.jpg,reticle,poison ivy,hazard,a photo of Toxicodendron radicans.,0.351471
-non-plant,np_dog_145478988.jpg,reticle,poison oak,hazard,a photo of Toxicodendron pubescens.,0.322594
-non-plant,np_dog_145478988.jpg,reticle,poison sumac,hazard,a photo of Toxicodendron vernix.,0.322802
-non-plant,np_dog_145478988.jpg,reticle,pokeweed,hazard,a photo of Phytolacca americana.,0.351143
-non-plant,np_dog_145478988.jpg,reticle,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.326389
-non-plant,np_dog_145478988.jpg,reticle,lawn,scene,a photo of lawn.,0.450633
-non-plant,np_dog_145478988.jpg,reticle,field,scene,a photo of field.,0.455083
-non-plant,np_dog_145478988.jpg,reticle,weedy garden bed,scene,a photo of weedy garden bed.,0.485024
-non-plant,np_dog_145478988.jpg,reticle,pavement,scene,a photo of pavement.,0.420221
-non-plant,np_dog_145478988.jpg,reticle,person,scene,a photo of person.,0.490719
-non-plant,np_dog_145478988.jpg,reticle,screen,scene,a photo of screen.,0.526384
-non-plant,np_dog_254423.jpg,full,grass,plant,a photo of Poaceae.,0.438572
-non-plant,np_dog_254423.jpg,full,oak,plant,a photo of Quercus.,0.414544
-non-plant,np_dog_254423.jpg,full,fern,plant,a photo of Polypodiopsida.,0.441753
-non-plant,np_dog_254423.jpg,full,clover,plant,a photo of Trifolium.,0.401241
-non-plant,np_dog_254423.jpg,full,pine,plant,a photo of Pinus.,0.451777
-non-plant,np_dog_254423.jpg,full,dandelion,plant,a photo of Taraxacum.,0.391779
-non-plant,np_dog_254423.jpg,full,poison ivy,hazard,a photo of Toxicodendron radicans.,0.321112
-non-plant,np_dog_254423.jpg,full,poison oak,hazard,a photo of Toxicodendron pubescens.,0.286226
-non-plant,np_dog_254423.jpg,full,poison sumac,hazard,a photo of Toxicodendron vernix.,0.320022
-non-plant,np_dog_254423.jpg,full,pokeweed,hazard,a photo of Phytolacca americana.,0.350731
-non-plant,np_dog_254423.jpg,full,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.256668
-non-plant,np_dog_254423.jpg,full,lawn,scene,a photo of lawn.,0.390257
-non-plant,np_dog_254423.jpg,full,field,scene,a photo of field.,0.384289
-non-plant,np_dog_254423.jpg,full,weedy garden bed,scene,a photo of weedy garden bed.,0.371814
-non-plant,np_dog_254423.jpg,full,pavement,scene,a photo of pavement.,0.417609
-non-plant,np_dog_254423.jpg,full,person,scene,a photo of person.,0.427303
-non-plant,np_dog_254423.jpg,full,screen,scene,a photo of screen.,0.464740
-non-plant,np_dog_254423.jpg,reticle,grass,plant,a photo of Poaceae.,0.460146
-non-plant,np_dog_254423.jpg,reticle,oak,plant,a photo of Quercus.,0.377240
-non-plant,np_dog_254423.jpg,reticle,fern,plant,a photo of Polypodiopsida.,0.447344
-non-plant,np_dog_254423.jpg,reticle,clover,plant,a photo of Trifolium.,0.395027
-non-plant,np_dog_254423.jpg,reticle,pine,plant,a photo of Pinus.,0.420461
-non-plant,np_dog_254423.jpg,reticle,dandelion,plant,a photo of Taraxacum.,0.362027
-non-plant,np_dog_254423.jpg,reticle,poison ivy,hazard,a photo of Toxicodendron radicans.,0.288206
-non-plant,np_dog_254423.jpg,reticle,poison oak,hazard,a photo of Toxicodendron pubescens.,0.245464
-non-plant,np_dog_254423.jpg,reticle,poison sumac,hazard,a photo of Toxicodendron vernix.,0.264419
-non-plant,np_dog_254423.jpg,reticle,pokeweed,hazard,a photo of Phytolacca americana.,0.311672
-non-plant,np_dog_254423.jpg,reticle,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.233067
-non-plant,np_dog_254423.jpg,reticle,lawn,scene,a photo of lawn.,0.404229
-non-plant,np_dog_254423.jpg,reticle,field,scene,a photo of field.,0.395941
-non-plant,np_dog_254423.jpg,reticle,weedy garden bed,scene,a photo of weedy garden bed.,0.393580
-non-plant,np_dog_254423.jpg,reticle,pavement,scene,a photo of pavement.,0.424873
-non-plant,np_dog_254423.jpg,reticle,person,scene,a photo of person.,0.442583
-non-plant,np_dog_254423.jpg,reticle,screen,scene,a photo of screen.,0.472474
 non-plant,np_dog_26592914.jpg,full,grass,plant,a photo of Poaceae.,0.494913
 non-plant,np_dog_26592914.jpg,full,oak,plant,a photo of Quercus.,0.479857
 non-plant,np_dog_26592914.jpg,full,fern,plant,a photo of Polypodiopsida.,0.428205
@@ -9043,74 +8771,6 @@ mixed,np_playground_102609390.jpg,reticle,weedy garden bed,scene,a photo of weed
 mixed,np_playground_102609390.jpg,reticle,pavement,scene,a photo of pavement.,0.502427
 mixed,np_playground_102609390.jpg,reticle,person,scene,a photo of person.,0.501674
 mixed,np_playground_102609390.jpg,reticle,screen,scene,a photo of screen.,0.525999
-non-plant,np_car_17226541.jpg,full,grass,plant,a photo of Poaceae.,0.469621
-non-plant,np_car_17226541.jpg,full,oak,plant,a photo of Quercus.,0.466903
-non-plant,np_car_17226541.jpg,full,fern,plant,a photo of Polypodiopsida.,0.441114
-non-plant,np_car_17226541.jpg,full,clover,plant,a photo of Trifolium.,0.417163
-non-plant,np_car_17226541.jpg,full,pine,plant,a photo of Pinus.,0.431082
-non-plant,np_car_17226541.jpg,full,dandelion,plant,a photo of Taraxacum.,0.433273
-non-plant,np_car_17226541.jpg,full,poison ivy,hazard,a photo of Toxicodendron radicans.,0.399138
-non-plant,np_car_17226541.jpg,full,poison oak,hazard,a photo of Toxicodendron pubescens.,0.326742
-non-plant,np_car_17226541.jpg,full,poison sumac,hazard,a photo of Toxicodendron vernix.,0.312335
-non-plant,np_car_17226541.jpg,full,pokeweed,hazard,a photo of Phytolacca americana.,0.425536
-non-plant,np_car_17226541.jpg,full,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.359097
-non-plant,np_car_17226541.jpg,full,lawn,scene,a photo of lawn.,0.407525
-non-plant,np_car_17226541.jpg,full,field,scene,a photo of field.,0.361767
-non-plant,np_car_17226541.jpg,full,weedy garden bed,scene,a photo of weedy garden bed.,0.415491
-non-plant,np_car_17226541.jpg,full,pavement,scene,a photo of pavement.,0.413772
-non-plant,np_car_17226541.jpg,full,person,scene,a photo of person.,0.403788
-non-plant,np_car_17226541.jpg,full,screen,scene,a photo of screen.,0.381987
-non-plant,np_car_17226541.jpg,reticle,grass,plant,a photo of Poaceae.,0.542427
-non-plant,np_car_17226541.jpg,reticle,oak,plant,a photo of Quercus.,0.494160
-non-plant,np_car_17226541.jpg,reticle,fern,plant,a photo of Polypodiopsida.,0.508235
-non-plant,np_car_17226541.jpg,reticle,clover,plant,a photo of Trifolium.,0.451413
-non-plant,np_car_17226541.jpg,reticle,pine,plant,a photo of Pinus.,0.462837
-non-plant,np_car_17226541.jpg,reticle,dandelion,plant,a photo of Taraxacum.,0.475340
-non-plant,np_car_17226541.jpg,reticle,poison ivy,hazard,a photo of Toxicodendron radicans.,0.445801
-non-plant,np_car_17226541.jpg,reticle,poison oak,hazard,a photo of Toxicodendron pubescens.,0.393279
-non-plant,np_car_17226541.jpg,reticle,poison sumac,hazard,a photo of Toxicodendron vernix.,0.400477
-non-plant,np_car_17226541.jpg,reticle,pokeweed,hazard,a photo of Phytolacca americana.,0.465302
-non-plant,np_car_17226541.jpg,reticle,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.430821
-non-plant,np_car_17226541.jpg,reticle,lawn,scene,a photo of lawn.,0.484084
-non-plant,np_car_17226541.jpg,reticle,field,scene,a photo of field.,0.435148
-non-plant,np_car_17226541.jpg,reticle,weedy garden bed,scene,a photo of weedy garden bed.,0.451554
-non-plant,np_car_17226541.jpg,reticle,pavement,scene,a photo of pavement.,0.472891
-non-plant,np_car_17226541.jpg,reticle,person,scene,a photo of person.,0.470457
-non-plant,np_car_17226541.jpg,reticle,screen,scene,a photo of screen.,0.471091
-non-plant,np_car_67065530.jpg,full,grass,plant,a photo of Poaceae.,0.503216
-non-plant,np_car_67065530.jpg,full,oak,plant,a photo of Quercus.,0.482765
-non-plant,np_car_67065530.jpg,full,fern,plant,a photo of Polypodiopsida.,0.507394
-non-plant,np_car_67065530.jpg,full,clover,plant,a photo of Trifolium.,0.462893
-non-plant,np_car_67065530.jpg,full,pine,plant,a photo of Pinus.,0.538917
-non-plant,np_car_67065530.jpg,full,dandelion,plant,a photo of Taraxacum.,0.437937
-non-plant,np_car_67065530.jpg,full,poison ivy,hazard,a photo of Toxicodendron radicans.,0.346237
-non-plant,np_car_67065530.jpg,full,poison oak,hazard,a photo of Toxicodendron pubescens.,0.332963
-non-plant,np_car_67065530.jpg,full,poison sumac,hazard,a photo of Toxicodendron vernix.,0.400191
-non-plant,np_car_67065530.jpg,full,pokeweed,hazard,a photo of Phytolacca americana.,0.394658
-non-plant,np_car_67065530.jpg,full,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.339591
-non-plant,np_car_67065530.jpg,full,lawn,scene,a photo of lawn.,0.424060
-non-plant,np_car_67065530.jpg,full,field,scene,a photo of field.,0.430128
-non-plant,np_car_67065530.jpg,full,weedy garden bed,scene,a photo of weedy garden bed.,0.486547
-non-plant,np_car_67065530.jpg,full,pavement,scene,a photo of pavement.,0.441611
-non-plant,np_car_67065530.jpg,full,person,scene,a photo of person.,0.482907
-non-plant,np_car_67065530.jpg,full,screen,scene,a photo of screen.,0.502164
-non-plant,np_car_67065530.jpg,reticle,grass,plant,a photo of Poaceae.,0.478165
-non-plant,np_car_67065530.jpg,reticle,oak,plant,a photo of Quercus.,0.479372
-non-plant,np_car_67065530.jpg,reticle,fern,plant,a photo of Polypodiopsida.,0.467681
-non-plant,np_car_67065530.jpg,reticle,clover,plant,a photo of Trifolium.,0.429828
-non-plant,np_car_67065530.jpg,reticle,pine,plant,a photo of Pinus.,0.479593
-non-plant,np_car_67065530.jpg,reticle,dandelion,plant,a photo of Taraxacum.,0.384222
-non-plant,np_car_67065530.jpg,reticle,poison ivy,hazard,a photo of Toxicodendron radicans.,0.376375
-non-plant,np_car_67065530.jpg,reticle,poison oak,hazard,a photo of Toxicodendron pubescens.,0.354597
-non-plant,np_car_67065530.jpg,reticle,poison sumac,hazard,a photo of Toxicodendron vernix.,0.420399
-non-plant,np_car_67065530.jpg,reticle,pokeweed,hazard,a photo of Phytolacca americana.,0.394615
-non-plant,np_car_67065530.jpg,reticle,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.320267
-non-plant,np_car_67065530.jpg,reticle,lawn,scene,a photo of lawn.,0.405641
-non-plant,np_car_67065530.jpg,reticle,field,scene,a photo of field.,0.459062
-non-plant,np_car_67065530.jpg,reticle,weedy garden bed,scene,a photo of weedy garden bed.,0.464792
-non-plant,np_car_67065530.jpg,reticle,pavement,scene,a photo of pavement.,0.437927
-non-plant,np_car_67065530.jpg,reticle,person,scene,a photo of person.,0.478049
-non-plant,np_car_67065530.jpg,reticle,screen,scene,a photo of screen.,0.514398
 non-plant,np_car_25211371.jpg,full,grass,plant,a photo of Poaceae.,0.487237
 non-plant,np_car_25211371.jpg,full,oak,plant,a photo of Quercus.,0.521781
 non-plant,np_car_25211371.jpg,full,fern,plant,a photo of Polypodiopsida.,0.493269
@@ -9145,40 +8805,6 @@ non-plant,np_car_25211371.jpg,reticle,weedy garden bed,scene,a photo of weedy ga
 non-plant,np_car_25211371.jpg,reticle,pavement,scene,a photo of pavement.,0.483727
 non-plant,np_car_25211371.jpg,reticle,person,scene,a photo of person.,0.520039
 non-plant,np_car_25211371.jpg,reticle,screen,scene,a photo of screen.,0.589607
-non-plant,np_pickup_truck_178928937.jpg,full,grass,plant,a photo of Poaceae.,0.554811
-non-plant,np_pickup_truck_178928937.jpg,full,oak,plant,a photo of Quercus.,0.456957
-non-plant,np_pickup_truck_178928937.jpg,full,fern,plant,a photo of Polypodiopsida.,0.498095
-non-plant,np_pickup_truck_178928937.jpg,full,clover,plant,a photo of Trifolium.,0.493132
-non-plant,np_pickup_truck_178928937.jpg,full,pine,plant,a photo of Pinus.,0.445074
-non-plant,np_pickup_truck_178928937.jpg,full,dandelion,plant,a photo of Taraxacum.,0.488271
-non-plant,np_pickup_truck_178928937.jpg,full,poison ivy,hazard,a photo of Toxicodendron radicans.,0.361020
-non-plant,np_pickup_truck_178928937.jpg,full,poison oak,hazard,a photo of Toxicodendron pubescens.,0.404608
-non-plant,np_pickup_truck_178928937.jpg,full,poison sumac,hazard,a photo of Toxicodendron vernix.,0.401614
-non-plant,np_pickup_truck_178928937.jpg,full,pokeweed,hazard,a photo of Phytolacca americana.,0.352175
-non-plant,np_pickup_truck_178928937.jpg,full,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.401573
-non-plant,np_pickup_truck_178928937.jpg,full,lawn,scene,a photo of lawn.,0.500275
-non-plant,np_pickup_truck_178928937.jpg,full,field,scene,a photo of field.,0.453768
-non-plant,np_pickup_truck_178928937.jpg,full,weedy garden bed,scene,a photo of weedy garden bed.,0.466701
-non-plant,np_pickup_truck_178928937.jpg,full,pavement,scene,a photo of pavement.,0.472782
-non-plant,np_pickup_truck_178928937.jpg,full,person,scene,a photo of person.,0.472049
-non-plant,np_pickup_truck_178928937.jpg,full,screen,scene,a photo of screen.,0.446195
-non-plant,np_pickup_truck_178928937.jpg,reticle,grass,plant,a photo of Poaceae.,0.553506
-non-plant,np_pickup_truck_178928937.jpg,reticle,oak,plant,a photo of Quercus.,0.460471
-non-plant,np_pickup_truck_178928937.jpg,reticle,fern,plant,a photo of Polypodiopsida.,0.498463
-non-plant,np_pickup_truck_178928937.jpg,reticle,clover,plant,a photo of Trifolium.,0.495969
-non-plant,np_pickup_truck_178928937.jpg,reticle,pine,plant,a photo of Pinus.,0.461014
-non-plant,np_pickup_truck_178928937.jpg,reticle,dandelion,plant,a photo of Taraxacum.,0.473146
-non-plant,np_pickup_truck_178928937.jpg,reticle,poison ivy,hazard,a photo of Toxicodendron radicans.,0.361663
-non-plant,np_pickup_truck_178928937.jpg,reticle,poison oak,hazard,a photo of Toxicodendron pubescens.,0.387371
-non-plant,np_pickup_truck_178928937.jpg,reticle,poison sumac,hazard,a photo of Toxicodendron vernix.,0.395919
-non-plant,np_pickup_truck_178928937.jpg,reticle,pokeweed,hazard,a photo of Phytolacca americana.,0.371574
-non-plant,np_pickup_truck_178928937.jpg,reticle,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.386698
-non-plant,np_pickup_truck_178928937.jpg,reticle,lawn,scene,a photo of lawn.,0.505657
-non-plant,np_pickup_truck_178928937.jpg,reticle,field,scene,a photo of field.,0.456495
-non-plant,np_pickup_truck_178928937.jpg,reticle,weedy garden bed,scene,a photo of weedy garden bed.,0.477411
-non-plant,np_pickup_truck_178928937.jpg,reticle,pavement,scene,a photo of pavement.,0.480987
-non-plant,np_pickup_truck_178928937.jpg,reticle,person,scene,a photo of person.,0.470962
-non-plant,np_pickup_truck_178928937.jpg,reticle,screen,scene,a photo of screen.,0.470136
 non-plant,np_pickup_truck_114984589.jpg,full,grass,plant,a photo of Poaceae.,0.501280
 non-plant,np_pickup_truck_114984589.jpg,full,oak,plant,a photo of Quercus.,0.504295
 non-plant,np_pickup_truck_114984589.jpg,full,fern,plant,a photo of Polypodiopsida.,0.482116
@@ -10539,74 +10165,6 @@ non-plant,np_brick_wall_117737596.jpg,reticle,weedy garden bed,scene,a photo of 
 non-plant,np_brick_wall_117737596.jpg,reticle,pavement,scene,a photo of pavement.,0.502007
 non-plant,np_brick_wall_117737596.jpg,reticle,person,scene,a photo of person.,0.514457
 non-plant,np_brick_wall_117737596.jpg,reticle,screen,scene,a photo of screen.,0.523853
-mixed,np_brick_wall_105538175.jpg,full,grass,plant,a photo of Poaceae.,0.421207
-mixed,np_brick_wall_105538175.jpg,full,oak,plant,a photo of Quercus.,0.414070
-mixed,np_brick_wall_105538175.jpg,full,fern,plant,a photo of Polypodiopsida.,0.566203
-mixed,np_brick_wall_105538175.jpg,full,clover,plant,a photo of Trifolium.,0.349884
-mixed,np_brick_wall_105538175.jpg,full,pine,plant,a photo of Pinus.,0.429381
-mixed,np_brick_wall_105538175.jpg,full,dandelion,plant,a photo of Taraxacum.,0.389257
-mixed,np_brick_wall_105538175.jpg,full,poison ivy,hazard,a photo of Toxicodendron radicans.,0.350670
-mixed,np_brick_wall_105538175.jpg,full,poison oak,hazard,a photo of Toxicodendron pubescens.,0.308833
-mixed,np_brick_wall_105538175.jpg,full,poison sumac,hazard,a photo of Toxicodendron vernix.,0.380705
-mixed,np_brick_wall_105538175.jpg,full,pokeweed,hazard,a photo of Phytolacca americana.,0.386803
-mixed,np_brick_wall_105538175.jpg,full,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.303090
-mixed,np_brick_wall_105538175.jpg,full,lawn,scene,a photo of lawn.,0.401219
-mixed,np_brick_wall_105538175.jpg,full,field,scene,a photo of field.,0.433139
-mixed,np_brick_wall_105538175.jpg,full,weedy garden bed,scene,a photo of weedy garden bed.,0.429950
-mixed,np_brick_wall_105538175.jpg,full,pavement,scene,a photo of pavement.,0.428985
-mixed,np_brick_wall_105538175.jpg,full,person,scene,a photo of person.,0.441715
-mixed,np_brick_wall_105538175.jpg,full,screen,scene,a photo of screen.,0.521441
-mixed,np_brick_wall_105538175.jpg,reticle,grass,plant,a photo of Poaceae.,0.431237
-mixed,np_brick_wall_105538175.jpg,reticle,oak,plant,a photo of Quercus.,0.413647
-mixed,np_brick_wall_105538175.jpg,reticle,fern,plant,a photo of Polypodiopsida.,0.587962
-mixed,np_brick_wall_105538175.jpg,reticle,clover,plant,a photo of Trifolium.,0.333856
-mixed,np_brick_wall_105538175.jpg,reticle,pine,plant,a photo of Pinus.,0.415271
-mixed,np_brick_wall_105538175.jpg,reticle,dandelion,plant,a photo of Taraxacum.,0.368898
-mixed,np_brick_wall_105538175.jpg,reticle,poison ivy,hazard,a photo of Toxicodendron radicans.,0.356606
-mixed,np_brick_wall_105538175.jpg,reticle,poison oak,hazard,a photo of Toxicodendron pubescens.,0.320749
-mixed,np_brick_wall_105538175.jpg,reticle,poison sumac,hazard,a photo of Toxicodendron vernix.,0.398159
-mixed,np_brick_wall_105538175.jpg,reticle,pokeweed,hazard,a photo of Phytolacca americana.,0.398019
-mixed,np_brick_wall_105538175.jpg,reticle,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.300704
-mixed,np_brick_wall_105538175.jpg,reticle,lawn,scene,a photo of lawn.,0.404954
-mixed,np_brick_wall_105538175.jpg,reticle,field,scene,a photo of field.,0.475170
-mixed,np_brick_wall_105538175.jpg,reticle,weedy garden bed,scene,a photo of weedy garden bed.,0.433813
-mixed,np_brick_wall_105538175.jpg,reticle,pavement,scene,a photo of pavement.,0.409535
-mixed,np_brick_wall_105538175.jpg,reticle,person,scene,a photo of person.,0.431739
-mixed,np_brick_wall_105538175.jpg,reticle,screen,scene,a photo of screen.,0.539313
-mixed,np_brick_wall_105538174.jpg,full,grass,plant,a photo of Poaceae.,0.304707
-mixed,np_brick_wall_105538174.jpg,full,oak,plant,a photo of Quercus.,0.282419
-mixed,np_brick_wall_105538174.jpg,full,fern,plant,a photo of Polypodiopsida.,0.578862
-mixed,np_brick_wall_105538174.jpg,full,clover,plant,a photo of Trifolium.,0.243030
-mixed,np_brick_wall_105538174.jpg,full,pine,plant,a photo of Pinus.,0.309017
-mixed,np_brick_wall_105538174.jpg,full,dandelion,plant,a photo of Taraxacum.,0.319021
-mixed,np_brick_wall_105538174.jpg,full,poison ivy,hazard,a photo of Toxicodendron radicans.,0.316649
-mixed,np_brick_wall_105538174.jpg,full,poison oak,hazard,a photo of Toxicodendron pubescens.,0.247477
-mixed,np_brick_wall_105538174.jpg,full,poison sumac,hazard,a photo of Toxicodendron vernix.,0.224512
-mixed,np_brick_wall_105538174.jpg,full,pokeweed,hazard,a photo of Phytolacca americana.,0.317930
-mixed,np_brick_wall_105538174.jpg,full,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.296315
-mixed,np_brick_wall_105538174.jpg,full,lawn,scene,a photo of lawn.,0.338401
-mixed,np_brick_wall_105538174.jpg,full,field,scene,a photo of field.,0.361820
-mixed,np_brick_wall_105538174.jpg,full,weedy garden bed,scene,a photo of weedy garden bed.,0.350198
-mixed,np_brick_wall_105538174.jpg,full,pavement,scene,a photo of pavement.,0.339460
-mixed,np_brick_wall_105538174.jpg,full,person,scene,a photo of person.,0.323154
-mixed,np_brick_wall_105538174.jpg,full,screen,scene,a photo of screen.,0.391518
-mixed,np_brick_wall_105538174.jpg,reticle,grass,plant,a photo of Poaceae.,0.315090
-mixed,np_brick_wall_105538174.jpg,reticle,oak,plant,a photo of Quercus.,0.264400
-mixed,np_brick_wall_105538174.jpg,reticle,fern,plant,a photo of Polypodiopsida.,0.551777
-mixed,np_brick_wall_105538174.jpg,reticle,clover,plant,a photo of Trifolium.,0.231861
-mixed,np_brick_wall_105538174.jpg,reticle,pine,plant,a photo of Pinus.,0.268612
-mixed,np_brick_wall_105538174.jpg,reticle,dandelion,plant,a photo of Taraxacum.,0.314289
-mixed,np_brick_wall_105538174.jpg,reticle,poison ivy,hazard,a photo of Toxicodendron radicans.,0.298106
-mixed,np_brick_wall_105538174.jpg,reticle,poison oak,hazard,a photo of Toxicodendron pubescens.,0.227203
-mixed,np_brick_wall_105538174.jpg,reticle,poison sumac,hazard,a photo of Toxicodendron vernix.,0.253306
-mixed,np_brick_wall_105538174.jpg,reticle,pokeweed,hazard,a photo of Phytolacca americana.,0.333428
-mixed,np_brick_wall_105538174.jpg,reticle,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.287948
-mixed,np_brick_wall_105538174.jpg,reticle,lawn,scene,a photo of lawn.,0.292465
-mixed,np_brick_wall_105538174.jpg,reticle,field,scene,a photo of field.,0.349816
-mixed,np_brick_wall_105538174.jpg,reticle,weedy garden bed,scene,a photo of weedy garden bed.,0.312291
-mixed,np_brick_wall_105538174.jpg,reticle,pavement,scene,a photo of pavement.,0.312591
-mixed,np_brick_wall_105538174.jpg,reticle,person,scene,a photo of person.,0.283710
-mixed,np_brick_wall_105538174.jpg,reticle,screen,scene,a photo of screen.,0.339207
 non-plant,np_television_109987635.jpg,full,grass,plant,a photo of Poaceae.,0.494444
 non-plant,np_television_109987635.jpg,full,oak,plant,a photo of Quercus.,0.518406
 non-plant,np_television_109987635.jpg,full,fern,plant,a photo of Polypodiopsida.,0.500475
@@ -10709,40 +10267,6 @@ non-plant,np_television_43906515.jpg,reticle,weedy garden bed,scene,a photo of w
 non-plant,np_television_43906515.jpg,reticle,pavement,scene,a photo of pavement.,0.511420
 non-plant,np_television_43906515.jpg,reticle,person,scene,a photo of person.,0.537412
 non-plant,np_television_43906515.jpg,reticle,screen,scene,a photo of screen.,0.565430
-non-plant,np_smartphone_129470457.jpg,full,grass,plant,a photo of Poaceae.,0.508285
-non-plant,np_smartphone_129470457.jpg,full,oak,plant,a photo of Quercus.,0.483789
-non-plant,np_smartphone_129470457.jpg,full,fern,plant,a photo of Polypodiopsida.,0.520127
-non-plant,np_smartphone_129470457.jpg,full,clover,plant,a photo of Trifolium.,0.442899
-non-plant,np_smartphone_129470457.jpg,full,pine,plant,a photo of Pinus.,0.451991
-non-plant,np_smartphone_129470457.jpg,full,dandelion,plant,a photo of Taraxacum.,0.426884
-non-plant,np_smartphone_129470457.jpg,full,poison ivy,hazard,a photo of Toxicodendron radicans.,0.377285
-non-plant,np_smartphone_129470457.jpg,full,poison oak,hazard,a photo of Toxicodendron pubescens.,0.391275
-non-plant,np_smartphone_129470457.jpg,full,poison sumac,hazard,a photo of Toxicodendron vernix.,0.410119
-non-plant,np_smartphone_129470457.jpg,full,pokeweed,hazard,a photo of Phytolacca americana.,0.387722
-non-plant,np_smartphone_129470457.jpg,full,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.344221
-non-plant,np_smartphone_129470457.jpg,full,lawn,scene,a photo of lawn.,0.469834
-non-plant,np_smartphone_129470457.jpg,full,field,scene,a photo of field.,0.437109
-non-plant,np_smartphone_129470457.jpg,full,weedy garden bed,scene,a photo of weedy garden bed.,0.427505
-non-plant,np_smartphone_129470457.jpg,full,pavement,scene,a photo of pavement.,0.439231
-non-plant,np_smartphone_129470457.jpg,full,person,scene,a photo of person.,0.506676
-non-plant,np_smartphone_129470457.jpg,full,screen,scene,a photo of screen.,0.512128
-non-plant,np_smartphone_129470457.jpg,reticle,grass,plant,a photo of Poaceae.,0.537319
-non-plant,np_smartphone_129470457.jpg,reticle,oak,plant,a photo of Quercus.,0.477312
-non-plant,np_smartphone_129470457.jpg,reticle,fern,plant,a photo of Polypodiopsida.,0.519842
-non-plant,np_smartphone_129470457.jpg,reticle,clover,plant,a photo of Trifolium.,0.451737
-non-plant,np_smartphone_129470457.jpg,reticle,pine,plant,a photo of Pinus.,0.466049
-non-plant,np_smartphone_129470457.jpg,reticle,dandelion,plant,a photo of Taraxacum.,0.430066
-non-plant,np_smartphone_129470457.jpg,reticle,poison ivy,hazard,a photo of Toxicodendron radicans.,0.388925
-non-plant,np_smartphone_129470457.jpg,reticle,poison oak,hazard,a photo of Toxicodendron pubescens.,0.401674
-non-plant,np_smartphone_129470457.jpg,reticle,poison sumac,hazard,a photo of Toxicodendron vernix.,0.389434
-non-plant,np_smartphone_129470457.jpg,reticle,pokeweed,hazard,a photo of Phytolacca americana.,0.395951
-non-plant,np_smartphone_129470457.jpg,reticle,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.367029
-non-plant,np_smartphone_129470457.jpg,reticle,lawn,scene,a photo of lawn.,0.512056
-non-plant,np_smartphone_129470457.jpg,reticle,field,scene,a photo of field.,0.469178
-non-plant,np_smartphone_129470457.jpg,reticle,weedy garden bed,scene,a photo of weedy garden bed.,0.492145
-non-plant,np_smartphone_129470457.jpg,reticle,pavement,scene,a photo of pavement.,0.458917
-non-plant,np_smartphone_129470457.jpg,reticle,person,scene,a photo of person.,0.514236
-non-plant,np_smartphone_129470457.jpg,reticle,screen,scene,a photo of screen.,0.557509
 non-plant,np_smartphone_119015398.jpg,full,grass,plant,a photo of Poaceae.,0.506113
 non-plant,np_smartphone_119015398.jpg,full,oak,plant,a photo of Quercus.,0.441140
 non-plant,np_smartphone_119015398.jpg,full,fern,plant,a photo of Polypodiopsida.,0.420143
@@ -10845,3 +10369,71 @@ non-plant,np_smartphone_196609173.jpg,reticle,weedy garden bed,scene,a photo of 
 non-plant,np_smartphone_196609173.jpg,reticle,pavement,scene,a photo of pavement.,0.435830
 non-plant,np_smartphone_196609173.jpg,reticle,person,scene,a photo of person.,0.412959
 non-plant,np_smartphone_196609173.jpg,reticle,screen,scene,a photo of screen.,0.442547
+mixed,np_brick_wall_105538175.jpg,full,grass,plant,a photo of Poaceae.,0.421207
+mixed,np_brick_wall_105538175.jpg,full,oak,plant,a photo of Quercus.,0.414070
+mixed,np_brick_wall_105538175.jpg,full,fern,plant,a photo of Polypodiopsida.,0.566203
+mixed,np_brick_wall_105538175.jpg,full,clover,plant,a photo of Trifolium.,0.349884
+mixed,np_brick_wall_105538175.jpg,full,pine,plant,a photo of Pinus.,0.429381
+mixed,np_brick_wall_105538175.jpg,full,dandelion,plant,a photo of Taraxacum.,0.389257
+mixed,np_brick_wall_105538175.jpg,full,poison ivy,hazard,a photo of Toxicodendron radicans.,0.350670
+mixed,np_brick_wall_105538175.jpg,full,poison oak,hazard,a photo of Toxicodendron pubescens.,0.308833
+mixed,np_brick_wall_105538175.jpg,full,poison sumac,hazard,a photo of Toxicodendron vernix.,0.380705
+mixed,np_brick_wall_105538175.jpg,full,pokeweed,hazard,a photo of Phytolacca americana.,0.386803
+mixed,np_brick_wall_105538175.jpg,full,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.303090
+mixed,np_brick_wall_105538175.jpg,full,lawn,scene,a photo of lawn.,0.401219
+mixed,np_brick_wall_105538175.jpg,full,field,scene,a photo of field.,0.433139
+mixed,np_brick_wall_105538175.jpg,full,weedy garden bed,scene,a photo of weedy garden bed.,0.429950
+mixed,np_brick_wall_105538175.jpg,full,pavement,scene,a photo of pavement.,0.428985
+mixed,np_brick_wall_105538175.jpg,full,person,scene,a photo of person.,0.441715
+mixed,np_brick_wall_105538175.jpg,full,screen,scene,a photo of screen.,0.521441
+mixed,np_brick_wall_105538175.jpg,reticle,grass,plant,a photo of Poaceae.,0.431237
+mixed,np_brick_wall_105538175.jpg,reticle,oak,plant,a photo of Quercus.,0.413647
+mixed,np_brick_wall_105538175.jpg,reticle,fern,plant,a photo of Polypodiopsida.,0.587962
+mixed,np_brick_wall_105538175.jpg,reticle,clover,plant,a photo of Trifolium.,0.333856
+mixed,np_brick_wall_105538175.jpg,reticle,pine,plant,a photo of Pinus.,0.415271
+mixed,np_brick_wall_105538175.jpg,reticle,dandelion,plant,a photo of Taraxacum.,0.368898
+mixed,np_brick_wall_105538175.jpg,reticle,poison ivy,hazard,a photo of Toxicodendron radicans.,0.356606
+mixed,np_brick_wall_105538175.jpg,reticle,poison oak,hazard,a photo of Toxicodendron pubescens.,0.320749
+mixed,np_brick_wall_105538175.jpg,reticle,poison sumac,hazard,a photo of Toxicodendron vernix.,0.398159
+mixed,np_brick_wall_105538175.jpg,reticle,pokeweed,hazard,a photo of Phytolacca americana.,0.398019
+mixed,np_brick_wall_105538175.jpg,reticle,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.300704
+mixed,np_brick_wall_105538175.jpg,reticle,lawn,scene,a photo of lawn.,0.404954
+mixed,np_brick_wall_105538175.jpg,reticle,field,scene,a photo of field.,0.475170
+mixed,np_brick_wall_105538175.jpg,reticle,weedy garden bed,scene,a photo of weedy garden bed.,0.433813
+mixed,np_brick_wall_105538175.jpg,reticle,pavement,scene,a photo of pavement.,0.409535
+mixed,np_brick_wall_105538175.jpg,reticle,person,scene,a photo of person.,0.431739
+mixed,np_brick_wall_105538175.jpg,reticle,screen,scene,a photo of screen.,0.539313
+mixed,np_brick_wall_105538174.jpg,full,grass,plant,a photo of Poaceae.,0.304707
+mixed,np_brick_wall_105538174.jpg,full,oak,plant,a photo of Quercus.,0.282419
+mixed,np_brick_wall_105538174.jpg,full,fern,plant,a photo of Polypodiopsida.,0.578862
+mixed,np_brick_wall_105538174.jpg,full,clover,plant,a photo of Trifolium.,0.243030
+mixed,np_brick_wall_105538174.jpg,full,pine,plant,a photo of Pinus.,0.309017
+mixed,np_brick_wall_105538174.jpg,full,dandelion,plant,a photo of Taraxacum.,0.319021
+mixed,np_brick_wall_105538174.jpg,full,poison ivy,hazard,a photo of Toxicodendron radicans.,0.316649
+mixed,np_brick_wall_105538174.jpg,full,poison oak,hazard,a photo of Toxicodendron pubescens.,0.247477
+mixed,np_brick_wall_105538174.jpg,full,poison sumac,hazard,a photo of Toxicodendron vernix.,0.224512
+mixed,np_brick_wall_105538174.jpg,full,pokeweed,hazard,a photo of Phytolacca americana.,0.317930
+mixed,np_brick_wall_105538174.jpg,full,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.296315
+mixed,np_brick_wall_105538174.jpg,full,lawn,scene,a photo of lawn.,0.338401
+mixed,np_brick_wall_105538174.jpg,full,field,scene,a photo of field.,0.361820
+mixed,np_brick_wall_105538174.jpg,full,weedy garden bed,scene,a photo of weedy garden bed.,0.350198
+mixed,np_brick_wall_105538174.jpg,full,pavement,scene,a photo of pavement.,0.339460
+mixed,np_brick_wall_105538174.jpg,full,person,scene,a photo of person.,0.323154
+mixed,np_brick_wall_105538174.jpg,full,screen,scene,a photo of screen.,0.391518
+mixed,np_brick_wall_105538174.jpg,reticle,grass,plant,a photo of Poaceae.,0.315090
+mixed,np_brick_wall_105538174.jpg,reticle,oak,plant,a photo of Quercus.,0.264400
+mixed,np_brick_wall_105538174.jpg,reticle,fern,plant,a photo of Polypodiopsida.,0.551777
+mixed,np_brick_wall_105538174.jpg,reticle,clover,plant,a photo of Trifolium.,0.231861
+mixed,np_brick_wall_105538174.jpg,reticle,pine,plant,a photo of Pinus.,0.268612
+mixed,np_brick_wall_105538174.jpg,reticle,dandelion,plant,a photo of Taraxacum.,0.314289
+mixed,np_brick_wall_105538174.jpg,reticle,poison ivy,hazard,a photo of Toxicodendron radicans.,0.298106
+mixed,np_brick_wall_105538174.jpg,reticle,poison oak,hazard,a photo of Toxicodendron pubescens.,0.227203
+mixed,np_brick_wall_105538174.jpg,reticle,poison sumac,hazard,a photo of Toxicodendron vernix.,0.253306
+mixed,np_brick_wall_105538174.jpg,reticle,pokeweed,hazard,a photo of Phytolacca americana.,0.333428
+mixed,np_brick_wall_105538174.jpg,reticle,Carolina horsenettle,hazard,a photo of Solanum carolinense.,0.287948
+mixed,np_brick_wall_105538174.jpg,reticle,lawn,scene,a photo of lawn.,0.292465
+mixed,np_brick_wall_105538174.jpg,reticle,field,scene,a photo of field.,0.349816
+mixed,np_brick_wall_105538174.jpg,reticle,weedy garden bed,scene,a photo of weedy garden bed.,0.312291
+mixed,np_brick_wall_105538174.jpg,reticle,pavement,scene,a photo of pavement.,0.312591
+mixed,np_brick_wall_105538174.jpg,reticle,person,scene,a photo of person.,0.283710
+mixed,np_brick_wall_105538174.jpg,reticle,screen,scene,a photo of screen.,0.339207

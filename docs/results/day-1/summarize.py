@@ -6,9 +6,11 @@ uv run --project pipeline python docs/results/day-1/summarize.py > docs/results/
 import csv
 from collections import defaultdict
 from pathlib import Path
+from statistics import median
 
 OUT = Path(__file__).parent
-HAZARD_GROUPS = ("poison_ivy", "poison_oak", "poison_sumac", "pokeweed", "horsenettle")
+HAZARD_GROUPS = ("poison_ivy", "poisonivy", "poison_oak", "poison_sumac", "pokeweed", "horsenettle")
+CHOSEN_GATE = "wkcn/TinyCLIP-ViT-8M-16-Text-3M-YFCC15M"
 TARGETS_NO_GRASS = ("oak", "fern", "clover", "pine", "dandelion")
 
 
@@ -70,14 +72,20 @@ def bioclip_nonplants(data) -> None:
         print(f"{region}: {len(hits)}/{total} non-plants top-1 is a plant target: {', '.join(sorted(hits))}")
 
 
-def tinyclip_gate() -> None:
-    """Plant-gate pass rates per model, region, and photo group."""
-    section("TinyCLIP plant gate (plant share > 0.5)")
+def plant_shares() -> dict[tuple[str, str, str, str], float]:
+    """(model, set, photo, region) → summed TinyCLIP probability of the plant labels."""
     share: dict = defaultdict(float)
     with (OUT / "tinyclip_scores.csv").open() as fh:
         for r in csv.DictReader(fh):
             if r["kind"] == "plant":
                 share[(r["model"], r["set"], r["photo"], r["region"])] += float(r["probability"])
+    return share
+
+
+def tinyclip_gate() -> None:
+    """Plant-gate pass rates per model, region, and photo group."""
+    section("TinyCLIP plant gate (plant share > 0.5)")
+    share = plant_shares()
     models = sorted({k[0] for k in share})
     for model in models:
         for region in ("full", "reticle"):
@@ -117,25 +125,31 @@ def hazard_warnings(data) -> None:
         cnt = [sum(v > m for v in vals) for m in (0.0, 0.02, 0.05, 0.10)]
         print(
             f"{g:20s} {n:3d}   {cnt[0]:5d}          {cnt[1]:5d}   {cnt[2]:5d}   {cnt[3]:5d}   "
-            f"{vals[n // 2]:+.3f}       {vals[0]:+.3f}"
+            f"{median(vals):+.3f}       {vals[0]:+.3f}"
         )
 
 
 def tutorial_rules(data) -> None:
-    """Grass rank on the reticle crop for the tutorial rule."""
+    """Grass rank on the reticle crop for the tutorial rule, alone and behind the chosen TinyCLIP gate."""
     section("Tutorial rule: grass rank on the reticle crop (labels: 6 targets + 5 hazards)")
-    by_set: dict = defaultdict(lambda: [0, 0, 0])
+    share = plant_shares()
+    by_set: dict = defaultdict(lambda: [0, 0, 0, 0])
     for (s, photo, region), scores in data.items():
         if region != "reticle":
             continue
         labels = [lbl for lbl, (kind, _) in scores.items() if kind != "scene"]
         rank = sorted(labels, key=lambda lbl: -scores[lbl][1]).index("grass")
         key = s if s != "plant" else ("hazard plants" if group_of(photo) in HAZARD_GROUPS else "non-grass plants")
+        gate = share[(CHOSEN_GATE, s, photo, region)] > 0.5
         by_set[key][0] += rank == 0
         by_set[key][1] += rank < 3
-        by_set[key][2] += 1
-    for key, (top1, top3, n) in sorted(by_set.items()):
-        print(f"{key:17s} n={n:3d}  grass top-1: {top1:3d}  grass in top 3: {top3:3d}")
+        by_set[key][2] += gate and rank < 3
+        by_set[key][3] += 1
+    for key, (top1, top3, gated, n) in sorted(by_set.items()):
+        print(
+            f"{key:17s} n={n:3d}  grass top-1: {top1:3d}  grass in top 3: {top3:3d}  "
+            f"plant gate and grass in top 3: {gated:3d}"
+        )
 
 
 def species_hazards() -> None:
@@ -156,7 +170,7 @@ def species_hazards() -> None:
         cnt = [sum(v > m for v in vals) for m in (0.0, 0.02, 0.05)]
         print(
             f"{g:20s} {n:3d}   {cnt[0]:5d}          {cnt[1]:5d}   {cnt[2]:5d}   "
-            f"{vals[n // 2]:+.3f}       {vals[0]:+.3f}    {vals[-1]:+.3f}"
+            f"{median(vals):+.3f}       {vals[0]:+.3f}    {vals[-1]:+.3f}"
         )
 
 
@@ -170,7 +184,7 @@ def species_rank_rule() -> None:
             if r["set"] in ("fixture", "label-format"):
                 continue
             g = group_of(r["photo"]) if r["set"] == "plant" else r["set"]
-            kind[r["photo"]] = "hazard" if g in (*HAZARD_GROUPS, "poisonivy") else "safe"
+            kind[r["photo"]] = "hazard" if g in HAZARD_GROUPS else "safe"
             best[r["photo"]] = min(best.get(r["photo"], 10**9), int(r["best_hazard_rank"]))
     for k in (1, 2, 3, 5, 10):
         caught = sum(1 for p, v in best.items() if kind[p] == "hazard" and v <= k)

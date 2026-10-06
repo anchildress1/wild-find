@@ -6,7 +6,7 @@ Measured results from the Day-1 go/no-go gate. Every number here was observed, n
 
 | File | Contents |
 | --- | --- |
-| [day-1-photos.tsv](day-1-photos.tsv) | All 320 test photos: set, file, license (CC0 or public domain), source page, photo URL |
+| [day-1-photos.tsv](day-1-photos.tsv) | All 307 photos: set, file, license (CC0 or public domain), source page, photo URL, SHA-256 (the experiment script rejects any photo whose bytes differ) |
 | [day-1/bioclip_scores.csv](day-1/bioclip_scores.csv) | BioCLIP Mobile score for every photo, region (full frame, center 60% reticle crop), and label (6 targets, 5 hazards, 6 scenes) |
 | [day-1/species_scores.csv](day-1/species_scores.csv) | Every photo and region against BioCLIP's species table (4,271 species plus 1 added): top-1, best hazard and its rank, best non-hazard, top 5 |
 | [day-1/tinyclip_scores.csv](day-1/tinyclip_scores.csv) | TinyCLIP plant-gate probabilities for 3 models, every photo, both regions, all 17 gate labels |
@@ -16,7 +16,7 @@ Measured results from the Day-1 go/no-go gate. Every number here was observed, n
 | [day-1/summarize.py](day-1/summarize.py) and [summary.txt](day-1/summary.txt) | Derives every table on this page from the CSVs |
 | [day-1/device-logs.md](day-1/device-logs.md) | Raw logcat lines from every on-device run |
 
-Photo sets: 176 CC0 iNaturalist plant photos (10 each of oak, pine, maple, sweetgum, fern, clover, dandelion, moss, magnolia, violet, honeysuckle, and the 5 hazards, plus 16 earlier ones), 52 grass photos, 74 non-plant photos (Wikimedia CC0 or public domain: people, pets, vehicles, toys, screens, rocks, soil, walls), and 15 mixed scenes where real vegetation fills much of the frame. Non-photographs (paintings, logos, diagrams) were removed by hand.
+Photo sets: 176 CC0 iNaturalist plant photos (10 each of oak, pine, maple, sweetgum, fern, clover, dandelion, moss, magnolia, violet, honeysuckle, and the 5 hazards, plus 16 earlier ones), 52 grass photos, 63 non-plant photos (Wikimedia CC0 or public domain: people, pets, vehicles, toys, screens, rocks, soil, walls), and 14 mixed scenes where real vegetation fills much of the frame. Non-photographs (paintings, a floor plan, a sketch, an illustration, logos, diagrams) and duplicate photos were removed by hand; photographs of sculptures stay, since a kid can point the camera at a statue.
 
 ## Setup
 
@@ -28,7 +28,7 @@ Photo sets: 176 CC0 iNaturalist plant photos (10 each of oak, pine, maple, sweet
 | Gemma | `gemma-4-E2B-it.litertlm`, litert-community @ b3ca0d2 |
 | BioCLIP Mobile | crazedcodernate/bioclip-2.5-mobile-fastvit @ 29b474e (fp16 and fp32 files) |
 | BioCLIP teacher | imageomics/bioclip-2.5-vith14 @ 6e3d04e |
-| TinyCLIP | wkcn/TinyCLIP-ViT-8M-16-Text-3M-YFCC15M @ a2a8c6e, plus the 39M/16 and 40M/32 variants |
+| TinyCLIP | wkcn/TinyCLIP-ViT-8M-16-Text-3M-YFCC15M @ a2a8c6e; compared against ViT-39M-16-Text-19M-YFCC15M @ 07a4b0b and ViT-40M-32-Text-19M-LAION400M @ 95ec819 |
 
 ## Gemma 4 E2B on the phone
 
@@ -93,22 +93,22 @@ Photo: a CC0 white oak, [iNaturalist 211670015](https://www.inaturalist.org/obse
 
 ## BioCLIP Mobile can't reject non-plants
 
-Labels: 5 targets, 5 hazards, 6 scene labels. On 74 non-plant photos, a plant target was top-1 on **18 of 74 reticle crops** and **25 of 74 full frames**. Examples: portraits scored oak 0.592 and 0.516, asphalt roads oak 0.540 and 0.555, a car fern 0.508. The real red oak fixture scored oak 0.572, so no score floor separates them.
+Labels: 5 targets, 5 hazards, 6 scene labels. On 63 non-plant photos, a plant target was top-1 on **16 of 63 reticle crops** and **20 of 63 full frames**. Examples on the reticle crop: sneakers scored oak 0.605, a television pine 0.582, an asphalt road oak 0.555, an 1896 portrait photograph oak 0.516. The real red oak fixture scored oak 0.572, so no score floor separates them.
 
 ## TinyCLIP plant gate
 
 A frame is a plant when the plant labels' combined softmax share is over 0.5 (scores are cosine times the model's learned scale, 50.0 for ViT-8M/16).
 
-| Model | Region | Plants (176) | Grass (52) | Non-plants (74) | Mixed scenes (15) |
+| Model | Region | Plants (176) | Grass (52) | Non-plants (63) | Mixed scenes (14) |
 | --- | --- | --- | --- | --- | --- |
-| **ViT-8M/16** (chosen) | Full frame | 176 | 52 | 2 | 5 |
-| **ViT-8M/16** | Reticle | 175 (one pine missed) | 51 | 3 | 4 |
-| ViT-39M/16 | Full frame | 176 | 52 | 4 | 5 |
-| ViT-39M/16 | Reticle | 175 | 52 | 4 | 5 |
-| ViT-40M/32 | Full frame | 175 | 52 | 3 | 6 |
-| ViT-40M/32 | Reticle | 176 | 52 | 3 | 6 |
+| **ViT-8M/16** (chosen) | Full frame | 176 | 52 | 2 | 4 |
+| **ViT-8M/16** | Reticle | 175 (one pine missed) | 51 | 3 | 3 |
+| ViT-39M/16 | Full frame | 176 | 52 | 4 | 4 |
+| ViT-39M/16 | Reticle | 175 | 52 | 4 | 4 |
+| ViT-40M/32 | Full frame | 175 | 52 | 2 | 5 |
+| ViT-40M/32 | Reticle | 176 | 52 | 3 | 5 |
 
-The table counts photos that pass as plants. Mixed scenes passing is correct when vegetation fills the frame.
+The table counts photos that pass as plants. Mixed scenes passing is correct when vegetation fills the frame. These are laptop numbers; TinyCLIP parity and latency on the phone are unmeasured (S05, S06).
 
 ## Hazard warnings
 
@@ -126,7 +126,7 @@ Labels: grass, oak, fern, clover, pine, dandelion, and the 5 hazards. A photo wa
 | Grass (52 plus 2 earlier) | 54 | 9 | Clover | 12 | 2 |
 | Fern | 12 | 3 | Pine | 12 | 2 |
 | Oak, moss | 12 each | 1 each | Dandelion | 12 | 0 |
-| Non-plants | 74 | 0 | Mixed scenes | 15 | 0 |
+| Non-plants | 63 | 0 | Mixed scenes | 14 | 0 |
 
 Plants missing from the list get forced onto the nearest label, often a hazard. A hazard-over-plant margin doesn't fix it: at 0.10, honeysuckle still warns on 5 of 10, while one poison ivy photo falls 0.093 below the best plant.
 
@@ -134,7 +134,7 @@ Plants missing from the list get forced onto the nearest label, often a hazard. 
 
 BioCLIP Mobile ships a table of 4,271 plant species (MIT); Atlantic poison oak (*Toxicodendron pubescens*) was missing, so one row was added in our prompt format. That format lines up with the table: our embedding of "a photo of *Toxicodendron radicans*." scores 0.975 against the table's own row.
 
-| Rule (worse of full frame and reticle) | Hazards caught (52) | Safe photos warned (265) |
+| Rule (worse of full frame and reticle) | Hazards caught (52) | Safe photos warned (253) |
 | --- | --- | --- |
 | Hazard species top-1 | 43 (83%) | 1 (0.4%) |
 | Hazard species in the top 3 | 45 (87%) | 1 (0.4%) |
@@ -148,17 +148,19 @@ BioCLIP Mobile ships a table of 4,271 plant species (MIT); Atlantic poison oak (
 
 Grass is a kid's first target. On 52 CC0 grass photos (29 near the region, many cane and wetland grasses, plus 23 common Georgia lawn grasses):
 
-| Rule, on the reticle crop | Grass (52) | Non-grass plants (126) | Hazard plants (50) | Non-plants (74) |
+| Rule, on the reticle crop | Grass (52) | Non-grass plants (124) | Hazard plants (52) | Non-plants (63) |
 | --- | --- | --- | --- | --- |
-| BioCLIP grass top-1 | 45 | 11 | 0 | 35 |
-| **BioCLIP grass in top 3** (chosen, behind the plant gate) | **50** | 45 | 2 | 64 |
+| BioCLIP grass top-1 | 45 | 11 | 0 | 28 |
+| BioCLIP grass in top 3 | 50 | 44 | 3 | 54 |
+| **TinyCLIP plant gate and BioCLIP grass in top 3** (chosen) | **49** | 43 | 3 | 3 |
 
-- The non-plant column is BioCLIP alone; in the app, TinyCLIP blocks non-plants first.
+- Labels: the fixed 11-label tutorial set (grass, oak, fern, clover, pine, dandelion, and the 5 hazards).
+- The one grass photo BioCLIP passes but the gate rejects is a lawn (`lawn_250390361.jpg`): plant share 0.387 on the reticle crop, 0.784 on the full frame.
 - Against the menu labels, 9 of 54 grass photos would have shown a hazard warning, so the tutorial skips the hazard check. Against the species table, 1 of 54 grass photos still would.
 
 ## Camera
 
-The back camera (ID 0, 6.3 mm) reports focus distance with calibration `APPROXIMATE`. The "walk closer" threshold still has to be set on the phone (S09).
+Day 1 logged camera metadata only, not a live focus reading. The back camera (ID 0, 6.3 mm) reports focus calibration `APPROXIMATE` and no minimum focus distance or hyperfocal distance. Whether it returns a usable live `LENS_FOCUS_DISTANCE` is unverified; S09 logs live readings and sets the "walk closer" threshold.
 
 ## Still unmeasured
 

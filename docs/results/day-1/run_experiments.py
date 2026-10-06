@@ -28,12 +28,8 @@ MANIFEST = OUT.parent / "day-1-photos.tsv"
 PHOTOS = MODEL_CACHE / "day1-photos"
 USER_AGENT = "wild-find-pipeline/0.1 (+https://github.com/anchildress1/wild-find)"
 
-# BioCLIP Mobile's own species table: 4,271 plant species embedded by the same teacher, at the pinned revision.
+# BioCLIP Mobile's own species table: 4,271 plant species embedded by the same teacher (pins: taxa, taxa_labels).
 SPECIES_DIR = MODEL_CACHE / "bioclip-taxa"
-SPECIES_FILES = {
-    "taxa_table.npy": "75626c967a00556f09bd6534d15c9c97c71ce37b0f3ae591187ba06d53377ae2",
-    "taxa_labels.json": "adb36a6af884fda71ad3d633c20ede66862b335915a282ea613604409b6d4d7f",
-}
 HAZARD_SPECIES = {"Phytolacca americana", "Solanum carolinense"}  # plus every Toxicodendron species
 
 PLANTS = {
@@ -46,8 +42,8 @@ PLANTS = {
 }
 TINYCLIP_MODELS = {
     "wkcn/TinyCLIP-ViT-8M-16-Text-3M-YFCC15M": "a2a8c6eaa2549ad66eb7c31b85022bf58273a26c",
-    "wkcn/TinyCLIP-ViT-39M-16-Text-19M-YFCC15M": None,
-    "wkcn/TinyCLIP-ViT-40M-32-Text-19M-LAION400M": None,
+    "wkcn/TinyCLIP-ViT-39M-16-Text-19M-YFCC15M": "07a4b0bc751cb64fecd2b661c048c1dd98d69444",
+    "wkcn/TinyCLIP-ViT-40M-32-Text-19M-LAION400M": "95ec8197b3f2fe7f747865c61ca556cf0768b2f7",
 }
 GATE_PLANT = [f"a photo of {x}" for x in ("a plant", "leaves", "a tree", "grass", "a flower", "moss", "a fern")]
 GATE_OTHER = [
@@ -108,24 +104,29 @@ FORMATS = {
 
 
 def photos() -> list[dict[str, str]]:
-    """Download any manifest photos missing from the cache and return the manifest rows."""
+    """Download any manifest photos missing from the cache, check every SHA-256, and return the manifest rows."""
     PHOTOS.mkdir(parents=True, exist_ok=True)
     rows = list(csv.DictReader(MANIFEST.open(), delimiter="\t"))
     for row in rows:
-        path = PHOTOS / row["file"]
+        path = photo_path(row)
         if not path.exists():
             request = urllib.request.Request(row["photo_url"], headers={"User-Agent": USER_AGENT})
             with urllib.request.urlopen(request, timeout=30) as response:
                 path.write_bytes(response.read())
+        if hashlib.sha256(path.read_bytes()).hexdigest() != row["sha256"]:
+            raise ValueError(f"{path} does not match its manifest SHA-256")
     return rows
+
+
+def photo_path(row: dict[str, str]) -> Path:
+    """Local path of a manifest photo."""
+    # The parity fixture is the committed 224 x 224 PNG the phone test reads.
+    return REFERENCE_DIR / "fixture.png" if row["set"] == "fixture" else PHOTOS / row["file"]
 
 
 def load(row: dict[str, str]) -> Image.Image:
     """Open a manifest photo as RGB."""
-    # The parity fixture is the committed 224 x 224 PNG the phone test reads.
-    if row["set"] == "fixture":
-        return Image.open(REFERENCE_DIR / "fixture.png").convert("RGB")
-    return Image.open(PHOTOS / row["file"]).convert("RGB")
+    return Image.open(photo_path(row)).convert("RGB")
 
 
 def reticle(img: Image.Image) -> Image.Image:
@@ -285,16 +286,19 @@ def label_formats(rows, model, preprocess, tokenizer) -> None:
 def species_table(model, tokenizer) -> tuple[np.ndarray, list[str], dict[str, float]]:
     """Load the pinned species table, append any missing hazard species, and check prompt-format alignment."""
     SPECIES_DIR.mkdir(parents=True, exist_ok=True)
-    revision = pin("bioclip")["revision"]
-    for name, sha in SPECIES_FILES.items():
-        path = SPECIES_DIR / name
+    taxa = pin("taxa")
+    files = {}
+    for key in ("taxa", "taxa_labels"):
+        file = pin(key)
+        path = files[key] = SPECIES_DIR / file["file"]
         if not path.exists():
-            url = f"https://huggingface.co/{pin('bioclip')['repo']}/resolve/{revision}/{name}"
+            url = f"https://huggingface.co/{taxa['repo']}/resolve/{taxa['revision']}/{file['file']}"
             urllib.request.urlretrieve(url, path)
-        if hashlib.sha256(path.read_bytes()).hexdigest() != sha:
-            raise ValueError(f"{path} does not match its pinned SHA-256")
-    table = np.load(SPECIES_DIR / "taxa_table.npy")
-    names = [entry["scientific"] for entry in json.load((SPECIES_DIR / "taxa_labels.json").open())]
+        data = path.read_bytes()
+        if str(len(data)) != file["bytes"] or hashlib.sha256(data).hexdigest() != file["sha256"]:
+            raise ValueError(f"{path} does not match its pinned bytes and SHA-256")
+    table = np.load(files["taxa"])
+    names = [entry["scientific"] for entry in json.load(files["taxa_labels"].open())]
     ours = encode_text(model, tokenizer, [prompt("Toxicodendron radicans")])[0]
     check = {"prompt_format_cosine_Toxicodendron_radicans": float(ours @ table[names.index("Toxicodendron radicans")])}
     missing = [h for h in ("Toxicodendron pubescens",) if h not in names]

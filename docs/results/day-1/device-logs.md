@@ -80,3 +80,5 @@ FocusProbe: id=1 facing=0 calib=1 minFocus=null hyperfocal=null focal=[3.3]
 FocusProbe: id=2 facing=1 calib=1 minFocus=null hyperfocal=null focal=[2.2]
 FocusProbe: id=3 facing=0 calib=1 minFocus=null hyperfocal=null focal=[3.3]
 ```
+
+These are camera characteristics only. No live `CaptureResult.LENS_FOCUS_DISTANCE` was logged, so a usable focus reading is unverified (S09).
