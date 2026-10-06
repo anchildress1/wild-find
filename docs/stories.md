@@ -40,7 +40,7 @@ Both models run on the test phone, or nothing else starts.
 
 ## App · Oct 8–9
 
-- [ ] **S30 Mascot host** — placeholder mascot with the five states (welcome, searching/hint, found, retry, complete) driven by game events; final Rive art drops in later
+- [ ] **S30 Briar host** — placeholder Briar with the five states (welcome, searching/hint, found, retry, complete) driven by game events; final Rive art drops in later
 - [ ] **S31 Safety opener** — R1, placeholder art, replayable, banned-copy check in tests
 - [ ] **S32 Location** — coarse permission only, manual region pick on deny; coverage message off-region; R2, R7
 - [ ] **S33 iNat client** — one query, ≤ 3 pages (≤ 6 on the widen path), named User-Agent, 429 Retry-After; R2

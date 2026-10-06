@@ -80,7 +80,7 @@ Every call below is settled; open items live in Open Questions.
 | Fact cards | Gemma drafts from Wikipedia; Claude fact-checks at build time in a manual Claude Code pass; the post discloses it |
 | Location | Android coarse location only, rounded to whole degrees; the device is in a region only when its rounded key equals that region's key; the query always sends the region center, never device coordinates; manual region pick supported |
 | Images | Category illustrations in v1; licensed photos in v3 |
-| UI | Animation-first; Jetpack Compose hosts camera and chrome; Rive state machines animate the opener and the mascot; no React |
+| UI | Animation-first; Jetpack Compose hosts camera and chrome; Rive state machines animate the opener and Briar, the mascot; no React |
 | Distribution | GitHub Release APK plus first-launch model download; outdoor demo video |
 | Credits | README and About screen credit Gemma, BioCLIP 2.5 Mobile, BioCLIP 2.5, OpenCLIP, iNaturalist, and Wikipedia |
 | Prize categories | Best Use of Gemma in; DigitalOcean dropped |
@@ -401,15 +401,15 @@ Only the current hunt's state persists; there is no history, streak, or sharing.
 
 ## Visual System
 
-The final generated assets are the source of truth for the mascot's look; the Rive rig is built from the layered rigging sheet; frame-by-frame sprite sheets are out because AI-drawn frames drift in proportion and can't play as cycles.
+The final generated assets are the source of truth for Briar's look; the Rive rig is built from the layered rigging sheet; frame-by-frame sprite sheets are out because AI-drawn frames drift in proportion and can't play as cycles.
 
 | Asset | Used in | File |
 | --- | --- | --- |
 | Logo | Splash, About | Path pending (Open Questions) |
-| Mascot rig parts | Body parts, tail segments, turnaround; source for the Rive rig | assets/source/wild-find-briar-rig-1.png |
-| Mascot face parts | Head bases, eyes, lids, brows, mouths, muzzle, 24 expression heads | assets/source/wild-find-briar-rig-2b.png (2a is an earlier pass) |
+| Briar rig parts | Body parts, tail segments, turnaround; source for the Rive rig | assets/source/wild-find-briar-rig-1.png |
+| Briar face parts | Head bases, eyes, lids, brows, mouths, muzzle, 24 expression heads | assets/source/wild-find-briar-rig-2b.png (2a is an earlier pass) |
 | Concept board | Poses, icon ideas, palette; reference only, broken alpha | assets/source/wild-find-sprite-1.png |
-| Mascot rig | Rive state machine: welcome; searching or hint; success or found; retry or not quite; hunt complete | Path pending |
+| Briar rig | Rive state machine: welcome; searching or hint; success or found; retry or not quite; hunt complete | Path pending |
 | Category icons | One per icon\_category: tree, flower, fern, grass, vine, shrub, moss, other | Path pending |
 | Opener art | Bees and snakes, with poison ivy drawn in | Path pending |
 
@@ -491,7 +491,7 @@ Two questions block the build; three can wait.
 
 **Blocking**
 
-- [ ] Visual: who builds the mascot Rive rig and the opener, and by when? Logo and category icons still need paths
+- [ ] Visual: who builds Briar's Rive rig and the opener, and by when? Logo and category icons still need paths
 - [ ] Legal: do coarse location plus whole-degree rounding clear the precise-geolocation bar?
 
 **Non-blocking**

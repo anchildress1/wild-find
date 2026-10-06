@@ -24,7 +24,7 @@ Spec of record: `docs/PRD.md`. Work queue: `docs/stories.md`. A change that cont
 ## UI
 
 - Animation-first. Every screen transition and state change is animated; no static form or list screens.
-- The mascot and the opener are Rive state machines. Game events drive Rive inputs; Compose never draws mascot frames.
+- Briar (the mascot) and the opener are Rive state machines. Game events drive Rive inputs; Compose never draws Briar's frames.
 - 48 dp touch targets, content descriptions, no color-only signal, sunlight contrast.
 - Invoke `/compose-skill` before touching `@Composable` code. Invoke `/litertlm-android-sdk` before touching Gemma code.
 
