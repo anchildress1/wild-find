@@ -36,4 +36,4 @@ Spec of record: `docs/PRD.md`. Work queue: `docs/stories.md`. A change that cont
 - Public Kotlin and Python API gets a one-line KDoc/docstring; detekt and ruff `D1` enforce it. Inline comments explain why, never what.
 - `make fetch-models` then `make push-models` sideloads the pinned models to the test phone.
 - Never `adb uninstall` the app on the test phone; it deletes the 2.6 GB model. `make install` keeps data.
-- Unrunnable check (on-device, field, airplane mode) → stop and hand it to the user. Never tick it yourself.
+- Check that needs the user (field test, airplane mode, anything physical) → stop and hand it over; never tick it yourself. Automated on-device tests run with `make device-test` when the phone is attached; tick those on a logged pass.

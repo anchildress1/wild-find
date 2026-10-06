@@ -9,7 +9,7 @@ wild-find sends kids 8 and up outside to find and photograph plant groups common
 |  |  |
 | --- | --- |
 | Platform | Native Android, Kotlin; one Android test phone |
-| Models | BioCLIP 2.5 Mobile verifies the plant group live in the camera; Gemma 4 E2B writes level-2 hints |
+| Models | TinyCLIP ViT-8M gates plant vs not-plant and BioCLIP 2.5 Mobile verifies the plant group, both live in the camera; Gemma 4 E2B writes level-2 hints |
 | Network | One iNaturalist query per hunt, requiring at most three paginated HTTP requests, sent with coarse region coordinates |
 | Region | West Georgia region, key 34\_-85: a 75 km radius around (34, -85) that covers Carrollton |
 | Content | Kid words common in the West Georgia region, filtered to the current calendar month |
@@ -65,7 +65,7 @@ Every call below is settled; open items live in Open Questions.
 | Platform | Native Android in Kotlin; one Android test phone; no iOS; no Vestige code |
 | Repo | wild-find; new repo started inside the challenge window; MIT license |
 | Runtime models | Open-weight only, all running on the phone |
-| Model roles | BioCLIP 2.5 Mobile verifies the plant group on the reticle crop; Gemma writes level-2 hints and never sits in the verify path; full BioCLIP 2.5 makes text embeddings at build time; Pl@ntNet rejected |
+| Model roles | TinyCLIP ViT-8M (MIT) gates plant vs not-plant on the reticle crop; BioCLIP 2.5 Mobile verifies the plant group on it; Gemma writes level-2 hints and never sits in the verify path; full BioCLIP 2.5 makes text embeddings at build time; Pl@ntNet rejected |
 | Safety model | Look, photograph, leave it where it grows. Hazard recognition is an extra warning, never a safety guarantee; the app never tells a child a plant is safe |
 | Difficulty | Selector exists; v1 ships Low only |
 | Region | West Georgia region only, key 34\_-85 |
@@ -74,7 +74,7 @@ Every call below is settled; open items live in Open Questions.
 | Local filter | A word is eligible with 25+ research-grade sightings in the region for the current calendar month, across all available years |
 | Hunt shape | First-ever hunt: grass tutorial, then 3 targets; later hunts: 3 targets; targets picked by sighting-weighted random |
 | Look-alikes | Pass automatically; never taught in v1 |
-| Framing | Live camera with a center reticle; "walk closer" when autofocus distance puts the subject past the close-range threshold; no Gemma boxes |
+| Framing | Live camera with a center reticle; "walk closer" when the autofocus distance, in diopters (0 = infinity, larger = nearer), is below the close-range threshold; no auto-capture without a focus reading; no Gemma boxes |
 | Scoring | One star per find; one leave-it star when the plant is clearly still rooted |
 | Hints | Three levels; Gemma reads the scene; facts only from fact cards; 20-word guard |
 | Fact cards | Gemma drafts from Wikipedia; Claude fact-checks at build time in a manual Claude Code pass; the post discloses it |
@@ -123,7 +123,7 @@ Ten P0s ship the hunt; one P1 follows; four P2s shape the design now. Requiremen
 | --- | --- | --- |
 | R1 | Safety opener | First launch shows bees and snakes, with poison ivy drawn into the art; one rule: "Look. Photograph. Leave it where it grows."; no copy says safe, harmless, not poisonous, or okay to touch; replayable from the menu |
 | R2 | Hunt list | One iNaturalist query per hunt, requiring at most three paginated HTTP requests: coarse region coordinates, current calendar month across all available years, plants, research grade; a result counts toward a target when its taxon id equals the target's taxon\_id or the target's taxon\_id is in its ancestor\_ids; eligible at 25+ sightings; fewer than 3 eligible widens the radius to 150 km once; cached under the versioned cache key; location denied falls back to a manual region pick; fewer than 3 eligible words shows the coverage message |
-| R3 | Grass tutorial | The first-ever hunt opens with grass, followed by 3 normal targets; any grass close-up passes; lawn is not a scene label for this target; done in under 60 seconds; never repeats once completed |
+| R3 | Grass tutorial | The first-ever hunt opens with grass, followed by 3 normal targets; any grass close-up passes; the plant gate counts lawn as grass; done in under 60 seconds; never repeats once completed |
 | R4 | Target pick | 3 targets per hunt by sighting-weighted random from eligible words; a hazard is never a target |
 | R5 | Verify | Follows the Runtime Logic verify table, live while the camera is open; a find needs the subject in close range and the target top-1 on the reticle crop at or above its verify\_floor for 3 frames in a row, then auto-captures; a hazard match shows a warning and gives no star; no result is ever presented as evidence of safety |
 | R6 | Hints | Tap for a hint; levels 1 and 3 are precomputed from the fact card at hunt start; level 2 uses the most recent failed verify photo, otherwise the current camera frame at tap time, with no separate hint photo; guards reject the target name, "I see", "there is", numbers not on the card, and anything over 20 words; retry once, then a template hint |
@@ -155,7 +155,7 @@ Latency, heat, and memory targets are guesses until the Day-1 gate measures them
 | --- | --- | --- |
 | Privacy | No photo or precise location leaves the device; gameplay requests carry only coarse region coordinates plus ordinary request metadata such as IP address | Network log on the test phone |
 | Offline | A full hunt runs in airplane mode from the cache or the bundled fallback list | Field test |
-| Verify latency | Under 5 s from shutter to result (unmeasured) | Day-1 gate |
+| Verify latency | Each analyzed live frame under 200 ms (plant gate plus BioCLIP); the first eligible frame to Found under 1.5 s | Gate harness (S05) |
 | Hint latency | Under 5 s for level 2; levels 1 and 3 are precomputed (unmeasured) | Day-1 gate |
 | Download size | Gemma 2,588,147,712 bytes plus BioCLIP 46,986,589 bytes, fetched after install | Day-1 gate |
 | Storage | Free space checked before the download starts | Day-1 gate |
@@ -228,13 +228,13 @@ Runs once on the laptop in Python with uv; a word ships only after it passes eve
 6. **Cards:** the Wikipedia description, found via the taxon's wikipedia\_url, goes to Gemma with the card prompt, which also picks icon\_category
 7. **Fact-check:** in a manual Claude Code pass, Claude checks every fact against its source text, every word-to-taxon match, and every icon\_category; failures print for review
 8. **Ship review:** Ashley reviews the final menu before it ships
-9. **Embeddings:** the BioCLIP 2.5 ViT-H text encoder writes one vector per menu word, hazard, and scene label (text format per hole 3)
+9. **Embeddings:** the BioCLIP 2.5 ViT-H text encoder writes one vector per menu word and hazard (text format per hole 3); the TinyCLIP text encoder writes the plant-gate vectors
 10. **Fallback:** the same gates produce fallback\_october\_west\_georgia.json from October sightings, with no live counts
 11. **Output:** menu.json, hazards.json, labels.npy, labels.json, and the fallback file
 
 **Hazard plant labels:** poison ivy, poison oak, poison sumac, pokeweed, Carolina horsenettle; the fact-check confirms each.
 
-**Scene labels:** lawn, field, weedy garden bed, pavement, person, screen; Day 1 tests whether BioCLIP Mobile handles them (hole 17).
+**Plant-gate labels:** plant, leaves, tree, grass, flower, moss, fern vs person, child, screen, phone, road, sidewalk, car, dog, room, building. Day 1 showed BioCLIP Mobile can't score non-plant labels (hole 17), so these go to TinyCLIP.
 
 **Ambiguous-name denylist:** blocks target names that are themselves ambiguous or hazardous common names. A safe taxon is not blocked just because its word appears inside a longer hazard name, so oak stays. Starter list, maintained by hand: ivy, sumac. Berry-named targets are allowed unless the name itself is hazardous.
 
@@ -273,8 +273,8 @@ Five files ship in the app, two pinned models download once, and every cache ent
 | --- | --- | --- |
 | menu.json | schema\_version, menu\_version, and targets (below) | Build pipeline |
 | hazards.json | Hazard plant labels (name, taxon\_id) and the two opener hazards (name, rule) | Build pipeline, from NIOSH |
-| labels.npy | One 1024-d unit vector per menu word, hazard, and scene label | BioCLIP 2.5 ViT-H text encoder |
-| labels.json | Parallel list: id and kind (word, hazard, scene) | Build pipeline |
+| labels.npy | One 1024-d unit vector per menu word and hazard | BioCLIP 2.5 ViT-H text encoder |
+| labels.json | Parallel list: id and kind (word, hazard) | Build pipeline |
 | fallback\_october\_west\_georgia.json | Targets common in the region in October; no live counts | Build pipeline |
 
 **menu.json**
@@ -350,17 +350,20 @@ Verify runs on live camera frames, about 5 per second, with no Gemma call. The h
 
 | # | Condition | Kid sees | Star |
 | --- | --- | --- | --- |
-| 1 | A hazard label is top-1 on the reticle crop or the full frame | "That might be a plant we leave extra space around." | No |
-| 2 | Autofocus distance puts the subject past the close-range threshold | "Walk closer" | No |
-| 3 | The target is top-1 on the reticle crop, at or above its verify\_floor and past the margin if calibration adopts one, for 3 frames in a row | Auto-capture, then Found | Yes |
-| 4 | Anything else | Reticle guidance ("Put the plant in the circle"), with the hint button | No |
+| 1 | TinyCLIP says the reticle crop isn't a plant | "Point the camera at a plant" | No |
+| 2 | A hazard label is top-1 on the reticle crop or the full frame | "That might be a plant we leave extra space around." | No |
+| 3 | No focus reading yet | "Tap the plant to focus" | No |
+| 4 | Autofocus distance is below the close-range threshold in diopters, so the subject is too far | "Walk closer" | No |
+| 5 | The target is top-1 on the reticle crop, at or above its verify\_floor and past the margin if calibration adopts one, for 3 frames in a row | Auto-capture, then Found | Yes |
+| 6 | Anything else | Reticle guidance ("Put the plant in the circle"), with the hint button | No |
 
-The back camera reports focus distance as approximate (Day 1); the close-range threshold is set on the device (hole 19). Scoring labels per frame: this hunt's targets, other locally eligible words, hazards, and scene labels. The grass tutorial drops lawn from the scene labels. A missed hazard never reads as safe: "Look. Photograph. Leave it where it grows." stays the rule on every screen.
+The back camera reports focus distance as approximate (Day 1); the close-range threshold is set on the device (hole 19). BioCLIP scoring labels per frame: this hunt's targets, other locally eligible words, and hazards. A missed hazard never reads as safe: "Look. Photograph. Leave it where it grows." stays the rule on every screen.
 
-If Day 1 shows BioCLIP Mobile can't handle the scene and non-plant labels, Gemma answers plant, non-plant, or screen, and BioCLIP keeps plant-group verification only.
+Day 1: BioCLIP Mobile can't reject non-plants. 6 of 22 free non-plant photos scored a plant target top-1, and a portrait scored oak higher than a real oak. TinyCLIP ViT-8M kept 16 of 16 plant photos and passed 0 real non-plants, so it gates every frame first.
 
 ```
-pass = target_score >= target.verify_floor
+pass = target_score > runner_up_score          // top-1 is always required
+       && target_score >= target.verify_floor
        && (margin == null || target_score - runner_up_score >= margin)
 ```
 
@@ -419,7 +422,7 @@ Every failure degrades to a playable hunt or a plain message; none crash or stal
 | Not enough free storage | Stop before downloading and show the space needed |
 | Model download fails | Resume where it stopped; Wi-Fi only |
 | SHA-256 mismatch | Delete the file and download again |
-| Autofocus reports no focus distance | Skip the walk-closer check; verify on the reticle crop alone |
+| Autofocus reports no focus distance | No auto-capture; the kid sees "Tap the plant to focus" until a reading arrives |
 | Gemma too slow or out of memory | Release and reload once; then serve the template hint |
 | A hint fails the guards twice | Template hint built from the card fields |
 | Camera permission denied | Explain why the game needs it; the hunt can't start |
@@ -455,7 +458,7 @@ No blockers remain; every hole below closes or falls back during the Day-1 gate 
 | 10 | Heat and battery | Live BioCLIP at about 5 frames a second plus the camera; Gemma only on hint taps | The gate harness runs a 20-minute live-camera session | Medium |
 | 12 | Home Wi-Fi download | A Vestige model download broke when Hugging Face moved its redirect CDN and the app had the old host pinned; filtered networks can also block the CDN | Pin the Hugging Face start URL, never the CDN host; trust bytes + SHA-256; re-resolve redirects on resume; the Day-1 gate runs the full download and an interrupted resume on the test phone | High |
 | 13 | No telemetry | Field failures stay invisible by design | Debug builds only: a local log the developer can export | Medium |
-| 17 | BioCLIP Mobile vs non-plant labels | The student trained on plant photos only; labels like person or screen may not score cleanly | The Day-1 gate tests them; on failure, Gemma rejects non-plants and BioCLIP keeps plant verification | High |
+| 17 | BioCLIP Mobile vs non-plant labels | Resolved on Day 1: BioCLIP Mobile can't reject non-plants, so TinyCLIP ViT-8M gates plant vs not-plant before it | Pin and test TinyCLIP on the phone (S06) | Low |
 | 18 | Gemma file variant | Resolved on Day 1: the pinned generic file loads and runs on the GPU backend, so the GPU-only build isn't needed | Keep the pinned file | Low |
 | 19 | Approximate focus distance | The back camera reports focus distance as approximate, so "walk closer" may fire too early or late | Set the close-range threshold by pointing the test phone at near and far plants; tune in the field test | Medium |
 
@@ -469,7 +472,7 @@ Acceptance metrics come from the holdout set, which never touches calibration; t
 | False-pass rate | Leading | 5% or less | 0% | Wrong-group, non-plant, screen, and wide-shot holdout photos |
 | Screen time per target | Leading | Under 60 s | Under 30 s | Stopwatch during the field test |
 | Find rate after a hint | Leading | 2 of 3 stuck targets found | 3 of 3 | Field test log |
-| Verify latency | Leading | Under 5 s | Under 3 s | Day-1 timing |
+| Verify latency | Leading | Each live frame under 200 ms | Under 100 ms | Gate harness timing |
 | Challenge placement | Lagging | Best Use of Gemma | Overall winner | Results, week of October 12 |
 
 ## Open Questions
@@ -513,7 +516,7 @@ Day 1 is a go or no-go gate: both models must run on the test phone before UI or
 5. Oct 10, 2026: holdout acceptance metrics; record the outdoor demo; draft the post, disclosing the Claude fact-check
 6. Oct 11, 2026: internal ship deadline, 11:59 PM PDT
 
-Gate fallbacks: if the scene labels fail, Gemma rejects non-plants; if Gemma is too slow, cut Gemma calls and keep the architecture.
+Gate outcomes: the scene labels failed, so TinyCLIP gates non-plants; Gemma was too slow for verify, so it writes hints only.
 
 ## Sources
 
