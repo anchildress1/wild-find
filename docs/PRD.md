@@ -459,7 +459,7 @@ No blockers remain; every hole below closes or falls back during the Day-1 gate 
 
 | # | Hole | Why it matters | Fix | Severity |
 | --- | --- | --- | --- | --- |
-| 3 | Label text format | Day 1: with common names, a white oak photo scored "poison oak" top-1 on both the teacher and the mobile model; scientific names put oak top-1 on both | Plant labels embed as "a photo of <scientific name>."; scene labels stay plain words; confirm on the calibration set | High |
+| 3 | Label text format | Day 1: with common names, a white oak photo scored "poison oak" top-1 on both the teacher and the mobile model; scientific names put oak top-1 on both | Plant labels embed as "a photo of <scientific name>."; scene labels use common words in the same template ("a photo of lawn."); confirm on the calibration set | High |
 | 4 | Latency is unmeasured | A verify runs a Gemma vision call plus BioCLIP; a level-2 hint runs Gemma twice | The Day-1 gate measures both; if too slow, cut Gemma calls and keep the architecture | High |
 | 5 | Kids read hints on screen | Reading pulls eyes down, against the theme | Read hints aloud with Android's on-device text-to-speech; confirm an offline voice on the test phone | High |
 | 8 | Loose Gemma boxes | One E2B test saw a box drift off its object | Pad crops 15%; check boxes on the calibration set | Medium |

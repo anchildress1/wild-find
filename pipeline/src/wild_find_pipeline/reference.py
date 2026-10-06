@@ -11,7 +11,7 @@ import numpy as np
 from PIL import Image
 
 from wild_find_pipeline.labels import HAZARDS, SCENES, prompt
-from wild_find_pipeline.paths import MODEL_CACHE, REFERENCE_DIR, pin
+from wild_find_pipeline.paths import MODEL_CACHE, REFERENCE_DIR, pin, verified_artifact
 
 SIZE = 224
 FIXTURE_WORD = "oak"
@@ -85,7 +85,7 @@ def main() -> int:
     fixture_path = REFERENCE_DIR / "fixture.png"
     fixture.save(fixture_path)
     # Embed the saved lossless PNG so Android reads byte-identical pixels.
-    image_vector = embed_image(MODEL_CACHE / bioclip["file"], image_input(Image.open(fixture_path)))
+    image_vector = embed_image(verified_artifact("bioclip"), image_input(Image.open(fixture_path)))
 
     labels = [
         (FIXTURE_WORD, "word", FIXTURE_TAXON),

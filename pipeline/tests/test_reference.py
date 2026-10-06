@@ -1,8 +1,10 @@
+import hashlib
+
 import numpy as np
 import pytest
 from PIL import Image
 
-from wild_find_pipeline.paths import MANIFEST, pin
+from wild_find_pipeline.paths import MANIFEST, pin, verified_artifact
 from wild_find_pipeline.reference import SIZE, image_input, ranked, square_fixture
 
 
@@ -54,3 +56,42 @@ def test_pin_raises_for_unknown_model(tmp_path):
 
     with pytest.raises(KeyError):
         pin("nope", manifest)
+
+
+@pytest.fixture
+def artifact(tmp_path):
+    data = b"model-bytes"
+    manifest = tmp_path / "m.properties"
+    manifest.write_text(f"toy.file=toy.onnx\ntoy.bytes={len(data)}\ntoy.sha256={hashlib.sha256(data).hexdigest()}\n")
+    (tmp_path / "toy.onnx").write_bytes(data)
+    return tmp_path, manifest
+
+
+def test_verified_artifact_returns_path_when_pins_match(artifact):
+    cache, manifest = artifact
+
+    assert verified_artifact("toy", cache, manifest) == cache / "toy.onnx"
+
+
+def test_verified_artifact_rejects_same_size_different_bytes(artifact):
+    cache, manifest = artifact
+    (cache / "toy.onnx").write_bytes(b"MODEL-BYTES")
+
+    with pytest.raises(ValueError, match="does not match"):
+        verified_artifact("toy", cache, manifest)
+
+
+def test_verified_artifact_rejects_wrong_size(artifact):
+    cache, manifest = artifact
+    (cache / "toy.onnx").write_bytes(b"short")
+
+    with pytest.raises(ValueError, match="does not match"):
+        verified_artifact("toy", cache, manifest)
+
+
+def test_verified_artifact_rejects_missing_file(artifact):
+    cache, manifest = artifact
+    (cache / "toy.onnx").unlink()
+
+    with pytest.raises(ValueError, match="missing"):
+        verified_artifact("toy", cache, manifest)

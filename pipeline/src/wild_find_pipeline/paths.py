@@ -1,5 +1,6 @@
 """Repo-relative paths shared by pipeline steps."""
 
+import hashlib
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[3]
@@ -19,3 +20,17 @@ def pin(model: str, manifest: Path = MANIFEST) -> dict[str, str]:
     if not pins:
         raise KeyError(f"no pins for {model!r} in {manifest}")
     return pins
+
+
+def verified_artifact(model: str, cache: Path = MODEL_CACHE, manifest: Path = MANIFEST) -> Path:
+    """Return the cached file for `model` after checking its pinned byte count and SHA-256.
+
+    Raises ValueError when the file is missing or doesn't match its pins.
+    """
+    pins = pin(model, manifest)
+    path = cache / pins["file"]
+    if not path.is_file():
+        raise ValueError(f"{path} missing; run make fetch-models")
+    if path.stat().st_size != int(pins["bytes"]) or hashlib.sha256(path.read_bytes()).hexdigest() != pins["sha256"]:
+        raise ValueError(f"{path} does not match its pinned size/SHA-256; run make fetch-models")
+    return path
