@@ -520,7 +520,7 @@ Day 1 is a go or no-go gate: both models must run on the test phone before UI or
    - SHA-256 verification succeeds
    - Low-storage handling tested
 2. Oct 7, 2026: build pipeline outputs menu.json, hazards.json, labels, and the fallback file; denylist and final menu reviewed; final assets wired in
-3. Oct 8, 2026: verify loop end to end; shoot about 30 calibration photos and 20 to 30 holdout photos, stored apart
+3. Oct 8, 2026: verify loop end to end; collect about 30 calibration photos and 20 to 30 holdout photos from free CC0 or public-domain iNaturalist observations, stored apart
 4. Oct 9, 2026: outdoor field test; per-target floors and the margin decision come from the calibration set only; hints with guards; hunt-complete flow
 5. Oct 10, 2026: holdout acceptance metrics; record the outdoor demo; draft the post, disclosing the Claude fact-check
 6. Oct 11, 2026: internal ship deadline, 11:59 PM PDT

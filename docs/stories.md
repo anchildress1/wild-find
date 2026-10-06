@@ -54,8 +54,8 @@ Both models run on the test phone, or nothing else starts.
 
 ## Ship · Oct 9–11
 
-- [ ] **S50 Calibration** — ~30 calibration photos → per-target floors + margin decision
-- [ ] **S51 Holdout** — 20–30 holdout photos → pass rate ≥ 90%, false pass ≤ 5%, hazard false-alarm rate recorded (H6)
+- [ ] **S50 Calibration** — ~30 free photos (CC0 or public domain, iNaturalist research grade) → per-target floors + margin decision
+- [ ] **S51 Holdout** — 20–30 free photos, never used in calibration → pass rate ≥ 90%, false pass ≤ 5%, hazard false-alarm rate recorded (H6)
 - [ ] **S52 Field test** — screen time per target, find rate after a hint
 - [ ] **S53 Release** — release keystore (local, never committed), R8 minify, signed APK on a GitHub Release, About screen credits; install the release build on the test phone and run a full first-launch download from it; H10
 - [ ] **S54 Demo + post** — outdoor demo video; post discloses the Claude fact-check
