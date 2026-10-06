@@ -35,7 +35,7 @@ v1 succeeds when a kid finishes a real hunt outside and the verifier stays hones
 
 - **Screen stays short:** a 3-target hunt takes under 20 minutes, with under 1 minute of screen time per target
 - **Correct passes:** 90% or more of right-group holdout photos pass
-- **No free passes:** 5% or fewer of wrong-group, non-plant, screen, and wide-shot holdout photos pass
+- **No free passes:** 5% or fewer of wrong-group, non-plant, and screen holdout photos pass, and 5% or fewer of wide shots pass in the live field test
 - **Grounded hints:** every fact in a 20-hint audit traces to its fact card
 - **Works offline:** a cached hunt completes in airplane mode
 
@@ -331,7 +331,7 @@ A mismatch on schema\_version, menu\_version, region, or month discards the entr
 
 | Model | Input | Output |
 | --- | --- | --- |
-| TinyCLIP plant gate | 224 x 224 RGB reticle crop, values 0 to 1; normalization is baked in | 512-d unit vector; softmax over 50.0 × cosine against plant\_gate.json rows |
+| TinyCLIP plant gate | 224 x 224 RGB reticle crop, values 0 to 1, rotation normalized (the same crop BioCLIP gets); normalization is baked in | 512-d unit vector; softmax over 50.0 × cosine against plant\_gate.json rows |
 | BioCLIP 2.5 Mobile | 224 x 224 RGB reticle crop, values 0 to 1, rotation normalized; normalization is baked in | 1024-d unit vector; score is a dot product with labels.npy rows |
 | Gemma, scene call | Scene image plus the fixed tag list | JSON array of tags |
 | Gemma, hint call | Fact card, tags, hint level | One line, 20 words or fewer |
@@ -348,14 +348,14 @@ One query per hunt, requiring at most three paginated HTTP requests. month means
 
 ## Runtime Logic
 
-Verify runs on live camera frames, about 5 per second, with no Gemma call. The plant gate runs first, then the hazard check as an extra warning; a find needs the subject in close range and the target on top for 3 frames in a row; no result ever means a plant is safe.
+Verify runs on live camera frames, about 5 per second, with no Gemma call. Each frame is rotation-normalized once, and the same upright reticle crop feeds both models. The hazard check runs first, over the reticle crop and the full frame, so a hazard anywhere in view always warns; then the plant gate, then close range; a find needs the target on top for 3 frames in a row; no result ever means a plant is safe.
 
 **Verify, checked in order**
 
 | # | Condition | Kid sees | Star |
 | --- | --- | --- | --- |
-| 1 | TinyCLIP says the reticle crop isn't a plant | "Point the camera at a plant" | No |
-| 2 | A hazard label is top-1 on the reticle crop or the full frame | "That might be a plant we leave extra space around." | No |
+| 1 | A hazard label is top-1 on the reticle crop or the full frame | "That might be a plant we leave extra space around." | No |
+| 2 | TinyCLIP says the reticle crop isn't a plant | "Point the camera at a plant" | No |
 | 3 | No focus reading yet | "Tap the plant to focus" | No |
 | 4 | Autofocus distance is below the close-range threshold in diopters, so the subject is too far | "Walk closer" | No |
 | 5 | The target is top-1 on the reticle crop, at or above its verify\_floor and past the margin if calibration adopts one, for 3 frames in a row | Auto-capture, then Found | Yes |
@@ -472,7 +472,7 @@ Acceptance metrics come from the holdout set, which never touches calibration; t
 | Metric | Type | Success | Stretch | Method |
 | --- | --- | --- | --- | --- |
 | Correct-pass rate | Leading | 90% | 95% | Right-group holdout photos |
-| False-pass rate | Leading | 5% or less | 0% | Wrong-group, non-plant, screen, and wide-shot holdout photos |
+| False-pass rate | Leading | 5% or less | 0% | Wrong-group, non-plant, and screen holdout photos; wide shots on the test phone with live autofocus in the field test |
 | Screen time per target | Leading | Under 60 s | Under 30 s | Stopwatch during the field test |
 | Find rate after a hint | Leading | 2 of 3 stuck targets found | 3 of 3 | Field test log |
 | Verify latency | Leading | Each live frame under 200 ms | Under 100 ms | Gate harness timing |
@@ -515,8 +515,8 @@ Day 1 is a go or no-go gate: every runtime model must run on the test phone befo
    - SHA-256 verification succeeds
    - Low-storage handling tested
 2. Oct 7, 2026: build pipeline outputs menu.json, hazards.json, labels, and the fallback file; denylist and final menu reviewed; final assets wired in
-3. Oct 8, 2026: verify loop end to end; collect about 30 calibration photos and 20 to 30 holdout photos from free CC0 or public-domain sources, stored apart; the holdout includes free non-plant negatives (screens, people, pavement, wide shots)
-4. Oct 9, 2026: outdoor field test; per-target floors and the margin decision come from the calibration set only; hints with guards; hunt-complete flow
+3. Oct 8, 2026: verify loop end to end; collect about 30 calibration photos and 20 to 30 holdout photos from free CC0 or public-domain sources, stored apart; the holdout includes free non-plant negatives (screens, people, pavement)
+4. Oct 9, 2026: outdoor field test, including live wide shots for the wide-shot false-pass rate; per-target floors and the margin decision come from the calibration set only; hints with guards; hunt-complete flow
 5. Oct 10, 2026: holdout acceptance metrics; record the outdoor demo; draft the post, disclosing the Claude fact-check
 6. Oct 11, 2026: internal ship deadline, 11:59 PM PDT
 
