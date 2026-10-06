@@ -6,9 +6,9 @@ wild-find sends kids 8 and up outside to find and photograph plants that grow ne
 
 ## How it works
 
-- Gemma 4 E2B finds the plants in a photo and writes hints
-- BioCLIP 2.5 Mobile checks that the plant is the right group
 - One iNaturalist query per hunt picks targets that grow nearby this month
+- While the camera is open, TinyCLIP checks that the kid is pointing at a plant, the camera's focus says whether to walk closer, and BioCLIP 2.5 Mobile checks that it's the right plant group
+- Gemma 4 E2B writes hints when the kid asks for one
 
 The full spec is in [docs/PRD.md](docs/PRD.md). The build queue is in [docs/stories.md](docs/stories.md).
 

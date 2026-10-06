@@ -130,6 +130,17 @@ The grass tutorial is a kid's first target, so grass got its own run: 52 CC0 res
 - Median gap −0.076; worst +0.296, a cane stalk among broad leaves of other plants. Poison ivy gaps were +0.093 and +0.276, so no margin cleanly separates them yet.
 - Decision: the grass tutorial skips the hazard check (PRD R3); regular hunts keep it, with the margin set from the calibration set.
 
+Tutorial pass rules on the same center reticle crops:
+
+| Rule | Grass passes (52) | Non-grass plants pass (14) | Non-plants pass (22) |
+| --- | --- | --- | --- |
+| BioCLIP grass top-1 | 45 | 4 | 11 |
+| BioCLIP grass in top 3 | 50 | 6 | 19 |
+| TinyCLIP's best plant label is grass | 21 | 2 | 0 |
+
+- The non-plant column is BioCLIP alone; in the app, TinyCLIP's plant gate blocks non-plants first.
+- Decision: the tutorial passes when TinyCLIP calls the crop a plant and grass is in BioCLIP's top 3. Some non-grass plant close-ups also pass the tutorial, which is acceptable for a first win.
+
 ## Camera
 
 The back camera (ID 0, 6.3 mm) reports focus distance with calibration `APPROXIMATE`. The "walk closer" threshold still has to be set on the phone (S09).

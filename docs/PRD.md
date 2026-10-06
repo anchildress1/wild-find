@@ -123,7 +123,7 @@ Ten P0s ship the hunt; one P1 follows; four P2s shape the design now. Requiremen
 | --- | --- | --- |
 | R1 | Safety opener | First launch shows bees and snakes, with poison ivy drawn into the art; one rule: "Look. Photograph. Leave it where it grows."; no copy says safe, harmless, not poisonous, or okay to touch; replayable from the menu |
 | R2 | Hunt list | One iNaturalist query per hunt, requiring at most three paginated HTTP requests: coarse region coordinates, current calendar month across all available years, plants, research grade; a result counts toward a target when its taxon id equals the target's taxon\_id or the target's taxon\_id is in its ancestor\_ids; eligible at 25+ sightings; fewer than 3 eligible widens the radius to 150 km once; cached under the versioned cache key; location denied falls back to a manual region pick; fewer than 3 eligible words shows the coverage message |
-| R3 | Grass tutorial | The first-ever hunt opens with grass, followed by 3 normal targets; any grass close-up passes; the plant gate counts lawn as grass; the hazard check doesn't run during the tutorial, because 9 of 52 grass photos scored a hazard top-1 on Day 1, and the leave-it rule stays on screen; done in under 60 seconds; never repeats once completed |
+| R3 | Grass tutorial | The first-ever hunt opens with grass, followed by 3 normal targets; a grass close-up passes when TinyCLIP calls the reticle crop a plant and grass is in BioCLIP's top 3 (50 of 52 CC0 grass photos on Day 1; top-1 alone passed 45); the plant gate counts lawn as grass; the hazard check doesn't run during the tutorial, because 9 of 52 grass photos scored a hazard top-1 on Day 1, and the leave-it rule stays on screen; done in under 60 seconds; never repeats once completed |
 | R4 | Target pick | 3 targets per hunt by sighting-weighted random from eligible words; a hazard is never a target |
 | R5 | Verify | Follows the Runtime Logic verify table, live while the camera is open; a find needs the subject in close range and the target top-1 on the reticle crop at or above its verify\_floor for 3 frames in a row, then auto-captures; a hazard match shows a warning and gives no star; no result is ever presented as evidence of safety |
 | R6 | Hints | Tap for a hint; levels 1 and 3 are precomputed from the fact card at hunt start; level 2 reads the current camera frame at tap time, with no separate hint photo; guards reject the target name, "I see", "there is", numbers not on the card, and anything over 20 words; retry once, then a template hint |
@@ -285,6 +285,8 @@ Eight files ship in the app, one pinned model downloads once, and every cache en
 {
   "schema_version": 1,
   "menu_version": "2026-10-07",
+  "margin": null,
+  "hazard_margin": null,
   "targets": [
     {
       "word": "oak",
@@ -367,9 +369,15 @@ The back camera reports focus distance as approximate (Day 1); the close-range t
 pass = target_score > runner_up_score          // top-1 is always required
        && target_score >= target.verify_floor
        && (margin == null || target_score - runner_up_score >= margin)
+
+tutorial_pass = plant_gate(reticle) && rank(grass) <= 3   // grass tutorial only (R3)
+
+hazard_warns(region) = plant_gate(region)
+       && hazard_score > best_plant_score
+       && (hazard_margin == null || hazard_score - best_plant_score > hazard_margin)
 ```
 
-margin stays null unless the calibration set shows it cuts false passes.
+margin and hazard\_margin stay null until the calibration set sets them; null means top-1 alone decides. hazard\_margin comes from H6's false-alarm data (clover, grass) and must stay below the smallest real-hazard gap in the calibration set.
 
 **Hints, one level per tap**
 
