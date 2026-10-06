@@ -61,8 +61,8 @@ jobs:
       - name: Android lint
         run: ./gradlew --warning-mode=fail :app:lintDebug
 
-      - name: Assemble debug APK
-        run: ./gradlew --warning-mode=fail :app:assembleDebug
+      - name: Assemble debug and test APKs
+        run: ./gradlew --warning-mode=fail :app:assembleDebug :app:assembleDebugAndroidTest
 
       - name: Upload reports
         uses: actions/upload-artifact@v7

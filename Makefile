@@ -30,8 +30,9 @@ setup:
 	lefthook install
 	$(UV) sync
 
+# Assembles the instrumented tests too, so a broken on-device test fails here, not on the phone.
 build:
-	$(GRADLE) :app:assembleDebug
+	$(GRADLE) :app:assembleDebug :app:assembleDebugAndroidTest
 
 # -r keeps app data, so a sideloaded model survives reinstalls.
 install: build
