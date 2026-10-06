@@ -34,6 +34,11 @@ def prompt(text: str) -> str:
     return f"a photo of {text}."
 
 
+def lacking_hazards(names: list[str] | set[str]) -> list[str]:
+    """PRD hazard species missing from a species list, in HAZARDS order."""
+    return [taxon for taxon in HAZARDS.values() if taxon not in names]
+
+
 def is_hazard(scientific: str) -> bool:
     """True for every Toxicodendron species and each other PRD hazard species."""
     return scientific.startswith("Toxicodendron ") or scientific in HAZARDS.values()

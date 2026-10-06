@@ -8,7 +8,7 @@ import pytest
 
 from wild_find_pipeline import assets, paths
 from wild_find_pipeline.assets import plant_share, species_table
-from wild_find_pipeline.labels import HAZARDS, is_hazard
+from wild_find_pipeline.labels import HAZARDS, is_hazard, lacking_hazards
 
 
 def test_plant_share_sums_the_scaled_softmax_of_plant_labels():
@@ -33,7 +33,7 @@ def test_species_table_appends_missing_rows_and_flags_hazards():
     table, labels = species_table(
         np.eye(2, dtype=np.float64),
         ["Quercus alba", "Toxicodendron radicans"],
-        {"Toxicodendron radicans": np.zeros(2), "Toxicodendron pubescens": np.array([0.6, 0.8])},
+        {"Toxicodendron pubescens": np.array([0.6, 0.8])},
     )
 
     assert table.dtype == np.float32
@@ -51,6 +51,12 @@ def test_species_table_unchanged_when_nothing_is_missing():
 
     assert table.shape == (1, 1)
     assert [entry["scientific"] for entry in labels] == ["Quercus alba"]
+
+
+def test_lacking_hazards_keeps_hazards_order():
+    present = [taxon for taxon in HAZARDS.values() if taxon not in ("Toxicodendron vernix", "Phytolacca americana")]
+
+    assert lacking_hazards(present) == ["Toxicodendron vernix", "Phytolacca americana"]
 
 
 @pytest.mark.parametrize(

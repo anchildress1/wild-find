@@ -13,7 +13,7 @@ from pathlib import Path
 
 import numpy as np
 
-from wild_find_pipeline.labels import GATE_OTHER, GATE_PLANT, HAZARDS, is_hazard
+from wild_find_pipeline.labels import GATE_OTHER, GATE_PLANT, is_hazard, lacking_hazards
 from wild_find_pipeline.paths import GENERATED_ASSETS, HAZARD_VECTORS, MODEL_CACHE, ensure_artifact, pin
 
 # CLIP's ImageNet-style normalization, baked into plant_gate.onnx so the phone feeds plain 0..1 RGB like BioCLIP.
@@ -30,11 +30,10 @@ def plant_share(embedding: np.ndarray, vectors: np.ndarray, plant: np.ndarray, s
 
 
 def species_table(table: np.ndarray, names: list[str], extra: dict[str, np.ndarray]) -> tuple[np.ndarray, list[dict]]:
-    """Append rows for species the table lacks; return the table and per-row labels with hazard flags."""
-    missing = [name for name in extra if name not in names]
-    if missing:
-        table = np.vstack([table, np.stack([extra[name] for name in missing])])
-    labels = [{"scientific": name, "hazard": is_hazard(name)} for name in [*names, *missing]]
+    """Append the [extra] rows after the table's own; return the table and per-row labels with hazard flags."""
+    if extra:
+        table = np.vstack([table, np.stack(list(extra.values()))])
+    labels = [{"scientific": name, "hazard": is_hazard(name)} for name in [*names, *extra]]
     return table.astype(np.float32), labels
 
 
@@ -97,7 +96,7 @@ def export_plant_gate(local: Path, out: Path) -> tuple[np.ndarray, float]:
 def hazard_vectors(names: list[str]) -> dict[str, np.ndarray]:
     """Committed teacher vectors for every hazard species the pinned table lacks; raises when one is missing."""
     stored = json.loads(HAZARD_VECTORS.read_text())["species"]
-    lacking = [taxon for taxon in HAZARDS.values() if taxon not in names]
+    lacking = lacking_hazards(names)
     if missing := [taxon for taxon in lacking if taxon not in stored]:
         raise ValueError(f"no stored vector for {missing}; run make hazard-vectors")
     return {taxon: np.array(stored[taxon], dtype=np.float32) for taxon in lacking}
