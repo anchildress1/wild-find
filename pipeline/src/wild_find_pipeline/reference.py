@@ -119,8 +119,13 @@ def main() -> int:
     for label, score in order:
         print(f"{score:.4f}  {label}")
     (top, top_score), (runner_up, runner_score) = order[0], order[1]
-    if top != FIXTURE_WORD:
-        print(f"FAIL: top-1 is {top!r}, expected {FIXTURE_WORD!r}; committed reference left untouched", file=sys.stderr)
+    # A tie (e.g. an all-zero embedding) would otherwise pass on insertion order alone.
+    if top != FIXTURE_WORD or top_score <= runner_score:
+        print(
+            f"FAIL: top-1 is {top!r} (margin {top_score - runner_score:.4f}); "
+            f"expected {FIXTURE_WORD!r} to win outright. Reference left untouched.",
+            file=sys.stderr,
+        )
         return 1
 
     REFERENCE_DIR.mkdir(parents=True, exist_ok=True)
