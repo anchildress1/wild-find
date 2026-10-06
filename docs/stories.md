@@ -12,7 +12,7 @@ Every runtime model (TinyCLIP, BioCLIP, Gemma) runs on the test phone, or nothin
 - [x] **S02 BioCLIP reference** (pipeline) — `make reference` embeds a CC0 northern red oak fixture (iNat 363799243, 3 agreeing IDs) and the word, hazard, and scene labels into `app/src/androidTest/assets/reference/`; fails unless the fixture word is top-1
 - [x] **S03 BioCLIP on device** (app) — ONNX Runtime loads `flora_student_fp32.onnx` (fp16 returns NaN on ARM); `make device-test` passes: cosine 1.0000 to the S02 reference, oak top-1, load 135 ms, embed 58 ms on the test phone
 - [x] **S04 Gemma on device** — E2B loads on the GPU without out-of-memory (2.1 GB loaded, 2.9 GB peak; 4.0 s warm load) and answers vision prompts in 2.3–2.9 s; too slow for the verify path, so boxing was dropped for deterministic live verify
-- [ ] **S09 Close-range threshold** — log live `LENS_FOCUS_DISTANCE` readings at near and far plants on the test phone (none logged yet) and set the "walk closer" threshold; PRD hole 19
+- [x] **S09 Close-range threshold** — `make focus-probe` logged live `LENS_FOCUS_DISTANCE` at far, closer, full-frame, and too-close shots, plus pinch zoom, on the test phone (a can, not a plant); rule: diopters × zoom ≥ 2.0 while autofocus reports focused; PRD hole 19
 - [ ] **S05 Gate harness** (app, debug only) — records per-frame verify time, first-eligible-frame to Found, hint latency, RAM, and a 20-minute live-camera thermal run to a local exportable log; holes 4, 10, 13
 - [ ] **S06 Plant gate** (pipeline + app) — export TinyCLIP ViT-8M's image encoder to fp32 ONNX plus text vectors for the exact Day-1 gate prompts; pin it; on-device parity test; gate every frame before BioCLIP; PRD hole 17
 - [ ] **S07 Gemma download** (core + app) — R9, Gemma only; see Download rules below; proven on the test phone: full pull, kill mid-pull + resume, Wi-Fi drop + resume, bad-hash retry
@@ -77,7 +77,7 @@ The vestige download broke when Hugging Face moved its redirect CDN (`cas-bridge
 
 ## Open holes
 
-New holes found while drafting these stories. PRD holes 3, 4, 5, 10, 12, 13, 17, 19 still stand. H-numbers below are this file's own list, separate from PRD hole numbers.
+New holes found while drafting these stories. PRD holes 3, 4, 5, 10, 12, 13, 17, 19 still stand (19 only until the field test). H-numbers below are this file's own list, separate from PRD hole numbers.
 
 | # | Hole | Proposed fix | Severity |
 | --- | --- | --- | --- |

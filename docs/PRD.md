@@ -74,7 +74,7 @@ Every call below is settled; open items live in Open Questions.
 | Local filter | A word is eligible with 25+ research-grade sightings in the region for the current calendar month, across all available years |
 | Hunt shape | First-ever hunt: grass tutorial, then 3 targets; later hunts: 3 targets; targets picked by sighting-weighted random |
 | Look-alikes | Pass automatically; never taught in v1 |
-| Framing | Live camera with a center reticle; "walk closer" when the autofocus distance, in diopters (0 = infinity, larger = nearer), is below the close-range threshold; no auto-capture without a focus reading; no Gemma boxes |
+| Framing | Live camera with a center reticle; "walk closer" when the focused autofocus distance in diopters (0 = infinity, larger = nearer) times the zoom ratio is under 2.0; pinch zoom allowed; no auto-capture without a focused reading; no Gemma boxes |
 | Scoring | One star per find; one leave-it star when the plant is clearly still rooted |
 | Hints | Three levels; Gemma reads the scene; facts only from fact cards; 20-word guard |
 | Fact cards | Gemma drafts from Wikipedia; Claude fact-checks at build time in a manual Claude Code pass; the post discloses it |
@@ -363,12 +363,12 @@ Verify runs on live camera frames, about 5 per second, with no Gemma call. Each 
 | --- | --- | --- | --- |
 | 1 | In a region TinyCLIP calls a plant (the reticle crop, the full frame, or both), a hazard species ranks in the top 5 of the species table | "That might be a plant we leave extra space around." | No |
 | 2 | TinyCLIP says the reticle crop isn't a plant | "Point the camera at a plant" | No |
-| 3 | No focus reading yet | "Tap the plant to focus" | No |
-| 4 | Autofocus distance is below the close-range threshold in diopters, so the subject is too far | "Walk closer" | No |
+| 3 | No focused reading: autofocus state is neither focused nor locked (passive focused or focused locked), or the distance is missing or negative | "Tap the plant to focus" | No |
+| 4 | Focus distance in diopters times the zoom ratio is under 2.0, so the subject looks too small | "Walk closer" | No |
 | 5 | The target is top-1 on the reticle crop, at or above its verify\_floor and past the margin if calibration adopts one, for 3 frames in a row | Auto-capture, then Found | Yes |
 | 6 | Anything else | Reticle guidance ("Put the plant in the circle"), with the hint button | No |
 
-No live focus distance has been read yet; the back camera only reports its focus calibration as approximate (Day 1). The close-range threshold is set on the device (hole 19). BioCLIP target labels per frame: this hunt's targets and other locally eligible words; hazards score against the species table. The grass tutorial skips row 1 and scores only its fixed label set (R3). A missed hazard never reads as safe: "Look. Photograph. Leave it where it grows." stays the rule on every screen.
+The close-range rule was set on the test phone on Day 1 (S09): `LENS_FOCUS_DISTANCE × CONTROL_ZOOM_RATIO >= 2.0`, read only while autofocus reports focused. Unfocused frames park the lens near 0.2 diopters, which would read as far. BioCLIP target labels per frame: this hunt's targets and other locally eligible words; hazards score against the species table. The grass tutorial skips row 1 and scores only its fixed label set (R3). A missed hazard never reads as safe: "Look. Photograph. Leave it where it grows." stays the rule on every screen.
 
 ```
 pass = target_score > runner_up_score          // top-1 is always required
@@ -476,7 +476,7 @@ No blockers remain; every hole below closes or falls back during the Day-1 gate 
 | 13 | No telemetry | Field failures stay invisible by design | Debug builds only: a local log the developer can export | Medium |
 | 17 | BioCLIP Mobile vs non-plant labels | Laptop side resolved on Day 1: 16 of 63 free non-plant photos scored a plant target top-1 on the reticle crop (20 of 63 on the full frame), and a pair of sneakers scored oak (0.605) above a real oak (0.572). TinyCLIP ViT-8M kept 176 of 176 plant photos and passed 2 of 63 non-plants on the full frame, so it gates every frame first. Open until the phone matches the laptop: BioCLIP fp16 was right on the laptop and NaN on the phone | Export, ship, and pass TinyCLIP phone parity (S06) before verify depends on it | High |
 | 18 | Gemma file variant | Resolved on Day 1: the pinned generic file loads and runs on the GPU backend, so the GPU-only build isn't needed | Keep the pinned file | Low |
-| 19 | Unverified focus distance | Day 1 logged only camera metadata: focus calibration approximate, no minimum focus distance. No live LENS_FOCUS_DISTANCE reading exists yet, and verify rows 3 and 4 depend on one | Log live readings at near and far plants on the test phone (S09) and set the threshold from them; if no usable reading arrives, verify keeps rejecting (fail closed) and S34 waits for another close-range signal measured on the phone | High |
+| 19 | Approximate focus distance | Resolved on the test phone for a can at desk range (S09): focused readings split far (1.8 or less) from closer (2.0 or more) in three runs, and every lens reports about the same distance as zoom switches lenses. Unmeasured outdoors on plants and beyond about 1 m | Rule: diopters × zoom ≥ 2.0 while focused; recheck wide-shot calls in the field test (S52) | Medium |
 
 ## Success Metrics
 
