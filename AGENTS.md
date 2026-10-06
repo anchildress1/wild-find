@@ -31,6 +31,7 @@ Spec of record: `docs/PRD.md`. Work queue: `docs/stories.md`. A change that cont
 ## Checks
 
 - `make ai-checks` before every commit. Warnings fail the build.
+- Every measurement (latency, memory, accuracy, model comparisons) goes into `docs/results/` the same day, with date, device, versions, and inputs. The challenge post is written from it; numbers that only live in chat are lost.
 - `make setup` once per clone (lefthook + uv sync).
 - Local settings live in `.env` (copy `.env.example`). New variables go in `.env.example` with a one-line comment. Never commit `.env`.
 - Public Kotlin and Python API gets a one-line KDoc/docstring; detekt and ruff `D1` enforce it. Inline comments explain why, never what.
