@@ -3,6 +3,7 @@
 import hashlib
 import io
 import json
+import math
 import sys
 import urllib.request
 from pathlib import Path
@@ -119,8 +120,8 @@ def main() -> int:
     for label, score in order:
         print(f"{score:.4f}  {label}")
     (top, top_score), (runner_up, runner_score) = order[0], order[1]
-    # A tie (e.g. an all-zero embedding) would otherwise pass on insertion order alone.
-    if top != FIXTURE_WORD or top_score <= runner_score:
+    # A tie or a NaN score (e.g. a broken encoder) would otherwise pass on insertion order alone.
+    if top != FIXTURE_WORD or not all(map(math.isfinite, scores.values())) or top_score <= runner_score:
         print(
             f"FAIL: top-1 is {top!r} (margin {top_score - runner_score:.4f}); "
             f"expected {FIXTURE_WORD!r} to win outright. Reference left untouched.",
