@@ -3,7 +3,7 @@
 import json
 import sys
 
-from wild_find_pipeline.labels import lacking_hazards, prompt
+from wild_find_pipeline.labels import embedding_versions, lacking_hazards, prompt
 from wild_find_pipeline.paths import HAZARD_VECTORS, ensure_artifact, pin
 from wild_find_pipeline.reference import embed_texts
 
@@ -20,6 +20,8 @@ def main() -> int:
             {
                 "text_model": {"repo": teacher["repo"], "revision": teacher["revision"]},
                 "taxa_labels_sha256": pin("taxa_labels")["sha256"],
+                "prompts": {taxon: prompt(taxon) for taxon in lacking},
+                "packages": embedding_versions(),
                 "species": {
                     taxon: vector.astype(float).tolist() for taxon, vector in zip(lacking, vectors, strict=True)
                 },

@@ -14,7 +14,14 @@ from pathlib import Path
 
 import numpy as np
 
-from wild_find_pipeline.labels import GATE_OTHER, GATE_PLANT, is_hazard, lacking_hazards
+from wild_find_pipeline.labels import (
+    GATE_OTHER,
+    GATE_PLANT,
+    embedding_versions,
+    is_hazard,
+    lacking_hazards,
+    prompt,
+)
 from wild_find_pipeline.paths import (
     GENERATED_ASSETS,
     GENERATED_STAMP,
@@ -115,8 +122,13 @@ def hazard_vectors(names: list[str]) -> dict[str, np.ndarray]:
         or stored_file.get("taxa_labels_sha256") != pin("taxa_labels")["sha256"]
     ):
         raise ValueError(f"{HAZARD_VECTORS.name} predates the current teacher or taxa pins; run make hazard-vectors")
+    if stored_file.get("packages") != embedding_versions():
+        raise ValueError(f"{HAZARD_VECTORS.name} came from other embedding package versions; run make hazard-vectors")
     stored = stored_file["species"]
     lacking = lacking_hazards(names)
+    prompts = stored_file.get("prompts", {})
+    if changed := [taxon for taxon in lacking if prompts.get(taxon) != prompt(taxon)]:
+        raise ValueError(f"the label prompt changed for {changed}; run make hazard-vectors")
     if missing := [taxon for taxon in lacking if taxon not in stored]:
         raise ValueError(f"no stored vector for {missing}; run make hazard-vectors")
     return {taxon: np.array(stored[taxon], dtype=np.float32) for taxon in lacking}

@@ -8,7 +8,7 @@ import pytest
 
 from wild_find_pipeline import assets, paths
 from wild_find_pipeline.assets import plant_share, species_table
-from wild_find_pipeline.labels import HAZARDS, is_hazard, lacking_hazards
+from wild_find_pipeline.labels import HAZARDS, embedding_versions, is_hazard, lacking_hazards
 from wild_find_pipeline.paths import pin
 
 
@@ -125,11 +125,14 @@ def stored(tmp_path, monkeypatch):
             {
                 "text_model": {"repo": pin("teacher")["repo"], "revision": pin("teacher")["revision"]},
                 "taxa_labels_sha256": pin("taxa_labels")["sha256"],
+                "prompts": {"Toxicodendron pubescens": "a photo of Toxicodendron pubescens."},
+                "packages": {"open-clip-torch": "3.3.0", "torch": "2.14.1"},
                 "species": {"Toxicodendron pubescens": [0.6, 0.8]},
             }
         )
     )
     monkeypatch.setattr(assets, "HAZARD_VECTORS", path)
+    monkeypatch.setattr(assets, "embedding_versions", lambda: {"open-clip-torch": "3.3.0", "torch": "2.14.1"})
 
 
 def test_hazard_vectors_returns_only_hazards_the_table_lacks(stored):
@@ -151,13 +154,15 @@ def test_hazard_vectors_fails_when_a_lacking_hazard_has_no_stored_vector(stored)
     [
         {"text_model": {"repo": "imageomics/bioclip-2.5-vith14", "revision": "old"}},
         {"taxa_labels_sha256": "0" * 64},
+        {"packages": {"open-clip-torch": "3.2.0", "torch": "2.14.1"}},
+        {"prompts": {"Toxicodendron pubescens": "a photo of poison oak."}},
     ],
 )
 def test_hazard_vectors_rejects_rows_built_against_other_pins(stored, stale):
     path = assets.HAZARD_VECTORS
     path.write_text(json.dumps({**json.loads(path.read_text()), **stale}))
 
-    with pytest.raises(ValueError, match="predates"):
+    with pytest.raises(ValueError, match="run make hazard-vectors"):
         assets.hazard_vectors(["Toxicodendron radicans"])
 
 
@@ -177,3 +182,11 @@ def test_publish_swaps_the_folder_and_stamps_inputs_last(tmp_path, monkeypatch):
     assert not (tmp_path / "assets.old").exists()
     manifest_key = "core/src/main/resources/models.properties"
     assert json.loads(stamp.read_text()) == {manifest_key: paths.file_sha256(paths.MANIFEST)}
+
+
+def test_embedding_versions_drop_local_labels(monkeypatch):
+    import importlib.metadata
+
+    monkeypatch.setattr(importlib.metadata, "version", {"open-clip-torch": "3.3.0", "torch": "2.14.1+cpu"}.__getitem__)
+
+    assert embedding_versions() == {"open-clip-torch": "3.3.0", "torch": "2.14.1"}

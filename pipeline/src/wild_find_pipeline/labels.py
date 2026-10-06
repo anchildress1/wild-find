@@ -34,6 +34,17 @@ def prompt(text: str) -> str:
     return f"a photo of {text}."
 
 
+# Packages whose version changes the teacher's text vectors; hazard_vectors.json records them.
+EMBEDDING_PACKAGES = ("open-clip-torch", "torch")
+
+
+def embedding_versions() -> dict[str, str]:
+    """Installed EMBEDDING_PACKAGES versions without local labels, so Linux "2.14.1+cpu" equals macOS "2.14.1"."""
+    from importlib.metadata import version
+
+    return {name: version(name).split("+")[0] for name in EMBEDDING_PACKAGES}
+
+
 def lacking_hazards(names: list[str] | set[str]) -> list[str]:
     """PRD hazard species missing from a species list, in HAZARDS order."""
     return [taxon for taxon in HAZARDS.values() if taxon not in names]
