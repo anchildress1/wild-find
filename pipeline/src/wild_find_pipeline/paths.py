@@ -9,6 +9,8 @@ MANIFEST = REPO / "core/src/main/resources/models.properties"
 REFERENCE_DIR = REPO / "app/src/androidTest/assets/reference"
 # Bundled into the APK by app/build.gradle.kts; gitignored, rebuilt by `make assets`.
 GENERATED_ASSETS = REPO / "app/generated/assets"
+# Input hashes of the last good make assets; app/build.gradle.kts refuses to package assets whose inputs changed.
+GENERATED_STAMP = REPO / "app/generated/inputs.json"
 # Teacher text vectors for hazard species the pinned species table lacks; committed so CI never needs the teacher.
 HAZARD_VECTORS = REPO / "pipeline/data/hazard_vectors.json"
 

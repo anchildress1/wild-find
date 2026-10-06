@@ -1,3 +1,6 @@
+import groovy.json.JsonSlurper
+import java.security.MessageDigest
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -41,10 +44,13 @@ androidComponents {
     }
 }
 
-// Without these files the APK installs fine and fails on the first camera frame, so no APK may skip them.
+// Without these files the APK installs fine and fails on the first camera frame, so no APK may skip them,
+// and stale ones from before a pin or pipeline change would package silently, so their input stamp must match.
 // Compiling alone doesn't need them, which keeps CodeQL's compile-only build working.
 val checkBundledAssets = tasks.register("checkBundledAssets") {
     val dir = layout.projectDirectory.dir("generated/assets")
+    val stamp = layout.projectDirectory.file("generated/inputs.json")
+    val repoRoot = rootProject.layout.projectDirectory
     val required = listOf(
         "flora_student_fp32.onnx",
         "plant_gate.onnx",
@@ -55,6 +61,16 @@ val checkBundledAssets = tasks.register("checkBundledAssets") {
     doLast {
         val missing = required.filterNot { dir.file(it).asFile.isFile }
         if (missing.isNotEmpty()) throw GradleException("missing bundled assets $missing; run make assets")
+        if (!stamp.asFile.isFile) throw GradleException("bundled assets have no input stamp; run make assets")
+        @Suppress("UNCHECKED_CAST")
+        val inputs = JsonSlurper().parse(stamp.asFile) as Map<String, String>
+        val stale = inputs.filter { (path, sha) ->
+            val file = repoRoot.file(path).asFile
+            !file.isFile ||
+                MessageDigest.getInstance("SHA-256").digest(file.readBytes())
+                    .joinToString("") { "%02x".format(it) } != sha
+        }.keys
+        if (stale.isNotEmpty()) throw GradleException("bundled assets are stale, $stale changed; run make assets")
     }
 }
 

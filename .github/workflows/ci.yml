@@ -49,7 +49,7 @@ jobs:
         id: assets
         uses: actions/cache@v6
         with:
-          path: app/generated/assets
+          path: app/generated
           key: assets-${{ hashFiles('core/src/main/resources/models.properties', 'pipeline/src/**', 'pipeline/data/**', 'pipeline/uv.lock') }}
 
       - name: Build bundled assets

@@ -159,3 +159,21 @@ def test_hazard_vectors_rejects_rows_built_against_other_pins(stored, stale):
 
     with pytest.raises(ValueError, match="predates"):
         assets.hazard_vectors(["Toxicodendron radicans"])
+
+
+def test_publish_swaps_the_folder_and_stamps_inputs_last(tmp_path, monkeypatch):
+    staging, target, stamp = tmp_path / "staging", tmp_path / "assets", tmp_path / "inputs.json"
+    staging.mkdir()
+    (staging / "new.bin").write_bytes(b"new")
+    target.mkdir()
+    (target / "old.bin").write_bytes(b"old")
+    (tmp_path / "assets.new").mkdir()  # leftover from an interrupted run
+    monkeypatch.setattr(assets, "INPUTS", (paths.MANIFEST,))
+
+    assets.publish(staging, target, stamp)
+
+    assert sorted(p.name for p in target.iterdir()) == ["new.bin"]
+    assert not (tmp_path / "assets.new").exists()
+    assert not (tmp_path / "assets.old").exists()
+    manifest_key = "core/src/main/resources/models.properties"
+    assert json.loads(stamp.read_text()) == {manifest_key: paths.file_sha256(paths.MANIFEST)}

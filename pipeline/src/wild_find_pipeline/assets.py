@@ -6,6 +6,7 @@ committed hazard_vectors.json (make hazard-vectors), so CI can run it.
 
 import hashlib
 import json
+import os
 import shutil
 import sys
 import tempfile
@@ -14,7 +15,17 @@ from pathlib import Path
 import numpy as np
 
 from wild_find_pipeline.labels import GATE_OTHER, GATE_PLANT, is_hazard, lacking_hazards
-from wild_find_pipeline.paths import GENERATED_ASSETS, HAZARD_VECTORS, MODEL_CACHE, ensure_artifact, pin
+from wild_find_pipeline.paths import (
+    GENERATED_ASSETS,
+    GENERATED_STAMP,
+    HAZARD_VECTORS,
+    MANIFEST,
+    MODEL_CACHE,
+    REPO,
+    ensure_artifact,
+    file_sha256,
+    pin,
+)
 
 # CLIP's ImageNet-style normalization, baked into plant_gate.onnx so the phone feeds plain 0..1 RGB like BioCLIP.
 CLIP_MEAN = (0.48145466, 0.4578275, 0.40821073)
@@ -111,8 +122,34 @@ def hazard_vectors(names: list[str]) -> dict[str, np.ndarray]:
     return {taxon: np.array(stored[taxon], dtype=np.float32) for taxon in lacking}
 
 
+# Everything whose change alters the bundled assets; the stamp records their SHA-256 for the Gradle check.
+INPUTS = (
+    MANIFEST,
+    HAZARD_VECTORS,
+    REPO / "pipeline/uv.lock",
+    *(REPO / "pipeline/src/wild_find_pipeline" / name for name in ("assets.py", "labels.py", "paths.py")),
+)
+
+
+def publish(staging: Path, target: Path = GENERATED_ASSETS, stamp: Path = GENERATED_STAMP) -> None:
+    """Swap staging in for target by rename, then write the input stamp last, so a crash never leaves a stamped mix."""
+    stamp.unlink(missing_ok=True)
+    fresh, old = target.with_name(target.name + ".new"), target.with_name(target.name + ".old")
+    for leftover in (fresh, old):
+        shutil.rmtree(leftover, ignore_errors=True)
+    shutil.copytree(staging, fresh)
+    if target.exists():
+        target.rename(old)
+    fresh.rename(target)
+    shutil.rmtree(old, ignore_errors=True)
+    hashes = {path.relative_to(REPO).as_posix(): file_sha256(path) for path in INPUTS}
+    pending = stamp.with_suffix(".tmp")
+    pending.write_text(json.dumps(hashes, indent=1, sort_keys=True) + "\n")
+    os.replace(pending, stamp)
+
+
 def main() -> int:
-    """Build every bundled asset into a temp dir, then replace app/generated/assets in one step."""
+    """Build every bundled asset into a temp dir, then swap it into app/generated/assets and stamp its inputs."""
     with tempfile.TemporaryDirectory() as tmp:
         staging = Path(tmp)
 
@@ -136,9 +173,7 @@ def main() -> int:
         }
         (staging / "plant_gate.json").write_text(json.dumps(gate) + "\n")
 
-        if GENERATED_ASSETS.exists():
-            shutil.rmtree(GENERATED_ASSETS)
-        shutil.copytree(staging, GENERATED_ASSETS)
+        publish(staging)
     hazards = sum(entry["hazard"] for entry in labels)
     print(
         f"OK: {GENERATED_ASSETS}: {len(labels)} species ({hazards} hazards, appended {list(extra)}), scale {scale:.4f}"
