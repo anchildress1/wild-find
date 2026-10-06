@@ -409,8 +409,11 @@ The final generated assets are the source of truth for Briar's look; the Rive ri
 | Asset | Used in | File |
 | --- | --- | --- |
 | Logo | Splash, About | Path pending (Open Questions) |
-| Briar body parts | Head, torso (front, back, sides), limbs, paws, tail segments, scarf, backpack, props; source for the Rive rig | assets/source/wild-find-briar-master-rig-1.png |
-| Briar face parts | Eyes, irises, pupils, lids, brows, mouths and interiors, teeth, noses, blush, whiskers | assets/source/wild-find-briar-master-rig-2.png |
+| Briar body parts | Ears, head, muzzle, neck fur with scarf, torso (front, back, sides), limbs, paws, tail segments; source for the Rive rig | assets/source/wild-find-briar-master-rig-1.png |
+| Briar alternate body | Unlabeled alternate torsos, head turns, tails, and limbs; reference only, no names or pivots | assets/source/wild-find-briar-master-rig-1b.png |
+| Briar face parts | Eyes, irises, pupils, lids, brows, mouths and interiors, teeth, noses, blush, whiskers; drawn at a different scale than the head, so each family needs a uniform fit scale | assets/source/wild-find-briar-master-rig-2.png |
+| Briar accessories | Scarves, backpack, hats, handheld props, environment bits, FX | assets/source/wild-find-briar-master-rig-3.png |
+| Briar rigging spec | Pivots, bone ends, hierarchy, draw order, rotation limits, and source exceptions for the Rive build | assets/source/briar-4-rigging-specification.pdf |
 | Concept board | Poses, icon ideas, palette; reference only, broken alpha | assets/source/wild-find-sprite-1.png |
 | Briar rig | Rive state machine: welcome; searching or hint; success or found; retry or not quite; hunt complete | Path pending |
 | Category icons | One per icon\_category: tree, flower, fern, grass, vine, shrub, moss, other | Path pending |
