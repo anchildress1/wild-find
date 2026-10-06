@@ -406,7 +406,8 @@ The final generated assets are the source of truth for the mascot's look; the Ri
 | Asset | Used in | File |
 | --- | --- | --- |
 | Logo | Splash, About | Path pending (Open Questions) |
-| Mascot rig parts | Layered parts, 11 expression heads, turnaround; source for the Rive rig | assets/source/wild-find-rigging-sheet.png |
+| Mascot rig parts | Body parts, tail segments, turnaround; source for the Rive rig | assets/source/wild-find-briar-rig-1.png |
+| Mascot face parts | Head bases, eyes, lids, brows, mouths, muzzle, 24 expression heads | assets/source/wild-find-briar-rig-2b.png (2a is an earlier pass) |
 | Concept board | Poses, icon ideas, palette; reference only, broken alpha | assets/source/wild-find-sprite-1.png |
 | Mascot rig | Rive state machine: welcome; searching or hint; success or found; retry or not quite; hunt complete | Path pending |
 | Category icons | One per icon\_category: tree, flower, fern, grass, vine, shrub, moss, other | Path pending |
