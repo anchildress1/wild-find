@@ -89,8 +89,8 @@ def pinned(tmp_path, monkeypatch):
     )
     calls = []
 
-    def download(repo, filename, revision, local_dir, body=data):
-        calls.append((repo, filename, revision))
+    def download(repo, filename, revision, local_dir, force_download, body=data):
+        calls.append((repo, filename, revision, force_download))
         (local_dir / filename).write_bytes(body)
 
     monkeypatch.setitem(sys.modules, "huggingface_hub", types.SimpleNamespace(hf_hub_download=download))
@@ -101,7 +101,15 @@ def test_ensure_artifact_downloads_the_pinned_revision_when_missing(pinned):
     cache, manifest, calls = pinned
 
     assert paths.ensure_artifact("toy", cache, manifest) == cache / "toy.onnx"
-    assert calls == [("org/toy", "toy.onnx", "abc")]
+    assert calls == [("org/toy", "toy.onnx", "abc", True)]
+
+
+def test_ensure_artifact_force_redownloads_a_corrupt_cached_file(pinned):
+    cache, manifest, calls = pinned
+    (cache / "toy.onnx").write_bytes(b"MODEL-BYTES")
+
+    assert paths.ensure_artifact("toy", cache, manifest).read_bytes() == b"model-bytes"
+    assert calls == [("org/toy", "toy.onnx", "abc", True)]
 
 
 def test_ensure_artifact_skips_the_download_when_already_verified(pinned):
@@ -115,7 +123,9 @@ def test_ensure_artifact_skips_the_download_when_already_verified(pinned):
 
 def test_ensure_artifact_rejects_downloaded_bytes_that_miss_the_pins(pinned, monkeypatch):
     cache, manifest, _ = pinned
-    bad = types.SimpleNamespace(hf_hub_download=lambda repo, f, revision, local_dir: (local_dir / f).write_bytes(b"x"))
+    bad = types.SimpleNamespace(
+        hf_hub_download=lambda repo, f, revision, local_dir, force_download: (local_dir / f).write_bytes(b"x")
+    )
     monkeypatch.setitem(sys.modules, "huggingface_hub", bad)
 
     with pytest.raises(ValueError, match="does not match"):

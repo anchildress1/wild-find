@@ -60,5 +60,6 @@ def ensure_artifact(model: str, cache: Path = MODEL_CACHE, manifest: Path = MANI
 
         pins = pin(model, manifest)
         # The start URL is pinned (repo, revision, file); trust comes from size + SHA-256, never the CDN host.
-        hf_hub_download(pins["repo"], pins["file"], revision=pins["revision"], local_dir=cache)
+        # force_download: a corrupt file whose local metadata matches the pinned commit is otherwise kept as is.
+        hf_hub_download(pins["repo"], pins["file"], revision=pins["revision"], local_dir=cache, force_download=True)
         return verified_artifact(model, cache, manifest)
