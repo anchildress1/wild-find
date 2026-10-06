@@ -32,4 +32,6 @@ Spec of record: `docs/PRD.md`. Work queue: `docs/stories.md`. A change that cont
 
 - `make ai-checks` before every commit. Warnings fail the build.
 - `make setup` once per clone (lefthook + uv sync).
+- Model pins live in `core/src/main/resources/models.properties`. `make fetch-models` then `make push-models` sideloads them to the test phone.
+- Never `adb uninstall` the app on the test phone; it deletes the 2.6 GB model. `make install` keeps data.
 - Unrunnable check (on-device, field, airplane mode) → stop and hand it to the user. Never tick it yourself.

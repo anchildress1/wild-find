@@ -8,7 +8,7 @@ Module key: **core** = pure Kotlin, JVM-tested · **app** = Android · **pipelin
 
 Both models run on the test phone, or nothing else starts.
 
-- [ ] **S01 Sideload models** (app, Makefile) — `make push-models` streams both pinned files into app storage over adb; hole 12
+- [x] **S01 Sideload models** (Makefile) — `make fetch-models` pulls and verifies both pins into `.models/`; `make push-models` streams them into the debug app's `no_backup/models` over adb and verifies SHA-256 on the device; hole 12
 - [ ] **S02 BioCLIP reference** (pipeline) — embed one fixture image and the scene + hazard labels on the laptop; write expected vectors
 - [ ] **S03 BioCLIP on device** (app) — ONNX Runtime loads `flora_student_fp16.onnx`; fixture embedding matches S02 within tolerance; labels score correctly
 - [ ] **S04 Gemma boxes** (core + app) — LiteRT-LM loads E2B; box call returns JSON that the core box parser accepts (clamp, reject inverted/zero-area, keep 5 largest)
