@@ -9,7 +9,7 @@ wild-find sends kids 8 and up outside to find and photograph plant groups common
 |  |  |
 | --- | --- |
 | Platform | Native Android, Kotlin; one Android test phone |
-| Models | Gemma 4 E2B boxes plants and writes hints; BioCLIP 2.5 Mobile verifies the plant group |
+| Models | BioCLIP 2.5 Mobile verifies the plant group live in the camera; Gemma 4 E2B writes level-2 hints |
 | Network | One iNaturalist query per hunt, requiring at most three paginated HTTP requests, sent with coarse region coordinates |
 | Region | West Georgia region, key 34\_-85: a 75 km radius around (34, -85) that covers Carrollton |
 | Content | Kid words common in the West Georgia region, filtered to the current calendar month |
@@ -65,7 +65,7 @@ Every call below is settled; open items live in Open Questions.
 | Platform | Native Android in Kotlin; one Android test phone; no iOS; no Vestige code |
 | Repo | wild-find; new repo started inside the challenge window; MIT license |
 | Runtime models | Open-weight only, all running on the phone |
-| Model roles | Gemma boxes plants and writes hints; BioCLIP 2.5 Mobile verifies the plant group; full BioCLIP 2.5 makes text embeddings at build time; Pl@ntNet rejected |
+| Model roles | BioCLIP 2.5 Mobile verifies the plant group on the reticle crop; Gemma writes level-2 hints and never sits in the verify path; full BioCLIP 2.5 makes text embeddings at build time; Pl@ntNet rejected |
 | Safety model | Look, photograph, leave it where it grows. Hazard recognition is an extra warning, never a safety guarantee; the app never tells a child a plant is safe |
 | Difficulty | Selector exists; v1 ships Low only |
 | Region | West Georgia region only, key 34\_-85 |
@@ -74,7 +74,7 @@ Every call below is settled; open items live in Open Questions.
 | Local filter | A word is eligible with 25+ research-grade sightings in the region for the current calendar month, across all available years |
 | Hunt shape | First-ever hunt: grass tutorial, then 3 targets; later hunts: 3 targets; targets picked by sighting-weighted random |
 | Look-alikes | Pass automatically; never taught in v1 |
-| Framing | A plant box must cover 15% of the frame, or the kid hears "walk closer" |
+| Framing | Live camera with a center reticle; "walk closer" when autofocus distance puts the subject past the close-range threshold; no Gemma boxes |
 | Scoring | One star per find; one leave-it star when the plant is clearly still rooted |
 | Hints | Three levels; Gemma reads the scene; facts only from fact cards; 20-word guard |
 | Fact cards | Gemma drafts from Wikipedia; Claude fact-checks at build time in a manual Claude Code pass; the post discloses it |
@@ -125,7 +125,7 @@ Ten P0s ship the hunt; one P1 follows; four P2s shape the design now. Requiremen
 | R2 | Hunt list | One iNaturalist query per hunt, requiring at most three paginated HTTP requests: coarse region coordinates, current calendar month across all available years, plants, research grade; a result counts toward a target when its taxon id equals the target's taxon\_id or the target's taxon\_id is in its ancestor\_ids; eligible at 25+ sightings; fewer than 3 eligible widens the radius to 150 km once; cached under the versioned cache key; location denied falls back to a manual region pick; fewer than 3 eligible words shows the coverage message |
 | R3 | Grass tutorial | The first-ever hunt opens with grass, followed by 3 normal targets; any grass close-up passes; lawn is not a scene label for this target; done in under 60 seconds; never repeats once completed |
 | R4 | Target pick | 3 targets per hunt by sighting-weighted random from eligible words; a hazard is never a target |
-| R5 | Verify | Follows the Runtime Logic verify table; a pass needs a box covering 15%+ of the frame with the target top-1 at or above its verify\_floor; a hazard match shows a warning and gives no star; no result is ever presented as evidence of safety |
+| R5 | Verify | Follows the Runtime Logic verify table, live while the camera is open; a find needs the subject in close range and the target top-1 on the reticle crop at or above its verify\_floor for 3 frames in a row, then auto-captures; a hazard match shows a warning and gives no star; no result is ever presented as evidence of safety |
 | R6 | Hints | Tap for a hint; levels 1 and 3 are precomputed from the fact card at hunt start; level 2 uses the most recent failed verify photo, otherwise the current camera frame at tap time, with no separate hint photo; guards reject the target name, "I see", "there is", numbers not on the card, and anything over 20 words; retry once, then a template hint |
 | R7 | Privacy | Android coarse location permission only; no fine location requested; coordinates rounded again before the query; no photo or precise location leaves the device; no account; no analytics |
 | R8 | Offline | Both models on-device; a cached hunt completes in airplane mode; with no cache and no network, the bundled West Georgia fallback list runs the hunt |
@@ -192,7 +192,7 @@ flowchart TD
         A2["Local menu<br/>coarse region; 25+ sightings"]
         A3["Pick the hunt<br/>grass first, then 3 weighted"]
         A4["Hint on tap<br/>Gemma reads the scene; card facts"]
-        A5["Verify the photo<br/>Gemma boxes every plant<br/>BioCLIP verifies each crop"]
+        A5["Verify live<br/>focus distance: walk closer<br/>BioCLIP on the reticle crop"]
         M["Models on the phone<br/>Gemma 4 E2B, 2.59 GB<br/>BioCLIP Mobile, 47.0 MB"]
         A1 --> A2 --> A3 --> A4 --> A5
         M --> A4
@@ -214,7 +214,7 @@ flowchart TD
     E4 --> M
 ```
 
-The highlighted box is the core loop: Gemma finds the plants, and BioCLIP verifies the plant group.
+The core loop runs live in the camera: focus distance decides "walk closer", and BioCLIP verifies the plant group on the reticle crop.
 
 ## Build Pipeline
 
@@ -329,21 +329,8 @@ A mismatch on schema\_version, menu\_version, region, or month discards the entr
 | Model | Input | Output |
 | --- | --- | --- |
 | BioCLIP 2.5 Mobile | 224 x 224 RGB, values 0 to 1, rotation normalized; normalization is baked in | 1024-d unit vector; score is a dot product with labels.npy rows |
-| Gemma, box call | Rotation-normalized photo plus "box every plant" | Box JSON (below) |
 | Gemma, scene call | Scene image plus the fixed tag list | JSON array of tags |
 | Gemma, hint call | Fact card, tags, hint level | One line, 20 words or fewer |
-
-**Gemma box JSON**
-
-```json
-{ "boxes": [ { "x1": 120, "y1": 180, "x2": 780, "y2": 920 } ] }
-```
-
-- Integers on a 0 to 1000 grid; (x1, y1) is top-left, (x2, y2) is bottom-right
-- Values slightly outside 0 to 1000 are clamped; inverted or zero-area boxes are rejected
-- More than 5 boxes: keep the 5 largest by area
-- Coordinates scale to the rotation-normalized image before the 15% pad and crop
-- Malformed JSON: retry once, then run the full-frame scene check
 
 **The iNaturalist query**
 
@@ -357,19 +344,18 @@ One query per hunt, requiring at most three paginated HTTP requests. month means
 
 ## Runtime Logic
 
-The hazard check runs first on every photo as an extra warning; a find needs a big enough box with the target on top; no result ever means a plant is safe.
+Verify runs on live camera frames, about 5 per second, with no Gemma call. The hazard check runs first as an extra warning; a find needs the subject in close range and the target on top for 3 frames in a row; no result ever means a plant is safe.
 
 **Verify, checked in order**
 
 | # | Condition | Kid sees | Star |
 | --- | --- | --- | --- |
-| 1 | A hazard label is top-1 in any box or the full frame | "That might be a plant we leave extra space around." | No |
-| 2 | Gemma returns no valid plant box | Scene message, such as "Lots of grass! Look closer for the clover" | No |
-| 3 | The target is top-1 in a box covering 15%+ of the frame, at or above its verify\_floor, and past the margin if calibration adopts one | Found | Yes |
-| 4 | The target is top-1 only in a smaller box | "Walk closer" | No |
-| 5 | Anything else | "Not quite, keep looking" plus the hint button | No |
+| 1 | A hazard label is top-1 on the reticle crop or the full frame | "That might be a plant we leave extra space around." | No |
+| 2 | Autofocus distance puts the subject past the close-range threshold | "Walk closer" | No |
+| 3 | The target is top-1 on the reticle crop, at or above its verify\_floor and past the margin if calibration adopts one, for 3 frames in a row | Auto-capture, then Found | Yes |
+| 4 | Anything else | Reticle guidance ("Put the plant in the circle"), with the hint button | No |
 
-Scoring labels per photo: this hunt's targets, other locally eligible words, hazards, and scene labels. The grass tutorial drops lawn from the scene labels. A missed hazard never reads as safe: "Look. Photograph. Leave it where it grows." stays the rule on every screen.
+The back camera reports focus distance as approximate (Day 1); the close-range threshold is set on the device (hole 19). Scoring labels per frame: this hunt's targets, other locally eligible words, hazards, and scene labels. The grass tutorial drops lawn from the scene labels. A missed hazard never reads as safe: "Look. Photograph. Leave it where it grows." stays the rule on every screen.
 
 If Day 1 shows BioCLIP Mobile can't handle the scene and non-plant labels, Gemma answers plant, non-plant, or screen, and BioCLIP keeps plant-group verification only.
 
@@ -433,8 +419,8 @@ Every failure degrades to a playable hunt or a plain message; none crash or stal
 | Not enough free storage | Stop before downloading and show the space needed |
 | Model download fails | Resume where it stopped; Wi-Fi only |
 | SHA-256 mismatch | Delete the file and download again |
-| Gemma box output won't parse | Retry once, then run the full-frame scene check |
-| Gemma too slow or out of memory | Release and reload once; then score the full frame without boxes |
+| Autofocus reports no focus distance | Skip the walk-closer check; verify on the reticle crop alone |
+| Gemma too slow or out of memory | Release and reload once; then serve the template hint |
 | A hint fails the guards twice | Template hint built from the card fields |
 | Camera permission denied | Explain why the game needs it; the hunt can't start |
 | App sent to the background mid-hunt | The current hunt's state is restored |
@@ -446,7 +432,7 @@ Each choice below buys speed or privacy for v1 and names the point where it gets
 | Choice | What it costs | Revisit when |
 | --- | --- | --- |
 | BioCLIP 2.5 Mobile over full BioCLIP | Trained on plants only; misses 28% at species level | Medium difficulty ships, or the holdout set misses 90% |
-| Gemma boxes before BioCLIP | An extra Gemma call per photo; E2B boxes are loose | Verify runs over 5 s: cut Gemma calls, keep the architecture |
+| Deterministic framing, no Gemma boxes | Approximate focus distance is coarse; clutter inside the reticle can lower the target's score | Holdout false-pass rate over 5%, or the field test shows wrong "walk closer" calls |
 | One iNaturalist query at app time | Needs signal once per region and month; coarse coordinates and request metadata reach iNaturalist | A fully offline mode is required |
 | Menu built for one region | Testers outside west Georgia get the coverage message | A second region: rerun the build gates for it |
 | Fixed 3-target hunt | Less variety per hunt | Field tests show hunts end too fast |
@@ -463,14 +449,15 @@ No blockers remain; every hole below closes or falls back during the Day-1 gate 
 | # | Hole | Why it matters | Fix | Severity |
 | --- | --- | --- | --- | --- |
 | 3 | Label text format | Day 1: with common names, a white oak photo scored "poison oak" top-1 on both the teacher and the mobile model; scientific names put oak top-1 on both | Plant labels embed as "a photo of <scientific name>."; scene labels use common words in the same template ("a photo of lawn."); confirm on the calibration set | High |
-| 4 | Latency is unmeasured | A verify runs a Gemma vision call plus BioCLIP; a level-2 hint runs Gemma twice | The Day-1 gate measures both; if too slow, cut Gemma calls and keep the architecture | High |
+| 4 | Latency | Day 1: verify is BioCLIP alone, 60 ms per crop, so live frames fit easily. Gemma (hints only) loads in 4.0 s warm, 9.9 s first ever, peaks at 2.9 GB, and took 2.3 to 2.9 s per warm vision call (measured on box prompts before boxing was dropped). Level-2 hint latency is still unmeasured | Measure the hint call in the gate harness (S05) | Medium |
 | 5 | Kids read hints on screen | Reading pulls eyes down, against the theme | Read hints aloud with Android's on-device text-to-speech; confirm an offline voice on the test phone | High |
-| 8 | Loose Gemma boxes | One E2B test saw a box drift off its object | Pad crops 15%; check boxes on the calibration set | Medium |
-| 10 | Heat and battery | Repeated Gemma runs in sun can throttle the phone | The Day-1 gate runs a 20-minute session; cap Gemma calls per target | Medium |
+| 8 | Loose Gemma boxes | Resolved on Day 1: verify no longer uses Gemma boxes | None | Low |
+| 10 | Heat and battery | Live BioCLIP at about 5 frames a second plus the camera; Gemma only on hint taps | The gate harness runs a 20-minute live-camera session | Medium |
 | 12 | Home Wi-Fi download | A Vestige model download broke when Hugging Face moved its redirect CDN and the app had the old host pinned; filtered networks can also block the CDN | Pin the Hugging Face start URL, never the CDN host; trust bytes + SHA-256; re-resolve redirects on resume; the Day-1 gate runs the full download and an interrupted resume on the test phone | High |
 | 13 | No telemetry | Field failures stay invisible by design | Debug builds only: a local log the developer can export | Medium |
 | 17 | BioCLIP Mobile vs non-plant labels | The student trained on plant photos only; labels like person or screen may not score cleanly | The Day-1 gate tests them; on failure, Gemma rejects non-plants and BioCLIP keeps plant verification | High |
-| 18 | Gemma file variant | The repo also has a 2,008,432,640-byte GPU build; the pinned generic file may run slower or heavier | Measure the pinned file on Day 1; switching means re-pinning the file name, bytes, and SHA-256 | Medium |
+| 18 | Gemma file variant | Resolved on Day 1: the pinned generic file loads and runs on the GPU backend, so the GPU-only build isn't needed | Keep the pinned file | Low |
+| 19 | Approximate focus distance | The back camera reports focus distance as approximate, so "walk closer" may fire too early or late | Set the close-range threshold by pointing the test phone at near and far plants; tune in the field test | Medium |
 
 ## Success Metrics
 
@@ -509,7 +496,8 @@ Day 1 is a go or no-go gate: both models must run on the test phone before UI or
    - Android output matches Python for the same input
    - Build-time text embeddings score correctly against mobile image embeddings
    - Gemma loads without running out of memory
-   - Gemma boxes plants
+   - Gemma answers a vision prompt (boxes measured on Day 1, then dropped from verify)
+   - Autofocus distance read live from the back camera
    - End-to-end verify latency measured
    - Hint latency measured
    - Phone RAM recorded

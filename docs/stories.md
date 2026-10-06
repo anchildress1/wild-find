@@ -11,7 +11,8 @@ Both models run on the test phone, or nothing else starts.
 - [x] **S01 Sideload models** (Makefile) — `make fetch-models` pulls and verifies both pins into `.models/`; `make push-models` streams them into the debug app's `no_backup/models` over adb and verifies SHA-256 on the device; hole 12
 - [x] **S02 BioCLIP reference** (pipeline) — `make reference` embeds a CC0 northern red oak fixture (iNat 363799243, 3 agreeing IDs) and the word, hazard, and scene labels into `app/src/androidTest/assets/reference/`; fails unless the fixture word is top-1
 - [x] **S03 BioCLIP on device** (app) — ONNX Runtime loads `flora_student_fp32.onnx` (fp16 returns NaN on ARM); `make device-test` passes: cosine 1.0000 to the S02 reference, oak top-1, load 135 ms, embed 58 ms on the test phone
-- [ ] **S04 Gemma boxes** (core + app) — LiteRT-LM loads E2B; box call returns JSON that the core box parser accepts (clamp, reject inverted/zero-area, keep 5 largest)
+- [x] **S04 Gemma on device** — E2B loads on the GPU without out-of-memory (2.1 GB loaded, 2.9 GB peak; 4.0 s warm load) and answers vision prompts in 2.3–2.9 s; too slow for the verify path, so boxing was dropped for deterministic live verify
+- [ ] **S09 Close-range threshold** — read live autofocus distance on the test phone and set the "walk closer" threshold; PRD hole 19
 - [ ] **S05 Gate harness** (app, debug only) — records verify latency, hint latency, RAM, and a 20-minute thermal run to a local exportable log; holes 4, 10, 13, 18
 - [ ] **S06 Scene label verdict** (app) — scene + non-plant labels vs BioCLIP Mobile; on failure switch to the Gemma plant / non-plant / screen fallback; hole 17
 - [ ] **S07 Model download** (core + app) — R9; see Download rules below; proven on the test phone: full pull, kill mid-pull + resume, Wi-Fi drop + resume, bad-hash retry
@@ -34,7 +35,7 @@ Both models run on the test phone, or nothing else starts.
 - [ ] **S22 Sightings** — aggregate `species_counts` pages via id or `ancestor_ids`; eligibility at 25+; widen to 150 km once when < 3 eligible; R2
 - [ ] **S23 Cache rules** — versioned entry; mismatch on schema, menu, region, month, or radius discards; H3
 - [ ] **S24 Hunt pick** — sighting-weighted random, 3 targets, never a hazard; grass tutorial first-ever only; R3, R4, H1
-- [ ] **S25 Verify decision** — PRD verify table in order; 15% box rule; floor + optional margin; multi-photo-ready input; R5, R12
+- [ ] **S25 Verify decision** — PRD verify table in order over live frames: hazard, close range, target top-1 for 3 frames; floor + optional margin; R5, R12
 - [ ] **S26 Hint guards** — target name, "I see", "there is", off-card numbers, 20 words; retry once → template; R6
 - [ ] **S27 Hunt state** — current hunt survives process death; tutorial/opener flags persist; H2
 
@@ -44,7 +45,7 @@ Both models run on the test phone, or nothing else starts.
 - [ ] **S31 Safety opener** — R1, placeholder art, replayable, banned-copy check in tests
 - [ ] **S32 Location** — coarse permission only, manual region pick on deny; coverage message off-region; R2, R7
 - [ ] **S33 iNat client** — one query, ≤ 3 pages (≤ 6 on the widen path), named User-Agent, 429 Retry-After; R2
-- [ ] **S34 Camera + verify flow** — CameraX capture, rotation normalize, Gemma boxes → BioCLIP crops → S25 → kid message; R5
+- [ ] **S34 Camera + verify flow** — CameraX preview at about 5 fps: autofocus distance → "walk closer"; reticle crop → BioCLIP → S25 → auto-capture and kid message; R5
 - [ ] **S35 Hints** — levels 1/3 precomputed at hunt start, level 2 from last failed photo or current frame; R6
 - [ ] **S36 Hunt complete** — success animation, stars, Hunt Again / Home; R15
 - [ ] **S37 Offline** — airplane-mode hunt from cache or bundled fallback; R8
