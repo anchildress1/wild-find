@@ -94,7 +94,7 @@ pokeweed              10       9              7       5   +0.065       -0.023   
 sweetgum              10       0              0       0   -0.161       -0.247    -0.091
 violet                10       0              0       0   -0.226       -0.338    -0.099
 
-## Species-table rule: warn when a hazard species is in the top k (worse of full frame and reticle)
+## Species-table rule: warn when a hazard species is in the top k of a region the plant gate passes
 
 top  1: hazards caught 43/52 (83%), safe photos warned 1/253 (0.4%)
 top  2: hazards caught 44/52 (85%), safe photos warned 1/253 (0.4%)

@@ -175,8 +175,9 @@ def species_hazards() -> None:
 
 
 def species_rank_rule() -> None:
-    """Hazards caught vs safe photos warned when a hazard species ranks in the top k (worse region)."""
-    section("Species-table rule: warn when a hazard species is in the top k (worse of full frame and reticle)")
+    """Hazards caught vs safe photos warned when a hazard species ranks in the top k in a TinyCLIP-plant region."""
+    section("Species-table rule: warn when a hazard species is in the top k of a region the plant gate passes")
+    share = plant_shares()
     best: dict = {}
     kind: dict = {}
     with (OUT / "species_scores.csv").open() as fh:
@@ -185,7 +186,9 @@ def species_rank_rule() -> None:
                 continue
             g = group_of(r["photo"]) if r["set"] == "plant" else r["set"]
             kind[r["photo"]] = "hazard" if g in HAZARD_GROUPS else "safe"
-            best[r["photo"]] = min(best.get(r["photo"], 10**9), int(r["best_hazard_rank"]))
+            gated = share[(CHOSEN_GATE, r["set"], r["photo"], r["region"])] > 0.5
+            rank = int(r["best_hazard_rank"]) if gated else 10**9
+            best[r["photo"]] = min(best.get(r["photo"], 10**9), rank)
     for k in (1, 2, 3, 5, 10):
         caught = sum(1 for p, v in best.items() if kind[p] == "hazard" and v <= k)
         warned = sum(1 for p, v in best.items() if kind[p] == "safe" and v <= k)

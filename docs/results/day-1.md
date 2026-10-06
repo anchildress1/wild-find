@@ -134,7 +134,7 @@ Plants missing from the list get forced onto the nearest label, often a hazard. 
 
 BioCLIP Mobile ships a table of 4,271 plant species (MIT); Atlantic poison oak (*Toxicodendron pubescens*) was missing, so one row was added in our prompt format. That format lines up with the table: our embedding of "a photo of *Toxicodendron radicans*." scores 0.975 against the table's own row.
 
-| Rule (worse of full frame and reticle) | Hazards caught (52) | Safe photos warned (253) |
+| Rule (any region the plant gate passes) | Hazards caught (52) | Safe photos warned (253) |
 | --- | --- | --- |
 | Hazard species top-1 | 43 (83%) | 1 (0.4%) |
 | Hazard species in the top 3 | 45 (87%) | 1 (0.4%) |
