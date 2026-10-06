@@ -5,8 +5,11 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# Values already in the shell environment win over .env, as with any dotenv loader.
+shell_serial="${ANDROID_SERIAL:-}" shell_package="${WILDFIND_PACKAGE:-}"
 # shellcheck source=/dev/null
 [ -f "$ROOT/.env" ] && { set -a; . "$ROOT/.env"; set +a; }
+ANDROID_SERIAL="${shell_serial:-${ANDROID_SERIAL:-}}" WILDFIND_PACKAGE="${shell_package:-${WILDFIND_PACKAGE:-}}"
 # adb treats an empty ANDROID_SERIAL as a device named "".
 [ -n "${ANDROID_SERIAL:-}" ] || unset ANDROID_SERIAL
 MANIFEST="$ROOT/core/src/main/resources/models.properties"

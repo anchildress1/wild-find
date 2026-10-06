@@ -2,7 +2,12 @@
 
 SHELL := /bin/bash
 
+# Values already in the shell environment win over .env, as with any dotenv loader.
+SHELL_ANDROID_SERIAL := $(ANDROID_SERIAL)
+SHELL_WILDFIND_PACKAGE := $(WILDFIND_PACKAGE)
 -include .env
+ANDROID_SERIAL := $(or $(SHELL_ANDROID_SERIAL),$(ANDROID_SERIAL))
+WILDFIND_PACKAGE := $(or $(SHELL_WILDFIND_PACKAGE),$(WILDFIND_PACKAGE))
 export WILDFIND_PACKAGE
 # adb treats an empty ANDROID_SERIAL as a device named ""; export it only when set.
 ifneq ($(strip $(ANDROID_SERIAL)),)
