@@ -24,7 +24,7 @@ Photo sets: 176 CC0 iNaturalist plant photos (10 each of oak, pine, maple, sweet
 | --- | --- |
 | Phone | Samsung Galaxy S24 Ultra (SM-S928U), Snapdragon 8 Gen 3 (SM8650), 11 GB RAM, Android 16 (SDK 36) |
 | On-device runtimes | ONNX Runtime Android 1.30.0 (CPU); LiteRT-LM Android 0.17.1 (GPU text and vision backends) |
-| Laptop | macOS, ONNX Runtime 1.30.0, open_clip 3.3.0, torch 2.14.1 |
+| Laptop | Apple M4 Max, macOS 26.5.2, Python 3.13.14 (uv 0.12.13), ONNX Runtime 1.30.0, open_clip 3.3.0, torch 2.14.1, Transformers 5.19.0, Pillow 12.3.0, NumPy 2.5.3 |
 | Gemma | `gemma-4-E2B-it.litertlm`, litert-community @ b3ca0d2 |
 | BioCLIP Mobile | crazedcodernate/bioclip-2.5-mobile-fastvit @ 29b474e (fp16 and fp32 files) |
 | BioCLIP teacher | imageomics/bioclip-2.5-vith14 @ 6e3d04e |

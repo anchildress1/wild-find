@@ -2,7 +2,7 @@
 
 Run from the repo root (downloads photos listed in docs/results/day-1-photos.tsv into .models/day1-photos):
 
-    uv run --project pipeline --group reference --with transformers python docs/results/day-1/run_experiments.py
+    uv run --project pipeline --group reference --with transformers==5.19.0 python docs/results/day-1/run_experiments.py
 
 BioCLIP scores here equal the phone's: S03 measured phone-vs-laptop cosine 0.9999999988.
 """

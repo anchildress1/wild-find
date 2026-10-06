@@ -17,7 +17,7 @@ Every runtime model (TinyCLIP, BioCLIP, Gemma) runs on the test phone, or nothin
 - [ ] **S06 Plant gate** (pipeline + app) — export TinyCLIP ViT-8M's image encoder to fp32 ONNX plus text vectors for the exact Day-1 gate prompts; pin it; on-device parity test; gate every frame before BioCLIP; PRD hole 17
 - [ ] **S07 Gemma download** (core + app) — R9, Gemma only; see Download rules below; proven on the test phone: full pull, kill mid-pull + resume, Wi-Fi drop + resume, bad-hash retry
 - [x] **S08 Debug/release side by side** (app) — debug uses `applicationIdSuffix = ".debug"` so a release install never wipes the debug app's 2.6 GB model on the one test phone
-- [ ] **S08b Bundle the small models** (build) — `make` fetches BioCLIP (SHA-checked) and exports TinyCLIP into gitignored generated assets; CI does the same with a cache; the app loads both from the APK
+- [ ] **S08b Bundle the small models** (build) — `make` fetches BioCLIP and the taxa table and labels (SHA-checked), builds species_table.npy and species_labels.json (missing hazard species appended, hazard flags set), and exports TinyCLIP into gitignored generated assets; CI does the same with a cache; the app loads all of them from the APK
 
 ## Build pipeline · Oct 7
 

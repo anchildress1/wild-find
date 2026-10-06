@@ -229,7 +229,7 @@ Runs once on the laptop in Python with uv; a word ships only after it passes eve
 8. **Ship review:** Ashley reviews the final menu before it ships
 9. **Embeddings:** the BioCLIP 2.5 ViT-H text encoder writes one vector per menu word and per tutorial label (text format per hole 3); the TinyCLIP text encoder writes the plant-gate vectors
 10. **Fallback:** the same gates produce fallback\_october\_west\_georgia.json from October sightings, with no live counts
-11. **Output:** menu.json, hazards.json, labels.npy, labels.json, the plant gate (plant_gate.onnx, plant_gate.json), and the fallback file
+11. **Output:** menu.json, hazards.json, labels.npy, labels.json, the species table (species_table.npy, species_labels.json: the pinned taxa files plus any missing hazard species, with hazard flags), the plant gate (plant_gate.onnx, plant_gate.json), and the fallback file; BioCLIP Mobile ships as its pinned file
 
 **Hazard species:** every *Toxicodendron* species (poison ivy, poison oak, poison sumac), *Phytolacca americana* (pokeweed), and *Solanum carolinense* (Carolina horsenettle); the fact-check confirms each.
 
@@ -475,7 +475,7 @@ No blockers remain; every hole below closes or falls back during the Day-1 gate 
 | 13 | No telemetry | Field failures stay invisible by design | Debug builds only: a local log the developer can export | Medium |
 | 17 | BioCLIP Mobile vs non-plant labels | Laptop side resolved on Day 1: 16 of 63 free non-plant photos scored a plant target top-1 on the reticle crop (20 of 63 on the full frame), and a pair of sneakers scored oak (0.605) above a real oak (0.572). TinyCLIP ViT-8M kept 176 of 176 plant photos and passed 2 of 63 non-plants on the full frame, so it gates every frame first. Open until the phone matches the laptop: BioCLIP fp16 was right on the laptop and NaN on the phone | Export, ship, and pass TinyCLIP phone parity (S06) before verify depends on it | High |
 | 18 | Gemma file variant | Resolved on Day 1: the pinned generic file loads and runs on the GPU backend, so the GPU-only build isn't needed | Keep the pinned file | Low |
-| 19 | Unverified focus distance | Day 1 logged only camera metadata: focus calibration approximate, no minimum focus distance. No live LENS_FOCUS_DISTANCE reading exists yet, and verify rows 3 and 4 depend on one | Log live readings at near and far plants on the test phone (S09) and set the threshold from them; if no usable reading arrives, drop rows 3 and 4 | High |
+| 19 | Unverified focus distance | Day 1 logged only camera metadata: focus calibration approximate, no minimum focus distance. No live LENS_FOCUS_DISTANCE reading exists yet, and verify rows 3 and 4 depend on one | Log live readings at near and far plants on the test phone (S09) and set the threshold from them; if no usable reading arrives, verify keeps rejecting (fail closed) and S34 waits for another close-range signal measured on the phone | High |
 
 ## Success Metrics
 
