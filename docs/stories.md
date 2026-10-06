@@ -86,7 +86,7 @@ New holes found while drafting these stories. PRD holes 3, 4, 5, 10, 12, 13, 19 
 | H3 | Widened 150 km counts get cached under the same key as 75 km counts | Add `radius_km` to the cache entry; mismatch discards | Medium |
 | H4 | R10 never says what judges "still rooted" | Gemma yes/no call on the found crop; P1, decide before S40 | Medium |
 | H5 | Fallback file is October-only; offline cold starts after October get October targets | Accept for v1; note in the post | Low |
-| H6 | Hazard false alarms on safe plants: on Day 1, 3 of 14 safe plant photos had a hazard top-1 (clover → pokeweed twice, grass → poison sumac) and white oak beat poison oak by only 0.022 on the mobile model | Track hazard false-alarm rate on the holdout set; decide whether a hazard must beat the target by a margin before it warns | High |
+| H6 | Hazard false alarms on safe plants: on Day 1, 9 of 52 CC0 grass photos (2 of 23 lawn grasses) and 2 of 2 clover photos had a hazard top-1; a 0.05 hazard-over-plant margin still left 5 of 52 grass photos warning, while poison ivy cleared it by 0.093 and 0.276. White oak beat poison oak by only 0.022 on the mobile model | Grass tutorial skips the hazard check (R3); for regular hunts, decide the hazard margin from the calibration set and track the false-alarm rate on the holdout | High |
 | H7 | Build-time menu gate uses 75 km while the app can widen to 150 km | Widened hunts may surface fewer words; accept, or run the gate at 150 km | Medium |
 | H8 | LiteRT-LM Python ships as a CLI; prompt-in, JSON-out scripting is unverified | Verify on Day 2 before S10; fall back to transformers in uv | Medium |
 | H10 | No release keystore plan for the GitHub Release APK | Local keystore, never committed; `keystore.properties` gitignored | Low |

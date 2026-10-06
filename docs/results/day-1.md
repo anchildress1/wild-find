@@ -116,6 +116,20 @@ Scored against 5 plant targets plus 5 hazards (no scene labels), on the full fra
 - Gating each region with TinyCLIP first removes the non-plant warning, since TinyCLIP rejects screens.
 - The safe-plant false alarms don't depend on order; they need the hazard margin decided from the calibration set (stories H6).
 
+## Hazard false alarms on grass
+
+The grass tutorial is a kid's first target, so grass got its own run: 52 CC0 research-grade grass photos (29 near the region, many cane and wetland grasses, plus 23 common Georgia lawn grasses: Bermuda, Bahia, centipede, zoysia, tall fescue, St. Augustine). Labels: grass (Poaceae), oak, fern, clover, pine, dandelion, and the 5 hazards. Each photo was scored on the full frame and a center 60% reticle crop; the gap is the best hazard score minus the best plant score, in the worse region.
+
+| Rule | Grass photos that would warn | Poison ivy (2) that would warn |
+| --- | --- | --- |
+| Hazard top-1 | 9 of 52 (lawn grasses: 2 of 23) | 2 of 2 |
+| Hazard beats best plant by more than 0.02 | 6 of 52 | 2 of 2 |
+| Hazard beats best plant by more than 0.05 | 5 of 52 | 2 of 2 |
+
+- Grass was top-1 on the reticle crop in 45 of 52 photos.
+- Median gap −0.076; worst +0.296, a cane stalk among broad leaves of other plants. Poison ivy gaps were +0.093 and +0.276, so no margin cleanly separates them yet.
+- Decision: the grass tutorial skips the hazard check (PRD R3); regular hunts keep it, with the margin set from the calibration set.
+
 ## Camera
 
 The back camera (ID 0, 6.3 mm) reports focus distance with calibration `APPROXIMATE`. The "walk closer" threshold still has to be set on the phone (S09).
