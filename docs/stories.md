@@ -12,7 +12,7 @@ Every runtime model (TinyCLIP, BioCLIP, Gemma) runs on the test phone, or nothin
 - [x] **S02 BioCLIP reference** (pipeline) — `make reference` embeds a CC0 northern red oak fixture (iNat 363799243, 3 agreeing IDs) and the word, hazard, and scene labels into `app/src/androidTest/assets/reference/`; fails unless the fixture word is top-1
 - [x] **S03 BioCLIP on device** (app) — ONNX Runtime loads `flora_student_fp32.onnx` (fp16 returns NaN on ARM); `make device-test` passes: cosine 1.0000 to the S02 reference, oak top-1, load 135 ms, embed 58 ms on the test phone
 - [x] **S04 Gemma on device** — E2B loads on the GPU without out-of-memory (2.1 GB loaded, 2.9 GB peak; 4.0 s warm load) and answers vision prompts in 2.3–2.9 s; too slow for the verify path, so boxing was dropped for deterministic live verify
-- [ ] **S09 Close-range threshold** — read live autofocus distance on the test phone and set the "walk closer" threshold; PRD hole 19
+- [ ] **S09 Close-range threshold** — log live `LENS_FOCUS_DISTANCE` readings at near and far plants on the test phone (none logged yet) and set the "walk closer" threshold; PRD hole 19
 - [ ] **S05 Gate harness** (app, debug only) — records per-frame verify time, first-eligible-frame to Found, hint latency, RAM, and a 20-minute live-camera thermal run to a local exportable log; holes 4, 10, 13
 - [ ] **S06 Plant gate** (pipeline + app) — export TinyCLIP ViT-8M's image encoder to fp32 ONNX plus text vectors for the exact Day-1 gate prompts; pin it; on-device parity test; gate every frame before BioCLIP; PRD hole 17
 - [ ] **S07 Gemma download** (core + app) — R9, Gemma only; see Download rules below; proven on the test phone: full pull, kill mid-pull + resume, Wi-Fi drop + resume, bad-hash retry
@@ -86,7 +86,7 @@ New holes found while drafting these stories. PRD holes 3, 4, 5, 10, 12, 13, 19 
 | H3 | Widened 150 km counts get cached under the same key as 75 km counts | Add `radius_km` to the cache entry; mismatch discards | Medium |
 | H4 | R10 never says what judges "still rooted" | Gemma yes/no call on the found crop; P1, decide before S40 | Medium |
 | H5 | Fallback file is October-only; offline cold starts after October get October targets | Accept for v1; note in the post | Low |
-| H6 | Hazard false alarms on safe plants | Resolved on Day 1 by scoring hazards against BioCLIP's species table (4,271 species plus *T. pubescens*) (warn when a hazard species is in the top 5): 48 of 52 hazards caught, 1 of 265 safe photos warned. Against menu labels alone, magnolia warned 10 of 10 and honeysuckle 9 of 10 | Low |
+| H6 | Hazard false alarms on safe plants | Resolved on Day 1 by scoring hazards against BioCLIP's species table (4,271 species plus *T. pubescens*) (warn when a hazard species is in the top 5): 48 of 52 hazards caught, 1 of 253 safe photos warned. Against menu labels alone, magnolia warned 10 of 10 and honeysuckle 9 of 10 | Low |
 | H7 | Build-time menu gate uses 75 km while the app can widen to 150 km | Widened hunts may surface fewer words; accept, or run the gate at 150 km | Medium |
 | H8 | LiteRT-LM Python ships as a CLI; prompt-in, JSON-out scripting is unverified | Verify on Day 2 before S10; fall back to transformers in uv | Medium |
 | H10 | No release keystore plan for the GitHub Release APK | Local keystore, never committed; `keystore.properties` gitignored | Low |
