@@ -41,7 +41,7 @@ install: build
 device-test: install
 	$(GRADLE) :app:assembleDebugAndroidTest
 	adb install -r -d -t app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
-	@adb shell am instrument -w $(WILDFIND_PACKAGE).test/androidx.test.runner.AndroidJUnitRunner | tee /dev/stderr | grep -q '^OK ('
+	@adb shell am instrument -w $(WILDFIND_PACKAGE).test/androidx.test.runner.AndroidJUnitRunner | tee /dev/stderr | grep -qE '^OK \([1-9][0-9]* tests?\)'
 
 fetch-models:
 	./scripts/models.sh fetch
