@@ -3,17 +3,12 @@ name = "wild-find-pipeline"
 version = "0.1.0"
 description = "Build-time menu, fact cards, and label embeddings for wild-find."
 requires-python = ">=3.13"
-dependencies = [
-    "huggingface-hub>=0.35",
-    "numpy>=2.3",
-    "onnxruntime>=1.23",
-    "open-clip-torch>=3.3.0",
-    "pillow>=11.3",
-    "torch>=2.9",
-]
+dependencies = ["numpy>=2.3", "pillow>=11.3"]
 
 [dependency-groups]
 dev = ["gitlint-rai>=1.0.3", "pytest>=9.1.1", "ruff>=0.16.10"]
+# Model runtimes for `make reference` only; lint and unit tests never import them.
+reference = ["huggingface-hub>=0.35", "onnxruntime>=1.23", "open-clip-torch>=3.3.0", "torch>=2.9"]
 
 [tool.uv]
 # gitlint-core's trusted-deps extra hard-pins vulnerable click (PYSEC-2026-2132) and sh (CVE-2026-54552).

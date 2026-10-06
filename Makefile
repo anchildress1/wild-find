@@ -27,7 +27,7 @@ push-models:
 
 # Day-1 parity reference for the on-device BioCLIP check; needs make fetch-models first.
 reference:
-	$(UV) run python -W error -m wild_find_pipeline.reference
+	$(UV) run --group reference python -W error -m wild_find_pipeline.reference
 
 test: pipeline-test
 	$(GRADLE) :core:test :core:koverVerify

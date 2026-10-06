@@ -998,13 +998,8 @@ name = "wild-find-pipeline"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
-    { name = "huggingface-hub" },
     { name = "numpy" },
-    { name = "onnxruntime" },
-    { name = "open-clip-torch" },
     { name = "pillow" },
-    { name = "torch", version = "2.14.1", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform != 'linux'" },
-    { name = "torch", version = "2.14.1+cpu", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "sys_platform == 'linux'" },
 ]
 
 [package.dev-dependencies]
@@ -1013,16 +1008,18 @@ dev = [
     { name = "pytest" },
     { name = "ruff" },
 ]
+reference = [
+    { name = "huggingface-hub" },
+    { name = "onnxruntime" },
+    { name = "open-clip-torch" },
+    { name = "torch", version = "2.14.1", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform != 'linux'" },
+    { name = "torch", version = "2.14.1+cpu", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "sys_platform == 'linux'" },
+]
 
 [package.metadata]
 requires-dist = [
-    { name = "huggingface-hub", specifier = ">=0.35" },
     { name = "numpy", specifier = ">=2.3" },
-    { name = "onnxruntime", specifier = ">=1.23" },
-    { name = "open-clip-torch", specifier = ">=3.3.0" },
     { name = "pillow", specifier = ">=11.3" },
-    { name = "torch", marker = "sys_platform != 'linux'", specifier = ">=2.9" },
-    { name = "torch", marker = "sys_platform == 'linux'", specifier = ">=2.9", index = "https://download.pytorch.org/whl/cpu" },
 ]
 
 [package.metadata.requires-dev]
@@ -1030,4 +1027,11 @@ dev = [
     { name = "gitlint-rai", specifier = ">=1.0.3" },
     { name = "pytest", specifier = ">=9.1.1" },
     { name = "ruff", specifier = ">=0.16.10" },
+]
+reference = [
+    { name = "huggingface-hub", specifier = ">=0.35" },
+    { name = "onnxruntime", specifier = ">=1.23" },
+    { name = "open-clip-torch", specifier = ">=3.3.0" },
+    { name = "torch", marker = "sys_platform != 'linux'", specifier = ">=2.9" },
+    { name = "torch", marker = "sys_platform == 'linux'", specifier = ">=2.9", index = "https://download.pytorch.org/whl/cpu" },
 ]

@@ -5,11 +5,15 @@ on:
     branches: [main]
     paths:
       - "pipeline/**"
+      - "core/src/main/resources/models.properties"
+      - "Makefile"
       - ".github/workflows/pipeline.yml"
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
     paths:
       - "pipeline/**"
+      - "core/src/main/resources/models.properties"
+      - "Makefile"
       - ".github/workflows/pipeline.yml"
   workflow_dispatch:
 

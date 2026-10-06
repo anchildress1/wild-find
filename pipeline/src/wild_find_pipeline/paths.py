@@ -22,6 +22,12 @@ def pin(model: str, manifest: Path = MANIFEST) -> dict[str, str]:
     return pins
 
 
+def file_sha256(path: Path) -> str:
+    """Hex SHA-256 of a file, streamed so multi-GB models never load into memory."""
+    with path.open("rb") as f:
+        return hashlib.file_digest(f, "sha256").hexdigest()
+
+
 def verified_artifact(model: str, cache: Path = MODEL_CACHE, manifest: Path = MANIFEST) -> Path:
     """Return the cached file for `model` after checking its pinned byte count and SHA-256.
 
@@ -31,6 +37,6 @@ def verified_artifact(model: str, cache: Path = MODEL_CACHE, manifest: Path = MA
     path = cache / pins["file"]
     if not path.is_file():
         raise ValueError(f"{path} missing; run make fetch-models")
-    if path.stat().st_size != int(pins["bytes"]) or hashlib.sha256(path.read_bytes()).hexdigest() != pins["sha256"]:
+    if path.stat().st_size != int(pins["bytes"]) or file_sha256(path) != pins["sha256"]:
         raise ValueError(f"{path} does not match its pinned size/SHA-256; run make fetch-models")
     return path

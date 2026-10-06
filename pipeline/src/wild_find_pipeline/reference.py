@@ -75,17 +75,17 @@ def embed_texts(texts: list[str]) -> np.ndarray:
 
 
 def main() -> int:
-    """Write fixture.png and reference.json; returns 1 when the fixture word is not top-1."""
+    """Write fixture.png and reference.json only when the fixture word is top-1; otherwise return 1."""
     bioclip = pin("bioclip")
     request = urllib.request.Request(FIXTURE_URL, headers={"User-Agent": USER_AGENT})
     with urllib.request.urlopen(request, timeout=30) as response:
         fixture = square_fixture(Image.open(io.BytesIO(response.read())))
 
-    REFERENCE_DIR.mkdir(parents=True, exist_ok=True)
-    fixture_path = REFERENCE_DIR / "fixture.png"
-    fixture.save(fixture_path)
-    # Embed the saved lossless PNG so Android reads byte-identical pixels.
-    image_vector = embed_image(verified_artifact("bioclip"), image_input(Image.open(fixture_path)))
+    buffer = io.BytesIO()
+    fixture.save(buffer, format="PNG")
+    png = buffer.getvalue()
+    # Embed the decoded lossless PNG so Android reads byte-identical pixels.
+    image_vector = embed_image(verified_artifact("bioclip"), image_input(Image.open(io.BytesIO(png))))
 
     labels = [
         (FIXTURE_WORD, "word", FIXTURE_TAXON),
@@ -97,8 +97,8 @@ def main() -> int:
 
     reference = {
         "fixture": {
-            "file": fixture_path.name,
-            "sha256": hashlib.sha256(fixture_path.read_bytes()).hexdigest(),
+            "file": "fixture.png",
+            "sha256": hashlib.sha256(png).hexdigest(),
             "source": FIXTURE_SOURCE,
             "word": FIXTURE_WORD,
         },
@@ -111,15 +111,17 @@ def main() -> int:
         ],
         "scores": scores,
     }
-    (REFERENCE_DIR / "reference.json").write_text(json.dumps(reference, indent=1) + "\n")
-
     order = ranked(scores)
     for label, score in order:
         print(f"{score:.4f}  {label}")
     (top, top_score), (runner_up, runner_score) = order[0], order[1]
     if top != FIXTURE_WORD:
-        print(f"FAIL: top-1 is {top!r}, expected {FIXTURE_WORD!r}", file=sys.stderr)
+        print(f"FAIL: top-1 is {top!r}, expected {FIXTURE_WORD!r}; committed reference left untouched", file=sys.stderr)
         return 1
+
+    REFERENCE_DIR.mkdir(parents=True, exist_ok=True)
+    (REFERENCE_DIR / "fixture.png").write_bytes(png)
+    (REFERENCE_DIR / "reference.json").write_text(json.dumps(reference, indent=1) + "\n")
     print(f"OK: {FIXTURE_WORD!r} is top-1, margin {top_score - runner_score:.4f} over {runner_up!r}")
     return 0
 
