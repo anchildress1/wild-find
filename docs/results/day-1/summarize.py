@@ -58,15 +58,16 @@ def bioclip_nonplants(data) -> None:
     """BioCLIP top-1 on non-plants with the original label set (5 targets, 5 hazards, 6 scenes)."""
     section("BioCLIP Mobile on non-plants (labels: 5 targets, 5 hazards, 6 scenes)")
     for region in ("reticle", "full"):
-        hits = []
+        hits, total = [], 0
         for (s, photo, reg), scores in data.items():
             if s != "non-plant" or reg != region:
                 continue
+            total += 1
             labels = [lbl for lbl, (kind, _) in scores.items() if kind != "plant" or lbl in TARGETS_NO_GRASS]
             label, kind, score = top(scores, labels)
             if kind == "plant":
                 hits.append(f"{photo}={label} {score:.3f}")
-        print(f"{region}: {len(hits)}/22 non-plants top-1 is a plant target: {', '.join(sorted(hits))}")
+        print(f"{region}: {len(hits)}/{total} non-plants top-1 is a plant target: {', '.join(sorted(hits))}")
 
 
 def tinyclip_gate() -> None:
@@ -137,6 +138,51 @@ def tutorial_rules(data) -> None:
         print(f"{key:17s} n={n:3d}  grass top-1: {top1:3d}  grass in top 3: {top3:3d}")
 
 
+def species_hazards() -> None:
+    """Hazard warnings when a hazard species must beat all 4,271+ species, per set and group."""
+    section("Hazard warnings against the full species table (worse of full frame and reticle)")
+    check = (OUT / "species_table_check.json").read_text().strip().replace("\n", " ")
+    print(f"table check: {check}")
+    gaps: dict = defaultdict(list)
+    with (OUT / "species_scores.csv").open() as fh:
+        for r in csv.DictReader(fh):
+            key = group_of(r["photo"]) if r["set"] == "plant" else r["set"]
+            gaps[(key, r["photo"])].append(float(r["best_hazard_score"]) - float(r["best_other_score"]))
+    worst = {k: max(v) for k, v in gaps.items()}
+    print("group                 n   hazard top-1   >0.02   >0.05   median gap   min gap   max gap")
+    for g in sorted({k[0] for k in worst}):
+        vals = sorted(v for (k, _), v in worst.items() if k == g)
+        n = len(vals)
+        cnt = [sum(v > m for v in vals) for m in (0.0, 0.02, 0.05)]
+        print(
+            f"{g:20s} {n:3d}   {cnt[0]:5d}          {cnt[1]:5d}   {cnt[2]:5d}   "
+            f"{vals[n // 2]:+.3f}       {vals[0]:+.3f}    {vals[-1]:+.3f}"
+        )
+
+
+def species_rank_rule() -> None:
+    """Hazards caught vs safe photos warned when a hazard species ranks in the top k (worse region)."""
+    section("Species-table rule: warn when a hazard species is in the top k (worse of full frame and reticle)")
+    best: dict = {}
+    kind: dict = {}
+    with (OUT / "species_scores.csv").open() as fh:
+        for r in csv.DictReader(fh):
+            if r["set"] in ("fixture", "label-format"):
+                continue
+            g = group_of(r["photo"]) if r["set"] == "plant" else r["set"]
+            kind[r["photo"]] = "hazard" if g in (*HAZARD_GROUPS, "poisonivy") else "safe"
+            best[r["photo"]] = min(best.get(r["photo"], 10**9), int(r["best_hazard_rank"]))
+    for k in (1, 2, 3, 5, 10):
+        caught = sum(1 for p, v in best.items() if kind[p] == "hazard" and v <= k)
+        warned = sum(1 for p, v in best.items() if kind[p] == "safe" and v <= k)
+        n_h = sum(1 for p in best if kind[p] == "hazard")
+        n_s = sum(1 for p in best if kind[p] == "safe")
+        print(
+            f"top {k:2d}: hazards caught {caught}/{n_h} ({caught / n_h:.0%}), "
+            f"safe photos warned {warned}/{n_s} ({warned / n_s:.1%})"
+        )
+
+
 def main() -> None:
     """Print every summary."""
     data = load_bioclip()
@@ -145,6 +191,8 @@ def main() -> None:
     tinyclip_gate()
     hazard_warnings(data)
     tutorial_rules(data)
+    species_hazards()
+    species_rank_rule()
 
 
 if __name__ == "__main__":

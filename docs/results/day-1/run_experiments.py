@@ -8,6 +8,8 @@ BioCLIP scores here equal the phone's: S03 measured phone-vs-laptop cosine 0.999
 """
 
 import csv
+import hashlib
+import json
 import urllib.request
 from pathlib import Path
 
@@ -25,6 +27,14 @@ OUT = Path(__file__).parent
 MANIFEST = OUT.parent / "day-1-photos.tsv"
 PHOTOS = MODEL_CACHE / "day1-photos"
 USER_AGENT = "wild-find-pipeline/0.1 (+https://github.com/anchildress1/wild-find)"
+
+# BioCLIP Mobile's own species table: 4,271 plant species embedded by the same teacher, at the pinned revision.
+SPECIES_DIR = MODEL_CACHE / "bioclip-taxa"
+SPECIES_FILES = {
+    "taxa_table.npy": "75626c967a00556f09bd6534d15c9c97c71ce37b0f3ae591187ba06d53377ae2",
+    "taxa_labels.json": "adb36a6af884fda71ad3d633c20ede66862b335915a282ea613604409b6d4d7f",
+}
+HAZARD_SPECIES = {"Phytolacca americana", "Solanum carolinense"}  # plus every Toxicodendron species
 
 PLANTS = {
     "grass": "Poaceae",
@@ -150,7 +160,18 @@ def encode_text(model, tokenizer, texts: list[str]) -> np.ndarray:
         return torch.nn.functional.normalize(model.encode_text(tokenizer(texts)), dim=-1).numpy()
 
 
-def bioclip_scores(rows, model, tokenizer) -> None:
+def embed_all(rows) -> dict[tuple[str, str], np.ndarray]:
+    """BioCLIP Mobile image embedding for every photo's full frame and reticle crop."""
+    onnx = verified_artifact("bioclip")
+    out = {}
+    for row in rows:
+        img = load(row)
+        for region, crop in (("full", square_fixture(img)), ("reticle", reticle(img))):
+            out[(row["file"], region)] = embed_image(onnx, image_input(crop))
+    return out
+
+
+def bioclip_scores(rows, embeddings, model, tokenizer) -> None:
     """Write every BioCLIP Mobile score for every photo, region, and label to bioclip_scores.csv."""
     labels = (
         [(name, "plant", taxon) for name, taxon in PLANTS.items()]
@@ -158,17 +179,12 @@ def bioclip_scores(rows, model, tokenizer) -> None:
         + [(scene, "scene", scene) for scene in SCENES]
     )
     vectors = encode_text(model, tokenizer, [prompt(text) for _, _, text in labels])
-    onnx = verified_artifact("bioclip")
     with (OUT / "bioclip_scores.csv").open("w", newline="") as fh:
         w = csv.writer(fh)
         w.writerow(["set", "photo", "region", "label", "kind", "prompt", "score"])
         for row in rows:
-            img = load(row)
-            for region, crop in (
-                ("full", square_fixture(img)),
-                ("reticle", reticle(img)),
-            ):
-                scores = vectors @ embed_image(onnx, image_input(crop))
+            for region in ("full", "reticle"):
+                scores = vectors @ embeddings[(row["file"], region)]
                 for (label, kind, text), score in zip(labels, scores, strict=True):
                     w.writerow(
                         [
@@ -266,11 +282,88 @@ def label_formats(rows, model, preprocess, tokenizer) -> None:
                     )
 
 
+def species_table(model, tokenizer) -> tuple[np.ndarray, list[str], dict[str, float]]:
+    """Load the pinned species table, append any missing hazard species, and check prompt-format alignment."""
+    SPECIES_DIR.mkdir(parents=True, exist_ok=True)
+    revision = pin("bioclip")["revision"]
+    for name, sha in SPECIES_FILES.items():
+        path = SPECIES_DIR / name
+        if not path.exists():
+            url = f"https://huggingface.co/{pin('bioclip')['repo']}/resolve/{revision}/{name}"
+            urllib.request.urlretrieve(url, path)
+        if hashlib.sha256(path.read_bytes()).hexdigest() != sha:
+            raise ValueError(f"{path} does not match its pinned SHA-256")
+    table = np.load(SPECIES_DIR / "taxa_table.npy")
+    names = [entry["scientific"] for entry in json.load((SPECIES_DIR / "taxa_labels.json").open())]
+    ours = encode_text(model, tokenizer, [prompt("Toxicodendron radicans")])[0]
+    check = {"prompt_format_cosine_Toxicodendron_radicans": float(ours @ table[names.index("Toxicodendron radicans")])}
+    missing = [h for h in ("Toxicodendron pubescens",) if h not in names]
+    if missing:
+        table = np.vstack([table, encode_text(model, tokenizer, [prompt(h) for h in missing])])
+        names += missing
+    check["appended_species"] = float(len(missing))
+    return table, names, check
+
+
+def is_hazard(species: str) -> bool:
+    """True for every Toxicodendron species and the other PRD hazard species."""
+    return species.startswith("Toxicodendron ") or species in HAZARD_SPECIES
+
+
+def species_scores(rows, embeddings, model, tokenizer) -> None:
+    """Score every photo against the full species table; write top-1, best hazard, best non-hazard, and top 5."""
+    table, names, check = species_table(model, tokenizer)
+    hazard = np.array([is_hazard(n) for n in names])
+    (OUT / "species_table_check.json").write_text(json.dumps({**check, "species": len(names)}, indent=1) + "\n")
+    with (OUT / "species_scores.csv").open("w", newline="") as fh:
+        w = csv.writer(fh)
+        w.writerow(
+            [
+                "set",
+                "photo",
+                "region",
+                "top1",
+                "top1_score",
+                "top1_is_hazard",
+                "best_hazard",
+                "best_hazard_score",
+                "best_hazard_rank",
+                "best_other",
+                "best_other_score",
+                "top5",
+            ]
+        )
+        for row in rows:
+            for region in ("full", "reticle"):
+                scores = table @ embeddings[(row["file"], region)]
+                order = np.argsort(-scores)
+                h = int(np.argmax(np.where(hazard, scores, -np.inf)))
+                o = int(np.argmax(np.where(hazard, -np.inf, scores)))
+                w.writerow(
+                    [
+                        row["set"],
+                        row["file"],
+                        region,
+                        names[order[0]],
+                        f"{scores[order[0]]:.6f}",
+                        bool(hazard[order[0]]),
+                        names[h],
+                        f"{scores[h]:.6f}",
+                        int(np.where(order == h)[0][0]) + 1,
+                        names[o],
+                        f"{scores[o]:.6f}",
+                        "; ".join(f"{names[i]} {scores[i]:.3f}" for i in order[:5]),
+                    ]
+                )
+
+
 def main() -> None:
     """Run every experiment."""
     rows = photos()
     model, preprocess, tokenizer = teacher()
-    bioclip_scores(rows, model, tokenizer)
+    embeddings = embed_all(rows)
+    bioclip_scores(rows, embeddings, model, tokenizer)
+    species_scores(rows, embeddings, model, tokenizer)
     label_formats(rows, model, preprocess, tokenizer)
     tinyclip_scores(rows)
     print("wrote", ", ".join(p.name for p in sorted(OUT.glob("*.csv"))))

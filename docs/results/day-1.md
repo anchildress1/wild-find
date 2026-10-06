@@ -1,6 +1,22 @@
 # 📏 Day-1 results (October 6, 2026)
 
-Measured results from the Day-1 go/no-go gate. Every number here was observed, not estimated. The test photos and their licenses are listed in [day-1-photos.tsv](day-1-photos.tsv).
+Measured results from the Day-1 go/no-go gate. Every number here was observed, not estimated, and every laptop number below is derived from the raw data in [day-1/](day-1/).
+
+## Raw data
+
+| File | Contents |
+| --- | --- |
+| [day-1-photos.tsv](day-1-photos.tsv) | All 320 test photos: set, file, license (CC0 or public domain), source page, photo URL |
+| [day-1/bioclip_scores.csv](day-1/bioclip_scores.csv) | BioCLIP Mobile score for every photo, region (full frame, center 60% reticle crop), and label (6 targets, 5 hazards, 6 scenes) |
+| [day-1/species_scores.csv](day-1/species_scores.csv) | Every photo and region against BioCLIP's species table (4,271 species plus 1 added): top-1, best hazard and its rank, best non-hazard, top 5 |
+| [day-1/tinyclip_scores.csv](day-1/tinyclip_scores.csv) | TinyCLIP plant-gate probabilities for 3 models, every photo, both regions, all 17 gate labels |
+| [day-1/label_format.csv](day-1/label_format.csv) | Label-format experiment: 4 prompt formats, mobile vs teacher |
+| [day-1/species_table_check.json](day-1/species_table_check.json) | Species-table prompt-format check and appended rows |
+| [day-1/run_experiments.py](day-1/run_experiments.py) | Regenerates every CSV above from the photo manifest |
+| [day-1/summarize.py](day-1/summarize.py) and [summary.txt](day-1/summary.txt) | Derives every table on this page from the CSVs |
+| [day-1/device-logs.md](day-1/device-logs.md) | Raw logcat lines from every on-device run |
+
+Photo sets: 176 CC0 iNaturalist plant photos (10 each of oak, pine, maple, sweetgum, fern, clover, dandelion, moss, magnolia, violet, honeysuckle, and the 5 hazards, plus 16 earlier ones), 52 grass photos, 74 non-plant photos (Wikimedia CC0 or public domain: people, pets, vehicles, toys, screens, rocks, soil, walls), and 15 mixed scenes where real vegetation fills much of the frame. Non-photographs (paintings, logos, diagrams) were removed by hand.
 
 ## Setup
 
@@ -59,87 +75,86 @@ BioCLIP is now pinned to the fp32 file (46,986,589 bytes).
 
 ## Label text format
 
-Fixture: a CC0 white oak, [iNaturalist 211670015](https://www.inaturalist.org/observations/211670015). Scores are cosine similarity.
+Photo: a CC0 white oak, [iNaturalist 211670015](https://www.inaturalist.org/observations/211670015). Scores are cosine similarity.
 
 | Prompt format | Model | Top-1 | Top three |
 | --- | --- | --- | --- |
-| Common name ("a photo of oak.") | Mobile | **poison oak** | poison oak 0.456, poison ivy 0.400, oak 0.365 |
+| Common name ("a photo of oak.") | Mobile | **poison oak** | poison oak 0.456, poison ivy 0.399, oak 0.366 |
 | Common name | Teacher | **poison oak** | poison oak 0.388, poison ivy 0.352, oak 0.329 |
-| Scientific ("a photo of Quercus.") | Mobile | oak | oak 0.478, poison oak 0.456, poison ivy 0.393 |
+| Scientific ("a photo of Quercus.") | Mobile | oak | oak 0.478, poison oak 0.456, poison ivy 0.392 |
 | Scientific | Teacher | oak | oak 0.414, poison ivy 0.345, poison oak 0.331 |
-| Full taxonomic string | Mobile | oak | oak 0.477, poison oak 0.457, poison ivy 0.395 |
-| Taxonomic plus common name | Mobile | **poison oak** | poison oak 0.457, oak 0.406, poison ivy 0.398 |
+| Full taxonomic string | Mobile | oak | oak 0.476, poison oak 0.457, poison ivy 0.395 |
+| Full taxonomic string | Teacher | oak | oak 0.412, poison ivy 0.347, poison oak 0.332 |
+| Taxonomic plus common name | Mobile | **poison oak** | poison oak 0.456, oak 0.405, poison ivy 0.397 |
+| Taxonomic plus common name | Teacher | oak | oak 0.378, poison ivy 0.348, poison oak 0.344 |
 
-- Mobile vs teacher image embedding on that photo: cosine 0.811.
-- On the red oak fixture used for the parity reference ([iNaturalist 363799243](https://www.inaturalist.org/observations/363799243)), oak wins by 0.136 over Carolina horsenettle.
-- Plant labels now embed by scientific name.
+- Mobile vs teacher image embedding on that photo: cosine 0.810.
+- Plant labels embed by scientific name.
 
-## Non-plant photos
+## BioCLIP Mobile can't reject non-plants
 
-22 CC0 or public-domain photos of screens, people, roads, sidewalks, cars, dogs, rooms, and lawns, plus 16 CC0 iNaturalist plant photos (oak, fern, clover, pine, dandelion, grass, moss, poison ivy).
+Labels: 5 targets, 5 hazards, 6 scene labels. On 74 non-plant photos, a plant target was top-1 on **18 of 74 reticle crops** and **25 of 74 full frames**. Examples: portraits scored oak 0.592 and 0.516, asphalt roads oak 0.540 and 0.555, a car fern 0.508. The real red oak fixture scored oak 0.572, so no score floor separates them.
 
-**BioCLIP Mobile can't reject non-plants.** Against 5 plant targets, 5 hazards, and 6 scene labels:
+## TinyCLIP plant gate
 
-| Photo | Reticle-crop top-1 | Score |
+A frame is a plant when the plant labels' combined softmax share is over 0.5 (scores are cosine times the model's learned scale, 50.0 for ViT-8M/16).
+
+| Model | Region | Plants (176) | Grass (52) | Non-plants (74) | Mixed scenes (15) |
+| --- | --- | --- | --- | --- | --- |
+| **ViT-8M/16** (chosen) | Full frame | 176 | 52 | 2 | 5 |
+| **ViT-8M/16** | Reticle | 175 (one pine missed) | 51 | 3 | 4 |
+| ViT-39M/16 | Full frame | 176 | 52 | 4 | 5 |
+| ViT-39M/16 | Reticle | 175 | 52 | 4 | 5 |
+| ViT-40M/32 | Full frame | 175 | 52 | 3 | 6 |
+| ViT-40M/32 | Reticle | 176 | 52 | 3 | 6 |
+
+The table counts photos that pass as plants. Mixed scenes passing is correct when vegetation fills the frame.
+
+## Hazard warnings
+
+### Against the menu labels only (old rule, dropped)
+
+Labels: grass, oak, fern, clover, pine, dandelion, and the 5 hazards. A photo warns when a hazard is top-1 in either region.
+
+| Group | Photos | Warn | Group | Photos | Warn |
+| --- | --- | --- | --- | --- | --- |
+| Magnolia (not on the list) | 10 | **10** | Poison ivy | 12 | 11 |
+| Honeysuckle (not on the list) | 10 | **9** | Poison oak | 10 | 10 |
+| Maple (not on the list) | 10 | **7** | Poison sumac | 10 | 10 |
+| Sweetgum (not on the list) | 10 | **6** | Pokeweed | 10 | 10 |
+| Violet (not on the list) | 10 | **6** | Horsenettle | 10 | 10 |
+| Grass (52 plus 2 earlier) | 54 | 9 | Clover | 12 | 2 |
+| Fern | 12 | 3 | Pine | 12 | 2 |
+| Oak, moss | 12 each | 1 each | Dandelion | 12 | 0 |
+| Non-plants | 74 | 0 | Mixed scenes | 15 | 0 |
+
+Plants missing from the list get forced onto the nearest label, often a hazard. A hazard-over-plant margin doesn't fix it: at 0.10, honeysuckle still warns on 5 of 10, while one poison ivy photo falls 0.093 below the best plant.
+
+### Against BioCLIP's species table (new rule)
+
+BioCLIP Mobile ships a table of 4,271 plant species (MIT); Atlantic poison oak (*Toxicodendron pubescens*) was missing, so one row was added in our prompt format. That format lines up with the table: our embedding of "a photo of *Toxicodendron radicans*." scores 0.975 against the table's own row.
+
+| Rule (worse of full frame and reticle) | Hazards caught (52) | Safe photos warned (265) |
 | --- | --- | --- |
-| Portrait of a woman (1) | oak | 0.592 |
-| Portrait of a woman (2) | oak | 0.516 |
-| Asphalt road (1) | oak | 0.540 |
-| Asphalt road (2) | oak | 0.555 |
-| Car | fern | 0.508 |
-| Red oak fixture (real plant) | oak | 0.572 |
+| Hazard species top-1 | 43 (83%) | 1 (0.4%) |
+| Hazard species in the top 3 | 45 (87%) | 1 (0.4%) |
+| **Hazard species in the top 5** (chosen) | **48 (92%)** | **1 (0.4%)** |
+| Hazard species in the top 10 | 48 (92%) | 2 (0.8%) |
 
-- 5 of 22 non-plants came out as plant targets on the reticle crop, and 7 of 22 on the full frame.
-- A portrait scored higher for oak than a real oak did, so no score floor can separate them.
-- Scene labels misfired too: a child playing scored "screen", a computer monitor "person", and a laptop "lawn".
+- Under top-1, every safe group warns 0 times except grass, 1 of 54.
+- Hazards caught under top-1: poison ivy 10 of 12, poison oak 9 of 10, pokeweed 9 of 10, horsenettle 8 of 10, poison sumac 7 of 10.
 
-**TinyCLIP gates plants cleanly.** Scores are cosine similarity times TinyCLIP's learned scale (exp(logit_scale) = 50.0 for ViT-8M/16), softmaxed; a frame counts as a plant when the plant labels' combined share is over 0.5.
+## Grass tutorial
 
-| Model | Image-side size | Plants kept | Non-plants passed |
-| --- | --- | --- | --- |
-| TinyCLIP ViT-8M/16 | 8.28M parameters, about 33 MB fp32 | 16 / 16 | 1 / 22 (a mowed lawn, 0.65, which is grass) |
-| TinyCLIP ViT-39M/16 | 38M parameters | 16 / 16 | 1 / 22 (the same lawn, 0.57) |
-| TinyCLIP ViT-40M/32 | 39M parameters | 16 / 16 | 2 / 22 (the lawn, 0.62; a smartphone display, 0.51) |
+Grass is a kid's first target. On 52 CC0 grass photos (29 near the region, many cane and wetland grasses, plus 23 common Georgia lawn grasses):
 
-TinyCLIP ViT-8M/16 is the plant gate. Its phone-vs-laptop parity is still to be measured (S06).
+| Rule, on the reticle crop | Grass (52) | Non-grass plants (126) | Hazard plants (50) | Non-plants (74) |
+| --- | --- | --- | --- | --- |
+| BioCLIP grass top-1 | 45 | 11 | 0 | 35 |
+| **BioCLIP grass in top 3** (chosen, behind the plant gate) | **50** | 45 | 2 | 64 |
 
-## Hazard warnings without scene labels
-
-Scored against 5 plant targets plus 5 hazards (no scene labels), on the full frame and a center 60% reticle crop. A photo "warns" when a hazard is top-1 on either.
-
-| Photos | Would warn | Detail |
-| --- | --- | --- |
-| 22 non-plants | 1 | A computer monitor: full frame top-1 poison sumac |
-| 14 safe plants | 3 | Clover → pokeweed (both photos), grass → poison sumac |
-| 2 poison ivy | 2 | Both correctly flagged |
-
-- Gating each region with TinyCLIP first removes the non-plant warning, since TinyCLIP rejects screens.
-- The safe-plant false alarms don't depend on order; they need the hazard margin decided from the calibration set (stories H6).
-
-## Hazard false alarms on grass
-
-The grass tutorial is a kid's first target, so grass got its own run: 52 CC0 research-grade grass photos (29 near the region, many cane and wetland grasses, plus 23 common Georgia lawn grasses: Bermuda, Bahia, centipede, zoysia, tall fescue, St. Augustine). Labels: grass (Poaceae), oak, fern, clover, pine, dandelion, and the 5 hazards. Each photo was scored on the full frame and a center 60% reticle crop; the gap is the best hazard score minus the best plant score, in the worse region.
-
-| Rule | Grass photos that would warn | Poison ivy (2) that would warn |
-| --- | --- | --- |
-| Hazard top-1 | 9 of 52 (lawn grasses: 2 of 23) | 2 of 2 |
-| Hazard beats best plant by more than 0.02 | 6 of 52 | 2 of 2 |
-| Hazard beats best plant by more than 0.05 | 5 of 52 | 2 of 2 |
-
-- Grass was top-1 on the reticle crop in 45 of 52 photos.
-- Median gap −0.076; worst +0.296, a cane stalk among broad leaves of other plants. Poison ivy gaps were +0.093 and +0.276, so no margin cleanly separates them yet.
-- Decision: the grass tutorial skips the hazard check (PRD R3); regular hunts keep it, with the margin set from the calibration set.
-
-Tutorial pass rules on the same center reticle crops:
-
-| Rule | Grass passes (52) | Non-grass plants pass (14) | Non-plants pass (22) |
-| --- | --- | --- | --- |
-| BioCLIP grass top-1 | 45 | 4 | 11 |
-| BioCLIP grass in top 3 | 50 | 6 | 19 |
-| TinyCLIP's best plant label is grass | 21 | 2 | 0 |
-
-- The non-plant column is BioCLIP alone; in the app, TinyCLIP's plant gate blocks non-plants first.
-- Decision: the tutorial passes when TinyCLIP calls the crop a plant and grass is in BioCLIP's top 3. Some non-grass plant close-ups also pass the tutorial, which is acceptable for a first win.
+- The non-plant column is BioCLIP alone; in the app, TinyCLIP blocks non-plants first.
+- Against the menu labels, 9 of 54 grass photos would have shown a hazard warning, so the tutorial skips the hazard check. Against the species table, 1 of 54 grass photos still would.
 
 ## Camera
 
@@ -147,6 +162,7 @@ The back camera (ID 0, 6.3 mm) reports focus distance with calibration `APPROXIM
 
 ## Still unmeasured
 
+- The full per-frame verify path on the phone: TinyCLIP twice plus BioCLIP up to twice (S05)
 - Level-2 hint latency (S05)
 - A 20-minute live-camera heat run (S05)
 - TinyCLIP parity on the phone (S06)
