@@ -1,4 +1,4 @@
-.PHONY: setup build install device-test fetch-models push-models reference test pipeline-test lint ktlint detekt android-lint pipeline-lint shellcheck actionlint secret-scan ai-checks clean
+.PHONY: setup build install device-test focus-probe fetch-models push-models reference test pipeline-test lint ktlint detekt android-lint pipeline-lint shellcheck actionlint secret-scan ai-checks clean
 
 SHELL := /bin/bash
 
@@ -43,6 +43,12 @@ device-test: install
 	$(GRADLE) :app:assembleDebugAndroidTest
 	adb install -r -d -t app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
 	@adb shell am instrument -w $(WILDFIND_PACKAGE).test/androidx.test.runner.AndroidJUnitRunner | tee /dev/stderr | grep -qE '^OK \([1-9][0-9]* tests?\)'
+
+# S09: logs live autofocus distance (diopters) from the back camera; Ctrl-C to stop.
+focus-probe: install
+	adb logcat -c
+	adb shell am start -n $(WILDFIND_PACKAGE)/dev.anchildress1.wildfind.FocusProbeActivity
+	adb logcat -s FocusProbe:I | tee docs/results/day-1/focus-probe.log
 
 fetch-models:
 	./scripts/models.sh fetch
