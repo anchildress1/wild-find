@@ -41,7 +41,8 @@ androidComponents {
     }
 }
 
-// Without these files the APK installs fine and fails on the first camera frame, so no build may skip them.
+// Without these files the APK installs fine and fails on the first camera frame, so no APK may skip them.
+// Compiling alone doesn't need them, which keeps CodeQL's compile-only build working.
 val checkBundledAssets = tasks.register("checkBundledAssets") {
     val dir = layout.projectDirectory.dir("generated/assets")
     val required = listOf(
@@ -57,7 +58,7 @@ val checkBundledAssets = tasks.register("checkBundledAssets") {
     }
 }
 
-tasks.named("preBuild") { dependsOn(checkBundledAssets) }
+tasks.matching { it.name.matches(Regex("merge\\w*Assets")) }.configureEach { dependsOn(checkBundledAssets) }
 
 kotlin {
     jvmToolchain(25)
