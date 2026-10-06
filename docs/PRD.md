@@ -81,7 +81,7 @@ Every call below is settled; open items live in Open Questions.
 | Location | Android coarse location only, rounded to whole degrees; the device is in a region only when its rounded key equals that region's key; the query always sends the region center, never device coordinates; manual region pick supported |
 | Images | Category illustrations in v1; licensed photos in v3 |
 | UI | Animation-first; Jetpack Compose hosts camera and chrome; Rive state machines animate the opener and Briar, the mascot; no React |
-| Distribution | GitHub Release APK plus first-launch model download; outdoor demo video |
+| Distribution | GitHub Release APK with BioCLIP Mobile and the TinyCLIP plant gate inside; Gemma downloads on first launch; outdoor demo video |
 | Credits | README and About screen credit Gemma, BioCLIP 2.5 Mobile, BioCLIP 2.5, TinyCLIP, OpenCLIP, iNaturalist, and Wikipedia |
 | Prize categories | Best Use of Gemma in; DigitalOcean dropped |
 | Later versions | Tiebreaker shot in v2; licensed photos in v3 |
@@ -103,7 +103,7 @@ The kid hunts and leaves every plant where it grows; the parent sets the boundar
 
 - As a parent, I want no account, no uploads, and coarse location only so that I don't hand over my kid's data
 - As a parent, I want the app to never call a plant safe so that my kid leaves every plant alone
-- As a parent, I want the big model download on Wi-Fi only, with a storage check, so that it doesn't eat my data plan or fill my phone
+- As a parent, I want the big Gemma download on Wi-Fi only, with a storage check, so that it doesn't eat my data plan or fill my phone
 - As a parent who denies location, I want a manual region pick so that the app still runs
 
 **Edge cases**
@@ -129,7 +129,7 @@ Ten P0s ship the hunt; one P1 follows; four P2s shape the design now. Requiremen
 | R6 | Hints | Tap for a hint; levels 1 and 3 are precomputed from the fact card at hunt start; level 2 reads the current camera frame at tap time, with no separate hint photo; guards reject the target name, "I see", "there is", numbers not on the card, and anything over 20 words; retry once, then a template hint |
 | R7 | Privacy | Android coarse location permission only; no fine location requested; coordinates rounded again before the query; no photo or precise location leaves the device; no account; no analytics |
 | R8 | Offline | All three models on-device; a cached hunt completes in airplane mode; with no cache and no network, the bundled West Georgia fallback list runs the hunt |
-| R9 | Model delivery | Pinned artifacts from Data Contracts; free storage checked before download, with a clear message showing the space needed; Wi-Fi only; resumable; progress shown; SHA-256 verified before load |
+| R9 | Model delivery | Gemma is the only download: pinned in Data Contracts; free storage checked before download, with a clear message showing the space needed; Wi-Fi only; resumable; progress shown; SHA-256 verified before load. Verify works before the download finishes; only level-2 hints wait |
 | R15 | Hunt complete | The last target passes, a short success animation plays, the stars show, then Hunt Again or Home; only the current hunt's state persists |
 
 ### P1: Fast follow
@@ -157,7 +157,7 @@ Day-1 measurements on the test phone are in hole 4; heat and hint latency are st
 | Offline | A full hunt runs in airplane mode from the cache or the bundled fallback list | Field test |
 | Verify latency | Each analyzed live frame under 200 ms (plant gate plus BioCLIP); the first eligible frame to Found under 1.5 s | Gate harness (S05) |
 | Hint latency | Under 5 s for level 2; levels 1 and 3 are precomputed (unmeasured) | Day-1 gate |
-| Download size | Gemma 2,588,147,712 bytes plus BioCLIP 46,986,589 bytes, fetched after install | Day-1 gate |
+| Download size | Gemma 2,588,147,712 bytes, fetched after install; the APK carries BioCLIP (46,986,589 bytes) and the plant gate (about 33 MB) | Day-1 gate |
 | Storage | Free space checked before the download starts | Day-1 gate |
 | Memory | Gemma loads once per session and is released when the app goes to the background; RAM recorded | Day-1 gate |
 | Heat and battery | A 20-minute session runs without immediate throttling (unmeasured) | Day-1 gate |
@@ -184,7 +184,7 @@ flowchart TD
         B1 --> B2 --> B3 --> B4
     end
 
-    SHIP["Ships inside the app<br/>menu, hazards, labels,<br/>plant gate, fallback"]
+    SHIP["Ships inside the app<br/>menu, hazards, labels, fallback,<br/>BioCLIP Mobile, plant gate"]
     B4 --> SHIP
 
     subgraph app["App time · the phone, every hunt"]
@@ -193,7 +193,7 @@ flowchart TD
         A3["Pick the hunt<br/>grass first, then 3 weighted"]
         A4["Hint on tap<br/>Gemma reads the scene; card facts"]
         A5["Verify live, 5 frames a second<br/>TinyCLIP: is it a plant?<br/>focus distance: walk closer<br/>BioCLIP: which plant?"]
-        M["Downloaded models<br/>Gemma 4 E2B, 2.59 GB<br/>BioCLIP Mobile, 47.0 MB"]
+        M["Downloaded model<br/>Gemma 4 E2B, 2.59 GB"]
         A1 --> A2 --> A3 --> A4 --> A5
         M --> A4
         M --> A5
@@ -205,7 +205,7 @@ flowchart TD
         E1["iNat taxa search<br/>word to group ID"]
         E2["Wikipedia<br/>plant descriptions"]
         E3["iNat species counts<br/>1 query, up to 3 pages"]
-        E4["Hugging Face<br/>models once, on Wi-Fi"]
+        E4["Hugging Face<br/>Gemma once, on Wi-Fi"]
     end
 
     B2 -- "kid word" --> E1
@@ -265,7 +265,7 @@ Rules:
 
 ## Data Contracts
 
-Seven files ship in the app, two pinned models download once, and every cache entry is versioned so a rebuild never serves stale data.
+Eight files ship in the app, one pinned model downloads once, and every cache entry is versioned so a rebuild never serves stale data.
 
 **Shipped in the app**
 
@@ -275,6 +275,7 @@ Seven files ship in the app, two pinned models download once, and every cache en
 | hazards.json | Hazard plant labels (name, taxon\_id) and the two opener hazards (name, rule) | Build pipeline, from NIOSH |
 | labels.npy | One 1024-d unit vector per menu word and hazard | BioCLIP 2.5 ViT-H text encoder |
 | labels.json | Parallel list: id and kind (word, hazard) | Build pipeline |
+| flora\_student\_fp32.onnx | BioCLIP 2.5 Mobile image encoder, fp32; pinned below and SHA-256 checked at build time | Build pipeline, from crazedcodernate/bioclip-2.5-mobile-fastvit @ 29b474ea2a5d72b4646f036ead9441e0a22a5c62 |
 | plant\_gate.onnx | TinyCLIP ViT-8M/16 image encoder, fp32 (about 33 MB), with CLIP normalization baked in | Build pipeline, from wkcn/TinyCLIP-ViT-8M-16-Text-3M-YFCC15M @ a2a8c6eaa2549ad66eb7c31b85022bf58273a26c |
 | plant\_gate.json | Plant and not-plant labels with their 512-d TinyCLIP text vectors | Build pipeline |
 | fallback\_october\_west\_georgia.json | Targets common in the region in October; no live counts | Build pipeline |
@@ -301,16 +302,16 @@ Seven files ship in the app, two pinned models download once, and every cache en
 
 icon\_category is one of tree, flower, fern, grass, vine, shrub, moss, other. verify\_floor stays null until calibration; development builds use one shared default until then.
 
-**Downloaded on first launch, pinned**
+**Pinned model artifacts**
 
-| Model | Repo and revision | File | Bytes | SHA-256 |
-| --- | --- | --- | --- | --- |
-| Gemma 4 E2B | litert-community/gemma-4-E2B-it-litert-lm @ b3ca0d2f076785a8f4b2219ddbd2bdb99954eae1 | gemma-4-E2B-it.litertlm | 2,588,147,712 | 181938105e0eefd105961417e8da75903eacda102c4fce9ce90f50b97139a63c |
-| BioCLIP 2.5 Mobile | crazedcodernate/bioclip-2.5-mobile-fastvit @ 29b474ea2a5d72b4646f036ead9441e0a22a5c62 | flora\_student\_fp32.onnx | 46,986,589 | 8624d44af3727b69a41dc2035c37018a30753b8d9c93ab8801a0c724dd42510f |
+| Model | Delivery | Repo and revision | File | Bytes | SHA-256 |
+| --- | --- | --- | --- | --- | --- |
+| Gemma 4 E2B | Downloaded on first launch | litert-community/gemma-4-E2B-it-litert-lm @ b3ca0d2f076785a8f4b2219ddbd2bdb99954eae1 | gemma-4-E2B-it.litertlm | 2,588,147,712 | 181938105e0eefd105961417e8da75903eacda102c4fce9ce90f50b97139a63c |
+| BioCLIP 2.5 Mobile | Bundled in the APK | crazedcodernate/bioclip-2.5-mobile-fastvit @ 29b474ea2a5d72b4646f036ead9441e0a22a5c62 | flora\_student\_fp32.onnx | 46,986,589 | 8624d44af3727b69a41dc2035c37018a30753b8d9c93ab8801a0c724dd42510f |
 
 The build-time text encoder is pinned too, laptop only: BioCLIP 2.5 ViT-H, imageomics/bioclip-2.5-vith14 @ 6e3d04e3d6522012c88181085c5ae666e14c45cd.
 
-Download from `https://huggingface.co/<repo>/resolve/<revision>/<file>`. Check free storage first. Integrity comes from the SHA-256 above, read from the Hugging Face file listing on October 5 and 6, 2026, never from a displayed size. fp32 only: on the test phone, ONNX Runtime returned NaN for BioCLIP's fp16 file.
+Gemma downloads from `https://huggingface.co/<repo>/resolve/<revision>/<file>`; the build fetches BioCLIP from the same URL shape. Check free storage first. Integrity comes from the SHA-256 above, read from the Hugging Face file listing on October 5 and 6, 2026, never from a displayed size. fp32 only: on the test phone, ONNX Runtime returned NaN for BioCLIP's fp16 file. Bundled models are generated build assets, never committed.
 
 **Cache entry**
 
@@ -460,7 +461,7 @@ No blockers remain; every hole below closes or falls back during the Day-1 gate 
 | 10 | Heat and battery | Live BioCLIP at about 5 frames a second plus the camera; Gemma only on hint taps | The gate harness runs a 20-minute live-camera session | Medium |
 | 12 | Home Wi-Fi download | A Vestige model download broke when Hugging Face moved its redirect CDN and the app had the old host pinned; filtered networks can also block the CDN | Pin the Hugging Face start URL, never the CDN host; trust bytes + SHA-256; re-resolve redirects on resume; the Day-1 gate runs the full download and an interrupted resume on the test phone | High |
 | 13 | No telemetry | Field failures stay invisible by design | Debug builds only: a local log the developer can export | Medium |
-| 17 | BioCLIP Mobile vs non-plant labels | Resolved on Day 1: 6 of 22 free non-plant photos scored a plant target top-1, and a portrait scored oak (0.592) above a real oak (0.572). TinyCLIP ViT-8M kept 16 of 16 plant photos and passed 0 real non-plants, so it gates every frame first | Export, ship, and test TinyCLIP on the phone (S06) | Low |
+| 17 | BioCLIP Mobile vs non-plant labels | Resolved on Day 1: 5 of 22 free non-plant photos scored a plant target top-1 on the reticle crop (7 of 22 on the full frame), and a portrait scored oak (0.592) above a real oak (0.572). TinyCLIP ViT-8M kept 16 of 16 plant photos and passed 0 real non-plants, so it gates every frame first | Export, ship, and test TinyCLIP on the phone (S06) | Low |
 | 18 | Gemma file variant | Resolved on Day 1: the pinned generic file loads and runs on the GPU backend, so the GPU-only build isn't needed | Keep the pinned file | Low |
 | 19 | Approximate focus distance | The back camera reports focus distance as approximate, so "walk closer" may fire too early or late | Set the close-range threshold by pointing the test phone at near and far plants; tune in the field test | Medium |
 
@@ -509,7 +510,7 @@ Day 1 is a go or no-go gate: every runtime model must run on the test phone befo
    - A 20-minute session doesn't throttle right away
    - Scene and non-plant labels tested against BioCLIP Mobile
    - TinyCLIP plant gate matches the laptop on the phone
-   - The full first-launch download succeeds
+   - The full first-launch Gemma download succeeds
    - Resume after an interrupted download succeeds
    - SHA-256 verification succeeds
    - Low-storage handling tested

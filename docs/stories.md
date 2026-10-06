@@ -15,8 +15,9 @@ Both models run on the test phone, or nothing else starts.
 - [ ] **S09 Close-range threshold** — read live autofocus distance on the test phone and set the "walk closer" threshold; PRD hole 19
 - [ ] **S05 Gate harness** (app, debug only) — records per-frame verify time, first-eligible-frame to Found, hint latency, RAM, and a 20-minute live-camera thermal run to a local exportable log; holes 4, 10, 13
 - [ ] **S06 Plant gate** (pipeline + app) — export TinyCLIP ViT-8M's image encoder to fp32 ONNX plus plant/not-plant text vectors; pin it; on-device parity test; gate every frame before BioCLIP; PRD hole 17
-- [ ] **S07 Model download** (core + app) — R9; see Download rules below; proven on the test phone: full pull, kill mid-pull + resume, Wi-Fi drop + resume, bad-hash retry
+- [ ] **S07 Gemma download** (core + app) — R9, Gemma only; see Download rules below; proven on the test phone: full pull, kill mid-pull + resume, Wi-Fi drop + resume, bad-hash retry
 - [x] **S08 Debug/release side by side** (app) — debug uses `applicationIdSuffix = ".debug"` so a release install never wipes the debug app's 2.6 GB model on the one test phone
+- [ ] **S08b Bundle the small models** (build) — `make` fetches BioCLIP (SHA-checked) and exports TinyCLIP into gitignored generated assets; CI does the same with a cache; the app loads both from the APK
 
 ## Build pipeline · Oct 7
 
