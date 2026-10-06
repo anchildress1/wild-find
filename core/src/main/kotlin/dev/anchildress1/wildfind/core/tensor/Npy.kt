@@ -46,18 +46,25 @@ object Npy {
     private const val LENGTH_OFFSET = 8
     private const val PREAMBLE_V1 = 10
     private const val PREAMBLE_V2 = 12
+    private const val MAX_VERSION = 3
 
     /** Parses [bytes] as a C-order `<f4` matrix; throws [IllegalArgumentException] on any other layout. */
     fun floatMatrix(bytes: ByteArray): FloatMatrix {
         require(bytes.size >= PREAMBLE_V1 && bytes.copyOf(MAGIC.size).contentEquals(MAGIC)) { "not an .npy file" }
         val buffer = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN)
         val major = bytes[MAGIC.size].toInt()
+        require(major in 1..MAX_VERSION) { "unsupported .npy version $major" }
         // Version 1 stores the header length in 2 bytes; versions 2 and 3 use 4.
-        val (headerLength, dataStart) = if (major == 1) {
-            buffer.getShort(LENGTH_OFFSET).toUShort().toInt() to PREAMBLE_V1
+        val dataStart = if (major == 1) PREAMBLE_V1 else PREAMBLE_V2
+        require(bytes.size >= dataStart) { "truncated .npy preamble" }
+        val headerLength = if (major ==
+            1
+        ) {
+            buffer.getShort(LENGTH_OFFSET).toUShort().toInt()
         } else {
-            buffer.getInt(LENGTH_OFFSET) to PREAMBLE_V2
+            buffer.getInt(LENGTH_OFFSET)
         }
+        require(headerLength in 0..bytes.size - dataStart) { "header length $headerLength overruns the file" }
         val header = String(bytes, dataStart, headerLength, Charsets.US_ASCII)
         require("'descr': '<f4'" in header) { "expected little-endian float32: $header" }
         require("'fortran_order': False" in header) { "expected C order: $header" }

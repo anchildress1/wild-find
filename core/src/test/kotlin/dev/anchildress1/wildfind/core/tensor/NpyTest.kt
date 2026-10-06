@@ -92,4 +92,26 @@ class NpyTest {
     fun `dotAt multiplies from an offset`() {
         assertEquals(4.0 * 1 + 5.0 * 2, floatArrayOf(9f, 4f, 5f).dotAt(1, floatArrayOf(1f, 2f)))
     }
+
+    @Test
+    fun `rejects an unknown major version`() {
+        val bytes = npy(header, values).also { it[6] = 4 }
+
+        assertThrows<IllegalArgumentException> { Npy.floatMatrix(bytes) }
+    }
+
+    @Test
+    fun `rejects a version 2 preamble cut short`() {
+        assertThrows<IllegalArgumentException> { Npy.floatMatrix(npy(header, values, version = 2).copyOf(11)) }
+    }
+
+    @Test
+    fun `rejects a header length past the end of the file`() {
+        val bytes = npy(header, values).also {
+            it[8] = 0xFF.toByte()
+            it[9] = 0x7F
+        }
+
+        assertThrows<IllegalArgumentException> { Npy.floatMatrix(bytes) }
+    }
 }
