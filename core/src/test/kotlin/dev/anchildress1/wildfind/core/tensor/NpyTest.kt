@@ -128,4 +128,21 @@ class NpyTest {
 
         assertThrows<IllegalArgumentException> { Npy.floatMatrix(npy(huge, values)) }
     }
+
+    @Test
+    fun `rejects sides whose Long product overflows`() {
+        val huge = header.replace("(2, 3)", "(9223372036854775807, 9223372036854775807)")
+
+        assertThrows<IllegalArgumentException> { Npy.floatMatrix(npy(huge, values)) }
+    }
+
+    @Test
+    fun `matrix rejects a shape whose Int product wraps`() {
+        assertThrows<IllegalArgumentException> { FloatMatrix(65536, 65536, FloatArray(0)) }
+    }
+
+    @Test
+    fun `matrix rejects negative sides`() {
+        assertThrows<IllegalArgumentException> { FloatMatrix(-1, -1, FloatArray(1)) }
+    }
 }

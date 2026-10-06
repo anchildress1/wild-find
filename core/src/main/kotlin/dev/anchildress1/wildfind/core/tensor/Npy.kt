@@ -12,7 +12,9 @@ import java.nio.ByteOrder
  */
 class FloatMatrix(val rows: Int, val cols: Int, val data: FloatArray) {
     init {
-        require(data.size == rows * cols) { "expected ${rows * cols} values, got ${data.size}" }
+        require(rows >= 0 && cols >= 0 && data.size.toLong() == rows.toLong() * cols) {
+            "expected $rows x $cols values, got ${data.size}"
+        }
     }
 
     /** Dot product of row [index] with [vector]. */
@@ -70,9 +72,12 @@ object Npy {
         require("'fortran_order': False" in header) { "expected C order: $header" }
         val (rows, cols) = requireNotNull(SHAPE.find(header)) { "expected a 2-D shape: $header" }
             .destructured.let { (r, c) -> r.toLongOrNull() to c.toLongOrNull() }
-        // Long math, so a malformed shape can't wrap to a small or negative Int count.
-        val count = if (rows != null && cols != null) rows * cols else -1L
-        require(rows != null && cols != null && count in 0..Int.MAX_VALUE.toLong()) { "shape too large: $header" }
+        // Each side fits an Int, so their product fits a Long without wrapping; then the count must fit an Int.
+        val max = Int.MAX_VALUE.toLong()
+        require(rows != null && cols != null && rows <= max && cols <= max && rows * cols <= max) {
+            "shape too large: $header"
+        }
+        val count = rows * cols
         val floats = buffer.position(dataStart + headerLength).slice().order(ByteOrder.LITTLE_ENDIAN).asFloatBuffer()
         require(floats.remaining().toLong() == count) { "expected $count values, got ${floats.remaining()}" }
         return FloatMatrix(rows.toInt(), cols.toInt(), FloatArray(count.toInt()).also { floats.get(it) })
