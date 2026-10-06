@@ -2,6 +2,13 @@
 
 SHELL := /bin/bash
 
+-include .env
+export WILDFIND_PACKAGE
+# adb treats an empty ANDROID_SERIAL as a device named ""; export it only when set.
+ifneq ($(strip $(ANDROID_SERIAL)),)
+export ANDROID_SERIAL
+endif
+
 # Pin JAVA_HOME to the .sdkmanrc JDK; empty in CI where setup-java already exports it.
 SDKMAN_JAVA := $(HOME)/.sdkman/candidates/java/$(shell sed -n 's/^java=//p' .sdkmanrc)
 JAVA_HOME_ENV := $(if $(wildcard $(SDKMAN_JAVA)/bin/java),JAVA_HOME=$(SDKMAN_JAVA),)

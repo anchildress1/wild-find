@@ -18,6 +18,7 @@ You need SDKMAN!, the Android SDK, uv, lefthook, ktlint, detekt, and gitleaks.
 
 ```sh
 sdk env install
+cp .env.example .env   # local overrides; never committed
 make setup
 make ai-checks
 make install   # debug APK to a connected phone
