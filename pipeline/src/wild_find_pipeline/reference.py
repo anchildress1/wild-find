@@ -39,10 +39,12 @@ def image_input(img: Image.Image) -> np.ndarray:
 
 
 def ranked(scores: dict[str, float]) -> list[tuple[str, float]]:
+    """Label/score pairs, highest score first."""
     return sorted(scores.items(), key=lambda kv: kv[1], reverse=True)
 
 
 def embed_image(onnx_path: Path, x: np.ndarray) -> np.ndarray:
+    """Run the mobile ONNX image encoder on one input tensor; returns a unit 1024-d vector."""
     import onnxruntime as ort
 
     session = ort.InferenceSession(str(onnx_path), providers=["CPUExecutionProvider"])
@@ -50,6 +52,10 @@ def embed_image(onnx_path: Path, x: np.ndarray) -> np.ndarray:
 
 
 def embed_texts(texts: list[str]) -> np.ndarray:
+    """Embed texts with the pinned BioCLIP 2.5 ViT-H teacher; returns unit vectors, one row per text.
+
+    Downloads the teacher snapshot into `.models/hf` on first use.
+    """
     import open_clip
     import torch
     from huggingface_hub import snapshot_download
@@ -69,6 +75,7 @@ def embed_texts(texts: list[str]) -> np.ndarray:
 
 
 def main() -> int:
+    """Write fixture.png and reference.json; returns 1 when the fixture word is not top-1."""
     bioclip = pin("bioclip")
     request = urllib.request.Request(FIXTURE_URL, headers={"User-Agent": USER_AGENT})
     with urllib.request.urlopen(request, timeout=30) as response:
