@@ -2,7 +2,12 @@ package dev.anchildress1.wildfind.core.region
 
 import kotlin.math.roundToInt
 
-/** Whole-degree region, keyed as `"<lat>_<lng>"` (e.g. `34_-85`). */
+/**
+ * Whole-degree region, keyed as `"<lat>_<lng>"` (e.g. `34_-85`).
+ *
+ * @property lat latitude in whole degrees
+ * @property lng longitude in whole degrees
+ */
 data class RegionKey(val lat: Int, val lng: Int) {
     /** True when wild-find ships a menu for this region. */
     val isSupported: Boolean get() = this in SUPPORTED
