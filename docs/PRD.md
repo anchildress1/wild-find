@@ -404,20 +404,16 @@ Only the current hunt's state persists; there is no history, streak, or sharing.
 
 ## Visual System
 
-Briar and the opener play finished sprite sheets, one per state. A Rive rig was dropped on Oct 6: the rig sheets' parts were drawn at mismatched sizes and didn't assemble into a usable Briar. The rig sheets stay as reference.
+Briar and the opener play finished sprite sheets, one per state. A Rive rig was dropped on Oct 6: the rig sheets' parts were drawn at mismatched sizes and didn't assemble into a usable Briar, and the sheets were removed.
 
-**Sprite sheet contract:** each state is `app/src/main/assets/briar/<state>.png` plus `<state>.json`. The PNG is a grid of equal frames, left to right, then top to bottom, on a transparent background. The JSON is `{"frame_width": 512, "frame_height": 512, "frames": 12, "columns": 4, "fps": 12, "loop": true}`. States: `welcome`, `searching`, `found`, `retry`, `complete`. A looping state's last frame must flow into its first.
+**Sprite sheet contract:** each state is `app/src/main/assets/briar/<state>.png` plus `<state>.json`. The PNG is a grid of equal frames, left to right, then top to bottom, on a transparent background. The JSON is `{"frame_width": 512, "frame_height": 512, "frames": 12, "columns": 4, "fps": 12, "loop": true}`. States: `welcome`, `searching`, `found`, `retry`, `complete`; until their art exists, every state plays `idle`. A looping state's last frame must flow into its first. The build repacks source sheets onto whole-pixel cells, so a source sheet may have fractional cell sizes.
 
 | Asset | Used in | File |
 | --- | --- | --- |
 | Logo | Splash, About | Path pending (Open Questions) |
-| Briar body parts | Ears, head, muzzle, neck fur with scarf, torso (front, back, sides), limbs, paws, tail segments; reference only | assets/source/wild-find-briar-master-rig-1.png |
-| Briar alternate body | Unlabeled alternate torsos, head turns, tails, and limbs; reference only, no names or pivots | assets/source/wild-find-briar-master-rig-1b.png |
-| Briar face parts | Eyes, irises, pupils, lids, brows, mouths and interiors, teeth, noses, blush, whiskers; reference only | assets/source/wild-find-briar-master-rig-2.png |
-| Briar accessories | Scarves, backpack, hats, handheld props, environment bits, FX; reference only | assets/source/wild-find-briar-master-rig-3.png |
-| Briar rigging spec | Pivots, hierarchy, and limits written for the dropped Rive rig; reference only | assets/source/briar-4-rigging-specification.pdf |
 | Concept board | Poses, icon ideas, palette; reference only, broken alpha | assets/source/wild-find-sprite-1.png |
-| Briar sprite sheets | One sheet per state: welcome; searching or hint; found; retry; hunt complete | app/src/main/assets/briar/ (pending art) |
+| Briar idle loop | 8-frame idle (head turn, blink), source for `idle`; plays for every state until per-state art exists | assets/source/briar-idle-sprites-twigs.png |
+| Briar sprite sheets | Per-state sheets: welcome; searching or hint; found; retry; hunt complete | app/src/main/assets/briar/ (only `idle` so far) |
 | Category icons | One per icon\_category: tree, flower, fern, grass, vine, shrub, moss, other | Path pending |
 | Opener art | Bees and snakes, with poison ivy drawn in; a sprite sheet under the same contract | Path pending |
 
