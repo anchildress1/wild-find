@@ -47,13 +47,13 @@ jobs:
           sudo install -m 755 ktlint /usr/local/bin/ktlint
 
       - name: Run ktlint
-        run: ktlint --log-level=error
+        run: make ktlint
 
       - name: Run detekt
         run: |
           curl -sSLo detekt.jar --proto '=https' --tlsv1.2 https://github.com/detekt/detekt/releases/download/v1.23.8/detekt-cli-1.23.8-all.jar
           echo "2ce2ff952e150baf28a29cda70a363b0340b3e81a55f43e51ec5edffc3d066c1  detekt.jar" | sha256sum -c -
-          java -jar detekt.jar --build-upon-default-config --config detekt.yml --input core/src,app/src
+          make detekt DETEKT_JAR=detekt.jar
 
       - name: Test core with coverage gate
         run: ./gradlew --warning-mode=fail :core:test :core:koverVerify

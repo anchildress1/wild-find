@@ -24,7 +24,7 @@ Spec of record: `docs/PRD.md`. Work queue: `docs/stories.md`. A change that cont
 ## UI
 
 - Animation-first. Every screen transition and state change is animated; no static form or list screens.
-- The mascot and the opener are Rive state machines. Game events drive Rive inputs; Compose never draws mascot frames.
+- Briar (the mascot) and the opener are Rive state machines. Game events drive Rive inputs; Compose never draws Briar's frames.
 - 48 dp touch targets, content descriptions, no color-only signal, sunlight contrast.
 - Invoke `/compose-skill` before touching `@Composable` code. Invoke `/litertlm-android-sdk` before touching Gemma code.
 
@@ -32,6 +32,8 @@ Spec of record: `docs/PRD.md`. Work queue: `docs/stories.md`. A change that cont
 
 - `make ai-checks` before every commit. Warnings fail the build.
 - `make setup` once per clone (lefthook + uv sync).
+- Local settings live in `.env` (copy `.env.example`). New variables go in `.env.example` with a one-line comment. Never commit `.env`.
+- Public Kotlin and Python API gets a one-line KDoc/docstring; detekt and ruff `D1` enforce it. Inline comments explain why, never what.
 - `make fetch-models` then `make push-models` sideloads the pinned models to the test phone.
 - Never `adb uninstall` the app on the test phone; it deletes the 2.6 GB model. `make install` keeps data.
 - Unrunnable check (on-device, field, airplane mode) → stop and hand it to the user. Never tick it yourself.

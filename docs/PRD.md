@@ -80,7 +80,7 @@ Every call below is settled; open items live in Open Questions.
 | Fact cards | Gemma drafts from Wikipedia; Claude fact-checks at build time in a manual Claude Code pass; the post discloses it |
 | Location | Android coarse location only, rounded to whole degrees; the device is in a region only when its rounded key equals that region's key; the query always sends the region center, never device coordinates; manual region pick supported |
 | Images | Category illustrations in v1; licensed photos in v3 |
-| UI | Animation-first; Jetpack Compose hosts camera and chrome; Rive state machines animate the opener and the mascot; no React |
+| UI | Animation-first; Jetpack Compose hosts camera and chrome; Rive state machines animate the opener and Briar, the mascot; no React |
 | Distribution | GitHub Release APK plus first-launch model download; outdoor demo video |
 | Credits | README and About screen credit Gemma, BioCLIP 2.5 Mobile, BioCLIP 2.5, OpenCLIP, iNaturalist, and Wikipedia |
 | Prize categories | Best Use of Gemma in; DigitalOcean dropped |
@@ -401,14 +401,15 @@ Only the current hunt's state persists; there is no history, streak, or sharing.
 
 ## Visual System
 
-The final generated assets are the source of truth for the mascot's look; the Rive rig is built from the layered rigging sheet; frame-by-frame sprite sheets are out because AI-drawn frames drift in proportion and can't play as cycles.
+The final generated assets are the source of truth for Briar's look; the Rive rig is built from the layered rigging sheet; frame-by-frame sprite sheets are out because AI-drawn frames drift in proportion and can't play as cycles.
 
 | Asset | Used in | File |
 | --- | --- | --- |
 | Logo | Splash, About | Path pending (Open Questions) |
-| Mascot rig parts | Layered parts, 11 expression heads, turnaround; source for the Rive rig | assets/source/wild-find-rigging-sheet.png |
+| Briar body parts | Head, torso (front, back, sides), limbs, paws, tail segments, scarf, backpack, props; source for the Rive rig | assets/source/wild-find-briar-master-rig-1.png |
+| Briar face parts | Eyes, irises, pupils, lids, brows, mouths and interiors, teeth, noses, blush, whiskers | assets/source/wild-find-briar-master-rig-2.png |
 | Concept board | Poses, icon ideas, palette; reference only, broken alpha | assets/source/wild-find-sprite-1.png |
-| Mascot rig | Rive state machine: welcome; searching or hint; success or found; retry or not quite; hunt complete | Path pending |
+| Briar rig | Rive state machine: welcome; searching or hint; success or found; retry or not quite; hunt complete | Path pending |
 | Category icons | One per icon\_category: tree, flower, fern, grass, vine, shrub, moss, other | Path pending |
 | Opener art | Bees and snakes, with poison ivy drawn in | Path pending |
 
@@ -490,7 +491,7 @@ Two questions block the build; three can wait.
 
 **Blocking**
 
-- [ ] Visual: who builds the mascot Rive rig and the opener, and by when? Logo and category icons still need paths
+- [ ] Visual: who builds Briar's Rive rig and the opener, and by when? Logo and category icons still need paths
 - [ ] Legal: do coarse location plus whole-degree rounding clear the precise-geolocation bar?
 
 **Non-blocking**
@@ -519,7 +520,7 @@ Day 1 is a go or no-go gate: both models must run on the test phone before UI or
    - SHA-256 verification succeeds
    - Low-storage handling tested
 2. Oct 7, 2026: build pipeline outputs menu.json, hazards.json, labels, and the fallback file; denylist and final menu reviewed; final assets wired in
-3. Oct 8, 2026: verify loop end to end; shoot about 30 calibration photos and 20 to 30 holdout photos, stored apart
+3. Oct 8, 2026: verify loop end to end; collect about 30 calibration photos and 20 to 30 holdout photos from free CC0 or public-domain sources, stored apart; the holdout includes free non-plant negatives (screens, people, pavement, wide shots)
 4. Oct 9, 2026: outdoor field test; per-target floors and the margin decision come from the calibration set only; hints with guards; hunt-complete flow
 5. Oct 10, 2026: holdout acceptance metrics; record the outdoor demo; draft the post, disclosing the Claude fact-check
 6. Oct 11, 2026: internal ship deadline, 11:59 PM PDT

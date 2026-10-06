@@ -14,10 +14,11 @@ The full spec is in [docs/PRD.md](docs/PRD.md). The build queue is in [docs/stor
 
 ## Setup
 
-You need SDKMAN!, the Android SDK, uv, lefthook, ktlint, detekt, and gitleaks.
+You need SDKMAN!, the Android SDK, uv, lefthook, ktlint, detekt, shellcheck, actionlint, and gitleaks.
 
 ```sh
 sdk env install
+cp .env.example .env   # local overrides; never committed
 make setup
 make ai-checks
 make install   # debug APK to a connected phone

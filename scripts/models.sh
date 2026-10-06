@@ -5,9 +5,16 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# Values already in the shell environment win over .env, as with any dotenv loader.
+shell_serial="${ANDROID_SERIAL:-}" shell_package="${WILDFIND_PACKAGE:-}"
+# shellcheck source=/dev/null
+[ -f "$ROOT/.env" ] && { set -a; . "$ROOT/.env"; set +a; }
+ANDROID_SERIAL="${shell_serial:-${ANDROID_SERIAL:-}}" WILDFIND_PACKAGE="${shell_package:-${WILDFIND_PACKAGE:-}}"
+# adb treats an empty ANDROID_SERIAL as a device named "".
+[ -n "${ANDROID_SERIAL:-}" ] || unset ANDROID_SERIAL
 MANIFEST="$ROOT/core/src/main/resources/models.properties"
 CACHE="$ROOT/.models"
-PACKAGE="${PACKAGE:-dev.anchildress1.wildfind.debug}"
+PACKAGE="${WILDFIND_PACKAGE:-dev.anchildress1.wildfind.debug}"
 # Matches Context.noBackupFilesDir/models, relative to the app data dir run-as starts in.
 REMOTE_DIR="no_backup/models"
 MODELS=(gemma bioclip)
@@ -56,6 +63,7 @@ push() {
   command -v adb >/dev/null || die "adb not found"
   [ "$(adb devices | grep -c $'\tdevice$')" = 1 ] || [ -n "${ANDROID_SERIAL:-}" ] \
     || die "need exactly one device, or set ANDROID_SERIAL"
+  device shell true >/dev/null 2>&1 || die "adb can't reach ${ANDROID_SERIAL:-the device}; check ANDROID_SERIAL in .env"
   device shell pm path "$PACKAGE" >/dev/null 2>&1 || die "$PACKAGE not installed; run make install"
   runas true 2>/dev/null || die "$PACKAGE is not debuggable"
   runas mkdir -p "$REMOTE_DIR"

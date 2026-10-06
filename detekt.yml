@@ -5,6 +5,18 @@ config:
   validation: true
   warningsAsErrors: true
 
+comments:
+  UndocumentedPublicClass:
+    active: true
+    ignoreDefaultCompanionObject: true
+    excludes: ['**/test/**', '**/androidTest/**']
+  UndocumentedPublicFunction:
+    active: true
+    excludes: ['**/test/**', '**/androidTest/**']
+  UndocumentedPublicProperty:
+    active: true
+    excludes: ['**/test/**', '**/androidTest/**']
+
 naming:
   FunctionNaming:
     ignoreAnnotated: ['Composable']
