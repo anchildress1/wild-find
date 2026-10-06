@@ -45,10 +45,13 @@ device-test: install
 	@adb shell am instrument -w $(WILDFIND_PACKAGE).test/androidx.test.runner.AndroidJUnitRunner | tee /dev/stderr | grep -qE '^OK \([1-9][0-9]* tests?\)'
 
 # S09: logs live autofocus distance (diopters) from the back camera; Ctrl-C to stop.
+# Each run gets its own dated file so no run overwrites another; pass FOCUS_LOG=... to choose one.
+FOCUS_LOG ?= docs/results/$(shell date +%F)/focus-probe-$(shell date +%H%M%S).log
 focus-probe: install
+	mkdir -p $(dir $(FOCUS_LOG))
 	adb logcat -c
 	adb shell am start -n $(WILDFIND_PACKAGE)/dev.anchildress1.wildfind.FocusProbeActivity
-	adb logcat -s FocusProbe:I | tee docs/results/day-1/focus-probe.log
+	adb logcat -s FocusProbe:I | tee $(FOCUS_LOG)
 
 fetch-models:
 	./scripts/models.sh fetch
