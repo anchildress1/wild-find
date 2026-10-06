@@ -47,6 +47,11 @@ def test_species_table_appends_missing_rows_and_flags_hazards():
     ]
 
 
+def test_species_table_rejects_labels_that_do_not_match_its_rows():
+    with pytest.raises(ValueError, match="2 rows but 1 labels"):
+        species_table(np.eye(2), ["Quercus alba"], {})
+
+
 def test_species_table_unchanged_when_nothing_is_missing():
     table, labels = species_table(np.eye(1), ["Quercus alba"], {})
 

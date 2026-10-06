@@ -49,6 +49,9 @@ def plant_share(embedding: np.ndarray, vectors: np.ndarray, plant: np.ndarray, s
 
 def species_table(table: np.ndarray, names: list[str], extra: dict[str, np.ndarray]) -> tuple[np.ndarray, list[dict]]:
     """Append the [extra] rows after the table's own; return the table and per-row labels with hazard flags."""
+    # The table and its labels are pinned separately; a mismatched pair would shift every name onto the wrong row.
+    if table.shape[0] != len(names):
+        raise ValueError(f"species table has {table.shape[0]} rows but {len(names)} labels")
     if extra:
         table = np.vstack([table, np.stack(list(extra.values()))])
     labels = [{"scientific": name, "hazard": is_hazard(name)} for name in [*names, *extra]]
