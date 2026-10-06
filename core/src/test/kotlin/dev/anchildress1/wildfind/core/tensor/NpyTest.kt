@@ -87,4 +87,9 @@ class NpyTest {
     fun `matrix rejects data that does not match its shape`() {
         assertThrows<IllegalArgumentException> { FloatMatrix(2, 2, FloatArray(3)) }
     }
+
+    @Test
+    fun `dotAt multiplies from an offset`() {
+        assertEquals(4.0 * 1 + 5.0 * 2, floatArrayOf(9f, 4f, 5f).dotAt(1, floatArrayOf(1f, 2f)))
+    }
 }

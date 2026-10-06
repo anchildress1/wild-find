@@ -18,9 +18,15 @@ class FloatMatrix(val rows: Int, val cols: Int, val data: FloatArray) {
     /** Dot product of row [index] with [vector]. */
     fun dot(index: Int, vector: FloatArray): Double {
         require(vector.size == cols) { "vector size ${vector.size}, expected $cols" }
-        val start = index * cols
-        return (0 until cols).sumOf { (data[start + it] * vector[it]).toDouble() }
+        return data.dotAt(index * cols, vector)
     }
+}
+
+/** Dot product of [other] with this array's values starting at [start]; allocation-free for the per-frame path. */
+fun FloatArray.dotAt(start: Int, other: FloatArray): Double {
+    var sum = 0.0
+    for (i in other.indices) sum += this[start + i] * other[i]
+    return sum
 }
 
 /** Reads the 2-D little-endian float32 `.npy` files the build pipeline writes. */

@@ -1,5 +1,6 @@
 package dev.anchildress1.wildfind.core.verify
 
+import dev.anchildress1.wildfind.core.tensor.dotAt
 import kotlin.math.exp
 
 /**
@@ -26,8 +27,7 @@ class PlantGate(val labels: List<Label>, val logitScale: Float) {
     fun plantShare(embedding: FloatArray): Double {
         require(embedding.size == labels.first().vector.size) { "embedding size ${embedding.size}" }
         val logits = labels.map { label ->
-            logitScale *
-                label.vector.indices.sumOf { (label.vector[it] * embedding[it]).toDouble() }
+            logitScale * label.vector.dotAt(0, embedding)
         }
         val max = logits.max()
         val weights = logits.map { exp(it - max) }
