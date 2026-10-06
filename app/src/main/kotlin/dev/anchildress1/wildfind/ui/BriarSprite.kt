@@ -37,7 +37,7 @@ fun BriarSprite(name: String, description: String, modifier: Modifier = Modifier
     }
     val image = remember(name) { assets.open("briar/$name.png").use(BitmapFactory::decodeStream).asImageBitmap() }
     var frame by remember(name) { mutableIntStateOf(0) }
-    LaunchedEffect(sheet) {
+    LaunchedEffect(name, sheet) {
         val start = withFrameNanos { it }
         while (true) withFrameNanos { frame = sheet.frameAt(it - start) }
     }
