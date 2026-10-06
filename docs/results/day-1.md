@@ -103,6 +103,19 @@ Fixture: a CC0 white oak, [iNaturalist 211670015](https://www.inaturalist.org/ob
 
 TinyCLIP ViT-8M/16 is the plant gate. Its phone-vs-laptop parity is still to be measured (S06).
 
+## Hazard warnings without scene labels
+
+Scored against 5 plant targets plus 5 hazards (no scene labels), on the full frame and a center 60% reticle crop. A photo "warns" when a hazard is top-1 on either.
+
+| Photos | Would warn | Detail |
+| --- | --- | --- |
+| 22 non-plants | 1 | A computer monitor: full frame top-1 poison sumac |
+| 14 safe plants | 3 | Clover → pokeweed (both photos), grass → poison sumac |
+| 2 poison ivy | 2 | Both correctly flagged |
+
+- Gating each region with TinyCLIP first removes the non-plant warning, since TinyCLIP rejects screens.
+- The safe-plant false alarms don't depend on order; they need the hazard margin decided from the calibration set (stories H6).
+
 ## Camera
 
 The back camera (ID 0, 6.3 mm) reports focus distance with calibration `APPROXIMATE`. The "walk closer" threshold still has to be set on the phone (S09).

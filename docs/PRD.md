@@ -155,7 +155,7 @@ Day-1 measurements on the test phone are in hole 4; heat and hint latency are st
 | --- | --- | --- |
 | Privacy | No photo or precise location leaves the device; gameplay requests carry only coarse region coordinates plus ordinary request metadata such as IP address | Network log on the test phone |
 | Offline | A full hunt runs in airplane mode from the cache or the bundled fallback list | Field test |
-| Verify latency | Each analyzed live frame under 200 ms (plant gate plus BioCLIP); the first eligible frame to Found under 1.5 s | Gate harness (S05) |
+| Verify latency | Each analyzed live frame under 200 ms (TinyCLIP on the reticle crop and full frame, plus BioCLIP); the first eligible frame to Found under 1.5 s | Gate harness (S05) |
 | Hint latency | Under 5 s for level 2; levels 1 and 3 are precomputed (unmeasured) | Day-1 gate |
 | Download size | Gemma 2,588,147,712 bytes, fetched after install; the APK carries BioCLIP (46,986,589 bytes) and the plant gate (about 33 MB) | Day-1 gate |
 | Storage | Free space checked before the download starts | Day-1 gate |
@@ -331,7 +331,7 @@ A mismatch on schema\_version, menu\_version, region, or month discards the entr
 
 | Model | Input | Output |
 | --- | --- | --- |
-| TinyCLIP plant gate | 224 x 224 RGB reticle crop, values 0 to 1, rotation normalized (the same crop BioCLIP gets); normalization is baked in | 512-d unit vector; softmax over 50.0 × cosine against plant\_gate.json rows |
+| TinyCLIP plant gate | 224 x 224 RGB reticle crop and full frame, values 0 to 1, rotation normalized (the same inputs BioCLIP gets); normalization is baked in | 512-d unit vector; softmax over 50.0 × cosine against plant\_gate.json rows |
 | BioCLIP 2.5 Mobile | 224 x 224 RGB reticle crop, values 0 to 1, rotation normalized; normalization is baked in | 1024-d unit vector; score is a dot product with labels.npy rows |
 | Gemma, scene call | Scene image plus the fixed tag list | JSON array of tags |
 | Gemma, hint call | Fact card, tags, hint level | One line, 20 words or fewer |
@@ -348,13 +348,13 @@ One query per hunt, requiring at most three paginated HTTP requests. month means
 
 ## Runtime Logic
 
-Verify runs on live camera frames, about 5 per second, with no Gemma call. Each frame is rotation-normalized once, and the same upright reticle crop feeds both models. The hazard check runs first, over the reticle crop and the full frame, so a hazard anywhere in view always warns; then the plant gate, then close range; a find needs the target on top for 3 frames in a row; no result ever means a plant is safe.
+Verify runs on live camera frames, about 5 per second, with no Gemma call. Each frame is rotation-normalized once. TinyCLIP checks both the reticle crop and the full frame, and the hazard check runs on every region it calls a plant, so a hazard anywhere in view warns while a person or a screen never does. Then the reticle plant gate, then close range; a find needs the target on top for 3 frames in a row; no result ever means a plant is safe.
 
 **Verify, checked in order**
 
 | # | Condition | Kid sees | Star |
 | --- | --- | --- | --- |
-| 1 | A hazard label is top-1 on the reticle crop or the full frame | "That might be a plant we leave extra space around." | No |
+| 1 | In a region TinyCLIP calls a plant (the reticle crop, the full frame, or both), a hazard label is top-1 | "That might be a plant we leave extra space around." | No |
 | 2 | TinyCLIP says the reticle crop isn't a plant | "Point the camera at a plant" | No |
 | 3 | No focus reading yet | "Tap the plant to focus" | No |
 | 4 | Autofocus distance is below the close-range threshold in diopters, so the subject is too far | "Walk closer" | No |

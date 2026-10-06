@@ -36,7 +36,7 @@ Every runtime model (TinyCLIP, BioCLIP, Gemma) runs on the test phone, or nothin
 - [ ] **S22 Sightings** — aggregate `species_counts` pages via id or `ancestor_ids`; eligibility at 25+; widen to 150 km once when < 3 eligible; R2
 - [ ] **S23 Cache rules** — versioned entry; mismatch on schema, menu, region, month, or radius discards; H3
 - [ ] **S24 Hunt pick** — sighting-weighted random, 3 targets, never a hazard; grass tutorial first-ever only; R3, R4, H1
-- [ ] **S25 Verify decision** — every PRD verify-table state over live frames, in order: hazard (reticle crop or full frame), not a plant, no focus reading, too far, target top-1 for 3 frames (auto-capture), else reticle guidance; floor + optional margin; R5, R12
+- [ ] **S25 Verify decision** — every PRD verify-table state over live frames, in order: hazard in a region TinyCLIP calls a plant (reticle crop or full frame), reticle not a plant, no focus reading, too far, target top-1 for 3 frames (auto-capture), else reticle guidance; floor + optional margin; R5, R12
 - [ ] **S26 Hint guards** — target name, "I see", "there is", off-card numbers, 20 words; retry once → template; R6
 - [ ] **S27 Hunt state** — current hunt survives process death; tutorial/opener flags persist; H2
 
@@ -46,7 +46,7 @@ Every runtime model (TinyCLIP, BioCLIP, Gemma) runs on the test phone, or nothin
 - [ ] **S31 Safety opener** — R1, placeholder art, replayable, banned-copy check in tests
 - [ ] **S32 Location** — coarse permission only, manual region pick on deny; coverage message off-region; R2, R7
 - [ ] **S33 iNat client** — one query, ≤ 3 pages (≤ 6 on the widen path), named User-Agent, 429 Retry-After; R2
-- [ ] **S34 Camera + verify flow** — CameraX preview at about 5 fps: rotation-normalize the frame once; full frame + reticle crop → hazard check; reticle crop → TinyCLIP plant gate → BioCLIP; autofocus distance → "walk closer"; S25 → auto-capture and kid message; R5
+- [ ] **S34 Camera + verify flow** — CameraX preview at about 5 fps: rotation-normalize the frame once; TinyCLIP on the reticle crop and full frame; BioCLIP hazard check on each region TinyCLIP calls a plant; reticle plant gate → BioCLIP target; autofocus distance → "walk closer"; S25 → auto-capture and kid message; R5
 - [ ] **S35 Hints** — levels 1/3 precomputed at hunt start, level 2 from the current camera frame at tap time; R6
 - [ ] **S36 Hunt complete** — success animation, stars, Hunt Again / Home; R15
 - [ ] **S37 Offline** — airplane-mode hunt from cache or bundled fallback; R8
@@ -86,7 +86,7 @@ New holes found while drafting these stories. PRD holes 3, 4, 5, 10, 12, 13, 19 
 | H3 | Widened 150 km counts get cached under the same key as 75 km counts | Add `radius_km` to the cache entry; mismatch discards | Medium |
 | H4 | R10 never says what judges "still rooted" | Gemma yes/no call on the found crop; P1, decide before S40 | Medium |
 | H5 | Fallback file is October-only; offline cold starts after October get October targets | Accept for v1; note in the post | Low |
-| H6 | Hazard check runs first, and on Day 1 the mobile model put white oak only 0.022 above poison oak (teacher: 0.069); its embedding sits at 0.81 cosine to the teacher's | Track hazard false-alarm rate on the holdout set; decide whether a hazard must beat the target by a margin before it warns | High |
+| H6 | Hazard false alarms on safe plants: on Day 1, 3 of 14 safe plant photos had a hazard top-1 (clover → pokeweed twice, grass → poison sumac) and white oak beat poison oak by only 0.022 on the mobile model | Track hazard false-alarm rate on the holdout set; decide whether a hazard must beat the target by a margin before it warns | High |
 | H7 | Build-time menu gate uses 75 km while the app can widen to 150 km | Widened hunts may surface fewer words; accept, or run the gate at 150 km | Medium |
 | H8 | LiteRT-LM Python ships as a CLI; prompt-in, JSON-out scripting is unverified | Verify on Day 2 before S10; fall back to transformers in uv | Medium |
 | H10 | No release keystore plan for the GitHub Release APK | Local keystore, never committed; `keystore.properties` gitignored | Low |
