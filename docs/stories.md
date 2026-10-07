@@ -21,21 +21,23 @@ Every runtime model (TinyCLIP, BioCLIP, Gemma) runs on the test phone, or nothin
 
 ## Build pipeline · Oct 7–8
 
-The Oct 7 redesign (PRD Redesign) dropped the build-time menu: the candidates, resolve, gates, fact-card, fact-check, and fallback stories are gone, and iNat supplies targets live.
+The Oct 7 redesign (PRD Redesign) dropped the build-time menu: the old S10–S16 (candidates, resolve, gates, fact cards, fact-check, fallback) are gone, and iNat supplies targets live. S10 now names the toxicity flag; S15 keeps its number.
 
-- [ ] **S10 Toxicity flag** (pipeline) — for every species-table row: GBIF name match, English Wikipedia article text, USDA PLANTS toxicity; flag per the PRD rule (stub or missing article flags); commit `pipeline/data/toxicity.json` with each flag's evidence, since CI can't fetch 4,272 articles; `make assets` merges `toxic` and `genus` into species_labels.json
+- [x] **S10 Toxicity flag** (pipeline) — `make toxicity` reads every species-table row's English Wikipedia article and USDA PLANTS ratings (GBIF synonyms); flags per the PRD rule; commits `pipeline/data/toxicity.json` with evidence and revision; `make assets` merges `toxic` and `genus` into species_labels.json; Oct 7 build: 2,170 of 4,272 flagged (1,369 stubs), 64 of the 104 common West Georgia species pass
 - [ ] **S15 Tutorial labels** (pipeline) — `make labels` writes only the 11 fixed tutorial labels into `labels.npy` + `labels.json`; drop the stand-in menu words; label text format per hole 3
 
 ## Game logic · core
 
 - [ ] **S20 Contracts** — parse and validate `species_labels.json` (genus, hazard, toxic), `hazards.json`, `labels.json`, cache entry; reject unknown `schema_version`
-- [ ] **S21 Region key** — whole-degree rounding; any key plays (redesign: drop the `34_-85`-only gate in `RegionKey`)
+- [x] **S21 Region key** — whole-degree rounding; supported iff key is `34_-85`
+- [ ] **S28 Any region** (core) — redesign: drop the `34_-85`-only gate in `RegionKey`; any whole-degree key plays; R2
 - [ ] **S22 Sightings** — aggregate `species_counts` pages; eligible at 25+ sightings, in the species table, not toxic or hazard, common name of 3 words or fewer in the device locale; widen to 150 km once when < 3 eligible; R2
 - [ ] **S23 Cache rules** — versioned entry; mismatch on schema, table version, region, locale, month, or radius discards; H3
 - [ ] **S24 Hunt pick** — sighting-weighted random, 3 targets, never two from one genus, never a hazard or toxic species; grass tutorial first-ever only; R3, R4, H1
-- [ ] **S25 Verify decision** — every PRD verify-table state over live frames, in order: hazard in a region TinyCLIP calls a plant (reticle crop or full frame), reticle not a plant, no focus reading, too far, top-1 species-table row in the target's genus for 3 frames (auto-capture), else reticle guidance; redesign: replace target top-1 over menu labels with the genus pass and drop floor + margin; R5, R12; `VerifyStreak` reports `Matching(1..2)` for the ring and "Hold still", then `Found`; the grass tutorial goal (R3) skips the hazard row; `FrameVerifier` runs the per-frame model path behind encoder interfaces, so all of it is JVM-tested
+- [x] **S25 Verify decision** — every PRD verify-table state over live frames, in order: hazard in a region TinyCLIP calls a plant (reticle crop or full frame), reticle not a plant, no focus reading, too far, target top-1 for 3 frames (auto-capture), else reticle guidance; floor + optional margin; R5, R12; `VerifyStreak` reports `Matching(1..2)` for the ring and "Hold still", then `Found`; the grass tutorial goal (R3) skips the hazard row; `FrameVerifier` runs the per-frame model path behind encoder interfaces, so all of it is JVM-tested
 - [ ] **S26 Hint guards** — target name, "I see", "there is", any number, eat/taste/edible/touch/pick, any claim about the plant itself, 20 words; retry once → template from the scene tags; R6
 - [ ] **S27 Hunt state** — current hunt survives process death; tutorial/opener flags persist; H2
+- [ ] **S29 Genus pass** (core) — redesign: S25's row 5 passes when the reticle's top-1 species-table row is in the target's genus, scored from the same species-table pass as the hazard check; drop floor + margin and menu-label scoring; R5
 
 ## App · Oct 8–9
 

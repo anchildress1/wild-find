@@ -230,7 +230,7 @@ The core loop runs live in the camera: TinyCLIP rejects non-plants, focus distan
 Runs once on the laptop in Python with uv. Gemma never runs here.
 
 1. **Species table:** the pinned BioCLIP taxa files plus a row for each hazard species they lack, with hazard flags (species_table.npy, species_labels.json)
-2. **Toxicity flag:** for every species-table row, GBIF's name match gives the accepted name; the English Wikipedia article and USDA PLANTS' toxicity rating set the flag per the Decisions rule; committed as `pipeline/data/toxicity.json` with each flag's evidence sentence or rating, since CI can't fetch 4,272 articles, and merged into species_labels.json
+2. **Toxicity flag:** `make toxicity` reads each species-table row's English Wikipedia article (redirects followed, 50 per request, reference sections and citations stripped) and USDA PLANTS' toxicity ratings, widened to every GBIF synonym of each moderate or severe species; flags per the Decisions rule; commits `pipeline/data/toxicity.json` with each flag's evidence and article revision, since CI doesn't fetch articles; `make assets` merges the flag and genus into species_labels.json. The Oct 7 build flagged 2,170 of 4,272 rows: 1,369 stubs (mostly rare species with short English articles), 694 toxicity sentences, 87 with no article, 20 from USDA alone (`docs/results/day-2/toxicity-build.log`)
 3. **Tutorial labels:** the BioCLIP 2.5 ViT-H text encoder writes one vector per fixed tutorial label (R3; text format per hole 3) into labels.npy and labels.json
 4. **Plant gate:** TinyCLIP's image encoder exported to plant_gate.onnx, and its text encoder writes the plant-gate vectors into plant_gate.json
 5. **Output:** species_table.npy, species_labels.json, labels.npy, labels.json, hazards.json, plant_gate.onnx, plant_gate.json; BioCLIP Mobile ships as its pinned file
@@ -249,7 +249,7 @@ Eight files ship in the app, one pinned model downloads once, and every cache en
 | --- | --- | --- |
 | hazards.json | Hazard species (name, taxon\_id, scientific name) and the two opener hazards (name, rule) | Build pipeline, from NIOSH |
 | species\_table.npy | BioCLIP Mobile's 4,271-species text table plus a row for each hazard species it lacks (today: *Toxicodendron pubescens*); 1024-d unit vectors | Build pipeline, from the pinned taxa\_table.npy |
-| species\_labels.json | schema\_version, table\_version, and one entry per species\_table row: scientific name, genus, hazard flag, toxic flag (below) | Build pipeline, from the pinned taxa\_labels.json and toxicity.json |
+| species\_labels.json | One entry per species\_table row: scientific name, genus, hazard flag, toxic flag (below) | Build pipeline, from the pinned taxa\_labels.json and toxicity.json |
 | labels.npy | One 1024-d unit vector per fixed tutorial label (R3) | BioCLIP 2.5 ViT-H text encoder |
 | labels.json | schema\_version, the teacher pin and package versions, and a list parallel to labels.npy: id, scientific name, and prompt per row | Build pipeline |
 | flora\_student\_fp32.onnx | BioCLIP 2.5 Mobile image encoder, fp32; pinned below and SHA-256 checked at build time | Build pipeline, from crazedcodernate/bioclip-2.5-mobile-fastvit @ 29b474ea2a5d72b4646f036ead9441e0a22a5c62 |
@@ -259,13 +259,9 @@ Eight files ship in the app, one pinned model downloads once, and every cache en
 **species\_labels.json**
 
 ```json
-{
-  "schema_version": 2,
-  "table_version": "2026-10-07",
-  "species": [
-    { "scientific": "Quercus nigra", "genus": "Quercus", "hazard": false, "toxic": false }
-  ]
-}
+[
+  { "scientific": "Quercus nigra", "hazard": false, "genus": "Quercus", "toxic": false }
+]
 ```
 
 A target is a species-table row; its common name comes from the iNaturalist pull in the device language, so the table carries no common names. No verify floor: top-1 genus decides, unless the calibration set (S50) shows a floor is needed.
@@ -288,7 +284,7 @@ Gemma downloads from `https://huggingface.co/<repo>/resolve/<revision>/<file>`; 
 ```json
 {
   "schema_version": 1,
-  "table_version": "2026-10-07",
+  "table_version": "1f3c9a07d2e4",
   "region": "34_-85",
   "locale": "en",
   "month": 10,
@@ -297,7 +293,7 @@ Gemma downloads from `https://huggingface.co/<repo>/resolve/<revision>/<file>`; 
 }
 ```
 
-radius\_km is 75, or 150 after the widen, so widened counts never pass as 75 km counts. The entry holds only eligible species, so an offline hunt needs nothing else. A mismatch on schema\_version, table\_version, region, locale, month, or radius\_km discards the entry and refetches.
+radius\_km is 75, or 150 after the widen, so widened counts never pass as 75 km counts. The entry holds only eligible species, so an offline hunt needs nothing else. table\_version is the first 12 hex digits of species\_labels.json's SHA-256, so a rebuilt table or flag set discards old entries. A mismatch on schema\_version, table\_version, region, locale, month, or radius\_km discards the entry and refetches.
 
 **Model inputs and outputs**
 
