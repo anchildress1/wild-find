@@ -15,7 +15,7 @@ Every runtime model (TinyCLIP, BioCLIP, Gemma) runs on the test phone, or nothin
 - [x] **S09 Close-range threshold** — `make focus-probe` logged live `LENS_FOCUS_DISTANCE` at far, closer, full-frame, and too-close shots, plus pinch zoom, on the test phone (a can, not a plant); rule: diopters × zoom ≥ 2.0 while autofocus reports focused; PRD hole 19
 - [ ] **S05 Gate harness** (app, debug only) — records per-frame verify time, first-eligible-frame to Found, hint latency, RAM, and a 20-minute live-camera thermal run to a local exportable log; holes 4, 10, 13
 - [x] **S06 Plant gate** (pipeline + app) — export TinyCLIP ViT-8M's image encoder to fp32 ONNX plus text vectors for the exact Day-1 gate prompts; pin it; `PlantGate` in core; on-device parity passes (cosine 0.99999999, 40 ms per embedding); S34 gates every frame with it; PRD hole 17
-- [ ] **S07 Gemma download** (core + app) — R9, Gemma only; starts on its own during the first-launch opener, never behind a wait screen; see Download rules below; proven on the test phone: full pull, kill mid-pull + resume, Wi-Fi drop + resume, bad-hash retry
+- [ ] **S07 Gemma download** (core + app) — R9, Gemma only; starts on its own during the first-launch opener, never behind a wait screen; see Download rules below; proven on the test phone: full pull, kill mid-pull + resume, Wi-Fi drop + resume, bad hash deleted and pulled again on the next launch
 - [x] **S08 Debug/release side by side** (app) — debug uses `applicationIdSuffix = ".debug"` so a release install never wipes the debug app's 2.6 GB model on the one test phone
 - [x] **S08b Bundle the small models** (build) — `make assets` fetches BioCLIP and the taxa table and labels (SHA-checked), builds species_table.npy and species_labels.json (missing hazard species appended, hazard flags set), and exports TinyCLIP into gitignored `app/generated/assets`; the one missing hazard row comes from the committed `pipeline/data/hazard_vectors.json` (`make hazard-vectors`; it and `make reference` are the manual steps that need the 3.9 GB teacher, while `make assets` and CI never do); CI runs `make assets` with a cache; any build without the assets fails; the app loads all of them from the APK
 
@@ -71,7 +71,7 @@ The vestige download broke when Hugging Face moved its redirect CDN (`cas-bridge
 - Re-resolve the redirect on every attempt; signed CDN URLs expire.
 - Preflight with a HEAD: `x-linked-size` and `x-linked-etag` must match the pins, or stop with a clear message before pulling 2.6 GB.
 - Resume from a `.part` file with `Range`; require a 206 whose `Content-Range` starts at the `.part` length, else restart.
-- Run as a foreground-service download with a notification so it survives the screen turning off.
+- Run as a WorkManager foreground download (`dataSync`) with a progress notification so it survives the screen turning off. Android 12+ refuses a foreground start from the background, so a retry that can't go foreground waits, and the next app launch restarts it in the foreground.
 - On failure, show which host failed, so a parent can tell a filtered network from an outage.
 - Store under `noBackupFilesDir`. Never uninstall the app on the test phone; `make install` keeps data.
 

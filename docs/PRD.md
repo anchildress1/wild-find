@@ -435,8 +435,8 @@ Every failure degrades to a playable hunt or a plain message; none crash or stal
 | Cache entry mismatch (schema, menu, region, month, or radius) | Discard the entry and refetch |
 | Fewer than 3 eligible words | Widen the radius to 150 km once, one extra query of up to three requests; still short, show "wild-find covers west Georgia for now" |
 | Not enough free storage | Stop before downloading and show the space needed |
-| Model download fails | Resume where it stopped; Wi-Fi only |
-| SHA-256 mismatch | Delete the file and download again |
+| Model download fails | Resume where it stopped; Wi-Fi only; the notification names the host that failed |
+| SHA-256 mismatch | Delete the file; the next app launch downloads it again, since every retry costs a full 2.6 GB |
 | Autofocus reports no focus distance | No auto-capture; the kid sees "Tap the plant to focus" until a reading arrives |
 | Gemma too slow or out of memory | Release and reload once; then serve the template hint |
 | A hint fails the guards twice | Template hint built from the card fields |
