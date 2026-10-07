@@ -41,6 +41,7 @@ class GemmaDownloadService : JobService() {
     override fun onStartJob(params: JobParameters): Boolean {
         val run = Run(params)
         active.set(run)
+        Log.i(TAG, "job started")
         val pin = ModelPin.load("gemma")
         // The system requires the job's notification soon after start, before the sideload hash can finish.
         setNotification(params, PROGRESS_ID, progress(0, pin.bytes), JOB_END_NOTIFICATION_POLICY_REMOVE)
@@ -50,6 +51,7 @@ class GemmaDownloadService : JobService() {
 
     // The network dropped or the system needs the job gone: keep the .part and let the system run it again.
     override fun onStopJob(params: JobParameters): Boolean {
+        Log.i(TAG, "job stopped, reason ${params.stopReason}")
         active.getAndSet(null)?.stopped = true
         return true
     }
@@ -83,7 +85,10 @@ class GemmaDownloadService : JobService() {
             if (run.stopped) null else stop(e, getString(R.string.download_failed_unexpected))
         }
         active.compareAndSet(run, null)
-        if (reschedule != null) jobFinished(run.params, reschedule)
+        if (reschedule != null) {
+            Log.i(TAG, "job finished, reschedule $reschedule")
+            jobFinished(run.params, reschedule)
+        }
     }
 
     // Returns whether the job should run again, or null when the system already stopped it.

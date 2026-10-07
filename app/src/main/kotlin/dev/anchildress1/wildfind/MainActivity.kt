@@ -21,11 +21,15 @@ import dev.anchildress1.wildfind.ui.BriarSprite
 
 /** Single-activity host for the Compose UI. */
 class MainActivity : ComponentActivity() {
+    // Every time the app comes to the front, not just on create: returning from recents must restart a download
+    // stuck in backoff. The download never blocks the UI; notifications only show its progress.
+    override fun onStart() {
+        super.onStart()
+        GemmaDownloadService.start(this)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // The download starts on its own at launch and never blocks the UI; notifications only show its progress.
-        // Once per launch: a rotation must not restart the check.
-        if (savedInstanceState == null) GemmaDownloadService.start(this)
         if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
                 .launch(Manifest.permission.POST_NOTIFICATIONS)
