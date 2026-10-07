@@ -8,7 +8,7 @@ Uses the pinned .litertlm the phone runs (make fetch-models), on the laptop CPU,
 sampler, a system instruction, and two few-shot examples. Targets are the 20 most-seen West Georgia October species
 that would be hunt targets: in the species table and not toxic-flagged. Writes gemma_describe.csv.
 
-The gemma pin left models.properties when Gemma was dropped on Oct 7; restore those lines from git history to rerun.
+Gemma was dropped on Oct 7; uncomment the gemma lines in models.properties to rerun.
 """
 
 import csv
