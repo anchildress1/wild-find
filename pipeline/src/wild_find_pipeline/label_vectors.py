@@ -54,6 +54,22 @@ def write(out: Path, rows: list[dict[str, str]], vectors: np.ndarray) -> None:
     )
 
 
+def check_committed(out: Path = LABELS_DIR, words: dict[str, str] = DEV_WORDS) -> None:
+    """Raise ValueError unless the committed labels match the label lists, prompt, teacher pin, and packages.
+
+    They need the teacher to rebuild, so nothing else would notice a changed word, tutorial row, or prompt.
+    """
+    meta = json.loads((out / "labels.json").read_text())
+    expected = [{**row, "prompt": prompt(row["scientific"])} for row in label_rows(words)]
+    if meta.get("schema_version") != SCHEMA_VERSION or meta.get("text_model") != teacher_model():
+        raise ValueError("labels.json predates the current schema or teacher pin; run make labels")
+    if meta.get("packages") != embedding_versions():
+        raise ValueError("labels.json came from other embedding package versions; run make labels")
+    if meta.get("labels") != expected:
+        raise ValueError("labels.json rows or prompts differ from the label lists; run make labels")
+    check_vectors(np.load(out / "labels.npy"), len(expected))
+
+
 def main() -> int:
     """Embed the stand-in menu and the tutorial labels with the pinned teacher."""
     from wild_find_pipeline.reference import embed_texts

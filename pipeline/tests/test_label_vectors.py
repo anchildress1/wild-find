@@ -55,3 +55,40 @@ def test_write_saves_parallel_npy_and_json(tmp_path, monkeypatch):
     assert meta["labels"][0] == {"id": "oak", "kind": "word", "scientific": "Quercus", "prompt": "a photo of Quercus."}
     assert len(meta["labels"]) == 12
     assert meta["packages"] == {"open-clip-torch": "x", "torch": "y"}
+
+
+@pytest.fixture
+def committed(tmp_path, monkeypatch):
+    monkeypatch.setattr(label_vectors, "embedding_versions", lambda: {"open-clip-torch": "x", "torch": "y"})
+    words = {"oak": "Quercus"}
+    rows = label_rows(words)
+    vectors = np.zeros((len(rows), 2))
+    vectors[:, 0] = 1.0
+    write(tmp_path, rows, vectors)
+    return tmp_path, words
+
+
+def test_committed_labels_that_match_pass(committed):
+    out, words = committed
+
+    label_vectors.check_committed(out, words)
+
+
+@pytest.mark.parametrize(
+    "drift",
+    [
+        lambda out, words, mp: words.update(oak="Quercus alba"),
+        lambda out, words, mp: words.update(pine="Pinus"),
+        lambda out, words, mp: mp.setattr(label_vectors, "prompt", lambda text: f"an image of {text}."),
+        lambda out, words, mp: mp.setattr(label_vectors, "teacher_model", lambda: {"repo": "x", "revision": "y"}),
+        lambda out, words, mp: mp.setattr(label_vectors, "embedding_versions", lambda: {"torch": "z"}),
+        lambda out, words, mp: np.save(out / "labels.npy", np.ones((12, 2), dtype="<f4")),
+    ],
+    ids=["mapping", "new word", "prompt", "teacher", "packages", "vectors"],
+)
+def test_committed_labels_that_drift_are_rejected(committed, monkeypatch, drift):
+    out, words = committed
+    drift(out, words, monkeypatch)
+
+    with pytest.raises(ValueError):
+        label_vectors.check_committed(out, words)

@@ -1,7 +1,8 @@
 """Bundled APK assets: BioCLIP Mobile, the species table with hazard flags, and the TinyCLIP plant gate.
 
 Writes into the gitignored app/generated/assets. Needs no BioCLIP teacher: appended hazard rows come from the
-committed hazard_vectors.json (make hazard-vectors), so CI can run it.
+committed hazard_vectors.json (make hazard-vectors), so CI can run it. Also checks the committed labels.npy and
+labels.json (make labels) against the current label lists and pins.
 """
 
 import hashlib
@@ -14,6 +15,7 @@ from pathlib import Path
 
 import numpy as np
 
+from wild_find_pipeline import label_vectors
 from wild_find_pipeline.labels import (
     GATE_OTHER,
     GATE_PLANT,
@@ -26,6 +28,7 @@ from wild_find_pipeline.paths import (
     GENERATED_ASSETS,
     GENERATED_STAMP,
     HAZARD_VECTORS,
+    LABELS_DIR,
     MANIFEST,
     MODEL_CACHE,
     REPO,
@@ -142,7 +145,12 @@ INPUTS = (
     MANIFEST,
     HAZARD_VECTORS,
     REPO / "pipeline/uv.lock",
-    *(REPO / "pipeline/src/wild_find_pipeline" / name for name in ("assets.py", "labels.py", "paths.py")),
+    LABELS_DIR / "labels.json",
+    LABELS_DIR / "labels.npy",
+    *(
+        REPO / "pipeline/src/wild_find_pipeline" / name
+        for name in ("assets.py", "labels.py", "label_vectors.py", "paths.py")
+    ),
 )
 
 
@@ -165,6 +173,7 @@ def publish(staging: Path, target: Path = GENERATED_ASSETS, stamp: Path = GENERA
 
 def main() -> int:
     """Build every bundled asset into a temp dir, then swap it into app/generated/assets and stamp its inputs."""
+    label_vectors.check_committed()
     with tempfile.TemporaryDirectory() as tmp:
         staging = Path(tmp)
 
