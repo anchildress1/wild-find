@@ -298,12 +298,20 @@ class ModelDownloaderTest {
     }
 
     @Test
-    fun `a complete part skips the GET and is verified`() {
+    fun `a complete part is verified offline, with no request at all`() {
         part.writeBytes(bytes)
-        server.enqueue(head())
 
         assertArrayEquals(bytes, downloader().download { _, _ -> }.readBytes())
-        assertEquals(1, server.requestCount)
+        assertEquals(0, server.requestCount)
+    }
+
+    @Test
+    fun `a complete part that fails its hash is deleted without a request`() {
+        part.writeBytes(bytes.copyOf().also { it[0] = (it[0] + 1).toByte() })
+
+        assertThrows<DownloadFailure> { downloader().download { _, _ -> } }
+        assertFalse(part.exists())
+        assertEquals(0, server.requestCount)
     }
 
     @Test

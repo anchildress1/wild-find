@@ -98,9 +98,12 @@ class ModelDownloader(
         if (!dir.isDirectory && !dir.mkdirs()) throw IOException("can't create $dir")
         dir.listFiles { f -> f != part && stalePart.matches(f.name) }?.forEach(File::delete)
         if (part.length() > pin.bytes) part.deleteOrThrow()
-        preflight()
-        requireSpace()
-        if (part.length() < pin.bytes) fetch(onProgress)
+        // A part that already holds every byte only needs its hash, which the pin decides offline.
+        if (part.length() < pin.bytes) {
+            preflight()
+            requireSpace()
+            fetch(onProgress)
+        }
         if (sha256(part) != pin.sha256) part.discardMismatch()
         // A stopped run still finishing its last chunk can verify the same part; whichever renames second finds
         // the file already in place.
