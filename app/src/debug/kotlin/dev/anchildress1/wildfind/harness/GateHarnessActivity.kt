@@ -29,6 +29,7 @@ import androidx.camera.core.resolutionselector.ResolutionStrategy
 import androidx.camera.lifecycle.ProcessCameraProvider
 import dev.anchildress1.wildfind.core.download.ModelPin
 import dev.anchildress1.wildfind.core.frame.Crops
+import dev.anchildress1.wildfind.core.verify.VerifyStreak
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.json.JSONObject
 import java.io.File
@@ -39,9 +40,9 @@ import java.util.concurrent.Executors
 import kotlin.concurrent.thread
 
 /**
- * Debug-only gate harness: the live verify path, level-2 hints, memory, and heat, logged for `make gate-pull`.
+ * Debug-only gate harness: the live verify path, Gemma scene hints, memory, and heat, logged for `make gate-pull`.
  *
- * Launched over adb by `make gate-harness` with the extra [EXTRA_WORD].
+ * Launched from its own launcher icon (target oak) or over adb by `make gate-harness` with the extra [EXTRA_WORD].
  */
 class GateHarnessActivity : ComponentActivity() {
     private val analysisExecutor = Executors.newSingleThreadExecutor()
@@ -178,7 +179,7 @@ class GateHarnessActivity : ComponentActivity() {
         put("word", word)
         put("goal", if (word == GateRun.TUTORIAL) "tutorial" else "target")
         put("requested_analysis", "${size.width}x${size.height}")
-        put("frame_interval_ms", GateRun.FRAME_INTERVAL_MS)
+        put("capture_frames", VerifyStreak.FRAMES)
         listOf("gemma", "bioclip").forEach { model ->
             put(model, ModelPin.load(model).let { "${it.repo}@${it.revision}/${it.file}" })
         }

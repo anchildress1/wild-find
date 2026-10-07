@@ -68,7 +68,8 @@ class GateLog(val dir: File) : Closeable {
         /** Times are `elapsedRealtimeNanos`; stage durations are milliseconds. */
         val FRAME_COLUMNS = listOf(
             "t_ns", "sensor_ns", "gap_ms", "frame_w", "frame_h", "rotation", "verdict", "streak",
-            "reticle_share", "full_share", "reticle_hazard_rank", "full_hazard_rank", "goal_score", "goal_rank",
+            "reticle_share", "full_share", "reticle_hazard_rank", "full_hazard_rank",
+            "reticle_top", "reticle_hazard", "full_top", "full_hazard", "goal_score", "goal_rank",
             "af_state", "diopters", "zoom", "focus_matched",
             "crop_ms", "resize_ms", "gate_ms", "bioclip_ms", "hazard_ms", "goal_ms", "verify_ms", "frame_ms",
         )
@@ -80,9 +81,8 @@ class GateLog(val dir: File) : Closeable {
         )
 
         /**
-         * One row per level-2 tap. The scene call runs from the level-1 tap (`lead_ms` earlier): frame copy, JPEG,
-         * scene call. Then `wait_ms` for a scene call still running at the level-2 tap, the hint call, and the
-         * level-2 tap to hint shown (`total_ms`).
+         * One row per hint tap: frame copy, JPEG, scene call, hint call, and tap to hint shown (`total_ms`). Every tap
+         * runs its own scene call, so `lead_ms` and `wait_ms` are always 0.
          */
         val HINT_COLUMNS = listOf(
             "tap_ns", "lead_ms", "frame_ms", "jpeg_ms", "scene_ms", "wait_ms", "hint_ms", "total_ms",

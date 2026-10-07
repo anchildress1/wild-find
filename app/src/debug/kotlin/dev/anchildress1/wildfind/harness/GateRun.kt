@@ -35,9 +35,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.io.ByteArrayOutputStream
 import java.io.Closeable
-import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
 
 /**
@@ -50,8 +50,11 @@ import java.util.concurrent.atomic.AtomicLong
  * @property found Found verdicts this run
  * @property pssMb this process's last sampled PSS
  * @property thermalStatus last sampled `PowerManager` thermal status
- * @property gemma Gemma's state: loading, ready, busy, missing, or failed
+ * @property gemma Gemma's state: loading, ready, busy, cooldown, missing, or failed
  * @property hint the last hint reply and its end-to-end latency, or the last hint error
+ * @property species the reticle's top-1 species-table row on the last frame BioCLIP ran, or empty
+ * @property capturing true while a capture's frames are being verified
+ * @property target the word this run looks for
  */
 data class GateStatus(
     val frameWidth: Int = 0,
@@ -63,11 +66,14 @@ data class GateStatus(
     val thermalStatus: Int = 0,
     val gemma: String = "loading",
     val hint: String = "",
+    val species: String = "",
+    val capturing: Boolean = false,
+    val target: String = "",
 )
 
 /**
- * One gate-harness run: the real per-frame verify path at about 5 fps, level-2 hints on tap, and memory, heat,
- * and battery sampled off the analysis thread, all logged by [log].
+ * One gate-harness run: the real verify path on each capture tap, a Gemma scene hint on each hint tap, and memory,
+ * heat, and battery sampled off the analysis thread, all logged by [log]. Between taps the camera only previews.
  *
  * Construct off the main thread: it loads both ONNX models and the species table.
  *
@@ -85,29 +91,18 @@ class GateRun(private val context: Context, private val word: String, val log: G
     }
     private val gateEncoder = ImageEncoder(bundled.plantGateModel())
     private val bioclip = ImageEncoder(bundled.bioclipModel())
+    private val species = bundled.speciesLabels().map { it.scientific }
     private val verifier = FrameVerifier(bundled.plantGate(), gateEncoder, bioclip, bundled.hazardCheck())
     private val streak = VerifyStreak()
     private val focus = FocusTrack()
     private val hintThread = Executors.newSingleThreadExecutor()
     private val sampler = Executors.newSingleThreadScheduledExecutor()
     private val tap = AtomicLong(NO_TAP)
-    private val state = MutableStateFlow(GateStatus())
+    private val captureLeft = AtomicInteger(0)
+    private val state = MutableStateFlow(GateStatus(target = word))
 
     @Volatile private var gemma: GemmaHint? = null
     private var lastFrameNs = 0L
-
-    // Main-thread state for the hint ladder.
-    private var hintLevel = 0
-    private var scene: CompletableFuture<Scene>? = null
-
-    /** A finished scene call for the level-1 tap at [tapNs]; [partsMs] is frame copy, JPEG, and scene call. */
-    private class Scene(
-        val tapNs: Long,
-        val doneNs: Long,
-        val jpegBytes: Int,
-        val reply: String,
-        val partsMs: List<Double>,
-    )
 
     /** The sensor's active-array width, for the crop-region zoom fallback; set once the camera is bound. */
     @Volatile var activeArrayWidth = 0
@@ -142,20 +137,42 @@ class GateRun(private val context: Context, private val word: String, val log: G
         hintThread.execute(::loadGemma)
     }
 
-    /** Analyzes [proxy] when the last analyzed frame started at least [FRAME_INTERVAL_MS] ago; always closes it. */
+    /** Verifies [proxy] while a capture is pending and copies it for a pending hint tap; always closes it. */
     fun analyze(proxy: ImageProxy) = proxy.use {
-        val received = now()
-        if (lastFrameNs != 0L && received - lastFrameNs < FRAME_INTERVAL_MS * NANOS_PER_MS) return@use
-        val gapMs = if (lastFrameNs == 0L) null else ms(received - lastFrameNs)
-        lastFrameNs = received
+        val capturing = captureLeft.get() > 0
+        val tapNs = tap.getAndSet(NO_TAP)
+        if (!capturing && tapNs == NO_TAP) return@use
         val plane = proxy.planes[0]
         check(plane.pixelStride == RGBA_BYTES) { "pixel stride ${plane.pixelStride}" }
         val crop = proxy.cropRect
-        val rotation = proxy.imageInfo.rotationDegrees
-        val frame =
-            RgbaFrame(plane.buffer, plane.rowStride, Box(crop.left, crop.top, crop.width(), crop.height()), rotation)
-        if (gapMs == null) log.event(received, "analysis_buffer", "${proxy.width}x${proxy.height} crop $crop")
-        val sensorNs = proxy.imageInfo.timestamp
+        val frame = RgbaFrame(
+            plane.buffer,
+            plane.rowStride,
+            Box(crop.left, crop.top, crop.width(), crop.height()),
+            proxy.imageInfo.rotationDegrees,
+        )
+        if (capturing) verify(frame, proxy.imageInfo.rotationDegrees, proxy.imageInfo.timestamp)
+        // Copied before the proxy closes, since the frame wraps the camera's buffer.
+        if (tapNs != NO_TAP) {
+            val pixels = frame.upright(Box(0, 0, frame.width, frame.height))
+            hintThread.execute { hint(tapNs, pixels) }
+        }
+    }
+
+    /**
+     * One capture tap: verify the next [VerifyStreak.FRAMES] frames back to back, stopping at the first that breaks
+     * the streak, so a Found still needs that many matching frames in a row.
+     */
+    fun requestCapture() {
+        if (!captureLeft.compareAndSet(0, VerifyStreak.FRAMES)) return
+        log.event(now(), "capture", word)
+        state.update { it.copy(capturing = true) }
+    }
+
+    private fun verify(frame: RgbaFrame, rotation: Int, sensorNs: Long) {
+        val received = now()
+        val gapMs = if (lastFrameNs == 0L) null else ms(received - lastFrameNs)
+        lastFrameNs = received
         val result = verifier.analyze(frame, goal) { focus.at(sensorNs) }
         val verdict = streak.next(result.evidence)
         val frameMs = ms(now() - received)
@@ -166,14 +183,20 @@ class GateRun(private val context: Context, private val word: String, val log: G
             Verdict.Found -> VerifyStreak.FRAMES
             else -> 0
         }
+        val reticleRank = result.reticleRanking
+        val fullRank = result.fullRanking
         log.frame(
             received, sensorNs, gapMs, frame.width, frame.height, rotation, name(verdict), streakFrames,
-            result.reticleShare, result.fullShare, result.reticleRanking?.hazardRank, result.fullRanking?.hazardRank,
+            result.reticleShare, result.fullShare, reticleRank?.hazardRank, fullRank?.hazardRank,
+            reticleRank?.let { species[it.topRow] }, reticleRank?.let { species[it.hazardRow] },
+            fullRank?.let { species[it.topRow] }, fullRank?.let { species[it.hazardRow] },
             result.goal?.score, result.goal?.rank,
             reading?.afState, reading?.diopters, reading?.zoomRatio, reading != null,
             ms(times.crop), ms(times.resize), ms(times.plantGate), ms(times.bioclip), ms(times.hazard), ms(times.goal),
             ms(times.total), frameMs,
         )
+        val left = if (verdict is Verdict.Matching) captureLeft.decrementAndGet() else 0
+        captureLeft.set(left)
         state.update {
             it.copy(
                 frameWidth = frame.width,
@@ -181,50 +204,20 @@ class GateRun(private val context: Context, private val word: String, val log: G
                 verdict = verdict,
                 frameMs = frameMs,
                 found = it.found + if (verdict == Verdict.Found) 1 else 0,
+                species = reticleRank?.let { rank -> species[rank.topRow] } ?: it.species,
+                capturing = left > 0,
             )
-        }
-        // After the frame's own timing, so a hint tap never inflates a verify measurement; copied before the
-        // proxy closes, since the frame wraps the camera's buffer.
-        val tapNs = tap.getAndSet(NO_TAP)
-        if (tapNs != NO_TAP) {
-            val pixels = frame.upright(Box(0, 0, frame.width, frame.height))
-            hintThread.execute { prefetchScene(tapNs, pixels) }
         }
     }
 
     /**
-     * One hint tap, levels in order: level 1 shows its card line at once and starts the scene call on the next
-     * frame, so by the level-2 tap usually only the short hint call is left; level 3 shows its card line at once.
+     * One hint tap: the next analyzed frame goes to Gemma's scene call, then the hint call. The button stays off while
+     * Gemma works and for [COOLDOWN_MS] after, so taps can't pile up calls.
      */
     fun requestHint() {
-        when (hintLevel) {
-            0 -> {
-                if (gemma == null) return
-                val prefetch = CompletableFuture<Scene>()
-                scene = prefetch
-                hintLevel = 1
-                tap.set(now())
-                state.update { it.copy(gemma = "level 1", hint = "1: ${STAND_IN_WHERE.getValue(word)}") }
-            }
-
-            1 -> {
-                val tapNs = now()
-                hintLevel = 2
-                state.update { it.copy(gemma = "busy") }
-                checkNotNull(scene).whenCompleteAsync({ ready, error -> levelTwo(tapNs, ready, error) }, hintThread)
-            }
-
-            2 -> if (state.value.gemma != "busy") {
-                hintLevel = LAST_LEVEL
-                state.update { it.copy(gemma = "level 3", hint = "3: ${STAND_IN_SHAPE.getValue(word)}") }
-            }
-
-            // A new ladder, so one run can measure many level-2 taps.
-            else -> {
-                hintLevel = 0
-                state.update { it.copy(gemma = "ready", hint = "") }
-            }
-        }
+        if (gemma == null || state.value.gemma != "ready") return
+        state.update { it.copy(gemma = "busy") }
+        tap.set(now())
     }
 
     /** Stops sampling and releases every model. Call after the camera stops delivering frames. */
@@ -271,59 +264,32 @@ class GateRun(private val context: Context, private val word: String, val log: G
         }
     }
 
-    // Any failure must settle the future: level 2 waits on it, and a pending one would disable hints for the rest of
-    // the run. The level-2 handler logs it as hint_error.
+    // A failed call is logged and the button comes back after the cooldown: one bad reply mustn't end hints for the
+    // run. LiteRT-LM and the JPEG encode can each fail in ways that aren't LiteRtLmJniException.
     @Suppress("TooGenericExceptionCaught")
-    private fun prefetchScene(tapNs: Long, pixels: Pixels) {
-        val prefetch = checkNotNull(scene)
+    private fun hint(tapNs: Long, pixels: Pixels) {
         try {
-            val model = checkNotNull(gemma) { "level 1 opened without Gemma" }
+            val model = checkNotNull(gemma) { "hint tap without Gemma" }
             val copied = now()
             val jpeg = jpeg(pixels)
             val encoded = now()
-            val reply = model.scene(jpeg)
+            val sceneReply = model.scene(jpeg)
+            val scened = now()
+            val tags = HintPrompts.parseTags(sceneReply)
+            val reply = model.hint(HintPrompts.levelTwo(word, STAND_IN_WHERE.getValue(word), tags))
             val done = now()
-            prefetch.complete(
-                Scene(
-                    tapNs,
-                    done,
-                    jpeg.size,
-                    reply,
-                    listOf(ms(copied - tapNs), ms(encoded - copied), ms(done - encoded)),
-                ),
+            log.hint(
+                tapNs, 0.0, ms(copied - tapNs), ms(encoded - copied), ms(scened - encoded), 0.0, ms(done - scened),
+                ms(done - tapNs), jpeg.size, tags.joinToString(" "), sceneReply, reply,
             )
+            state.update { it.copy(hint = "${ms(done - tapNs).toLong()} ms: $reply") }
         } catch (e: Exception) {
-            prefetch.completeExceptionally(e)
+            log.event(now(), "hint_error", e.toString())
+            state.update { it.copy(hint = e.toString()) }
+        } finally {
+            state.update { it.copy(gemma = "cooldown") }
+            sampler.schedule({ state.update { it.copy(gemma = "ready") } }, COOLDOWN_MS, TimeUnit.MILLISECONDS)
         }
-    }
-
-    // A failed call is logged and the button comes back: one bad reply mustn't end hint load for the whole run.
-    private fun levelTwo(tapNs: Long, scene: Scene?, error: Throwable?) {
-        val model = checkNotNull(gemma)
-        val start = now()
-        val tags = scene?.let { HintPrompts.parseTags(it.reply) }.orEmpty()
-        val reply = scene?.let {
-            try {
-                model.hint(HintPrompts.levelTwo(word, STAND_IN_WHERE.getValue(word), tags))
-            } catch (e: LiteRtLmJniException) {
-                fail("hint_error", e.toString())
-                null
-            }
-        }
-        if (scene == null) fail("hint_error", error.toString())
-        if (scene == null || reply == null) return
-        val done = now()
-        val (frameMs, jpegMs, sceneMs) = scene.partsMs
-        log.hint(
-            tapNs, ms(tapNs - scene.tapNs), frameMs, jpegMs, sceneMs, ms(maxOf(0L, scene.doneNs - tapNs)),
-            ms(done - start), ms(done - tapNs), scene.jpegBytes, tags.joinToString(" "), scene.reply, reply,
-        )
-        state.update { it.copy(gemma = "level 2", hint = "2 (${ms(done - tapNs).toLong()} ms): $reply") }
-    }
-
-    private fun fail(event: String, detail: String) {
-        log.event(now(), event, detail)
-        state.update { it.copy(gemma = "level 2", hint = "2: $detail") }
     }
 
     // scheduleWithFixedDelay cancels the schedule on the first uncaught exception without a trace, which would
@@ -364,8 +330,8 @@ class GateRun(private val context: Context, private val word: String, val log: G
         /** The [GateRun] word that selects the grass tutorial goal. */
         const val TUTORIAL = "grass"
 
-        /** Analysis pacing: about 5 frames a second, as the PRD verifies. */
-        const val FRAME_INTERVAL_MS = 200L
+        /** Hint button rest after each Gemma reply, so taps can't stack calls and heat. */
+        const val COOLDOWN_MS = 10_000L
 
         /** System sampling period; `getThermalHeadroom` returns NaN when called more than once a second. */
         const val SAMPLE_MS = 2_000L
@@ -380,17 +346,6 @@ class GateRun(private val context: Context, private val word: String, val log: G
             TUTORIAL to "Grass grows in lawns and fields.",
         )
 
-        // Stand-in "shape" lines for level 3, sized like a card's.
-        private val STAND_IN_SHAPE = mapOf(
-            "oak" to "Look for leaves with rounded or pointed lobes along the edges.",
-            "pine" to "Look for long, thin needles in little bundles.",
-            "clover" to "Look for three round leaves on one stem.",
-            "dandelion" to "Look for jagged leaves in a flat circle on the ground.",
-            "fern" to "Look for leaves shaped like green feathers.",
-            TUTORIAL to "Look for long, thin blades.",
-        )
-
-        private const val LAST_LEVEL = 3
         private const val NO_TAP = -1L
         private const val RGBA_BYTES = 4
         private const val NANOS_PER_MS = 1_000_000L

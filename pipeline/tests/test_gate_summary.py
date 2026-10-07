@@ -18,6 +18,10 @@ FRAME_COLUMNS = [
     "full_share",
     "reticle_hazard_rank",
     "full_hazard_rank",
+    "reticle_top",
+    "reticle_hazard",
+    "full_top",
+    "full_hazard",
     "goal_score",
     "goal_rank",
     "af_state",
@@ -49,6 +53,10 @@ def frame(t_ms, verdict, streak=0, frame_ms=150.0, both=True):
         focus_matched="true",
         reticle_hazard_rank=9 if both else "",
         full_hazard_rank=9 if both else "",
+        reticle_top="Quercus alba" if both else "",
+        reticle_hazard="Toxicodendron radicans" if both else "",
+        full_top="Quercus alba" if both else "",
+        full_hazard="Toxicodendron radicans" if both else "",
     )
     return row
 
@@ -162,7 +170,7 @@ def test_summary_reports_every_gate_number(run):
     text = summarize(run)
 
     assert "frames: 5 over 1 s" in text
-    assert "at or over 200 ms: 1 of 5" in text
+    assert "at or over 500 ms: 0 of 5" in text
     assert "(4 frames)" in text
     assert "capture to analyzer ms: p50 40" in text
     assert "first eligible frame to Found ms: p50 580" in text
@@ -170,7 +178,9 @@ def test_summary_reports_every_gate_number(run):
     assert "battery %: 90 to 80 (30 %/h)" in text
     assert "PSS MB: start 2930, max 3027" in text
     assert "Gemma load: 4100.0 ms" in text
-    assert "level-2 tap to hint ms: p50 3570" in text
+    assert "tap to hint ms: p50 3570" in text
+    assert "reticle top-1 species: Quercus alba 4" in text
+    assert "hazard warnings by species (region-frames): none" in text
     assert "hint parts p50 ms: lead 2000, frame 150, jpeg 20, scene 2500, wait 670, hint 900" in text
     assert "with one guard retry ms: p50 4470" in text
     assert "replies with no scene tags: 0; empty hints: 0" in text
@@ -199,10 +209,10 @@ def test_a_run_that_died_before_any_row_summarizes_as_empty(run):
 
 
 def test_a_frame_exactly_at_the_budget_counts_against_it(run):
-    frames = (run / "frames.csv").read_text().replace(",150.0\n", ",200.0\n", 1)
+    frames = (run / "frames.csv").read_text().replace(",150.0\n", ",500.0\n", 1)
     (run / "frames.csv").write_text(frames)
 
-    assert "at or over 200 ms: 2 of 5" in summarize(run)
+    assert "at or over 500 ms: 1 of 5" in summarize(run)
 
 
 def test_a_missing_charging_state_reads_unavailable(run):
@@ -282,3 +292,10 @@ def test_one_broken_run_still_lets_the_others_summarize(run, capsys):
     assert main([str(run.parent)]) == 1
     assert not (broken / "summary.txt").exists()
     assert (run / "summary.txt").read_text().startswith("run 20261007-090000-oak-1280x960")
+
+
+def test_hazard_warnings_name_the_species_that_set_them_off(run):
+    frames = (run / "frames.csv").read_text().replace(",9,9,Quercus alba,", ",5,9,Quercus alba,", 1)
+    (run / "frames.csv").write_text(frames)
+
+    assert "hazard warnings by species (region-frames): Toxicodendron radicans 1" in summarize(run)

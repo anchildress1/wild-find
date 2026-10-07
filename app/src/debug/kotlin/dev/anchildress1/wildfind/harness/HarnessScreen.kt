@@ -10,8 +10,10 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -67,11 +69,21 @@ fun HarnessScreen(
         request?.let { Viewfinder(it, camera) }
         Ring(status)
         Readout(status, Modifier.align(Alignment.TopStart))
-        Button(
-            onClick = { run?.requestHint() },
-            enabled = status.gemma == "ready" || status.gemma.startsWith("level"),
-            modifier = Modifier.align(Alignment.BottomCenter).padding(32.dp).heightIn(min = 56.dp),
-        ) { Text(if (status.gemma.startsWith("level 3")) "Start over" else "Hint", fontSize = 22.sp) }
+        Row(
+            Modifier.align(Alignment.BottomCenter).padding(32.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            Button(
+                onClick = { run?.requestCapture() },
+                enabled = run != null && !status.capturing,
+                modifier = Modifier.heightIn(min = 56.dp),
+            ) { Text("Capture", fontSize = 22.sp) }
+            Button(
+                onClick = { run?.requestHint() },
+                enabled = status.gemma == "ready",
+                modifier = Modifier.heightIn(min = 56.dp),
+            ) { Text("Hint", fontSize = 22.sp) }
+        }
     }
 }
 
@@ -129,6 +141,7 @@ private fun Readout(status: GateStatus, modifier: Modifier) {
         else -> v.toString()
     }
     Column(modifier.fillMaxWidth().background(SCRIM).padding(16.dp)) {
+        Text("Find: ${status.target}", color = Color.White, fontSize = 26.sp)
         Text(
             "$verdict · ${status.frameMs.roundToInt()} ms · found ${status.found}",
             color = Color.White,
@@ -139,6 +152,7 @@ private fun Readout(status: GateStatus, modifier: Modifier) {
             color = Color.White,
             fontSize = 18.sp,
         )
+        if (status.species.isNotEmpty()) Text("sees ${status.species}", color = Color.White, fontSize = 18.sp)
         Text("Gemma ${status.gemma}", color = Color.White, fontSize = 18.sp)
         if (status.hint.isNotEmpty()) Text(status.hint, color = Color.White, fontSize = 18.sp)
     }

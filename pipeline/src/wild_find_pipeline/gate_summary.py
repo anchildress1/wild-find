@@ -11,7 +11,8 @@ import numpy as np
 
 NS_PER_MS = 1_000_000
 NS_PER_S = 1_000_000_000
-FRAME_BUDGET_MS = 200.0
+# The harness analyzes a frame every 500 ms; a slower frame makes it skip the next one.
+FRAME_BUDGET_MS = 500.0
 FOUND_BUDGET_MS = 1500.0
 HINT_BUDGET_MS = 5000.0
 # The PRD's targets are strict "under" limits, so a sample exactly at one counts against it.
@@ -19,6 +20,9 @@ HINT_BUDGET_MS = 5000.0
 THERMAL_NAMES = {0: "none", 1: "light", 2: "moderate", 3: "severe", 4: "critical", 5: "emergency", 6: "shutdown"}
 # CameraCharacteristics.SENSOR_INFO_TIMESTAMP_SOURCE_REALTIME: sensor time shares elapsedRealtimeNanos' clock.
 REALTIME = "timestamp_source 1"
+# HazardCheck.TOP_K: a hazard species ranked this high or better warns.
+HAZARD_TOP_K = 5
+SPECIES_SHOWN = 10
 
 
 def rows(path: Path) -> list[dict[str, str]]:
@@ -53,6 +57,24 @@ def found_latencies(frames: list[dict[str, str]]) -> list[float]:
     return latencies
 
 
+def species_lines(frames: list[dict[str, str]]) -> list[str]:
+    """What BioCLIP saw: the reticle's top-1 species, and which hazard species set off each warning."""
+    if "reticle_top" not in frames[0]:
+        return []
+    tops = Counter(r["reticle_top"] for r in frames if r["reticle_top"])
+    warned = Counter(
+        r[f"{region}_hazard"]
+        for r in frames
+        for region in ("reticle", "full")
+        if r[f"{region}_hazard_rank"] and int(r[f"{region}_hazard_rank"]) <= HAZARD_TOP_K
+    )
+    return [
+        "reticle top-1 species: " + (", ".join(f"{k} {v}" for k, v in tops.most_common(SPECIES_SHOWN)) or "none"),
+        "hazard warnings by species (region-frames): "
+        + (", ".join(f"{k} {v}" for k, v in warned.most_common()) or "none"),
+    ]
+
+
 def frame_lines(frames: list[dict[str, str]], camera_event: str) -> list[str]:
     """Summary lines for frames.csv."""
     if not frames:
@@ -77,6 +99,7 @@ def frame_lines(frames: list[dict[str, str]], camera_event: str) -> list[str]:
         f"focus matched by sensor timestamp: {sum(r['focus_matched'] == 'true' for r in frames)} of {len(frames)}",
         "verdicts: " + ", ".join(f"{k} {v}" for k, v in sorted(verdicts.items())),
         f"tap_to_focus with no focus reading for the frame: {unmatched_tap} of {verdicts['tap_to_focus']}",
+        *species_lines(frames),
     ]
     if REALTIME in camera_event:
         lag = [(int(r["t_ns"]) - int(r["sensor_ns"])) / NS_PER_MS for r in frames]
@@ -148,7 +171,7 @@ def hint_lines(hints: list[dict[str, str]], events: list[dict[str, str]]) -> lis
     late = sum(t >= HINT_BUDGET_MS for t in total)
     return [
         *lines,
-        f"level-2 taps: {len(hints)}; level-2 tap to hint ms: {spread(total)}; at or over {HINT_BUDGET_MS:.0f}: {late}",
+        f"hint taps: {len(hints)}; tap to hint ms: {spread(total)}; at or over {HINT_BUDGET_MS:.0f}: {late}",
         "hint parts p50 ms: "
         + ", ".join(
             f"{part} {pct([float(h[f'{part}_ms']) for h in hints], 50):.0f}"
