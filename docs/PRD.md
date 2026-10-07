@@ -302,7 +302,7 @@ Ten files ship in the app, one pinned model downloads once, and every cache entr
 }
 ```
 
-icon\_category is one of tree, flower, fern, grass, vine, shrub, moss, other. verify\_floor stays null until calibration; development builds use one shared default until then.
+icon\_category is one of tree, flower, fern, grass, vine, shrub, moss, other. verify\_floor stays null until calibration, and null means no floor: top-1 and the plant gate decide. No shared default stands in, because on Day 1 correct reticle top-1 finds scored as low as 0.338 while non-plants topped a target at up to 0.616, so no single floor separates them.
 
 **Pinned model artifacts**
 
@@ -381,7 +381,9 @@ hazard_warns(region) = plant_gate(region)
        && rank(best hazard species in species_table) <= 5
 ```
 
-margin stays null until the calibration set sets it; null means top-1 alone decides. The hazard rule needs no calibration: on Day 1 it caught 48 of 52 hazard photos (92%) and warned on 1 of 253 safe photos (0.4%); against the menu labels alone it warned on most magnolia, honeysuckle, and maple photos.
+margin stays null until the calibration set sets it; null means top-1 alone decides. A tie with the runner-up is not top-1.
+
+**Auto-capture** keeps the third matching frame's reticle crop, upright at analysis resolution, in memory for the Found screen. It is never written to storage or sent anywhere, and the streak starts over after it, so one target can take another capture (R12). The hazard rule needs no calibration: on Day 1 it caught 48 of 52 hazard photos (92%) and warned on 1 of 253 safe photos (0.4%); against the menu labels alone it warned on most magnolia, honeysuckle, and maple photos.
 
 **Hints, one level per tap**
 

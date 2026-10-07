@@ -36,7 +36,7 @@ Every runtime model (TinyCLIP, BioCLIP, Gemma) runs on the test phone, or nothin
 - [ ] **S22 Sightings** — aggregate `species_counts` pages via id or `ancestor_ids`; eligibility at 25+; widen to 150 km once when < 3 eligible; R2
 - [ ] **S23 Cache rules** — versioned entry; mismatch on schema, menu, region, month, or radius discards; H3
 - [ ] **S24 Hunt pick** — sighting-weighted random, 3 targets, never a hazard; grass tutorial first-ever only; R3, R4, H1
-- [ ] **S25 Verify decision** — every PRD verify-table state over live frames, in order: hazard in a region TinyCLIP calls a plant (reticle crop or full frame), reticle not a plant, no focus reading, too far, target top-1 for 3 frames (auto-capture), else reticle guidance; floor + optional margin; R5, R12
+- [x] **S25 Verify decision** — every PRD verify-table state over live frames, in order: hazard in a region TinyCLIP calls a plant (reticle crop or full frame), reticle not a plant, no focus reading, too far, target top-1 for 3 frames (auto-capture), else reticle guidance; floor + optional margin; R5, R12; `VerifyStreak` reports `Matching(1..2)` for the ring and "Hold still", then `Found`; the grass tutorial goal (R3) skips the hazard row; `FrameVerifier` runs the per-frame model path behind encoder interfaces, so all of it is JVM-tested
 - [ ] **S26 Hint guards** — target name, "I see", "there is", off-card numbers, 20 words; retry once → template; R6
 - [ ] **S27 Hunt state** — current hunt survives process death; tutorial/opener flags persist; H2
 

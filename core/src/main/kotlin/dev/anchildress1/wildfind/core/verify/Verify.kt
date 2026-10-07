@@ -1,0 +1,65 @@
+package dev.anchildress1.wildfind.core.verify
+
+/**
+ * What one analyzed frame showed, as the PRD verify table reads it.
+ *
+ * @property hazard row 1: a hazard species ranked in the top 5 in a region the plant gate called a plant
+ * @property reticlePlant row 2: the plant gate called the reticle crop a plant
+ * @property focus rows 3 and 4: this frame's own autofocus reading, or null when it has none
+ * @property goalMet row 5: this frame alone meets the goal
+ */
+data class FrameEvidence(val hazard: Boolean, val reticlePlant: Boolean, val focus: Focus?, val goalMet: Boolean)
+
+/** One frame's outcome under the PRD Runtime Logic verify table; the first matching row wins. */
+sealed interface Verdict {
+    /** Row 1: warn, no star. */
+    data object Hazard : Verdict
+
+    /** Row 2: "Point the camera at a plant". */
+    data object NotPlant : Verdict
+
+    /** Row 3: "Tap the plant to focus". */
+    data object TapToFocus : Verdict
+
+    /** Row 4: "Walk closer". */
+    data object WalkCloser : Verdict
+
+    /**
+     * Row 5 holding, before the streak completes: "Hold still".
+     *
+     * @property frames consecutive matching frames so far, 1 to [VerifyStreak.FRAMES] - 1
+     */
+    data class Matching(val frames: Int) : Verdict
+
+    /** Row 5 complete: auto-capture this frame's reticle crop, then Found. */
+    data object Found : Verdict
+
+    /** Row 6: "Put the plant in the circle". */
+    data object Guide : Verdict
+}
+
+/** Applies the verify table to consecutive frames and counts row 5's streak; one instance per target. */
+class VerifyStreak {
+    private var run = 0
+
+    /** The verdict for the next analyzed frame. */
+    fun next(frame: FrameEvidence): Verdict {
+        val verdict = when {
+            frame.hazard -> Verdict.Hazard
+            !frame.reticlePlant -> Verdict.NotPlant
+            frame.focus?.isFocused != true -> Verdict.TapToFocus
+            !frame.focus.isClose -> Verdict.WalkCloser
+            frame.goalMet -> if (run + 1 == FRAMES) Verdict.Found else Verdict.Matching(run + 1)
+            else -> Verdict.Guide
+        }
+        // A Found starts a fresh streak, so one target can take another capture (R12).
+        run = if (verdict is Verdict.Matching) verdict.frames else 0
+        return verdict
+    }
+
+    /** Verify constants from the PRD. */
+    companion object {
+        /** Consecutive matching frames before auto-capture. */
+        const val FRAMES = 3
+    }
+}
