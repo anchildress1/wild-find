@@ -138,6 +138,7 @@ private fun Readout(status: GateStatus, modifier: Modifier) {
     val verdict = when (val v = status.verdict) {
         null -> "starting"
         is Verdict.Matching -> "matching ${v.frames}/${VerifyStreak.FRAMES}"
+        Verdict.WalkCloser -> "get closer or zoom in"
         else -> v.toString()
     }
     Column(modifier.fillMaxWidth().background(SCRIM).padding(16.dp)) {
