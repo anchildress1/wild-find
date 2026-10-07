@@ -7,6 +7,10 @@ REPO = Path(__file__).resolve().parents[3]
 MODEL_CACHE = REPO / ".models"
 MANIFEST = REPO / "core/src/main/resources/models.properties"
 REFERENCE_DIR = REPO / "app/src/androidTest/assets/reference"
+# Pillow crops and resizes the JVM tests must reproduce pixel for pixel.
+CROP_REFERENCE_DIR = REPO / "core/src/test/resources/crops"
+# Committed menu-word and tutorial text vectors; they need the teacher, so CI never rebuilds them.
+LABELS_DIR = REPO / "app/src/main/assets"
 # Bundled into the APK by app/build.gradle.kts; gitignored, rebuilt by `make assets`.
 GENERATED_ASSETS = REPO / "app/generated/assets"
 # Input hashes of the last good make assets; app/build.gradle.kts refuses to package assets whose inputs changed.

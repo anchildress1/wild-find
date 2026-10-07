@@ -1,5 +1,7 @@
 """Label sets and the text template the BioCLIP text encoder embeds."""
 
+from wild_find_pipeline.paths import pin
+
 # Plant labels embed by scientific name: common names share words ("oak" in "poison oak"), and on Day 1 a
 # white oak photo scored "poison oak" top-1 on both BioCLIP models until labels switched to scientific names.
 HAZARDS = {
@@ -9,6 +11,17 @@ HAZARDS = {
     "pokeweed": "Phytolacca americana",
     "Carolina horsenettle": "Solanum carolinense",
 }
+# Stand-in menu: the five targets Day 1 scored on real photos. The built menu (S10-S13) replaces it.
+DEV_WORDS = {
+    "oak": "Quercus",
+    "pine": "Pinus",
+    "clover": "Trifolium",
+    "dandelion": "Taraxacum",
+    "fern": "Polypodiopsida",
+}
+GRASS = "Poaceae"
+# PRD R3's fixed grass-tutorial label set, exactly as Day 1 measured it.
+TUTORIAL = (GRASS, "Quercus", "Polypodiopsida", "Trifolium", "Pinus", "Taraxacum", *HAZARDS.values())
 # Day-1 plant-gate prompts, exact strings with no trailing period; the gate's verdicts were measured on these.
 GATE_PLANT = tuple(f"a photo of {x}" for x in ("a plant", "leaves", "a tree", "grass", "a flower", "moss", "a fern"))
 GATE_OTHER = tuple(
@@ -36,6 +49,12 @@ def prompt(text: str) -> str:
 
 # Packages whose version changes the teacher's text vectors; hazard_vectors.json records them.
 EMBEDDING_PACKAGES = ("open-clip-torch", "torch")
+
+
+def teacher_model() -> dict[str, str]:
+    """The pinned teacher's repo and revision, as every committed text-vector file records it."""
+    teacher = pin("teacher")
+    return {"repo": teacher["repo"], "revision": teacher["revision"]}
 
 
 def embedding_versions() -> dict[str, str]:

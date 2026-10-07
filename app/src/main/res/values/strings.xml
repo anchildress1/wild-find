@@ -3,4 +3,15 @@
     <string name="app_name">wild-find</string>
     <string name="briar_description">Briar, a fluffy explorer with big ears, looking around</string>
     <string name="leave_it_rule">Look. Photograph. Leave it where it grows.</string>
+    <string name="download_channel">Model download</string>
+    <string name="download_title">Downloading the hint model</string>
+    <string name="download_progress">%1$s of %2$s</string>
+    <string name="download_failed_title">Hint model download stopped</string>
+    <string name="download_failed_space">Needs %1$s free space. Free some up, then open wild-find again.</string>
+    <string name="download_failed_unreachable">Couldn\'t reach %1$s. This network may block it; wild-find keeps trying on Wi-Fi.</string>
+    <string name="download_failed_status">%1$s answered with an error (HTTP %2$d); wild-find keeps trying on Wi-Fi.</string>
+    <string name="download_failed_pin">Hugging Face no longer serves the expected model file. Update wild-find.</string>
+    <string name="download_failed_hash">The download arrived damaged and was deleted. Open wild-find on Wi-Fi to start it over.</string>
+    <string name="download_failed_disk">Couldn\'t save the download on this phone. Open wild-find again to retry.</string>
+    <string name="download_failed_unexpected">The download hit an unexpected error. Open wild-find again to retry.</string>
 </resources>

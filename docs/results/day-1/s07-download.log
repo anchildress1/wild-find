@@ -1,0 +1,94 @@
+22:08:13 == setup: delete the model, start clean; Wi-Fi is enabled
+22:08:13 == 1. full pull, killed at 30%
+22:08:13 launched app (cold)
+22:08:14 part 0 bytes (0%)
+22:08:19 part 115112105 bytes (4%)
+22:08:24 part 301413441 bytes (11%)
+22:08:29 part 461832391 bytes (17%)
+22:08:34 part 620301647 bytes (23%)
+22:08:39 part 798939461 bytes (30%)
+22:08:40 force-stopped at 806882072 bytes
+22:08:45 after kill: part 806882072 bytes
+22:08:45 == 2. relaunch resumes from the part
+22:08:45 launched app (cold)
+22:08:45 part 806882072 bytes (31%)
+22:08:50 part 1050922357 bytes (40%)
+22:08:56 part 1726298771 bytes (66%)
+22:08:56 == 3. Wi-Fi drop with the app closed
+22:08:58 app backgrounded and process killed at 1868769517 bytes
+22:09:03 wifi: Wi-Fi is enabled; part 1875295965 bytes
+22:09:24 after 25 s off: Wi-Fi is enabled; part 2274705408 bytes
+22:09:24 trace while off: 10-06 22:08:58.626 I/GemmaDownload(12494): job stopped, reason 7 10-06 22:09:09.458 I/GemmaDownload(12494): job started 
+22:09:24 wifi on; waiting without opening the app
+22:09:29 part 2588147712 bytes
+22:09:34 part 2588147712 bytes
+22:09:40 part  bytes
+22:09:40 final 2588147712 bytes, marker 181938105e0eefd105961417e8da75903eacda102c4fce9ce90f50b97139a63c
+22:09:43 device sha256 181938105e0eefd105961417e8da75903eacda102c4fce9ce90f50b97139a63c
+22:09:43 full pull wall time 90 s including the deliberate pauses
+22:09:43 == 4. bad hash: corrupt a part, expect delete + no auto retry
+22:09:43 launched app (cold)
+22:09:43 part 0 bytes (0%)
+22:09:49 part 101273520 bytes (3%)
+22:09:54 part 231384035 bytes (8%)
+22:09:59 part 392016554 bytes (15%)
+22:09:59 force-stopped at 397069189 bytes
+22:09:59 zeroed the first MiB of the part
+22:10:00 launched app (cold)
+22:10:05 part 513565427 bytes
+22:10:10 part 684180042 bytes
+22:10:15 part 870620404 bytes
+22:10:20 part 1069743926 bytes
+22:10:26 part 1287012717 bytes
+22:10:31 part 1824481204 bytes
+22:10:36 part 2096561220 bytes
+22:10:41 part 2269543761 bytes
+22:10:46 part 2458719052 bytes
+22:10:52 part 2588147712 bytes
+22:10:57 part  bytes
+22:10:57 part gone; final present: ''
+22:11:08 trace after mismatch: 10-06 22:10:00.602 I/GemmaDownload(14178): job started 10-06 22:10:53.974 I/GemmaDownload(14178): job finished, reschedule false 
+22:11:08 == 5. next launch pulls again
+22:11:08 launched app (cold)
+22:11:14 part 83050030 bytes
+22:11:19 part 604948705 bytes
+22:11:24 part 716887217 bytes
+22:11:29 part 898669218 bytes
+22:11:34 part 1326651815 bytes
+22:11:39 part 1499893760 bytes
+22:11:45 part 1591013162 bytes
+22:11:50 part 1657640704 bytes
+22:11:55 part 1811704093 bytes
+22:12:00 part 2012269234 bytes
+22:12:05 part 2485200479 bytes
+22:12:11 part 2588147712 bytes
+22:12:16 part  bytes
+22:12:16 final 2588147712 bytes, marker 181938105e0eefd105961417e8da75903eacda102c4fce9ce90f50b97139a63c
+22:12:19 device sha256 181938105e0eefd105961417e8da75903eacda102c4fce9ce90f50b97139a63c
+22:12:19 == logcat
+10-06 22:08:14.398 12179 12179 I GemmaDownload: job started
+10-06 22:08:46.081 12494 12494 I GemmaDownload: job started
+10-06 22:08:56.266 12494 12494 W JobService: onNetworkChanged() not implemented in dev.anchildress1.wildfind.download.GemmaDownloadService. Must override in a subclass.
+10-06 22:08:58.626 12494 12494 I GemmaDownload: job stopped, reason 7
+10-06 22:09:09.458 12494 12494 I GemmaDownload: job started
+10-06 22:09:09.472 12494 12494 W JobService: onNetworkChanged() not implemented in dev.anchildress1.wildfind.download.GemmaDownloadService. Must override in a subclass.
+10-06 22:09:09.491 12494 12494 W JobService: onNetworkChanged() not implemented in dev.anchildress1.wildfind.download.GemmaDownloadService. Must override in a subclass.
+10-06 22:09:24.345 12494 12494 W JobService: onNetworkChanged() not implemented in dev.anchildress1.wildfind.download.GemmaDownloadService. Must override in a subclass.
+10-06 22:09:24.418  2826  2826 I adbd    : adbd service requested 'shell,v2,TERM=xterm-256color:export ANDROID_LOG_TAGS=''; exec logcat '-d' '-v' 'time' '-s' 'GemmaDownload:I''
+10-06 22:09:37.824 12494 13498 I GemmaDownload: job finished, reschedule false
+10-06 22:09:44.288 13911 13911 I GemmaDownload: job started
+10-06 22:10:00.602 14178 14178 I GemmaDownload: job started
+10-06 22:10:53.970 14178 14229 E GemmaDownload: download stopped
+10-06 22:10:53.970 14178 14229 E GemmaDownload: dev.anchildress1.wildfind.core.download.DownloadFailure$HashMismatch: size or SHA-256 mismatch
+10-06 22:10:53.970 14178 14229 E GemmaDownload: 	at dev.anchildress1.wildfind.core.download.ModelDownloaderKt.discardMismatch(ModelDownloader.kt:252)
+10-06 22:10:53.970 14178 14229 E GemmaDownload: 	at dev.anchildress1.wildfind.core.download.ModelDownloaderKt.access$discardMismatch(ModelDownloader.kt:1)
+10-06 22:10:53.970 14178 14229 E GemmaDownload: 	at dev.anchildress1.wildfind.core.download.ModelDownloader.download(ModelDownloader.kt:104)
+10-06 22:10:53.970 14178 14229 E GemmaDownload: 	at dev.anchildress1.wildfind.download.GemmaDownloadService.download(GemmaDownloadService.kt:66)
+10-06 22:10:53.970 14178 14229 E GemmaDownload: 	at dev.anchildress1.wildfind.download.GemmaDownloadService.onStartJob$lambda$0(GemmaDownloadService.kt:48)
+10-06 22:10:53.970 14178 14229 E GemmaDownload: 	at dev.anchildress1.wildfind.download.GemmaDownloadService$$ExternalSyntheticLambda2.invoke(D8$$SyntheticClass:0)
+10-06 22:10:53.970 14178 14229 E GemmaDownload: 	at kotlin.concurrent.ThreadsKt$thread$thread$1.run(Thread.kt:30)
+10-06 22:10:53.974 14178 14229 I GemmaDownload: job finished, reschedule false
+10-06 22:11:07.293  2826  2826 I adbd    : adbd service requested 'shell,v2,TERM=xterm-256color:export ANDROID_LOG_TAGS=''; exec logcat '-d' '-v' 'time' '-s' 'GemmaDownload:I''
+10-06 22:11:09.496 14596 14596 I GemmaDownload: job started
+10-06 22:12:14.093 14596 14720 I GemmaDownload: job finished, reschedule false
+22:12:22 PASS final hash matches pin

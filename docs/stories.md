@@ -13,9 +13,9 @@ Every runtime model (TinyCLIP, BioCLIP, Gemma) runs on the test phone, or nothin
 - [x] **S03 BioCLIP on device** (app) — ONNX Runtime loads `flora_student_fp32.onnx` (fp16 returns NaN on ARM); `make device-test` passes: cosine 1.0000 to the S02 reference, oak top-1, load 135 ms, embed 58 ms on the test phone
 - [x] **S04 Gemma on device** — E2B loads on the GPU without out-of-memory (2.1 GB loaded, 2.9 GB peak; 4.0 s warm load) and answers vision prompts in 2.3–2.9 s; too slow for the verify path, so boxing was dropped for deterministic live verify
 - [x] **S09 Close-range threshold** — `make focus-probe` logged live `LENS_FOCUS_DISTANCE` at far, closer, full-frame, and too-close shots, plus pinch zoom, on the test phone (a can, not a plant); rule: diopters × zoom ≥ 2.0 while autofocus reports focused; PRD hole 19
-- [ ] **S05 Gate harness** (app, debug only) — records per-frame verify time, first-eligible-frame to Found, hint latency, RAM, and a 20-minute live-camera thermal run to a local exportable log; holes 4, 10, 13
+- [ ] **S05 Gate harness** (app, debug only) — records per-frame verify time, first-eligible-frame to Found, hint latency, RAM, and a 20-minute live-camera thermal run to a local exportable log; holes 4, 10, 13; `make gate-harness` (`GATE_WORD`) runs the real verify path at the default 1920 x 1440 analysis size and the level-2 hint on the phone, `make gate-pull` copies the CSVs into `docs/results/` and summarizes them; ticks after a logged 20-minute run on each test phone (Galaxy S24 Ultra, Pixel 9)
 - [x] **S06 Plant gate** (pipeline + app) — export TinyCLIP ViT-8M's image encoder to fp32 ONNX plus text vectors for the exact Day-1 gate prompts; pin it; `PlantGate` in core; on-device parity passes (cosine 0.99999999, 40 ms per embedding); S34 gates every frame with it; PRD hole 17
-- [ ] **S07 Gemma download** (core + app) — R9, Gemma only; starts on its own during the first-launch opener, never behind a wait screen; see Download rules below; proven on the test phone: full pull, kill mid-pull + resume, Wi-Fi drop + resume, bad-hash retry
+- [x] **S07 Gemma download** (core + app) — R9, Gemma only; starts on its own at launch as a user-initiated transfer job, never behind a wait screen; see Download rules below; proven on the test phone (`docs/results/day-1.md`): full pull at about 32 MB/s, kill mid-pull + resume, a 60-second outage with the app closed resumed by the system in a new process, bad hash deleted and pulled again on the next launch; low storage is JVM-tested only; in-app progress lands with the opener (S31)
 - [x] **S08 Debug/release side by side** (app) — debug uses `applicationIdSuffix = ".debug"` so a release install never wipes the debug app's 2.6 GB model on the one test phone
 - [x] **S08b Bundle the small models** (build) — `make assets` fetches BioCLIP and the taxa table and labels (SHA-checked), builds species_table.npy and species_labels.json (missing hazard species appended, hazard flags set), and exports TinyCLIP into gitignored `app/generated/assets`; the one missing hazard row comes from the committed `pipeline/data/hazard_vectors.json` (`make hazard-vectors`; it and `make reference` are the manual steps that need the 3.9 GB teacher, while `make assets` and CI never do); CI runs `make assets` with a cache; any build without the assets fails; the app loads all of them from the APK
 
@@ -26,7 +26,7 @@ Every runtime model (TinyCLIP, BioCLIP, Gemma) runs on the test phone, or nothin
 - [ ] **S12 Gates** — hazard drop, denylist drop, 25+ local sightings
 - [ ] **S13 Fact cards** — Wikipedia text → card prompt → `icon_category`
 - [ ] **S14 Fact-check** — manual Claude Code pass; verdicts committed as a review file for the post's disclosure
-- [ ] **S15 Embeddings** — BioCLIP 2.5 ViT-H text encoder → `labels.npy` + `labels.json`; label text format per hole 3
+- [ ] **S15 Embeddings** — BioCLIP 2.5 ViT-H text encoder → `labels.npy` + `labels.json`; label text format per hole 3; `make labels` already writes them for the 11 fixed tutorial labels plus a stand-in menu of the five Day-1 targets, committed to `app/src/main/assets/`; done when the built menu feeds it
 - [ ] **S16 Fallback + output** — `menu.json`, `hazards.json`, fallback file; Ashley's ship review
 
 ## Game logic · core
@@ -36,7 +36,7 @@ Every runtime model (TinyCLIP, BioCLIP, Gemma) runs on the test phone, or nothin
 - [ ] **S22 Sightings** — aggregate `species_counts` pages via id or `ancestor_ids`; eligibility at 25+; widen to 150 km once when < 3 eligible; R2
 - [ ] **S23 Cache rules** — versioned entry; mismatch on schema, menu, region, month, or radius discards; H3
 - [ ] **S24 Hunt pick** — sighting-weighted random, 3 targets, never a hazard; grass tutorial first-ever only; R3, R4, H1
-- [ ] **S25 Verify decision** — every PRD verify-table state over live frames, in order: hazard in a region TinyCLIP calls a plant (reticle crop or full frame), reticle not a plant, no focus reading, too far, target top-1 for 3 frames (auto-capture), else reticle guidance; floor + optional margin; R5, R12
+- [x] **S25 Verify decision** — every PRD verify-table state over live frames, in order: hazard in a region TinyCLIP calls a plant (reticle crop or full frame), reticle not a plant, no focus reading, too far, target top-1 for 3 frames (auto-capture), else reticle guidance; floor + optional margin; R5, R12; `VerifyStreak` reports `Matching(1..2)` for the ring and "Hold still", then `Found`; the grass tutorial goal (R3) skips the hazard row; `FrameVerifier` runs the per-frame model path behind encoder interfaces, so all of it is JVM-tested
 - [ ] **S26 Hint guards** — target name, "I see", "there is", off-card numbers, 20 words; retry once → template; R6
 - [ ] **S27 Hunt state** — current hunt survives process death; tutorial/opener flags persist; H2
 
@@ -71,7 +71,7 @@ The vestige download broke when Hugging Face moved its redirect CDN (`cas-bridge
 - Re-resolve the redirect on every attempt; signed CDN URLs expire.
 - Preflight with a HEAD: `x-linked-size` and `x-linked-etag` must match the pins, or stop with a clear message before pulling 2.6 GB.
 - Resume from a `.part` file with `Range`; require a 206 whose `Content-Range` starts at the `.part` length, else restart.
-- Run as a foreground-service download with a notification so it survives the screen turning off.
+- Run as a user-initiated data transfer job (Android 14+, so minSdk is 34) with a progress notification, so it survives the screen turning off and the system reruns it after a dropped network with the app closed. A foreground service can't restart from the background on Android 12+.
 - On failure, show which host failed, so a parent can tell a filtered network from an outage.
 - Store under `noBackupFilesDir`. Never uninstall the app on the test phone; `make install` keeps data.
 

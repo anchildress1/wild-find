@@ -1,0 +1,22 @@
+run 20261007-095515-oak: samsung SM-S928U (SM8650), Android 16, app 0.1.0
+goal target oak, requested analysis 1920x1440, viewport 1080x2340, timestamp_source 1
+frames: 241 over 59 s (4.1 analyzed/s), upright 886x1920
+frame ms (buffer to verdict): p50 117, p95 143, max 361; over 200 ms: 3 of 241
+frame ms with BioCLIP on both regions: none (0 frames)
+stage p50 ms: crop 24.0, resize 17.0, gate 73.4, bioclip 0.0, hazard 0.0, goal 0.0
+focus matched by sensor timestamp: 241 of 241
+verdicts: not_plant 241
+tap_to_focus with no focus reading for the frame: 0 of 0
+capture to analyzer ms: p50 92, p95 100, max 159
+first eligible frame to Found: no Found this run
+system: 1.0 min sampled, charging no
+PSS MB: start 387, max 3119, end 3076
+thermal status max none
+thermal headroom: first 0.61 at 0.0 min, max 0.77, end 0.77; 0 of 30 samples NaN
+battery temp C: start 30.0, max 33.2, end 33.2
+battery %: 21 to 20 (61 %/h)
+Gemma load: 5440.912134 ms, pss 2293893 kB
+hint taps: 1; tap to hint ms: p50 5235, p95 5235, max 5235; over 5000: 1
+hint parts p50 ms: frame 120, jpeg 28, scene 4137, hint 951
+with one guard retry ms: p50 6186, p95 6186, max 6186
+replies with no scene tags: 1; empty hints: 0

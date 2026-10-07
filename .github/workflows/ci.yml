@@ -50,7 +50,8 @@ jobs:
         uses: actions/cache@v6
         with:
           path: app/generated
-          key: assets-${{ hashFiles('core/src/main/resources/models.properties', 'pipeline/src/**', 'pipeline/data/**', 'pipeline/uv.lock') }}
+          # Every file the asset stamp records, or a restored cache fails the Gradle stale-assets check.
+          key: assets-${{ hashFiles('core/src/main/resources/models.properties', 'pipeline/src/**', 'pipeline/data/**', 'pipeline/uv.lock', 'app/src/main/assets/labels.*') }}
 
       - name: Build bundled assets
         if: steps.assets.outputs.cache-hit != 'true'

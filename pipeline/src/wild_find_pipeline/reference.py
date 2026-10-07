@@ -22,12 +22,17 @@ FIXTURE_SOURCE = "https://www.inaturalist.org/observations/363799243 (CC0)"
 USER_AGENT = "wild-find-pipeline/0.1 (+https://github.com/anchildress1/wild-find)"
 
 
+def center_crop(img: Image.Image, width: int, height: int) -> Image.Image:
+    """The centered `width` x `height` region; odd leftovers floor, as Day 1 cropped."""
+    left, top = (img.width - width) // 2, (img.height - height) // 2
+    return img.crop((left, top, left + width, top + height))
+
+
 def square_fixture(img: Image.Image) -> Image.Image:
     """Center-crop to a square and resize to the model's input size."""
     img = img.convert("RGB")
     side = min(img.size)
-    left, top = (img.width - side) // 2, (img.height - side) // 2
-    return img.crop((left, top, left + side, top + side)).resize((SIZE, SIZE), Image.Resampling.BICUBIC)
+    return center_crop(img, side, side).resize((SIZE, SIZE), Image.Resampling.BICUBIC)
 
 
 def image_input(img: Image.Image) -> np.ndarray:

@@ -1,4 +1,4 @@
-.PHONY: setup build install device-test focus-probe assets sprites hazard-vectors fetch-models push-models reference test pipeline-test lint ktlint detekt android-lint pipeline-lint shellcheck actionlint secret-scan ai-checks clean
+.PHONY: setup build install device-test focus-probe assets sprites hazard-vectors labels crop-reference gate-harness gate-pull fetch-models push-models reference test pipeline-test lint ktlint detekt android-lint pipeline-lint shellcheck actionlint secret-scan ai-checks clean
 
 SHELL := /bin/bash
 
@@ -53,6 +53,20 @@ focus-probe: install
 	adb shell am start -n $(WILDFIND_PACKAGE)/dev.anchildress1.wildfind.FocusProbeActivity
 	adb logcat -s FocusProbe:I | tee $(FOCUS_LOG)
 
+# S05 gate harness: the live verify path at about 5 fps, hint taps, memory, and heat, logged on the phone.
+# GATE_WORD is a menu word, or grass for the tutorial. Back ends a run.
+GATE_WORD ?= oak
+gate-harness: install
+	adb shell am start -n $(WILDFIND_PACKAGE)/dev.anchildress1.wildfind.harness.GateHarnessActivity --es word $(GATE_WORD)
+
+# Copies harness runs off the phone and summarizes new ones. One folder for all of them: each run's name starts with
+# its date and time, so pulling again adds new runs instead of copying old ones into another day's folder.
+GATE_DIR ?= docs/results/gate
+gate-pull:
+	mkdir -p $(GATE_DIR)
+	adb pull /sdcard/Android/data/$(WILDFIND_PACKAGE)/files/gate/. $(GATE_DIR)
+	$(UV) run python -W error -m wild_find_pipeline.gate_summary $(GATE_DIR)
+
 fetch-models:
 	./scripts/models.sh fetch
 
@@ -71,8 +85,16 @@ sprites:
 hazard-vectors:
 	$(UV) run --group reference python -W error -m wild_find_pipeline.hazard_vectors
 
+# Rebuilds the committed labels.npy and labels.json from the pinned teacher (3.9 GB), so CI never runs it.
+labels:
+	$(UV) run --group reference python -W error -m wild_find_pipeline.label_vectors
+
+# Pillow crops the JVM frame tests must match pixel for pixel.
+crop-reference:
+	$(UV) run --group reference python -W error -m wild_find_pipeline.crop_reference
+
 # Parity references for the on-device tests: BioCLIP (Day 1) and the bundled plant gate.
-reference: assets
+reference: assets crop-reference
 	$(UV) run --group reference python -W error -m wild_find_pipeline.reference
 	$(UV) run --group reference python -W error -m wild_find_pipeline.gate_reference
 

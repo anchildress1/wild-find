@@ -19,8 +19,11 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 dependencies {
+    api(libs.okhttp)
+
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter)
+    testImplementation(libs.mockwebserver)
     testRuntimeOnly(libs.junit.platform.launcher)
 }
 

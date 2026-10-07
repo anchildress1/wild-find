@@ -1,0 +1,4 @@
+# make device-test on SM-S928U (Android 16), 2026-10-07 10:16, Gemma warm-up before the first scene call, built from
+# the commit that adds this file. adb logcat -d -s GemmaHintDevice:I
+10-07 10:16:55.403 28707 28721 I GemmaHintDevice: load 4733 ms, warm-up 3793 ms, first scene 1243 ms [shade, woods edge] from: ["shade", "woods edge"]
+10-07 10:16:55.403 28707 28721 I GemmaHintDevice: hint 721 ms: Look near the woods edge where the shade is.

@@ -1,9 +1,9 @@
 package dev.anchildress1.wildfind.inference
 
-import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import dev.anchildress1.wildfind.core.verify.PlantGate
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -24,16 +24,16 @@ class PlantGateParityTest {
 
     @Test
     fun fixtureEmbeddingAndPlantShareMatchTheLaptop() {
-        val bitmap = instrumentation.context.assets.open("reference/fixture.png").use(BitmapFactory::decodeStream)
+        val fixture = testBitmap("reference/fixture.png").pixels()
         val gate = bundled.plantGate()
 
         val loadStart = System.nanoTime()
         val encoder = ImageEncoder(bundled.plantGateModel())
         val loadMs = (System.nanoTime() - loadStart) / 1e6
         val embedding = encoder.use {
-            it.embed(bitmap) // warm-up run, excluded from timing
+            it.embed(fixture) // warm-up run, excluded from timing
             val start = System.nanoTime()
-            it.embed(bitmap).also {
+            it.embed(fixture).also {
                 Log.i(TAG, "load ${"%.0f".format(loadMs)} ms, embed ${(System.nanoTime() - start) / 1_000_000} ms")
             }
         }
@@ -46,7 +46,7 @@ class PlantGateParityTest {
         Log.i(TAG, "cosine to laptop reference: $cosine, plant share $share")
         assertTrue("cosine $cosine below $MIN_COSINE", cosine >= MIN_COSINE)
         assertEquals(reference.getDouble("plant_share"), share, SHARE_TOLERANCE)
-        assertTrue("the oak fixture must pass the gate", gate.isPlant(embedding))
+        assertTrue("the oak fixture must pass the gate", PlantGate.isPlant(share))
     }
 
     private fun dot(a: FloatArray, b: FloatArray) = a.indices.sumOf { (a[it] * b[it]).toDouble() }

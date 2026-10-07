@@ -34,12 +34,12 @@ class PlantGate(val labels: List<Label>, val logitScale: Float) {
         return labels.indices.filter { labels[it].isPlant }.sumOf { weights[it] } / weights.sum()
     }
 
-    /** True when the plant labels' combined share is over [THRESHOLD]. */
-    fun isPlant(embedding: FloatArray): Boolean = plantShare(embedding) > THRESHOLD
-
     /** Gate constants measured on Day 1. */
     companion object {
         /** A frame is a plant above this combined plant share. */
         const val THRESHOLD = 0.5
+
+        /** True when a [plantShare] result is over [THRESHOLD]. */
+        fun isPlant(share: Double): Boolean = share > THRESHOLD
     }
 }

@@ -8,7 +8,7 @@ wild-find sends kids 8 and up outside to find and photograph plant groups common
 
 |  |  |
 | --- | --- |
-| Platform | Native Android, Kotlin; one Android test phone |
+| Platform | Native Android, Kotlin; two test phones: Samsung Galaxy S24 Ultra and Google Pixel 9 |
 | Models | TinyCLIP ViT-8M gates plant vs not-plant and BioCLIP 2.5 Mobile verifies the plant group, both live in the camera; Gemma 4 E2B writes level-2 hints |
 | Network | One iNaturalist query per hunt, requiring at most three paginated HTTP requests, sent with coarse region coordinates |
 | Region | West Georgia region, key 34\_-85: a 75 km radius around (34, -85) that covers Carrollton |
@@ -62,7 +62,7 @@ Every call below is settled; open items live in Open Questions.
 | Area | Decision |
 | --- | --- |
 | Audience | Kids 8 and up; no taxonomy jargon in the UI |
-| Platform | Native Android in Kotlin; one Android test phone; no iOS; no Vestige code |
+| Platform | Native Android in Kotlin; two test phones, Samsung Galaxy S24 Ultra and Google Pixel 9; no iOS; no Vestige code |
 | Repo | wild-find; new repo started inside the challenge window; MIT license |
 | Runtime models | Open-weight only, all running on the phone |
 | Model roles | TinyCLIP ViT-8M (MIT) gates plant vs not-plant on the reticle crop; BioCLIP 2.5 Mobile verifies the plant group on it; Gemma writes level-2 hints and never sits in the verify path; full BioCLIP 2.5 makes text embeddings at build time; Pl@ntNet rejected |
@@ -126,7 +126,7 @@ Ten P0s ship the hunt; one P1 follows; four P2s shape the design now. Requiremen
 | R3 | Grass tutorial | The first-ever hunt opens with grass, followed by 3 normal targets; a grass close-up passes when TinyCLIP calls the reticle crop a plant and grass is in BioCLIP's top 3 of the fixed tutorial label set, the 11 labels Day 1 measured (Poaceae, Quercus, Polypodiopsida, Trifolium, Pinus, Taraxacum, and the 5 hazard species), never the hunt's full label universe (49 of 52 CC0 grass photos passed both on Day 1; BioCLIP top 3 alone passed 50 and top-1 alone 45; the one lawn the gate rejected scored a plant share of 0.39); the plant gate's labels include grass; the hazard check doesn't run during the tutorial, because 9 of 54 grass photos warned against the menu labels on Day 1 (1 of 54 against the species table), and the leave-it rule stays on screen; done in under 60 seconds; never repeats once completed |
 | R4 | Target pick | 3 targets per hunt by sighting-weighted random from eligible words; a hazard is never a target |
 | R5 | Verify | Follows the Runtime Logic verify table, live while the camera is open; a find needs the subject in close range and the target top-1 on the reticle crop at or above its verify\_floor for 3 frames in a row, then auto-captures; a hazard match shows a warning and gives no star; no result is ever presented as evidence of safety |
-| R6 | Hints | Tap for a hint; levels 1 and 3 are precomputed from the fact card at hunt start; level 2 reads the current camera frame at tap time, with no separate hint photo; guards reject the target name, "I see", "there is", numbers not on the card, and anything over 20 words; retry once, then a template hint |
+| R6 | Hints | Tap for a hint; levels 1 and 3 are precomputed from the fact card at hunt start; level 2 reads the camera frame from the moment the kid opens level 1, with no separate hint photo: the scene call starts on the level-1 tap, so the level-2 tap usually waits only for the short hint call; guards reject the target name, "I see", "there is", numbers not on the card, and anything over 20 words; retry once, then a template hint |
 | R7 | Privacy | Android coarse location permission only; no fine location requested; coordinates rounded again before the query; no photo or precise location leaves the device; no account; no analytics |
 | R8 | Offline | All three models on-device; a cached hunt completes in airplane mode; with no cache and no network, the bundled West Georgia fallback list runs the hunt |
 | R9 | Model delivery | Gemma is the only download: pinned in Data Contracts; starts on its own at first launch while the opener plays; free storage checked before download, with a clear message showing the space needed; Wi-Fi only; resumable; progress shown; SHA-256 verified before load. Verify works before the download finishes; only level-2 hints wait |
@@ -156,7 +156,7 @@ Day-1 measurements on the test phone are in hole 4; heat and hint latency are st
 | Privacy | No photo or precise location leaves the device; gameplay requests carry only coarse region coordinates plus ordinary request metadata such as IP address | Network log on the test phone |
 | Offline | A full hunt runs in airplane mode from the cache or the bundled fallback list | Field test |
 | Verify latency | Each analyzed live frame under 200 ms (TinyCLIP on the reticle crop and full frame, plus BioCLIP on up to both); the first eligible frame to Found under 1.5 s | Gate harness (S05) |
-| Hint latency | Under 5 s for level 2; levels 1 and 3 are precomputed (unmeasured) | Day-1 gate |
+| Hint latency | Under 5 s for level 2; levels 1 and 3 are precomputed. The first vision call after Gemma loads pays about 3 s of one-time setup (first taps took 5.2 to 6.3 s on Oct 7), so Gemma runs one throwaway vision call right after loading. With that and the level-1 prefetch, level-2 taps took 0.9 to 1.8 s on the S24 Ultra, 2.9 s at worst with one guard retry (`docs/results/day-2/`, `docs/results/gate/`) | Gate harness (S05) |
 | Download size | Gemma 2,588,147,712 bytes, fetched after install; the APK carries BioCLIP (46,986,589 bytes), the plant gate (about 33 MB), and the species table (about 17.5 MB) | Day-1 gate |
 | Storage | Free space checked before the download starts | Day-1 gate |
 | Memory | Gemma loads once per session and is released when the app goes to the background; RAM recorded | Day-1 gate |
@@ -275,7 +275,7 @@ Ten files ship in the app, one pinned model downloads once, and every cache entr
 | species\_table.npy | BioCLIP Mobile's 4,271-species text table plus a row for each hazard species it lacks (today: *Toxicodendron pubescens*); 1024-d unit vectors | Build pipeline, from the pinned taxa\_table.npy |
 | species\_labels.json | Scientific name per species\_table row, with a hazard flag | Build pipeline, from the pinned taxa\_labels.json |
 | labels.npy | One 1024-d unit vector per menu word, plus the 11 fixed tutorial labels (R3) | BioCLIP 2.5 ViT-H text encoder |
-| labels.json | Parallel list: id per menu word or tutorial label | Build pipeline |
+| labels.json | schema\_version, the teacher pin and package versions, and a list parallel to labels.npy: id, kind (word or tutorial), scientific name, and prompt per row | Build pipeline |
 | flora\_student\_fp32.onnx | BioCLIP 2.5 Mobile image encoder, fp32; pinned below and SHA-256 checked at build time | Build pipeline, from crazedcodernate/bioclip-2.5-mobile-fastvit @ 29b474ea2a5d72b4646f036ead9441e0a22a5c62 |
 | plant\_gate.onnx | TinyCLIP ViT-8M/16 image encoder, fp32 (about 33 MB), with CLIP normalization baked in | Build pipeline, exported from the pinned TinyCLIP weights below |
 | plant\_gate.json | Plant and not-plant labels, their 512-d TinyCLIP text vectors, and TinyCLIP's learned logit scale (exp(logit\_scale) = 50.0) | Build pipeline |
@@ -302,7 +302,7 @@ Ten files ship in the app, one pinned model downloads once, and every cache entr
 }
 ```
 
-icon\_category is one of tree, flower, fern, grass, vine, shrub, moss, other. verify\_floor stays null until calibration; development builds use one shared default until then.
+icon\_category is one of tree, flower, fern, grass, vine, shrub, moss, other. verify\_floor stays null until calibration, and null means no floor: top-1 and the plant gate decide. No shared default stands in, because on Day 1 correct reticle top-1 finds scored as low as 0.338 while non-plants topped a target at up to 0.616, so no single floor separates them.
 
 **Pinned model artifacts**
 
@@ -341,7 +341,7 @@ radius\_km is 75, or 150 after the widen, so widened counts never pass as 75 km 
 | Gemma, scene call | Scene image plus the fixed tag list | JSON array of tags |
 | Gemma, hint call | Fact card, tags, hint level | One line, 20 words or fewer |
 
-**Crops** (the geometry Day 1 measured): both come from the rotation-normalized analysis frame. Full frame: the center square with side equal to the shorter edge. Reticle crop: the center square with side 60% of the shorter edge. Each is resized bicubic to 224 x 224. The on-screen circle is drawn inscribed in the reticle square after mapping analysis coordinates to preview coordinates, so the kid aims at the pixels the models read.
+**Crops** (the geometry Day 1 measured): both come from the rotation-normalized analysis frame, which is exactly the region the preview shows, because preview and analysis share one CameraX viewport. The kid frames the shot with the screen, so the screen is the photo, and the crops are taken from it as Day 1 took them from each photo. Analysis defaults to 1920 x 1440 (4:3); a phone without that size gets the closest smaller 4:3 size, then the closest larger. On a tall phone the visible strip's reticle square stays above 224 pixels down to about 960 x 720, so every crop downscales as Day 1's did. Full frame: the center square with side equal to the shorter edge. Reticle crop: the center square with side 60% of the shorter edge. Each is resized bicubic to 224 x 224 with Pillow's fixed-point resampler, which the phone reproduces bit for bit (JVM tests check every rotation against Pillow's own output). The on-screen circle is drawn inscribed in the reticle square after mapping analysis coordinates to preview coordinates, so the kid aims at the pixels the models read.
 
 **The iNaturalist query**
 
@@ -381,14 +381,16 @@ hazard_warns(region) = plant_gate(region)
        && rank(best hazard species in species_table) <= 5
 ```
 
-margin stays null until the calibration set sets it; null means top-1 alone decides. The hazard rule needs no calibration: on Day 1 it caught 48 of 52 hazard photos (92%) and warned on 1 of 253 safe photos (0.4%); against the menu labels alone it warned on most magnolia, honeysuckle, and maple photos.
+margin stays null until the calibration set sets it; null means top-1 alone decides. A tie with the runner-up is not top-1.
+
+**Auto-capture** keeps the third matching frame's reticle crop, upright at analysis resolution, in memory for the Found screen. It is never written to storage or sent anywhere, and the streak starts over after it, so one target can take another capture (R12). The hazard rule needs no calibration: on Day 1 it caught 48 of 52 hazard photos (92%) and warned on 1 of 253 safe photos (0.4%); against the menu labels alone it warned on most magnolia, honeysuckle, and maple photos.
 
 **Hints, one level per tap**
 
 | Level | Built from | When | Example (made up) |
 | --- | --- | --- | --- |
 | 1 | Card: where | Precomputed at hunt start | "Ferns like shady, damp spots." |
-| 2 | Card: where, plus scene tags | On tap; the scene is the current camera frame | "That shady spot by the fence looks fern-friendly." |
+| 2 | Card: where, plus scene tags | On tap; the scene is the camera frame from the level-1 tap, tagged while the kid reads level 1 | "That shady spot by the fence looks fern-friendly." |
 | 3 | Card: shape | Precomputed at hunt start | "Look for leaves shaped like green feathers." |
 
 Scene tags: shade, sun, water, tree, lawn, rocks, fence, path, woods edge. Guards run on every hint before it shows.
@@ -412,6 +414,7 @@ Briar and the opener play finished sprite sheets, one per state. A Rive rig was 
 | --- | --- | --- |
 | Logo | Splash, About | Path pending (Open Questions) |
 | Concept board | Poses, icon ideas, palette; reference only, broken alpha | assets/source/wild-find-sprite-1.png |
+| UI direction 01 | Eight-screen review concept: first launch with the hint-download bar, grass tutorial, hunt map, live camera, hint, found, give it space, hunt complete; reference only | assets/source/wild-find-app-design.png |
 | Briar idle loop | 16-frame rest-and-blink idle, source for `idle`; plays for every state until per-state art exists | assets/source/briar-rest-blink-16.png |
 | Briar sprite sheets | Per-state sheets: welcome; searching or hint; found; retry; hunt complete | app/src/main/assets/briar/ (only `idle` so far) |
 | Category icons | One per icon\_category: tree, flower, fern, grass, vine, shrub, moss, other | Path pending |
@@ -435,8 +438,8 @@ Every failure degrades to a playable hunt or a plain message; none crash or stal
 | Cache entry mismatch (schema, menu, region, month, or radius) | Discard the entry and refetch |
 | Fewer than 3 eligible words | Widen the radius to 150 km once, one extra query of up to three requests; still short, show "wild-find covers west Georgia for now" |
 | Not enough free storage | Stop before downloading and show the space needed |
-| Model download fails | Resume where it stopped; Wi-Fi only |
-| SHA-256 mismatch | Delete the file and download again |
+| Model download fails | Resume where it stopped; Wi-Fi only; the notification names the host that failed |
+| SHA-256 mismatch | Delete the file; the next app launch downloads it again, since every retry costs a full 2.6 GB |
 | Autofocus reports no focus distance | No auto-capture; the kid sees "Tap the plant to focus" until a reading arrives |
 | Gemma too slow or out of memory | Release and reload once; then serve the template hint |
 | A hint fails the guards twice | Template hint built from the card fields |
@@ -470,7 +473,7 @@ No blockers remain; every hole below closes or falls back during the Day-1 gate 
 | # | Hole | Why it matters | Fix | Severity |
 | --- | --- | --- | --- | --- |
 | 3 | Label text format | Day 1: with common names, a white oak photo scored "poison oak" top-1 on both the teacher and the mobile model; scientific names put oak top-1 on both | BioCLIP labels embed as "a photo of <scientific name>."; confirm on the calibration set | High |
-| 4 | Latency | Day 1 measured parts, not the whole per-frame path: one BioCLIP embedding takes 45 to 65 ms (one run 132 ms) and one TinyCLIP embedding 40 ms. A live frame now runs TinyCLIP twice plus BioCLIP up to twice, so the 200 ms target is unproven. Gemma (hints only) loads in 4.0 s warm, 9.9 s first ever, peaks at 2.9 GB, and took 2.3 to 2.9 s per warm vision call. Level-2 hint latency is unmeasured | The gate harness (S05) benchmarks the full per-frame verify path and the hint call on the phone; if a frame runs over 200 ms, analyze fewer frames a second | High |
+| 4 | Latency | Day 1 measured parts, not the whole per-frame path: one BioCLIP embedding takes 45 to 65 ms (one run 132 ms) and one TinyCLIP embedding 40 ms. A live frame runs TinyCLIP twice plus BioCLIP up to twice: on Oct 7 the whole path took 163 to 305 ms across two runs on the test phone with both regions plants (a 224-pixel test frame, `docs/results/day-2/`), with BioCLIP alone swinging from 80 to 193 ms, so frames can miss 200 ms; live camera frames at the pinned analysis resolution come from the gate harness. Gemma (hints only) loads in 4.0 s warm, 9.9 s first ever, peaks at 2.9 GB, and took 2.3 to 2.9 s per warm vision call. Level-2 hint latency, measured Oct 7: 5.2 to 6.3 s for a first tap after a cold load, 0.9 to 1.8 s once Gemma warms its vision path after loading and level 1 starts the scene call (see Hint latency) | The gate harness (S05) benchmarks the full per-frame verify path and the hint call on the phone; if a frame runs over 200 ms, analyze fewer frames a second | High |
 | 5 | Kids read hints on screen | Reading pulls eyes down, against the theme | Read hints aloud with Android's on-device text-to-speech; confirm an offline voice on the test phone | High |
 | 8 | Loose Gemma boxes | Resolved on Day 1: verify no longer uses Gemma boxes | None | Low |
 | 10 | Heat and battery | Live BioCLIP at about 5 frames a second plus the camera; Gemma only on hint taps | The gate harness runs a 20-minute live-camera session | Medium |

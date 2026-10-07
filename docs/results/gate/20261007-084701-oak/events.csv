@@ -1,0 +1,7 @@
+t_ns,event,detail
+132066840605281,start,oak
+132066943180333,camera,"viewport 1080x2340, timestamp_source 1"
+132067642648458,analysis_buffer,"1920x1440 crop Rect(0, 277 - 1920, 1163)"
+132071632460696,gemma_loaded,"4771.775519 ms, pss 2304232 kB"
+132140368589732,paused,
+132140988348742,stop,oak

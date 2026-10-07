@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "dev.anchildress1.wildfind"
-        minSdk = 31
+        minSdk = 34
         targetSdk = 37
         versionCode = 1
         versionName = "0.1.0"
@@ -97,9 +97,11 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.compose.material3)
     implementation(libs.onnxruntime.android)
+    implementation(libs.litertlm.android)
     implementation(libs.camerax.camera2)
     implementation(libs.camerax.lifecycle)
     implementation(libs.camerax.view)
+    debugImplementation(libs.camerax.compose)
 
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.androidx.test.ext.junit)

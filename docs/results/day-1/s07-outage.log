@@ -1,0 +1,44 @@
+22:20:55 == setup: delete the model, cold-start the app
+22:21:19 part 501203653 bytes
+22:21:19 == remove the app from recents
+22:21:19 recents entry for dev.anchildress1.wildfind.debug: 1
+22:21:19 == offline for 60 s
+22:21:34 airplane enabled, wifi networks 0, part 509671602
+22:21:50 airplane enabled, wifi networks 0, part 509671602
+22:22:05 airplane enabled, wifi networks 0, part 509671602
+22:22:20 airplane enabled, wifi networks 0, part 509671602
+22:22:20 trace while offline:
+10-06 22:21:00.308 I/GemmaDownload(21090): job started
+10-06 22:21:19.894 I/GemmaDownload(21090): job stopped, reason 7
+22:22:21 == network back; the app stays closed
+22:22:26 wifi networks 1, part 509671602
+22:22:31 wifi networks 1, part 613992632
+22:22:37 wifi networks 1, part 665576042
+22:22:42 wifi networks 1, part 822171716
+22:22:47 wifi networks 1, part 885372662
+22:22:53 wifi networks 1, part 1012186139
+22:22:58 wifi networks 1, part 1077063221
+22:23:03 wifi networks 1, part 1249600536
+22:23:08 wifi networks 1, part 1321327150
+22:23:14 wifi networks 1, part 1490867810
+22:23:19 wifi networks 1, part 1566230668
+22:23:24 wifi networks 1, part 1727171365
+22:23:29 wifi networks 1, part 1802773789
+22:23:35 wifi networks 1, part 1971266449
+22:23:40 wifi networks 1, part 2050261469
+22:23:45 wifi networks 1, part 2212271723
+22:23:51 wifi networks 1, part 2295786648
+22:23:56 wifi networks 1, part 2454741194
+22:24:01 wifi networks 1, part 2522934082
+22:24:06 wifi networks 1, part 2588147712
+22:24:12 wifi networks 1, part 2588147712
+22:24:17 wifi networks 1, part 
+22:24:17 final 2588147712 bytes
+22:24:17 trace:
+10-06 22:21:00.308 I/GemmaDownload(21090): job started
+10-06 22:21:19.894 I/GemmaDownload(21090): job stopped, reason 7
+10-06 22:22:26.675 I/GemmaDownload(23971): job started
+10-06 22:24:13.811 I/GemmaDownload(23971): job finished, reschedule false
+22:24:18 activity starts (1 = the initial launch only): 1
+22:24:21 device sha256 181938105e0eefd105961417e8da75903eacda102c4fce9ce90f50b97139a63c
+22:24:21 PASS final hash matches pin

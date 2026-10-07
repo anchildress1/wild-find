@@ -3,7 +3,7 @@
 import json
 import sys
 
-from wild_find_pipeline.labels import embedding_versions, lacking_hazards, prompt
+from wild_find_pipeline.labels import embedding_versions, lacking_hazards, prompt, teacher_model
 from wild_find_pipeline.paths import HAZARD_VECTORS, ensure_artifact, pin
 from wild_find_pipeline.reference import embed_texts
 
@@ -13,12 +13,11 @@ def main() -> int:
     names = {entry["scientific"] for entry in json.loads(ensure_artifact("taxa_labels").read_text())}
     lacking = lacking_hazards(names)
     vectors = embed_texts([prompt(taxon) for taxon in lacking]) if lacking else []
-    teacher = pin("teacher")
     HAZARD_VECTORS.parent.mkdir(parents=True, exist_ok=True)
     HAZARD_VECTORS.write_text(
         json.dumps(
             {
-                "text_model": {"repo": teacher["repo"], "revision": teacher["revision"]},
+                "text_model": teacher_model(),
                 "taxa_labels_sha256": pin("taxa_labels")["sha256"],
                 "prompts": {taxon: prompt(taxon) for taxon in lacking},
                 "packages": embedding_versions(),

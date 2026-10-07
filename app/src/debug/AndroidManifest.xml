@@ -6,5 +6,11 @@
         <activity
             android:name=".FocusProbeActivity"
             android:exported="true" />
+        <!-- Debug-only gate harness; launched over adb by make gate-harness, never from the launcher. -->
+        <!-- Handles its own size and orientation changes: recreation would split one 20-minute run into two. -->
+        <activity
+            android:name=".harness.GateHarnessActivity"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"
+            android:exported="true" />
     </application>
 </manifest>
