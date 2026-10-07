@@ -45,6 +45,8 @@ class VerifyTest {
         assertEquals(4f, Focus.zoomRatio(null, 4000, 1000))
         assertNull(Focus.zoomRatio(null, 4000, null))
         assertNull(Focus.zoomRatio(null, 4000, 0))
+        // Before the camera reports its active array, a crop region alone would read as 0x zoom.
+        assertNull(Focus.zoomRatio(null, 0, 1000))
     }
 
     @Test
