@@ -1,0 +1,8 @@
+# 2026-10-07 19:15 EDT, from docs/results/day-1/bioclip_scores.csv (BioCLIP Mobile, reticle crop, 6 group labels)
+114 reticle crops of the 6 groups; own label top-1 among 6: 102 (89%)
+  grass: 51 of 54
+  oak: 11 of 12
+  fern: 10 of 12
+  clover: 10 of 12
+  pine: 10 of 12
+  dandelion: 10 of 12
