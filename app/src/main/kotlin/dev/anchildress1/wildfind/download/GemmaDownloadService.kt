@@ -24,6 +24,7 @@ import okhttp3.OkHttpClient
 import java.io.File
 import java.io.IOException
 import java.util.concurrent.CancellationException
+import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.concurrent.thread
 
@@ -73,7 +74,8 @@ class GemmaDownloadService : JobService() {
                 }
             }
             getSystemService(NotificationManager::class.java).cancel(FAILED_ID)
-            false
+            // The system may already have stopped this run and started another; never finish it on that one's behalf.
+            false.takeUnless { run.stopped }
         } catch (_: CancellationException) {
             null
         } catch (e: DownloadFailure) {
@@ -169,6 +171,7 @@ class GemmaDownloadService : JobService() {
 
         // The run executing in this process; a job only runs in its app's process, so null means none is running.
         private val active = AtomicReference<Run?>()
+        private val checking = AtomicBoolean(false)
 
         /**
          * Schedules the download now unless a run is in progress; a finished model needs no job.
@@ -177,7 +180,8 @@ class GemmaDownloadService : JobService() {
          */
         @Suppress("TooGenericExceptionCaught")
         fun start(context: Context) {
-            if (active.get() != null) return
+            // One check at a time: each onStart would otherwise hash a sideloaded 2.6 GB file in parallel.
+            if (active.get() != null || !checking.compareAndSet(false, true)) return
             val app = context.applicationContext
             val pin = ModelPin.load("gemma")
             // Off the main thread: a sideloaded model without its marker is hashed once here. A ready model needs
@@ -191,6 +195,8 @@ class GemmaDownloadService : JobService() {
                 } catch (e: RuntimeException) {
                     // Same as the job thread: a background check must never crash the app's UI.
                     Log.e(TAG, "download check failed", e)
+                } finally {
+                    checking.set(false)
                 }
             }
         }
