@@ -92,7 +92,12 @@ class GateRun(private val context: Context, private val word: String, val log: G
     private val gateEncoder = ImageEncoder(bundled.plantGateModel())
     private val bioclip = ImageEncoder(bundled.bioclipModel())
     private val species = bundled.speciesLabels().map { it.scientific }
-    private val verifier = FrameVerifier(bundled.plantGate(), gateEncoder, bioclip, bundled.hazardCheck())
+
+    // West Georgia's October list, a debug asset; the hunt's own iNat pull replaces it in the app.
+    private val local = context.assets.open(LOCAL_SPECIES).bufferedReader().useLines { lines ->
+        lines.filterNot { it.isBlank() || it.startsWith("#") }.toSet()
+    }
+    private val verifier = FrameVerifier(bundled.plantGate(), gateEncoder, bioclip, bundled.hazardCheck(local))
     private val streak = VerifyStreak()
     private val focus = FocusTrack()
     private val hintThread = Executors.newSingleThreadExecutor()
@@ -347,6 +352,7 @@ class GateRun(private val context: Context, private val word: String, val log: G
         )
 
         private const val NO_TAP = -1L
+        private const val LOCAL_SPECIES = "local_species.txt"
         private const val RGBA_BYTES = 4
         private const val NANOS_PER_MS = 1_000_000L
         private const val BYTES_PER_KB = 1024

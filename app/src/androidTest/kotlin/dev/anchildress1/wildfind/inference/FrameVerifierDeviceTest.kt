@@ -38,7 +38,17 @@ class FrameVerifierDeviceTest {
 
         ImageEncoder(bundled.plantGateModel()).use { gate ->
             ImageEncoder(bundled.bioclipModel()).use { bioclip ->
-                val verifier = FrameVerifier(bundled.plantGate(), gate, bioclip, bundled.hazardCheck())
+                val verifier =
+                    FrameVerifier(
+                        bundled.plantGate(),
+                        gate,
+                        bioclip,
+                        bundled.hazardCheck(
+                            bundled.speciesLabels().map {
+                                it.scientific
+                            }.toSet(),
+                        ),
+                    )
                 verifier.analyze(frame, goal) { focus } // warm-up, excluded from timing
                 val runs = List(RUNS) { verifier.analyze(frame, goal) { focus } }
                 runs.forEach { Log.i(TAG, "times ns ${it.times}") }

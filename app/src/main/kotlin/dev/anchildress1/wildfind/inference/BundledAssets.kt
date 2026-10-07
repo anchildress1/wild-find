@@ -49,8 +49,15 @@ class BundledAssets(private val assets: AssetManager) {
         }
     }
 
-    /** PRD verify row 1's hazard rule over the species table. */
-    fun hazardCheck(): HazardCheck = HazardCheck(speciesTable(), speciesLabels().map { it.hazard }.toBooleanArray())
+    /** Verify row 1's hazard rule over the species table, ranking only [local] species plus every hazard. */
+    fun hazardCheck(local: Set<String>): HazardCheck {
+        val labels = speciesLabels()
+        return HazardCheck(
+            speciesTable(),
+            labels.map { it.hazard }.toBooleanArray(),
+            labels.map { it.scientific in local }.toBooleanArray(),
+        )
+    }
 
     /** Menu-word and tutorial text vectors from `labels.npy`, with their `labels.json` entries. */
     fun labels(): LabelSet {
