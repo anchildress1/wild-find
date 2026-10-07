@@ -216,7 +216,8 @@ def test_a_run_with_a_truncated_row_fails_alone(run, capsys):
         f.write("5\n")
 
     assert main([str(run.parent)]) == 1
-    assert "SUMMARY FAILED" in (run / "summary.txt").read_text()
+    assert not (run / "summary.txt").exists()
+    assert "SUMMARY FAILED" in capsys.readouterr().err
 
 
 def test_a_paused_run_is_flagged(run):
@@ -279,5 +280,5 @@ def test_one_broken_run_still_lets_the_others_summarize(run, capsys):
     (broken / "run.json").write_text("{}")
 
     assert main([str(run.parent)]) == 1
-    assert "SUMMARY FAILED" in (broken / "summary.txt").read_text()
+    assert not (broken / "summary.txt").exists()
     assert (run / "summary.txt").read_text().startswith("run 20261007-090000-oak-1280x960")

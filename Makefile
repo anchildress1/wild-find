@@ -59,8 +59,9 @@ GATE_WORD ?= oak
 gate-harness: install
 	adb shell am start -n $(WILDFIND_PACKAGE)/dev.anchildress1.wildfind.harness.GateHarnessActivity --es word $(GATE_WORD)
 
-# Copies every harness run off the phone and writes summary.txt beside each run's raw CSVs.
-GATE_DIR ?= docs/results/$(shell date +%F)/gate
+# Copies harness runs off the phone and summarizes new ones. One folder for all of them: each run's name starts with
+# its date and time, so pulling again adds new runs instead of copying old ones into another day's folder.
+GATE_DIR ?= docs/results/gate
 gate-pull:
 	mkdir -p $(GATE_DIR)
 	adb pull /sdcard/Android/data/$(WILDFIND_PACKAGE)/files/gate/. $(GATE_DIR)

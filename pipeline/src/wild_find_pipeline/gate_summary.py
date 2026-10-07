@@ -198,11 +198,13 @@ def main(argv: list[str]) -> int:
     failed = 0
     for run in runs:
         # One truncated or partial run must not stop every run after it from getting a summary.
+        # A failed run gets no summary.txt, so the next pull retries it instead of keeping the failure as its result.
         try:
             text = summarize(run)
         except (AttributeError, KeyError, OSError, TypeError, ValueError) as e:
             failed += 1
-            text = f"run {run.name}: SUMMARY FAILED: {e!r}"
+            print(f"run {run.name}: SUMMARY FAILED: {e!r}", file=sys.stderr)
+            continue
         (run / "summary.txt").write_text(text + "\n")
         print(text + "\n")
     return 1 if failed else 0
