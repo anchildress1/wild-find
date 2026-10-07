@@ -39,8 +39,8 @@ data class StageTimes(
  * @property reticle the upright reticle crop at analysis resolution; on Found, this is the capture
  * @property reticleShare TinyCLIP plant share of the reticle crop
  * @property fullShare TinyCLIP plant share of the full-frame crop
- * @property reticleHazardRank best hazard rank on the reticle crop, or null when it wasn't checked
- * @property fullHazardRank best hazard rank on the full frame, or null when it wasn't checked
+ * @property reticleRanking the reticle crop ranked against the species table, or null when it wasn't checked
+ * @property fullRanking the full frame ranked against the species table, or null when it wasn't checked
  * @property goal the goal score, or null when the reticle crop isn't a plant
  * @property times per-stage durations
  */
@@ -49,8 +49,8 @@ data class FrameResult(
     val reticle: Pixels,
     val reticleShare: Double,
     val fullShare: Double,
-    val reticleHazardRank: Int?,
-    val fullHazardRank: Int?,
+    val reticleRanking: HazardCheck.Ranking?,
+    val fullRanking: HazardCheck.Ranking?,
     val goal: GoalScore?,
     val times: StageTimes,
 )
@@ -100,9 +100,9 @@ class FrameVerifier(
             null
         }
         val embedded = clock()
-        val reticleRank = reticleEmbedding?.takeIf { goal.checksHazards }?.let(hazards::bestHazardRank)
-        val fullRank = fullEmbedding?.let(hazards::bestHazardRank)
-        val hazard = listOfNotNull(reticleRank, fullRank).any(HazardCheck::warns)
+        val reticleRank = reticleEmbedding?.takeIf { goal.checksHazards }?.let(hazards::rank)
+        val fullRank = fullEmbedding?.let(hazards::rank)
+        val hazard = listOfNotNull(reticleRank, fullRank).any { it.warns }
         val ranked = clock()
         val score = reticleEmbedding?.let(goal::score)
         val scored = clock()

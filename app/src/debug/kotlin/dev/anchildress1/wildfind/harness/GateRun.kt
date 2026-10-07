@@ -168,7 +168,7 @@ class GateRun(private val context: Context, private val word: String, val log: G
         }
         log.frame(
             received, sensorNs, gapMs, frame.width, frame.height, rotation, name(verdict), streakFrames,
-            result.reticleShare, result.fullShare, result.reticleHazardRank, result.fullHazardRank,
+            result.reticleShare, result.fullShare, result.reticleRanking?.hazardRank, result.fullRanking?.hazardRank,
             result.goal?.score, result.goal?.rank,
             reading?.afState, reading?.diopters, reading?.zoomRatio, reading != null,
             ms(times.crop), ms(times.resize), ms(times.plantGate), ms(times.bioclip), ms(times.hazard), ms(times.goal),

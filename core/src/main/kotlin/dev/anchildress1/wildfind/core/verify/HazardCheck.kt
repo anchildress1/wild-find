@@ -15,23 +15,33 @@ class HazardCheck(private val table: FloatMatrix, private val hazard: BooleanArr
     }
 
     /**
-     * 1-based rank of the best-scoring hazard species among all rows.
+     * One region's embedding ranked against every row.
      *
-     * A safe species tied with the hazard ranks below it, so ties warn rather than pass.
+     * @property topRow the best-scoring species row
+     * @property hazardRow the best-scoring hazard species row
+     * @property hazardRank 1-based rank of [hazardRow]; a safe species tied with it ranks below it, so ties warn
      */
-    fun bestHazardRank(embedding: FloatArray): Int {
+    data class Ranking(val topRow: Int, val hazardRow: Int, val hazardRank: Int) {
+        /** True when the best hazard is within the top [TOP_K]. */
+        val warns: Boolean get() = hazardRank <= TOP_K
+    }
+
+    /** Ranks [embedding] against the whole table. */
+    fun rank(embedding: FloatArray): Ranking {
         val scores = DoubleArray(table.rows) { table.dot(it, embedding) }
-        var best = Double.NEGATIVE_INFINITY
-        for (row in scores.indices) if (hazard[row] && scores[row] > best) best = scores[row]
-        return 1 + scores.count { it > best }
+        var topRow = 0
+        var hazardRow = -1
+        for (row in scores.indices) {
+            if (scores[row] > scores[topRow]) topRow = row
+            if (hazard[row] && (hazardRow < 0 || scores[row] > scores[hazardRow])) hazardRow = row
+        }
+        val best = scores[hazardRow]
+        return Ranking(topRow, hazardRow, 1 + scores.count { it > best })
     }
 
     /** Hazard rule constants measured on Day 1. */
     companion object {
         /** A hazard warns within this many top species; caught 48 of 52 hazard photos, warned on 1 of 253 safe ones. */
         const val TOP_K = 5
-
-        /** True when a [bestHazardRank] result is within the top [TOP_K]. */
-        fun warns(rank: Int): Boolean = rank <= TOP_K
     }
 }

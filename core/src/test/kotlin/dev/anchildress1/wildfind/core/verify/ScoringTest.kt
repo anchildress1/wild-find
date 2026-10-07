@@ -24,8 +24,15 @@ class ScoringTest {
         val table = rows(10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0)
         val check = HazardCheck(table, booleanArrayOf(false, false, true, false, false, true, false))
 
-        assertEquals(3, check.bestHazardRank(east))
-        assertTrue(HazardCheck.warns(check.bestHazardRank(east)))
+        assertEquals(3, check.rank(east).hazardRank)
+        assertTrue(check.rank(east).warns)
+    }
+
+    @Test
+    fun `ranking names the top species and the best hazard rows`() {
+        val check = HazardCheck(rows(30.0, 10.0, 20.0, 40.0), booleanArrayOf(false, false, false, true))
+
+        assertEquals(HazardCheck.Ranking(topRow = 1, hazardRow = 3, hazardRank = 4), check.rank(east))
     }
 
     @Test
@@ -33,15 +40,15 @@ class ScoringTest {
         val check =
             HazardCheck(rows(1.0, 2.0, 3.0, 4.0, 5.0, 6.0), booleanArrayOf(false, false, false, false, false, true))
 
-        assertEquals(6, check.bestHazardRank(east))
-        assertFalse(HazardCheck.warns(check.bestHazardRank(east)))
+        assertEquals(6, check.rank(east).hazardRank)
+        assertFalse(check.rank(east).warns)
     }
 
     @Test
     fun `a safe species tied with the hazard does not push it down`() {
         val check = HazardCheck(rows(10.0, 10.0), booleanArrayOf(false, true))
 
-        assertEquals(1, check.bestHazardRank(east))
+        assertEquals(1, check.rank(east).hazardRank)
     }
 
     @Test
@@ -49,7 +56,7 @@ class ScoringTest {
         assertThrows<IllegalArgumentException> { HazardCheck(rows(1.0), booleanArrayOf(false)) }
         assertThrows<IllegalArgumentException> { HazardCheck(rows(1.0), booleanArrayOf(true, false)) }
         assertThrows<IllegalArgumentException> {
-            HazardCheck(rows(1.0), booleanArrayOf(true)).bestHazardRank(floatArrayOf(1f))
+            HazardCheck(rows(1.0), booleanArrayOf(true)).rank(floatArrayOf(1f))
         }
     }
 
