@@ -15,6 +15,7 @@ Measured results from the Day-1 go/no-go gate. Every number here was observed, n
 | [day-1/run_experiments.py](day-1/run_experiments.py) | Regenerates every CSV above from the photo manifest |
 | [day-1/summarize.py](day-1/summarize.py) and [summary.txt](day-1/summary.txt) | Derives every table on this page from the CSVs |
 | [day-1/device-logs.md](day-1/device-logs.md) | Raw logcat lines from every on-device run |
+| [day-1/s07-download-proof.sh](day-1/s07-download-proof.sh) and [s07-download.log](day-1/s07-download.log) | Gemma download proof script and its raw output |
 
 Photo sets: 176 CC0 iNaturalist plant photos (10 each of oak, pine, maple, sweetgum, fern, clover, dandelion, moss, magnolia, violet, honeysuckle, and the 5 hazards, plus 16 earlier ones), 52 grass photos, 63 non-plant photos (Wikimedia CC0 or public domain: people, pets, vehicles, toys, screens, rocks, soil, walls), and 14 mixed scenes where real vegetation fills much of the frame. Non-photographs (paintings, a floor plan, a sketch, an illustration, logos, diagrams) and duplicate photos were removed by hand; photographs of sculptures stay, since a kid can point the camera at a statue.
 
@@ -200,9 +201,27 @@ The back camera (ID 0, 6.3 mm) reports focus calibration `APPROXIMATE` and no mi
 | Plant gate on the phone | load 220 ms read into the heap, 73 ms memory-mapped; one embedding 30 to 40 ms |
 | BioCLIP on the phone, loaded from the APK | load 353 ms read into the heap, 115 ms memory-mapped (128 to 138 ms from a sideloaded file); one embedding 45 to 65 ms; cosine 0.9999999988 |
 
+## Gemma download on the phone (S07)
+
+[day-1/s07-download-proof.sh](day-1/s07-download-proof.sh) drives the debug app over adb on home Wi-Fi and wrote [day-1/s07-download.log](day-1/s07-download.log). The download runs as an Android 14 user-initiated data transfer job and pulls straight from the pinned `huggingface.co` URL, redirected to the CDN.
+
+| Check | Result |
+| --- | --- |
+| Pull rate | 0 to 799 MB in 25 s, about 32 MB/s |
+| Kill mid-pull, relaunch | Force-stopped at 806,882,072 bytes; the part survived and the next launch resumed from that byte, not zero |
+| Network loss with the app in the background | The system stopped the job for connectivity (stop reason 7) at 22:08:58 and started it again 11 s later without the app being opened; the pull went on to finish |
+| Completed file | 2,588,147,712 bytes; on-device SHA-256 matches the pin; marker written |
+| Verify after the last byte | about 10 s from the full part to the renamed file (one SHA-256 pass over 2.6 GB) |
+| Bad hash | First MiB of a 397 MB part zeroed; the resumed pull finished, failed the hash, deleted the part, posted the failure notification, and ended without rescheduling |
+| Next launch after a bad hash | Pulled the full file again and passed the hash; the failure notification cleared |
+| Sideloaded model, no marker | Hashed once off the main thread in about 5 s; no job scheduled |
+
+The network-loss row isn't a clean Wi-Fi-off test. On this Samsung, neither `svc wifi` nor `cmd wifi` keeps Wi-Fi off from adb; it reconnected within about 10 s. `am kill` also leaves a process running a user-initiated job alive, so the restart happened in the same process.
+
 ## Still unmeasured
 
 - The full per-frame verify path on the phone: TinyCLIP twice plus BioCLIP up to twice (S05)
 - Level-2 hint latency (S05)
 - A 20-minute live-camera heat run (S05)
-- The full Gemma download, resume, and low-storage handling (S07)
+- A Gemma download through a long Wi-Fi outage with the app swiped away, done by hand (S07)
+- Low-storage handling on the phone; covered by JVM tests only, since the test phone has 337 GB free (S07)
