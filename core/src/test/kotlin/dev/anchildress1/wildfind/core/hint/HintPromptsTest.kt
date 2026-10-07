@@ -6,15 +6,23 @@ import org.junit.jupiter.api.Test
 
 class HintPromptsTest {
     @Test
-    fun `tags come from the first JSON array, allowed only, in order, once each`() {
+    fun `tags are the allowed quoted words, in order, once each`() {
         assertEquals(
-            listOf("shade", "woods edge", "fence"),
+            listOf("shade", "woods edge", "fence", "sun"),
             HintPrompts.parseTags("""Sure! ["Shade", "woods edge", "car", "fence", "shade"] and ["sun"]"""),
         )
     }
 
     @Test
-    fun `a reply without a quoted list has no tags`() {
+    fun `tags inside native box objects count`() {
+        assertEquals(
+            listOf("shade", "fence"),
+            HintPrompts.parseTags("""[{"box_2d": [0, 500, 497, 1000], "label": "shade"}, {"label": "fence"}]"""),
+        )
+    }
+
+    @Test
+    fun `a reply without quoted allowed words has no tags`() {
         assertEquals(emptyList<String>(), HintPrompts.parseTags("shade, fence"))
         assertEquals(emptyList<String>(), HintPrompts.parseTags("box_2d [0, 500, 497, 1000]"))
     }

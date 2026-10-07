@@ -2,7 +2,7 @@ package dev.anchildress1.wildfind.core.hint
 
 /**
  * Gemma prompts for the level-2 hint: a scene call tags the camera frame, then a hint call writes one line from the
- * fact card and those tags (PRD hint table). S35's guards check the line before a kid sees it.
+ * fact card and those tags (PRD hint table). The R6 guards check the line before a kid sees it.
  */
 object HintPrompts {
     /** The fixed scene tags from the PRD. */
@@ -11,8 +11,6 @@ object HintPrompts {
     /** Longest hint, in words (R6). */
     const val MAX_WORDS = 20
 
-    // A bracketed list, closed or not: a reply cut off at the token cap may never reach its ']'.
-    private val ARRAY = Regex("\\[([^\\[\\]]*)\\]?")
     private val QUOTED = Regex("[\"']([^\"']*)[\"']")
 
     /** The scene call's text, sent with the camera frame. */
@@ -29,19 +27,16 @@ object HintPrompts {
     """.trimMargin()
 
     /**
-     * Scene tags from a scene-call [reply]: the allowed ones, in reply order, each once.
+     * Scene tags from a scene-call [reply]: the allowed ones, quoted anywhere in it, in order, each once.
      *
-     * Reads the first bracketed list that holds a quoted string, since Gemma E2B may lead with a numeric `box_2d`.
+     * The tags are a fixed vocabulary, so a quoted allowed word counts wherever it sits: in the asked-for list, in a
+     * native `box_2d` object Gemma E2B sometimes answers with, or in a list cut off at the token cap.
      */
-    fun parseTags(reply: String): List<String> {
-        val array = ARRAY.findAll(reply).map { it.groupValues[1] }.firstOrNull { QUOTED.containsMatchIn(it) }
-            ?: return emptyList()
-        return QUOTED.findAll(array)
-            .map { it.groupValues[1].trim().lowercase() }
-            .filter { it in SCENE_TAGS }
-            .distinct()
-            .toList()
-    }
+    fun parseTags(reply: String): List<String> = QUOTED.findAll(reply)
+        .map { it.groupValues[1].trim().lowercase() }
+        .filter { it in SCENE_TAGS }
+        .distinct()
+        .toList()
 
     /**
      * The level-2 hint call's text.
