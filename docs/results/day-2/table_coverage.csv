@@ -1,0 +1,1330 @@
+region,count,name,rank,common,in_table,genus_in_table
+west-georgia-us,362,Conoclinium coelestinum,species,blue mistflower,True,True
+west-georgia-us,231,Callicarpa americana,species,American beautyberry,True,True
+west-georgia-us,184,Liquidambar styraciflua,species,American sweetgum,True,True
+west-georgia-us,184,Persicaria longiseta,species,low smartweed,True,True
+west-georgia-us,159,Magnolia grandiflora,species,southern magnolia,True,True
+west-georgia-us,156,Phytolacca americana,species,American pokeweed,True,True
+west-georgia-us,154,Liriodendron tulipifera,species,American tuliptree,True,True
+west-georgia-us,151,Eupatorium capillifolium,species,dogfennel,True,True
+west-georgia-us,148,Polystichum acrostichoides,species,Christmas fern,True,True
+west-georgia-us,139,Euonymus americanus,species,strawberry bush,True,True
+west-georgia-us,125,Fagus grandifolia,species,American beech,True,True
+west-georgia-us,124,Lonicera maackii,species,Amur honeysuckle,True,True
+west-georgia-us,116,Erechtites hieraciifolius,species,American burnweed,True,True
+west-georgia-us,103,Ampelopsis glandulosa,species,Porcelain Berry,True,True
+west-georgia-us,97,Diospyros virginiana,species,American persimmon,True,True
+west-georgia-us,92,Eupatorium serotinum,species,late boneset,True,True
+west-georgia-us,90,Ligustrum sinense,species,Chinese privet,True,True
+west-georgia-us,84,Platanus occidentalis,species,American sycamore,True,True
+west-georgia-us,84,Asarum arifolium,species,Little Brown Jugs,False,True
+west-georgia-us,83,Hedera helix,species,common ivy,True,True
+west-georgia-us,82,Vitis rotundifolia,species,muscadine,True,True
+west-georgia-us,79,Pueraria montana,species,kudzu,True,True
+west-georgia-us,76,Cercis canadensis,species,eastern redbud,True,True
+west-georgia-us,72,Quercus nigra,species,water oak,True,True
+west-georgia-us,69,Parthenocissus quinquefolia,species,Virginia creeper,True,True
+west-georgia-us,65,Albizia julibrissin,species,Persian silk tree,True,True
+west-georgia-us,64,Acer negundo,species,box elder,True,True
+west-georgia-us,63,Cornus florida,species,flowering dogwood,True,True
+west-georgia-us,63,Chimaphila maculata,species,striped wintergreen,True,True
+west-georgia-us,63,Nandina domestica,species,Heavenly bamboo,True,True
+west-georgia-us,62,Toxicodendron radicans,species,eastern poison ivy,True,True
+west-georgia-us,61,Rhus copallinum,species,shining sumac,True,True
+west-georgia-us,60,Solidago altissima,species,tall goldenrod,True,True
+west-georgia-us,60,Ilex cornuta,species,Chinese holly,True,True
+west-georgia-us,57,Solanum carolinense,species,Carolina horsenettle,True,True
+west-georgia-us,57,Juglans nigra,species,eastern black walnut,True,True
+west-georgia-us,57,Sassafras albidum,species,sassafras,True,True
+west-georgia-us,57,Tipularia discolor,species,crane-fly orchid,True,True
+west-georgia-us,56,Acer rubrum,species,red maple,True,True
+west-georgia-us,56,Asimina triloba,species,common pawpaw,True,True
+west-georgia-us,56,Phyllanthus urinaria,species,Chamberbitter,True,True
+west-georgia-us,54,Ilex opaca,species,American holly,True,True
+west-georgia-us,54,Perilla frutescens,species,beefsteak plant,True,True
+west-georgia-us,54,Elaeagnus pungens,species,thorny olive,True,True
+west-georgia-us,53,Symphyotrichum pilosum,species,frost aster,True,True
+west-georgia-us,52,Impatiens capensis,species,common jewelweed,True,True
+west-georgia-us,52,Quercus alba,species,white oak,True,True
+west-georgia-us,50,Ipomoea purpurea,species,common morning-glory,True,True
+west-georgia-us,50,Berberis bealei,species,leatherleaf mahonia,True,True
+west-georgia-us,48,Epifagus virginiana,species,Beechdrops,True,True
+west-georgia-us,48,Chasmanthium latifolium,species,river oats,True,True
+west-georgia-us,47,Oxydendrum arboreum,species,sourwood,True,True
+west-georgia-us,47,Magnolia macrophylla,species,bigleaf magnolia,True,True
+west-georgia-us,46,Chrysopsis mariana,species,Maryland golden-aster,False,False
+west-georgia-us,45,Lonicera japonica,species,Japanese honeysuckle,True,True
+west-georgia-us,45,Dryopteris erythrosora,species,autumn fern,False,True
+west-georgia-us,44,Pinus taeda,species,loblolly pine,True,True
+west-georgia-us,44,Diphasiastrum digitatum,species,fan clubmoss,True,True
+west-georgia-us,42,Lobelia cardinalis,species,cardinal flower,True,True
+west-georgia-us,42,Passiflora incarnata,species,purple passionflower,True,True
+west-georgia-us,41,Physalis angulata,species,cutleaf groundcherry,True,True
+west-georgia-us,41,Microstegium vimineum,species,Japanese stiltgrass,True,True
+west-georgia-us,40,Bignonia capreolata,species,cross vine,True,True
+west-georgia-us,40,Chelone glabra,species,white turtlehead,True,True
+west-georgia-us,40,Nephroia carolina,species,Carolina snailseed,False,False
+west-georgia-us,39,Verbesina alternifolia,species,Wingstem,True,True
+west-georgia-us,38,Commelina communis,species,Asiatic dayflower,True,True
+west-georgia-us,38,Lycoris radiata,species,red spider lily,True,True
+west-georgia-us,36,Campsis radicans,species,American trumpet vine,True,True
+west-georgia-us,35,Nyssa sylvatica,species,Black Tupelo,True,True
+west-georgia-us,35,Pyrus calleryana,species,Callery pear,True,True
+west-georgia-us,35,Bigelowia nuttallii,species,Nuttall's Rayless Goldenrod,False,False
+west-georgia-us,34,Carya illinoinensis,species,pecan,True,True
+west-georgia-us,34,Heterotheca subaxillaris,species,Camphorweed,True,True
+west-georgia-us,33,Magnolia tripetala,species,umbrella magnolia,True,True
+west-georgia-us,33,Pluchea camphorata,species,Camphor-weed,True,True
+west-georgia-us,33,Symphyotrichum georgianum,species,Georgia aster,False,True
+west-georgia-us,32,Rhus glabra,species,smooth sumac,True,True
+west-georgia-us,32,Quercus phellos,species,willow oak,True,True
+west-georgia-us,32,Achyranthes japonica,species,Japanese Chaff Flower,False,True
+west-georgia-us,32,Citrus trifoliata,species,trifoliate orange,True,True
+west-georgia-us,31,Symphyotrichum dumosum,species,Bushy Aster,False,True
+west-georgia-us,31,Hydrangea quercifolia,species,oakleaf hydrangea,True,True
+west-georgia-us,31,Mikania scandens,species,climbing hempvine,True,True
+west-georgia-us,31,Asplenium platyneuron,species,ebony spleenwort,True,True
+west-georgia-us,31,Lespedeza cuneata,species,Chinese bushclover,True,True
+west-georgia-us,30,Glechoma hederacea,species,ground-ivy,True,True
+west-georgia-us,30,Symphyotrichum lateriflorum,species,calico aster,True,True
+west-georgia-us,30,Persicaria sagittata,species,arrow-leaved tearthumb,True,True
+west-georgia-us,29,Cosmos sulphureus,species,Yellow Cosmos,True,True
+west-georgia-us,29,Trifolium repens,species,white clover,True,True
+west-georgia-us,29,Ilex verticillata,species,winterberry holly,True,True
+west-georgia-us,29,Quercus falcata,species,southern red oak,True,True
+west-georgia-us,29,Mitchella repens,species,partridgeberry,True,True
+west-georgia-us,29,Campanula divaricata,species,Southern Harebell,False,True
+west-georgia-us,29,Solidago caesia,species,bluestem goldenrod,True,True
+west-georgia-us,29,Euonymus fortunei,species,fortune's spindle,True,True
+west-georgia-us,29,Melothria pendula,species,creeping cucumber,True,True
+west-georgia-us,29,Gentiana saponaria,species,Soapwort Gentian,False,True
+west-georgia-us,29,Jacquemontia tamnifolia,species,Hairy cluster-vine,True,True
+west-georgia-us,29,Athyrium asplenioides,species,southern lady fern,False,True
+west-georgia-us,28,Rudbeckia laciniata,species,cutleaf coneflower,True,True
+west-georgia-us,28,Paulownia tomentosa,species,princess tree,True,True
+west-georgia-us,28,Potentilla indica,species,mock strawberry,True,True
+west-georgia-us,27,Verbesina virginica,species,frostweed,True,True
+west-georgia-us,27,Ipomoea coccinea,species,red morning glory,True,True
+west-georgia-us,27,Macrothelypteris torresiana,species,Mariana Maiden Fern,False,False
+west-georgia-us,26,Vaccinium arboreum,species,sparkleberry,True,True
+west-georgia-us,26,Ruellia simplex,species,Mexican Ruellia,True,True
+west-georgia-us,26,Chamaecrista fasciculata,species,partridge pea,True,True
+west-georgia-us,25,Juniperus virginiana,species,eastern redcedar,True,True
+west-georgia-us,25,Alnus serrulata,species,smooth alder,True,True
+west-georgia-us,25,Verbascum thapsus,species,great mullein,True,True
+west-georgia-us,25,Onoclea sensibilis,species,sensitive fern,True,True
+west-georgia-us,25,Smilax bona-nox,species,saw greenbrier,True,True
+west-georgia-us,25,Helianthus angustifolius,species,narrowleaf sunflower,True,True
+west-georgia-us,25,Symphyotrichum patens,species,late purple aster,False,True
+west-georgia-us,24,Monotropa uniflora,species,Ghost Pipe,True,True
+west-georgia-us,24,Fatoua villosa,species,hairy crabweed,True,True
+west-georgia-us,24,Betula nigra,species,river birch,True,True
+west-georgia-us,24,Pseudognaphalium obtusifolium,species,sweet everlasting,True,True
+west-georgia-us,24,Lygodium japonicum,species,Japanese climbing fern,True,True
+west-georgia-us,24,Anatherum tenuispatheum,species,Maritime Bushy Bluestem,False,False
+west-georgia-us,23,Maclura pomifera,species,Osage-orange,True,True
+west-georgia-us,23,Aralia spinosa,species,devil's walkingstick,True,True
+west-georgia-us,23,Prunus caroliniana,species,Carolina laurelcherry,True,True
+west-georgia-us,22,Ambrosia trifida,species,giant ragweed,True,True
+west-georgia-us,22,Senna obtusifolia,species,American Sicklepod,True,True
+west-georgia-us,22,Baccharis halimifolia,species,groundsel tree,True,True
+west-georgia-us,22,Lobelia puberula,species,downy lobelia,True,True
+west-georgia-us,22,Hibiscus syriacus,species,common hibiscus,True,True
+west-georgia-us,22,Diodia virginiana,species,buttonweed,True,True
+west-georgia-us,22,Asimina parviflora,species,Small-Flower Pawpaw,False,True
+west-georgia-us,22,Symphyotrichum racemosum,species,Small White Aster,False,True
+west-georgia-us,21,Ageratina altissima,species,white snakeroot,True,True
+west-georgia-us,21,Ipomoea quamoclit,species,Cypress Vine,True,True
+west-georgia-us,21,Lactuca floridana,species,woodland lettuce,True,True
+west-georgia-us,21,Pleopeltis michauxiana,species,resurrection fern,True,True
+west-georgia-us,20,Cephalanthus occidentalis,species,buttonbush,True,True
+west-georgia-us,20,Carya tomentosa,species,mockernut,True,True
+west-georgia-us,20,Sicyos angulatus,species,Oneseed Bur Cucumber,True,True
+west-georgia-us,20,Dioscorea villosa,species,wild yam,True,True
+west-georgia-us,20,Ipomoea lacunosa,species,White Morning-glory,True,True
+west-georgia-us,19,Prunella vulgaris,species,common selfheal,True,True
+west-georgia-us,19,Ambrosia artemisiifolia,species,common ragweed,True,True
+west-georgia-us,19,Viburnum acerifolium,species,mapleleaf viburnum,True,True
+west-georgia-us,19,Buddleja davidii,species,Butterfly bush,True,True
+west-georgia-us,19,Ulmus alata,species,Winged Elm,True,True
+west-georgia-us,19,Elephantopus carolinianus,species,leafy elephant's-foot,True,True
+west-georgia-us,19,Tradescantia pallida,species,Purple Heart,True,True
+west-georgia-us,19,Gonolobus suberosus,species,Anglepod,True,True
+west-georgia-us,19,Smallanthus uvedalia,species,bear's foot,True,True
+west-georgia-us,19,Fallopia scandens,species,climbing false buckwheat,True,True
+west-georgia-us,19,Cleome houtteana,species,Spider flower,False,True
+west-georgia-us,18,Morus rubra,species,red mulberry,True,True
+west-georgia-us,18,Prunus serotina,species,black cherry,True,True
+west-georgia-us,18,Clematis virginiana,species,virgin's-bower,True,True
+west-georgia-us,18,Helenium amarum,species,Bitterweed,True,True
+west-georgia-us,18,Ipomoea hederacea,species,ivy-leaved morning-glory,True,True
+west-georgia-us,18,Trichostema dichotomum,species,Blue Curls,True,True
+west-georgia-us,18,Symphyotrichum concolor,species,Eastern Silver Aster,False,True
+west-georgia-us,18,Solanum emulans,species,eastern black nightshade,True,True
+west-georgia-us,17,Conocephalum salebrosum,species,Snakewort,True,True
+west-georgia-us,17,Symphyotrichum lanceolatum,species,panicled aster,True,True
+west-georgia-us,17,Yucca filamentosa,species,common yucca,True,True
+west-georgia-us,17,Woodwardia areolata,species,netted chain fern,True,True
+west-georgia-us,17,Monarda punctata,species,spotted horsemint,True,True
+west-georgia-us,17,Collinsonia canadensis,species,citronella horse balm,True,True
+west-georgia-us,17,Verbesina occidentalis,species,Yellow Crownbeard,False,True
+west-georgia-us,16,Sagittaria latifolia,species,broadleaf arrowhead,True,True
+west-georgia-us,16,Pinus virginiana,species,Virginia pine,True,True
+west-georgia-us,16,Acer saccharinum,species,silver maple,True,True
+west-georgia-us,16,Carpinus caroliniana,species,American hornbeam,True,True
+west-georgia-us,16,Goodyera pubescens,species,downy rattlesnake plantain,True,True
+west-georgia-us,16,Rosa multiflora,species,multiflora rose,True,True
+west-georgia-us,16,Ilex vomitoria,species,Yaupon Holly,True,True
+west-georgia-us,16,Agalinis tenuifolia,species,slender false foxglove,True,True
+west-georgia-us,16,Mazus pumilus,species,Asian mazus,True,True
+west-georgia-us,16,Persicaria virginiana,species,American jumpseed,True,True
+west-georgia-us,16,Helianthus longifolius,species,Longleaf Sunflower,False,True
+west-georgia-us,16,Nekemias arborea,species,peppervine,False,False
+west-georgia-us,16,Spiranthes cernua,species,nodding ladies' tresses,True,True
+west-georgia-us,15,Tsuga canadensis,species,eastern hemlock,True,True
+west-georgia-us,15,Taxodium distichum,species,baldcypress,True,True
+west-georgia-us,15,Ailanthus altissima,species,tree-of-heaven,True,True
+west-georgia-us,15,Symphyotrichum puniceum,species,swamp aster,True,True
+west-georgia-us,15,Itea virginica,species,Virginia sweetspire,True,True
+west-georgia-us,15,Sorghastrum nutans,species,Indiangrass,True,True
+west-georgia-us,15,Youngia japonica,species,Oriental false hawksbeard,True,True
+west-georgia-us,15,Helianthus porteri,species,Porter's sunflower,False,True
+west-georgia-us,15,Sesbania vesicaria,species,Bladder Pod,True,True
+west-georgia-us,14,Passiflora lutea,species,yellow passionflower,True,True
+west-georgia-us,14,Pontederia cordata,species,pickerelweed,True,True
+west-georgia-us,14,Melia azedarach,species,Chinaberry,True,True
+west-georgia-us,14,Euphorbia maculata,species,Spotted spurge,True,True
+west-georgia-us,14,Myriophyllum aquaticum,species,Parrot's feather,True,True
+west-georgia-us,14,Rudbeckia hirta,species,black-eyed Susan,True,True
+west-georgia-us,14,Silphium compositum,species,Kidney-leaf Rosinweed,False,True
+west-georgia-us,14,Quercus lyrata,species,overcup oak,False,True
+west-georgia-us,14,Verbena brasiliensis,species,Brazilian Vervain,True,True
+west-georgia-us,14,Agalinis purpurea,species,purple false foxglove,True,True
+west-georgia-us,14,Ageratina aromatica,species,smaller white snakeroot,False,True
+west-georgia-us,14,Osmundastrum cinnamomeum,species,cinnamon fern,True,True
+west-georgia-us,13,Lindera benzoin,species,northern spicebush,True,True
+west-georgia-us,13,Arum italicum,species,Italian arum,True,True
+west-georgia-us,13,Cosmos bipinnatus,species,garden cosmos,True,True
+west-georgia-us,13,Vernonia gigantea,species,Tall Ironweed,True,True
+west-georgia-us,13,Elephantopus tomentosus,species,common elephant's-foot,True,True
+west-georgia-us,13,Xanthorhiza simplicissima,species,Shrub Yellowroot,True,True
+west-georgia-us,13,Anatherum ternarium,species,splitbeard bluestem,False,False
+west-georgia-us,12,Trifolium pratense,species,Red Clover,True,True
+west-georgia-us,12,Sonchus asper,species,prickly sowthistle,True,True
+west-georgia-us,12,Smilax rotundifolia,species,roundleaf greenbrier,True,True
+west-georgia-us,12,Clematis terniflora,species,autumn clematis,True,True
+west-georgia-us,12,Ligustrum lucidum,species,tree privet,True,True
+west-georgia-us,12,Smilax glauca,species,sawbrier,True,True
+west-georgia-us,12,Apios americana,species,American groundnut,True,True
+west-georgia-us,12,Schizachyrium scoparium,species,little bluestem,True,True
+west-georgia-us,12,Quercus montana,species,chestnut oak,True,True
+west-georgia-us,12,Liriope muscari,species,Liriope,True,True
+west-georgia-us,12,Osmunda spectabilis,species,American Royal Fern,False,True
+west-georgia-us,11,Quercus rubra,species,northern red oak,True,True
+west-georgia-us,11,Bidens bipinnata,species,Spanish needles,True,True
+west-georgia-us,11,Bidens aristosa,species,Bearded Beggarticks,True,True
+west-georgia-us,11,Gaillardia pulchella,species,firewheel,True,True
+west-georgia-us,11,Quercus marilandica,species,blackjack oak,True,True
+west-georgia-us,11,Sambucus canadensis,species,American black elderberry,True,True
+west-georgia-us,11,Euonymus alatus,species,winged euonymus,True,True
+west-georgia-us,11,Quercus stellata,species,post oak,True,True
+west-georgia-us,11,Frangula caroliniana,species,Carolina buckthorn,True,True
+west-georgia-us,11,Eryngium yuccifolium,species,rattlesnake master,True,True
+west-georgia-us,11,Solidago erecta,species,slender goldenrod,False,True
+west-georgia-us,11,Hydrangea barbara,species,woodvamp,False,True
+west-georgia-us,11,Pelazoneuron kunthii,species,Widespread Maiden Fern,False,False
+west-georgia-us,11,Senega curtissii,species,button-rosy,False,False
+west-georgia-us,10,Mirabilis jalapa,species,marvel of Peru,True,True
+west-georgia-us,10,Bidens frondosa,species,Devil's Beggarticks,True,True
+west-georgia-us,10,Galax urceolata,species,galax,True,True
+west-georgia-us,10,Oenothera biennis,species,common evening-primrose,True,True
+west-georgia-us,10,Eclipta prostrata,species,False Daisy,True,True
+west-georgia-us,10,Helenium autumnale,species,common sneezeweed,True,True
+west-georgia-us,10,Scirpus cyperinus,species,woolgrass,True,True
+west-georgia-us,10,Tephrosia virginiana,species,goat's rue,True,True
+west-georgia-us,10,Physostegia virginiana,species,obedient plant,True,True
+west-georgia-us,10,Morella cerifera,species,wax myrtle,True,True
+west-georgia-us,10,Colocasia esculenta,species,Taro,True,True
+west-georgia-us,10,Spiranthes ovalis,species,Oval Ladies' Tresses,False,True
+west-georgia-us,10,Chamaecrista nictitans,species,sensitive pea,True,True
+west-georgia-us,10,Sceptridium biternatum,species,sparse-lobed grapefern,False,True
+west-georgia-us,10,Amauropelta noveboracensis,species,New York fern,False,False
+west-georgia-us,9,Castanea mollissima,species,Chinese chestnut,False,True
+west-georgia-us,9,Kalmia latifolia,species,mountain laurel,True,True
+west-georgia-us,9,Pteridium aquilinum,species,common bracken,True,True
+west-georgia-us,9,Plantago lanceolata,species,ribwort plantain,True,True
+west-georgia-us,9,Vinca major,species,greater periwinkle,True,True
+west-georgia-us,9,Salvia azurea,species,giant blue sage,True,True
+west-georgia-us,9,Persicaria lapathifolia,species,pale smartweed,True,True
+west-georgia-us,9,Salvia lyrata,species,lyreleaf sage,True,True
+west-georgia-us,9,Clerodendrum trichotomum,species,Harlequin glorybower,False,False
+west-georgia-us,9,Rubus trivialis,species,southern dewberry,True,True
+west-georgia-us,9,Boehmeria cylindrica,species,false nettle,True,True
+west-georgia-us,9,Euphorbia cyathophora,species,wild poinsettia,True,True
+west-georgia-us,9,Persicaria punctata,species,Dotted Smartweed,True,True
+west-georgia-us,9,Sida rhombifolia,species,Cuban jute,True,True
+west-georgia-us,9,Pinus palustris,species,longleaf pine,True,True
+west-georgia-us,9,Commelina virginica,species,Virginia Dayflower,True,True
+west-georgia-us,9,Eurybia divaricata,species,White Wood Aster,True,True
+west-georgia-us,9,Solidago nemoralis,species,field goldenrod,True,True
+west-georgia-us,9,Ludwigia alternifolia,species,Seedbox,True,True
+west-georgia-us,9,Arnoglossum atriplicifolium,species,pale Indian plantain,True,True
+west-georgia-us,9,Gentiana villosa,species,Striped Gentian,False,True
+west-georgia-us,9,Hibiscus mutabilis,species,Cotton Rosemallow,False,True
+west-georgia-us,9,Miscanthus sinensis,species,Chinese silver grass,True,True
+west-georgia-us,9,Solanum pseudocapsicum,species,Jerusalem cherry,True,True
+west-georgia-us,9,Torenia crustacea,species,Brittle False Pimpernel,True,True
+west-georgia-us,9,Anatherum virginicum,species,broomsedge bluestem,False,False
+west-georgia-us,8,Adiantum pedatum,species,northern maidenhair fern,True,True
+west-georgia-us,8,Setaria pumila,species,yellow foxtail,True,True
+west-georgia-us,8,Maianthemum racemosum,species,Solomon's plume,True,True
+west-georgia-us,8,Populus deltoides,species,Eastern Cottonwood,True,True
+west-georgia-us,8,Salix nigra,species,black willow,True,True
+west-georgia-us,8,Lamium amplexicaule,species,henbit deadnettle,True,True
+west-georgia-us,8,Lamium purpureum,species,red deadnettle,True,True
+west-georgia-us,8,Xanthium strumarium,species,rough cocklebur,True,True
+west-georgia-us,8,Sorghum halepense,species,Johnson grass,True,True
+west-georgia-us,8,Persicaria pensylvanica,species,pinkweed,True,True
+west-georgia-us,8,Symphyotrichum novae-angliae,species,New England aster,True,True
+west-georgia-us,8,Pilea pumila,species,Canada clearweed,True,True
+west-georgia-us,8,Panicum virgatum,species,switchgrass,True,True
+west-georgia-us,8,Polypremum procumbens,species,Rust Weed,True,True
+west-georgia-us,8,Acalypha rhomboidea,species,Common Three-seeded Mercury,True,True
+west-georgia-us,8,Clerodendrum bungei,species,rose glorybower,False,False
+west-georgia-us,8,Acmella repens,species,Oppositeleaf Spotflower,True,True
+west-georgia-us,8,Humulus scandens,species,Japanese Hops,False,True
+west-georgia-us,8,Liatris elegantula,species,shaggy blazing star,False,True
+west-georgia-us,8,Cenchrus alopecuroides,species,Chinese pennisetum,False,True
+west-georgia-us,8,Anacis pulchra,species,Lookout Mountain Coreopsis,False,False
+west-georgia-us,7,Acer floridanum,species,southern sugar maple,True,True
+west-georgia-us,7,Hamamelis virginiana,species,american witch-hazel,True,True
+west-georgia-us,7,Acer saccharum,species,sugar maple,True,True
+west-georgia-us,7,Oxalis corniculata,species,Creeping Woodsorrel,True,True
+west-georgia-us,7,Ostrya virginiana,species,American hophornbeam,True,True
+west-georgia-us,7,Carya glabra,species,pignut hickory,True,True
+west-georgia-us,7,Tilia americana,species,basswood,True,True
+west-georgia-us,7,Vinca minor,species,lesser periwinkle,True,True
+west-georgia-us,7,Datura stramonium,species,jimsonweed,True,True
+west-georgia-us,7,Portulaca oleracea,species,Common Purslane,True,True
+west-georgia-us,7,Saururus cernuus,species,lizard's tail,True,True
+west-georgia-us,7,Ipomoea triloba,species,Littlebell,True,True
+west-georgia-us,7,Celastrus orbiculatus,species,Asian bittersweet,True,True
+west-georgia-us,7,Allium vineale,species,wild garlic,True,True
+west-georgia-us,7,Modiola caroliniana,species,Bristly Mallow,True,True
+west-georgia-us,7,Peltandra virginica,species,Green Arrow Arum,True,True
+west-georgia-us,7,Polygonatum biflorum,species,smooth Solomon's seal,True,True
+west-georgia-us,7,Eupatorium perfoliatum,species,common boneset,True,True
+west-georgia-us,7,Quercus michauxii,species,swamp chestnut oak,True,True
+west-georgia-us,7,Arundinaria gigantea,species,river cane,True,True
+west-georgia-us,7,Nothoscordum bivalve,species,crowpoison,True,True
+west-georgia-us,7,Hydrocotyle sibthorpioides,species,Sibthorp's Pennywort,False,True
+west-georgia-us,7,Symphyotrichum laeve,species,smooth blue aster,True,True
+west-georgia-us,7,Hydrangea arborescens,species,wild hydrangea,True,True
+west-georgia-us,7,Vernonia noveboracensis,species,New York ironweed,True,True
+west-georgia-us,7,Phyllanthus tenellus,species,Mascarene Island leaf-flower,True,True
+west-georgia-us,7,Smilax smallii,species,Lanceleaf Greenbrier,True,True
+west-georgia-us,7,Bidens alba,species,White beggarticks,False,True
+west-georgia-us,6,Echinacea purpurea,species,purple coneflower,True,True
+west-georgia-us,6,Quercus coccinea,species,scarlet oak,True,True
+west-georgia-us,6,Robinia pseudoacacia,species,black locust,True,True
+west-georgia-us,6,Morus alba,species,white mulberry,True,True
+west-georgia-us,6,Cynodon dactylon,species,Bermuda grass,True,True
+west-georgia-us,6,Geranium carolinianum,species,Carolina crane's-bill,True,True
+west-georgia-us,6,Elaeagnus umbellata,species,autumn olive,True,True
+west-georgia-us,6,Daucus carota,species,wild carrot,True,True
+west-georgia-us,6,Erigeron canadensis,species,horseweed,True,True
+west-georgia-us,6,Gelsemium sempervirens,species,yellow jessamine,True,True
+west-georgia-us,6,Heliotropium indicum,species,Indian Heliotrope,True,True
+west-georgia-us,6,Oxalis dillenii,species,slender yellow woodsorrel,True,True
+west-georgia-us,6,Dioscorea polystachya,species,Chinese yam,False,True
+west-georgia-us,6,Tridens flavus,species,purpletop tridens,True,True
+west-georgia-us,6,Phegopteris hexagonoptera,species,broad beech fern,True,True
+west-georgia-us,6,Sceptridium dissectum,species,Cutleaf Grapefern,True,True
+west-georgia-us,6,Grimmia laevigata,species,Grimmia Dry Rock Moss,False,True
+west-georgia-us,6,Lespedeza capitata,species,round-headed bush clover,True,True
+west-georgia-us,6,Spiraea japonica,species,Japanese Spirea,True,True
+west-georgia-us,6,Symphyotrichum undulatum,species,wavy-leaf aster,False,True
+west-georgia-us,6,Broussonetia papyrifera,species,Paper mulberry,True,True
+west-georgia-us,6,Ruellia caroliniensis,species,Carolina ruellia,True,True
+west-georgia-us,6,Nabalus altissimus,species,tall rattlesnake root,True,True
+west-georgia-us,6,Rudbeckia triloba,species,brown-eyed Susan,True,True
+west-georgia-us,6,Eupatorium hyssopifolium,species,hyssopleaf thoroughwort,True,True
+west-georgia-us,6,Rudbeckia fulgida,species,orange coneflower,False,True
+west-georgia-us,6,Viburnum nudum,species,southern wild raisin,True,True
+west-georgia-us,6,Euphorbia heterophylla,species,painted spurge,True,True
+west-georgia-us,6,Liatris microcephala,species,smallhead blazing star,False,True
+west-georgia-us,6,Thuidium delicatulum,species,delicate fern moss,True,True
+west-georgia-us,6,Nabalus serpentaria,species,lion's foot rattlesnake root,False,True
+west-georgia-us,6,Viburnum alabamense,species,Alabama Arrowwood,False,True
+west-georgia-us,6,Collinsonia anisata,species,Anise Horsebalm,False,True
+west-georgia-us,6,Solidago zedia,species,Gulf Coast axillary goldenrod,False,True
+west-georgia-us,5,Asclepias syriaca,species,common milkweed,True,True
+west-georgia-us,5,Orontium aquaticum,species,Golden Club,True,True
+west-georgia-us,5,Hypochaeris radicata,species,Common Cat's-ear,True,True
+west-georgia-us,5,Ulmus americana,species,American elm,True,True
+west-georgia-us,5,Quercus shumardii,species,Shumard oak,True,True
+west-georgia-us,5,Gleditsia triacanthos,species,honey locust,True,True
+west-georgia-us,5,Celtis occidentalis,species,common hackberry,True,True
+west-georgia-us,5,Pallavicinia lyellii,species,Ribbonwort,False,False
+west-georgia-us,5,Cyperus erythrorhizos,species,redroot flatsedge,False,True
+west-georgia-us,5,Mimulus ringens,species,Allegheny monkeyflower,True,True
+west-georgia-us,5,Cardiospermum halicacabum,species,Lesser Balloon Vine,True,True
+west-georgia-us,5,Packera anonyma,species,Small's ragwort,True,True
+west-georgia-us,5,Botrypus virginianus,species,rattlesnake fern,True,True
+west-georgia-us,5,Cucurbita pepo,species,American pumpkin,False,True
+west-georgia-us,5,Ulmus parvifolia,species,Chinese elm,True,True
+west-georgia-us,5,Celtis laevigata,species,sugar hackberry,True,True
+west-georgia-us,5,Phlox paniculata,species,fall phlox,True,True
+west-georgia-us,5,Ipomoea pandurata,species,wild potato vine,True,True
+west-georgia-us,5,Lobelia siphilitica,species,great blue lobelia,True,True
+west-georgia-us,5,Ilex decidua,species,possumhaw,True,True
+west-georgia-us,5,Vaccinium darrowii,species,Darrow's Blueberry,False,True
+west-georgia-us,5,Calycanthus floridus,species,Carolina sweetshrub,True,True
+west-georgia-us,5,Wisteria sinensis,species,Chinese wisteria,True,True
+west-georgia-us,5,Magnolia virginiana,species,sweetbay magnolia,True,True
+west-georgia-us,5,Dichondra carolinensis,species,Carolina ponysfoot,True,True
+west-georgia-us,5,Liatris squarrulosa,species,Appalachian blazing star,False,True
+west-georgia-us,5,Kummerowia striata,species,Japanese Clover,False,False
+west-georgia-us,5,Hedychium coronarium,species,Butterfly ginger lily,True,True
+west-georgia-us,5,Hypericum gentianoides,species,pineweed,True,True
+west-georgia-us,5,Lespedeza violacea,species,violet bush clover,False,True
+west-georgia-us,5,Crotalaria spectabilis,species,Showy Rattlebox,True,True
+west-georgia-us,5,Cyrtomium fortunei,species,Fortune's Holly-fern,False,True
+west-georgia-us,5,Eupatorium rotundifolium,species,round-leaved boneset,True,True
+west-georgia-us,5,Illicium floridanum,species,Florida Anise,False,False
+west-georgia-us,5,Strophostyles helvola,species,trailing fuzzy-bean,True,True
+west-georgia-us,5,Lobelia amoena,species,Southern Lobelia,False,True
+west-georgia-us,5,Lobelia nuttallii,species,Nuttall's Lobelia,False,True
+west-georgia-us,5,Farfugium japonicum,species,leopard-plant,False,False
+west-georgia-us,5,Nabalus barbatus,species,barbed rattlesnake root,False,True
+west-georgia-us,5,Sedum smallii,species,Elf Orpine,False,True
+west-georgia-us,5,Paepalanthus anceps,species,common bogbuttons,False,False
+west-georgia-us,5,Sabdariffa gossypiifolia,species,Sorrel,False,False
+west-georgia-us,4,Ptelea trifoliata,species,common hoptree,True,True
+west-georgia-us,4,Solanum lycopersicum,species,tomato,True,True
+west-georgia-us,4,Equisetum hyemale,species,rough horsetail,True,True
+west-georgia-us,4,Diervilla rivularis,species,mountain bush honeysuckle,False,True
+west-georgia-us,4,Fraxinus americana,species,white ash,True,True
+west-georgia-us,4,Fraxinus pennsylvanica,species,green ash,True,True
+west-georgia-us,4,Aucuba japonica,species,Japanese aucuba,False,False
+west-georgia-us,4,Chenopodium album,species,Common Lambsquarters,True,True
+west-georgia-us,4,Solanum americanum,species,American black nightshade,True,True
+west-georgia-us,4,Lathyrus latifolius,species,broad-leaved sweet pea,True,True
+west-georgia-us,4,Catharanthus roseus,species,Madagascar Periwinkle,True,True
+west-georgia-us,4,Eleusine indica,species,Goose Grass,True,True
+west-georgia-us,4,Eriobotrya japonica,species,Loquat,True,True
+west-georgia-us,4,Paspalum urvillei,species,Vasey Grass,True,True
+west-georgia-us,4,Persicaria hydropiperoides,species,swamp smartweed,True,True
+west-georgia-us,4,Plumbago auriculata,species,blue plumbago,True,True
+west-georgia-us,4,Triadica sebifera,species,Chinese Tallow,True,True
+west-georgia-us,4,Hypoxis hirsuta,species,yellow star grass,True,True
+west-georgia-us,4,Carex lupulina,species,hop sedge,True,True
+west-georgia-us,4,Crataegus spathulata,species,Littlehip hawthorn,False,True
+west-georgia-us,4,Rhododendron maximum,species,great rhododendron,True,True
+west-georgia-us,4,Berchemia scandens,species,Supplejack,True,True
+west-georgia-us,4,Ludwigia decurrens,species,Wingleaf Primrose-Willow,False,True
+west-georgia-us,4,Hypericum hypericoides,species,St. Andrew's cross,True,True
+west-georgia-us,4,Silphium terebinthinaceum,species,prairie dock,True,True
+west-georgia-us,4,Andropogon gerardi,species,big bluestem,True,True
+west-georgia-us,4,Murdannia keisak,species,marsh dewflower,False,False
+west-georgia-us,4,Ipomoea hederifolia,species,scarlet creeper,True,True
+west-georgia-us,4,Cyclamen hederifolium,species,Ivy-leaved cyclamen,True,True
+west-georgia-us,4,Entodon seductrix,species,seductive entodon moss,False,False
+west-georgia-us,4,Hieracium gronovii,species,Beaked Hawkweed,False,True
+west-georgia-us,4,Solidago rugosa,species,common wrinkle-leaved goldenrod,True,True
+west-georgia-us,4,Salvia coccinea,species,Tropical sage,True,True
+west-georgia-us,4,Selaginella apoda,species,meadow spikemoss,False,True
+west-georgia-us,4,Cinna arundinacea,species,stout wood reed,False,False
+west-georgia-us,4,Desmodium paniculatum,species,panicled ticktrefoil,True,True
+west-georgia-us,4,Dichanthelium clandestinum,species,deertongue,True,True
+west-georgia-us,4,Lyonia ligustrina,species,He-huckleberry,False,True
+west-georgia-us,4,Ipomoea cordatotriloba,species,Tievine,True,True
+west-georgia-us,4,Cephalotaxus harringtonia,species,Japanese Plum-yew,False,False
+west-georgia-us,4,Cirsium altissimum,species,Tall Thistle,True,True
+west-georgia-us,4,Cunila origanoides,species,common dittany,True,True
+west-georgia-us,4,Solidago petiolaris,species,downy ragged goldenrod,False,True
+west-georgia-us,4,Agalinis fasciculata,species,Beach False Foxglove,False,True
+west-georgia-us,4,Chelone lyonii,species,pink turtlehead,False,True
+west-georgia-us,4,Clinopodium gracile,species,Slender Wild Basil,False,True
+west-georgia-us,4,Corallorhiza odontorhiza,species,autumn coralroot,False,True
+west-georgia-us,4,Cyperus granitophilus,species,Granite Flatsedge,False,True
+west-georgia-us,4,Firmiana simplex,species,Chinese parasol tree,False,False
+west-georgia-us,4,Helianthus atrorubens,species,Purpledisk Sunflower,False,True
+west-georgia-us,4,Malus angustifolia,species,southern crabapple,False,True
+west-georgia-us,4,Photinia serratifolia,species,Chinese Photinia,True,True
+west-georgia-us,4,Quercus georgiana,species,Georgia Oak,False,True
+west-georgia-us,4,Schisandra glabra,species,Bay Starvine,False,False
+west-georgia-us,4,Solidago curtisii,species,Mountain Decumbent Goldenrod,False,True
+west-georgia-us,4,Eupatorium torreyanum,species,Torrey's eupatorium,False,True
+west-georgia-us,4,Gomphocarpus physocarpus,species,balloonplant,True,True
+west-georgia-us,4,Trachelospermum asiaticum,species,Asiatic jasmine,False,True
+west-georgia-us,4,Deparia petersenii,species,Japanese lady fern,False,True
+west-georgia-us,4,Hepatica americana,species,round-lobed hepatica,True,True
+west-georgia-us,4,Morus indica,species,Korean mulberry,True,True
+west-georgia-us,4,Hypericum walteri,species,Greater Marsh St. John's-wort,False,True
+west-georgia-us,4,Asarum shuttleworthii,species,largeflower heartleaf,False,True
+west-georgia-us,3,Sherardia arvensis,species,Field madder,True,True
+west-georgia-us,3,Asclepias tuberosa,species,butterfly milkweed,True,True
+west-georgia-us,3,Pinus echinata,species,shortleaf pine,True,True
+west-georgia-us,3,Lysimachia nummularia,species,creeping Jenny,True,True
+west-georgia-us,3,Clethra alnifolia,species,Sweet Pepperbush,True,True
+west-georgia-us,3,Cichorium intybus,species,chicory,True,True
+west-georgia-us,3,Galium aparine,species,catchweed bedstraw,True,True
+west-georgia-us,3,Rumex crispus,species,curled dock,True,True
+west-georgia-us,3,Commelina erecta,species,whitemouth dayflower,True,True
+west-georgia-us,3,Dryopteris marginalis,species,marginal wood fern,True,True
+west-georgia-us,3,Chionanthus virginicus,species,white fringetree,True,True
+west-georgia-us,3,Quercus palustris,species,pin oak,True,True
+west-georgia-us,3,Carya cordiformis,species,bitternut hickory,True,True
+west-georgia-us,3,Ulmus rubra,species,slippery elm,True,True
+west-georgia-us,3,Packera glabella,species,Butterweed,True,True
+west-georgia-us,3,Veronica persica,species,bird's-eye speedwell,True,True
+west-georgia-us,3,Ajuga reptans,species,carpet bugle,True,True
+west-georgia-us,3,Oxalis articulata,species,pink-sorrel,True,True
+west-georgia-us,3,Koelreuteria paniculata,species,golden rain tree,True,True
+west-georgia-us,3,Cornus amomum,species,silky dogwood,True,True
+west-georgia-us,3,Monotropa hypopitys,species,pinesap,True,True
+west-georgia-us,3,Rubus armeniacus,species,Armenian Blackberry,True,True
+west-georgia-us,3,Carica papaya,species,Papaya,True,True
+west-georgia-us,3,Cyperus esculentus,species,yellow nutsedge,True,True
+west-georgia-us,3,Erigeron annuus,species,annual fleabane,True,True
+west-georgia-us,3,Sesbania herbacea,species,bigpod sesbania,True,True
+west-georgia-us,3,Verbena bonariensis,species,purpletop vervain,True,True
+west-georgia-us,3,Epigaea repens,species,trailing arbutus,True,True
+west-georgia-us,3,Chasmanthium sessiliflorum,species,Longleaf Woodoats,False,True
+west-georgia-us,3,Manfreda virginica,species,Eastern False Aloe,True,True
+west-georgia-us,3,Sabatia angularis,species,Rosepink,True,True
+west-georgia-us,3,Actaea racemosa,species,black cohosh,True,True
+west-georgia-us,3,Solanum sarrachoides,species,Hairy Nightshade,False,True
+west-georgia-us,3,Camellia sinensis,species,tea,False,False
+west-georgia-us,3,Dicranum scoparium,species,Broom Forkmoss,True,True
+west-georgia-us,3,Bryum argenteum,species,Silvery Bryum,True,True
+west-georgia-us,3,Staphylea trifolia,species,American bladdernut,True,True
+west-georgia-us,3,Anemone virginiana,species,tall thimbleweed,True,True
+west-georgia-us,3,Ranunculus abortivus,species,small-flowered buttercup,True,True
+west-georgia-us,3,Vaccinium elliottii,species,mayberry,False,True
+west-georgia-us,3,Vitis vulpina,species,frost grape,False,True
+west-georgia-us,3,Pycnanthemum tenuifolium,species,narrowleaf mountainmint,True,True
+west-georgia-us,3,Pyrrhopappus carolinianus,species,Carolina desert-chicory,False,True
+west-georgia-us,3,Solidago arguta,species,cut-leaf goldenrod,False,True
+west-georgia-us,3,Lespedeza procumbens,species,trailing lespedeza,False,True
+west-georgia-us,3,Lespedeza bicolor,species,shrub lespedeza,False,True
+west-georgia-us,3,Heliopsis helianthoides,species,false sunflower,True,True
+west-georgia-us,3,Carex aureolensis,species,golden cattail sedge,False,True
+west-georgia-us,3,Solidago odora,species,Sweet Goldenrod,False,True
+west-georgia-us,3,Koelreuteria bipinnata,species,Chinese flame tree,False,True
+west-georgia-us,3,Lespedeza hirta,species,hairy lespedeza,False,True
+west-georgia-us,3,Ionactis linariifolia,species,Flax-leaved Aster,False,False
+west-georgia-us,3,Lablab purpureus,species,Hyacinth bean,False,False
+west-georgia-us,3,Aronia arbutifolia,species,red chokeberry,False,True
+west-georgia-us,3,Hypericum crux-andreae,species,St. Peter's-wort,False,True
+west-georgia-us,3,Abelmoschus esculentus,species,Okra,False,False
+west-georgia-us,3,Arundinaria appalachiana,species,hill cane,False,True
+west-georgia-us,3,Bryoandersonia illecebra,species,spoon-leaved moss,False,False
+west-georgia-us,3,Croton michauxii,species,Michaux's croton,False,True
+west-georgia-us,3,Dahlia pinnata,species,Garden Dahlia,False,True
+west-georgia-us,3,Dicliptera brachiata,species,Branched Foldwing,True,True
+west-georgia-us,3,Euphorbia pubentissima,species,False Flowering Spurge,False,True
+west-georgia-us,3,Hibiscus laevis,species,Halberd-leaf Rosemallow,True,True
+west-georgia-us,3,Ipomoea alba,species,Moonflower,True,True
+west-georgia-us,3,Quercus acutissima,species,Sawtooth oak,False,True
+west-georgia-us,3,Viburnum obovatum,species,Walter's Viburnum,False,True
+west-georgia-us,3,Wahlenbergia marginata,species,southern rockbell,True,True
+west-georgia-us,3,Elymus glabriflorus,species,Southeastern Wildrye,False,True
+west-georgia-us,3,Iris domestica,species,Blackberry Lily,True,True
+west-georgia-us,3,Helianthus verticillatus,species,Whorled Sunflower,False,True
+west-georgia-us,3,Reynoutria japonica,species,Japanese knotweed,True,True
+west-georgia-us,3,Phyllostachys reticulata,species,Giant Timber Bamboo,False,False
+west-georgia-us,3,Erianthus giganteus,species,sugarcane plumegrass,False,False
+west-georgia-us,3,Senega nana,species,candyroot,False,False
+west-georgia-us,3,Anacis major,species,Woodland Coreopsis,False,False
+west-georgia-us,2,Geranium maculatum,species,wild geranium,True,True
+west-georgia-us,2,Nepeta cataria,species,Catnip,True,True
+west-georgia-us,2,Oenothera speciosa,species,Pinkladies,True,True
+west-georgia-us,2,Typha latifolia,species,broadleaf cattail,True,True
+west-georgia-us,2,Quercus velutina,species,black oak,True,True
+west-georgia-us,2,Arisaema triphyllum,species,Jack-in-the-Pulpit,True,True
+west-georgia-us,2,Pachysandra procumbens,species,Allegheny Spurge,False,True
+west-georgia-us,2,Pedicularis canadensis,species,Canadian lousewort,True,True
+west-georgia-us,2,Justicia americana,species,American water-willow,True,True
+west-georgia-us,2,Pinus strobus,species,eastern white pine,True,True
+west-georgia-us,2,Achillea millefolium,species,common yarrow,True,True
+west-georgia-us,2,Artemisia vulgaris,species,common mugwort,True,True
+west-georgia-us,2,Brickellia eupatorioides,species,False Boneset,True,True
+west-georgia-us,2,Cornus alternifolia,species,alternate-leaved dogwood,True,True
+west-georgia-us,2,Cornus foemina,species,Stiff Dogwood,False,True
+west-georgia-us,2,Quercus muehlenbergii,species,chinkapin oak,True,True
+west-georgia-us,2,Carya ovata,species,shagbark hickory,True,True
+west-georgia-us,2,Raphanus raphanistrum,species,Wild radish,True,True
+west-georgia-us,2,Veronica serpyllifolia,species,thyme-leaved speedwell,True,True
+west-georgia-us,2,Agrimonia parviflora,species,swamp agrimony,True,True
+west-georgia-us,2,Rhododendron canescens,species,Mountain Azalea,True,True
+west-georgia-us,2,Ricinus communis,species,castor bean,True,True
+west-georgia-us,2,Lobularia maritima,species,sweet alyssum,True,True
+west-georgia-us,2,Trifolium campestre,species,hop trefoil,True,True
+west-georgia-us,2,Helianthus annuus,species,Common Sunflower,True,True
+west-georgia-us,2,Apocynum cannabinum,species,hemp dogbane,True,True
+west-georgia-us,2,Plantago major,species,greater plantain,True,True
+west-georgia-us,2,Cyperus strigosus,species,straw-colored flatsedge,True,True
+west-georgia-us,2,Ipomoea tricolor,species,Garden Morning Glory,False,True
+west-georgia-us,2,Marsilea vestita,species,water clover,False,False
+west-georgia-us,2,Hydrocotyle verticillata,species,Whorled Pennywort,False,True
+west-georgia-us,2,Ludwigia palustris,species,Water Purslane,True,True
+west-georgia-us,2,Lobelia inflata,species,Indian tobacco,True,True
+west-georgia-us,2,Sparganium americanum,species,American bur-reed,False,True
+west-georgia-us,2,Cortaderia selloana,species,Pampas Grass,True,True
+west-georgia-us,2,Trachycarpus fortunei,species,Chusan Palm,False,False
+west-georgia-us,2,Alternanthera philoxeroides,species,Alligatorweed,True,True
+west-georgia-us,2,Bouteloua curtipendula,species,sideoats grama,True,True
+west-georgia-us,2,Coreopsis tinctoria,species,plains coreopsis,True,True
+west-georgia-us,2,Heliotropium amplexicaule,species,fragrant heliotrope,False,True
+west-georgia-us,2,Mollugo verticillata,species,green carpetweed,True,True
+west-georgia-us,2,Muhlenbergia schreberi,species,nimblewill,False,True
+west-georgia-us,2,Phyllostachys aurea,species,fishpole bamboo,False,False
+west-georgia-us,2,Tagetes erecta,species,Mexican Marigold,False,True
+west-georgia-us,2,Silphium perfoliatum,species,cup plant,True,True
+west-georgia-us,2,Aesculus pavia,species,Red Buckeye,True,True
+west-georgia-us,2,Pteris multifida,species,spider brake,False,True
+west-georgia-us,2,Carex lurida,species,sallow sedge,True,True
+west-georgia-us,2,Clitoria mariana,species,Pigeonwings,True,True
+west-georgia-us,2,Lysimachia quadrifolia,species,whorled loosestrife,True,True
+west-georgia-us,2,Parthenium integrifolium,species,wild quinine,True,True
+west-georgia-us,2,Mimosa microphylla,species,littleleaf sensitive-briar,False,True
+west-georgia-us,2,Amphicarpaea bracteata,species,American hog-peanut,True,True
+west-georgia-us,2,Panax quinquefolius,species,American ginseng,True,True
+west-georgia-us,2,Helianthus giganteus,species,giant sunflower,False,True
+west-georgia-us,2,Magnolia acuminata,species,Cucumber-tree,True,True
+west-georgia-us,2,Thalictrum thalictroides,species,rue anemone,True,True
+west-georgia-us,2,Helianthus microcephalus,species,Small Woodland Sunflower,False,True
+west-georgia-us,2,Lysimachia lanceolata,species,Lanceleaf Loosestrife,False,True
+west-georgia-us,2,Aconitum uncinatum,species,southern blue monkshood,False,True
+west-georgia-us,2,Malvaviscus arboreus,species,Turk's cap,True,True
+west-georgia-us,2,Cucurbita moschata,species,Squash,False,True
+west-georgia-us,2,Asclepias incarnata,species,swamp milkweed,True,True
+west-georgia-us,2,Helianthus mollis,species,ashy sunflower,True,True
+west-georgia-us,2,Elymus virginicus,species,Virginia wildrye,True,True
+west-georgia-us,2,Luzula echinata,species,Hedgehog Woodrush,False,True
+west-georgia-us,2,Centrosema virginianum,species,butterfly pea,True,True
+west-georgia-us,2,Cornus kousa,species,kousa dogwood,False,True
+west-georgia-us,2,Symphoricarpos orbiculatus,species,coralberry,True,True
+west-georgia-us,2,Smilax tamnoides,species,bristly greenbrier,True,True
+west-georgia-us,2,Euthamia caroliniana,species,slender goldentop,False,True
+west-georgia-us,2,Lespedeza repens,species,creeping lespedeza,False,True
+west-georgia-us,2,Menispermum canadense,species,moonseed,True,True
+west-georgia-us,2,Euphorbia hyssopifolia,species,hyssop spurge,True,True
+west-georgia-us,2,Eutrochium fistulosum,species,Hollow Joe-Pye Weed,True,True
+west-georgia-us,2,Penthorum sedoides,species,ditch stonecrop,True,True
+west-georgia-us,2,Selaginella rupestris,species,rock spikemoss,True,True
+west-georgia-us,2,Carex cherokeensis,species,Cherokee sedge,True,True
+west-georgia-us,2,Ampelopsis cordata,species,heart leaf peppervine,True,True
+west-georgia-us,2,Lagerstroemia indica,species,Crape-myrtle,True,True
+west-georgia-us,2,Symplocos tinctoria,species,Sweetleaf,True,True
+west-georgia-us,2,Athyrium niponicum,species,Japanese painted fern,False,True
+west-georgia-us,2,Pistacia chinensis,species,Chinese pistache,True,True
+west-georgia-us,2,Gamochaeta americana,species,American Everlasting,False,True
+west-georgia-us,2,Symphyotrichum cordifolium,species,Common Blue Wood Aster,True,True
+west-georgia-us,2,Malaxis unifolia,species,green adder's-mouth,False,False
+west-georgia-us,2,Phemeranthus mengesii,species,Menges' fameflower,False,False
+west-georgia-us,2,Acer leucoderme,species,chalk maple,False,True
+west-georgia-us,2,Aletris farinosa,species,White-tubed Colicroot,False,False
+west-georgia-us,2,Arthraxon hispidus,species,small carpetgrass,False,False
+west-georgia-us,2,Commelina diffusa,species,Scrambling Dayflower,True,True
+west-georgia-us,2,Dichanthelium laxiflorum,species,open-flower witchgrass,False,True
+west-georgia-us,2,Eurybia spectabilis,species,purple wood aster,False,True
+west-georgia-us,2,Eurybia surculosa,species,Creeping Aster,False,True
+west-georgia-us,2,Hibiscus coccineus,species,Scarlet Rosemallow,False,True
+west-georgia-us,2,Hydrocotyle bowlesioides,species,Bowlesia-leaf Pennywort,False,True
+west-georgia-us,2,Iris verna,species,Dwarf Iris,True,True
+west-georgia-us,2,Jasminum nudiflorum,species,Winter jasmine,False,False
+west-georgia-us,2,Lagenaria siceraria,species,Calabash,False,False
+west-georgia-us,2,Leucothoe fontanesiana,species,mountain doghobble,True,True
+west-georgia-us,2,Lycopus virginicus,species,sweet bugleweed,False,True
+west-georgia-us,2,Marshallia trinervia,species,Broadleaf Barbara's-buttons,False,True
+west-georgia-us,2,Oxypolis rigidior,species,stiff cowbane,True,True
+west-georgia-us,2,Phlox carolina,species,thickleaf phlox,False,True
+west-georgia-us,2,Plantago rugelii,species,American plantain,True,True
+west-georgia-us,2,Portulaca umbraticola,species,wingpod purslane,False,True
+west-georgia-us,2,Psilotum nudum,species,skeleton fork fern,True,True
+west-georgia-us,2,Pyrularia pubera,species,Buffalo-nut,False,False
+west-georgia-us,2,Rhododendron minus,species,gorge rhododendron,False,True
+west-georgia-us,2,Rudbeckia heliopsidis,species,Sunfacing Coneflower,False,True
+west-georgia-us,2,Sarracenia oreophila,species,green pitcher plant,False,True
+west-georgia-us,2,Senna occidentalis,species,Coffee Senna,True,True
+west-georgia-us,2,Smilax hugeri,species,Huger's Carrionflower,False,True
+west-georgia-us,2,Torenia fournieri,species,wishbone flower,False,True
+west-georgia-us,2,Tragia urticifolia,species,Nettleleaf Noseburn,False,False
+west-georgia-us,2,Trillium catesbaei,species,bashful wakerobin,True,True
+west-georgia-us,2,Viburnum plicatum,species,Japanese snowball,False,True
+west-georgia-us,2,Viola hirsutula,species,Southern wood violet,False,True
+west-georgia-us,2,Vitex agnus-castus,species,Lilac chaste tree,True,True
+west-georgia-us,2,Xyris laxifolia,species,Laxleaf Yellow-eyed Grass,False,False
+west-georgia-us,2,Xyris torta,species,twisted yellow-eyed grass,False,False
+west-georgia-us,2,Hepatica acutiloba,species,sharp-lobed hepatica,True,True
+west-georgia-us,2,Persicaria glabra,species,Dense-flowered smartweed,False,True
+west-georgia-us,2,Euphorbia prostrata,species,prostrate sandmat,True,True
+west-georgia-us,2,Hylodesmum nudiflorum,species,naked-flowered tick-trefoil,True,True
+west-georgia-us,2,Lamium galeobdolon,species,yellow archangel,True,True
+west-georgia-us,2,Euphorbia hypericifolia,species,graceful spurge,True,True
+west-georgia-us,2,Oxalis triangularis,species,false shamrock,False,True
+west-georgia-us,2,Acer buergerianum,species,Trident maple,False,True
+west-georgia-us,2,Scapania nemorea,species,Grove Earwort,False,False
+west-georgia-us,2,Euonymus japonicus,species,Japanese spindle tree,True,True
+west-georgia-us,2,Christella dentata,species,Soft Fern,False,False
+west-georgia-us,2,Lantana strigocamara,species,Lantana,False,True
+west-georgia-us,2,Lobelia georgiana,species,Southern Lobelia,False,True
+west-georgia-us,2,Mosla scabra,species,Mini-shiso,False,False
+west-georgia-us,2,Myriopteris tomentosa,species,Woolly Lipfern,False,True
+west-georgia-us,2,Phegopteris decursive-pinnata,species,Japanese beech fern,False,True
+west-georgia-us,2,Opuntia mesacantha,species,Southeastern Pricklypear,False,True
+west-georgia-us,2,Cardamine occulta,species,Nursery bittercress,False,True
+west-georgia-us,2,Abelia chinensis,species,Chinese Abelia,False,False
+west-georgia-us,2,Hypericum densiflorum,species,bushy St. John's Wort,False,True
+west-georgia-us,2,Mononeuria glabra,species,Appalachian sandwort,False,True
+west-georgia-us,2,Acalypha persimilis,species,hornbeam copperleaf,False,True
+west-georgia-us,2,Eriocapitella japonica,species,Japanese anemone,False,False
+west-georgia-us,2,Greeneochloa coarctata,species,Nuttall's Reedgrass,False,False
+west-georgia-us,2,Asarum reflexum,species,Reflexed Wild Ginger,False,True
+west-georgia-us,2,Erianthus alopecuroides,species,woolly beardgrass,False,False
+west-georgia-us,2,Anatherum glomeratum,species,Bushy Bluestem,False,False
+west-georgia-us,1,Populus alba,species,white poplar,True,True
+west-georgia-us,1,Asclepias amplexicaulis,species,clasping milkweed,True,True
+west-georgia-us,1,Tricyrtis hirta,species,Hairy Toad Lily,False,False
+west-georgia-us,1,Zea mays,species,Maize,False,False
+west-georgia-us,1,Prunus americana,species,American plum,True,True
+west-georgia-us,1,Spiraea tomentosa,species,Steeplebush,True,True
+west-georgia-us,1,Amelanchier arborea,species,common serviceberry,True,True
+west-georgia-us,1,Rhododendron catawbiense,species,Catawba Rhododendron,False,True
+west-georgia-us,1,Phoradendron leucarpum,species,American Mistletoe,True,True
+west-georgia-us,1,Lantana camara,species,common lantana,True,True
+west-georgia-us,1,Sanguinaria canadensis,species,bloodroot,True,True
+west-georgia-us,1,Nymphaea odorata,species,American white waterlily,True,True
+west-georgia-us,1,Wisteria frutescens,species,American wisteria,False,True
+west-georgia-us,1,Physalis philadelphica,species,Large-flowered Tomatillo,False,True
+west-georgia-us,1,Physalis peruviana,species,Cape gooseberry,True,True
+west-georgia-us,1,Amaranthus blitum,species,purple amaranth,False,True
+west-georgia-us,1,Cirsium vulgare,species,Bull Thistle,True,True
+west-georgia-us,1,Geranium molle,species,Dove's-foot crane's-bill,True,True
+west-georgia-us,1,Oxalis stricta,species,upright yellow woodsorrel,True,True
+west-georgia-us,1,Sonchus oleraceus,species,Common Sow-thistle,True,True
+west-georgia-us,1,Stellaria media,species,common chickweed,True,True
+west-georgia-us,1,Vicia sativa,species,Common Vetch,True,True
+west-georgia-us,1,Ilex aquifolium,species,European holly,True,True
+west-georgia-us,1,Styphnolobium japonicum,species,Japanese pagoda tree,False,False
+west-georgia-us,1,Tropaeolum majus,species,garden nasturtium,True,True
+west-georgia-us,1,Aristolochia serpentaria,species,Virginia snakeroot,False,True
+west-georgia-us,1,Corylus avellana,species,common hazel,True,True
+west-georgia-us,1,Tanacetum parthenium,species,feverfew,True,True
+west-georgia-us,1,Acer platanoides,species,Norway maple,True,True
+west-georgia-us,1,Celtis tenuifolia,species,Dwarf Hackberry,False,True
+west-georgia-us,1,Lunularia cruciata,species,Crescent-cup liverwort,True,True
+west-georgia-us,1,Veronica arvensis,species,corn speedwell,True,True
+west-georgia-us,1,Lunaria annua,species,Annual Honesty,True,True
+west-georgia-us,1,Leucanthemum vulgare,species,oxeye daisy,True,True
+west-georgia-us,1,Veronica hederifolia,species,Ivy-leaved Speedwell,True,True
+west-georgia-us,1,Juncus effusus,species,Soft Rush,True,True
+west-georgia-us,1,Galinsoga quadriradiata,species,shaggy soldier,True,True
+west-georgia-us,1,Asarum canadense,species,Canadian wild ginger,True,True
+west-georgia-us,1,Torilis arvensis,species,common hedge parsley,True,True
+west-georgia-us,1,Pyracantha coccinea,species,Firethorn,True,True
+west-georgia-us,1,Amorpha fruticosa,species,false indigo bush,True,True
+west-georgia-us,1,Salix babylonica,species,weeping willow,True,True
+west-georgia-us,1,Sorghum bicolor,species,Sorghum,False,True
+west-georgia-us,1,Berberis thunbergii,species,Japanese barberry,True,True
+west-georgia-us,1,Hydrocotyle umbellata,species,manyflower marshpennywort,True,True
+west-georgia-us,1,Erigeron pulchellus,species,robin's-plantain,True,True
+west-georgia-us,1,Abutilon theophrasti,species,velvetleaf,True,True
+west-georgia-us,1,Samolus parviflorus,species,seaside brookweed,True,True
+west-georgia-us,1,Asparagus officinalis,species,wild asparagus,True,True
+west-georgia-us,1,Paspalum dilatatum,species,Dallis grass,True,True
+west-georgia-us,1,Gamochaeta purpurea,species,Purple Cudweed,False,True
+west-georgia-us,1,Lepidium didymum,species,Lesser swine-cress,True,True
+west-georgia-us,1,Ceratophyllum demersum,species,coontail,True,True
+west-georgia-us,1,Medicago arabica,species,Spotted medick,True,True
+west-georgia-us,1,Cirsium discolor,species,field thistle,True,True
+west-georgia-us,1,Prunus laurocerasus,species,Cherry laurel,True,True
+west-georgia-us,1,Scleranthus annuus,species,Annual Knawel,True,True
+west-georgia-us,1,Oxalis debilis,species,Largeflower pink-sorrel,True,True
+west-georgia-us,1,Actaea pachypoda,species,white baneberry,True,True
+west-georgia-us,1,Rumex obtusifolius,species,broad-leaved dock,True,True
+west-georgia-us,1,Adiantum capillus-veneris,species,black maidenhair fern,True,True
+west-georgia-us,1,Agave americana,species,American century plant,True,True
+west-georgia-us,1,Leersia oryzoides,species,rice cutgrass,True,True
+west-georgia-us,1,Teucrium canadense,species,American germander,True,True
+west-georgia-us,1,Crataegus marshallii,species,parsley hawthorn,True,True
+west-georgia-us,1,Erigeron philadelphicus,species,Philadelphia fleabane,True,True
+west-georgia-us,1,Polytrichum commune,species,Common Haircap Moss,True,True
+west-georgia-us,1,Pentas lanceolata,species,Egyptian Star-cluster,False,False
+west-georgia-us,1,Platanthera flava,species,pale green orchid,False,True
+west-georgia-us,1,Phlox subulata,species,moss phlox,True,True
+west-georgia-us,1,Houstonia caerulea,species,azure bluet,True,True
+west-georgia-us,1,Houstonia longifolia,species,long-leaved bluets,True,True
+west-georgia-us,1,Juncus tenuis,species,Slender Path Rush,True,True
+west-georgia-us,1,Amaranthus viridis,species,green amaranth,False,True
+west-georgia-us,1,Aristida oligantha,species,Oldfield Three-awn,False,True
+west-georgia-us,1,Asclepias curassavica,species,tropical milkweed,True,True
+west-georgia-us,1,Bidens laevis,species,Smooth Beggarticks,False,True
+west-georgia-us,1,Brasenia schreberi,species,Watershield,True,True
+west-georgia-us,1,Cabomba caroliniana,species,Carolina Fanwort,False,False
+west-georgia-us,1,Cenchrus spinifex,species,coastal sandbur,False,True
+west-georgia-us,1,Cucumis melo,species,Muskmelon,False,False
+west-georgia-us,1,Cyperus flavescens,species,Yellow Flatsedge,False,True
+west-georgia-us,1,Dulichium arundinaceum,species,Three-way Sedge,True,True
+west-georgia-us,1,Echinochloa colona,species,Jungle Rice,False,True
+west-georgia-us,1,Erigeron bonariensis,species,Flax-leaved Horseweed,True,True
+west-georgia-us,1,Erigeron sumatrensis,species,tropical horseweed,True,True
+west-georgia-us,1,Euphorbia dentata,species,green poinsettia,True,True
+west-georgia-us,1,Fragaria virginiana,species,Virginia strawberry,True,True
+west-georgia-us,1,Gypsophila elegans,species,showy baby's-breath,False,False
+west-georgia-us,1,Lantana montevidensis,species,creeping lantana,True,True
+west-georgia-us,1,Lepidium virginicum,species,Virginia pepperweed,True,True
+west-georgia-us,1,Ligustrum japonicum,species,wax-leaf ligustrum,False,True
+west-georgia-us,1,Nicandra physalodes,species,apple-of-Peru,True,True
+west-georgia-us,1,Nicotiana sylvestris,species,Woodland Tobacco,False,True
+west-georgia-us,1,Oenothera laciniata,species,cutleaf evening primrose,True,True
+west-georgia-us,1,Panicum dichotomiflorum,species,Smooth Witchgrass,False,True
+west-georgia-us,1,Pistia stratiotes,species,Water Lettuce,True,True
+west-georgia-us,1,Rotala ramosior,species,Toothcup,False,False
+west-georgia-us,1,Salpichroa origanifolia,species,Cock's-eggs,False,False
+west-georgia-us,1,Senna marilandica,species,Maryland senna,True,True
+west-georgia-us,1,Setaria parviflora,species,knotroot bristlegrass,True,True
+west-georgia-us,1,Stenotaphrum secundatum,species,Saint Augustine grass,True,True
+west-georgia-us,1,Tradescantia ohiensis,species,Ohio spiderwort,True,True
+west-georgia-us,1,Tripleurospermum inodorum,species,scentless mayweed,True,True
+west-georgia-us,1,Utricularia gibba,species,humped bladderwort,True,True
+west-georgia-us,1,Potentilla canadensis,species,dwarf cinquefoil,True,True
+west-georgia-us,1,Sanicula canadensis,species,Black Snakeroot,True,True
+west-georgia-us,1,Oxalis violacea,species,violet woodsorrel,True,True
+west-georgia-us,1,Viburnum rufidulum,species,Rusty Blackhaw,True,True
+west-georgia-us,1,Sabal minor,species,Dwarf Palmetto,True,True
+west-georgia-us,1,Euphorbia corollata,species,flowering spurge,True,True
+west-georgia-us,1,Baptisia tinctoria,species,eastern wild indigo,True,True
+west-georgia-us,1,Viburnum dentatum,species,southern arrowwood,True,True
+west-georgia-us,1,Hibiscus moscheutos,species,swamp rose mallow,True,True
+west-georgia-us,1,Lygodium palmatum,species,Hartford fern,False,True
+west-georgia-us,1,Vitis palmata,species,catbird grape,False,True
+west-georgia-us,1,Iris cristata,species,dwarf crested iris,True,True
+west-georgia-us,1,Solidago gigantea,species,giant goldenrod,True,True
+west-georgia-us,1,Helenium flexuosum,species,Southern Sneezeweed,True,True
+west-georgia-us,1,Rubus phoenicolasius,species,wineberry,True,True
+west-georgia-us,1,Arisaema dracontium,species,green dragon,True,True
+west-georgia-us,1,Castanea pumila,species,Allegheny Chinquapin,False,True
+west-georgia-us,1,Calyptocarpus vialis,species,straggler daisy,True,True
+west-georgia-us,1,Sabatia campanulata,species,Slender Rose Gentian,False,True
+west-georgia-us,1,Monarda fistulosa,species,wild bergamot,True,True
+west-georgia-us,1,Geum canadense,species,white avens,True,True
+west-georgia-us,1,Polymnia canadensis,species,leafcup,True,True
+west-georgia-us,1,Phryma leptostachya,species,American lopseed,True,True
+west-georgia-us,1,Sedum sarmentosum,species,Stringy Stonecrop,False,True
+west-georgia-us,1,Stenanthium gramineum,species,featherbells,False,False
+west-georgia-us,1,Symphyotrichum oblongifolium,species,Aromatic Aster,False,True
+west-georgia-us,1,Liatris virgata,species,wand blazing star,False,True
+west-georgia-us,1,Lonicera sempervirens,species,coral honeysuckle,True,True
+west-georgia-us,1,Antennaria plantaginifolia,species,plantain-leaved pussytoes,False,True
+west-georgia-us,1,Doellingeria umbellata,species,flat-top white aster,True,True
+west-georgia-us,1,Spiranthes lacera,species,Slender Ladies' Tresses,True,True
+west-georgia-us,1,Woodsia obtusa,species,blunt woodsia,True,True
+west-georgia-us,1,Chamaelirium luteum,species,devil's bit,False,False
+west-georgia-us,1,Allium tuberosum,species,Garlic Chives,False,True
+west-georgia-us,1,Leucobryum glaucum,species,Pincushion Moss,True,True
+west-georgia-us,1,Pyrus pyrifolia,species,Asian Pear,False,True
+west-georgia-us,1,Helianthus tuberosus,species,Jerusalem artichoke,True,True
+west-georgia-us,1,Asclepias verticillata,species,whorled milkweed,True,True
+west-georgia-us,1,Aspidistra elatior,species,cast-iron plant,False,False
+west-georgia-us,1,Akebia quinata,species,Five-leaf akebia,False,False
+west-georgia-us,1,Rhexia mariana,species,Maryland meadowbeauty,True,True
+west-georgia-us,1,Stachys floridana,species,Florida Hedgenettle,True,True
+west-georgia-us,1,Camellia sasanqua,species,sasanqua camellia,False,False
+west-georgia-us,1,Helleborus orientalis,species,Lenten-rose,False,True
+west-georgia-us,1,Brugmansia arborea,species,Angel's Trumpet,False,False
+west-georgia-us,1,Scutellaria integrifolia,species,Helmet skullcap,True,True
+west-georgia-us,1,Pieris japonica,species,Japanese andromeda,False,False
+west-georgia-us,1,Rhodotypos scandens,species,jetbead,True,True
+west-georgia-us,1,Verbena rigida,species,Slender Vervain,True,True
+west-georgia-us,1,Carex grayi,species,Gray's sedge,True,True
+west-georgia-us,1,Gomphrena globosa,species,Globe amaranth,False,True
+west-georgia-us,1,Viburnum rhytidophyllum,species,Leatherleaf viburnum,True,True
+west-georgia-us,1,Prunus mexicana,species,Mexican Plum,True,True
+west-georgia-us,1,Parnassia asarifolia,species,Kidney-leaved Grass of Parnassus,False,True
+west-georgia-us,1,Aronia melanocarpa,species,black chokeberry,True,True
+west-georgia-us,1,Lobelia spicata,species,pale-spiked lobelia,True,True
+west-georgia-us,1,Croton glandulosus,species,Tropic Croton,True,True
+west-georgia-us,1,Silene stellata,species,starry campion,True,True
+west-georgia-us,1,Cryptotaenia canadensis,species,honewort,True,True
+west-georgia-us,1,Carex frankii,species,Frank's sedge,False,True
+west-georgia-us,1,Emilia fosbergii,species,Red Tasselflower,True,True
+west-georgia-us,1,Ceanothus americanus,species,New Jersey tea,True,True
+west-georgia-us,1,Ilex glabra,species,gallberry,True,True
+west-georgia-us,1,Brachyelytrum erectum,species,Long-awned Wood Grass,False,False
+west-georgia-us,1,Eryngium prostratum,species,creeping eryngo,False,True
+west-georgia-us,1,Viburnum prunifolium,species,Blackhaw,True,True
+west-georgia-us,1,Leersia virginica,species,white grass,False,True
+west-georgia-us,1,Danthonia spicata,species,Poverty oatgrass,True,True
+west-georgia-us,1,Osmorhiza longistylis,species,aniseroot,True,True
+west-georgia-us,1,Liatris aspera,species,rough blazing star,True,True
+west-georgia-us,1,Pycnanthemum albescens,species,Whiteleaf Mountain Mint,False,True
+west-georgia-us,1,Rhexia virginica,species,Virginia meadowbeauty,True,True
+west-georgia-us,1,Silphium asteriscus,species,Starry rosinweed,False,True
+west-georgia-us,1,Nephrolepis exaltata,species,southern sword fern,False,True
+west-georgia-us,1,Tradescantia virginiana,species,Virginia spiderwort,True,True
+west-georgia-us,1,Coreopsis leavenworthii,species,Leavenworth's Tickseed,False,True
+west-georgia-us,1,Euphorbia ophthalmica,species,Florida Hammock Sandmat,True,True
+west-georgia-us,1,Indigofera hirsuta,species,hairy indigo,False,True
+west-georgia-us,1,Hypericum punctatum,species,spotted St. John's wort,True,True
+west-georgia-us,1,Ilex crenata,species,Japanese holly,False,True
+west-georgia-us,1,Nyssa biflora,species,Swamp tupelo,False,True
+west-georgia-us,1,Portulaca pilosa,species,shaggy portulaca,True,True
+west-georgia-us,1,Yucca aloifolia,species,Aloe Yucca,False,True
+west-georgia-us,1,Scutellaria elliptica,species,Hairy Skullcap,False,True
+west-georgia-us,1,Galium tinctorium,species,Stiff Marsh Bedstraw,False,True
+west-georgia-us,1,Cynanchum laeve,species,honey-vine climbing milkweed,True,True
+west-georgia-us,1,Phaseolus polystachios,species,Thicket Bean,False,False
+west-georgia-us,1,Leonotis nepetifolia,species,lion's ear,True,True
+west-georgia-us,1,Crataegus phaenopyrum,species,Washington hawthorn,False,True
+west-georgia-us,1,Salvia splendens,species,Scarlet Sage,False,True
+west-georgia-us,1,Ageratum conyzoides,species,billygoat weed,True,True
+west-georgia-us,1,Magnolia kobus,species,Kobus magnolia,False,True
+west-georgia-us,1,Galium pilosum,species,Hairy bedstraw,False,True
+west-georgia-us,1,Spiranthes magnicamporum,species,Great Plains Ladies' Tresses,True,True
+west-georgia-us,1,Pycnanthemum virginianum,species,Virginia mountain mint,True,True
+west-georgia-us,1,Halesia carolina,species,Carolina Silverbell,False,False
+west-georgia-us,1,Houttuynia cordata,species,Chameleon Plant,True,True
+west-georgia-us,1,Acalypha gracilens,species,Slender Three-seeded Mercury,False,True
+west-georgia-us,1,Aesculus parviflora,species,bottlebrush buckeye,False,True
+west-georgia-us,1,Agalinis gattingeri,species,Round-stem False Foxglove,False,True
+west-georgia-us,1,Agalinis oligophylla,species,Ridgestem False Foxglove,False,True
+west-georgia-us,1,Allium speculae,species,Little River Canyon Onion,False,True
+west-georgia-us,1,Arachniodes simplicior,species,East Indian holly fern,False,False
+west-georgia-us,1,Ardisia japonica,species,Japanese ardisia,False,True
+west-georgia-us,1,Callicarpa dichotoma,species,Purple Beautyberry,False,True
+west-georgia-us,1,Campanulastrum americanum,species,tall bellflower,True,True
+west-georgia-us,1,Carex glaucescens,species,Southern Waxy Sedge,False,True
+west-georgia-us,1,Carex nigromarginata,species,Black-edge Sedge,False,True
+west-georgia-us,1,Carya carolinae-septentrionalis,species,Carolina shagbark hickory,False,True
+west-georgia-us,1,Celosia argentea,species,Quail Grass,True,True
+west-georgia-us,1,Centratherum punctatum,species,Brazilian bachelor's button,False,False
+west-georgia-us,1,Ceratostigma plumbaginoides,species,blue leadwort,False,False
+west-georgia-us,1,Cestrum aurantiacum,species,orange cestrum,False,False
+west-georgia-us,1,Chaenomeles speciosa,species,Chinese quince,False,False
+west-georgia-us,1,Chasmanthium laxum,species,Slender Spikegrass,False,True
+west-georgia-us,1,Clitoria ternatea,species,Blue Pea,True,True
+west-georgia-us,1,Crotalaria sagittalis,species,arrowhead rattlebox,False,True
+west-georgia-us,1,Cuphea carthagenensis,species,Colombian waxweed,True,True
+west-georgia-us,1,Cyperus compressus,species,Poorland Flatsedge,False,True
+west-georgia-us,1,Cyrilla racemiflora,species,Swamp titi,True,True
+west-georgia-us,1,Dichanthelium scoparium,species,Velvet Panicum,False,True
+west-georgia-us,1,Drosera brevifolia,species,dwarf sundew,True,True
+west-georgia-us,1,Dryopteris celsa,species,log fern,False,True
+west-georgia-us,1,Dumortiera hirsuta,species,Dumortier's Liverwort,False,False
+west-georgia-us,1,Eragrostis spectabilis,species,Purple Lovegrass,False,False
+west-georgia-us,1,Eriocaulon decangulare,species,ten-angled pipewort,False,True
+west-georgia-us,1,Euthamia leptocephala,species,Bushy Goldentop,False,True
+west-georgia-us,1,Facelis retusa,species,Annual Trampweed,False,False
+west-georgia-us,1,Forestiera ligustrina,species,Southern Glade Forestiera,False,True
+west-georgia-us,1,Gratiola virginiana,species,Virginia hedge-hyssop,False,False
+west-georgia-us,1,Halesia diptera,species,Two-wing Silverbell,False,False
+west-georgia-us,1,Halesia tetraptera,species,mountain silverbell,False,False
+west-georgia-us,1,Helianthus simulans,species,Muck Sunflower,False,True
+west-georgia-us,1,Hylotelephium erythrostictum,species,garden stonecrop,False,True
+west-georgia-us,1,Ilex longipes,species,Georgia Holly,False,True
+west-georgia-us,1,Ipomoea cristulata,species,trans-Pecos morning-glory,False,True
+west-georgia-us,1,Isoetes melanospora,species,Black-spored Quillwort,False,False
+west-georgia-us,1,Jamesianthus alabamensis,species,Alabama Warbonnet,False,False
+west-georgia-us,1,Jasminum mesnyi,species,Primrose jasmine,False,False
+west-georgia-us,1,Juncus repens,species,Creeping Rush,False,True
+west-georgia-us,1,Lespedeza stuevei,species,tall bush-clover,False,True
+west-georgia-us,1,Leucospora multifida,species,Obi-Wan conobea,True,True
+west-georgia-us,1,Liatris pilosa,species,shaggy blazing star,False,True
+west-georgia-us,1,Liatris squarrosa,species,scaly blazing star,False,True
+west-georgia-us,1,Ludwigia octovalvis,species,Mexican Primrose-willow,True,True
+west-georgia-us,1,Lycopus rubellus,species,taperleaf waterhorehound,False,True
+west-georgia-us,1,Malus baccata,species,Siberian crabapple,False,True
+west-georgia-us,1,Metzgeria furcata,species,Forked Veilwort,False,False
+west-georgia-us,1,Mitracarpus hirtus,species,Tropical Girdlepod,False,False
+west-georgia-us,1,Muhlenbergia capillaris,species,Hairawn Muhly,False,True
+west-georgia-us,1,Murdannia nudiflora,species,Nakedstem Dewflower,False,False
+west-georgia-us,1,Parthenocissus tricuspidata,species,Japanese creeper,True,True
+west-georgia-us,1,Paspalum notatum,species,Bahia grass,True,True
+west-georgia-us,1,Phyllostachys aureosulcata,species,Yellow groove bamboo,False,False
+west-georgia-us,1,Piptochaetium avenaceum,species,Blackseed Needlegrass,False,False
+west-georgia-us,1,Pogonatum pensilvanicum,species,Algal Haircap Moss,False,False
+west-georgia-us,1,Potamogeton pulcher,species,Spotted Pondweed,False,True
+west-georgia-us,1,Pseudosasa japonica,species,Arrow Bamboo,False,False
+west-georgia-us,1,Quercus hemisphaerica,species,Darlington Oak,False,True
+west-georgia-us,1,Rhodobryum ontariense,species,Ontario rhodobryum moss,True,True
+west-georgia-us,1,Rhynchospora corniculata,species,short-bristled horned beaksedge,False,True
+west-georgia-us,1,Rhynchospora debilis,species,Savannah Beakrush,False,True
+west-georgia-us,1,Rhynchospora glomerata,species,Clustered Beaksedge,False,True
+west-georgia-us,1,Rhynchospora recognita,species,Cymose Beaksedge,False,True
+west-georgia-us,1,Ribes curvatum,species,Granite Gooseberry,False,True
+west-georgia-us,1,Richardia brasiliensis,species,Tropical Mexican Clover,False,True
+west-georgia-us,1,Rubus probabilis,species,,False,True
+west-georgia-us,1,Sabatia capitata,species,Cumberland Rose Gentian,False,True
+west-georgia-us,1,Scirpus polyphyllus,species,leafy bulrush,False,True
+west-georgia-us,1,Seymeria cassioides,species,Yaupon Blacksenna,False,False
+west-georgia-us,1,Sideroxylon lycioides,species,Buckthorn Bully,False,True
+west-georgia-us,1,Solidago auriculata,species,eared goldenrod,False,True
+west-georgia-us,1,Solidago flaccidifolia,species,Mountain Goldenrod,False,True
+west-georgia-us,1,Sorghastrum elliottii,species,Slender Indiangrass,False,True
+west-georgia-us,1,Sphagnum recurvum,species,Recurved Peatmoss,False,True
+west-georgia-us,1,Symphyotrichum phlogifolium,species,Thinleaf Late Purple Aster,False,True
+west-georgia-us,1,Symphyotrichum shortii,species,Short's aster,False,True
+west-georgia-us,1,Symphyotrichum urophyllum,species,Arrow-leaved Aster,False,True
+west-georgia-us,1,Talinum paniculatum,species,Jewels of Opar,True,True
+west-georgia-us,1,Thalia dealbata,species,Powdery thalia,False,True
+west-georgia-us,1,Tithonia rotundifolia,species,Red Sunflower,False,True
+west-georgia-us,1,Viburnum recognitum,species,northern arrowwood,False,True
+west-georgia-us,1,Zephyranthes candida,species,White rain-lily,False,True
+west-georgia-us,1,Zinnia elegans,species,Elegant Zinnia,True,True
+west-georgia-us,1,Euphorbia nutans,species,nodding spurge,True,True
+west-georgia-us,1,Coleataenia anceps,species,beaked panicum,False,False
+west-georgia-us,1,Marsilea minuta,species,,False,False
+west-georgia-us,1,Eupatorium pubescens,species,roundleaf thoroughwort,False,True
+west-georgia-us,1,Dendrolycopodium obscurum,species,flat-branched tree-clubmoss,True,True
+west-georgia-us,1,Bidens polylepis,species,Tickseed Sunflower,False,True
+west-georgia-us,1,Ligusticum canadense,species,American lovage,False,True
+west-georgia-us,1,Sisyrinchium micranthum,species,Blue Pigroot,False,True
+west-georgia-us,1,Muhlenbergia expansa,species,Cutover Muhly,False,True
+west-georgia-us,1,Avenella flexuosa,species,wavy hair-grass,False,False
+west-georgia-us,1,Fraxinus biltmoreana,species,Biltmore Ash,False,True
+west-georgia-us,1,Aloysia citrodora,species,lemon verbena,False,True
+west-georgia-us,1,Hypochaeris chillensis,species,Brazilian Cat's-ear,False,True
+west-georgia-us,1,Dryopteris cycadina,species,Black wood fern,False,True
+west-georgia-us,1,Osmanthus fragrans,species,Sweet olive,False,False
+west-georgia-us,1,Sedum tetractinum,species,,False,True
+west-georgia-us,1,Ternstroemia gymnanthera,species,Japanese Ternstroemia,False,False
+west-georgia-us,1,Forsythia koreana,species,Korean goldenbell tree,False,False
+west-georgia-us,1,Coleataenia rigidula,species,redtop panicgrass,False,False
+west-georgia-us,1,Malus domestica,species,apple,True,True
+west-georgia-us,1,Myriopteris lanosa,species,Hairy Lip Fern,False,True
+west-georgia-us,1,Danae racemosa,species,Alexandrian Laurel,False,False
+west-georgia-us,1,Silene coronaria,species,Rose campion,True,True
+west-georgia-us,1,Xanthium orientale,species,common cocklebur,True,True
+west-georgia-us,1,Liatris hirsuta,species,hairy gayfeather,False,True
+west-georgia-us,1,Callianthe picta,species,Redvein Abutilon,False,False
+west-georgia-us,1,Opuntia drummondii,species,Creeping Cactus,False,True
+west-georgia-us,1,Silphium asperrimum,species,Gates' Rosinweed,False,True
+west-georgia-us,1,Acmella oleracea,species,toothache plant,False,True
+west-georgia-us,1,Arundinaria tecta,species,switch cane,False,True
+west-georgia-us,1,Andersonglossum virginianum,species,wild comfrey,True,True
+west-georgia-us,1,Cyperus sesquiflorus,species,Fragrant Spikesedge,False,True
+west-georgia-us,1,Cyperus hortensis,species,low spikesedge,False,True
+west-georgia-us,1,Hexasepalum teres,species,rough buttonweed,True,True
+west-georgia-us,1,Gratiola amphiantha,species,little amphianthus,False,False
+west-georgia-us,1,Colocasia fontanesii,species,Blackstem Taro,False,True
+west-georgia-us,1,Eupatorium linearifolium,species,Narrowleaf Bushy Thoroughwort,False,True
+west-georgia-us,1,Youngia thunbergiana,species,Tall false hawksbeard,False,True
+west-georgia-us,1,Berberis fortunei,species,Chinese mahonia,False,True
+west-georgia-us,1,Pontederia crassipes,species,common water hyacinth,True,True
+west-georgia-us,1,Solidago austrina,species,Southern Goldenrod,False,True
+west-georgia-us,1,Luffa aegyptiaca,species,Sponge Gourd,False,False
+west-georgia-us,1,Clinopodium talladeganum,species,Talladega Wild Basil,False,True
+west-georgia-us,1,Pseudanomodon attenuatus,species,tree-skirt moss,False,False
+west-georgia-us,1,Feijoa sellowiana,species,Feijoa,False,False
+west-georgia-us,1,Viola communis,species,dooryard violet,False,True
+west-georgia-us,1,Bothriochloa torreyana,species,silver bluestem,False,True
+west-georgia-us,1,Asarum heterophyllum,species,variable-leaf heartleaf,False,True
+west-georgia-us,1,Castanea alabamensis,species,Alabama chinquapin,False,True
+west-georgia-us,1,Harperella nodosa,species,harperella,False,False
+west-georgia-us,1,Senega incarnata,species,Pink Milkwort,False,False
+west-georgia-us,1,Polystichum polyblepharon,species,Japanese tassel fern,False,True
+west-georgia-us,1,Anacis verticillata,species,Threadleaf Coreopsis,False,False
+tbilisi-georgia,87,Crocus speciosus,species,Bieberstein's Crocus,False,True
+tbilisi-georgia,45,Paliurus spina-christi,species,Jerusalem Thorn,True,True
+tbilisi-georgia,32,Acer campestre,species,field maple,True,True
+tbilisi-georgia,32,Cotinus coggygria,species,Smokebush,True,True
+tbilisi-georgia,25,Ligustrum lucidum,species,tree privet,True,True
+tbilisi-georgia,25,Chrysojasminum fruticans,species,Wild Jasmine,False,False
+tbilisi-georgia,22,Laurus nobilis,species,Bay laurel,True,True
+tbilisi-georgia,14,Koelreuteria paniculata,species,golden rain tree,True,True
+tbilisi-georgia,14,Juniperus excelsa,species,Greek juniper,False,True
+tbilisi-georgia,12,Maclura pomifera,species,Osage-orange,True,True
+tbilisi-georgia,12,Hyssopus officinalis,species,Hyssop,False,False
+tbilisi-georgia,11,Ailanthus altissima,species,tree-of-heaven,True,True
+tbilisi-georgia,11,Juniperus communis,species,common juniper,True,True
+tbilisi-georgia,10,Asplenium trichomanes,species,maidenhair spleenwort,True,True
+tbilisi-georgia,10,Carpinus orientalis,species,Eastern Hornbeam,False,True
+tbilisi-georgia,10,Hylotelephium caucasicum,species,,False,True
+tbilisi-georgia,9,Zygophyllum fabago,species,Syrian bean-caper,False,False
+tbilisi-georgia,9,Campanula alliariifolia,species,Cornish Bellflower,False,True
+tbilisi-georgia,8,Cyclamen coum,species,Eastern Sowbread,False,True
+tbilisi-georgia,8,Hedera helix,species,common ivy,True,True
+tbilisi-georgia,8,Pyracantha coccinea,species,Firethorn,True,True
+tbilisi-georgia,7,Punica granatum,species,pomegranate,True,True
+tbilisi-georgia,7,Ecballium elaterium,species,squirting cucumber,True,True
+tbilisi-georgia,7,Fagus orientalis,species,Oriental Beech,False,True
+tbilisi-georgia,7,Colchicum speciosum,species,Giant Meadow Saffron,False,True
+tbilisi-georgia,6,Ficus carica,species,common fig,True,True
+tbilisi-georgia,6,Cercis siliquastrum,species,Judas-tree,False,True
+tbilisi-georgia,6,Galatella linosyris,species,Goldilocks Aster,False,False
+tbilisi-georgia,6,Crataegus germanica,species,Medlar,False,True
+tbilisi-georgia,5,Silybum marianum,species,milk thistle,True,True
+tbilisi-georgia,5,Carpinus betulus,species,European Hornbeam,True,True
+tbilisi-georgia,5,Euonymus europaeus,species,Spindle,True,True
+tbilisi-georgia,5,Datura stramonium,species,jimsonweed,True,True
+tbilisi-georgia,5,Echium vulgare,species,viper's-bugloss,True,True
+tbilisi-georgia,5,Sorghum halepense,species,Johnson grass,True,True
+tbilisi-georgia,5,Ajuga chamaepitys,species,Ground-pine,True,True
+tbilisi-georgia,5,Bothriochloa ischaemum,species,King Ranch bluestem,True,True
+tbilisi-georgia,5,Salvia verticillata,species,Whorled Clary,True,True
+tbilisi-georgia,5,Buxus colchica,species,,False,False
+tbilisi-georgia,5,Acer cappadocicum,species,Cappadocian Maple,False,True
+tbilisi-georgia,5,Ilex colchica,species,Black Sea Holly,False,True
+tbilisi-georgia,5,Alcea rugosa,species,Russian Hollyhock,False,True
+tbilisi-georgia,5,Alkekengi officinarum,species,Japanese-lantern,True,True
+tbilisi-georgia,4,Spartium junceum,species,Spanish Broom,True,True
+tbilisi-georgia,4,Populus alba,species,white poplar,True,True
+tbilisi-georgia,4,Trifolium pratense,species,Red Clover,True,True
+tbilisi-georgia,4,Cichorium intybus,species,chicory,True,True
+tbilisi-georgia,4,Styphnolobium japonicum,species,Japanese pagoda tree,False,False
+tbilisi-georgia,4,Gleditsia triacanthos,species,honey locust,True,True
+tbilisi-georgia,4,Lamium album,species,White deadnettle,True,True
+tbilisi-georgia,4,Viscum album,species,European mistletoe,True,True
+tbilisi-georgia,4,Xanthium spinosum,species,spiny cocklebur,True,True
+tbilisi-georgia,4,Adiantum capillus-veneris,species,black maidenhair fern,True,True
+tbilisi-georgia,4,Berberis vulgaris,species,European barberry,True,True
+tbilisi-georgia,4,Solanum nigrum,species,black nightshade,True,True
+tbilisi-georgia,4,Ruscus aculeatus,species,butcher's-broom,True,True
+tbilisi-georgia,4,Helianthemum nummularium,species,Common Rock-rose,True,True
+tbilisi-georgia,4,Ligustrum vulgare,species,Common Privet,True,True
+tbilisi-georgia,4,Scabiosa ochroleuca,species,Cream Scabious,True,True
+tbilisi-georgia,4,Euonymus latifolius,species,Large-leaved Spindle,False,True
+tbilisi-georgia,4,Limonium meyeri,species,,False,True
+tbilisi-georgia,4,Galatella villosa,species,,False,False
+tbilisi-georgia,4,Opuntia cymochila,species,Grassland Pricklypear,False,True
+tbilisi-georgia,4,Torminalis glaberrima,species,Wild Service-tree,False,False
+tbilisi-georgia,4,Rubus creticus,species,Holy Bramble,False,True
+tbilisi-georgia,3,Ipomoea purpurea,species,common morning-glory,True,True
+tbilisi-georgia,3,Geranium robertianum,species,Herb Robert,True,True
+tbilisi-georgia,3,Cynodon dactylon,species,Bermuda grass,True,True
+tbilisi-georgia,3,Helminthotheca echioides,species,bristly oxtongue,True,True
+tbilisi-georgia,3,Phragmites australis,species,common reed,True,True
+tbilisi-georgia,3,Elaeagnus umbellata,species,autumn olive,True,True
+tbilisi-georgia,3,Heliotropium europaeum,species,European heliotrope,True,True
+tbilisi-georgia,3,Acer monspessulanum,species,Montpellier Maple,False,True
+tbilisi-georgia,3,Scabiosa columbaria,species,Small Scabious,True,True
+tbilisi-georgia,3,Salvia glutinosa,species,Sticky Sage,True,True
+tbilisi-georgia,3,Linum austriacum,species,Austrian Flax,False,True
+tbilisi-georgia,3,Plumbago europaea,species,common leadwort,False,True
+tbilisi-georgia,3,Leucodon sciuroides,species,squirrel-tail moss,False,False
+tbilisi-georgia,3,Viola alba,species,White Violet,False,True
+tbilisi-georgia,3,Acer hyrcanum,species,Balkan Maple,False,True
+tbilisi-georgia,3,Dianthus orientalis,species,,False,True
+tbilisi-georgia,3,Salvia rosmarinus,species,Rosemary,True,True
+tbilisi-georgia,3,Astragalus microcephalus,species,,False,True
+tbilisi-georgia,3,Rhamnus erythroxyloides,species,Pallas' Buckthorn,False,True
+tbilisi-georgia,3,Delphinium consolida,species,Forking Larkspur,False,True
+tbilisi-georgia,2,Taxus baccata,species,common yew,True,True
+tbilisi-georgia,2,Acer negundo,species,box elder,True,True
+tbilisi-georgia,2,Mirabilis jalapa,species,marvel of Peru,True,True
+tbilisi-georgia,2,Prunella vulgaris,species,common selfheal,True,True
+tbilisi-georgia,2,Oxalis corniculata,species,Creeping Woodsorrel,True,True
+tbilisi-georgia,2,Rhamnus cathartica,species,common buckthorn,True,True
+tbilisi-georgia,2,Teucrium chamaedrys,species,Wall germander,True,True
+tbilisi-georgia,2,Agrimonia eupatoria,species,common agrimony,True,True
+tbilisi-georgia,2,Viburnum opulus,species,guelder-rose,True,True
+tbilisi-georgia,2,Malva sylvestris,species,Common Mallow,True,True
+tbilisi-georgia,2,Verbena officinalis,species,Common vervain,True,True
+tbilisi-georgia,2,Parietaria judaica,species,pellitory-of-the-wall,True,True
+tbilisi-georgia,2,Centranthus ruber,species,Red Valerian,True,True
+tbilisi-georgia,2,Datura wrightii,species,Sacred Datura,True,True
+tbilisi-georgia,2,Amaranthus retroflexus,species,Redroot Amaranth,True,True
+tbilisi-georgia,2,Asparagus officinalis,species,wild asparagus,True,True
+tbilisi-georgia,2,Elaeagnus angustifolia,species,Russian olive,True,True
+tbilisi-georgia,2,Agropyron cristatum,species,Crested Wheatgrass,True,True
+tbilisi-georgia,2,Asplenium septentrionale,species,northern spleenwort,False,True
+tbilisi-georgia,2,Centaurea diffusa,species,diffuse knapweed,False,True
+tbilisi-georgia,2,Echinops sphaerocephalus,species,Glandular Globe-thistle,True,True
+tbilisi-georgia,2,Euphorbia virgata,species,slender leafy spurge,True,True
+tbilisi-georgia,2,Geranium lucidum,species,Shining Crane's-bill,True,True
+tbilisi-georgia,2,Hypericum calycinum,species,Rose-of-sharon,True,True
+tbilisi-georgia,2,Setaria viridis,species,Green Bristle Grass,True,True
+tbilisi-georgia,2,Sisymbrium loeselii,species,False London-rocket,True,True
+tbilisi-georgia,2,Dioscorea communis,species,Black Bryony,True,True
+tbilisi-georgia,2,Syringa vulgaris,species,common lilac,True,True
+tbilisi-georgia,2,Diospyros lotus,species,Date plum,False,True
+tbilisi-georgia,2,Saxifraga rotundifolia,species,Round-leaved Saxifrage,False,True
+tbilisi-georgia,2,Helleborus orientalis,species,Lenten-rose,False,True
+tbilisi-georgia,2,Cornus sanguinea,species,common dogwood,True,True
+tbilisi-georgia,2,Abietinella abietina,species,Fir Tamarisk-moss,False,False
+tbilisi-georgia,2,Clematis vitalba,species,Old man's beard,True,True
+tbilisi-georgia,2,Eryngium campestre,species,Field Eryngo,True,True
+tbilisi-georgia,2,Hippophae rhamnoides,species,Sea-buckthorn,True,True
+tbilisi-georgia,2,Hyoscyamus niger,species,black henbane,True,True
+tbilisi-georgia,2,Nepeta racemosa,species,Eastern Cat-mint,False,True
+tbilisi-georgia,2,Opuntia macrorhiza,species,prairie pricklypear,True,True
+tbilisi-georgia,2,Portulaca grandiflora,species,moss rose,False,True
+tbilisi-georgia,2,Linaria genistifolia,species,Broomleaf Toadflax,False,True
+tbilisi-georgia,2,Crataegus pontica,species,,False,True
+tbilisi-georgia,2,Lithospermum officinale,species,Common Gromwell,True,True
+tbilisi-georgia,2,Convolvulus cantabrica,species,Cantabrican morning glory,False,True
+tbilisi-georgia,2,Galatella sedifolia,species,Rhone Aster,False,False
+tbilisi-georgia,2,Rubia tinctorum,species,Madder,False,False
+tbilisi-georgia,2,Pyrus salicifolia,species,Willow-leaved Pear,False,True
+tbilisi-georgia,2,Teucrium polium,species,Felty Germander,False,True
+tbilisi-georgia,2,Juniperus deltoides,species,eastern prickly juniper,False,True
+tbilisi-georgia,2,Lonicera iberica,species,,False,True
+tbilisi-georgia,2,Asparagus verticillatus,species,vining asparagus,False,True
+tbilisi-georgia,2,Pulsatilla georgica,species,,False,True
+tbilisi-georgia,2,Euphorbia iberica,species,,False,True
+tbilisi-georgia,2,Colutea orientalis,species,Blood-spotted Bladder Senna,False,False
+tbilisi-georgia,2,Allium rupestre,species,,False,True
+tbilisi-georgia,2,Eryngium caeruleum,species,Blue sea holly,False,True
+tbilisi-georgia,2,Dryopteris caucasica,species,,False,True
+tbilisi-georgia,1,Albizia julibrissin,species,Persian silk tree,True,True
+tbilisi-georgia,1,Populus nigra,species,Black Poplar,True,True
+tbilisi-georgia,1,Populus tremula,species,European aspen,True,True
+tbilisi-georgia,1,Taraxacum officinale,species,common dandelion,True,True
+tbilisi-georgia,1,Symphoricarpos albus,species,Common Snowberry,True,True
+tbilisi-georgia,1,Phytolacca americana,species,American pokeweed,True,True
+tbilisi-georgia,1,Bidens bipinnata,species,Spanish needles,True,True
+tbilisi-georgia,1,Crataegus monogyna,species,common hawthorn,True,True
+tbilisi-georgia,1,Laburnum anagyroides,species,Common Laburnum,True,True
+tbilisi-georgia,1,Urtica dioica,species,great stinging nettle,True,True
+tbilisi-georgia,1,Centaurea solstitialis,species,Yellow Star-Thistle,True,True
+tbilisi-georgia,1,Hordeum murinum,species,wall barley,True,True
+tbilisi-georgia,1,Foeniculum vulgare,species,fennel,True,True
+tbilisi-georgia,1,Plantago lanceolata,species,ribwort plantain,True,True
+tbilisi-georgia,1,Stellaria media,species,common chickweed,True,True
+tbilisi-georgia,1,Cotoneaster pannosus,species,silverleaf cotoneaster,False,False
+tbilisi-georgia,1,Melia azedarach,species,Chinaberry,True,True
+tbilisi-georgia,1,Cotoneaster horizontalis,species,Wall cotoneaster,False,False
+tbilisi-georgia,1,Pyracantha angustifolia,species,Narrowleaf Firethorn,False,True
+tbilisi-georgia,1,Lemna minor,species,Common Duckweed,True,True
+tbilisi-georgia,1,Silene vulgaris,species,bladder campion,True,True
+tbilisi-georgia,1,Cymbalaria muralis,species,Ivy-leaved toadflax,True,True
+tbilisi-georgia,1,Sanguisorba minor,species,Salad Burnet,True,True
+tbilisi-georgia,1,Prunus spinosa,species,Blackthorn,True,True
+tbilisi-georgia,1,Primula veris,species,Cowslip,True,True
+tbilisi-georgia,1,Viola odorata,species,Sweet violet,True,True
+tbilisi-georgia,1,Cornus mas,species,Cornelian cherry,True,True
+tbilisi-georgia,1,Rosa canina,species,Dog-rose,True,True
+tbilisi-georgia,1,Lapsana communis,species,nipplewort,True,True
+tbilisi-georgia,1,Tamarix ramosissima,species,saltcedar,True,True
+tbilisi-georgia,1,Robinia pseudoacacia,species,black locust,True,True
+tbilisi-georgia,1,Morus alba,species,white mulberry,True,True
+tbilisi-georgia,1,Primula vulgaris,species,Primrose,True,True
+tbilisi-georgia,1,Juncus effusus,species,Soft Rush,True,True
+tbilisi-georgia,1,Galinsoga quadriradiata,species,shaggy soldier,True,True
+tbilisi-georgia,1,Medicago sativa,species,Alfalfa,True,True
+tbilisi-georgia,1,Melilotus officinalis,species,Yellow Sweetclover,True,True
+tbilisi-georgia,1,Xanthium strumarium,species,rough cocklebur,True,True
+tbilisi-georgia,1,Pinus sylvestris,species,Scots pine,True,True
+tbilisi-georgia,1,Euphorbia maculata,species,Spotted spurge,True,True
+tbilisi-georgia,1,Plantago major,species,greater plantain,True,True
+tbilisi-georgia,1,Portulaca oleracea,species,Common Purslane,True,True
+tbilisi-georgia,1,Galium humifusum,species,Spreading Bedstraw,False,True
+tbilisi-georgia,1,Verbascum blattaria,species,moth mullein,True,True
+tbilisi-georgia,1,Sambucus ebulus,species,Dwarf Elder,True,True
+tbilisi-georgia,1,Petrorhagia saxifraga,species,Tunicflower,False,True
+tbilisi-georgia,1,Cirsium arvense,species,creeping thistle,True,True
+tbilisi-georgia,1,Echinochloa crus-galli,species,barnyardgrass,True,True
+tbilisi-georgia,1,Artemisia absinthium,species,absinthe wormwood,True,True
+tbilisi-georgia,1,Conocephalum salebrosum,species,Snakewort,True,True
+tbilisi-georgia,1,Origanum vulgare,species,Oregano,True,True
+tbilisi-georgia,1,Filipendula vulgaris,species,Dropwort,True,True
+tbilisi-georgia,1,Lepidium draba,species,Heart-podded Hoary Cress,True,True
+tbilisi-georgia,1,Lemna gibba,species,Fat Duckweed,False,True
+tbilisi-georgia,1,Juglans regia,species,Persian walnut,True,True
+tbilisi-georgia,1,Pyrus communis,species,Common Pear,True,True
+tbilisi-georgia,1,Cortaderia selloana,species,Pampas Grass,True,True
+tbilisi-georgia,1,Cupressus sempervirens,species,Mediterranean cypress,False,True
+tbilisi-georgia,1,Trachycarpus fortunei,species,Chusan Palm,False,False
+tbilisi-georgia,1,Cosmos bipinnatus,species,garden cosmos,True,True
+tbilisi-georgia,1,Prunus amygdalus,species,Almond,False,True
+tbilisi-georgia,1,Anchusa azurea,species,Italian Bugloss,False,True
+tbilisi-georgia,1,Astragalus cicer,species,Chickpea Milkvetch,True,True
+tbilisi-georgia,1,Carduus acanthoides,species,Broad-winged Thistle,True,True
+tbilisi-georgia,1,Chondrilla juncea,species,Rush Skeletonweed,True,True
+tbilisi-georgia,1,Cucumis melo,species,Muskmelon,False,False
+tbilisi-georgia,1,Daucus carota,species,wild carrot,True,True
+tbilisi-georgia,1,Diplotaxis muralis,species,annual wall-rocket,False,True
+tbilisi-georgia,1,Diplotaxis tenuifolia,species,Perennial Wall-rocket,True,True
+tbilisi-georgia,1,Geranium pyrenaicum,species,Hedgerow Crane's-bill,True,True
+tbilisi-georgia,1,Glycyrrhiza glabra,species,cultivated licorice,False,True
+tbilisi-georgia,1,Hypericum androsaemum,species,Tutsan,True,True
+tbilisi-georgia,1,Papaver somniferum,species,opium poppy,True,True
+tbilisi-georgia,1,Pistacia atlantica,species,Mount Atlas mastic tree,False,True
+tbilisi-georgia,1,Quercus ilex,species,Holm oak,True,True
+tbilisi-georgia,1,Reseda lutea,species,Wild Mignonette,True,True
+tbilisi-georgia,1,Silene latifolia,species,white campion,True,True
+tbilisi-georgia,1,Silene noctiflora,species,Night-flowering Catchfly,False,True
+tbilisi-georgia,1,Tagetes minuta,species,wild marigold,False,True
+tbilisi-georgia,1,Ulmus minor,species,Field Elm,True,True
+tbilisi-georgia,1,Glaucium corniculatum,species,Red Horned Poppy,False,True
+tbilisi-georgia,1,Viburnum tinus,species,Laurustinus viburnum,True,True
+tbilisi-georgia,1,Cydonia oblonga,species,Quince,False,False
+tbilisi-georgia,1,Solanum villosum,species,red nightshade,False,True
+tbilisi-georgia,1,Betula pendula,species,silver birch,True,True
+tbilisi-georgia,1,Asplenium ruta-muraria,species,wall-rue,True,True
+tbilisi-georgia,1,Dipsacus laciniatus,species,cutleaf teasel,True,True
+tbilisi-georgia,1,Carlina vulgaris,species,Carline Thistle,True,True
+tbilisi-georgia,1,Solidago virgaurea,species,European goldenrod,True,True
+tbilisi-georgia,1,Acer pseudoplatanus,species,sycamore maple,True,True
+tbilisi-georgia,1,Paulownia tomentosa,species,princess tree,True,True
+tbilisi-georgia,1,Hylocomium splendens,species,stairstep moss,True,True
+tbilisi-georgia,1,Helianthus tuberosus,species,Jerusalem artichoke,True,True
+tbilisi-georgia,1,Rhus coriaria,species,Tanner's sumac,False,True
+tbilisi-georgia,1,Dicranum scoparium,species,Broom Forkmoss,True,True
+tbilisi-georgia,1,Bryum argenteum,species,Silvery Bryum,True,True
+tbilisi-georgia,1,Prunus mahaleb,species,St Lucie Cherry,False,True
+tbilisi-georgia,1,Broussonetia papyrifera,species,Paper mulberry,True,True
+tbilisi-georgia,1,Rhododendron luteum,species,Yellow Azalea,False,True
+tbilisi-georgia,1,Geranium sanguineum,species,Bloody Crane's-bill,True,True
+tbilisi-georgia,1,Saxifraga paniculata,species,Livelong Saxifrage,True,True
+tbilisi-georgia,1,Buxus sempervirens,species,common box,False,False
+tbilisi-georgia,1,Prunus armeniaca,species,apricot,False,True
+tbilisi-georgia,1,Picea orientalis,species,Oriental spruce,False,True
+tbilisi-georgia,1,Abies nordmanniana,species,Caucasian fir,False,True
+tbilisi-georgia,1,Astragalus buschiorum,species,,False,True
+tbilisi-georgia,1,Asplenium adiantum-nigrum,species,black spleenwort,False,True
+tbilisi-georgia,1,Astragalus glycyphyllos,species,Wild Liquorice,True,True
+tbilisi-georgia,1,Calliergonella cuspidata,species,Pointed Spear-moss,False,False
+tbilisi-georgia,1,Centaurea phrygia,species,Wig Knapweed,True,True
+tbilisi-georgia,1,Clematis orientalis,species,Oriental Virgin's-bower,False,True
+tbilisi-georgia,1,Crepis foetida,species,Stinking Hawk's-beard,False,True
+tbilisi-georgia,1,Echium italicum,species,Pale Bugloss,False,True
+tbilisi-georgia,1,Hedera colchica,species,Persian Ivy,False,True
+tbilisi-georgia,1,Hylotelephium spectabile,species,Butterfly Stonecrop,False,True
+tbilisi-georgia,1,Jasminum nudiflorum,species,Winter jasmine,False,False
+tbilisi-georgia,1,Malus baccata,species,Siberian crabapple,False,True
+tbilisi-georgia,1,Schoenoplectus lacustris,species,Common Club-rush,False,True
+tbilisi-georgia,1,Sigesbeckia orientalis,species,Eastern St Paul's-wort,False,False
+tbilisi-georgia,1,Stachys annua,species,Annual Yellow-woundwort,False,True
+tbilisi-georgia,1,Teucrium orientale,species,,False,True
+tbilisi-georgia,1,Vinca herbacea,species,Herbaceous Periwinkle,False,True
+tbilisi-georgia,1,Zephyranthes candida,species,White rain-lily,False,True
+tbilisi-georgia,1,Zinnia elegans,species,Elegant Zinnia,True,True
+tbilisi-georgia,1,Celtis caucasica,species,Caucasian hackberry,False,True
+tbilisi-georgia,1,Euphorbia prostrata,species,prostrate sandmat,True,True
+tbilisi-georgia,1,Citrus trifoliata,species,trifoliate orange,True,True
+tbilisi-georgia,1,Typha laxmannii,species,Graceful Cattail,False,True
+tbilisi-georgia,1,Phedimus spurius,species,Caucasian Stonecrop,False,False
+tbilisi-georgia,1,Smyrnium perfoliatum,species,Perfoliate Alexanders,False,True
+tbilisi-georgia,1,Linum tenuifolium,species,Narrow-leaved Flax,False,True
+tbilisi-georgia,1,Daphne pontica,species,,False,True
+tbilisi-georgia,1,Sternbergia colchiciflora,species,Turkish starflower,False,False
+tbilisi-georgia,1,Sempervivum transcaucasicum,species,,False,True
+tbilisi-georgia,1,Colchicum umbrosum,species,,False,True
+tbilisi-georgia,1,Pilosella officinarum,species,mouse-eared hawkweed,True,True
+tbilisi-georgia,1,Tilia dasystyla,species,Crimean Lime,False,True
+tbilisi-georgia,1,Fumana procumbens,species,Heath-rose,False,False
+tbilisi-georgia,1,Selaginella helvetica,species,Swiss Spikemoss,False,True
+tbilisi-georgia,1,Xeranthemum annuum,species,Immortelle,False,False
+tbilisi-georgia,1,Danae racemosa,species,Alexandrian Laurel,False,False
+tbilisi-georgia,1,Paragymnopteris marantae,species,,False,False
+tbilisi-georgia,1,Euphorbia seguieriana,species,steppe spurge,False,True
+tbilisi-georgia,1,Xanthium orientale,species,common cocklebur,True,True
+tbilisi-georgia,1,Chenopodiastrum murale,species,nettle-leaved goosefoot,True,True
+tbilisi-georgia,1,Datisca cannabina,species,False Hemp,False,False
+tbilisi-georgia,1,Acer velutinum,species,Velvet Maple,False,True
+tbilisi-georgia,1,Ephedra procera,species,,False,True
+tbilisi-georgia,1,Sempervivum caucasicum,species,,False,True
+tbilisi-georgia,1,Cephalaria media,species,,False,False
+tbilisi-georgia,1,Klasea quinquefolia,species,,False,False
+tbilisi-georgia,1,Paris incompleta,species,,False,True
+tbilisi-georgia,1,Astragalus fragrans,species,,False,True
+tbilisi-georgia,1,Centaurea reflexa,species,,False,True
+tbilisi-georgia,1,Salvia garedjii,species,Mount Gareja Sage,False,True
+tbilisi-georgia,1,Oxybasis glauca,species,oak-leaved goosefoot,True,True
+tbilisi-georgia,1,Eriocapitella hupehensis,species,Hubei Anemone,False,False
+tbilisi-georgia,1,Feijoa sellowiana,species,Feijoa,False,False
