@@ -43,3 +43,6 @@ keystore.properties
 
 # Bundled models and tables from make assets; generated, never committed
 app/generated/
+
+# Art drafts; finished sheets move to assets/source/
+assets/generated/
