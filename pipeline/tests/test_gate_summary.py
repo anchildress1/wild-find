@@ -115,9 +115,11 @@ def run(tmp_path):
         [
             {
                 "tap_ns": 1,
+                "lead_ms": 2000,
                 "frame_ms": 150,
                 "jpeg_ms": 20,
                 "scene_ms": 2500,
+                "wait_ms": 670,
                 "hint_ms": 900,
                 "total_ms": 3570,
                 "jpeg_bytes": 1,
@@ -168,7 +170,8 @@ def test_summary_reports_every_gate_number(run):
     assert "battery %: 90 to 80 (30 %/h)" in text
     assert "PSS MB: start 2930, max 3027" in text
     assert "Gemma load: 4100.0 ms" in text
-    assert "tap to hint ms: p50 3570" in text
+    assert "level-2 tap to hint ms: p50 3570" in text
+    assert "hint parts p50 ms: lead 2000, frame 150, jpeg 20, scene 2500, wait 670, hint 900" in text
     assert "with one guard retry ms: p50 4470" in text
     assert "replies with no scene tags: 0; empty hints: 0" in text
     assert "tap_to_focus with no focus reading for the frame: 0 of 0" in text

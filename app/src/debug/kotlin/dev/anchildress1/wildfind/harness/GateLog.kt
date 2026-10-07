@@ -79,9 +79,13 @@ class GateLog(val dir: File) : Closeable {
             "battery_temp_c", "battery_pct", "charging",
         )
 
-        /** One row per hint tap: tap to frame copy, JPEG, scene call, hint call, end to end. */
+        /**
+         * One row per level-2 tap. The scene call runs from the level-1 tap (`lead_ms` earlier): frame copy, JPEG,
+         * scene call. Then `wait_ms` for a scene call still running at the level-2 tap, the hint call, and the
+         * level-2 tap to hint shown (`total_ms`).
+         */
         val HINT_COLUMNS = listOf(
-            "tap_ns", "frame_ms", "jpeg_ms", "scene_ms", "hint_ms", "total_ms",
+            "tap_ns", "lead_ms", "frame_ms", "jpeg_ms", "scene_ms", "wait_ms", "hint_ms", "total_ms",
             "jpeg_bytes", "tags", "scene_reply", "hint",
         )
 

@@ -69,9 +69,9 @@ fun HarnessScreen(
         Readout(status, Modifier.align(Alignment.TopStart))
         Button(
             onClick = { run?.requestHint() },
-            enabled = status.gemma == "ready",
+            enabled = status.gemma == "ready" || status.gemma.startsWith("level"),
             modifier = Modifier.align(Alignment.BottomCenter).padding(32.dp).heightIn(min = 56.dp),
-        ) { Text("Hint", fontSize = 22.sp) }
+        ) { Text(if (status.gemma.startsWith("level 3")) "Start over" else "Hint", fontSize = 22.sp) }
     }
 }
 

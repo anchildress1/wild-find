@@ -145,11 +145,11 @@ def hint_lines(hints: list[dict[str, str]], events: list[dict[str, str]]) -> lis
     late = sum(t > HINT_BUDGET_MS for t in total)
     return [
         *lines,
-        f"hint taps: {len(hints)}; tap to hint ms: {spread(total)}; over {HINT_BUDGET_MS:.0f}: {late}",
+        f"level-2 taps: {len(hints)}; level-2 tap to hint ms: {spread(total)}; over {HINT_BUDGET_MS:.0f}: {late}",
         "hint parts p50 ms: "
         + ", ".join(
             f"{part} {pct([float(h[f'{part}_ms']) for h in hints], 50):.0f}"
-            for part in ("frame", "jpeg", "scene", "hint")
+            for part in ("lead", "frame", "jpeg", "scene", "wait", "hint")
         ),
         f"with one guard retry ms: {spread(worst)}",
         f"replies with no scene tags: {sum(not h['tags'] for h in hints)}; "

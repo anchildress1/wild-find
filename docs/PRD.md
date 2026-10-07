@@ -126,7 +126,7 @@ Ten P0s ship the hunt; one P1 follows; four P2s shape the design now. Requiremen
 | R3 | Grass tutorial | The first-ever hunt opens with grass, followed by 3 normal targets; a grass close-up passes when TinyCLIP calls the reticle crop a plant and grass is in BioCLIP's top 3 of the fixed tutorial label set, the 11 labels Day 1 measured (Poaceae, Quercus, Polypodiopsida, Trifolium, Pinus, Taraxacum, and the 5 hazard species), never the hunt's full label universe (49 of 52 CC0 grass photos passed both on Day 1; BioCLIP top 3 alone passed 50 and top-1 alone 45; the one lawn the gate rejected scored a plant share of 0.39); the plant gate's labels include grass; the hazard check doesn't run during the tutorial, because 9 of 54 grass photos warned against the menu labels on Day 1 (1 of 54 against the species table), and the leave-it rule stays on screen; done in under 60 seconds; never repeats once completed |
 | R4 | Target pick | 3 targets per hunt by sighting-weighted random from eligible words; a hazard is never a target |
 | R5 | Verify | Follows the Runtime Logic verify table, live while the camera is open; a find needs the subject in close range and the target top-1 on the reticle crop at or above its verify\_floor for 3 frames in a row, then auto-captures; a hazard match shows a warning and gives no star; no result is ever presented as evidence of safety |
-| R6 | Hints | Tap for a hint; levels 1 and 3 are precomputed from the fact card at hunt start; level 2 reads the current camera frame at tap time, with no separate hint photo; guards reject the target name, "I see", "there is", numbers not on the card, and anything over 20 words; retry once, then a template hint |
+| R6 | Hints | Tap for a hint; levels 1 and 3 are precomputed from the fact card at hunt start; level 2 reads the camera frame from the moment the kid opens level 1, with no separate hint photo: the scene call starts on the level-1 tap, so the level-2 tap usually waits only for the short hint call; guards reject the target name, "I see", "there is", numbers not on the card, and anything over 20 words; retry once, then a template hint |
 | R7 | Privacy | Android coarse location permission only; no fine location requested; coordinates rounded again before the query; no photo or precise location leaves the device; no account; no analytics |
 | R8 | Offline | All three models on-device; a cached hunt completes in airplane mode; with no cache and no network, the bundled West Georgia fallback list runs the hunt |
 | R9 | Model delivery | Gemma is the only download: pinned in Data Contracts; starts on its own at first launch while the opener plays; free storage checked before download, with a clear message showing the space needed; Wi-Fi only; resumable; progress shown; SHA-256 verified before load. Verify works before the download finishes; only level-2 hints wait |
@@ -156,7 +156,7 @@ Day-1 measurements on the test phone are in hole 4; heat and hint latency are st
 | Privacy | No photo or precise location leaves the device; gameplay requests carry only coarse region coordinates plus ordinary request metadata such as IP address | Network log on the test phone |
 | Offline | A full hunt runs in airplane mode from the cache or the bundled fallback list | Field test |
 | Verify latency | Each analyzed live frame under 200 ms (TinyCLIP on the reticle crop and full frame, plus BioCLIP on up to both); the first eligible frame to Found under 1.5 s | Gate harness (S05) |
-| Hint latency | Under 5 s for level 2; levels 1 and 3 are precomputed. First measured Oct 7: the first tap after a cold load took about 6.3 s (scene call 5.6 s, hint call 0.7 s, `docs/results/day-2/`); warm taps come from the gate harness | Gate harness (S05) |
+| Hint latency | Under 5 s for level 2; levels 1 and 3 are precomputed. The first vision call after Gemma loads pays about 3 s of one-time setup (first taps took 5.2 to 6.3 s on Oct 7), so Gemma runs one throwaway vision call right after loading. With that and the level-1 prefetch, level-2 taps took 0.9 to 1.8 s on the S24 Ultra, 2.9 s at worst with one guard retry (`docs/results/day-2/`) | Gate harness (S05) |
 | Download size | Gemma 2,588,147,712 bytes, fetched after install; the APK carries BioCLIP (46,986,589 bytes), the plant gate (about 33 MB), and the species table (about 17.5 MB) | Day-1 gate |
 | Storage | Free space checked before the download starts | Day-1 gate |
 | Memory | Gemma loads once per session and is released when the app goes to the background; RAM recorded | Day-1 gate |
@@ -390,7 +390,7 @@ margin stays null until the calibration set sets it; null means top-1 alone deci
 | Level | Built from | When | Example (made up) |
 | --- | --- | --- | --- |
 | 1 | Card: where | Precomputed at hunt start | "Ferns like shady, damp spots." |
-| 2 | Card: where, plus scene tags | On tap; the scene is the current camera frame | "That shady spot by the fence looks fern-friendly." |
+| 2 | Card: where, plus scene tags | On tap; the scene is the camera frame from the level-1 tap, tagged while the kid reads level 1 | "That shady spot by the fence looks fern-friendly." |
 | 3 | Card: shape | Precomputed at hunt start | "Look for leaves shaped like green feathers." |
 
 Scene tags: shade, sun, water, tree, lawn, rocks, fence, path, woods edge. Guards run on every hint before it shows.

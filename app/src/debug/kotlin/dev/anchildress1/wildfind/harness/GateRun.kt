@@ -35,6 +35,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.io.ByteArrayOutputStream
 import java.io.Closeable
+import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicLong
@@ -94,6 +95,19 @@ class GateRun(private val context: Context, private val word: String, val log: G
 
     @Volatile private var gemma: GemmaHint? = null
     private var lastFrameNs = 0L
+
+    // Main-thread state for the hint ladder.
+    private var hintLevel = 0
+    private var scene: CompletableFuture<Scene>? = null
+
+    /** A finished scene call for the level-1 tap at [tapNs]; [partsMs] is frame copy, JPEG, and scene call. */
+    private class Scene(
+        val tapNs: Long,
+        val doneNs: Long,
+        val jpegBytes: Int,
+        val reply: String,
+        val partsMs: List<Double>,
+    )
 
     /** The sensor's active-array width, for the crop-region zoom fallback; set once the camera is bound. */
     @Volatile var activeArrayWidth = 0
@@ -173,15 +187,44 @@ class GateRun(private val context: Context, private val word: String, val log: G
         // proxy closes, since the frame wraps the camera's buffer.
         val tapNs = tap.getAndSet(NO_TAP)
         if (tapNs != NO_TAP) {
-            val scene = frame.upright(Box(0, 0, frame.width, frame.height))
-            hintThread.execute { hint(tapNs, scene) }
+            val pixels = frame.upright(Box(0, 0, frame.width, frame.height))
+            hintThread.execute { prefetchScene(tapNs, pixels) }
         }
     }
 
-    /** Asks for a level-2 hint from the next analyzed frame. */
+    /**
+     * One hint tap, levels in order: level 1 shows its card line at once and starts the scene call on the next
+     * frame, so by the level-2 tap usually only the short hint call is left; level 3 shows its card line at once.
+     */
     fun requestHint() {
-        if (gemma == null || !tap.compareAndSet(NO_TAP, now())) return
-        state.update { it.copy(gemma = "busy") }
+        when (hintLevel) {
+            0 -> {
+                if (gemma == null) return
+                val prefetch = CompletableFuture<Scene>()
+                scene = prefetch
+                hintLevel = 1
+                tap.set(now())
+                state.update { it.copy(gemma = "level 1", hint = "1: ${STAND_IN_WHERE.getValue(word)}") }
+            }
+
+            1 -> {
+                val tapNs = now()
+                hintLevel = 2
+                state.update { it.copy(gemma = "busy") }
+                checkNotNull(scene).whenCompleteAsync({ ready, error -> levelTwo(tapNs, ready, error) }, hintThread)
+            }
+
+            2 -> if (state.value.gemma != "busy") {
+                hintLevel = LAST_LEVEL
+                state.update { it.copy(gemma = "level 3", hint = "3: ${STAND_IN_SHAPE.getValue(word)}") }
+            }
+
+            // A new ladder, so one run can measure many level-2 taps.
+            else -> {
+                hintLevel = 0
+                state.update { it.copy(gemma = "ready", hint = "") }
+            }
+        }
     }
 
     /** Stops sampling and releases every model. Call after the camera stops delivering frames. */
@@ -216,35 +259,67 @@ class GateRun(private val context: Context, private val word: String, val log: G
             return
         }
         log.event(now(), "gemma_loaded", "${ms(now() - start)} ms, pss ${Debug.getPss()} kB")
+        val warmStart = now()
+        try {
+            candidate.warmUp()
+        } catch (e: LiteRtLmJniException) {
+            log.event(now(), "gemma_error", "warm-up: $e")
+        }
+        log.event(now(), "gemma_warmed", "${ms(now() - warmStart)} ms")
         gemma = candidate
         state.update { it.copy(gemma = "ready") }
     }
 
-    private fun hint(tapNs: Long, scene: Pixels) {
-        val model = gemma ?: return
+    private fun prefetchScene(tapNs: Long, pixels: Pixels) {
+        val prefetch = checkNotNull(scene)
+        val model = checkNotNull(gemma) { "level 1 opened without Gemma" }
         val copied = now()
-        val jpeg = jpeg(scene)
+        val jpeg = jpeg(pixels)
         val encoded = now()
-        // A failed call is logged and the button comes back: one bad reply mustn't end hint load for the whole run.
-        val sceneReply: String
-        val tagged: Long
-        val reply: String
         try {
-            sceneReply = model.scene(jpeg)
-            tagged = now()
-            val prompt = HintPrompts.levelTwo(word, STAND_IN_WHERE.getValue(word), HintPrompts.parseTags(sceneReply))
-            reply = model.hint(prompt)
+            val reply = model.scene(jpeg)
+            val done = now()
+            prefetch.complete(
+                Scene(
+                    tapNs,
+                    done,
+                    jpeg.size,
+                    reply,
+                    listOf(ms(copied - tapNs), ms(encoded - copied), ms(done - encoded)),
+                ),
+            )
         } catch (e: LiteRtLmJniException) {
-            log.event(now(), "hint_error", e.toString())
-            state.update { it.copy(gemma = "ready", hint = e.toString()) }
-            return
+            prefetch.completeExceptionally(e)
         }
+    }
+
+    // A failed call is logged and the button comes back: one bad reply mustn't end hint load for the whole run.
+    private fun levelTwo(tapNs: Long, scene: Scene?, error: Throwable?) {
+        val model = checkNotNull(gemma)
+        val start = now()
+        val tags = scene?.let { HintPrompts.parseTags(it.reply) }.orEmpty()
+        val reply = scene?.let {
+            try {
+                model.hint(HintPrompts.levelTwo(word, STAND_IN_WHERE.getValue(word), tags))
+            } catch (e: LiteRtLmJniException) {
+                fail("hint_error", e.toString())
+                null
+            }
+        }
+        if (scene == null) fail("hint_error", error.toString())
+        if (scene == null || reply == null) return
         val done = now()
+        val (frameMs, jpegMs, sceneMs) = scene.partsMs
         log.hint(
-            tapNs, ms(copied - tapNs), ms(encoded - copied), ms(tagged - encoded), ms(done - tagged), ms(done - tapNs),
-            jpeg.size, HintPrompts.parseTags(sceneReply).joinToString(" "), sceneReply, reply,
+            tapNs, ms(tapNs - scene.tapNs), frameMs, jpegMs, sceneMs, ms(maxOf(0L, scene.doneNs - tapNs)),
+            ms(done - start), ms(done - tapNs), scene.jpegBytes, tags.joinToString(" "), scene.reply, reply,
         )
-        state.update { it.copy(gemma = "ready", hint = "${ms(done - tapNs).toLong()} ms: $reply") }
+        state.update { it.copy(gemma = "level 2", hint = "2 (${ms(done - tapNs).toLong()} ms): $reply") }
+    }
+
+    private fun fail(event: String, detail: String) {
+        log.event(now(), event, detail)
+        state.update { it.copy(gemma = "level 2", hint = "2: $detail") }
     }
 
     // scheduleWithFixedDelay cancels the schedule on the first uncaught exception without a trace, which would
@@ -300,6 +375,17 @@ class GateRun(private val context: Context, private val word: String, val log: G
             TUTORIAL to "Grass grows in lawns and fields.",
         )
 
+        // Stand-in "shape" lines for level 3, sized like a card's.
+        private val STAND_IN_SHAPE = mapOf(
+            "oak" to "Look for leaves with rounded or pointed lobes along the edges.",
+            "pine" to "Look for long, thin needles in little bundles.",
+            "clover" to "Look for three round leaves on one stem.",
+            "dandelion" to "Look for jagged leaves in a flat circle on the ground.",
+            "fern" to "Look for leaves shaped like green feathers.",
+            TUTORIAL to "Look for long, thin blades.",
+        )
+
+        private const val LAST_LEVEL = 3
         private const val NO_TAP = -1L
         private const val RGBA_BYTES = 4
         private const val NANOS_PER_MS = 1_000_000L
