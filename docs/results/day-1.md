@@ -16,6 +16,7 @@ Measured results from the Day-1 go/no-go gate. Every number here was observed, n
 | [day-1/summarize.py](day-1/summarize.py) and [summary.txt](day-1/summary.txt) | Derives every table on this page from the CSVs |
 | [day-1/device-logs.md](day-1/device-logs.md) | Raw logcat lines from every on-device run |
 | [day-1/s07-download-proof.sh](day-1/s07-download-proof.sh) and [s07-download.log](day-1/s07-download.log) | Gemma download proof script and its raw output |
+| [day-1/s07-outage-proof.sh](day-1/s07-outage-proof.sh) and [s07-outage.log](day-1/s07-outage.log) | 60-second airplane-mode outage during a pull, and its raw output |
 
 Photo sets: 176 CC0 iNaturalist plant photos (10 each of oak, pine, maple, sweetgum, fern, clover, dandelion, moss, magnolia, violet, honeysuckle, and the 5 hazards, plus 16 earlier ones), 52 grass photos, 63 non-plant photos (Wikimedia CC0 or public domain: people, pets, vehicles, toys, screens, rocks, soil, walls), and 14 mixed scenes where real vegetation fills much of the frame. Non-photographs (paintings, a floor plan, a sketch, an illustration, logos, diagrams) and duplicate photos were removed by hand; photographs of sculptures stay, since a kid can point the camera at a statue.
 
@@ -216,12 +217,20 @@ The back camera (ID 0, 6.3 mm) reports focus calibration `APPROXIMATE` and no mi
 | Next launch after a bad hash | Pulled the full file again and passed the hash; the failure notification cleared |
 | Sideloaded model, no marker | Hashed once off the main thread in about 5 s; no job scheduled |
 
-The network-loss row isn't a clean Wi-Fi-off test. On this Samsung, neither `svc wifi` nor `cmd wifi` keeps Wi-Fi off from adb; it reconnected within about 10 s. `am kill` also leaves a process running a user-initiated job alive, so the restart happened in the same process.
+The network-loss row above was a short blip: on this Samsung, neither `svc wifi` nor `cmd wifi` keeps Wi-Fi off from adb, and it reconnected within about 10 s in the same process. Airplane mode does hold, so [day-1/s07-outage-proof.sh](day-1/s07-outage-proof.sh) ran a real outage ([s07-outage.log](day-1/s07-outage.log)):
+
+| Step | Result |
+| --- | --- |
+| Fresh pull to 501 MB, app sent home | Job running in process 21090 |
+| Airplane mode on for 60 s | No Wi-Fi network; the system stopped the job for connectivity (reason 7); the part held at 509,671,602 bytes the whole time |
+| Network back, app never opened | The system started the job in a new process (23971) 5 s later; it resumed from the part and finished in 107 s |
+| Result | 2,588,147,712 bytes, SHA-256 matches the pin; one activity start in logcat, the initial launch |
+
+`cmd activity task remove` didn't clear the recents entry from adb, so the app stayed in recents; its process still died while offline, which is the case that matters.
 
 ## Still unmeasured
 
 - The full per-frame verify path on the phone: TinyCLIP twice plus BioCLIP up to twice (S05)
 - Level-2 hint latency (S05)
 - A 20-minute live-camera heat run (S05)
-- A Gemma download through a long Wi-Fi outage with the app swiped away, done by hand (S07)
 - Low-storage handling on the phone; covered by JVM tests only, since the test phone has 337 GB free (S07)
