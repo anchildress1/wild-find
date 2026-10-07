@@ -32,7 +32,9 @@ def pct(values: list[float], q: float) -> float:
 
 
 def spread(values: list[float]) -> str:
-    """p50 / p95 / max, in one line."""
+    """p50 / p95 / max, in one line; "none" for no values."""
+    if not values:
+        return "none"
     return f"p50 {pct(values, 50):.0f}, p95 {pct(values, 95):.0f}, max {max(values, default=float('nan')):.0f}"
 
 
@@ -168,7 +170,8 @@ def summarize(run: Path) -> str:
     # A run killed by OOM, heat, or a crash never logs stop; its numbers end early and must say so.
     if "stop" not in names:
         header.append("WARNING: no stop event; the run ended without a clean close (crash, kill, or still running)")
-    pauses = sum(e["event"] == "paused" for e in events)
+    # Back pauses the activity right before its clean stop; only a pause the run came back from is a gap.
+    pauses = sum(e["event"] == "resumed" for e in events)
     if pauses:
         header.append(f"WARNING: paused {pauses} time(s) (screen off or app left); frames and samples have gaps")
     return "\n".join(

@@ -3,7 +3,7 @@ import json
 
 import pytest
 
-from wild_find_pipeline.gate_summary import found_latencies, main, pct, summarize
+from wild_find_pipeline.gate_summary import found_latencies, main, pct, spread, summarize
 
 FRAME_COLUMNS = [
     "t_ns",
@@ -200,6 +200,17 @@ def test_a_paused_run_is_flagged(run):
         f.write("3,paused,\n4,resumed,\n")
 
     assert "WARNING: paused 1 time(s)" in summarize(run)
+
+
+def test_the_pause_before_a_clean_stop_is_not_a_gap(run):
+    with (run / "events.csv").open("a") as f:
+        f.write("3,paused,\n")
+
+    assert "WARNING" not in summarize(run)
+
+
+def test_a_stat_with_no_values_reads_none():
+    assert spread([]) == "none"
 
 
 def test_capture_lag_needs_a_realtime_sensor_clock(run):
