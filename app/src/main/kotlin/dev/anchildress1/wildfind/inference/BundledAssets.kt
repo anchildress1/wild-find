@@ -3,6 +3,8 @@ package dev.anchildress1.wildfind.inference
 import android.content.res.AssetManager
 import dev.anchildress1.wildfind.core.tensor.FloatMatrix
 import dev.anchildress1.wildfind.core.tensor.Npy
+import dev.anchildress1.wildfind.core.verify.HazardCheck
+import dev.anchildress1.wildfind.core.verify.LabelSet
 import dev.anchildress1.wildfind.core.verify.PlantGate
 import org.json.JSONArray
 import org.json.JSONObject
@@ -11,7 +13,7 @@ import java.nio.ByteBuffer
 import java.nio.channels.FileChannel
 
 /**
- * Models and tables `make assets` bundles into the APK.
+ * Models and tables the APK carries: `make assets` builds most of them; `make labels` commits the label vectors.
  *
  * @property assets the app's asset manager
  */
@@ -47,6 +49,23 @@ class BundledAssets(private val assets: AssetManager) {
         }
     }
 
+    /** PRD verify row 1's hazard rule over the species table. */
+    fun hazardCheck(): HazardCheck = HazardCheck(speciesTable(), speciesLabels().map { it.hazard }.toBooleanArray())
+
+    /** Menu-word and tutorial text vectors from `labels.npy`, with their `labels.json` entries. */
+    fun labels(): LabelSet {
+        val json = JSONObject(String(bytes(LABELS_JSON)))
+        val version = json.getInt("schema_version")
+        require(version == LABELS_SCHEMA) { "labels.json schema_version $version, expected $LABELS_SCHEMA" }
+        val rows = json.getJSONArray("labels")
+        val entries = List(rows.length()) { i ->
+            rows.getJSONObject(i).let {
+                LabelSet.Entry(it.getString("id"), LabelSet.Kind.of(it.getString("kind")), it.getString("scientific"))
+            }
+        }
+        return LabelSet(entries, Npy.floatMatrix(bytes(LABELS_NPY)))
+    }
+
     /**
      * One species-table row.
      *
@@ -72,5 +91,8 @@ class BundledAssets(private val assets: AssetManager) {
         const val PLANT_GATE_LABELS = "plant_gate.json"
         const val SPECIES_TABLE = "species_table.npy"
         const val SPECIES_LABELS = "species_labels.json"
+        const val LABELS_NPY = "labels.npy"
+        const val LABELS_JSON = "labels.json"
+        const val LABELS_SCHEMA = 1
     }
 }

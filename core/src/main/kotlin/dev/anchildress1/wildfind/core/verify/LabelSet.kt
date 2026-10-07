@@ -26,13 +26,25 @@ class LabelSet(val entries: List<Entry>, val vectors: FloatMatrix) {
      */
     data class Entry(val id: String, val kind: Kind, val scientific: String)
 
-    /** Which scoring set a row belongs to. */
-    enum class Kind {
+    /**
+     * Which scoring set a row belongs to.
+     *
+     * @property json the `kind` value in `labels.json`
+     */
+    enum class Kind(val json: String) {
         /** A menu word, scored as a hunt target or candidate. */
-        WORD,
+        WORD("word"),
 
         /** One of the fixed grass-tutorial labels. */
-        TUTORIAL,
+        TUTORIAL("tutorial"),
+        ;
+
+        /** Parses `labels.json` kinds. */
+        companion object {
+            /** The kind named [json]; throws [IllegalArgumentException] for any other value. */
+            fun of(json: String): Kind =
+                requireNotNull(entries.firstOrNull { it.json == json }) { "unknown label kind $json" }
+        }
     }
 
     /** Row of the menu word [word]. */

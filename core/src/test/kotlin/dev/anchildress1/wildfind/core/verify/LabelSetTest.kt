@@ -44,4 +44,11 @@ class LabelSetTest {
         assertThrows<IllegalArgumentException> { set(words + tutorial.drop(1) + Entry("Acer", Kind.TUTORIAL, "Acer")) }
         assertThrows<IllegalArgumentException> { set(words + words.take(1) + tutorial) }
     }
+
+    @Test
+    fun `label kinds parse from labels json and nothing else`() {
+        assertEquals(Kind.WORD, Kind.of("word"))
+        assertEquals(Kind.TUTORIAL, Kind.of("tutorial"))
+        assertThrows<IllegalArgumentException> { Kind.of("hazard") }
+    }
 }

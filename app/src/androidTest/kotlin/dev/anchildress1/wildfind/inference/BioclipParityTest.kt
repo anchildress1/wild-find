@@ -1,6 +1,5 @@
 package dev.anchildress1.wildfind.inference
 
-import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -23,15 +22,15 @@ class BioclipParityTest {
 
     @Test
     fun fixtureEmbeddingMatchesTheLaptopReferenceAndPicksTheFixtureWord() {
-        val bitmap = instrumentation.context.assets.open("reference/fixture.png").use(BitmapFactory::decodeStream)
+        val fixture = testBitmap("reference/fixture.png").pixels()
 
         val loadStart = System.nanoTime()
         val encoder = ImageEncoder(bundled.bioclipModel())
         val loadMs = (System.nanoTime() - loadStart) / 1e6
         val embedding = encoder.use {
-            it.embed(bitmap) // warm-up run, excluded from timing
+            it.embed(fixture) // warm-up run, excluded from timing
             val start = System.nanoTime()
-            it.embed(bitmap).also {
+            it.embed(fixture).also {
                 Log.i(TAG, "load ${"%.0f".format(loadMs)} ms, embed ${(System.nanoTime() - start) / 1_000_000} ms")
             }
         }
