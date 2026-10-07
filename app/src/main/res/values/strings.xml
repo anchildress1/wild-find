@@ -13,4 +13,5 @@
     <string name="download_failed_pin">Hugging Face no longer serves the expected model file. Update wild-find.</string>
     <string name="download_failed_hash">The download arrived damaged and was deleted. Open wild-find on Wi-Fi to start it over.</string>
     <string name="download_failed_disk">Couldn\'t save the download on this phone. Open wild-find again to retry.</string>
+    <string name="download_failed_unexpected">The download hit an unexpected error. Open wild-find again to retry.</string>
 </resources>

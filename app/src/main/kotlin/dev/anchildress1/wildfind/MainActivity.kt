@@ -2,7 +2,6 @@ package dev.anchildress1.wildfind
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,8 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
-import dev.anchildress1.wildfind.download.GemmaDownloadWorker
+import dev.anchildress1.wildfind.download.GemmaDownloadService
 import dev.anchildress1.wildfind.ui.BriarSprite
 
 /** Single-activity host for the Compose UI. */
@@ -27,11 +25,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         // The download starts on its own at launch and never blocks the UI; notifications only show its progress.
         // Once per launch: a rotation must not restart the check.
-        if (savedInstanceState == null) GemmaDownloadWorker.start(this)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) !=
-            PackageManager.PERMISSION_GRANTED
-        ) {
+        if (savedInstanceState == null) GemmaDownloadService.start(this)
+        if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
                 .launch(Manifest.permission.POST_NOTIFICATIONS)
         }

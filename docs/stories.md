@@ -71,7 +71,7 @@ The vestige download broke when Hugging Face moved its redirect CDN (`cas-bridge
 - Re-resolve the redirect on every attempt; signed CDN URLs expire.
 - Preflight with a HEAD: `x-linked-size` and `x-linked-etag` must match the pins, or stop with a clear message before pulling 2.6 GB.
 - Resume from a `.part` file with `Range`; require a 206 whose `Content-Range` starts at the `.part` length, else restart.
-- Run as a WorkManager foreground download (`dataSync`) with a progress notification so it survives the screen turning off. Android 12+ refuses a foreground start from the background, so a retry that can't go foreground waits, and the next app launch restarts it in the foreground.
+- Run as a user-initiated data transfer job (Android 14+, so minSdk is 34) with a progress notification, so it survives the screen turning off and the system reruns it after a dropped network with the app closed. A foreground service can't restart from the background on Android 12+.
 - On failure, show which host failed, so a parent can tell a filtered network from an outage.
 - Store under `noBackupFilesDir`. Never uninstall the app on the test phone; `make install` keeps data.
 
