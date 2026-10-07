@@ -1,5 +1,7 @@
 package dev.anchildress1.wildfind.hint
 
+import android.graphics.Bitmap
+import androidx.core.graphics.createBitmap
 import com.google.ai.edge.litertlm.Backend
 import com.google.ai.edge.litertlm.Content
 import com.google.ai.edge.litertlm.Contents
@@ -7,6 +9,7 @@ import com.google.ai.edge.litertlm.ConversationConfig
 import com.google.ai.edge.litertlm.Engine
 import com.google.ai.edge.litertlm.EngineConfig
 import dev.anchildress1.wildfind.core.hint.HintPrompts
+import java.io.ByteArrayOutputStream
 import java.io.File
 
 /**
@@ -32,6 +35,14 @@ class GemmaHint(model: File, cacheDir: File) : AutoCloseable {
     /** Loads the model; seconds of work. */
     fun load() = engine.initialize()
 
+    /**
+     * Runs one throwaway scene call on a blank frame. The first vision call after a load pays about 3 s of one-time
+     * setup on the S24 Ultra (4.1-4.8 s against 1.3 s warm), so this keeps that off the kid's first hint tap.
+     */
+    fun warmUp() {
+        scene(BLANK_JPEG)
+    }
+
     /** Gemma's raw scene-call reply for a JPEG camera frame; [HintPrompts.parseTags] reads the tags from it. */
     fun scene(jpeg: ByteArray): String {
         require(jpeg.isNotEmpty()) { "empty JPEG" }
@@ -54,5 +65,15 @@ class GemmaHint(model: File, cacheDir: File) : AutoCloseable {
         // Caps on output length, so a rambling reply can't stretch the latency a kid waits through.
         const val TAG_TOKENS = 48
         const val HINT_TOKENS = 64
+        const val BLANK_SIZE = 256
+        const val BLANK_GRAY = 0xFF808080.toInt()
+        const val JPEG_QUALITY = 90
+
+        val BLANK_JPEG: ByteArray by lazy {
+            val bitmap = createBitmap(BLANK_SIZE, BLANK_SIZE).apply {
+                eraseColor(BLANK_GRAY)
+            }
+            ByteArrayOutputStream().also { bitmap.compress(Bitmap.CompressFormat.JPEG, JPEG_QUALITY, it) }.toByteArray()
+        }
     }
 }

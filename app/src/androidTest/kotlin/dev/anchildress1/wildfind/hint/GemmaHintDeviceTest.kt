@@ -26,11 +26,12 @@ class GemmaHintDeviceTest {
 
         GemmaHint(model, context.cacheDir).use { gemma ->
             val loaded = timed { gemma.load() }
+            val warmed = timed { gemma.warmUp() }
             val (scene, sceneMs) = timedResult { gemma.scene(jpeg) }
             val tags = HintPrompts.parseTags(scene)
             val prompt = HintPrompts.levelTwo("oak", "Oaks grow in yards, parks, and along the woods edge.", tags)
             val (hint, hintMs) = timedResult { gemma.hint(prompt) }
-            Log.i(TAG, "load $loaded ms, scene $sceneMs ms $tags from: $scene")
+            Log.i(TAG, "load $loaded ms, warm-up $warmed ms, first scene $sceneMs ms $tags from: $scene")
             Log.i(TAG, "hint $hintMs ms: $hint")
 
             // The fixture is a close-up of oak leaves, so an empty tag list is a valid answer; a reply with no list
