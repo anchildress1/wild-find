@@ -66,7 +66,7 @@ data class GateStatus(
 )
 
 /**
- * One S05 gate-harness run: the real per-frame verify path at about 5 fps, level-2 hints on tap, and memory, heat,
+ * One gate-harness run: the real per-frame verify path at about 5 fps, level-2 hints on tap, and memory, heat,
  * and battery sampled off the analysis thread, all logged by [log].
  *
  * Construct off the main thread: it loads both ONNX models and the species table.
@@ -233,50 +233,54 @@ class GateRun(private val context: Context, private val word: String, val log: G
         hintThread.execute { gemma?.close() }
         hintThread.shutdown()
         // A queued Gemma load plus a hint can outlast the wait under heat; the log says so instead of hiding it.
-        val drained = sampler.awaitTermination(CLOSE_WAIT_S, TimeUnit.SECONDS) &&
-            hintThread.awaitTermination(CLOSE_WAIT_S, TimeUnit.SECONDS)
+        val samplerDone = sampler.awaitTermination(CLOSE_WAIT_S, TimeUnit.SECONDS)
+        val hintsDone = hintThread.awaitTermination(CLOSE_WAIT_S, TimeUnit.SECONDS)
+        val drained = samplerDone && hintsDone
         log.event(now(), if (drained) "stop" else "stop_timeout", word)
         gateEncoder.close()
         bioclip.close()
-        log.close()
+        // A thread still running would write to a closed log and crash; every row is already flushed, so leaving the
+        // files open loses nothing.
+        if (drained) log.close()
     }
 
+    // Model checks, engine setup, load, and warm-up can each fail in ways LiteRT-LM doesn't wrap; every one must
+    // land in events.csv and on screen, never kill the run.
+    @Suppress("TooGenericExceptionCaught")
     private fun loadGemma() {
-        val model = GemmaDownloadService.readyModel(context)
-        if (model == null) {
-            log.event(now(), "gemma_missing", "no verified model on the phone; hints off")
-            state.update { it.copy(gemma = "missing") }
-            return
-        }
-        val start = now()
-        val candidate = GemmaHint(model, context.cacheDir)
+        var candidate: GemmaHint? = null
         try {
-            candidate.load()
-        } catch (e: LiteRtLmJniException) {
-            candidate.close()
+            val model = GemmaDownloadService.readyModel(context)
+            if (model == null) {
+                log.event(now(), "gemma_missing", "no verified model on the phone; hints off")
+                state.update { it.copy(gemma = "missing") }
+                return
+            }
+            val start = now()
+            candidate = GemmaHint(model, context.cacheDir).also { it.load() }
+            log.event(now(), "gemma_loaded", "${ms(now() - start)} ms, pss ${Debug.getPss()} kB")
+            val warmStart = now()
+            candidate.warmUp()
+            log.event(now(), "gemma_warmed", "${ms(now() - warmStart)} ms")
+            gemma = candidate
+            state.update { it.copy(gemma = "ready") }
+        } catch (e: Exception) {
+            candidate?.close()
             log.event(now(), "gemma_error", e.toString())
             state.update { it.copy(gemma = "failed", hint = e.toString()) }
-            return
         }
-        log.event(now(), "gemma_loaded", "${ms(now() - start)} ms, pss ${Debug.getPss()} kB")
-        val warmStart = now()
-        try {
-            candidate.warmUp()
-        } catch (e: LiteRtLmJniException) {
-            log.event(now(), "gemma_error", "warm-up: $e")
-        }
-        log.event(now(), "gemma_warmed", "${ms(now() - warmStart)} ms")
-        gemma = candidate
-        state.update { it.copy(gemma = "ready") }
     }
 
+    // Any failure must settle the future: level 2 waits on it, and a pending one would disable hints for the rest of
+    // the run. The level-2 handler logs it as hint_error.
+    @Suppress("TooGenericExceptionCaught")
     private fun prefetchScene(tapNs: Long, pixels: Pixels) {
         val prefetch = checkNotNull(scene)
-        val model = checkNotNull(gemma) { "level 1 opened without Gemma" }
-        val copied = now()
-        val jpeg = jpeg(pixels)
-        val encoded = now()
         try {
+            val model = checkNotNull(gemma) { "level 1 opened without Gemma" }
+            val copied = now()
+            val jpeg = jpeg(pixels)
+            val encoded = now()
             val reply = model.scene(jpeg)
             val done = now()
             prefetch.complete(
@@ -288,7 +292,7 @@ class GateRun(private val context: Context, private val word: String, val log: G
                     listOf(ms(copied - tapNs), ms(encoded - copied), ms(done - encoded)),
                 ),
             )
-        } catch (e: LiteRtLmJniException) {
+        } catch (e: Exception) {
             prefetch.completeExceptionally(e)
         }
     }
