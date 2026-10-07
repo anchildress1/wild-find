@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <!-- Debug-only S09 probe; launched over adb by make focus-probe, never from the launcher. -->
+        <activity
+            android:name=".FocusProbeActivity"
+            android:exported="true" />
+    </application>
+</manifest>

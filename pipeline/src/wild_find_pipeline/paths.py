@@ -7,6 +7,12 @@ REPO = Path(__file__).resolve().parents[3]
 MODEL_CACHE = REPO / ".models"
 MANIFEST = REPO / "core/src/main/resources/models.properties"
 REFERENCE_DIR = REPO / "app/src/androidTest/assets/reference"
+# Bundled into the APK by app/build.gradle.kts; gitignored, rebuilt by `make assets`.
+GENERATED_ASSETS = REPO / "app/generated/assets"
+# Input hashes of the last good make assets; app/build.gradle.kts refuses to package assets whose inputs changed.
+GENERATED_STAMP = REPO / "app/generated/inputs.json"
+# Teacher text vectors for hazard species the pinned species table lacks; committed so CI never needs the teacher.
+HAZARD_VECTORS = REPO / "pipeline/data/hazard_vectors.json"
 
 
 def pin(model: str, manifest: Path = MANIFEST) -> dict[str, str]:
@@ -40,3 +46,20 @@ def verified_artifact(model: str, cache: Path = MODEL_CACHE, manifest: Path = MA
     if path.stat().st_size != int(pins["bytes"]) or file_sha256(path) != pins["sha256"]:
         raise ValueError(f"{path} does not match its pinned size/SHA-256; run make fetch-models")
     return path
+
+
+def ensure_artifact(model: str, cache: Path = MODEL_CACHE, manifest: Path = MANIFEST) -> Path:
+    """Return the verified cached file for `model`, downloading its pinned revision first when missing or wrong.
+
+    Raises ValueError when the downloaded bytes don't match the pins.
+    """
+    try:
+        return verified_artifact(model, cache, manifest)
+    except ValueError:
+        from huggingface_hub import hf_hub_download
+
+        pins = pin(model, manifest)
+        # The start URL is pinned (repo, revision, file); trust comes from size + SHA-256, never the CDN host.
+        # force_download: a corrupt file whose local metadata matches the pinned commit is otherwise kept as is.
+        hf_hub_download(pins["repo"], pins["file"], revision=pins["revision"], local_dir=cache, force_download=True)
+        return verified_artifact(model, cache, manifest)

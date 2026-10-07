@@ -17,7 +17,8 @@ CACHE="$ROOT/.models"
 PACKAGE="${WILDFIND_PACKAGE:-dev.anchildress1.wildfind.debug}"
 # Matches Context.noBackupFilesDir/models, relative to the app data dir run-as starts in.
 REMOTE_DIR="no_backup/models"
-MODELS=(gemma bioclip)
+# BioCLIP and the plant gate ship inside the APK (make assets); only Gemma is sideloaded.
+MODELS=(gemma)
 
 die() { echo "❌ $*" >&2; exit 1; }
 prop() { sed -n "s/^$1\.$2=//p" "$MANIFEST"; }

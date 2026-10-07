@@ -81,4 +81,27 @@ FocusProbe: id=2 facing=1 calib=1 minFocus=null hyperfocal=null focal=[2.2]
 FocusProbe: id=3 facing=0 calib=1 minFocus=null hyperfocal=null focal=[3.3]
 ```
 
-These are camera characteristics only. No live `CaptureResult.LENS_FOCUS_DISTANCE` was logged, so a usable focus reading is unverified (S09).
+These are camera characteristics only. Live `CaptureResult.LENS_FOCUS_DISTANCE` readings came later from `make focus-probe`; the raw logs are the `focus-probe-run*.log` files here.
+
+## Bundled assets (S06, S08b)
+
+`make device-test` with every model loaded from the APK:
+
+```
+BioclipParity: load 353 ms, embed 45 ms
+BioclipParity: cosine to laptop reference: 0.9999999987512017
+BioclipParity: scores: oak=0.5199, Carolina horsenettle=0.3828, poison oak=0.3753, poison ivy=0.3445, pokeweed=0.3426, poison sumac=0.2938, screen=0.2533, field=0.1873, person=0.1869, pavement=0.1735, lawn=0.1631, weedy garden bed=0.1507
+PlantGateParity: load 220 ms, embed 40 ms
+PlantGateParity: cosine to laptop reference: 0.9999999889085937, plant share 0.9869904087790642
+OK (3 tests)
+```
+
+Same tests after the models switched to memory-mapped, uncompressed APK entries:
+
+```
+BioclipParity: load 115 ms, embed 65 ms
+BioclipParity: cosine to laptop reference: 0.9999999987512017
+PlantGateParity: load 73 ms, embed 30 ms
+PlantGateParity: cosine to laptop reference: 0.9999999889085937, plant share 0.9869904087790642
+OK (3 tests)
+```

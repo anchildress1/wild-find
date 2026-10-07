@@ -7,8 +7,8 @@ Spec of record: `docs/PRD.md`. Work queue: `docs/stories.md`. A change that cont
 | Path | Owns | Rule |
 | --- | --- | --- |
 | `core/` | Game logic: contracts, region, sightings, cache, hunt pick, verify decision, hint guards | Pure Kotlin JVM. No `android.*` imports. Every rule is unit-tested here |
-| `app/` | Compose UI, Rive, CameraX, LiteRT-LM, ONNX Runtime, model download, iNat HTTP | Thin adapters over `core`. Logic that can run on the JVM moves to `core` |
-| `pipeline/` | Build-time menu, fact cards, label embeddings | uv only. Shipped outputs land in `app/src/main/assets/`; test references in `app/src/androidTest/assets/` |
+| `app/` | Compose UI, sprite playback, CameraX, LiteRT-LM, ONNX Runtime, model download, iNat HTTP | Thin adapters over `core`. Logic that can run on the JVM moves to `core` |
+| `pipeline/` | Build-time menu, fact cards, label embeddings | uv only. Committed shipped outputs land in `app/src/main/assets/`; generated bundled models and tables in gitignored `app/generated/assets/` (`make assets`); test references in `app/src/androidTest/assets/` |
 | `assets/source/` | Original art | Reference input. Never edit or regenerate |
 
 ## Hard rules
@@ -24,7 +24,7 @@ Spec of record: `docs/PRD.md`. Work queue: `docs/stories.md`. A change that cont
 ## UI
 
 - Animation-first. Every screen transition and state change is animated; no static form or list screens.
-- Briar (the mascot) and the opener are Rive state machines. Game events drive Rive inputs; Compose never draws Briar's frames.
+- Briar (the mascot) and the opener are finished sprite sheets per the PRD sprite sheet contract. Game events pick the state; Compose plays the frames and never draws or composites Briar itself.
 - 48 dp touch targets, content descriptions, no color-only signal, sunlight contrast.
 - Invoke `/compose-skill` before touching `@Composable` code. Invoke `/litertlm-android-sdk` before touching Gemma code.
 
@@ -35,6 +35,8 @@ Spec of record: `docs/PRD.md`. Work queue: `docs/stories.md`. A change that cont
 - `make setup` once per clone (lefthook + uv sync).
 - Local settings live in `.env` (copy `.env.example`). New variables go in `.env.example` with a one-line comment. Never commit `.env`.
 - Public Kotlin and Python API gets a one-line KDoc/docstring; detekt and ruff `D1` enforce it. Inline comments explain why, never what.
-- `make fetch-models` then `make push-models` sideloads the pinned models to the test phone.
+- `make assets` builds the bundled models and tables into gitignored `app/generated/assets`; every build fails without them. CI runs it with a cache.
+- `make hazard-vectors` and `make reference` pull the 3.9 GB BioCLIP teacher; commit `pipeline/data/hazard_vectors.json` and the references they write. `make assets` and CI never need the teacher.
+- `make fetch-models` then `make push-models` sideloads Gemma to the test phone.
 - Never `adb uninstall` the app on the test phone; it deletes the 2.6 GB model. `make install` keeps data.
 - Check that needs the user (field test, airplane mode, anything physical) → stop and hand it over; never tick it yourself. Automated on-device tests run with `make device-test` when the phone is attached; tick those on a logged pass.

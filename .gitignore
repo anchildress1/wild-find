@@ -40,3 +40,6 @@ keystore.properties
 
 # Local model cache for sideloading
 .models/
+
+# Bundled models and tables from make assets; generated, never committed
+app/generated/

@@ -5,14 +5,18 @@ import ai.onnxruntime.OrtEnvironment
 import ai.onnxruntime.OrtSession
 import android.graphics.Bitmap
 import android.graphics.Color
-import java.io.File
+import java.nio.ByteBuffer
 import java.nio.FloatBuffer
 
-/** BioCLIP 2.5 Mobile image encoder: a 224x224 RGB bitmap in, a unit 1024-d embedding out. */
-class BioclipImageEncoder(modelFile: File) : AutoCloseable {
+/**
+ * ONNX image encoder for BioCLIP 2.5 Mobile and the TinyCLIP plant gate: a 224x224 RGB bitmap in, a unit embedding out.
+ *
+ * Both graphs take an `image` input of plain 0..1 RGB and apply their own normalization.
+ */
+class ImageEncoder(model: ByteBuffer) : AutoCloseable {
     private val env = OrtEnvironment.getEnvironment()
     private val options = OrtSession.SessionOptions()
-    private val session = env.createSession(modelFile.path, options)
+    private val session = env.createSession(model, options)
 
     /** Embeds [bitmap], which must be exactly [SIZE]x[SIZE]; resizing and cropping are the caller's job. */
     fun embed(bitmap: Bitmap): FloatArray {
@@ -33,7 +37,6 @@ class BioclipImageEncoder(modelFile: File) : AutoCloseable {
         options.close()
     }
 
-    // The ONNX graph applies ImageNet normalization itself, so pixels go in as plain 0..1 RGB.
     private fun chwInput(bitmap: Bitmap): FloatBuffer {
         val pixels = IntArray(SIZE * SIZE).also { bitmap.getPixels(it, 0, SIZE, 0, 0, SIZE, SIZE) }
         val plane = SIZE * SIZE

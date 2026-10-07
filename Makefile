@@ -1,4 +1,4 @@
-.PHONY: setup build install device-test fetch-models push-models reference test pipeline-test lint ktlint detekt android-lint pipeline-lint shellcheck actionlint secret-scan ai-checks clean
+.PHONY: setup build install device-test focus-probe assets sprites hazard-vectors fetch-models push-models reference test pipeline-test lint ktlint detekt android-lint pipeline-lint shellcheck actionlint secret-scan ai-checks clean
 
 SHELL := /bin/bash
 
@@ -30,8 +30,9 @@ setup:
 	lefthook install
 	$(UV) sync
 
+# Assembles the instrumented tests too, so a broken on-device test fails here, not on the phone.
 build:
-	$(GRADLE) :app:assembleDebug
+	$(GRADLE) :app:assembleDebug :app:assembleDebugAndroidTest
 
 # -r keeps app data, so a sideloaded model survives reinstalls.
 install: build
@@ -43,15 +44,37 @@ device-test: install
 	adb install -r -d -t app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
 	@adb shell am instrument -w $(WILDFIND_PACKAGE).test/androidx.test.runner.AndroidJUnitRunner | tee /dev/stderr | grep -qE '^OK \([1-9][0-9]* tests?\)'
 
+# S09: logs live autofocus distance (diopters) from the back camera; Ctrl-C to stop.
+# Each run gets its own dated file so no run overwrites another; pass FOCUS_LOG=... to choose one.
+FOCUS_LOG ?= docs/results/$(shell date +%F)/focus-probe-$(shell date +%H%M%S).log
+focus-probe: install
+	mkdir -p $(dir $(FOCUS_LOG))
+	adb logcat -c
+	adb shell am start -n $(WILDFIND_PACKAGE)/dev.anchildress1.wildfind.FocusProbeActivity
+	adb logcat -s FocusProbe:I | tee $(FOCUS_LOG)
+
 fetch-models:
 	./scripts/models.sh fetch
 
 push-models:
 	./scripts/models.sh push
 
-# Day-1 parity reference for the on-device BioCLIP check; needs make fetch-models first.
-reference:
+# Bundled models and tables into app/generated/assets (gitignored); every app build needs them.
+assets:
+	$(UV) run --group reference python -W error -m wild_find_pipeline.assets
+
+# Repacks Briar's source sprite sheets into the committed app/src/main/assets/briar/.
+sprites:
+	$(UV) run python -W error -m wild_find_pipeline.sprites
+
+# Rebuilds the committed hazard_vectors.json; pulls the 3.9 GB BioCLIP teacher (as does reference), so CI runs neither.
+hazard-vectors:
+	$(UV) run --group reference python -W error -m wild_find_pipeline.hazard_vectors
+
+# Parity references for the on-device tests: BioCLIP (Day 1) and the bundled plant gate.
+reference: assets
 	$(UV) run --group reference python -W error -m wild_find_pipeline.reference
+	$(UV) run --group reference python -W error -m wild_find_pipeline.gate_reference
 
 test: pipeline-test
 	$(GRADLE) :core:test :core:koverVerify

@@ -107,7 +107,7 @@ def run_gate(monkeypatch, tmp_path, winner: int | None) -> int:
     labels = 1 + 5 + 6
     monkeypatch.setattr(reference, "REFERENCE_DIR", tmp_path / "ref")
     monkeypatch.setattr(reference, "fetch_fixture", lambda: Image.new("RGB", (300, 400)))
-    monkeypatch.setattr(reference, "verified_artifact", lambda model: tmp_path / "model.onnx")
+    monkeypatch.setattr(reference, "ensure_artifact", lambda model: tmp_path / "model.onnx")
     image = np.zeros(labels) if winner is None else np.full(labels, np.nan) if winner == -1 else np.eye(labels)[winner]
     monkeypatch.setattr(reference, "embed_image", lambda path, x: image)
     monkeypatch.setattr(reference, "embed_texts", lambda texts: np.eye(len(texts)))

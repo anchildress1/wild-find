@@ -74,13 +74,13 @@ Every call below is settled; open items live in Open Questions.
 | Local filter | A word is eligible with 25+ research-grade sightings in the region for the current calendar month, across all available years |
 | Hunt shape | First-ever hunt: grass tutorial, then 3 targets; later hunts: 3 targets; targets picked by sighting-weighted random |
 | Look-alikes | Pass automatically; never taught in v1 |
-| Framing | Live camera with a center reticle; "walk closer" when the autofocus distance, in diopters (0 = infinity, larger = nearer), is below the close-range threshold; no auto-capture without a focus reading; no Gemma boxes |
+| Framing | Live camera with a center reticle; "walk closer" when the focused autofocus distance in diopters (0 = infinity, larger = nearer) times the zoom ratio is under 2.0; pinch zoom allowed; no auto-capture without a focused reading; no Gemma boxes |
 | Scoring | One star per find; one leave-it star when the plant is clearly still rooted |
 | Hints | Three levels; Gemma reads the scene; facts only from fact cards; 20-word guard |
 | Fact cards | Gemma drafts from Wikipedia; Claude fact-checks at build time in a manual Claude Code pass; the post discloses it |
 | Location | Android coarse location only, rounded to whole degrees; the device is in a region only when its rounded key equals that region's key; the query always sends the region center, never device coordinates; manual region pick supported |
 | Images | Category illustrations in v1; licensed photos in v3 |
-| UI | Animation-first; Jetpack Compose hosts camera and chrome; Rive state machines animate the opener and Briar, the mascot; no React |
+| UI | Animation-first; Jetpack Compose hosts camera and chrome and plays sprite sheets for the opener and Briar, the mascot; no Rive, no React |
 | Distribution | GitHub Release APK with BioCLIP Mobile and the TinyCLIP plant gate inside; Gemma downloads on first launch; outdoor demo video |
 | Credits | README and About screen credit Gemma, BioCLIP 2.5 Mobile, BioCLIP 2.5, TinyCLIP, OpenCLIP, iNaturalist, and Wikipedia |
 | Prize categories | Best Use of Gemma in; DigitalOcean dropped |
@@ -129,7 +129,7 @@ Ten P0s ship the hunt; one P1 follows; four P2s shape the design now. Requiremen
 | R6 | Hints | Tap for a hint; levels 1 and 3 are precomputed from the fact card at hunt start; level 2 reads the current camera frame at tap time, with no separate hint photo; guards reject the target name, "I see", "there is", numbers not on the card, and anything over 20 words; retry once, then a template hint |
 | R7 | Privacy | Android coarse location permission only; no fine location requested; coordinates rounded again before the query; no photo or precise location leaves the device; no account; no analytics |
 | R8 | Offline | All three models on-device; a cached hunt completes in airplane mode; with no cache and no network, the bundled West Georgia fallback list runs the hunt |
-| R9 | Model delivery | Gemma is the only download: pinned in Data Contracts; free storage checked before download, with a clear message showing the space needed; Wi-Fi only; resumable; progress shown; SHA-256 verified before load. Verify works before the download finishes; only level-2 hints wait |
+| R9 | Model delivery | Gemma is the only download: pinned in Data Contracts; starts on its own at first launch while the opener plays; free storage checked before download, with a clear message showing the space needed; Wi-Fi only; resumable; progress shown; SHA-256 verified before load. Verify works before the download finishes; only level-2 hints wait |
 | R15 | Hunt complete | The last target passes, a short success animation plays, the stars show, then Hunt Again or Home; only the current hunt's state persists |
 
 ### P1: Fast follow
@@ -155,7 +155,7 @@ Day-1 measurements on the test phone are in hole 4; heat and hint latency are st
 | --- | --- | --- |
 | Privacy | No photo or precise location leaves the device; gameplay requests carry only coarse region coordinates plus ordinary request metadata such as IP address | Network log on the test phone |
 | Offline | A full hunt runs in airplane mode from the cache or the bundled fallback list | Field test |
-| Verify latency | Each analyzed live frame under 200 ms (TinyCLIP on the reticle crop and full frame, plus BioCLIP); the first eligible frame to Found under 1.5 s | Gate harness (S05) |
+| Verify latency | Each analyzed live frame under 200 ms (TinyCLIP on the reticle crop and full frame, plus BioCLIP on up to both); the first eligible frame to Found under 1.5 s | Gate harness (S05) |
 | Hint latency | Under 5 s for level 2; levels 1 and 3 are precomputed (unmeasured) | Day-1 gate |
 | Download size | Gemma 2,588,147,712 bytes, fetched after install; the APK carries BioCLIP (46,986,589 bytes), the plant gate (about 33 MB), and the species table (about 17.5 MB) | Day-1 gate |
 | Storage | Free space checked before the download starts | Day-1 gate |
@@ -315,7 +315,7 @@ icon\_category is one of tree, flower, fern, grass, vine, shrub, moss, other. ve
 
 The build-time text encoder is pinned too, laptop only: BioCLIP 2.5 ViT-H, imageomics/bioclip-2.5-vith14 @ 6e3d04e3d6522012c88181085c5ae666e14c45cd.
 
-Gemma downloads from `https://huggingface.co/<repo>/resolve/<revision>/<file>`; the build fetches BioCLIP from the same URL shape. Check free storage first. Integrity comes from the SHA-256 above, read from the Hugging Face file listing on October 5 and 6, 2026, never from a displayed size. fp32 only: on the test phone, ONNX Runtime returned NaN for BioCLIP's fp16 file. Bundled models are generated build assets, never committed.
+Gemma downloads from `https://huggingface.co/<repo>/resolve/<revision>/<file>`; the build fetches BioCLIP from the same URL shape. Check free storage first. Integrity comes from the SHA-256 above, read from the Hugging Face file listing on October 5 and 6, 2026, never from a displayed size. fp32 only: on the test phone, ONNX Runtime returned NaN for BioCLIP's fp16 file. Bundled models are generated build assets, never committed; the build regenerates them, and CI caches them. Text vectors that need the 3.9 GB teacher (labels.npy, appended hazard rows) are committed instead, so CI never downloads it.
 
 **Cache entry**
 
@@ -325,11 +325,12 @@ Gemma downloads from `https://huggingface.co/<repo>/resolve/<revision>/<file>`; 
   "menu_version": "2026-10-07",
   "region": "34_-85",
   "month": 10,
+  "radius_km": 75,
   "sightings": { "47851": 272 }
 }
 ```
 
-A mismatch on schema\_version, menu\_version, region, or month discards the entry and refetches.
+radius\_km is 75, or 150 after the widen, so widened counts never pass as 75 km counts. A mismatch on schema\_version, menu\_version, region, month, or radius\_km discards the entry and refetches.
 
 **Model inputs and outputs**
 
@@ -362,12 +363,12 @@ Verify runs on live camera frames, about 5 per second, with no Gemma call. Each 
 | --- | --- | --- | --- |
 | 1 | In a region TinyCLIP calls a plant (the reticle crop, the full frame, or both), a hazard species ranks in the top 5 of the species table | "That might be a plant we leave extra space around." | No |
 | 2 | TinyCLIP says the reticle crop isn't a plant | "Point the camera at a plant" | No |
-| 3 | No focus reading yet | "Tap the plant to focus" | No |
-| 4 | Autofocus distance is below the close-range threshold in diopters, so the subject is too far | "Walk closer" | No |
+| 3 | No focused reading: autofocus state is neither focused nor locked (passive focused or focused locked), or the distance is missing or negative | "Tap the plant to focus" | No |
+| 4 | Focus distance in diopters times the zoom ratio is under 2.0, so the subject looks too small | "Walk closer" | No |
 | 5 | The target is top-1 on the reticle crop, at or above its verify\_floor and past the margin if calibration adopts one, for 3 frames in a row | Auto-capture, then Found | Yes |
 | 6 | Anything else | Reticle guidance ("Put the plant in the circle"), with the hint button | No |
 
-No live focus distance has been read yet; the back camera only reports its focus calibration as approximate (Day 1). The close-range threshold is set on the device (hole 19). BioCLIP target labels per frame: this hunt's targets and other locally eligible words; hazards score against the species table. The grass tutorial skips row 1 and scores only its fixed label set (R3). A missed hazard never reads as safe: "Look. Photograph. Leave it where it grows." stays the rule on every screen.
+The close-range rule was set on the test phone on Day 1 (S09): `LENS_FOCUS_DISTANCE × CONTROL_ZOOM_RATIO >= 2.0`, read only while autofocus reports focused. Unfocused frames park the lens near 0.2 diopters, which would read as far. BioCLIP target labels per frame: this hunt's targets and other locally eligible words; hazards score against the species table. The grass tutorial skips row 1 and scores only its fixed label set (R3). A missed hazard never reads as safe: "Look. Photograph. Leave it where it grows." stays the rule on every screen.
 
 ```
 pass = target_score > runner_up_score          // top-1 is always required
@@ -403,17 +404,18 @@ Only the current hunt's state persists; there is no history, streak, or sharing.
 
 ## Visual System
 
-The final generated assets are the source of truth for Briar's look; the Rive rig is built from the layered rigging sheet; frame-by-frame sprite sheets are out because AI-drawn frames drift in proportion and can't play as cycles.
+Briar and the opener play finished sprite sheets, one per state. A Rive rig was dropped on Oct 6: the rig sheets' parts were drawn at mismatched sizes and didn't assemble into a usable Briar, and the sheets were removed.
+
+**Sprite sheet contract:** each state is `app/src/main/assets/briar/<state>.png` plus `<state>.json`. The PNG is a grid of equal frames, left to right, then top to bottom, on a transparent background. The JSON is `{"frame_width": 512, "frame_height": 512, "frames": 12, "columns": 4, "fps": 12, "loop": true}`. States: `welcome`, `searching`, `found`, `retry`, `complete`; until their art exists, every state plays `idle`. A looping state's last frame must flow into its first. The build finds each source frame by its outline and plants every frame on the same feet point, so a source sheet's frames needn't sit on an even grid.
 
 | Asset | Used in | File |
 | --- | --- | --- |
 | Logo | Splash, About | Path pending (Open Questions) |
-| Briar body parts | Head, torso (front, back, sides), limbs, paws, tail segments, scarf, backpack, props; source for the Rive rig | assets/source/wild-find-briar-master-rig-1.png |
-| Briar face parts | Eyes, irises, pupils, lids, brows, mouths and interiors, teeth, noses, blush, whiskers | assets/source/wild-find-briar-master-rig-2.png |
 | Concept board | Poses, icon ideas, palette; reference only, broken alpha | assets/source/wild-find-sprite-1.png |
-| Briar rig | Rive state machine: welcome; searching or hint; success or found; retry or not quite; hunt complete | Path pending |
+| Briar idle loop | 16-frame rest-and-blink idle, source for `idle`; plays for every state until per-state art exists | assets/source/briar-rest-blink-16.png |
+| Briar sprite sheets | Per-state sheets: welcome; searching or hint; found; retry; hunt complete | app/src/main/assets/briar/ (only `idle` so far) |
 | Category icons | One per icon\_category: tree, flower, fern, grass, vine, shrub, moss, other | Path pending |
-| Opener art | Bees and snakes, with poison ivy drawn in | Path pending |
+| Opener art | Bees and snakes, with poison ivy drawn in; a sprite sheet under the same contract | Path pending |
 
 - Animation-first interactions; illustrations, not licensed photos, in v1
 - Kid copy principle: "Look. Photograph. Leave it where it grows."
@@ -430,7 +432,7 @@ Every failure degrades to a playable hunt or a plain message; none crash or stal
 | iNat unreachable, matching cache exists | Use the cached entry |
 | iNat unreachable, no matching cache | Use the bundled West Georgia fallback list |
 | iNat returns 429 | Wait per Retry-After, then use the cache or the fallback list |
-| Cache schema or menu version mismatch | Discard the entry and refetch |
+| Cache entry mismatch (schema, menu, region, month, or radius) | Discard the entry and refetch |
 | Fewer than 3 eligible words | Widen the radius to 150 km once, one extra query of up to three requests; still short, show "wild-find covers west Georgia for now" |
 | Not enough free storage | Stop before downloading and show the space needed |
 | Model download fails | Resume where it stopped; Wi-Fi only |
@@ -449,8 +451,9 @@ Each choice below buys speed or privacy for v1 and names the point where it gets
 | --- | --- | --- |
 | BioCLIP 2.5 Mobile over full BioCLIP | Trained on plants only; misses 28% at species level | Medium difficulty ships, or the holdout set misses 90% |
 | Species-table hazard rule | 17.5 MB more in the APK and one 4,272-row dot product per region; misses 4 of 52 Day-1 hazard photos | Holdout or field test shows a missed hazard rate above 10% |
-| TinyCLIP plant gate before BioCLIP | A third model: about 33 MB in the APK and unmeasured phone latency (S05); on the laptop it kept 176 of 176 plant photos and passed 2 of 63 non-plants on the full frame (175 and 3 on the reticle crop) | Holdout non-plant false-pass rate over 5% |
+| TinyCLIP plant gate before BioCLIP | A third model: about 33 MB in the APK and 40 ms per embedding on the test phone, twice per frame (S06); on the laptop it kept 176 of 176 plant photos and passed 2 of 63 non-plants on the full frame (175 and 3 on the reticle crop) | Holdout non-plant false-pass rate over 5% |
 | Deterministic framing, no Gemma boxes | Approximate focus distance is coarse; clutter inside the reticle can lower the target's score | Holdout false-pass rate over 5%, or the field test shows wrong "walk closer" calls |
+| Gemma downloads after install, not inside the APK | A second download after the app install; mitigated by starting it during the opener, and verify never waits on it. Bundling isn't possible: GitHub Releases caps each file at 2 GiB (2,147,483,648 bytes) and Gemma alone is 2,588,147,712. It would also store Gemma twice, because LiteRT-LM loads from a file path (`EngineConfig(modelPath)`) and an APK asset has none, so the app would copy it out: about 5.2 GB kept after install instead of 2.6 GB | Distribution moves to an app store with asset delivery |
 | One iNaturalist query at app time | Needs signal once per region and month; coarse coordinates and request metadata reach iNaturalist | A fully offline mode is required |
 | Menu built for one region | Testers outside west Georgia get the coverage message | A second region: rerun the build gates for it |
 | Fixed 3-target hunt | Less variety per hunt | Field tests show hunts end too fast |
@@ -467,15 +470,15 @@ No blockers remain; every hole below closes or falls back during the Day-1 gate 
 | # | Hole | Why it matters | Fix | Severity |
 | --- | --- | --- | --- | --- |
 | 3 | Label text format | Day 1: with common names, a white oak photo scored "poison oak" top-1 on both the teacher and the mobile model; scientific names put oak top-1 on both | BioCLIP labels embed as "a photo of <scientific name>."; confirm on the calibration set | High |
-| 4 | Latency | Day 1 measured parts, not the whole per-frame path: one BioCLIP embedding takes 58 to 60 ms (one run 132 ms); TinyCLIP on the phone is unmeasured. A live frame now runs TinyCLIP twice plus BioCLIP up to twice, so the 200 ms target is unproven. Gemma (hints only) loads in 4.0 s warm, 9.9 s first ever, peaks at 2.9 GB, and took 2.3 to 2.9 s per warm vision call. Level-2 hint latency is unmeasured | The gate harness (S05) benchmarks the full per-frame verify path and the hint call on the phone; if a frame runs over 200 ms, analyze fewer frames a second | High |
+| 4 | Latency | Day 1 measured parts, not the whole per-frame path: one BioCLIP embedding takes 45 to 65 ms (one run 132 ms) and one TinyCLIP embedding 40 ms. A live frame now runs TinyCLIP twice plus BioCLIP up to twice, so the 200 ms target is unproven. Gemma (hints only) loads in 4.0 s warm, 9.9 s first ever, peaks at 2.9 GB, and took 2.3 to 2.9 s per warm vision call. Level-2 hint latency is unmeasured | The gate harness (S05) benchmarks the full per-frame verify path and the hint call on the phone; if a frame runs over 200 ms, analyze fewer frames a second | High |
 | 5 | Kids read hints on screen | Reading pulls eyes down, against the theme | Read hints aloud with Android's on-device text-to-speech; confirm an offline voice on the test phone | High |
 | 8 | Loose Gemma boxes | Resolved on Day 1: verify no longer uses Gemma boxes | None | Low |
 | 10 | Heat and battery | Live BioCLIP at about 5 frames a second plus the camera; Gemma only on hint taps | The gate harness runs a 20-minute live-camera session | Medium |
 | 12 | Home Wi-Fi download | A Vestige model download broke when Hugging Face moved its redirect CDN and the app had the old host pinned; filtered networks can also block the CDN | Pin the Hugging Face start URL, never the CDN host; trust bytes + SHA-256; re-resolve redirects on resume; the Day-1 gate runs the full download and an interrupted resume on the test phone | High |
 | 13 | No telemetry | Field failures stay invisible by design | Debug builds only: a local log the developer can export | Medium |
-| 17 | BioCLIP Mobile vs non-plant labels | Laptop side resolved on Day 1: 16 of 63 free non-plant photos scored a plant target top-1 on the reticle crop (20 of 63 on the full frame), and a pair of sneakers scored oak (0.605) above a real oak (0.572). TinyCLIP ViT-8M kept 176 of 176 plant photos and passed 2 of 63 non-plants on the full frame, so it gates every frame first. Open until the phone matches the laptop: BioCLIP fp16 was right on the laptop and NaN on the phone | Export, ship, and pass TinyCLIP phone parity (S06) before verify depends on it | High |
+| 17 | BioCLIP Mobile vs non-plant labels | Laptop side resolved on Day 1: 16 of 63 free non-plant photos scored a plant target top-1 on the reticle crop (20 of 63 on the full frame), and a pair of sneakers scored oak (0.605) above a real oak (0.572). TinyCLIP ViT-8M kept 176 of 176 plant photos and passed 2 of 63 non-plants on the full frame, so it gates every frame first. The fp32 export now matches the laptop on the phone (cosine 0.99999999, same plant share) and reproduces all 307 Day-1 reticle verdicts | Resolved (S06) | Low |
 | 18 | Gemma file variant | Resolved on Day 1: the pinned generic file loads and runs on the GPU backend, so the GPU-only build isn't needed | Keep the pinned file | Low |
-| 19 | Unverified focus distance | Day 1 logged only camera metadata: focus calibration approximate, no minimum focus distance. No live LENS_FOCUS_DISTANCE reading exists yet, and verify rows 3 and 4 depend on one | Log live readings at near and far plants on the test phone (S09) and set the threshold from them; if no usable reading arrives, verify keeps rejecting (fail closed) and S34 waits for another close-range signal measured on the phone | High |
+| 19 | Approximate focus distance | Resolved on the test phone for a can at desk range (S09): focused readings split far (1.8 or less) from closer (2.0 or more) in three runs, and every lens reports about the same distance as zoom switches lenses. Unmeasured outdoors on plants and beyond about 1 m | Rule: diopters × zoom ≥ 2.0 while focused; recheck wide-shot calls in the field test (S52) | Medium |
 
 ## Success Metrics
 
@@ -496,7 +499,7 @@ Two questions block the build; three can wait.
 
 **Blocking**
 
-- [ ] Visual: who builds Briar's Rive rig and the opener, and by when? Logo and category icons still need paths
+- [ ] Visual: when do Briar's five sprite sheets and the opener sheet land? Logo and category icons still need paths
 - [ ] Legal: do coarse location plus whole-degree rounding clear the precise-geolocation bar?
 
 **Non-blocking**

@@ -108,7 +108,7 @@ A frame is a plant when the plant labels' combined softmax share is over 0.5 (sc
 | ViT-40M/32 | Full frame | 175 | 52 | 2 | 5 |
 | ViT-40M/32 | Reticle | 176 | 52 | 3 | 5 |
 
-The table counts photos that pass as plants. Mixed scenes passing is correct when vegetation fills the frame. These are laptop numbers; TinyCLIP parity and latency on the phone are unmeasured (S05, S06).
+The table counts photos that pass as plants. Mixed scenes passing is correct when vegetation fills the frame. These are laptop numbers; the phone matches them (below).
 
 ## Hazard warnings
 
@@ -160,12 +160,49 @@ Grass is a kid's first target. On 52 CC0 grass photos (29 near the region, many 
 
 ## Camera
 
-Day 1 logged camera metadata only, not a live focus reading. The back camera (ID 0, 6.3 mm) reports focus calibration `APPROXIMATE` and no minimum focus distance or hyperfocal distance. Whether it returns a usable live `LENS_FOCUS_DISTANCE` is unverified; S09 logs live readings and sets the "walk closer" threshold.
+The back camera (ID 0, 6.3 mm) reports focus calibration `APPROXIMATE` and no minimum focus distance or hyperfocal distance. Live readings came from the debug focus probe (`make focus-probe`, CameraX 1.6.2): back camera, preview only, one log line every 250 ms. Subject: a soda can on a desk, indoors; the USB cable limited range to about 1 m. One tap to focus per shot; values below are the steady reading while autofocus reported `FOCUSED_LOCKED`.
+
+| Shot | Run 1 | Run 2 portrait | Run 2 landscape | Run 3 portrait |
+| --- | --- | --- | --- | --- |
+| Far | 1.80 | 1.32 | 1.28 | 1.00 |
+| Closer (can is the main thing) | 2.53 | 2.09 | 2.53 | 1.99 |
+| Closest, whole can in frame | 3.97 | 6.37 | 5.38 | not tapped |
+| Too close | not taken | 10.0 | 10.0 | 8.20 |
+
+- Run 1's labels come from the tester's description afterward; runs 2 and 3 were taken in the order shown.
+- Far is 1.80 or less and closer is 1.99 or more in every run. Rule chosen: closer at 2.0 or more.
+- 10.0 is the lens's near limit; the image is blurry there.
+- Unfocused frames (`PASSIVE_UNFOCUSED`, about a third of run 1) park the lens near 0.20 to 0.25 diopters whatever the subject distance, and the first frames read -1.0. Only focused or locked readings count.
+- The phone's distance scale is off: about 3 ft (0.9 m) read 1.8 diopters (0.55 m).
+
+**Zoom run** (run 4, standing still at about 1 m, pinch zoom from far-looking to full frame):
+
+| Physical lens | Zoom | Diopters | Diopters × zoom |
+| --- | --- | --- | --- |
+| 5 (main) | 1.0 | 1.25 | 1.25 |
+| 5 (main) | 2.7 | 0.80 to 1.25 | 2.2 to 3.4 |
+| 6 | 3.8 | 0.78 | 3.0 |
+| 7 | 10.0 | 1.13 | 11.3 |
+
+- Zoom switches physical lenses; each still reports about the same distance (0.76 to 1.25), so diopters × zoom tracks how big the subject looks.
+- Rule: diopters × zoom ≥ 2.0 while focused, else "walk closer".
+- Raw logs: [focus-probe-run1.log](day-1/focus-probe-run1.log), [run 2](day-1/focus-probe-run2-can.log), [run 3](day-1/focus-probe-run3-soda.log), [run 4](day-1/focus-probe-run4-zoom.log). Not measured: plants, outdoors, beyond about 1 m (S52).
+
+## Bundled plant gate and species table on the phone (S06, S08b)
+
+`make assets` exports TinyCLIP ViT-8M/16's image encoder to `plant_gate.onnx` (fp32, 33,730,790 bytes, CLIP normalization baked in; torch 2.14.1 dynamo exporter, Transformers 5.19.0) and writes `plant_gate.json` (17 gate prompts, logit scale 50.0043). It also builds the species table: the pinned 4,271 rows plus *Toxicodendron pubescens*, 7 rows flagged as hazards (*Toxicodendron diversilobum*, *radicans*, *rydbergii*, *vernix*, *pubescens*, *Phytolacca americana*, *Solanum carolinense*). All five files load from the APK.
+
+| Check | Result |
+| --- | --- |
+| Export vs the Day-1 measurement path, on all 307 Day-1 photos (reticle crop) | largest plant-share difference 0.0000024; 0 verdict flips ([check_plant_gate_export.py](day-1/check_plant_gate_export.py)) |
+| Fixture plant share: laptop export, Day-1 path, phone | 0.986990, 0.986990, 0.986990 |
+| Phone vs laptop embedding cosine | 0.9999999889 |
+| Plant gate on the phone | load 220 ms read into the heap, 73 ms memory-mapped; one embedding 30 to 40 ms |
+| BioCLIP on the phone, loaded from the APK | load 353 ms read into the heap, 115 ms memory-mapped (128 to 138 ms from a sideloaded file); one embedding 45 to 65 ms; cosine 0.9999999988 |
 
 ## Still unmeasured
 
 - The full per-frame verify path on the phone: TinyCLIP twice plus BioCLIP up to twice (S05)
 - Level-2 hint latency (S05)
 - A 20-minute live-camera heat run (S05)
-- TinyCLIP parity on the phone (S06)
 - The full Gemma download, resume, and low-storage handling (S07)
