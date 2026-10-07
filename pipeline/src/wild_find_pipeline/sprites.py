@@ -13,7 +13,7 @@ from wild_find_pipeline.paths import REPO
 SOURCE = REPO / "assets/source"
 OUT = REPO / "app/src/main/assets/briar"
 # name: (source file, columns, rows, fps)
-SHEETS = {"idle": ("briar-sprite-16.png", 4, 4, 8)}
+SHEETS = {"idle": ("briar-rest-blink-16.png", 4, 4, 8)}
 # Rows of each frame's lowest pixels that count as its feet.
 FEET_ROWS = 24
 # Soft fur edges sit outside the alpha > 128 outline; grow the outline this far to keep them.
