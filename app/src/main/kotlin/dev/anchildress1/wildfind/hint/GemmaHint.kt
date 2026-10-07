@@ -15,7 +15,7 @@ import java.io.File
 /**
  * Gemma 4 E2B on LiteRT-LM for level-2 hints: one engine per session, a fresh conversation per call.
  *
- * Text and vision both run on the GPU, as measured on Day 1 (S04). Every call blocks for seconds; never call one on
+ * Text and vision both run on the GPU, as measured on Day 1. Every call blocks for seconds; never call one on
  * the main thread.
  *
  * @param model the verified `.litertlm` file

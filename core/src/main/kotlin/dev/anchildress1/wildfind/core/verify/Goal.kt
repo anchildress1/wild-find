@@ -26,7 +26,7 @@ sealed interface Goal {
  * @param labels `labels.npy`
  * @param target the target's row
  * @param candidates rows scored this frame: the hunt's targets and other locally eligible words, target included
- * @param floor the target's verify_floor; null means no floor until calibration (S50)
+ * @param floor the target's verify_floor; null means no floor until calibration sets one
  * @param margin the menu's runner-up margin; null means top-1 alone decides
  */
 class TargetGoal(

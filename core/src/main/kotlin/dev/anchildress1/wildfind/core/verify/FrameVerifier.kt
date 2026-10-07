@@ -128,7 +128,7 @@ class FrameVerifier(
         )
     }
 
-    // fp16 BioCLIP returned NaN on the phone's ARM CPU (S03); a NaN embedding would rank every hazard first.
+    // fp16 BioCLIP returned NaN on the phone's ARM CPU on Day 1; a NaN embedding would rank every hazard first.
     private fun embed(encoder: ImageEmbedder, pixels: Pixels, what: String): FloatArray =
         encoder.embed(pixels).also { v -> check(v.all(Float::isFinite)) { "$what embedding is not finite" } }
 }

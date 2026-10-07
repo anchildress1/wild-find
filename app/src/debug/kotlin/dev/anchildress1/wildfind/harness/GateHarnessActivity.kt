@@ -39,7 +39,7 @@ import java.util.concurrent.Executors
 import kotlin.concurrent.thread
 
 /**
- * Debug-only S05 gate harness: the live verify path, level-2 hints, memory, and heat, logged for `make gate-pull`.
+ * Debug-only gate harness: the live verify path, level-2 hints, memory, and heat, logged for `make gate-pull`.
  *
  * Launched over adb by `make gate-harness` with the extra [EXTRA_WORD].
  */
