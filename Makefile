@@ -1,4 +1,4 @@
-.PHONY: setup build install device-test focus-probe assets sprites hazard-vectors labels crop-reference fetch-models push-models reference test pipeline-test lint ktlint detekt android-lint pipeline-lint shellcheck actionlint secret-scan ai-checks clean
+.PHONY: setup build install device-test focus-probe assets sprites hazard-vectors labels crop-reference gate-harness gate-pull fetch-models push-models reference test pipeline-test lint ktlint detekt android-lint pipeline-lint shellcheck actionlint secret-scan ai-checks clean
 
 SHELL := /bin/bash
 
@@ -52,6 +52,19 @@ focus-probe: install
 	adb logcat -c
 	adb shell am start -n $(WILDFIND_PACKAGE)/dev.anchildress1.wildfind.FocusProbeActivity
 	adb logcat -s FocusProbe:I | tee $(FOCUS_LOG)
+
+# S05 gate harness: the live verify path at about 5 fps, hint taps, memory, and heat, logged on the phone.
+# GATE_WORD is a menu word, or grass for the tutorial. Back ends a run.
+GATE_WORD ?= oak
+gate-harness: install
+	adb shell am start -n $(WILDFIND_PACKAGE)/dev.anchildress1.wildfind.harness.GateHarnessActivity --es word $(GATE_WORD)
+
+# Copies every harness run off the phone and writes summary.txt beside each run's raw CSVs.
+GATE_DIR ?= docs/results/$(shell date +%F)/gate
+gate-pull:
+	mkdir -p $(GATE_DIR)
+	adb pull /sdcard/Android/data/$(WILDFIND_PACKAGE)/files/gate/. $(GATE_DIR)
+	$(UV) run python -W error -m wild_find_pipeline.gate_summary $(GATE_DIR)
 
 fetch-models:
 	./scripts/models.sh fetch

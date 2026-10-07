@@ -8,7 +8,7 @@ wild-find sends kids 8 and up outside to find and photograph plant groups common
 
 |  |  |
 | --- | --- |
-| Platform | Native Android, Kotlin; one Android test phone |
+| Platform | Native Android, Kotlin; two test phones: Samsung Galaxy S24 Ultra and Google Pixel 9 |
 | Models | TinyCLIP ViT-8M gates plant vs not-plant and BioCLIP 2.5 Mobile verifies the plant group, both live in the camera; Gemma 4 E2B writes level-2 hints |
 | Network | One iNaturalist query per hunt, requiring at most three paginated HTTP requests, sent with coarse region coordinates |
 | Region | West Georgia region, key 34\_-85: a 75 km radius around (34, -85) that covers Carrollton |
@@ -62,7 +62,7 @@ Every call below is settled; open items live in Open Questions.
 | Area | Decision |
 | --- | --- |
 | Audience | Kids 8 and up; no taxonomy jargon in the UI |
-| Platform | Native Android in Kotlin; one Android test phone; no iOS; no Vestige code |
+| Platform | Native Android in Kotlin; two test phones, Samsung Galaxy S24 Ultra and Google Pixel 9; no iOS; no Vestige code |
 | Repo | wild-find; new repo started inside the challenge window; MIT license |
 | Runtime models | Open-weight only, all running on the phone |
 | Model roles | TinyCLIP ViT-8M (MIT) gates plant vs not-plant on the reticle crop; BioCLIP 2.5 Mobile verifies the plant group on it; Gemma writes level-2 hints and never sits in the verify path; full BioCLIP 2.5 makes text embeddings at build time; Pl@ntNet rejected |
@@ -341,7 +341,7 @@ radius\_km is 75, or 150 after the widen, so widened counts never pass as 75 km 
 | Gemma, scene call | Scene image plus the fixed tag list | JSON array of tags |
 | Gemma, hint call | Fact card, tags, hint level | One line, 20 words or fewer |
 
-**Crops** (the geometry Day 1 measured): both come from the rotation-normalized analysis frame. Full frame: the center square with side equal to the shorter edge. Reticle crop: the center square with side 60% of the shorter edge. Each is resized bicubic to 224 x 224 with Pillow's fixed-point resampler, which the phone reproduces bit for bit (JVM tests check every rotation against Pillow's own output). The on-screen circle is drawn inscribed in the reticle square after mapping analysis coordinates to preview coordinates, so the kid aims at the pixels the models read.
+**Crops** (the geometry Day 1 measured): both come from the rotation-normalized analysis frame, which is exactly the region the preview shows, because preview and analysis share one CameraX viewport. The kid frames the shot with the screen, so the screen is the photo, and the crops are taken from it as Day 1 took them from each photo. Analysis defaults to 1920 x 1440 (4:3); a phone without that size gets the closest smaller 4:3 size, then the closest larger. On a tall phone the visible strip's reticle square stays above 224 pixels down to about 960 x 720, so every crop downscales as Day 1's did. Full frame: the center square with side equal to the shorter edge. Reticle crop: the center square with side 60% of the shorter edge. Each is resized bicubic to 224 x 224 with Pillow's fixed-point resampler, which the phone reproduces bit for bit (JVM tests check every rotation against Pillow's own output). The on-screen circle is drawn inscribed in the reticle square after mapping analysis coordinates to preview coordinates, so the kid aims at the pixels the models read.
 
 **The iNaturalist query**
 
@@ -473,7 +473,7 @@ No blockers remain; every hole below closes or falls back during the Day-1 gate 
 | # | Hole | Why it matters | Fix | Severity |
 | --- | --- | --- | --- | --- |
 | 3 | Label text format | Day 1: with common names, a white oak photo scored "poison oak" top-1 on both the teacher and the mobile model; scientific names put oak top-1 on both | BioCLIP labels embed as "a photo of <scientific name>."; confirm on the calibration set | High |
-| 4 | Latency | Day 1 measured parts, not the whole per-frame path: one BioCLIP embedding takes 45 to 65 ms (one run 132 ms) and one TinyCLIP embedding 40 ms. A live frame now runs TinyCLIP twice plus BioCLIP up to twice, so the 200 ms target is unproven. Gemma (hints only) loads in 4.0 s warm, 9.9 s first ever, peaks at 2.9 GB, and took 2.3 to 2.9 s per warm vision call. Level-2 hint latency is unmeasured | The gate harness (S05) benchmarks the full per-frame verify path and the hint call on the phone; if a frame runs over 200 ms, analyze fewer frames a second | High |
+| 4 | Latency | Day 1 measured parts, not the whole per-frame path: one BioCLIP embedding takes 45 to 65 ms (one run 132 ms) and one TinyCLIP embedding 40 ms. A live frame runs TinyCLIP twice plus BioCLIP up to twice: on Oct 7 the whole path took 163 to 305 ms across two runs on the test phone with both regions plants (a 224-pixel test frame, `docs/results/day-2/`), with BioCLIP alone swinging from 80 to 193 ms, so frames can miss 200 ms; live camera frames at the pinned analysis resolution come from the gate harness. Gemma (hints only) loads in 4.0 s warm, 9.9 s first ever, peaks at 2.9 GB, and took 2.3 to 2.9 s per warm vision call. Level-2 hint latency is unmeasured | The gate harness (S05) benchmarks the full per-frame verify path and the hint call on the phone; if a frame runs over 200 ms, analyze fewer frames a second | High |
 | 5 | Kids read hints on screen | Reading pulls eyes down, against the theme | Read hints aloud with Android's on-device text-to-speech; confirm an offline voice on the test phone | High |
 | 8 | Loose Gemma boxes | Resolved on Day 1: verify no longer uses Gemma boxes | None | Low |
 | 10 | Heat and battery | Live BioCLIP at about 5 frames a second plus the camera; Gemma only on hint taps | The gate harness runs a 20-minute live-camera session | Medium |

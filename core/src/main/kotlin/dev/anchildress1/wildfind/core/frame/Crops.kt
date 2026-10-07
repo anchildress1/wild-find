@@ -7,6 +7,15 @@ object Crops {
     /** Width and height of every model input, in pixels. */
     const val MODEL_SIZE = 224
 
+    /**
+     * Default camera analysis width, sensor orientation. With [ANALYSIS_HEIGHT] it is 4:3, and large enough that
+     * the visible strip's reticle square on a tall phone still downscales to [MODEL_SIZE], as Day 1's photos did.
+     */
+    const val ANALYSIS_WIDTH = 1920
+
+    /** Default camera analysis height, sensor orientation. */
+    const val ANALYSIS_HEIGHT = 1440
+
     /** The reticle square's side as a share of the frame's shorter edge. */
     const val RETICLE_SHARE = 0.6
 
