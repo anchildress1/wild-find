@@ -238,8 +238,15 @@ def test_main_writes_summary_into_each_run(run, capsys):
     assert (run / "summary.txt").read_text().startswith("run 20261007-090000-oak-1280x960")
 
 
-def test_main_fails_without_runs(tmp_path):
-    assert main([str(tmp_path)]) == 1
+def test_main_without_new_runs_is_a_no_op(tmp_path):
+    assert main([str(tmp_path)]) == 0
+
+
+def test_main_never_rewrites_an_existing_summary(run):
+    (run / "summary.txt").write_text("as logged\n")
+
+    assert main([str(run.parent)]) == 0
+    assert (run / "summary.txt").read_text() == "as logged\n"
 
 
 def test_one_broken_run_still_lets_the_others_summarize(run, capsys):

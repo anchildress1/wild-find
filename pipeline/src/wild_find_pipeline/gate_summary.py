@@ -183,12 +183,15 @@ def summarize(run: Path) -> str:
 
 
 def main(argv: list[str]) -> int:
-    """Write summary.txt into every run directory under argv[0]."""
+    """Write summary.txt into every run directory under argv[0] that doesn't have one yet.
+
+    An existing summary describes its run's data as the harness logged it then; a later script never rewrites it.
+    """
     root = Path(argv[0])
-    runs = sorted(p for p in root.iterdir() if (p / "run.json").is_file())
+    runs = sorted(p for p in root.iterdir() if (p / "run.json").is_file() and not (p / "summary.txt").exists())
     if not runs:
-        print(f"no harness runs under {root}", file=sys.stderr)
-        return 1
+        print(f"no unsummarized harness runs under {root}", file=sys.stderr)
+        return 0
     failed = 0
     for run in runs:
         # One truncated or partial run must not stop every run after it from getting a summary.
