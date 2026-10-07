@@ -1,0 +1,4 @@
+tap_ns,lead_ms,frame_ms,jpeg_ms,scene_ms,wait_ms,hint_ms,total_ms,jpeg_bytes,tags,scene_reply,hint
+137580898826771,4078.923227,80.284271,26.842708,1180.183802,0.0,897.725989,898.49901,45580,,[],Look for big trees in parks or near the edge of the woods.
+137592782242184,1594.857864,345.322604,33.025416,1866.917135,650.407291,1147.039844,1797.579895,46079,,[],Look for big trees in parks or near the edge of the woods.
+137609181765094,4102.266821,209.473385,26.886719,1896.11828,0.0,1157.119948,1157.865729,45996,,[],Look for big trees in parks or near the edge of the woods.
