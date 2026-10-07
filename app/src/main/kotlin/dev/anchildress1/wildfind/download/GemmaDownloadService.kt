@@ -207,6 +207,8 @@ class GemmaDownloadService : JobService() {
             val network = NetworkRequest.Builder()
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED)
+                // Unmetered alone also matches unmetered cellular; R9 promises Wi-Fi only for 2.6 GB.
+                .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
                 .build()
             val job = JobInfo.Builder(JOB_ID, ComponentName(context, GemmaDownloadService::class.java))
                 .setUserInitiated(true)
