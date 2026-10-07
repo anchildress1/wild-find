@@ -110,7 +110,10 @@ class ModelDownloader(
         return final
     }
 
-    /** The verified file, or null; deletes a file that fails the pin. Never touches the network. */
+    /**
+     * The verified file, or null; deletes a file that fails the pin, throwing [IOException] if it can't. Never touches
+     * the network.
+     */
     fun ready(): File? {
         // Sideloaded by make push-models, or left by an older pin of the same size, the file has no matching marker
         // and is hashed once.
@@ -119,8 +122,8 @@ class ModelDownloader(
         if (verified) {
             marker.writeText(pin.sha256)
         } else {
-            final.delete()
-            marker.delete()
+            final.deleteOrThrow()
+            marker.deleteOrThrow()
         }
         return final.takeIf { verified }
     }
