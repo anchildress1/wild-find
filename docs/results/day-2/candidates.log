@@ -1,0 +1,18 @@
+# make candidates (S10), 2026-10-07 13:20, Mac16,5 Apple M4 Max, macOS 26.5.2
+# litert-lm-api 0.18.0, CPU backend, pinned gemma-4-E2B-it.litertlm @ b3ca0d2; sampler top_k 64, top_p 0.95, temperature 1.0, seeds 1-10
+# greedy (top_k 1) gave the same 10 words for every seed: oak fern cattail sunflower grass rose bellflower dandelion ivy weed
+# rerun produced a byte-identical pipeline/menu/candidates.json
+uv --project pipeline run --group gemma python -W error -m wild_find_pipeline.candidates
+      Built wild-find-pipeline @ file:///Users/anchildress1/git_personal/wild-find/pipeline
+load 1.1 s
+seed 1: 2.8 s, ['oak', 'grass', 'sunflower', 'bellflower', 'dandelion', 'rose', 'ivy', 'weed', 'fern', 'cattail', 'tomato', 'bean', 'sunflower']
+seed 2: 2.1 s, ['oak', 'fern', 'cattail', 'grass', 'sunflower', 'rose', 'ivy', 'weed', 'dandelion', 'bellflower']
+seed 3: 2.6 s, ['oak', 'fern', 'grass', 'sunflower', 'dandelion', 'bellflower', 'rose', 'ivy', 'tulip', 'daisy', 'zinnia', 'marigold']
+seed 4: 2.5 s, ['oak', 'fern', 'cattail', 'sunflower', 'grass', 'rose', 'bellflower', 'daisy', 'wildflower', 'thistle', 'ivy', 'moss']
+seed 5: 2.7 s, ['oak', 'fern', 'cattail', 'rose', 'sunflower', 'ivy', 'grass', 'bellflower', 'wildflower', 'dandelion', 'weed', 'strawberry', 'tomato', 'cucumber', 'corn', 'soybean']
+seed 6: 2.0 s, ['oak', 'fern', 'grass', 'sunflower', 'bellflower', 'dandelion', 'rose', 'tulip', 'hosta']
+seed 7: 2.4 s, ['oak', 'fern', 'cattail', 'rose', 'sunflower', 'grass', 'flower', 'bush', 'berry', 'tree', 'weed', 'shrub']
+seed 8: 1.9 s, ['oak', 'fern', 'cattail', 'grass', 'flower', 'bush', 'tree', 'berry', 'sunflower']
+seed 9: 1.7 s, ['oak', 'fern', 'cattail', 'grass', 'flower', 'sunflower', 'weed']
+seed 10: 2.6 s, ['oak', 'fern', 'sunflower', 'bellflower', 'weed', 'grass', 'ivy', 'rose', 'tulip', 'daisy', 'bean', 'corn']
+OK: wrote 29 words to /Users/anchildress1/git_personal/wild-find/pipeline/menu/candidates.json

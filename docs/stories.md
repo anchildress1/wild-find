@@ -21,7 +21,7 @@ Every runtime model (TinyCLIP, BioCLIP, Gemma) runs on the test phone, or nothin
 
 ## Build pipeline · Oct 7
 
-- [ ] **S10 Candidates** — build-time Gemma via LiteRT-LM Python on the same `.litertlm`; candidate prompt; H8
+- [x] **S10 Candidates** — build-time Gemma via the LiteRT-LM Python API on the same `.litertlm`; candidate prompt over fixed seeds 1–10; `make candidates` writes the committed `pipeline/menu/candidates.json` (29 words, byte-identical on rerun); H8
 - [ ] **S11 Resolve** — iNat taxa search; Plantae; rank gate; ambiguous → manual review file
 - [ ] **S12 Gates** — hazard drop, denylist drop, 25+ local sightings
 - [ ] **S13 Fact cards** — Wikipedia text → card prompt → `icon_category`
@@ -88,5 +88,5 @@ New holes found while drafting these stories. PRD holes 3, 4, 5, 10, 12, 13, 19 
 | H5 | Fallback file is October-only; offline cold starts after October get October targets | Accept for v1; note in the post | Low |
 | H6 | Hazard false alarms on safe plants | Resolved on Day 1 by scoring hazards against BioCLIP's species table (4,271 species plus *T. pubescens*) (warn when a hazard species is in the top 5): 48 of 52 hazards caught, 1 of 253 safe photos warned. Against menu labels alone, magnolia warned 10 of 10 and honeysuckle 9 of 10 | Low |
 | H7 | Build-time menu gate uses 75 km while the app can widen to 150 km | Widened hunts may surface fewer words; accept, or run the gate at 150 km | Medium |
-| H8 | LiteRT-LM Python ships as a CLI; prompt-in, JSON-out scripting is unverified | Verify on Day 2 before S10; fall back to transformers in uv | Medium |
+| H8 | LiteRT-LM Python ships as a CLI; prompt-in, JSON-out scripting is unverified | Resolved Oct 7: `litert-lm-api` 0.18.0 has a Python `Engine` with seeded sampling; the candidate prompt returns a bare JSON array on the laptop CPU in about 2 s; no fallback needed | Low |
 | H10 | No release keystore plan for the GitHub Release APK | Local keystore, never committed; `keystore.properties` gitignored | Low |

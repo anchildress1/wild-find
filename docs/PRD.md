@@ -219,7 +219,7 @@ The core loop runs live in the camera: TinyCLIP rejects non-plants, focus distan
 
 Runs once on the laptop in Python with uv; a word ships only after it passes every gate below.
 
-1. **Candidates:** Gemma, run through LiteRT-LM on the pinned `.litertlm` file, writes kid words with the candidate prompt
+1. **Candidates:** Gemma, run through the LiteRT-LM Python API on the CPU on the pinned `.litertlm` file, writes kid words with the candidate prompt, once per fixed seed 1 to 10 (top\_k 64, top\_p 0.95, temperature 1.0); the union goes to `pipeline/menu/candidates.json`, committed with the pin, prompt, and sampler, since CI can't run Gemma. Greedy decoding returns the same 10 words every time; the seeds lift that to 29 (`docs/results/day-2/candidates.log`)
 2. **Resolve:** search `GET /v1/taxa?q=<word>`; keep Plantae only; prefer an exact common-name match; allow only genus, family, order, class, or phylum; more than one plausible match goes to manual review, never a guess
 3. **Hazard drop:** the word's taxon contains, or sits inside, a hazard taxon
 4. **Denylist drop:** the target name is itself an ambiguous or hazardous common name on the hand-maintained denylist
