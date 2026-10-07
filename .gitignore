@@ -22,7 +22,6 @@ __pycache__/
 .pytest_cache/
 
 # Models: downloaded at runtime or sideloaded with adb, never committed
-*.litertlm
 *.onnx
 *.safetensors
 

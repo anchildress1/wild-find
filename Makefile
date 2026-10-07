@@ -1,4 +1,4 @@
-.PHONY: setup build install device-test focus-probe assets sprites toxicity hazard-vectors labels crop-reference gate-harness gate-pull fetch-models push-models reference test pipeline-test lint ktlint detekt android-lint pipeline-lint shellcheck actionlint secret-scan ai-checks clean
+.PHONY: setup build install device-test focus-probe assets sprites toxicity hazard-vectors labels crop-reference gate-harness gate-pull reference test pipeline-test lint ktlint detekt android-lint pipeline-lint actionlint secret-scan ai-checks clean
 
 SHELL := /bin/bash
 
@@ -67,12 +67,6 @@ gate-pull:
 	adb pull /sdcard/Android/data/$(WILDFIND_PACKAGE)/files/gate/. $(GATE_DIR)
 	$(UV) run python -W error -m wild_find_pipeline.gate_summary $(GATE_DIR)
 
-fetch-models:
-	./scripts/models.sh fetch
-
-push-models:
-	./scripts/models.sh push
-
 # Bundled models and tables into app/generated/assets (gitignored); every app build needs them.
 assets:
 	$(UV) run --group reference python -W error -m wild_find_pipeline.assets
@@ -108,7 +102,7 @@ test: pipeline-test
 pipeline-test:
 	$(UV) run pytest pipeline/tests
 
-lint: ktlint detekt android-lint pipeline-lint shellcheck actionlint
+lint: ktlint detekt android-lint pipeline-lint actionlint
 
 ktlint:
 	ktlint --log-level=error
@@ -124,9 +118,6 @@ android-lint:
 pipeline-lint:
 	$(UV) run ruff check pipeline
 	$(UV) run ruff format --check pipeline
-
-shellcheck:
-	shellcheck scripts/*.sh
 
 actionlint:
 	actionlint

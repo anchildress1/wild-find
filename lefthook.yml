@@ -10,9 +10,6 @@ pre-commit:
     ruff:
       glob: 'pipeline/**/*.py'
       run: make pipeline-lint
-    shellcheck:
-      glob: 'scripts/*.sh'
-      run: shellcheck {staged_files}
     actionlint:
       glob: '.github/workflows/*.yml'
       run: actionlint {staged_files}

@@ -39,9 +39,6 @@ jobs:
           tar -xzf gitleaks_8.30.1_linux_x64.tar.gz gitleaks
           sudo install -m 755 gitleaks /usr/local/bin/gitleaks
 
-      - name: Run shellcheck
-        run: shellcheck --version && make shellcheck
-
       - name: Run actionlint
         run: make actionlint
 
