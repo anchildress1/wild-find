@@ -47,6 +47,9 @@ class LabelSet(val entries: List<Entry>, val vectors: FloatMatrix) {
         }
     }
 
+    /** Every menu word, in row order. */
+    val words: List<String> = entries.filter { it.kind == Kind.WORD }.map { it.id }
+
     /** Row of the menu word [word]. */
     fun wordRow(word: String): Int = rowOf(word, Kind.WORD)
 

@@ -5,6 +5,8 @@ import java.nio.ByteBuffer
 /**
  * One RGBA_8888 camera analysis frame, read in upright coordinates without rotating the whole buffer.
  *
+ * It wraps the camera's buffer without copying, so it is valid only until the source image is closed.
+ *
  * @param buffer RGBA bytes; row `r` starts at `r * rowStride`
  * @param rowStride bytes per buffer row, which may exceed `4 * width`
  * @param visible the region the preview shows (CameraX's shared-viewport crop rect), in buffer coordinates

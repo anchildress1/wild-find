@@ -3,6 +3,7 @@ package dev.anchildress1.wildfind.inference
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import dev.anchildress1.wildfind.core.verify.PlantGate
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -45,7 +46,7 @@ class PlantGateParityTest {
         Log.i(TAG, "cosine to laptop reference: $cosine, plant share $share")
         assertTrue("cosine $cosine below $MIN_COSINE", cosine >= MIN_COSINE)
         assertEquals(reference.getDouble("plant_share"), share, SHARE_TOLERANCE)
-        assertTrue("the oak fixture must pass the gate", gate.isPlant(embedding))
+        assertTrue("the oak fixture must pass the gate", PlantGate.isPlant(share))
     }
 
     private fun dot(a: FloatArray, b: FloatArray) = a.indices.sumOf { (a[it] * b[it]).toDouble() }

@@ -20,7 +20,7 @@ class FrameTest {
         "270, 2, 3, 3 6 2 5 1 4",
     )
     fun `upright reads the frame turned clockwise by its rotation`(rotation: Int, w: Int, h: Int, expected: String) {
-        val frame = cameraFrame(grid, rotation, margin = 1, padding = 4)
+        val frame = cameraFrame(grid, rotation, left = 1, top = 2, padding = 4)
 
         val pixels = frame.upright(Box(0, 0, w, h))
 

@@ -6,28 +6,27 @@ from pathlib import Path
 from PIL import Image
 
 from wild_find_pipeline.paths import CROP_REFERENCE_DIR
-from wild_find_pipeline.reference import SIZE, fetch_fixture, square_fixture
+from wild_find_pipeline.reference import SIZE, center_crop, fetch_fixture, square_fixture
 
 # Odd width minus either crop side leaves an odd remainder, which exercises the floor in the centering.
 SOURCE_SIZE = (333, 250)
 # A small, non-square target with a wide kernel: about 5.5x down in both directions.
 DOWN_SIZE = (61, 47)
+# One axis at a time: Pillow skips the pass whose size doesn't change.
+NARROW_SIZE = (61, SOURCE_SIZE[1])
+SHORT_SIZE = (SOURCE_SIZE[0], 47)
 RETICLE_SHARE = 0.6
 
 
 def reticle(img: Image.Image) -> Image.Image:
     """Center 60% square crop resized to 224, exactly as Day 1 cut its reticle crops."""
     side = int(min(img.size) * RETICLE_SHARE)
-    left, top = (img.width - side) // 2, (img.height - side) // 2
-    return img.crop((left, top, left + side, top + side)).resize((SIZE, SIZE), Image.Resampling.BICUBIC)
+    return center_crop(img, side, side).resize((SIZE, SIZE), Image.Resampling.BICUBIC)
 
 
 def source(photo: Image.Image) -> Image.Image:
     """Center SOURCE_SIZE region of the fixture photo, standing in for an upright camera frame."""
-    photo = photo.convert("RGB")
-    width, height = SOURCE_SIZE
-    left, top = (photo.width - width) // 2, (photo.height - height) // 2
-    return photo.crop((left, top, left + width, top + height))
+    return center_crop(photo.convert("RGB"), *SOURCE_SIZE)
 
 
 def references(upright: Image.Image) -> dict[str, Image.Image]:
@@ -43,6 +42,8 @@ def references(upright: Image.Image) -> dict[str, Image.Image]:
         "reticle.png": reticle(upright),
         "full.png": square_fixture(upright),
         "down.png": upright.resize(DOWN_SIZE, Image.Resampling.BICUBIC),
+        "narrow.png": upright.resize(NARROW_SIZE, Image.Resampling.BICUBIC),
+        "short.png": upright.resize(SHORT_SIZE, Image.Resampling.BICUBIC),
     }
 
 

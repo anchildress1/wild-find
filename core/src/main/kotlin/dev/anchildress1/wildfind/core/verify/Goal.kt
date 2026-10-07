@@ -38,6 +38,8 @@ class TargetGoal(
 ) : Goal {
     init {
         require(target in candidates) { "target row $target is not a candidate" }
+        // A repeated target row would leave no runner-up and pass any plant; a repeated other row skews the rank.
+        require(candidates.distinct().size == candidates.size) { "repeated candidate rows" }
         require(candidates.size >= 2) { "top-1 needs a runner-up" }
         require(candidates.all { it in 0 until labels.rows }) { "candidate row outside labels" }
     }

@@ -3,6 +3,7 @@ import json
 import numpy as np
 import pytest
 
+from wild_find_pipeline import label_vectors
 from wild_find_pipeline.label_vectors import check_vectors, label_rows, write
 from wild_find_pipeline.labels import DEV_WORDS, GRASS, HAZARDS, TUTORIAL
 
@@ -38,7 +39,9 @@ def test_check_vectors_rejects_wrong_count_shape_nan_and_non_unit(vectors):
         check_vectors(vectors, 2)
 
 
-def test_write_saves_parallel_npy_and_json(tmp_path):
+def test_write_saves_parallel_npy_and_json(tmp_path, monkeypatch):
+    # The real lookup needs the reference group's open-clip-torch, which CI's pipeline tests don't install.
+    monkeypatch.setattr(label_vectors, "embedding_versions", lambda: {"open-clip-torch": "x", "torch": "y"})
     rows = label_rows({"oak": "Quercus"})
     vectors = np.zeros((len(rows), 2))
     vectors[:, 0] = 1.0
@@ -51,3 +54,4 @@ def test_write_saves_parallel_npy_and_json(tmp_path):
     assert meta["schema_version"] == 1
     assert meta["labels"][0] == {"id": "oak", "kind": "word", "scientific": "Quercus", "prompt": "a photo of Quercus."}
     assert len(meta["labels"]) == 12
+    assert meta["packages"] == {"open-clip-torch": "x", "torch": "y"}

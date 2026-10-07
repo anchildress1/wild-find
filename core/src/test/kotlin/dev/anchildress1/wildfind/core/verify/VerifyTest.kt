@@ -40,6 +40,14 @@ class VerifyTest {
     }
 
     @Test
+    fun `zoom comes from the ratio control, else the crop region, else nowhere`() {
+        assertEquals(2.5f, Focus.zoomRatio(2.5f, 4000, 1000))
+        assertEquals(4f, Focus.zoomRatio(null, 4000, 1000))
+        assertNull(Focus.zoomRatio(null, 4000, null))
+        assertNull(Focus.zoomRatio(null, 4000, 0))
+    }
+
+    @Test
     fun `a missing distance is not a focused reading`() {
         assertFalse(Focus(Focus.AF_FOCUSED_LOCKED, null, 1f).isFocused)
         assertFalse(Focus(Focus.AF_FOCUSED_LOCKED, null, 1f).isClose)

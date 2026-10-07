@@ -25,7 +25,7 @@ class ScoringTest {
         val check = HazardCheck(table, booleanArrayOf(false, false, true, false, false, true, false))
 
         assertEquals(3, check.bestHazardRank(east))
-        assertTrue(check.warns(east))
+        assertTrue(HazardCheck.warns(check.bestHazardRank(east)))
     }
 
     @Test
@@ -34,7 +34,7 @@ class ScoringTest {
             HazardCheck(rows(1.0, 2.0, 3.0, 4.0, 5.0, 6.0), booleanArrayOf(false, false, false, false, false, true))
 
         assertEquals(6, check.bestHazardRank(east))
-        assertFalse(check.warns(east))
+        assertFalse(HazardCheck.warns(check.bestHazardRank(east)))
     }
 
     @Test
@@ -90,6 +90,9 @@ class ScoringTest {
         assertThrows<IllegalArgumentException> { TargetGoal(labels, 0, intArrayOf(1), null, null) }
         assertThrows<IllegalArgumentException> { TargetGoal(labels, 0, intArrayOf(0), null, null) }
         assertThrows<IllegalArgumentException> { TargetGoal(labels, 0, intArrayOf(0, 5), null, null) }
+        // A repeated target leaves no runner-up, so any plant would pass.
+        assertThrows<IllegalArgumentException> { TargetGoal(labels, 0, intArrayOf(0, 0), null, null) }
+        assertThrows<IllegalArgumentException> { TargetGoal(labels, 0, intArrayOf(0, 1, 1), null, null) }
     }
 
     @Test

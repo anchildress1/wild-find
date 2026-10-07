@@ -27,6 +27,18 @@ data class Focus(val afState: Int?, val diopters: Float?, val zoomRatio: Float) 
         /** Smallest diopters × zoom ratio that counts as close range. */
         const val CLOSE_RANGE = 2.0
 
+        /**
+         * The zoom ratio a capture used: `CONTROL_ZOOM_RATIO` when the result has it, else the sensor's active-array
+         * width over `SCALER_CROP_REGION`'s, which is how CameraX zooms cameras without ratio control.
+         *
+         * Null when the result has neither, so no reading is ever logged as a measured 1x.
+         */
+        fun zoomRatio(controlZoom: Float?, activeArrayWidth: Int, cropRegionWidth: Int?): Float? = when {
+            controlZoom != null -> controlZoom
+            cropRegionWidth != null && cropRegionWidth > 0 -> activeArrayWidth.toFloat() / cropRegionWidth
+            else -> null
+        }
+
         private val FOCUSED_STATES = setOf(AF_PASSIVE_FOCUSED, AF_FOCUSED_LOCKED)
     }
 }

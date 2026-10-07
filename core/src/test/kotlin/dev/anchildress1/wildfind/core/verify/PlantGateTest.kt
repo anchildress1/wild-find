@@ -36,13 +36,13 @@ class PlantGateTest {
         )
         val embedding = floatArrayOf(1f, 0f)
 
-        assertFalse(PlantGate(labels, logitScale = 50f).isPlant(embedding))
-        assertTrue(PlantGate(labels, logitScale = 1f).isPlant(embedding))
+        assertFalse(PlantGate.isPlant(PlantGate(labels, logitScale = 50f).plantShare(embedding)))
+        assertTrue(PlantGate.isPlant(PlantGate(labels, logitScale = 1f).plantShare(embedding)))
     }
 
     @Test
     fun `a plant-facing embedding passes`() {
-        assertTrue(gate.isPlant(floatArrayOf(1f, 0f)))
+        assertTrue(PlantGate.isPlant(gate.plantShare(floatArrayOf(1f, 0f))))
     }
 
     @Test
@@ -53,7 +53,7 @@ class PlantGateTest {
         )
 
         assertEquals(PlantGate.THRESHOLD, even.plantShare(floatArrayOf(1f)), 1e-12)
-        assertFalse(even.isPlant(floatArrayOf(1f)))
+        assertFalse(PlantGate.isPlant(even.plantShare(floatArrayOf(1f))))
     }
 
     @Test

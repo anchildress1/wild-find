@@ -1,5 +1,7 @@
 """Label sets and the text template the BioCLIP text encoder embeds."""
 
+from wild_find_pipeline.paths import pin
+
 # Plant labels embed by scientific name: common names share words ("oak" in "poison oak"), and on Day 1 a
 # white oak photo scored "poison oak" top-1 on both BioCLIP models until labels switched to scientific names.
 HAZARDS = {
@@ -47,6 +49,12 @@ def prompt(text: str) -> str:
 
 # Packages whose version changes the teacher's text vectors; hazard_vectors.json records them.
 EMBEDDING_PACKAGES = ("open-clip-torch", "torch")
+
+
+def teacher_model() -> dict[str, str]:
+    """The pinned teacher's repo and revision, as every committed text-vector file records it."""
+    teacher = pin("teacher")
+    return {"repo": teacher["repo"], "revision": teacher["revision"]}
 
 
 def embedding_versions() -> dict[str, str]:

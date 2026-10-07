@@ -22,6 +22,7 @@ class LabelSetTest {
     fun `words and tutorial labels with the same taxon stay separate rows`() {
         val labels = set(words + tutorial)
 
+        assertEquals(listOf("oak", "fern"), labels.words)
         assertEquals(0, labels.wordRow("oak"))
         assertEquals(1, labels.wordRow("fern"))
         assertThrows<IllegalArgumentException> { labels.wordRow("Quercus") }

@@ -85,18 +85,24 @@ class FrameVerifier(
         val reticleInput = Bicubic.resize(reticle, Crops.MODEL_SIZE, Crops.MODEL_SIZE)
         val fullInput = Bicubic.resize(full, Crops.MODEL_SIZE, Crops.MODEL_SIZE)
         val resized = clock()
-        val reticleShare = gate.plantShare(embed(gateEncoder, reticleInput))
-        val fullShare = gate.plantShare(embed(gateEncoder, fullInput))
-        val reticlePlant = reticleShare > PlantGate.THRESHOLD
+        val reticleShare = gate.plantShare(embed(gateEncoder, reticleInput, "TinyCLIP reticle"))
+        val fullShare = gate.plantShare(embed(gateEncoder, fullInput, "TinyCLIP full frame"))
+        val reticlePlant = PlantGate.isPlant(reticleShare)
         val gated = clock()
         // BioCLIP runs only on regions the gate calls a plant; the full frame only feeds the hazard check.
-        val reticleEmbedding = if (reticlePlant) embed(bioclip, reticleInput) else null
-        val fullPlant = fullShare > PlantGate.THRESHOLD
-        val fullEmbedding = if (goal.checksHazards && fullPlant) embed(bioclip, fullInput) else null
+        val reticleEmbedding = if (reticlePlant) embed(bioclip, reticleInput, "BioCLIP reticle") else null
+        val fullPlant = PlantGate.isPlant(fullShare)
+        val fullEmbedding = if (goal.checksHazards &&
+            fullPlant
+        ) {
+            embed(bioclip, fullInput, "BioCLIP full frame")
+        } else {
+            null
+        }
         val embedded = clock()
         val reticleRank = reticleEmbedding?.takeIf { goal.checksHazards }?.let(hazards::bestHazardRank)
         val fullRank = fullEmbedding?.let(hazards::bestHazardRank)
-        val hazard = listOfNotNull(reticleRank, fullRank).any { it <= HazardCheck.TOP_K }
+        val hazard = listOfNotNull(reticleRank, fullRank).any(HazardCheck::warns)
         val ranked = clock()
         val score = reticleEmbedding?.let(goal::score)
         val scored = clock()
@@ -123,6 +129,6 @@ class FrameVerifier(
     }
 
     // fp16 BioCLIP returned NaN on the phone's ARM CPU (S03); a NaN embedding would rank every hazard first.
-    private fun embed(encoder: ImageEmbedder, pixels: Pixels): FloatArray =
-        encoder.embed(pixels).also { v -> check(v.all(Float::isFinite)) { "encoder returned a non-finite embedding" } }
+    private fun embed(encoder: ImageEmbedder, pixels: Pixels, what: String): FloatArray =
+        encoder.embed(pixels).also { v -> check(v.all(Float::isFinite)) { "$what embedding is not finite" } }
 }

@@ -10,9 +10,10 @@ import org.junit.jupiter.params.provider.CsvSource
 class PillowParityTest {
     private val upright = png("upright.png")
 
-    @Test
-    fun `a downscale with a wide kernel matches Pillow`() {
-        val expected = png("down.png")
+    @ParameterizedTest(name = "{0}")
+    @CsvSource("down.png", "narrow.png", "short.png")
+    fun `resizes on both axes and on one axis only match Pillow`(name: String) {
+        val expected = png(name)
 
         assertTrue(sameRgb(expected, Bicubic.resize(upright, expected.width, expected.height)))
     }
@@ -29,7 +30,7 @@ class PillowParityTest {
         "full.png, rot270.png, 270",
     )
     fun `crop and resize from a camera buffer match Day 1's Pillow crop`(crop: String, raw: String, rotation: Int) {
-        val frame = cameraFrame(png(raw), rotation, margin = 3, padding = 12)
+        val frame = cameraFrame(png(raw), rotation, left = 2, top = 7, padding = 12)
         val reticle = crop == "reticle.png"
         val box = if (reticle) Crops.reticle(frame.width, frame.height) else Crops.fullFrame(frame.width, frame.height)
 

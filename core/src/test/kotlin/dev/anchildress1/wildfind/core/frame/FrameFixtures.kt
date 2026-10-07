@@ -11,18 +11,18 @@ fun png(name: String): Pixels {
 }
 
 /**
- * Lays [pixels] into an RGBA buffer the way a camera hands it over: [margin] pixels of noise on every side of the
- * visible region, plus [padding] spare bytes at the end of each row.
+ * Lays [pixels] into an RGBA buffer the way a camera hands it over: noise [left] pixels before and [top] rows above
+ * the visible region and as much again after it, plus [padding] spare bytes at the end of each row.
  */
-fun cameraFrame(pixels: Pixels, rotationDegrees: Int, margin: Int = 0, padding: Int = 0): RgbaFrame {
-    val width = pixels.width + 2 * margin
-    val height = pixels.height + 2 * margin
+fun cameraFrame(pixels: Pixels, rotationDegrees: Int, left: Int = 0, top: Int = 0, padding: Int = 0): RgbaFrame {
+    val width = pixels.width + 2 * left
+    val height = pixels.height + 2 * top
     val stride = width * 4 + padding
     val buffer = ByteBuffer.allocateDirect(stride * height)
     for (y in 0 until height) {
         for (x in 0 until width) {
-            val inside = x in margin until margin + pixels.width && y in margin until margin + pixels.height
-            val argb = if (inside) pixels.argb[(y - margin) * pixels.width + (x - margin)] else NOISE * (x + y)
+            val inside = x in left until left + pixels.width && y in top until top + pixels.height
+            val argb = if (inside) pixels.argb[(y - top) * pixels.width + (x - left)] else NOISE * (x + y)
             val i = y * stride + x * 4
             buffer.put(i, (argb shr 16).toByte())
             buffer.put(i + 1, (argb shr 8).toByte())
@@ -30,7 +30,7 @@ fun cameraFrame(pixels: Pixels, rotationDegrees: Int, margin: Int = 0, padding: 
             buffer.put(i + 3, (argb ushr 24).toByte())
         }
     }
-    return RgbaFrame(buffer, stride, Box(margin, margin, pixels.width, pixels.height), rotationDegrees)
+    return RgbaFrame(buffer, stride, Box(left, top, pixels.width, pixels.height), rotationDegrees)
 }
 
 /** Equal when every pixel's RGB matches; alpha is ignored as the encoders ignore it. */

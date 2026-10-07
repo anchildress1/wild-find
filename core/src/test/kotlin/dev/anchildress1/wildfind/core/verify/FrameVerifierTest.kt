@@ -13,17 +13,20 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
 class FrameVerifierTest {
-    // The frame's left half is red, right half is blue; the reticle crop sees only the middle.
+    // 30 x 10: the reticle square is green, everything else red, so each fake encoder can tell which crop it got.
+    private val reticleBox = Crops.reticle(WIDTH, HEIGHT)
     private val frame = cameraFrame(
-        Pixels(20, 10, IntArray(200) { if (it % 20 < 10) RED else BLUE }),
+        Pixels(WIDTH, HEIGHT, IntArray(WIDTH * HEIGHT) { if (inReticle(it % WIDTH, it / WIDTH)) GREEN else RED }),
         rotationDegrees = 0,
     )
 
-    // Gate: plant along x, not-plant along y. BioCLIP: six safe species along x, one hazard along y, target along x.
+    // Gate: plant along x, not-plant along y.
     private val gate = PlantGate(
         listOf(PlantGate.Label(true, floatArrayOf(1f, 0f)), PlantGate.Label(false, floatArrayOf(0f, 1f))),
         50f,
     )
+
+    // Species table: six safe species along x, one hazard along y. Labels: the target along x, a rival along y.
     private val hazards = HazardCheck(
         FloatMatrix(7, 2, FloatArray(14) { if (it < 12) (1 - it % 2).toFloat() else (it - 12).toFloat() }),
         BooleanArray(7) { it == 6 },
@@ -34,47 +37,48 @@ class FrameVerifierTest {
 
     private val plant = floatArrayOf(1f, 0f)
     private val notPlant = floatArrayOf(0f, 1f)
+    private val safe = floatArrayOf(1f, 0f)
+    private val hazard = floatArrayOf(0f, 1f)
 
-    private fun verifier(
-        gateOut: (Pixels) -> FloatArray,
-        bioclipOut: (Pixels) -> FloatArray,
-        calls: MutableList<String>,
-    ) = FrameVerifier(
+    private val calls = mutableListOf<String>()
+
+    /** A verifier whose fakes answer per crop: [gateOut] and [bioclipOut] get true for the reticle crop. */
+    private fun verifier(gateOut: (Boolean) -> FloatArray, bioclipOut: (Boolean) -> FloatArray) = FrameVerifier(
         gate,
-        { p ->
-            calls += "gate:${p.width}"
-            gateOut(p)
-        },
-        { p ->
-            calls += "bioclip"
-            bioclipOut(p)
-        },
+        { p -> gateOut(p.isReticle()).also { calls += "gate:${region(p)}" } },
+        { p -> bioclipOut(p.isReticle()).also { calls += "bioclip:${region(p)}" } },
         hazards,
         clock = Ticks(),
     )
 
     @Test
-    fun `a plant in the reticle runs both gates, BioCLIP on each plant region, and scores the goal`() {
-        val calls = mutableListOf<String>()
-        val result = verifier({ plant }, { plant }, calls).analyze(frame, target) { close }
+    fun `plants in both regions run BioCLIP on each and score the goal on the reticle`() {
+        val result = verifier({ plant }, { safe }).analyze(frame, target) { close }
 
-        assertEquals(listOf("gate:224", "gate:224", "bioclip", "bioclip"), calls)
+        assertEquals(listOf("gate:reticle", "gate:full", "bioclip:reticle", "bioclip:full"), calls)
         assertEquals(FrameEvidence(hazard = false, reticlePlant = true, focus = close, goalMet = true), result.evidence)
         assertEquals(7, result.reticleHazardRank)
         assertEquals(7, result.fullHazardRank)
         assertEquals(1, result.goal?.rank)
-        assertEquals(Crops.reticle(20, 10).width, result.reticle.width)
     }
 
     @Test
-    fun `the full frame alone can raise the hazard`() {
-        val calls = mutableListOf<String>()
-        // Gate: reticle crop (first call) is not a plant, full frame is. BioCLIP on the full frame hits the hazard.
-        var gateCalls = 0
-        val result = verifier({ if (gateCalls++ == 0) notPlant else plant }, { notPlant }, calls)
-            .analyze(frame, target) { close }
+    fun `a hazard filling the reticle warns even when the full frame isn't a plant`() {
+        val result = verifier({ if (it) plant else notPlant }, { hazard }).analyze(frame, target) { close }
 
-        assertEquals(listOf("gate:224", "gate:224", "bioclip"), calls)
+        assertEquals(listOf("gate:reticle", "gate:full", "bioclip:reticle"), calls)
+        assertTrue(result.evidence.hazard)
+        assertEquals(1, result.reticleHazardRank)
+        assertNull(result.fullHazardRank)
+        assertTrue(PlantGate.isPlant(result.reticleShare))
+        assertFalse(PlantGate.isPlant(result.fullShare))
+    }
+
+    @Test
+    fun `a hazard in the full frame warns even when the reticle isn't a plant`() {
+        val result = verifier({ if (it) notPlant else plant }, { hazard }).analyze(frame, target) { close }
+
+        assertEquals(listOf("gate:reticle", "gate:full", "bioclip:full"), calls)
         assertTrue(result.evidence.hazard)
         assertFalse(result.evidence.reticlePlant)
         assertNull(result.reticleHazardRank)
@@ -83,24 +87,31 @@ class FrameVerifierTest {
     }
 
     @Test
-    fun `no plant anywhere skips BioCLIP`() {
-        val calls = mutableListOf<String>()
-        val result = verifier({ notPlant }, { error("BioCLIP must not run") }, calls).analyze(frame, target) { null }
+    fun `a hazard in either plant region warns while the other looks safe`() {
+        val result = verifier({ plant }, { if (it) safe else hazard }).analyze(frame, target) { close }
 
+        assertTrue(result.evidence.hazard)
+        assertEquals(7, result.reticleHazardRank)
+        assertEquals(1, result.fullHazardRank)
+    }
+
+    @Test
+    fun `no plant anywhere skips BioCLIP`() {
+        val result = verifier({ notPlant }, { error("BioCLIP must not run") }).analyze(frame, target) { null }
+
+        assertEquals(listOf("gate:reticle", "gate:full"), calls)
         assertEquals(
             FrameEvidence(hazard = false, reticlePlant = false, focus = null, goalMet = false),
             result.evidence,
         )
-        assertTrue(result.reticleShare < PlantGate.THRESHOLD && result.fullShare < PlantGate.THRESHOLD)
     }
 
     @Test
     fun `the tutorial skips the hazard check and the full-frame BioCLIP`() {
-        val calls = mutableListOf<String>()
         val tutorial = TutorialGoal(labels, 0, intArrayOf(0, 1))
-        val result = verifier({ plant }, { notPlant }, calls).analyze(frame, tutorial) { close }
+        val result = verifier({ plant }, { hazard }).analyze(frame, tutorial) { close }
 
-        assertEquals(listOf("gate:224", "gate:224", "bioclip"), calls)
+        assertEquals(listOf("gate:reticle", "gate:full", "bioclip:reticle"), calls)
         assertFalse(result.evidence.hazard)
         assertNull(result.reticleHazardRank)
         assertNull(result.fullHazardRank)
@@ -109,7 +120,7 @@ class FrameVerifierTest {
 
     @Test
     fun `each stage is timed and the stages sum to the total`() {
-        val times = verifier({ plant }, { plant }, mutableListOf()).analyze(frame, target) { close }.times
+        val times = verifier({ plant }, { safe }).analyze(frame, target) { close }.times
 
         assertEquals(
             StageTimes(crop = 1, resize = 1, plantGate = 1, bioclip = 1, hazard = 1, goal = 1, total = 7),
@@ -119,8 +130,7 @@ class FrameVerifierTest {
 
     @Test
     fun `focus is asked for after the models ran`() {
-        val calls = mutableListOf<String>()
-        verifier({ plant }, { plant }, calls).analyze(frame, target) {
+        verifier({ plant }, { safe }).analyze(frame, target) {
             calls += "focus"
             close
         }
@@ -129,19 +139,29 @@ class FrameVerifierTest {
     }
 
     @Test
-    fun `a non-finite embedding fails loudly instead of ranking every hazard first`() {
-        assertThrows<IllegalStateException> {
-            verifier({ plant }, { floatArrayOf(Float.NaN, 0f) }, mutableListOf()).analyze(frame, target) { close }
+    fun `a non-finite embedding fails loudly and names the encoder and crop`() {
+        val error = assertThrows<IllegalStateException> {
+            verifier({ plant }, { floatArrayOf(Float.NaN, 0f) }).analyze(frame, target) { close }
         }
+
+        assertEquals("BioCLIP reticle embedding is not finite", error.message)
     }
 
     @Test
-    fun `the reticle crop is the frame's middle`() {
-        val result = verifier({ notPlant }, { plant }, mutableListOf()).analyze(frame, target) { null }
+    fun `the capture is the reticle square at analysis resolution`() {
+        val result = verifier({ notPlant }, { safe }).analyze(frame, target) { null }
 
-        assertEquals(Box(7, 2, 6, 6), Crops.reticle(20, 10))
-        assertEquals(setOf(RED, BLUE), result.reticle.argb.toSet())
+        assertEquals(Box(12, 2, 6, 6), reticleBox)
+        assertEquals(6 to 6, result.reticle.width to result.reticle.height)
+        assertTrue(result.reticle.isReticle())
     }
+
+    private fun inReticle(x: Int, y: Int) = x in reticleBox.left until reticleBox.left + reticleBox.width &&
+        y in reticleBox.top until reticleBox.top + reticleBox.height
+
+    private fun Pixels.isReticle() = argb.all { it == GREEN }
+
+    private fun region(p: Pixels) = if (p.isReticle()) "reticle" else "full"
 
     /** A clock that advances one nanosecond per read. */
     private class Ticks : () -> Long {
@@ -151,7 +171,9 @@ class FrameVerifierTest {
     }
 
     private companion object {
+        const val WIDTH = 30
+        const val HEIGHT = 10
         const val RED = 0xFFFF0000.toInt()
-        const val BLUE = 0xFF0000FF.toInt()
+        const val GREEN = 0xFF00FF00.toInt()
     }
 }

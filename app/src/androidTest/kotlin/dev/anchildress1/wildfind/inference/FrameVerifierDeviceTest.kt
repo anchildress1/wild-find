@@ -12,7 +12,6 @@ import dev.anchildress1.wildfind.core.frame.red
 import dev.anchildress1.wildfind.core.verify.Focus
 import dev.anchildress1.wildfind.core.verify.FrameVerifier
 import dev.anchildress1.wildfind.core.verify.HazardCheck
-import dev.anchildress1.wildfind.core.verify.LabelSet
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -30,8 +29,7 @@ class FrameVerifierDeviceTest {
     @Test
     fun theFixtureFramePassesTheGateAndNoHazardWithTheLaptopPlantShare() {
         val labels = bundled.labels()
-        val words = labels.entries.filter { it.kind == LabelSet.Kind.WORD }.map { it.id }
-        val goal = labels.targetGoal("oak", words, floor = null, margin = null)
+        val goal = labels.targetGoal("oak", labels.words, floor = null, margin = null)
         val frame = rgbaFrame(testBitmap("reference/fixture.png").pixels())
         val focus = Focus(Focus.AF_FOCUSED_LOCKED, CLOSE_DIOPTERS, 1f)
 
@@ -45,7 +43,7 @@ class FrameVerifierDeviceTest {
                 Log.i(TAG, "shares ${result.reticleShare} ${result.fullShare}, goal ${result.goal}")
                 Log.i(TAG, "hazard ranks ${result.reticleHazardRank} ${result.fullHazardRank}")
 
-                assertEquals(5, words.size)
+                assertEquals(5, labels.words.size)
                 // A 224-square fixture: the full-frame crop resizes to itself, so the laptop share must hold.
                 assertEquals(gateReference().getDouble("plant_share"), result.fullShare, SHARE_TOLERANCE)
                 assertTrue(result.evidence.reticlePlant)

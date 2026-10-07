@@ -6,8 +6,8 @@ from pathlib import Path
 
 import numpy as np
 
-from wild_find_pipeline.labels import DEV_WORDS, TUTORIAL, embedding_versions, prompt
-from wild_find_pipeline.paths import LABELS_DIR, pin
+from wild_find_pipeline.labels import DEV_WORDS, TUTORIAL, embedding_versions, prompt, teacher_model
+from wild_find_pipeline.paths import LABELS_DIR
 
 SCHEMA_VERSION = 1
 UNIT_TOLERANCE = 1e-4
@@ -38,14 +38,13 @@ def check_vectors(vectors: np.ndarray, count: int) -> np.ndarray:
 
 def write(out: Path, rows: list[dict[str, str]], vectors: np.ndarray) -> None:
     """Write labels.npy and labels.json under `out`."""
-    teacher = pin("teacher")
     out.mkdir(parents=True, exist_ok=True)
     np.save(out / "labels.npy", check_vectors(vectors, len(rows)))
     (out / "labels.json").write_text(
         json.dumps(
             {
                 "schema_version": SCHEMA_VERSION,
-                "text_model": {"repo": teacher["repo"], "revision": teacher["revision"]},
+                "text_model": teacher_model(),
                 "packages": embedding_versions(),
                 "labels": [{**row, "prompt": prompt(row["scientific"])} for row in rows],
             },

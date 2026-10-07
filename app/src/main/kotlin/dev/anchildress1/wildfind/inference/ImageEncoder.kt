@@ -24,7 +24,7 @@ class ImageEncoder(model: ByteBuffer) :
     private val options = OrtSession.SessionOptions()
     private val session = env.createSession(model, options)
 
-    /** Embeds [pixels], which must be exactly [SIZE]x[SIZE]; resizing and cropping are the caller's job. */
+    /** Embeds [pixels], which must be exactly [Crops.MODEL_SIZE] square; resizing and cropping are the caller's job. */
     override fun embed(pixels: Pixels): FloatArray {
         require(pixels.width == SIZE && pixels.height == SIZE) {
             "expected ${SIZE}x$SIZE, got ${pixels.width}x${pixels.height}"
@@ -54,9 +54,7 @@ class ImageEncoder(model: ByteBuffer) :
         return buffer
     }
 
-    /** Input geometry the model was trained on. */
-    companion object {
-        /** Width and height of the model input, in pixels. */
+    private companion object {
         const val SIZE = Crops.MODEL_SIZE
         private const val INPUT = "image"
         private const val CHANNELS = 3
