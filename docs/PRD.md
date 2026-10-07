@@ -341,7 +341,7 @@ radius\_km is 75, or 150 after the widen, so widened counts never pass as 75 km 
 | Gemma, scene call | Scene image plus the fixed tag list | JSON array of tags |
 | Gemma, hint call | Fact card, tags, hint level | One line, 20 words or fewer |
 
-**Crops** (the geometry Day 1 measured): both come from the rotation-normalized analysis frame. Full frame: the center square with side equal to the shorter edge. Reticle crop: the center square with side 60% of the shorter edge. Each is resized bicubic to 224 x 224. The on-screen circle is drawn inscribed in the reticle square after mapping analysis coordinates to preview coordinates, so the kid aims at the pixels the models read.
+**Crops** (the geometry Day 1 measured): both come from the rotation-normalized analysis frame. Full frame: the center square with side equal to the shorter edge. Reticle crop: the center square with side 60% of the shorter edge. Each is resized bicubic to 224 x 224 with Pillow's fixed-point resampler, which the phone reproduces bit for bit (JVM tests check every rotation against Pillow's own output). The on-screen circle is drawn inscribed in the reticle square after mapping analysis coordinates to preview coordinates, so the kid aims at the pixels the models read.
 
 **The iNaturalist query**
 

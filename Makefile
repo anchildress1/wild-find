@@ -1,4 +1,4 @@
-.PHONY: setup build install device-test focus-probe assets sprites hazard-vectors fetch-models push-models reference test pipeline-test lint ktlint detekt android-lint pipeline-lint shellcheck actionlint secret-scan ai-checks clean
+.PHONY: setup build install device-test focus-probe assets sprites hazard-vectors crop-reference fetch-models push-models reference test pipeline-test lint ktlint detekt android-lint pipeline-lint shellcheck actionlint secret-scan ai-checks clean
 
 SHELL := /bin/bash
 
@@ -71,8 +71,12 @@ sprites:
 hazard-vectors:
 	$(UV) run --group reference python -W error -m wild_find_pipeline.hazard_vectors
 
+# Pillow crops the JVM frame tests must match pixel for pixel.
+crop-reference:
+	$(UV) run --group reference python -W error -m wild_find_pipeline.crop_reference
+
 # Parity references for the on-device tests: BioCLIP (Day 1) and the bundled plant gate.
-reference: assets
+reference: assets crop-reference
 	$(UV) run --group reference python -W error -m wild_find_pipeline.reference
 	$(UV) run --group reference python -W error -m wild_find_pipeline.gate_reference
 
