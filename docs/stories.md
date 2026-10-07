@@ -42,7 +42,7 @@ Every runtime model (TinyCLIP, BioCLIP, Gemma) runs on the test phone, or nothin
 
 ## App · Oct 8–9
 
-- [ ] **S30 Briar host** — Compose sprite player for the PRD sheet contract, five states (welcome, searching/hint, found, retry, complete) driven by game events; every state plays the 8-frame `idle` loop until per-state art lands
+- [ ] **S30 Briar host** — Compose sprite player for the PRD sheet contract, five states (welcome, searching/hint, found, retry, complete) driven by game events; each state sheet plays once and holds its last frame; every state plays the 16-frame `idle` loop until per-state art lands
 - [ ] **S31 Safety opener** — R1, placeholder art, replayable, banned-copy check in tests
 - [ ] **S32 Location** — coarse permission only, manual region pick on deny; coverage message off-region; R2, R7
 - [ ] **S33 iNat client** — one query, ≤ 3 pages (≤ 6 on the widen path), named User-Agent, 429 Retry-After; R2
