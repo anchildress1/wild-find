@@ -412,6 +412,7 @@ Briar and the opener play finished sprite sheets, one per state. A Rive rig was 
 | --- | --- | --- |
 | Logo | Splash, About | Path pending (Open Questions) |
 | Concept board | Poses, icon ideas, palette; reference only, broken alpha | assets/source/wild-find-sprite-1.png |
+| UI direction 01 | Eight-screen review concept: first launch with the hint-download bar, grass tutorial, hunt map, live camera, hint, found, give it space, hunt complete; reference only | assets/source/wild-find-app-design.png |
 | Briar idle loop | 16-frame rest-and-blink idle, source for `idle`; plays for every state until per-state art exists | assets/source/briar-rest-blink-16.png |
 | Briar sprite sheets | Per-state sheets: welcome; searching or hint; found; retry; hunt complete | app/src/main/assets/briar/ (only `idle` so far) |
 | Category icons | One per icon\_category: tree, flower, fern, grass, vine, shrub, moss, other | Path pending |
