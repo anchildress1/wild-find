@@ -1,0 +1,26 @@
+run 20261007-180644-oak: samsung SM-S928U (SM8650), Android 16, app 0.1.0
+goal target oak, requested analysis 1920x1440, viewport 1080x2340, timestamp_source 1
+WARNING: no stop event; the run ended without a clean close (crash, kill, or still running)
+WARNING: paused 1 time(s) (screen off or app left); frames and samples have gaps
+frames: 19 over 246 s (0.1 analyzed/s), upright 886x1920
+frame ms (buffer to verdict): p50 189, p95 263, max 399; at or over 500 ms: 0 of 19
+frame ms with BioCLIP on both regions: p50 192, p95 248, max 248 (14 frames)
+stage p50 ms: crop 16.6, resize 18.8, gate 63.6, bioclip 78.4, hazard 12.4, goal 0.0
+focus matched by sensor timestamp: 19 of 19
+verdicts: hazard 1, not_plant 5, tap_to_focus 2, walk_closer 11
+tap_to_focus with no focus reading for the frame: 0 of 2
+reticle top-1 species: Cynodon dactylon 2, Stenotaphrum secundatum 1, Celtis laevigata 1, Pseudopanax crassifolius 1, Rubus flagellaris 1, Cinnamomum camphora 1, Passiflora tetrandra 1, Bignonia capreolata 1, Fraxinus pennsylvanica 1, Populus trichocarpa 1
+hazard warnings by species (region-frames): Toxicodendron radicans 1
+capture to analyzer ms: p50 72, p95 97, max 132
+first eligible frame to Found: no Found this run
+system: 5.5 min sampled, charging yes
+PSS MB: start 316, max 3235, end 3024
+thermal status max none
+thermal headroom: first 0.65 at 0.0 min, max 0.78, end 0.76; 0 of 162 samples NaN
+battery temp C: start 32.3, max 34.1, end 33.1
+battery %: 99 to 96 (33 %/h)
+Gemma load: 4908.518956 ms, pss 2347345 kB
+hint taps: 3; tap to hint ms: p50 2203, p95 2245, max 2249; at or over 5000: 0
+hint parts p50 ms: lead 0, frame 44, jpeg 24, scene 1283, wait 0, hint 660
+with one guard retry ms: p50 2905, p95 3041, max 3056
+replies with no scene tags: 1; empty hints: 0
