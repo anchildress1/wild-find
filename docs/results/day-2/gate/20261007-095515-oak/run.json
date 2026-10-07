@@ -1,0 +1,14 @@
+{
+ "started": "2026-10-07T09:55:15-04:00",
+ "device": "samsung SM-S928U",
+ "soc": "SM8650",
+ "android": "16",
+ "sdk": 36,
+ "app_version": "0.1.0",
+ "word": "oak",
+ "goal": "target",
+ "requested_analysis": "1920x1440",
+ "frame_interval_ms": 200,
+ "gemma": "litert-community\/gemma-4-E2B-it-litert-lm@b3ca0d2f076785a8f4b2219ddbd2bdb99954eae1\/gemma-4-E2B-it.litertlm",
+ "bioclip": "crazedcodernate\/bioclip-2.5-mobile-fastvit@29b474ea2a5d72b4646f036ead9441e0a22a5c62\/flora_student_fp32.onnx"
+}
