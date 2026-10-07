@@ -1,0 +1,151 @@
+subject,photo,top1,genus_right,local_top,local_genus_right,top3_agree
+oak,oak_1.jpg,Plumeria rubra,False,,,False
+oak,oak_2.jpg,Quercus shumardii,True,Quercus shumardii,True,True
+clover,clover_1.jpg,Urtica dioica,False,,,False
+clover,clover_2.jpg,Carya ovata,False,Carya ovata,False,True
+pine,pine_1.jpg,Cochlospermum vitifolium,False,Campsis radicans,False,False
+pine,pine_2.jpg,Pinus taeda,True,Pinus taeda,True,True
+dandelion,dandelion_1.jpg,Parkinsonia aculeata,False,Asparagus officinalis,False,False
+dandelion,dandelion_2.jpg,Thamnosma montana,False,,,False
+poisonivy,poisonivy_1.jpg,Toxicodendron radicans,True,Toxicodendron radicans,True,False
+poisonivy,poisonivy_2.jpg,Psychotria asiatica,False,,,False
+oak,oak_398522729.jpg,Quercus sinuata,True,Quercus muehlenbergii,True,True
+oak,oak_398522443.jpg,Quercus nigra,True,Quercus nigra,True,True
+oak,oak_43604874.jpg,Quercus stellata,True,Quercus stellata,True,True
+oak,oak_309119391.jpg,Peritoma arborea,False,,,False
+oak,oak_53007204.jpg,Quercus shumardii,True,Quercus shumardii,True,True
+oak,oak_318311909.jpg,Annona glabra,False,,,False
+oak,oak_363790437.jpg,Quercus marilandica,True,Quercus marilandica,True,True
+oak,oak_328991174.jpg,Quercus macrocarpa,True,Quercus alba,True,True
+oak,oak_314494391.jpg,Quercus falcata,True,Quercus falcata,True,True
+oak,oak_237720737.jpg,Quercus velutina,True,Quercus velutina,True,True
+pine,pine_71622438.jpg,Pinus elliottii,True,Pinus palustris,True,True
+pine,pine_360502159.jpg,Boophone disticha,False,Pinus palustris,True,False
+pine,pine_109885814.jpg,Pinus contorta,True,,,False
+pine,pine_360501929.jpg,Pinus palustris,True,Pinus palustris,True,True
+pine,pine_353810852.jpg,Conicosia pugioniformis,False,,,False
+pine,pine_305411590.jpg,Pinus banksiana,True,Pinus virginiana,True,True
+pine,pine_368827308.jpg,Pinus elliottii,True,Pinus palustris,True,True
+pine,pine_274979130.jpg,Pinus taeda,True,Pinus taeda,True,True
+pine,pine_277025434.jpg,Tsuga canadensis,False,Tsuga canadensis,False,False
+pine,pine_197008810.jpg,Delonix regia,False,,,False
+maple,maple_185909345.jpg,Acer palmatum,True,Parthenocissus quinquefolia,False,False
+maple,maple_354467072.jpg,Liquidambar styraciflua,False,Liquidambar styraciflua,False,False
+maple,maple_295533115.jpg,Ptelea trifoliata,False,Ptelea trifoliata,False,False
+maple,maple_295533286.jpg,Quercus falcata,False,Quercus falcata,False,True
+maple,maple_292509018.jpg,Acer rubrum,True,Acer rubrum,True,True
+maple,maple_285639441.jpg,Acer saccharum,True,Acer saccharum,True,True
+maple,maple_72135812.jpg,Vachellia farnesiana,False,,,False
+maple,maple_74594102.jpg,Acer nigrum,True,Acer saccharum,True,True
+maple,maple_241038100.jpg,Cornus sanguinea,False,Cornus alternifolia,False,False
+maple,maple_174967757.jpg,Acer spicatum,True,,,False
+sweetgum,sweetgum_267797916.jpg,Ricinus communis,False,Ricinus communis,False,False
+sweetgum,sweetgum_186693668.jpg,Salix eriocephala,False,Cephalanthus occidentalis,False,False
+sweetgum,sweetgum_93428583.jpg,Acer floridanum,False,Acer floridanum,False,True
+sweetgum,sweetgum_96329510.jpg,Smilax tamnoides,False,Smilax tamnoides,False,False
+sweetgum,sweetgum_75817784.jpg,Bryum argenteum,False,Bryum argenteum,False,False
+sweetgum,sweetgum_388029933.jpg,Vachellia karroo,False,,,True
+sweetgum,sweetgum_162228324.jpg,Quercus falcata,False,Quercus falcata,False,False
+sweetgum,sweetgum_235845659.jpg,Liquidambar styraciflua,True,Liquidambar styraciflua,True,False
+sweetgum,sweetgum_196672785.jpg,Liquidambar styraciflua,True,Liquidambar styraciflua,True,False
+sweetgum,sweetgum_267206868.jpg,Echinocystis lobata,False,Melothria pendula,False,False
+clover,clover_360420143.jpg,Medicago polymorpha,False,Trifolium campestre,True,False
+clover,clover_116135166.jpg,Trifolium aureum,True,Trifolium campestre,True,False
+clover,clover_21647604.jpg,Trifolium incarnatum,True,Trifolium pratense,True,True
+clover,clover_148398490.jpg,Medicago polymorpha,False,Trifolium repens,True,False
+clover,clover_166931416.jpg,Trifolium pratense,True,Trifolium pratense,True,True
+clover,clover_295532142.jpg,Trifolium pratense,True,Trifolium pratense,True,True
+clover,clover_347184606.jpg,Trifolium incarnatum,True,Trifolium pratense,True,True
+clover,clover_368882118.jpg,Marshallia caespitosa,False,,,False
+clover,clover_391225110.jpg,Trifolium medium,True,Trifolium pratense,True,True
+clover,clover_270225229.jpg,Vicia americana,False,Vicia sativa,False,True
+dandelion,dandelion_345312783.jpg,Taraxacum officinale,True,Sonchus oleraceus,False,False
+dandelion,dandelion_21582736.jpg,Taraxacum officinale,True,Hypochaeris radicata,False,False
+dandelion,dandelion_108365053.jpg,Scorzoneroides autumnalis,False,,,False
+dandelion,dandelion_109409921.jpg,Taraxacum officinale,True,Hypochaeris radicata,False,False
+dandelion,dandelion_201936576.jpg,Taraxacum officinale,True,Sonchus oleraceus,False,False
+dandelion,dandelion_114940138.jpg,Taraxacum officinale,True,Hypochaeris radicata,False,False
+dandelion,dandelion_39469049.jpg,Taraxacum officinale,True,Hypochaeris radicata,False,False
+dandelion,dandelion_65700688.jpg,Taraxacum officinale,True,Hypochaeris radicata,False,False
+dandelion,dandelion_143959013.jpg,Taraxacum officinale,True,Youngia japonica,False,False
+dandelion,dandelion_96999892.jpg,Scorzoneroides autumnalis,False,Hypochaeris radicata,False,False
+magnolia,magnolia_351718841.jpg,Magnolia tripetala,True,Magnolia tripetala,True,True
+magnolia,magnolia_357301974.jpg,Magnolia acuminata,True,Magnolia acuminata,True,False
+magnolia,magnolia_219012133.jpg,Magnolia macrophylla,True,Magnolia macrophylla,True,True
+magnolia,magnolia_251177662.jpg,Psychotria asiatica,False,Magnolia virginiana,True,False
+magnolia,magnolia_371399763.jpg,Calotropis procera,False,,,False
+magnolia,magnolia_60627713.jpg,Magnolia macrophylla,True,Magnolia macrophylla,True,True
+magnolia,magnolia_60606688.jpg,Magnolia macrophylla,True,Magnolia macrophylla,True,True
+magnolia,magnolia_164228758.jpg,Magnolia macrophylla,True,Magnolia macrophylla,True,True
+magnolia,magnolia_118925907.jpg,Nyssa sylvatica,False,Nyssa sylvatica,False,False
+magnolia,magnolia_80465557.jpg,Magnolia tripetala,True,Magnolia tripetala,True,True
+violet,violet_272831934.jpg,Viola pedatifida,True,,,False
+violet,violet_347694786.jpg,Viola palmata,True,Smallanthus uvedalia,False,False
+violet,violet_156481315.jpg,Viola pedatifida,True,,,False
+violet,violet_74595584.jpg,Ranunculus hispidus,False,Hypoxis hirsuta,False,False
+violet,violet_113009335.jpg,Viola canadensis,True,,,True
+violet,violet_109797658.jpg,Viola nuttallii,True,,,True
+violet,violet_153884718.jpg,Melothria pendula,False,Melothria pendula,False,False
+violet,violet_151894066.jpg,Viola riviniana,True,,,False
+violet,violet_343819870.jpg,Viola sororia,True,,,True
+violet,violet_7871180.jpg,Viola rotundifolia,True,Eurybia divaricata,False,False
+honeysuckle,honeysuckle_3323351.jpg,Lonicera japonica,True,Lonicera japonica,True,True
+honeysuckle,honeysuckle_300966429.jpg,Celtis pallida,False,Elaeagnus pungens,False,False
+honeysuckle,honeysuckle_19540307.jpg,Ligustrum sinense,False,Ligustrum sinense,False,False
+honeysuckle,honeysuckle_28400905.jpg,Hedychium coronarium,False,Hedychium coronarium,False,False
+honeysuckle,honeysuckle_36945277.jpg,Smilax aspera,False,Smilax tamnoides,False,True
+honeysuckle,honeysuckle_161677638.jpg,Lonicera japonica,True,Lonicera japonica,True,True
+honeysuckle,honeysuckle_79931175.jpg,Lonicera japonica,True,Lonicera japonica,True,True
+honeysuckle,honeysuckle_74726760.jpg,Symphoricarpos orbiculatus,False,Symphoricarpos orbiculatus,False,False
+honeysuckle,honeysuckle_24854627.jpg,Forestiera pubescens,False,Lonicera maackii,True,False
+honeysuckle,honeysuckle_345692495.jpg,Symphoricarpos mollis,False,,,False
+poison_ivy,poison_ivy_187310885.jpg,Toxicodendron radicans,True,Toxicodendron radicans,True,False
+poison_ivy,poison_ivy_120385547.jpg,Toxicodendron rydbergii,True,Toxicodendron radicans,True,True
+poison_ivy,poison_ivy_267986184.jpg,Tillandsia recurvata,False,,,False
+poison_ivy,poison_ivy_161804350.jpg,Toxicodendron radicans,True,Toxicodendron radicans,True,True
+poison_ivy,poison_ivy_177285710.jpg,Toxicodendron radicans,True,Toxicodendron radicans,True,True
+poison_ivy,poison_ivy_170203141.jpg,Oxydendrum arboreum,False,Oxydendrum arboreum,False,False
+poison_ivy,poison_ivy_293267010.jpg,Sassafras albidum,False,Sassafras albidum,False,False
+poison_ivy,poison_ivy_207844923.jpg,Toxicodendron radicans,True,Toxicodendron radicans,True,True
+poison_ivy,poison_ivy_13112921.jpg,Quercus marilandica,False,Quercus marilandica,False,False
+poison_ivy,poison_ivy_274901221.jpg,Toxicodendron radicans,True,Toxicodendron radicans,True,False
+poison_oak,poison_oak_357861641.jpg,Toxicodendron pubescens,True,Toxicodendron radicans,True,False
+poison_oak,poison_oak_154626076.jpg,Toxicodendron radicans,True,Toxicodendron radicans,True,True
+poison_oak,poison_oak_388255640.jpg,Toxicodendron rydbergii,True,Toxicodendron radicans,True,False
+poison_oak,poison_oak_27883238.jpg,Carya glabra,False,Carya glabra,False,False
+poison_oak,poison_oak_247037740.jpg,Toxicodendron radicans,True,Toxicodendron radicans,True,False
+poison_oak,poison_oak_118524258.jpg,Toxicodendron radicans,True,Toxicodendron radicans,True,True
+poison_oak,poison_oak_239391316.jpg,Rhus virens,False,Viburnum rufidulum,False,False
+poison_oak,poison_oak_98440726.jpg,Quercus marilandica,False,Quercus marilandica,False,False
+poison_oak,poison_oak_46634260.jpg,Toxicodendron pubescens,True,Toxicodendron radicans,True,True
+poison_oak,poison_oak_14221611.jpg,Toxicodendron rydbergii,True,Toxicodendron radicans,True,True
+poison_sumac,poison_sumac_387448086.jpg,Toxicodendron radicans,True,Toxicodendron radicans,True,True
+poison_sumac,poison_sumac_3140581.jpg,Apocynum cannabinum,False,Apocynum cannabinum,False,False
+poison_sumac,poison_sumac_396031193.jpg,Oxydendrum arboreum,False,Oxydendrum arboreum,False,False
+poison_sumac,poison_sumac_396810195.jpg,Fraxinus pennsylvanica,False,Fraxinus pennsylvanica,False,False
+poison_sumac,poison_sumac_397844618.jpg,Toxicodendron vernix,True,,,False
+poison_sumac,poison_sumac_183875536.jpg,Toxicodendron vernix,True,,,False
+poison_sumac,poison_sumac_233122366.jpg,Toxicodendron vernix,True,Apios americana,False,False
+poison_sumac,poison_sumac_81163949.jpg,Cyrilla racemiflora,False,Cyrilla racemiflora,False,False
+poison_sumac,poison_sumac_241642163.jpg,Fraxinus pennsylvanica,False,Fraxinus pennsylvanica,False,True
+poison_sumac,poison_sumac_189283633.jpg,Toxicodendron vernix,True,Fraxinus americana,False,False
+pokeweed,pokeweed_60455060.jpg,Phytolacca americana,True,Phytolacca americana,True,False
+pokeweed,pokeweed_230542881.jpg,Cornus sericea,False,Cornus amomum,False,True
+pokeweed,pokeweed_124308350.jpg,Toxicodendron radicans,False,Toxicodendron radicans,False,False
+pokeweed,pokeweed_348788863.jpg,Phytolacca americana,True,Phytolacca americana,True,False
+pokeweed,pokeweed_210262679.jpg,Phytolacca americana,True,Phytolacca americana,True,False
+pokeweed,pokeweed_29634110.jpg,Phytolacca americana,True,Phytolacca americana,True,True
+pokeweed,pokeweed_388023321.jpg,Phytolacca americana,True,Phytolacca americana,True,False
+pokeweed,pokeweed_157764467.jpg,Phytolacca americana,True,Phytolacca americana,True,False
+pokeweed,pokeweed_87058636.jpg,Phytolacca americana,True,Phytolacca americana,True,False
+pokeweed,pokeweed_166650461.jpg,Phytolacca americana,True,Phytolacca americana,True,False
+horsenettle,horsenettle_128063257.jpg,Solanum carolinense,True,Solanum carolinense,True,False
+horsenettle,horsenettle_265551501.jpg,Solanum carolinense,True,Solanum carolinense,True,True
+horsenettle,horsenettle_217820218.jpg,Quercus marilandica,False,Quercus marilandica,False,True
+horsenettle,horsenettle_166822583.jpg,Solanum carolinense,True,Solanum carolinense,True,True
+horsenettle,horsenettle_7378512.jpg,Solanum douglasii,True,Solanum americanum,True,True
+horsenettle,horsenettle_294427611.jpg,Solanum carolinense,True,Solanum carolinense,True,True
+horsenettle,horsenettle_127279141.jpg,Solanum carolinense,True,Solanum carolinense,True,True
+horsenettle,horsenettle_317558499.jpg,Solanum dimidiatum,True,Solanum carolinense,True,True
+horsenettle,horsenettle_363487826.jpg,Calochortus nuttallii,False,,,False
+horsenettle,horsenettle_298443769.jpg,Solanum umbelliferum,True,Solanum carolinense,True,True

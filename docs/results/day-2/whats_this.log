@@ -1,0 +1,19 @@
+# 2026-10-07 18:43 EDT, from docs/results/day-1/species_scores.csv (BioCLIP Mobile, whole table) and inat_species_oct.csv
+150 reticle crops; top-1 in the right genus: 90 (60%)
+local estimate: 124 crops have a local species in their top 5; its genus is right on 72 (58%); 26 would say not sure
+top 3 agree on a genus: 61 of 150 crops; that genus is right on 52 (85%); the other 89 would say not sure
+  clover: 6 of 12; wrong picks [('Medicago polymorpha', 2), ('Urtica dioica', 1), ('Carya ovata', 1)]
+  dandelion: 8 of 12; wrong picks [('Scorzoneroides autumnalis', 2), ('Parkinsonia aculeata', 1), ('Thamnosma montana', 1)]
+  honeysuckle: 3 of 10; wrong picks [('Celtis pallida', 1), ('Ligustrum sinense', 1), ('Hedychium coronarium', 1)]
+  horsenettle: 8 of 10; wrong picks [('Quercus marilandica', 1), ('Calochortus nuttallii', 1)]
+  magnolia: 7 of 10; wrong picks [('Psychotria asiatica', 1), ('Calotropis procera', 1), ('Nyssa sylvatica', 1)]
+  maple: 5 of 10; wrong picks [('Liquidambar styraciflua', 1), ('Ptelea trifoliata', 1), ('Quercus falcata', 1)]
+  oak: 9 of 12; wrong picks [('Plumeria rubra', 1), ('Peritoma arborea', 1), ('Annona glabra', 1)]
+  pine: 7 of 12; wrong picks [('Cochlospermum vitifolium', 1), ('Boophone disticha', 1), ('Conicosia pugioniformis', 1)]
+  poison_ivy: 6 of 10; wrong picks [('Tillandsia recurvata', 1), ('Oxydendrum arboreum', 1), ('Sassafras albidum', 1)]
+  poison_oak: 7 of 10; wrong picks [('Carya glabra', 1), ('Rhus virens', 1), ('Quercus marilandica', 1)]
+  poison_sumac: 5 of 10; wrong picks [('Fraxinus pennsylvanica', 2), ('Apocynum cannabinum', 1), ('Oxydendrum arboreum', 1)]
+  poisonivy: 1 of 2; wrong picks [('Psychotria asiatica', 1)]
+  pokeweed: 8 of 10; wrong picks [('Cornus sericea', 1), ('Toxicodendron radicans', 1)]
+  sweetgum: 2 of 10; wrong picks [('Ricinus communis', 1), ('Salix eriocephala', 1), ('Acer floridanum', 1)]
+  violet: 8 of 10; wrong picks [('Ranunculus hispidus', 1), ('Melothria pendula', 1)]
