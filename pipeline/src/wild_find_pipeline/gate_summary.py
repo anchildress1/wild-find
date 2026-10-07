@@ -14,6 +14,7 @@ NS_PER_S = 1_000_000_000
 FRAME_BUDGET_MS = 200.0
 FOUND_BUDGET_MS = 1500.0
 HINT_BUDGET_MS = 5000.0
+# The PRD's targets are strict "under" limits, so a sample exactly at one counts against it.
 # PowerManager thermal statuses.
 THERMAL_NAMES = {0: "none", 1: "light", 2: "moderate", 3: "severe", 4: "critical", 5: "emergency", 6: "shutdown"}
 # CameraCharacteristics.SENSOR_INFO_TIMESTAMP_SOURCE_REALTIME: sensor time shares elapsedRealtimeNanos' clock.
@@ -62,11 +63,11 @@ def frame_lines(frames: list[dict[str, str]], camera_event: str) -> list[str]:
     verdicts = Counter(r["verdict"] for r in frames)
     # A missing capture result reads as "Tap the plant to focus" too; split those from real unfocused frames.
     unmatched_tap = sum(r["verdict"] == "tap_to_focus" and r["focus_matched"] != "true" for r in frames)
-    over = sum(t > FRAME_BUDGET_MS for t in totals)
+    over = sum(t >= FRAME_BUDGET_MS for t in totals)
     lines = [
         f"frames: {len(frames)} over {seconds:.0f} s ({len(frames) / seconds if seconds else 0:.1f} analyzed/s), "
         f"upright {frames[0]['frame_w']}x{frames[0]['frame_h']}",
-        f"frame ms (buffer to verdict): {spread(totals)}; over {FRAME_BUDGET_MS:.0f} ms: {over} of {len(totals)}",
+        f"frame ms (buffer to verdict): {spread(totals)}; at or over {FRAME_BUDGET_MS:.0f} ms: {over} of {len(totals)}",
         f"frame ms with BioCLIP on both regions: {spread(both)} ({len(both)} frames)",
         "stage p50 ms: "
         + ", ".join(
@@ -82,9 +83,10 @@ def frame_lines(frames: list[dict[str, str]], camera_event: str) -> list[str]:
         lines.append(f"capture to analyzer ms: {spread(lag)}")
     found = found_latencies(frames)
     if found:
-        late = sum(f > FOUND_BUDGET_MS for f in found)
+        late = sum(f >= FOUND_BUDGET_MS for f in found)
         lines.append(
-            f"first eligible frame to Found ms: {spread(found)}; over {FOUND_BUDGET_MS:.0f}: {late} of {len(found)}"
+            f"first eligible frame to Found ms: {spread(found)}; "
+            f"at or over {FOUND_BUDGET_MS:.0f}: {late} of {len(found)}"
         )
     else:
         lines.append("first eligible frame to Found: no Found this run")
@@ -112,7 +114,8 @@ def system_lines(system: list[dict[str, str]]) -> list[str]:
         if r["thermal_headroom"] not in ("", "NaN")
     ]
     return [
-        f"system: {minutes:.1f} min sampled, charging {'yes' if system[-1]['charging'] == 'true' else 'no'}",
+        f"system: {minutes:.1f} min sampled, charging "
+        + {"true": "yes", "false": "no"}.get(system[-1]["charging"], "unavailable"),
         f"PSS MB: start {pss[0]:.0f}, max {max(pss):.0f}, end {pss[-1]:.0f}",
         f"thermal status max {THERMAL_NAMES[max(statuses)]}" + (f"; first {', '.join(firsts)}" if firsts else ""),
         f"thermal headroom: first {headroom[0][1]:.2f} at {headroom[0][0]:.1f} min, "
@@ -142,10 +145,10 @@ def hint_lines(hints: list[dict[str, str]], events: list[dict[str, str]]) -> lis
     total = [float(h["total_ms"]) for h in hints]
     # Guards may reject the first line and retry once (R6): one more hint call on top of the measured tap.
     worst = [float(h["total_ms"]) + float(h["hint_ms"]) for h in hints]
-    late = sum(t > HINT_BUDGET_MS for t in total)
+    late = sum(t >= HINT_BUDGET_MS for t in total)
     return [
         *lines,
-        f"level-2 taps: {len(hints)}; level-2 tap to hint ms: {spread(total)}; over {HINT_BUDGET_MS:.0f}: {late}",
+        f"level-2 taps: {len(hints)}; level-2 tap to hint ms: {spread(total)}; at or over {HINT_BUDGET_MS:.0f}: {late}",
         "hint parts p50 ms: "
         + ", ".join(
             f"{part} {pct([float(h[f'{part}_ms']) for h in hints], 50):.0f}"
@@ -197,7 +200,7 @@ def main(argv: list[str]) -> int:
         # One truncated or partial run must not stop every run after it from getting a summary.
         try:
             text = summarize(run)
-        except (KeyError, OSError, TypeError, ValueError) as e:
+        except (AttributeError, KeyError, OSError, TypeError, ValueError) as e:
             failed += 1
             text = f"run {run.name}: SUMMARY FAILED: {e!r}"
         (run / "summary.txt").write_text(text + "\n")

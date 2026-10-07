@@ -349,7 +349,8 @@ class GateRun(private val context: Context, private val word: String, val log: G
             power.getThermalHeadroom(HEADROOM_FORECAST_S),
             if (tenths == Int.MIN_VALUE) null else tenths / TENTHS,
             if (level < 0 || scale <= 0) null else level * PERCENT / scale,
-            battery?.let { it.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) != 0 },
+            battery?.takeIf { it.hasExtra(BatteryManager.EXTRA_PLUGGED) }
+                ?.let { it.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) != 0 },
         )
         state.update { it.copy(pssMb = pss / BYTES_PER_KB, thermalStatus = thermal) }
     }

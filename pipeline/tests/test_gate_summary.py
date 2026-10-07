@@ -162,7 +162,7 @@ def test_summary_reports_every_gate_number(run):
     text = summarize(run)
 
     assert "frames: 5 over 1 s" in text
-    assert "over 200 ms: 1 of 5" in text
+    assert "at or over 200 ms: 1 of 5" in text
     assert "(4 frames)" in text
     assert "capture to analyzer ms: p50 40" in text
     assert "first eligible frame to Found ms: p50 580" in text
@@ -196,6 +196,27 @@ def test_a_run_that_died_before_any_row_summarizes_as_empty(run):
     assert "frames: none" in text
     assert "system: none" in text
     assert "hints: none" in text
+
+
+def test_a_frame_exactly_at_the_budget_counts_against_it(run):
+    frames = (run / "frames.csv").read_text().replace(",150.0\n", ",200.0\n", 1)
+    (run / "frames.csv").write_text(frames)
+
+    assert "at or over 200 ms: 2 of 5" in summarize(run)
+
+
+def test_a_missing_charging_state_reads_unavailable(run):
+    (run / "system.csv").write_text((run / "system.csv").read_text().replace(",false\n", ",\n"))
+
+    assert "charging unavailable" in summarize(run)
+
+
+def test_a_run_with_a_truncated_row_fails_alone(run, capsys):
+    with (run / "events.csv").open("a") as f:
+        f.write("5\n")
+
+    assert main([str(run.parent)]) == 1
+    assert "SUMMARY FAILED" in (run / "summary.txt").read_text()
 
 
 def test_a_paused_run_is_flagged(run):
