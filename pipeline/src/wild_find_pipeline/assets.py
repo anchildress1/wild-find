@@ -1,7 +1,8 @@
-"""Bundled APK assets: BioCLIP Mobile, the species table with hazard flags, and the TinyCLIP plant gate.
+"""Bundled APK assets: BioCLIP Mobile, the species table with hazard and toxicity flags, and the TinyCLIP plant gate.
 
 Writes into the gitignored app/generated/assets. Needs no BioCLIP teacher: appended hazard rows come from the
-committed hazard_vectors.json (make hazard-vectors), so CI can run it. Also checks the committed labels.npy and
+committed hazard_vectors.json (make hazard-vectors) and toxicity flags from toxicity.json (make toxicity), so CI
+can run it. Also checks the committed labels.npy and
 labels.json (make labels) against the current label lists and pins.
 """
 
@@ -32,6 +33,7 @@ from wild_find_pipeline.paths import (
     MANIFEST,
     MODEL_CACHE,
     REPO,
+    TOXICITY,
     ensure_artifact,
     file_sha256,
     pin,
@@ -59,6 +61,17 @@ def species_table(table: np.ndarray, names: list[str], extra: dict[str, np.ndarr
         table = np.vstack([table, np.stack(list(extra.values()))])
     labels = [{"scientific": name, "hazard": is_hazard(name)} for name in [*names, *extra]]
     return table.astype(np.float32), labels
+
+
+def with_toxicity(labels: list[dict], flags: dict[str, dict]) -> list[dict]:
+    """Add each row's genus and committed toxicity flag; raises when a row has no flag."""
+    missing = [entry["scientific"] for entry in labels if entry["scientific"] not in flags]
+    if missing:
+        raise ValueError(f"{TOXICITY.name} lacks {len(missing)} species, e.g. {missing[:3]}; run make toxicity")
+    return [
+        {**entry, "genus": entry["scientific"].split()[0], "toxic": flags[entry["scientific"]]["toxic"]}
+        for entry in labels
+    ]
 
 
 def tinyclip_dir() -> Path:
@@ -144,6 +157,7 @@ def hazard_vectors(names: list[str]) -> dict[str, np.ndarray]:
 INPUTS = (
     MANIFEST,
     HAZARD_VECTORS,
+    TOXICITY,
     REPO / "pipeline/uv.lock",
     LABELS_DIR / "labels.json",
     LABELS_DIR / "labels.npy",
@@ -183,6 +197,7 @@ def main() -> int:
         names = [entry["scientific"] for entry in json.loads(ensure_artifact("taxa_labels").read_text())]
         extra = hazard_vectors(names)
         table, labels = species_table(np.load(ensure_artifact("taxa")), names, extra)
+        labels = with_toxicity(labels, json.loads(TOXICITY.read_text())["species"])
         np.save(staging / "species_table.npy", table)
         (staging / "species_labels.json").write_text(json.dumps(labels, indent=1) + "\n")
 
@@ -199,8 +214,10 @@ def main() -> int:
 
         publish(staging)
     hazards = sum(entry["hazard"] for entry in labels)
+    toxic = sum(entry["toxic"] for entry in labels)
     print(
-        f"OK: {GENERATED_ASSETS}: {len(labels)} species ({hazards} hazards, appended {list(extra)}), scale {scale:.4f}"
+        f"OK: {GENERATED_ASSETS}: {len(labels)} species ({hazards} hazards, {toxic} toxic, appended {list(extra)}), "
+        f"scale {scale:.4f}"
     )
     return 0
 
