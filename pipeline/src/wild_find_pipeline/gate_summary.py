@@ -1,4 +1,4 @@
-"""S05 gate-harness summary: per-frame verify time, first eligible frame to Found, hint latency, memory, and heat."""
+"""S05 gate-harness summary: verify time per frame, what BioCLIP saw, time to Found, memory, and heat."""
 
 import csv
 import json
@@ -14,7 +14,6 @@ NS_PER_S = 1_000_000_000
 # The harness analyzes a frame every 500 ms; a slower frame makes it skip the next one.
 FRAME_BUDGET_MS = 500.0
 FOUND_BUDGET_MS = 1500.0
-HINT_BUDGET_MS = 5000.0
 # The PRD's targets are strict "under" limits, so a sample exactly at one counts against it.
 # PowerManager thermal statuses.
 THERMAL_NAMES = {0: "none", 1: "light", 2: "moderate", 3: "severe", 4: "critical", 5: "emergency", 6: "shutdown"}
@@ -156,31 +155,10 @@ def system_lines(system: list[dict[str, str]]) -> list[str]:
     ]
 
 
-def hint_lines(hints: list[dict[str, str]], events: list[dict[str, str]]) -> list[str]:
-    """Summary lines for hints.csv and the Gemma load event."""
-    loaded = [e["detail"] for e in events if e["event"] == "gemma_loaded"]
-    lines = [f"Gemma load: {loaded[0]}" if loaded else "Gemma load: not loaded"]
+def error_lines(events: list[dict[str, str]]) -> list[str]:
+    """How many events were errors, and the first one."""
     errors = [e for e in events if e["event"].endswith("_error")]
-    if errors:
-        lines.append(f"errors: {len(errors)}, first {errors[0]['event']}: {errors[0]['detail']}")
-    if not hints:
-        return [*lines, "hints: none"]
-    total = [float(h["total_ms"]) for h in hints]
-    # Guards may reject the first line and retry once (R6): one more hint call on top of the measured tap.
-    worst = [float(h["total_ms"]) + float(h["hint_ms"]) for h in hints]
-    late = sum(t >= HINT_BUDGET_MS for t in total)
-    return [
-        *lines,
-        f"hint taps: {len(hints)}; tap to hint ms: {spread(total)}; at or over {HINT_BUDGET_MS:.0f}: {late}",
-        "hint parts p50 ms: "
-        + ", ".join(
-            f"{part} {pct([float(h[f'{part}_ms']) for h in hints], 50):.0f}"
-            for part in ("lead", "frame", "jpeg", "scene", "wait", "hint")
-        ),
-        f"with one guard retry ms: {spread(worst)}",
-        f"replies with no scene tags: {sum(not h['tags'] for h in hints)}; "
-        f"empty hints: {sum(not h['hint'] for h in hints)}",
-    ]
+    return [f"errors: {len(errors)}, first {errors[0]['event']}: {errors[0]['detail']}"] if errors else []
 
 
 def summarize(run: Path) -> str:
@@ -204,7 +182,7 @@ def summarize(run: Path) -> str:
         header
         + frame_lines(rows(run / "frames.csv"), camera)
         + system_lines(rows(run / "system.csv"))
-        + hint_lines(rows(run / "hints.csv"), events)
+        + error_lines(events)
     )
 
 

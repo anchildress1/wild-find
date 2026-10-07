@@ -10,10 +10,8 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -49,7 +47,7 @@ import kotlin.math.roundToInt
 private val NO_STATUS = MutableStateFlow(GateStatus())
 private val SCRIM = Color.Black.copy(alpha = 0.7f)
 
-/** The harness screen: live viewfinder, the reticle ring the models read, a readout, and the hint button. */
+/** The harness screen: live viewfinder, the reticle ring the models read, a readout, and the capture button. */
 @Composable
 fun HarnessScreen(
     runs: StateFlow<GateRun?>,
@@ -69,21 +67,11 @@ fun HarnessScreen(
         request?.let { Viewfinder(it, camera) }
         Ring(status)
         Readout(status, Modifier.align(Alignment.TopStart))
-        Row(
-            Modifier.align(Alignment.BottomCenter).padding(32.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            Button(
-                onClick = { run?.requestCapture() },
-                enabled = run != null && !status.capturing,
-                modifier = Modifier.heightIn(min = 56.dp),
-            ) { Text("Capture", fontSize = 22.sp) }
-            Button(
-                onClick = { run?.requestHint() },
-                enabled = status.gemma == "ready",
-                modifier = Modifier.heightIn(min = 56.dp),
-            ) { Text("Hint", fontSize = 22.sp) }
-        }
+        Button(
+            onClick = { run?.requestCapture() },
+            enabled = run != null && !status.capturing,
+            modifier = Modifier.align(Alignment.BottomCenter).padding(32.dp).heightIn(min = 56.dp),
+        ) { Text("Capture", fontSize = 22.sp) }
     }
 }
 
@@ -154,7 +142,5 @@ private fun Readout(status: GateStatus, modifier: Modifier) {
             fontSize = 18.sp,
         )
         if (status.species.isNotEmpty()) Text("sees ${status.species}", color = Color.White, fontSize = 18.sp)
-        Text("Gemma ${status.gemma}", color = Color.White, fontSize = 18.sp)
-        if (status.hint.isNotEmpty()) Text(status.hint, color = Color.White, fontSize = 18.sp)
     }
 }

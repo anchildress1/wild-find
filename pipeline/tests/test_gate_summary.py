@@ -119,29 +119,9 @@ def run(tmp_path):
     ]
     write(d / "system.csv", system)
     write(
-        d / "hints.csv",
-        [
-            {
-                "tap_ns": 1,
-                "lead_ms": 2000,
-                "frame_ms": 150,
-                "jpeg_ms": 20,
-                "scene_ms": 2500,
-                "wait_ms": 670,
-                "hint_ms": 900,
-                "total_ms": 3570,
-                "jpeg_bytes": 1,
-                "tags": "shade",
-                "scene_reply": '["shade"]',
-                "hint": "Look up, near the fence.",
-            }
-        ],
-    )
-    write(
         d / "events.csv",
         [
             {"t_ns": 0, "event": "camera", "detail": "viewport 1080x2340, timestamp_source 1"},
-            {"t_ns": 0, "event": "gemma_loaded", "detail": "4100.0 ms, pss 2100000 kB"},
             {"t_ns": 1, "event": "stop", "detail": "oak"},
         ],
     )
@@ -177,13 +157,8 @@ def test_summary_reports_every_gate_number(run):
     assert "thermal status max moderate; first moderate at 20.0 min" in text
     assert "battery %: 90 to 80 (30 %/h)" in text
     assert "PSS MB: start 2930, max 3027" in text
-    assert "Gemma load: 4100.0 ms" in text
-    assert "tap to hint ms: p50 3570" in text
     assert "reticle top-1 species: Quercus alba 4" in text
     assert "hazard warnings by species (region-frames): none" in text
-    assert "hint parts p50 ms: lead 2000, frame 150, jpeg 20, scene 2500, wait 670, hint 900" in text
-    assert "with one guard retry ms: p50 4470" in text
-    assert "replies with no scene tags: 0; empty hints: 0" in text
     assert "tap_to_focus with no focus reading for the frame: 0 of 0" in text
     assert "1 of 2 samples NaN" in text
     assert "WARNING" not in text
@@ -197,7 +172,7 @@ def test_a_run_without_a_stop_event_is_flagged(run):
 
 
 def test_a_run_that_died_before_any_row_summarizes_as_empty(run):
-    for name in ("frames.csv", "system.csv", "hints.csv"):
+    for name in ("frames.csv", "system.csv"):
         header = (run / name).read_text().splitlines()[0]
         (run / name).write_text(header + "\n")
 
@@ -205,7 +180,6 @@ def test_a_run_that_died_before_any_row_summarizes_as_empty(run):
 
     assert "frames: none" in text
     assert "system: none" in text
-    assert "hints: none" in text
 
 
 def test_a_frame_exactly_at_the_budget_counts_against_it(run):
@@ -257,13 +231,13 @@ def test_capture_lag_needs_a_realtime_sensor_clock(run):
 
 def test_errors_and_missing_battery_extras_are_reported_not_invented(run):
     with (run / "events.csv").open("a") as f:
-        f.write('2,hint_error,"LiteRtLmJniException: boom"\n')
+        f.write('2,sample_error,"IllegalStateException: boom"\n')
     system = (run / "system.csv").read_text().replace(",30.0,90,", ",,,")
     (run / "system.csv").write_text(system)
 
     text = summarize(run)
 
-    assert "errors: 1, first hint_error: LiteRtLmJniException: boom" in text
+    assert "errors: 1, first sample_error: IllegalStateException: boom" in text
     assert "battery temp C: start 38.5" in text
     assert "battery %: 80 to 80" in text
 

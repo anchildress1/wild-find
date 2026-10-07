@@ -40,7 +40,7 @@ import java.util.concurrent.Executors
 import kotlin.concurrent.thread
 
 /**
- * Debug-only gate harness: the live verify path, Gemma scene hints, memory, and heat, logged for `make gate-pull`.
+ * Debug-only gate harness: the verify path on each capture, memory, and heat, logged for `make gate-pull`.
  *
  * Launched from its own launcher icon (target oak) or over adb by `make gate-harness` with the extra [EXTRA_WORD].
  */
@@ -180,9 +180,7 @@ class GateHarnessActivity : ComponentActivity() {
         put("goal", if (word == GateRun.TUTORIAL) "tutorial" else "target")
         put("requested_analysis", "${size.width}x${size.height}")
         put("capture_frames", VerifyStreak.FRAMES)
-        listOf("gemma", "bioclip").forEach { model ->
-            put(model, ModelPin.load(model).let { "${it.repo}@${it.revision}/${it.file}" })
-        }
+        put("bioclip", ModelPin.load("bioclip").let { "${it.repo}@${it.revision}/${it.file}" })
     }
 
     /** Launch extras. */
