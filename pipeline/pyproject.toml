@@ -7,6 +7,8 @@ dependencies = ["numpy>=2.3", "pillow>=11.3", "scipy>=1.18.1"]
 
 [dependency-groups]
 dev = ["gitlint-rai>=1.0.3", "pytest>=9.1.1", "ruff>=0.16.10"]
+# Build-time Gemma for `make candidates` only; it needs the 2.6 GB pinned model, so CI never runs it.
+gemma = ["litert-lm-api>=0.18.0"]
 # Model runtimes for `make reference` and `make assets` only; lint and unit tests never import them.
 reference = [
     "huggingface-hub>=0.35",
