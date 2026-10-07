@@ -1,0 +1,118 @@
+count,name,common,usda,wikipedia_toxic
+362,Conoclinium coelestinum,blue mistflower,none,False
+230,Callicarpa americana,American beautyberry,none,False
+183,Liquidambar styraciflua,American sweetgum,none,False
+183,Persicaria longiseta,low smartweed,missing,False
+159,Magnolia grandiflora,southern magnolia,none,False
+156,Phytolacca americana,American pokeweed,slight,True
+154,Liriodendron tulipifera,American tuliptree,none,False
+151,Eupatorium capillifolium,dogfennel,missing,True
+148,Polystichum acrostichoides,Christmas fern,missing,False
+139,Euonymus americanus,strawberry bush,missing,True
+125,Fagus grandifolia,American beech,none,False
+124,Lonicera maackii,Amur honeysuckle,none,True
+116,Erechtites hieraciifolius,American burnweed,missing,False
+103,Ampelopsis glandulosa,Porcelain Berry,missing,False
+97,Diospyros virginiana,American persimmon,none,False
+92,Eupatorium serotinum,late boneset,missing,False
+89,Ligustrum sinense,Chinese privet,missing,True
+84,Platanus occidentalis,American sycamore,none,False
+84,Asarum arifolium,Little Brown Jugs,missing,False
+82,Hedera helix,common ivy,none,True
+82,Vitis rotundifolia,muscadine,none,False
+79,Pueraria montana,kudzu,missing,False
+76,Cercis canadensis,eastern redbud,none,False
+72,Quercus nigra,water oak,none,False
+69,Parthenocissus quinquefolia,Virginia creeper,none,True
+65,Albizia julibrissin,Persian silk tree,none,False
+64,Acer negundo,box elder,none,True
+63,Cornus florida,flowering dogwood,missing,True
+63,Chimaphila maculata,striped wintergreen,missing,False
+63,Nandina domestica,Heavenly bamboo,none,True
+62,Toxicodendron radicans,eastern poison ivy,missing,True
+61,Rhus copallinum,shining sumac,none,False
+60,Solidago altissima,tall goldenrod,missing,False
+60,Ilex cornuta,Chinese holly,none,False
+57,Solanum carolinense,Carolina horsenettle,missing,True
+57,Juglans nigra,eastern black walnut,slight,True
+57,Sassafras albidum,sassafras,none,False
+57,Tipularia discolor,crane-fly orchid,missing,False
+56,Acer rubrum,red maple,slight,True
+56,Asimina triloba,common pawpaw,none,True
+56,Phyllanthus urinaria,Chamberbitter,missing,False
+54,Ilex opaca,American holly,none,True
+54,Perilla frutescens,beefsteak plant,missing,True
+54,Elaeagnus pungens,thorny olive,missing,False
+53,Symphyotrichum pilosum,frost aster,none,False
+52,Impatiens capensis,common jewelweed,none,False
+52,Quercus alba,white oak,none,False
+50,Ipomoea purpurea,common morning-glory,missing,False
+50,Berberis bealei,leatherleaf mahonia,missing,True
+48,Epifagus virginiana,Beechdrops,missing,False
+48,Chasmanthium latifolium,river oats,none,False
+47,Oxydendrum arboreum,sourwood,none,False
+47,Magnolia macrophylla,bigleaf magnolia,missing,False
+46,Chrysopsis mariana,Maryland golden-aster,missing,False
+45,Lonicera japonica,Japanese honeysuckle,none,True
+45,Dryopteris erythrosora,autumn fern,missing,False
+44,Pinus taeda,loblolly pine,none,False
+44,Diphasiastrum digitatum,fan clubmoss,missing,False
+42,Lobelia cardinalis,cardinal flower,none,True
+42,Passiflora incarnata,purple passionflower,missing,False
+41,Physalis angulata,cutleaf groundcherry,missing,True
+41,Microstegium vimineum,Japanese stiltgrass,missing,False
+40,Bignonia capreolata,cross vine,missing,False
+40,Chelone glabra,white turtlehead,missing,False
+40,Nephroia carolina,Carolina snailseed,missing,False
+38,Commelina communis,Asiatic dayflower,missing,False
+38,Verbesina alternifolia,Wingstem,missing,False
+38,Lycoris radiata,red spider lily,missing,True
+36,Campsis radicans,American trumpet vine,none,True
+35,Nyssa sylvatica,Black Tupelo,none,False
+35,Pyrus calleryana,Callery pear,missing,False
+35,Bigelowia nuttallii,Nuttall's Rayless Goldenrod,missing,False
+34,Carya illinoinensis,pecan,none,False
+34,Heterotheca subaxillaris,Camphorweed,missing,False
+33,Magnolia tripetala,umbrella magnolia,none,True
+33,Pluchea camphorata,Camphor-weed,missing,False
+33,Symphyotrichum georgianum,Georgia aster,missing,False
+32,Rhus glabra,smooth sumac,none,False
+32,Quercus phellos,willow oak,none,False
+32,Achyranthes japonica,Japanese Chaff Flower,missing,False
+31,Symphyotrichum dumosum,Bushy Aster,missing,False
+31,Hydrangea quercifolia,oakleaf hydrangea,none,False
+31,Mikania scandens,climbing hempvine,none,False
+31,Asplenium platyneuron,ebony spleenwort,missing,False
+31,Lespedeza cuneata,Chinese bushclover,missing,False
+31,Citrus trifoliata,trifoliate orange,missing,False
+30,Glechoma hederacea,ground-ivy,missing,True
+30,Symphyotrichum lateriflorum,calico aster,none,False
+29,Cosmos sulphureus,Yellow Cosmos,missing,False
+29,Trifolium repens,white clover,slight,False
+29,Ilex verticillata,winterberry holly,none,False
+29,Quercus falcata,southern red oak,none,False
+29,Mitchella repens,partridgeberry,missing,False
+29,Campanula divaricata,Southern Harebell,missing,False
+29,Solidago caesia,bluestem goldenrod,none,False
+29,Euonymus fortunei,fortune's spindle,missing,False
+29,Melothria pendula,creeping cucumber,missing,True
+29,Gentiana saponaria,Soapwort Gentian,missing,False
+29,Jacquemontia tamnifolia,Hairy cluster-vine,missing,False
+29,Persicaria sagittata,arrow-leaved tearthumb,missing,False
+29,Athyrium asplenioides,southern lady fern,missing,False
+28,Rudbeckia laciniata,cutleaf coneflower,none,True
+28,Paulownia tomentosa,princess tree,none,False
+28,Potentilla indica,mock strawberry,missing,False
+27,Verbesina virginica,frostweed,missing,False
+27,Ipomoea coccinea,red morning glory,missing,False
+27,Macrothelypteris torresiana,Mariana Maiden Fern,missing,False
+26,Vaccinium arboreum,sparkleberry,none,False
+26,Ruellia simplex,Mexican Ruellia,missing,False
+26,Chamaecrista fasciculata,partridge pea,slight,False
+25,Juniperus virginiana,eastern redcedar,none,True
+25,Alnus serrulata,smooth alder,none,False
+25,Verbascum thapsus,great mullein,missing,True
+25,Onoclea sensibilis,sensitive fern,missing,True
+25,Smilax bona-nox,saw greenbrier,none,False
+25,Helianthus angustifolius,narrowleaf sunflower,none,False
+25,Symphyotrichum patens,late purple aster,none,False
