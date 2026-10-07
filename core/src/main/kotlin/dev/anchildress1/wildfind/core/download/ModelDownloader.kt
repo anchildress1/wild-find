@@ -94,7 +94,7 @@ class ModelDownloader(
      * Throws [DownloadFailure], or a plain [IOException] when the local disk fails.
      */
     fun download(onProgress: (Long, Long) -> Unit): File {
-        if (isReady()) return final
+        ready()?.let { return it }
         if (!dir.isDirectory && !dir.mkdirs()) throw IOException("can't create $dir")
         dir.listFiles { f -> f != part && stalePart.matches(f.name) }?.forEach(File::delete)
         if (part.length() > pin.bytes) part.deleteOrThrow()
@@ -104,14 +104,14 @@ class ModelDownloader(
         if (sha256(part) != pin.sha256) part.discardMismatch()
         // A stopped run still finishing its last chunk can verify the same part; whichever renames second finds
         // the file already in place.
-        if (!part.renameTo(final) && !isReady()) throw IOException("can't rename $part")
+        if (!part.renameTo(final) && ready() == null) throw IOException("can't rename $part")
         // A crash before the marker lands costs one re-hash on the next launch, never a re-download.
         marker.writeText(pin.sha256)
         return final
     }
 
-    /** True when the verified file is in place; deletes a file that fails the pin. Never touches the network. */
-    fun isReady(): Boolean {
+    /** The verified file, or null; deletes a file that fails the pin. Never touches the network. */
+    fun ready(): File? {
         // Sideloaded by make push-models, or left by an older pin of the same size, the file has no matching marker
         // and is hashed once.
         val verified = final.length() == pin.bytes &&
@@ -122,7 +122,7 @@ class ModelDownloader(
             final.delete()
             marker.delete()
         }
-        return verified
+        return final.takeIf { verified }
     }
 
     private fun requireSpace() {

@@ -1,0 +1,17 @@
+# make device-test on SM-S928U (Android 16), 2026-10-07 08:38:32 -0400, LiteRT-LM 0.18.0, built from the commit that adds this file
+# adb logcat -d -s GemmaHintDevice:I FrameVerifierDevice:I BioclipParity:I PlantGateParity:I
+--------- beginning of main
+10-07 08:38:17.788 31256 31274 I GemmaHintDevice: load 10691 ms, scene 5590 ms [shade, woods edge] from: ["shade", "woods edge"]
+10-07 08:38:17.788 31256 31274 I GemmaHintDevice: hint 667 ms: Look near the woods edge where the shade is.
+10-07 08:38:18.773 31256 31274 I BioclipParity: load 199 ms, embed 58 ms
+10-07 08:38:18.779 31256 31274 I BioclipParity: cosine to laptop reference: 0.9999999987512017
+10-07 08:38:18.789 31256 31274 I BioclipParity: scores: oak=0.5199, Carolina horsenettle=0.3828, poison oak=0.3753, poison ivy=0.3445, pokeweed=0.3426, poison sumac=0.2938, screen=0.2533, field=0.1873, person=0.1869, pavement=0.1735, lawn=0.1631, weedy garden bed=0.1507
+10-07 08:38:20.326 31256 31274 I FrameVerifierDevice: times ns StageTimes(crop=750677, resize=11785781, plantGate=60030729, bioclip=77557761, hazard=17998594, goal=16354, total=168144479)
+10-07 08:38:20.326 31256 31274 I FrameVerifierDevice: times ns StageTimes(crop=855208, resize=10896302, plantGate=59498958, bioclip=79969948, hazard=18315157, goal=15989, total=169555989)
+10-07 08:38:20.326 31256 31274 I FrameVerifierDevice: times ns StageTimes(crop=620573, resize=10277656, plantGate=59067656, bioclip=79338855, hazard=14256041, goal=17031, total=163582240)
+10-07 08:38:20.326 31256 31274 I FrameVerifierDevice: times ns StageTimes(crop=700104, resize=10430781, plantGate=61266250, bioclip=78115677, hazard=14738073, goal=19010, total=165274687)
+10-07 08:38:20.326 31256 31274 I FrameVerifierDevice: times ns StageTimes(crop=820990, resize=11052813, plantGate=61095677, bioclip=79673437, hazard=14625156, goal=15730, total=167287917)
+10-07 08:38:20.326 31256 31274 I FrameVerifierDevice: shares 0.9778267067144639 0.9869904087790642, goal GoalScore(met=true, score=0.5721672552736266, rank=1)
+10-07 08:38:20.326 31256 31274 I FrameVerifierDevice: hazard ranks 13 32
+10-07 08:38:20.518 31256 31274 I PlantGateParity: load 75 ms, embed 34 ms
+10-07 08:38:20.530 31256 31274 I PlantGateParity: cosine to laptop reference: 0.9999999889085937, plant share 0.9869904087790642

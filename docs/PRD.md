@@ -156,7 +156,7 @@ Day-1 measurements on the test phone are in hole 4; heat and hint latency are st
 | Privacy | No photo or precise location leaves the device; gameplay requests carry only coarse region coordinates plus ordinary request metadata such as IP address | Network log on the test phone |
 | Offline | A full hunt runs in airplane mode from the cache or the bundled fallback list | Field test |
 | Verify latency | Each analyzed live frame under 200 ms (TinyCLIP on the reticle crop and full frame, plus BioCLIP on up to both); the first eligible frame to Found under 1.5 s | Gate harness (S05) |
-| Hint latency | Under 5 s for level 2; levels 1 and 3 are precomputed (unmeasured) | Day-1 gate |
+| Hint latency | Under 5 s for level 2; levels 1 and 3 are precomputed. First measured Oct 7: the first tap after a cold load took about 6.3 s (scene call 5.6 s, hint call 0.7 s, `docs/results/day-2/`); warm taps come from the gate harness | Gate harness (S05) |
 | Download size | Gemma 2,588,147,712 bytes, fetched after install; the APK carries BioCLIP (46,986,589 bytes), the plant gate (about 33 MB), and the species table (about 17.5 MB) | Day-1 gate |
 | Storage | Free space checked before the download starts | Day-1 gate |
 | Memory | Gemma loads once per session and is released when the app goes to the background; RAM recorded | Day-1 gate |

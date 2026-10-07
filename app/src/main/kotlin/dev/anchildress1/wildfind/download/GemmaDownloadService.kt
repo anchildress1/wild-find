@@ -185,7 +185,7 @@ class GemmaDownloadService : JobService() {
             // retry waiting out its backoff, so opening the app restarts a stalled download right away.
             thread(name = TAG) {
                 try {
-                    if (!downloader(app, pin).isReady()) schedule(app, pin)
+                    if (downloader(app, pin).ready() == null) schedule(app, pin)
                 } catch (e: IOException) {
                     Log.e(TAG, "download check failed", e)
                 } catch (e: RuntimeException) {
@@ -194,6 +194,13 @@ class GemmaDownloadService : JobService() {
                 }
             }
         }
+
+        /**
+         * The verified Gemma file, or null until the download finishes.
+         *
+         * Blocks: a sideloaded model without its marker is hashed once (2.6 GB), so never call it on the main thread.
+         */
+        fun readyModel(context: Context): File? = downloader(context.applicationContext, ModelPin.load("gemma")).ready()
 
         private fun schedule(context: Context, pin: ModelPin) {
             val scheduler = context.getSystemService(JobScheduler::class.java)

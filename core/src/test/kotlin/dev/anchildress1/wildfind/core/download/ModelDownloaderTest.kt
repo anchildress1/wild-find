@@ -93,6 +93,26 @@ class ModelDownloaderTest {
     }
 
     @Test
+    fun `ready returns the verified file, or null with nothing downloaded`() {
+        assertNull(downloader().ready())
+
+        final.writeBytes(bytes)
+
+        assertEquals(final, downloader().ready())
+        assertEquals(0, server.requestCount)
+    }
+
+    @Test
+    fun `ready deletes a file that fails the pin and returns null`() {
+        final.writeBytes(bytes.copyOf().also { it[0] = (it[0] + 1).toByte() })
+        marker.writeText("stale")
+
+        assertNull(downloader().ready())
+        assertFalse(final.exists())
+        assertFalse(marker.exists())
+    }
+
+    @Test
     fun `a file with a matching marker is used without touching the network`() {
         final.writeBytes(bytes)
         marker.writeText(sha)
