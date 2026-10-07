@@ -1,0 +1,47 @@
+Built-in imagegen; searching state, full action. Generated artwork repacked using the existing sprite packer, then resized to a 4096 x 2048 RGBA sheet: 8 columns, 4 rows, 32 frames, 512 x 512 pixels per frame. Reading order: left to right, top to bottom. Playback preview: 8 fps.
+
+Prompt:
+Use case: stylized-concept.
+Asset type: production animation sprite sheet, wild-find mascot Briar, searching state.
+Generate ONE RGBA PNG sprite sheet with EXACTLY 32 complete sprites arranged in a strict grid of EIGHT COLUMNS and FOUR ROWS. Final intended sheet size 4096 x 2048, each cell 512 x 512. No grid lines, borders, labels, numbers or text. True transparent background.
+
+Reference 1: the existing searching sheet at /Users/anchildress1/git_personal/wild-find/assets/generated/briar/searching.png defines Briar's low all-fours searching pose.
+Reference 2: the idle sheet at /Users/anchildress1/git_personal/wild-find/assets/source/briar-rest-blink-16.png defines his initial and final upright standing pose, exact identity, face, materials and accessories.
+Preserve the same character across ALL frames: huge pink-inner upright ears, warm brown eyes with cream surrounds, rosy cheeks, little brown nose, plush warm gray-brown fur, cream muzzle/belly, large fluffy ringed striped tail curling to the viewer's LEFT, leafy neck scarf, small brown backpack with straps and round wooden leaf-emblem badge. Consistent head size and anatomy. Soft polished storybook 3D fur rendering, warm natural light, transparent cutout.
+
+This sheet must depict a COMPLETE ACTION, not repetitions of a crouch. Read frames left-to-right, then next row. Clear changes of full-body pose and distinct walking footfalls are essential.
+
+ROW 1, frames 1-8: STANDING TO CROUCH.
+Frame1: upright standing on two rear feet, small arms relaxed, identical stance to idle reference.
+Frame2: upright, looks down curiously.
+Frame3: knees bend, head tips down.
+Frame4: leans forward, hips lowering, forepaws reaching toward the ground.
+Frame5: deeper crouch, forepaws nearly down.
+Frame6: forepaws touch down, rear legs remain bent.
+Frame7: settles onto all fours.
+Frame8: low four-paw searching pose, nose angled down.
+
+ROW 2, frames 9-16: LOOK CLOSELY, THEN PREPARE TO WALK.
+Frames9-10: dips nose toward the empty ground, curious eyes.
+Frames11-12: small head turn, searching/sniffing.
+Frames13-14: head rises slightly and looks ahead toward viewer's RIGHT.
+Frame15: shifts weight to begin walking, one front paw lifts.
+Frame16: first clear stepping pose on all fours.
+
+ROW 3, frames 17-24: ACTUAL FOUR-LEGGED WALK CYCLE IN PLACE.
+Eight distinct successive gait frames, two gentle alternating steps. Forelegs and hindlegs must visibly alternate forward and backward and lift off the ground in correct order, with natural elbow/knee bending. Nose low but facing ahead. Backpack moves with shoulders; tail sways slightly. This is walking, not a still crouch with moving eyes. Keep the character's root position fixed within its cell so it can play in a UI without drifting. Do not travel between cells or change the camera. Exactly four limbs throughout.
+
+ROW 4, frames 25-32: STOP AND RETURN TO STANDING.
+Frame25: final stepping pose, weight settling.
+Frame26: all four paws grounded, pauses.
+Frame27: begins raising chest, forepaws lighten.
+Frame28: hips and chest rise, elbows extend.
+Frame29: lifts both forepaws off ground, shifts onto rear feet.
+Frame30: almost upright, arms lowering.
+Frame31: returns to initial upright standing stance.
+Frame32: SAME standing stance as frame1 for a clean loop boundary.
+
+Timing/evolution: each cell is a consecutive animation in-between. Keep camera angle at the same slight three-quarter view, head toward viewer's right. Maintain identical body/head SCALE across standing, crouched and walking poses: crouched poses are naturally shorter, not enlarged to fill their cells. Ground plane/root registration stays fixed in every cell; vertical pose changes come from the action. Initial and final frames must match. No outfit changes, no waving, no plants or flowers held or touched.
+
+Composition: center the complete animated silhouette consistently in each 512-square cell with at least 32 pixels of transparent padding on ALL sides. Entire tail, ears, paws and nose fit inside their OWN cell. Characters never touch adjacent sprites. Stand and crouch phases share the same ground baseline near local y=464. No actual ground drawing, no shadows, no scenery or floating props, no checkerboard, no matte, no red or yellow edge halos. Natural clean fur alpha. EXACTLY 8 columns x 4 rows = 32 frames in ONE landscape sheet.
+CRITICAL IDENTITY DETAIL: Briar has several small warm orange-brown WOODY TWIGS caught in the fur of his striped tail, clearly visible in reference2 (the original idle sheet). Restore these distinctive twig details. They must be present on the tail in EVERY ONE of the 32 frames, attached to the same parts of the tail and following its motion consistently. Include the small branching fork shapes along the outer tail and inner curl, matching the reference. They are woody twigs, not green leaves, not fur stripes, not detached objects, not carried in paws. Do not simplify the tail into a plain striped tail or omit the twigs at any phase. The tail fur, rings and twigs together are part of Briar's fixed identity.

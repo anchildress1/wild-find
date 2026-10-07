@@ -1,0 +1,28 @@
+Use case: identity-preserve.
+Asset type: Briar SEARCHING HINT sprite-animation keyframes; this source sheet is 16 consecutive DESCENT poses ONLY,4 columns by4 rows. It will be mirrored in time to create a32-frame down-and-up loop. Do NOT draw the upward half here.
+Input image1 is the ORIGINAL character style/identity reference. Input image2 is the previous imperfect magnifier sheet: use its prop as reference, but CORRECT the missing arm and use many evenly spaced intermediate postures.
+Transparent background, no words, numbers, gridlines or ground. Exactly16 separated complete sprites,4 in each row, every sprite inset in its cell with transparent gutters, no neighbor contact. Same fixed camera, same physical character dimensions, same feet baseline, same position.
+PRIMARY ANATOMY CORRECTION: EVERY sprite has EXACTLY TWO FULLY VISIBLE ARMS AND TWO LEGS. The empty arm on VIEWER-LEFT extends forward of the backpack beside the belly; show a connected shoulder, upper arm, elbow, forearm and clearly defined empty dark-brown paw. Do NOT hide it behind backpack, badge, torso or tail. At standing it hangs slightly out from the body with visible bent elbow and paw at hip. As he lowers, it bends gradually and its paw comes to rest on the VIEWER-LEFT knee for balance. Empty paw has distinct fingers/pads. The other arm, VIEWER-RIGHT, holds the same one brown-handled circular blue magnifying glass in EVERY frame, low to the side. Both arms visible from frame1 through16; no amputations, no swapping arms, no extra limbs.
+Pose/camera: front three-quarter view, turned just slightly toward viewer-right, torso facing enough forward to see both arms beside his cream belly. Prop low beside body, never in front of face, face completely visible, mouth closed and empty.
+Motion: one very gradual physical squat, bending BOTH knees and tilting body slightly forward, always same anatomical proportions. Lower head, shoulders, belly and pelvis a small evenly spaced amount in EVERY consecutive frame, with no height reversals, no repeated idle poses, no sudden jump. Tail may shift mildly but DO NOT lift it dramatically.
+Frame1 upright.
+Frame2 7% crouched.
+Frame3 13% crouched.
+Frame4 20% crouched.
+Frame5 27% crouched.
+Frame6 33% crouched.
+Frame7 40% crouched.
+Frame8 47% crouched.
+Frame9 53% crouched.
+Frame10 60% crouched.
+Frame11 67% crouched.
+Frame12 73% crouched.
+Frame13 80% crouched.
+Frame14 87% crouched.
+Frame15 93% crouched.
+Frame16 fully deeply crouched, both knees bent and haunches low, empty paw on knee and magnifier close to ground at viewer-right. Looking down with inquisitive eyes. Do not start standing again in row4. All16 must progress DOWN, with at least16 gradual body levels from upright to deepest; row1 nearly standing, row2 half-lowered, row3 three-quarters lowered, row4 deepest. No walking, no picking anything up.
+Identity locks: same small soft plush woodland mascot, huge upright pink-lined ears, warm brown eyes, cream eye surround/muzzle/belly, rosy cheeks, gray-brown fur, huge striped gray/cream ringed tail on viewer-left, brown backpack with round wooden leaf badge, green leaf neck scarf. Several clearly visible orange-brown BRANCHED TWIGS tangled across the tail in EVERY frame. Keep the original twigs on the tail. Do NOT put anything in his mouth or hands besides the magnifier. No plants, no harvested leaves, no nearby objects.
+Style: same polished soft storybook3D rendering, original fur detail and lighting. Clean transparent edges; no colored outlines or solid background. Target square source2048x2048. PRIORITY: complete visible empty arm in all16, and evenly spaced descent postures.
+
+Built-in image_gen. Packaging only: common feet anchor; uniform resampling to512px cells. Descent source frame order (1-based): 5,1,6,2,4,3,7,8,9,10,12,11,13,14,15,16; ascent exact reverse.32-frame PNG4096x2048 in8x4 cells. Slow GIF7.3s, equal3.65s halves; encoder combines identical endpoint holds. Both arms visually inspected in16source poses; alpha boundaries and magnifier presence checked per frame. No application/source-art edits.
+
