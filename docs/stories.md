@@ -26,7 +26,7 @@ Every runtime model (TinyCLIP, BioCLIP, Gemma) runs on the test phone, or nothin
 - [ ] **S12 Gates** — hazard drop, denylist drop, 25+ local sightings
 - [ ] **S13 Fact cards** — Wikipedia text → card prompt → `icon_category`
 - [ ] **S14 Fact-check** — manual Claude Code pass; verdicts committed as a review file for the post's disclosure
-- [ ] **S15 Embeddings** — BioCLIP 2.5 ViT-H text encoder → `labels.npy` + `labels.json`; label text format per hole 3
+- [ ] **S15 Embeddings** — BioCLIP 2.5 ViT-H text encoder → `labels.npy` + `labels.json`; label text format per hole 3; `make labels` already writes them for the 11 fixed tutorial labels plus a stand-in menu of the five Day-1 targets, committed to `app/src/main/assets/`; done when the built menu feeds it
 - [ ] **S16 Fallback + output** — `menu.json`, `hazards.json`, fallback file; Ashley's ship review
 
 ## Game logic · core

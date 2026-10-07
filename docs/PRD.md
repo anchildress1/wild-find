@@ -275,7 +275,7 @@ Ten files ship in the app, one pinned model downloads once, and every cache entr
 | species\_table.npy | BioCLIP Mobile's 4,271-species text table plus a row for each hazard species it lacks (today: *Toxicodendron pubescens*); 1024-d unit vectors | Build pipeline, from the pinned taxa\_table.npy |
 | species\_labels.json | Scientific name per species\_table row, with a hazard flag | Build pipeline, from the pinned taxa\_labels.json |
 | labels.npy | One 1024-d unit vector per menu word, plus the 11 fixed tutorial labels (R3) | BioCLIP 2.5 ViT-H text encoder |
-| labels.json | Parallel list: id per menu word or tutorial label | Build pipeline |
+| labels.json | schema\_version, the teacher pin and package versions, and a list parallel to labels.npy: id, kind (word or tutorial), scientific name, and prompt per row | Build pipeline |
 | flora\_student\_fp32.onnx | BioCLIP 2.5 Mobile image encoder, fp32; pinned below and SHA-256 checked at build time | Build pipeline, from crazedcodernate/bioclip-2.5-mobile-fastvit @ 29b474ea2a5d72b4646f036ead9441e0a22a5c62 |
 | plant\_gate.onnx | TinyCLIP ViT-8M/16 image encoder, fp32 (about 33 MB), with CLIP normalization baked in | Build pipeline, exported from the pinned TinyCLIP weights below |
 | plant\_gate.json | Plant and not-plant labels, their 512-d TinyCLIP text vectors, and TinyCLIP's learned logit scale (exp(logit\_scale) = 50.0) | Build pipeline |

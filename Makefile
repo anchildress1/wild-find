@@ -1,4 +1,4 @@
-.PHONY: setup build install device-test focus-probe assets sprites hazard-vectors crop-reference fetch-models push-models reference test pipeline-test lint ktlint detekt android-lint pipeline-lint shellcheck actionlint secret-scan ai-checks clean
+.PHONY: setup build install device-test focus-probe assets sprites hazard-vectors labels crop-reference fetch-models push-models reference test pipeline-test lint ktlint detekt android-lint pipeline-lint shellcheck actionlint secret-scan ai-checks clean
 
 SHELL := /bin/bash
 
@@ -70,6 +70,10 @@ sprites:
 # Rebuilds the committed hazard_vectors.json; pulls the 3.9 GB BioCLIP teacher (as does reference), so CI runs neither.
 hazard-vectors:
 	$(UV) run --group reference python -W error -m wild_find_pipeline.hazard_vectors
+
+# Rebuilds the committed labels.npy and labels.json from the pinned teacher (3.9 GB), so CI never runs it.
+labels:
+	$(UV) run --group reference python -W error -m wild_find_pipeline.label_vectors
 
 # Pillow crops the JVM frame tests must match pixel for pixel.
 crop-reference:

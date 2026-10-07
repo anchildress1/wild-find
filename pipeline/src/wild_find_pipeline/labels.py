@@ -9,6 +9,17 @@ HAZARDS = {
     "pokeweed": "Phytolacca americana",
     "Carolina horsenettle": "Solanum carolinense",
 }
+# Stand-in menu: the five targets Day 1 scored on real photos. The built menu (S10-S13) replaces it.
+DEV_WORDS = {
+    "oak": "Quercus",
+    "pine": "Pinus",
+    "clover": "Trifolium",
+    "dandelion": "Taraxacum",
+    "fern": "Polypodiopsida",
+}
+GRASS = "Poaceae"
+# PRD R3's fixed grass-tutorial label set, exactly as Day 1 measured it.
+TUTORIAL = (GRASS, "Quercus", "Polypodiopsida", "Trifolium", "Pinus", "Taraxacum", *HAZARDS.values())
 # Day-1 plant-gate prompts, exact strings with no trailing period; the gate's verdicts were measured on these.
 GATE_PLANT = tuple(f"a photo of {x}" for x in ("a plant", "leaves", "a tree", "grass", "a flower", "moss", "a fern"))
 GATE_OTHER = tuple(
