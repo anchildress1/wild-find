@@ -388,7 +388,8 @@ class ModelDownloaderTest {
     @Test
     fun `an interrupted pull resumes from the bytes on disk on the next call`() {
         server.enqueue(head())
-        server.enqueue(body(bytes).newBuilder().throttleBody(100, 1, TimeUnit.MILLISECONDS).build())
+        // Chunks far enough apart that each read holds one; at 1 ms a slow CI runner read the whole body at once.
+        server.enqueue(body(bytes).newBuilder().throttleBody(100, 50, TimeUnit.MILLISECONDS).build())
 
         assertThrows<IllegalStateException> {
             downloader().download { done, _ -> check(done < 400) { "stopped" } }
