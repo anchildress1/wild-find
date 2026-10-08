@@ -91,22 +91,30 @@ fun PrimaryButton(
         onClick = onClick,
         enabled = enabled,
         modifier = modifier.fillMaxWidth().heightIn(min = 56.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = Palette.Forest, contentColor = Color.White),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Palette.Forest,
+            contentColor = Color.White,
+            disabledContainerColor = Palette.Husk,
+            disabledContentColor = Palette.Ink2,
+        ),
     ) {
         Text(text, style = MaterialTheme.typography.labelLarge, textAlign = TextAlign.Center)
         icon?.let { Icon(it, contentDescription = null, Modifier.padding(start = 10.dp).size(22.dp)) }
     }
 }
 
-/** The 56 dp outlined button. */
+/** The 56 dp outlined button with an optional leading [icon]. */
 @Composable
-fun OutlineButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
+fun OutlineButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier, icon: ImageVector? = null) {
     OutlinedButton(
         onClick = onClick,
         modifier = modifier.fillMaxWidth().heightIn(min = 56.dp),
         border = BorderStroke(2.dp, Palette.Forest),
         colors = ButtonDefaults.outlinedButtonColors(contentColor = Palette.Forest),
-    ) { Text(text, style = MaterialTheme.typography.labelLarge, textAlign = TextAlign.Center) }
+    ) {
+        icon?.let { Icon(it, contentDescription = null, Modifier.padding(end = 10.dp).size(22.dp)) }
+        Text(text, style = MaterialTheme.typography.labelLarge, textAlign = TextAlign.Center)
+    }
 }
 
 /** The leave-it rule, on every screen a kid hunts from; the sprout rides inline so a wrapped line stays centered. */

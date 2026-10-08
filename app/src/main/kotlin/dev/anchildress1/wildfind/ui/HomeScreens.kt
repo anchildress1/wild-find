@@ -20,13 +20,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.anchildress1.wildfind.R
-import dev.anchildress1.wildfind.core.region.RegionKey
 import dev.anchildress1.wildfind.core.sprite.BriarState
 import dev.anchildress1.wildfind.ui.theme.Palette
 
 /** No hunt yet: Briar waves, and one button starts a hunt in the saved area. */
 @Composable
-fun StartScreen(region: RegionKey?, onStart: () -> Unit, onGrownUps: () -> Unit) {
+fun StartScreen(onStart: () -> Unit, onGrownUps: () -> Unit) {
     Page(
         top = { MenuRow(onGrownUps) },
         bottom = {
@@ -41,7 +40,7 @@ fun StartScreen(region: RegionKey?, onStart: () -> Unit, onGrownUps: () -> Unit)
             textAlign = TextAlign.Center,
         )
         Text(
-            regionName(region),
+            stringResource(R.string.region_near_you),
             Modifier.fillMaxWidth().rise(index = 1),
             style = MaterialTheme.typography.bodyLarge,
             color = Palette.Ink2,

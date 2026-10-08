@@ -47,7 +47,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.anchildress1.wildfind.R
-import dev.anchildress1.wildfind.core.region.RegionKey
 import dev.anchildress1.wildfind.core.sprite.BriarState
 import dev.anchildress1.wildfind.game.Stop
 import dev.anchildress1.wildfind.ui.theme.Palette
@@ -61,10 +60,8 @@ import java.time.format.TextStyle
  * @param offline the list came from the cache because iNat didn't answer
  */
 @Composable
-@Suppress("LongParameterList")
 fun HuntScreen(
     stops: List<Stop>,
-    region: RegionKey?,
     offline: Boolean,
     onStop: (Int) -> Unit,
     onFinish: () -> Unit,
@@ -78,7 +75,7 @@ fun HuntScreen(
             RuleLine()
         },
     ) {
-        Header(stops.size, region, onGrownUps)
+        Header(stops.size, onGrownUps)
         if (offline) OfflineBanner()
         Trail(stops, onStop)
         // Below the trail, not pinned: ending early is the rare path, and the pinned area stays short.
@@ -93,7 +90,7 @@ fun HuntScreen(
 }
 
 @Composable
-private fun Header(count: Int, region: RegionKey?, onGrownUps: () -> Unit) {
+private fun Header(count: Int, onGrownUps: () -> Unit) {
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
@@ -106,7 +103,7 @@ private fun Header(count: Int, region: RegionKey?, onGrownUps: () -> Unit) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             val month = LocalDate.now().month.getDisplayName(TextStyle.FULL, LocalLocale.current.platformLocale)
             Text(
-                stringResource(R.string.hunt_where, regionName(region), month),
+                stringResource(R.string.hunt_where, stringResource(R.string.region_near_you), month),
                 Modifier.weight(1f),
                 style = MaterialTheme.typography.bodyLarge,
                 color = Palette.Ink2,

@@ -94,11 +94,11 @@ Every call below is settled; open items live in Open Questions.
 | Scoring | One star per find; no leave-it star in v1 (R10 dropped Oct 8) |
 | Hints | None. The target's common name and type show from the start of each hunt |
 | Toxicity flag | Built once on the laptop for every species-table row. A species is flagged when its English Wikipedia article has a sentence with the whole word toxic, toxin, or poison (other plants' names such as poison ivy removed first), when USDA PLANTS rates it moderate or severe, or when it has no article or one under 1,500 characters. Names match through GBIF. Best effort, like hazard detection, never a safety claim; on Oct 7 it flagged 30 of 117 West Georgia species and wrongly dropped about 6 |
-| Location | Android coarse location only, asked when the kid taps "Use my rough area" and never again after a denial; rounded to whole degrees; the device is in a region only when its rounded key equals that region's key; the query always sends the region center, never device coordinates; manual region pick (West Georgia, or "Somewhere else", which shows the coverage message); the rounded hunting area is kept on the phone as an app flag and changed from the grown-ups page |
+| Location | Two paths, and no place is ever named in the app (no geocoding; the hunt says "Near you"). "Use my area": Android coarse location only, asked when the kid taps it and never again after a denial, rounded to whole degrees. "Pick on a map": a built-in Natural Earth map (public domain) drawn on the phone, no tile server; it opens on the whole world, pans and zooms under fixed crosshairs, snaps to the nearest whole degree on release, unlocks "Hunt here" at about 12° across or less, offers 1° arrow taps as the no-drag TalkBack path, and shows whole degrees only. A denial goes straight to the map. The device is in a region only when its rounded key equals that region's key; the query always sends the region center, never device coordinates; the rounded hunting area is kept on the phone as an app flag and changed on the map from the grown-ups page |
 | Images | One illustration per plant type (tree, shrub, vine, herb, grass, fern, moss, conifer) in v1; licensed photos in v3 |
 | UI | Animation-first; Jetpack Compose hosts camera and chrome and plays sprite sheets for the opener and Briar, the mascot; no Rive, no React |
 | Distribution | GitHub Release APK with BioCLIP Mobile and the TinyCLIP plant gate inside; nothing downloads after install; outdoor demo video |
-| Credits | README and the grown-ups page credit BioCLIP 2.5 Mobile, BioCLIP 2.5, TinyCLIP, OpenCLIP, iNaturalist, Wikipedia, USDA PLANTS, and GBIF, plus the Fredoka and Atkinson Hyperlegible fonts (SIL OFL 1.1, bundled with their license text) |
+| Credits | README and the grown-ups page credit BioCLIP 2.5 Mobile, BioCLIP 2.5, TinyCLIP, OpenCLIP, iNaturalist, Wikipedia, USDA PLANTS, and GBIF, plus Natural Earth for the built-in map and the Fredoka and Atkinson Hyperlegible fonts (SIL OFL 1.1, bundled with their license text) |
 | Prize categories | Best Use of Gemma, entered with the measured case for shipping without it; DigitalOcean dropped |
 | Later versions | Tiebreaker shot in v2; licensed photos in v3 |
 
@@ -119,7 +119,7 @@ The kid hunts and leaves every plant where it grows; the parent sets the boundar
 
 - As a parent, I want no account, no uploads, and coarse location only so that I don't hand over my kid's data
 - As a parent, I want the app to never call a plant safe so that my kid leaves every plant alone
-- As a parent who denies location, I want a manual region pick so that the app still runs
+- As a parent who denies location, I want to pick our area on a map so that the app still runs
 
 **Edge cases**
 
@@ -137,11 +137,11 @@ Eight P0s ship the hunt; four P2s shape the design now. Requirement IDs stay fix
 | ID | Requirement | Acceptance criteria |
 | --- | --- | --- |
 | R1 | Safety opener | First launch shows bees and snakes, with poison ivy drawn into the art; one rule: "Look. Photograph. Leave it where it grows."; no copy says safe, harmless, not poisonous, or okay to touch; replayable from the menu |
-| R2 | Hunt list | One iNaturalist query per hunt, requiring at most three paginated HTTP requests: coarse region coordinates, current calendar month across all available years, plants, research grade, device locale for common names; a species is eligible with at least 0.5% of the query's plant sightings and at least 3, a species-table row, no toxic or hazard flag, and a common name of 3 words or fewer; fewer than 3 eligible widens the radius to 150 km once; cached under the versioned cache key; location denied falls back to a manual region pick; still fewer than 3 shows the coverage message |
+| R2 | Hunt list | One iNaturalist query per hunt, requiring at most three paginated HTTP requests: coarse region coordinates, current calendar month across all available years, plants, research grade, device locale for common names; a species is eligible with at least 0.5% of the query's plant sightings and at least 3, a species-table row, no toxic or hazard flag, and a common name of 3 words or fewer; fewer than 3 eligible widens the radius to 150 km once; cached under the versioned cache key; location denied falls back to picking the area on the built-in map; still fewer than 3 shows the coverage message |
 | R3 | Grass tutorial | The first-ever hunt opens with grass, followed by 3 normal targets; a grass close-up passes when TinyCLIP calls the reticle crop a plant and grass is in BioCLIP's top 3 of the fixed tutorial label set, the 11 labels Day 1 measured (Poaceae, Quercus, Polypodiopsida, Trifolium, Pinus, Taraxacum, and the 5 hazard species), never the hunt's full label universe (49 of 52 CC0 grass photos passed both on Day 1; BioCLIP top 3 alone passed 50 and top-1 alone 45; the one lawn the gate rejected scored a plant share of 0.39); the plant gate's labels include grass; the hazard check doesn't run during the tutorial, because 9 of 54 grass photos warned against the menu labels on Day 1 (1 of 54 against the species table), and the leave-it rule stays on screen; done in under 60 seconds; never repeats once completed |
 | R4 | Target pick | 3 targets per hunt by sighting-weighted random from eligible species, never two from one genus; a hazard or toxic-flagged species is never a target |
 | R5 | Verify | Follows the Runtime Logic verify table on each Capture tap; a find needs the target (or its genus) to outscore the hunt's other locally eligible species and lead every local toxic and hazard species (blockers) by at least 0.048 on the reticle crop, for 3 frames in a row; a hazard match shows a warning and gives no star; no result is ever presented as evidence of safety |
-| R7 | Privacy | Android coarse location permission only; no fine location requested; coordinates rounded again before the query; no photo or precise location leaves the device; no account; no analytics |
+| R7 | Privacy | Android coarse location permission only; no fine location requested; the map picker is built in, so picking an area makes no request; coordinates rounded again before the query; no photo or precise location leaves the device; no account; no analytics |
 | R8 | Offline | Both models ship in the APK; a cached hunt completes in airplane mode; a region never pulled online can't start a hunt offline and says it needs signal once |
 | R15 | Hunt complete | The last target passes, a short success animation plays, the stars show, then Hunt Again or Home; only the current hunt's state persists |
 
@@ -371,7 +371,7 @@ Every failure degrades to a playable hunt or a plain message; none crash or stal
 
 | Failure | App behavior |
 | --- | --- |
-| Location denied | Manual region pick |
+| Location denied | The built-in map picker; never asked again |
 | iNat unreachable, matching cache exists | Use the cached entry |
 | iNat unreachable, no matching cache | No hunt; say this place needs signal once |
 | iNat returns 429 | Wait per Retry-After, at most 30 seconds, then use the cache |

@@ -77,12 +77,12 @@ fun NeedsSignalScreen(onRetry: () -> Unit, onArea: () -> Unit) {
 
 /** The coverage message; never an empty list. */
 @Composable
-fun NotEnoughScreen(elsewhere: Boolean, onArea: () -> Unit) {
+fun NotEnoughScreen(onArea: () -> Unit) {
     Page(bottom = { OutlineButton(stringResource(R.string.pick_area), onArea) }) {
         MessageCard(
             WildIcons.Pin,
             stringResource(R.string.not_enough),
-            if (elsewhere) stringResource(R.string.elsewhere_detail) else null,
+            null,
             Modifier.rise(),
         )
     }

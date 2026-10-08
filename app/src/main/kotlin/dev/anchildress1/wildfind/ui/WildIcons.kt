@@ -24,6 +24,30 @@ object WildIcons {
     /** Row chevron. */
     val Chevron = line("chevron", "M9 5l7 7-7 7")
 
+    /** Arrow pad: north. */
+    val Up = line("up", "M6 15l6-6 6 6", width = 2.4f)
+
+    /** Arrow pad: south. */
+    val Down = line("down", "M6 9l6 6 6-6", width = 2.4f)
+
+    /** Arrow pad: west. */
+    val Left = line("left", "M15 6l-6 6 6 6", width = 2.4f)
+
+    /** Arrow pad: east. */
+    val Right = line("right", "M9 6l6 6-6 6", width = 2.4f)
+
+    /** Zoom in. */
+    val Plus = line("plus", "M12 5v14M5 12h14", width = 2.2f)
+
+    /** Zoom out. */
+    val Minus = line("minus", "M5 12h14", width = 2.2f)
+
+    /** Go to my area. */
+    val Locate = line("locate", circle(12f, 12f, 6f), circle(12f, 12f, 1.5f), "M12 2v4M12 18v4M2 12h4M18 12h4")
+
+    /** Pick on a map. */
+    val Map = line("map", "M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2z", "M9 4v14M15 6v14")
+
     /** Found check. */
     val Check = line("check", "M5 12.5l4.5 4.5L19 7.5", width = 3f)
 

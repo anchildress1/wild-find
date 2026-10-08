@@ -18,11 +18,18 @@ sealed interface Screen {
     data class Opener(val back: Screen?) : Screen
 
     /**
-     * The hunting-area pick (R2, R7).
+     * The hunting-area choice: the rough location, or the map (R2, R7).
      *
      * @property back where Back returns when the area was already set
      */
     data class Region(val back: Screen?) : Screen
+
+    /**
+     * The built-in map picker.
+     *
+     * @property back where Back returns
+     */
+    data class Map(val back: Screen?) : Screen
 
     /** Waiting for the models or the iNat pull. */
     data object Loading : Screen
@@ -30,12 +37,8 @@ sealed interface Screen {
     /** No answer from iNat and no cache for this place. */
     data object NeedsSignal : Screen
 
-    /**
-     * The coverage message.
-     *
-     * @property elsewhere the kid picked "Somewhere else" instead of a place that came up short
-     */
-    data class NotEnough(val elsewhere: Boolean) : Screen
+    /** The coverage message. */
+    data object NotEnough : Screen
 
     /** No hunt yet: start one. */
     data object Start : Screen
@@ -104,7 +107,8 @@ data class CameraState(
  * @property stops this hunt's targets in pick order
  * @property offline the hunt's list came from the cache because iNat didn't answer
  * @property locating waiting for the rough location
- * @property locationFailed the location was denied or unavailable, so only the manual pick shows
+ * @property locationFailed the location was denied, so it is never asked again and only the map remains
+ * @property mapFocus where the map's Locate button found the rough location
  * @property camera the camera screen's state
  * @property crop the last find's reticle crop, in memory only
  */
@@ -115,6 +119,7 @@ data class GameState(
     val offline: Boolean = false,
     val locating: Boolean = false,
     val locationFailed: Boolean = false,
+    val mapFocus: MapFocus? = null,
     val camera: CameraState = CameraState(),
     val crop: Pixels? = null,
 ) {
@@ -124,6 +129,14 @@ data class GameState(
     /** The stop at [row]. */
     fun stop(row: Int): Stop? = stops.firstOrNull { it.row == row }
 }
+
+/**
+ * A Locate result for the map to center on.
+ *
+ * @property region the rough location's whole-degree region
+ * @property serial bumps on every Locate, so finding the same area again still recenters
+ */
+data class MapFocus(val region: RegionKey, val serial: Int)
 
 /** What the kid did. */
 sealed interface GameEvent {
@@ -144,8 +157,8 @@ sealed interface GameEvent {
      */
     data class PickRegion(val region: RegionKey) : GameEvent
 
-    /** "Somewhere else". */
-    data object PickElsewhere : GameEvent
+    /** "Pick on a map". */
+    data object OpenMap : GameEvent
 
     /** Back to the area pick from a coverage message. */
     data object ChangeRegion : GameEvent
@@ -177,7 +190,7 @@ sealed interface GameEvent {
     /** Open the grown-ups page. */
     data object OpenGrownUps : GameEvent
 
-    /** Grown-ups: change the hunting area. */
+    /** Grown-ups: change the hunting area on the map. */
     data object EditRegion : GameEvent
 
     /** Grown-ups: replay the opener. */

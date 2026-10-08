@@ -76,6 +76,13 @@ class MapCameraTest {
     }
 
     @Test
+    fun `glides take the short way across the date line`() {
+        assertEquals(2.0, MapCamera.eastward(179.0, -179.0), 1e-9)
+        assertEquals(-2.0, MapCamera.eastward(-179.0, 179.0), 1e-9)
+        assertEquals(10.0, MapCamera.eastward(-5.0, 5.0), 1e-9)
+    }
+
+    @Test
     fun `the chip shows whole degrees with compass letters`() {
         assertEquals("38°N, 121°W", MapCamera.degrees(RegionKey(38, -121)))
         assertEquals("12°S, 0°E", MapCamera.degrees(RegionKey(-12, 0)))

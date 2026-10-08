@@ -14,6 +14,7 @@ import dev.anchildress1.wildfind.core.hunt.LocalListSource
 import dev.anchildress1.wildfind.core.hunt.LocalSpecies
 import dev.anchildress1.wildfind.core.hunt.Sighting
 import dev.anchildress1.wildfind.core.inat.SpeciesCountsQuery
+import dev.anchildress1.wildfind.core.map.LandMap
 import dev.anchildress1.wildfind.core.region.RegionKey
 import dev.anchildress1.wildfind.core.verify.CaptureCue
 import dev.anchildress1.wildfind.core.verify.Goal
@@ -83,7 +84,7 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
             GameEvent.OpenerDone -> openerDone(screen)
             is GameEvent.LocationAnswer -> located(event.granted)
             is GameEvent.PickRegion -> pick(event.region)
-            GameEvent.PickElsewhere -> show(Screen.NotEnough(elsewhere = true))
+            GameEvent.OpenMap -> show(Screen.Map(back = screen))
             GameEvent.ChangeRegion -> show(Screen.Region(back = null))
             GameEvent.LoadHunt -> load()
             is GameEvent.OpenCamera -> openCamera(event.row)
@@ -94,7 +95,7 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
             GameEvent.HuntAgain -> endHunt().also { load() }
             GameEvent.Home -> endHunt().also { show(Screen.Start) }
             GameEvent.OpenGrownUps -> show(Screen.GrownUps(from = screen))
-            GameEvent.EditRegion -> show(Screen.Region(back = screen))
+            GameEvent.EditRegion -> show(Screen.Map(back = screen))
             GameEvent.ReplayOpener -> show(Screen.Opener(back = screen))
             GameEvent.Back -> back(screen)
         }
@@ -109,6 +110,7 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
         when (screen) {
             is Screen.Opener -> screen.back?.let(::show)
             is Screen.Region -> screen.back?.let(::show)
+            is Screen.Map -> screen.back?.let(::show)
             is Screen.GrownUps -> show(screen.from)
             is Screen.Camera, is Screen.Found -> toHunt()
             Screen.Complete -> onEvent(GameEvent.Home)
@@ -140,18 +142,43 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
         viewModelScope.launch { resume() }
     }
 
+    // From the area choice, a found area starts the hunt and anything else opens the map; on the map, Locate only
+    // recenters. A denial is final: neither button asks again.
     private fun located(granted: Boolean) {
-        if (!granted) return state.update { it.copy(locationFailed = true) }
+        val screen = state.value.screen
+        val fallback = Screen.Map(back = screen).takeIf { screen is Screen.Region }
+        if (!granted) {
+            state.update { it.copy(locationFailed = true) }
+            return fallback?.let(::show) ?: Unit
+        }
         state.update { it.copy(locating = true) }
         viewModelScope.launch {
             val region = graph.location.region()
-            state.update { it.copy(locating = false, locationFailed = region == null) }
-            region?.let(::pick)
+            state.update { it.copy(locating = false) }
+            when {
+                region == null -> fallback?.let(::show)
+
+                screen is Screen.Map -> state.update {
+                    it.copy(mapFocus = MapFocus(region, (it.mapFocus?.serial ?: 0) + 1))
+                }
+
+                else -> pick(region)
+            }
         }
     }
 
+    /** The built-in map, once read. */
+    suspend fun land(): LandMap = graph.land.await()
+
     private fun pick(region: RegionKey) {
-        val back = (state.value.screen as? Screen.Region)?.back
+        val back = when (val screen = state.value.screen) {
+            is Screen.Region -> screen.back
+
+            // Through the area choice, back to wherever that came from.
+            is Screen.Map -> (screen.back as? Screen.Region)?.back ?: screen.back?.takeUnless { it is Screen.Region }
+
+            else -> null
+        }
         if (region == flags.region && hunt != null && back != null) return show(back)
         save(flags.copy(region = region))
         state.update { it.copy(region = region) }
@@ -179,7 +206,7 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
                 result == LocalListResult.NeedsSignal -> show(Screen.NeedsSignal)
 
                 local == null || planned == null || planned.targets.size < HuntPick.TARGETS ->
-                    show(Screen.NotEnough(elsewhere = false))
+                    show(Screen.NotEnough)
 
                 else -> {
                     val fresh = ActiveHunt.start(planned, local, region)

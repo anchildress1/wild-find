@@ -88,6 +88,9 @@ data class MapCamera(val lat: Double = 0.0, val lng: Double = 0.0, val span: Dou
             return "${abs(region.lat)}°$ns, ${abs(region.lng)}°$ew"
         }
 
+        /** Degrees east from [from] to [to] the short way around, in [-180, 180): a glide never circles the globe. */
+        fun eastward(from: Double, to: Double): Double = wrap(to - from)
+
         private fun clamp(lat: Double) = lat.coerceIn(-MAX_LAT, MAX_LAT)
 
         private fun wrap(lng: Double) = ((lng + HALF_TURN) % TURN + TURN) % TURN - HALF_TURN

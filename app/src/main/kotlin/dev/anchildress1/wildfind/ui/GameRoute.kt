@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -24,6 +25,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import dev.anchildress1.wildfind.R
 import dev.anchildress1.wildfind.WildFindApp
+import dev.anchildress1.wildfind.core.map.LandMap
 import dev.anchildress1.wildfind.game.GameEffect
 import dev.anchildress1.wildfind.game.GameEvent
 import dev.anchildress1.wildfind.game.GameState
@@ -68,6 +70,7 @@ fun GameRoute(vm: GameViewModel = viewModel(factory = factory)) {
 private fun hasBack(screen: Screen) = when (screen) {
     is Screen.Opener -> screen.back != null
     is Screen.Region -> screen.back != null
+    is Screen.Map -> screen.back != null
     is Screen.GrownUps, is Screen.Camera, is Screen.Found, Screen.Complete -> true
     else -> false
 }
@@ -96,23 +99,33 @@ private fun ScreenFor(screen: Screen, state: GameState, vm: GameViewModel) {
             state.locating,
             state.locationFailed,
             onLocation = { on(GameEvent.LocationAnswer(it)) },
-            onPick = { on(GameEvent.PickRegion(it)) },
-            onElsewhere = { on(GameEvent.PickElsewhere) },
+            onMap = { on(GameEvent.OpenMap) },
         )
+
+        is Screen.Map -> {
+            val land by produceState<LandMap?>(null) { value = vm.land() }
+            MapScreen(
+                land,
+                state.mapFocus,
+                canLocate = !state.locationFailed,
+                onLocation = { on(GameEvent.LocationAnswer(it)) },
+                onPick = { on(GameEvent.PickRegion(it)) },
+                onBack = { on(GameEvent.Back) },
+            )
+        }
 
         Screen.Loading -> LoadingScreen()
 
         Screen.NeedsSignal -> NeedsSignalScreen({ on(GameEvent.LoadHunt) }, { on(GameEvent.ChangeRegion) })
 
-        is Screen.NotEnough -> NotEnoughScreen(screen.elsewhere) { on(GameEvent.ChangeRegion) }
+        Screen.NotEnough -> NotEnoughScreen { on(GameEvent.ChangeRegion) }
 
-        Screen.Start -> StartScreen(state.region, { on(GameEvent.LoadHunt) }, { on(GameEvent.OpenGrownUps) })
+        Screen.Start -> StartScreen({ on(GameEvent.LoadHunt) }, { on(GameEvent.OpenGrownUps) })
 
         Screen.Tutorial -> TutorialScreen({ on(GameEvent.OpenCamera(null)) }, { on(GameEvent.OpenGrownUps) })
 
         Screen.Hunt -> HuntScreen(
             state.stops,
-            state.region,
             state.offline,
             onStop = { on(GameEvent.OpenCamera(it)) },
             onFinish = { on(GameEvent.FinishHunt) },
@@ -138,7 +151,6 @@ private fun ScreenFor(screen: Screen, state: GameState, vm: GameViewModel) {
         Screen.Complete -> CompleteScreen(state.stops, { on(GameEvent.HuntAgain) }, { on(GameEvent.Home) })
 
         is Screen.GrownUps -> GrownUpsScreen(
-            state.region,
             onBack = { on(GameEvent.Back) },
             onArea = { on(GameEvent.EditRegion) },
             onReplay = { on(GameEvent.ReplayOpener) },

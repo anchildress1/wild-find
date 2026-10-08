@@ -19,23 +19,34 @@
     <string name="opener_done">Done</string>
 
     <string name="region_title">Where are you hunting?</string>
-    <string name="region_body">wild-find picks plants that grow near you. It only asks for your rough area.</string>
-    <string name="region_use_location">Use my rough area</string>
+    <string name="region_body">wild-find picks plants that grow near you. It only uses your rough area.</string>
+    <string name="region_use_location">Use my area</string>
+    <string name="region_pick_map">Pick on a map</string>
     <string name="region_locating">Finding your area…</string>
-    <string name="region_location_failed">We couldn\'t find your area. Pick it below.</string>
-    <string name="region_or">or pick your area</string>
-    <string name="region_west_georgia">West Georgia</string>
-    <string name="region_west_georgia_detail">Around Carrollton</string>
-    <string name="region_elsewhere">Somewhere else</string>
-    <string name="region_elsewhere_detail">We\'ll show what\'s ready</string>
     <string name="region_private">Your exact spot stays on this phone.</string>
-    <string name="region_next">Next</string>
     <string name="region_near_you">Near you</string>
+
+    <string name="map_title">Pick your area</string>
+    <string name="map_world_hint">Pinch or tap + to find your area</string>
+    <string name="map_zoom_more">Zoom in until you see your area.</string>
+    <string name="map_zoom_to_pick">Zoom in to pick</string>
+    <string name="map_place">Put the crosshairs on your area.</string>
+    <string name="map_hunt_here">Hunt here</string>
+    <string name="map_private">The map is on this phone. Only the crosshairs\' spot goes to iNaturalist.</string>
+    <string name="map_chip">About %s</string>
+    <string name="map_world_label">World map. Zoom in to find your area.</string>
+    <string name="map_area_label">Map zoomed to an area. Crosshairs mark the hunting spot, about %s.</string>
+    <string name="map_locate">Go to my area</string>
+    <string name="map_zoom_in">Zoom in</string>
+    <string name="map_zoom_out">Zoom out</string>
+    <string name="map_north">Move north one degree</string>
+    <string name="map_south">Move south one degree</string>
+    <string name="map_east">Move east one degree</string>
+    <string name="map_west">Move west one degree</string>
 
     <string name="getting_ready">Getting ready…</string>
     <string name="loading">Finding plants near you…</string>
     <string name="not_enough">Not enough plants spotted here yet</string>
-    <string name="elsewhere_detail">Pick West Georgia, or use your rough area to hunt where you are.</string>
     <string name="pick_area">Pick my area</string>
     <string name="needs_signal">This place needs signal once.</string>
     <string name="needs_signal_detail">After that, hunts here work without it.</string>
@@ -135,9 +146,10 @@
     <string name="privacy_location">Approximate location only, rounded to whole degrees; iNaturalist gets the region center</string>
     <string name="privacy_network">Talks only to iNaturalist, to see which plants grow nearby. Nothing downloads after install</string>
     <string name="hunting_area">Hunting area</string>
+    <string name="hunting_area_detail">Near you · change it on the map</string>
     <string name="replay_opener">Watch the safety intro again</string>
     <string name="made_with">Made with</string>
-    <string name="credits">BioCLIP 2.5 Mobile · BioCLIP 2.5 · TinyCLIP · OpenCLIP · iNaturalist · Wikipedia · USDA PLANTS · GBIF</string>
+    <string name="credits">BioCLIP 2.5 Mobile · BioCLIP 2.5 · TinyCLIP · OpenCLIP · iNaturalist · Wikipedia · USDA PLANTS · GBIF · Natural Earth</string>
     <string name="font_credits">Fredoka and Atkinson Hyperlegible fonts, SIL Open Font License 1.1</string>
     <string name="version">wild-find %s · MIT license</string>
 </resources>

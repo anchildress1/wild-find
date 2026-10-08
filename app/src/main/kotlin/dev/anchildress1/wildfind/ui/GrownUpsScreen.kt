@@ -25,12 +25,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.anchildress1.wildfind.R
-import dev.anchildress1.wildfind.core.region.RegionKey
 import dev.anchildress1.wildfind.ui.theme.Palette
 
 /** Privacy facts, the hunting area, the opener replay (R1), and credits. */
 @Composable
-fun GrownUpsScreen(region: RegionKey?, onBack: () -> Unit, onArea: () -> Unit, onReplay: () -> Unit) {
+fun GrownUpsScreen(onBack: () -> Unit, onArea: () -> Unit, onReplay: () -> Unit) {
     val context = LocalContext.current
     val version =
         remember(context) { context.packageManager.getPackageInfo(context.packageName, 0).versionName.orEmpty() }
@@ -65,7 +64,12 @@ fun GrownUpsScreen(region: RegionKey?, onBack: () -> Unit, onArea: () -> Unit, o
             Modifier.rise(index = 1).fillMaxWidth().clip(CardShape).background(Palette.Paper)
                 .border(1.5.dp, Palette.Line, CardShape),
         ) {
-            Link(WildIcons.Pin, stringResource(R.string.hunting_area), regionName(region), onArea)
+            Link(
+                WildIcons.Map,
+                stringResource(R.string.hunting_area),
+                stringResource(R.string.hunting_area_detail),
+                onArea,
+            )
             Box(Modifier.fillMaxWidth().height(1.5.dp).background(Palette.Line))
             Link(WildIcons.Replay, stringResource(R.string.replay_opener), null, onReplay)
         }
