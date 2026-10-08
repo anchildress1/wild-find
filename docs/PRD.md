@@ -80,7 +80,7 @@ Every call below is settled; open items live in Open Questions.
 | Audience | Kids 8 and up; no taxonomy jargon in the UI |
 | Platform | Native Android in Kotlin; two test phones, Samsung Galaxy S24 Ultra and Google Pixel 9; no iOS; no Vestige code |
 | Repo | wild-find; new repo started inside the challenge window; MIT license |
-| Runtime models | Open-weight only, all running on the phone |
+| Runtime models | Open-weight only, all running on the phone; ONNX Runtime's bundled Microsoft telemetry is switched off at launch (`ORT_DISABLE_TELEMETRY`), since it otherwise phones home (S39) |
 | Model roles | TinyCLIP ViT-8M (MIT) gates plant vs not-plant on the reticle crop and the full frame; BioCLIP 2.5 Mobile checks the target and hazards on it; full BioCLIP 2.5 makes the tutorial label vectors at build time; no model judges toxicity; no language model ships (Gemma 4 E2B was tested and dropped Oct 7); Pl@ntNet rejected |
 | Safety model | Look, photograph, leave it where it grows. Hazard recognition is an extra warning, never a safety guarantee; the app never tells a child a plant is safe |
 | Difficulty | Selector exists; v1 ships Low only |

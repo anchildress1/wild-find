@@ -50,7 +50,7 @@ The Oct 7 redesign (PRD Redesign) dropped the build-time menu: the old S10–S16
 - [x] **S36 Hunt complete** — success animation, stars, Hunt Again / Home; R15
 - [ ] **S37 Offline** — airplane-mode hunt from cache; a never-pulled region says it needs signal once; R8 (wired: cache fallback, "No signal" banner, needs-signal screen; ticks after the airplane-mode run on the phone)
 - [x] **S38 Lifecycle** — hunt state restored after the app goes to the background
-- [ ] **S39 Privacy proof** — network log on the test phone shows only iNat; R7
+- [x] **S39 Privacy proof** — network log on the test phone shows only iNat; R7. Oct 8: the first log caught ONNX Runtime's bundled Microsoft telemetry holding a connection to `mobile.events.data.microsoft.com`; with `ORT_DISABLE_TELEMETRY` set at launch, launch and a full iNat pull show only `api.inaturalist.org` (`docs/results/day-3/privacy/privacy.log`); the capture path is still unlogged, since the camera stays off indoors
 - [ ] ~~**S40 Leave-it star**~~ — dropped Oct 8 with R10: no on-device check can tell a rooted plant from a picked one
 
 ## Ship · Oct 9–11

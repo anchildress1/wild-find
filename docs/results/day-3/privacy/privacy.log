@@ -1,0 +1,27 @@
+# S39 privacy proof, 2026-10-08, Galaxy S24 Ultra (SM-S928U, Android 16), debug app dev.anchildress1.wildfind.debug (uid 10352)
+# Method: sample_sockets.sh pushed to /data/local/tmp and run with `adb shell sh`, reading every TCP and UDP socket
+# owned by the app's uid from /proc/net/{tcp,tcp6,udp,udp6} every 0.2 s. Columns: proto, remote address (hex,
+# IPv4-mapped IPv6), state (01 established, 08 close wait). No camera was opened in the captures below.
+
+## Before the fix (app launched to the tutorial and Grown-ups, models loading, no hunt started)
+before_fix_sockets.txt: one remote, ...FFFF000069DF9604:01BB = 4.150.223.105:443, established for the whole capture
+  whois: Microsoft Corporation (4.144.0.0/12)
+  TLS certificate at that address: CN=*.events.data.microsoft.com (SANs include mobile.events.data.microsoft.com)
+  phone and laptop resolve api.inaturalist.org to 13.66.155.195, so this was not iNat
+Source: onnxruntime-android 1.30.0 ships Microsoft 1DS telemetry. strings in the APK's lib/arm64-v8a/libonnxruntime.so:
+  https://mobile.events.data.microsoft.com/OneCollector/1.0
+  and the AAR merges android.permission.ACCESS_NETWORK_STATE into the app manifest.
+ONNX Runtime docs (docs/Privacy.md): ORT_DISABLE_TELEMETRY=1 set before ONNX Runtime initializes stops the uploader,
+  events, and device identifier for the process; the API switch alone may still let an initialization event out.
+
+## Fix
+WildFindApp.onCreate sets ORT_DISABLE_TELEMETRY=1 before anything loads ONNX Runtime; ImageEncoder also calls
+OrtEnvironment.setTelemetry(false); the manifest removes ACCESS_NETWORK_STATE (merged manifest now: CAMERA,
+ACCESS_COARSE_LOCATION, INTERNET, and the system's own dynamic-receiver permission).
+
+## After the fix
+after_fix_launch_sockets.txt: app launched, libonnxruntime.so and the JNI library loaded (logcat nativeloader), 40 s:
+  no socket at all
+after_fix_pull_sockets.txt: no saved hunt, "Start a hunt" tapped, iNat pull for West Georgia:
+  only ...FFFF0000C39B420D:01BB = 13.66.155.195:443 = api.inaturalist.org (21 samples established, 97 close wait)
+Not covered: the camera and verify path (no camera indoors); the models it runs are the ones loaded at launch above.
