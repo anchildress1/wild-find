@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
-import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.Camera
@@ -21,13 +20,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -46,14 +45,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import androidx.core.view.WindowCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import dev.anchildress1.wildfind.R
@@ -99,7 +96,6 @@ fun CameraScreen(
         }
         onPauseOrDispose {}
     }
-    LightStatusIcons()
     Column(Modifier.fillMaxSize().background(Palette.Night).container(stopKey(target.row))) {
         TopBar(target, onBack)
         Box(Modifier.weight(1f).fillMaxWidth()) {
@@ -119,22 +115,11 @@ fun CameraScreen(
     }
 }
 
-// The top bar is Forest, so the status icons turn light while the camera shows and dark again after.
-@Composable
-private fun LightStatusIcons() {
-    val window = LocalActivity.current?.window ?: return
-    val view = LocalView.current
-    DisposableEffect(window) {
-        val controller = WindowCompat.getInsetsController(window, view)
-        controller.isAppearanceLightStatusBars = false
-        onDispose { controller.isAppearanceLightStatusBars = true }
-    }
-}
-
 @Composable
 private fun TopBar(target: CameraTarget, onBack: () -> Unit) {
     Row(
-        Modifier.fillMaxWidth().background(Palette.Forest).statusBarsPadding()
+        // The bars are hidden, so only the front camera's cutout needs clearing.
+        Modifier.fillMaxWidth().background(Palette.Forest).displayCutoutPadding()
             .padding(start = 8.dp, end = 20.dp, top = 8.dp, bottom = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
