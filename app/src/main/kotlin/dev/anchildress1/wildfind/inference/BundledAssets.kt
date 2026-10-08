@@ -1,6 +1,7 @@
 package dev.anchildress1.wildfind.inference
 
 import android.content.res.AssetManager
+import dev.anchildress1.wildfind.core.hunt.SpeciesRow
 import dev.anchildress1.wildfind.core.tensor.FloatMatrix
 import dev.anchildress1.wildfind.core.tensor.Npy
 import dev.anchildress1.wildfind.core.verify.HazardCheck
@@ -41,23 +42,27 @@ class BundledAssets(private val assets: AssetManager) {
     /** BioCLIP species table: one unit text vector per row of [speciesLabels]. */
     fun speciesTable(): FloatMatrix = Npy.floatMatrix(bytes(SPECIES_TABLE))
 
-    /** Scientific name and hazard flag per species-table row. */
-    fun speciesLabels(): List<Species> {
+    /** Name, genus, and flags per species-table row. */
+    fun speciesLabels(): List<SpeciesRow> {
         val rows = JSONArray(String(bytes(SPECIES_LABELS)))
         return List(rows.length()) { i ->
-            rows.getJSONObject(i).let { Species(it.getString("scientific"), it.getBoolean("hazard")) }
+            rows.getJSONObject(i).let {
+                SpeciesRow(
+                    it.getString("scientific"),
+                    it.getString("genus"),
+                    it.getBoolean("hazard"),
+                    it.getBoolean("toxic"),
+                )
+            }
         }
     }
 
-    /** Verify row 1's hazard rule over the species table, ranking only [local] species plus every hazard. */
-    fun hazardCheck(local: Set<String>): HazardCheck {
-        val labels = speciesLabels()
-        return HazardCheck(
-            speciesTable(),
-            labels.map { it.hazard }.toBooleanArray(),
-            labels.map { it.scientific in local }.toBooleanArray(),
-        )
-    }
+    /** Verify row 1's hazard rule over [table], naming only [local] species as the top species. */
+    fun hazardCheck(table: FloatMatrix, labels: List<SpeciesRow>, local: Set<String>): HazardCheck = HazardCheck(
+        table,
+        labels.map { it.hazard }.toBooleanArray(),
+        labels.map { it.scientific in local }.toBooleanArray(),
+    )
 
     /** Menu-word and tutorial text vectors from `labels.npy`, with their `labels.json` entries. */
     fun labels(): LabelSet {
@@ -72,14 +77,6 @@ class BundledAssets(private val assets: AssetManager) {
         }
         return LabelSet(entries, Npy.floatMatrix(bytes(LABELS_NPY)))
     }
-
-    /**
-     * One species-table row.
-     *
-     * @property scientific scientific name
-     * @property hazard true for a PRD hazard species
-     */
-    data class Species(val scientific: String, val hazard: Boolean)
 
     private fun bytes(name: String) = assets.open(name).use { it.readBytes() }
 

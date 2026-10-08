@@ -21,45 +21,48 @@ sealed interface Goal {
 }
 
 /**
- * PRD verify row 5: the target is top-1 among [candidates], at or above [floor], and past [margin] when set.
+ * PRD verify row 4: the best-scoring row among the hunt's [eligible] species and the local [blockers] is not a
+ * blocker and shares the target's genus, so a look-alike in the genus passes.
  *
- * @param labels `labels.npy`
+ * Scored against the hunt's own rows, never the whole table: on Day 1 the right genus led the whole table on only 60%
+ * of crops. Toxic-flagged local species are [blockers]: never targets, but a frame they lead never passes, even inside
+ * the target's genus, so a photo of a toxic plant can't pass as a target it outscores.
+ *
+ * @param table `species_table.npy`
+ * @param genus each table row's genus
  * @param target the target's row
- * @param candidates rows scored this frame: the hunt's targets and other locally eligible words, target included
- * @param floor the target's verify_floor; null means no floor until calibration sets one
- * @param margin the menu's runner-up margin; null means top-1 alone decides
+ * @param eligible the hunt's locally eligible species rows, target included
+ * @param blockers local toxic-flagged species rows
  */
 class TargetGoal(
-    private val labels: FloatMatrix,
+    private val table: FloatMatrix,
+    private val genus: List<String>,
     private val target: Int,
-    private val candidates: IntArray,
-    private val floor: Double?,
-    private val margin: Double?,
+    eligible: IntArray,
+    blockers: IntArray,
 ) : Goal {
+    private val pool = eligible + blockers
+    private val blocking = blockers.toSet()
+
     init {
-        require(target in candidates) { "target row $target is not a candidate" }
-        // A repeated target row would leave no runner-up and pass any plant; a repeated other row skews the rank.
-        require(candidates.distinct().size == candidates.size) { "repeated candidate rows" }
-        require(candidates.size >= 2) { "top-1 needs a runner-up" }
-        require(candidates.all { it in 0 until labels.rows }) { "candidate row outside labels" }
+        require(genus.size == table.rows) { "${genus.size} genera for ${table.rows} rows" }
+        require(target in eligible) { "target row $target is not eligible" }
+        require(pool.distinct().size == pool.size) { "repeated or overlapping pool rows" }
+        require(pool.all { it in 0 until table.rows }) { "pool row outside the table" }
+        // A pool of one genus has no rival, so any plant would pass.
+        require(pool.any { it in blocking || genus[it] != genus[target] }) { "no row outside the target's genus" }
     }
 
     override val checksHazards = true
 
     override fun score(embedding: FloatArray): GoalScore {
-        val score = labels.dot(target, embedding)
-        var runnerUp = Double.NEGATIVE_INFINITY
-        var above = 0
-        for (row in candidates) {
-            if (row == target) continue
-            val other = labels.dot(row, embedding)
-            if (other > runnerUp) runnerUp = other
-            if (other > score) above++
-        }
-        val met = score > runnerUp &&
-            (floor == null || score >= floor) &&
-            (margin == null || score - runnerUp >= margin)
-        return GoalScore(met, score, 1 + above)
+        val scores = pool.map { table.dot(it, embedding) }
+        val best = scores.max()
+        val top = pool[scores.indexOf(best)]
+        val score = table.dot(target, embedding)
+        // A tie for top-1 is no pass, whichever rows tie.
+        val met = scores.count { it == best } == 1 && top !in blocking && genus[top] == genus[target]
+        return GoalScore(met, score, 1 + scores.count { it > score })
     }
 }
 

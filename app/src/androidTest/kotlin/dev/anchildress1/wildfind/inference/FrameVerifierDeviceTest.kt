@@ -14,6 +14,7 @@ import dev.anchildress1.wildfind.core.frame.red
 import dev.anchildress1.wildfind.core.verify.Focus
 import dev.anchildress1.wildfind.core.verify.FrameVerifier
 import dev.anchildress1.wildfind.core.verify.HazardCheck
+import dev.anchildress1.wildfind.core.verify.TargetGoal
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -23,7 +24,7 @@ import org.junit.runner.RunWith
 import java.nio.ByteBuffer
 import java.util.concurrent.ForkJoinPool
 
-/** The whole per-frame verify path on the phone: camera buffer, crops, both bundled models, species table, labels. */
+/** The whole per-frame verify path on the phone: camera buffer, crops, both bundled models, species table. */
 @RunWith(AndroidJUnit4::class)
 class FrameVerifierDeviceTest {
     private val instrumentation = InstrumentationRegistry.getInstrumentation()
@@ -31,8 +32,17 @@ class FrameVerifierDeviceTest {
 
     @Test
     fun theFixtureFramePassesTheGateAndNoHazardWithTheLaptopPlantShare() {
-        val labels = bundled.labels()
-        val goal = labels.targetGoal("oak", labels.words, floor = null, margin = null)
+        val table = bundled.speciesTable()
+        val species = bundled.speciesLabels()
+        val rows = species.map { it.scientific }
+        // The fixture is a northern red oak; a rival genus keeps the goal from passing any plant.
+        val goal = TargetGoal(
+            table,
+            species.map { it.genus },
+            rows.indexOf("Quercus rubra"),
+            intArrayOf(rows.indexOf("Quercus rubra"), rows.indexOf("Liquidambar styraciflua")),
+            intArrayOf(),
+        )
         val frame = rgbaFrame(testBitmap("reference/fixture.png").pixels())
         val focus = Focus(Focus.AF_FOCUSED_LOCKED, CLOSE_DIOPTERS, 1f)
 
@@ -43,11 +53,7 @@ class FrameVerifierDeviceTest {
                         bundled.plantGate(),
                         gate,
                         bioclip,
-                        bundled.hazardCheck(
-                            bundled.speciesLabels().map {
-                                it.scientific
-                            }.toSet(),
-                        ),
+                        bundled.hazardCheck(table, species, rows.toSet()),
                     )
                 verifier.analyze(frame, goal) { focus } // warm-up, excluded from timing
                 val runs = List(RUNS) { verifier.analyze(frame, goal) { focus } }
@@ -56,7 +62,6 @@ class FrameVerifierDeviceTest {
                 Log.i(TAG, "shares ${result.reticleShare} ${result.fullShare}, goal ${result.goal}")
                 Log.i(TAG, "hazard ranks ${result.reticleRanking?.hazardRank} ${result.fullRanking?.hazardRank}")
 
-                assertEquals(5, labels.words.size)
                 // A 224-square fixture: the full-frame crop resizes to itself, so the laptop share must hold.
                 assertEquals(gateReference().getDouble("plant_share"), result.fullShare, SHARE_TOLERANCE)
                 assertTrue(result.evidence.reticlePlant)

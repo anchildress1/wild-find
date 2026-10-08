@@ -80,7 +80,7 @@ def run(tmp_path):
                 "android": "16",
                 "app_version": "0.1.0",
                 "goal": "target",
-                "word": "oak",
+                "target": "Quercus nigra",
                 "requested_analysis": "1280x960",
             }
         )

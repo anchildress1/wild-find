@@ -42,14 +42,15 @@ import kotlin.concurrent.thread
 /**
  * Debug-only gate harness: the verify path on each capture, memory, and heat, logged for `make gate-pull`.
  *
- * Launched from its own launcher icon (target oak) or over adb by `make gate-harness` with the extra [EXTRA_WORD].
+ * Launched from its own launcher icon (target water oak) or over adb by `make gate-harness` with the extra
+ * [EXTRA_TARGET].
  */
 class GateHarnessActivity : ComponentActivity() {
     private val analysisExecutor = Executors.newSingleThreadExecutor()
     private val surfaceRequest = MutableStateFlow<SurfaceRequest?>(null)
     private val camera = MutableStateFlow<Camera?>(null)
     private val gateRun = MutableStateFlow<GateRun?>(null)
-    private val word by lazy { intent.getStringExtra(EXTRA_WORD) ?: DEFAULT_WORD }
+    private val target by lazy { intent.getStringExtra(EXTRA_TARGET) ?: DEFAULT_TARGET }
     private val analysisSize = Size(Crops.ANALYSIS_WIDTH, Crops.ANALYSIS_HEIGHT)
 
     private val cameraPermission =
@@ -92,13 +93,13 @@ class GateHarnessActivity : ComponentActivity() {
     private fun startRun() {
         val size = analysisSize
         val stamp = SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US).format(Date())
-        val dir = File(requireNotNull(getExternalFilesDir(LOG_DIR)), "$stamp-$word")
+        val dir = File(requireNotNull(getExternalFilesDir(LOG_DIR)), "$stamp-${target.lowercase().replace(' ', '-')}")
         check(dir.mkdirs()) { "can't create $dir" }
         // Loading both encoders and the species table takes a second; never on the main thread.
         thread(name = TAG) {
             val log = GateLog(dir)
-            log.run(runInfo(word, size))
-            val run = GateRun(applicationContext, word, log)
+            log.run(runInfo(target, size))
+            val run = GateRun(applicationContext, target, log)
             val alive = synchronized(gateRun) { (!isDestroyed).also { if (it) gateRun.value = run } }
             if (alive) {
                 run.start()
@@ -169,15 +170,15 @@ class GateHarnessActivity : ComponentActivity() {
         }, mainExecutor)
     }
 
-    private fun runInfo(word: String, size: Size) = JSONObject().apply {
+    private fun runInfo(target: String, size: Size) = JSONObject().apply {
         put("started", SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", Locale.US).format(Date()))
         put("device", "${Build.MANUFACTURER} ${Build.MODEL}")
         put("soc", Build.SOC_MODEL)
         put("android", Build.VERSION.RELEASE)
         put("sdk", Build.VERSION.SDK_INT)
         put("app_version", packageManager.getPackageInfo(packageName, 0).versionName)
-        put("word", word)
-        put("goal", if (word == GateRun.TUTORIAL) "tutorial" else "target")
+        put("target", target)
+        put("goal", if (target == GateRun.TUTORIAL) "tutorial" else "target")
         put("requested_analysis", "${size.width}x${size.height}")
         put("capture_frames", VerifyStreak.FRAMES)
         put("bioclip", ModelPin.load("bioclip").let { "${it.repo}@${it.revision}/${it.file}" })
@@ -185,11 +186,11 @@ class GateHarnessActivity : ComponentActivity() {
 
     /** Launch extras. */
     companion object {
-        /** Target menu word, or `grass` for the tutorial goal. */
-        const val EXTRA_WORD = "word"
+        /** Target scientific name, or `grass` for the tutorial goal. */
+        const val EXTRA_TARGET = "target"
 
         private const val TAG = "GateHarness"
         private const val LOG_DIR = "gate"
-        private const val DEFAULT_WORD = "oak"
+        private const val DEFAULT_TARGET = "Quercus nigra"
     }
 }

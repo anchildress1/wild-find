@@ -47,27 +47,12 @@ class LabelSet(val entries: List<Entry>, val vectors: FloatMatrix) {
         }
     }
 
-    /** Every menu word, in row order. */
-    val words: List<String> = entries.filter { it.kind == Kind.WORD }.map { it.id }
-
-    /** Row of the menu word [word]. */
-    fun wordRow(word: String): Int = rowOf(word, Kind.WORD)
-
     /** The grass tutorial goal over the fixed tutorial labels. */
     fun tutorialGoal(): TutorialGoal = TutorialGoal(
         vectors,
         rowOf(GRASS, Kind.TUTORIAL),
         entries.indices.filter { entries[it].kind == Kind.TUTORIAL }.toIntArray(),
     )
-
-    /**
-     * The verify goal for [target] among [candidates] (the hunt's targets and other locally eligible words).
-     *
-     * @param floor the target's verify_floor, null until calibration
-     * @param margin the menu's runner-up margin, null until calibration
-     */
-    fun targetGoal(target: String, candidates: Collection<String>, floor: Double?, margin: Double?): TargetGoal =
-        TargetGoal(vectors, wordRow(target), candidates.map(::wordRow).toIntArray(), floor, margin)
 
     private fun rowOf(id: String, kind: Kind): Int =
         entries.indexOfFirst { it.id == id && it.kind == kind }.also { require(it >= 0) { "no $kind label $id" } }

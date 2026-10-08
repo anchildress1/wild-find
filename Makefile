@@ -54,10 +54,10 @@ focus-probe: install
 	adb logcat -s FocusProbe:I | tee $(FOCUS_LOG)
 
 # S05 gate harness: verify on each Capture tap (3 frames), memory, and heat, logged on the phone.
-# GATE_WORD is the target, or grass for the tutorial. Back ends a run.
-GATE_WORD ?= oak
+# GATE_TARGET is an eligible West Georgia species, or grass for the tutorial. Back ends a run.
+GATE_TARGET ?= Quercus nigra
 gate-harness: install
-	adb shell am start -n $(WILDFIND_PACKAGE)/dev.anchildress1.wildfind.harness.GateHarnessActivity --es word $(GATE_WORD)
+	adb shell am start -n $(WILDFIND_PACKAGE)/dev.anchildress1.wildfind.harness.GateHarnessActivity --es target "'$(GATE_TARGET)'"
 
 # Copies harness runs off the phone and summarizes new ones. One folder for all of them: each run's name starts with
 # its date and time, so pulling again adds new runs instead of copying old ones into another day's folder.

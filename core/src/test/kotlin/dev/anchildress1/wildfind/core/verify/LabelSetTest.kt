@@ -19,23 +19,11 @@ class LabelSetTest {
         LabelSet(entries, FloatMatrix(entries.size, 2, FloatArray(entries.size * 2)))
 
     @Test
-    fun `words and tutorial labels with the same taxon stay separate rows`() {
-        val labels = set(words + tutorial)
-
-        assertEquals(listOf("oak", "fern"), labels.words)
-        assertEquals(0, labels.wordRow("oak"))
-        assertEquals(1, labels.wordRow("fern"))
-        assertThrows<IllegalArgumentException> { labels.wordRow("Quercus") }
-    }
-
-    @Test
-    fun `goals come from the right rows`() {
+    fun `the tutorial goal comes from the tutorial rows`() {
         val labels = set(words + tutorial)
         val embedding = floatArrayOf(1f, 0f)
 
-        assertEquals(1, labels.targetGoal("oak", listOf("oak", "fern"), null, null).score(embedding).rank)
         assertEquals(1, labels.tutorialGoal().score(embedding).rank)
-        assertThrows<IllegalArgumentException> { labels.targetGoal("pine", listOf("oak", "fern"), null, null) }
     }
 
     @Test

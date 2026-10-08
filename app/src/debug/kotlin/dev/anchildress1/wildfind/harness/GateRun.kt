@@ -15,10 +15,13 @@ import android.os.SystemClock
 import androidx.camera.core.ImageProxy
 import dev.anchildress1.wildfind.core.frame.Box
 import dev.anchildress1.wildfind.core.frame.RgbaFrame
+import dev.anchildress1.wildfind.core.hunt.LocalSpecies
+import dev.anchildress1.wildfind.core.hunt.Sighting
 import dev.anchildress1.wildfind.core.verify.Focus
 import dev.anchildress1.wildfind.core.verify.FocusTrack
 import dev.anchildress1.wildfind.core.verify.FrameVerifier
 import dev.anchildress1.wildfind.core.verify.Goal
+import dev.anchildress1.wildfind.core.verify.TargetGoal
 import dev.anchildress1.wildfind.core.verify.Verdict
 import dev.anchildress1.wildfind.core.verify.VerifyStreak
 import dev.anchildress1.wildfind.inference.BundledAssets
@@ -44,7 +47,7 @@ import java.util.concurrent.atomic.AtomicInteger
  * @property thermalStatus last sampled `PowerManager` thermal status
  * @property species the reticle's top-1 species-table row on the last frame BioCLIP ran, or empty
  * @property capturing true while a capture's frames are being verified
- * @property target the word this run looks for
+ * @property target the scientific name this run looks for, or [GateRun.TUTORIAL]
  */
 data class GateStatus(
     val frameWidth: Int = 0,
@@ -65,32 +68,48 @@ data class GateStatus(
  *
  * Construct off the main thread: it loads both ONNX models and the species table.
  *
- * @param word the target menu word, or [TUTORIAL] for the grass tutorial goal
+ * @param target the target's scientific name, or [TUTORIAL] for the grass tutorial goal
  */
-class GateRun(private val context: Context, private val word: String, val log: GateLog) : Closeable {
+class GateRun(private val context: Context, private val target: String, val log: GateLog) : Closeable {
     private val bundled = BundledAssets(context.assets)
-    private val labels = bundled.labels()
+    private val table = bundled.speciesTable()
+    private val labels = bundled.speciesLabels()
+    private val species = labels.map { it.scientific }
+    private val rowOf = species.withIndex().associate { (row, name) -> name to row }
 
-    // Every stand-in menu word competes, as the hunt's targets and locally eligible words will.
-    private val goal: Goal = if (word == TUTORIAL) {
-        labels.tutorialGoal()
+    // West Georgia's October pull, a debug asset; the hunt's own iNat pull replaces it in the app.
+    private val sightings = context.assets.open(LOCAL_SPECIES).bufferedReader().useLines { lines ->
+        lines.filterNot { it.isBlank() || it.startsWith("#") }.map { line ->
+            line.split('\t').let { Sighting(it[1], it.getOrNull(2)?.ifBlank { null }, it[0].toInt()) }
+        }.toList()
+    }
+    private val local = LocalSpecies(labels, rowOf::get).of(sightings)
+
+    // The hunt's eligible species compete, with the local toxic and hazard species as blockers.
+    private val goal: Goal = if (target == TUTORIAL) {
+        bundled.labels().tutorialGoal()
     } else {
-        labels.targetGoal(word, labels.words, floor = null, margin = null)
+        TargetGoal(
+            table,
+            labels.map { it.genus },
+            requireNotNull(local.eligible.firstOrNull { species[it.row] == target }) { "$target is not eligible" }.row,
+            local.eligible.map { it.row }.toIntArray(),
+            local.blockers,
+        )
     }
     private val gateEncoder = ImageEncoder(bundled.plantGateModel())
     private val bioclip = ImageEncoder(bundled.bioclipModel())
-    private val species = bundled.speciesLabels().map { it.scientific }
-
-    // West Georgia's October list, a debug asset; the hunt's own iNat pull replaces it in the app.
-    private val local = context.assets.open(LOCAL_SPECIES).bufferedReader().useLines { lines ->
-        lines.filterNot { it.isBlank() || it.startsWith("#") }.toSet()
-    }
-    private val verifier = FrameVerifier(bundled.plantGate(), gateEncoder, bioclip, bundled.hazardCheck(local))
+    private val verifier = FrameVerifier(
+        bundled.plantGate(),
+        gateEncoder,
+        bioclip,
+        bundled.hazardCheck(table, labels, sightings.map { it.scientific }.toSet()),
+    )
     private val streak = VerifyStreak()
     private val focus = FocusTrack()
     private val sampler = Executors.newSingleThreadScheduledExecutor()
     private val captureLeft = AtomicInteger(0)
-    private val state = MutableStateFlow(GateStatus(target = word))
+    private val state = MutableStateFlow(GateStatus(target = target))
 
     private var lastFrameNs = 0L
 
@@ -122,13 +141,12 @@ class GateRun(private val context: Context, private val word: String, val log: G
 
     /** Starts sampling. */
     fun start() {
-        log.event(now(), "start", word)
+        log.event(now(), "start", target)
         log.event(
             now(),
             "local_species",
-            "${species.count {
-                it in local
-            }} of ${local.size} local names in the species table",
+            "${sightings.count { it.scientific in rowOf }} of ${sightings.size} local names in the species table; " +
+                "${local.eligible.size} eligible, ${local.blockers.size} blockers",
         )
         sampler.scheduleWithFixedDelay(::sample, 0, SAMPLE_MS, TimeUnit.MILLISECONDS)
     }
@@ -158,7 +176,7 @@ class GateRun(private val context: Context, private val word: String, val log: G
         // capture and disable the button for the rest of the run.
         if (captureLeft.get() != 0) return
         state.update { it.copy(capturing = true) }
-        log.event(now(), "capture", word)
+        log.event(now(), "capture", target)
         captureLeft.set(VerifyStreak.FRAMES)
     }
 
@@ -209,7 +227,7 @@ class GateRun(private val context: Context, private val word: String, val log: G
         sampler.shutdown()
         // A sample stuck under heat can outlast the wait; the log says so instead of hiding it.
         val drained = sampler.awaitTermination(CLOSE_WAIT_S, TimeUnit.SECONDS)
-        log.event(now(), if (drained) "stop" else "stop_timeout", word)
+        log.event(now(), if (drained) "stop" else "stop_timeout", target)
         gateEncoder.close()
         bioclip.close()
         // A thread still running would write to a closed log and crash; every row is already flushed, so leaving the
@@ -252,13 +270,13 @@ class GateRun(private val context: Context, private val word: String, val log: G
 
     /** Constants for one run. */
     companion object {
-        /** The [GateRun] word that selects the grass tutorial goal. */
+        /** The [GateRun] target that selects the grass tutorial goal. */
         const val TUTORIAL = "grass"
 
         /** System sampling period; `getThermalHeadroom` returns NaN when called more than once a second. */
         const val SAMPLE_MS = 2_000L
 
-        private const val LOCAL_SPECIES = "local_species.txt"
+        private const val LOCAL_SPECIES = "local_species.tsv"
         private const val RGBA_BYTES = 4
         private const val NANOS_PER_MS = 1_000_000L
         private const val BYTES_PER_KB = 1024

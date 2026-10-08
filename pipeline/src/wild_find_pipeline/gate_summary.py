@@ -175,7 +175,7 @@ def summarize(run: Path) -> str:
     camera = next((e["detail"] for e in events if e["event"] == "camera"), "")
     header = [
         f"run {run.name}: {info['device']} ({info['soc']}), Android {info['android']}, app {info['app_version']}",
-        f"goal {info['goal']} {info['word']}, requested analysis {info['requested_analysis']}, {camera}",
+        f"goal {info['goal']} {info['target']}, requested analysis {info['requested_analysis']}, {camera}",
     ]
     names = {e["event"] for e in events}
     # A run killed by OOM, heat, or a crash never logs stop; its numbers end early and must say so.
