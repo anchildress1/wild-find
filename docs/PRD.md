@@ -281,11 +281,11 @@ The build fetches BioCLIP from `https://huggingface.co/<repo>/resolve/<revision>
   "locale": "en",
   "month": 10,
   "radius_km": 75,
-  "species": [{ "taxon_id": 119286, "scientific": "Quercus nigra", "common": "water oak", "count": 72 }]
+  "sightings": [{ "scientific": "Quercus nigra", "common": "water oak", "count": 72 }]
 }
 ```
 
-radius\_km is 75, or 150 after the widen, so widened counts never pass as 75 km counts. The entry holds only eligible species, so an offline hunt needs nothing else. table\_version is the first 12 hex digits of species\_labels.json's SHA-256, so a rebuilt table or flag set discards old entries. A mismatch on schema\_version, table\_version, region, locale, month, or radius\_km discards the entry and refetches.
+radius\_km is 75, or 150 after the widen, so widened counts never pass as 75 km counts. The entry holds every species the pull returned, not only the eligible ones: the share floor counts all of them, and the local toxic species block verify row 4, so an offline hunt rebuilds its eligible list and blockers from the entry alone. table\_version is the first 12 hex digits of species\_labels.json's SHA-256, so a rebuilt table or flag set discards old entries. A mismatch on schema\_version, table\_version, region, locale, month, or radius\_km discards the entry and refetches.
 
 **Model inputs and outputs**
 
