@@ -108,6 +108,7 @@ private fun ScreenFor(screen: Screen, state: GameState, vm: GameViewModel) {
                 map,
                 state.mapFocus,
                 canLocate = !state.locationFailed,
+                locating = state.locating,
                 onLocation = { on(GameEvent.LocationAnswer(it)) },
                 onPick = { on(GameEvent.PickRegion(it)) },
                 onBack = { on(GameEvent.Back) },

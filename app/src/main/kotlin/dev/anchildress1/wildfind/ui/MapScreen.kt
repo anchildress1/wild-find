@@ -68,6 +68,7 @@ private val CameraSaver = Saver<MapCamera, List<Double>>(
  * @param map the built-in map, null while it loads
  * @param focus where Locate found the rough location
  * @param canLocate location was never denied, so Locate may ask once
+ * @param locating Locate is waiting for the rough location, so "Hunt here" waits too
  */
 @Composable
 @Suppress("LongParameterList")
@@ -75,6 +76,7 @@ fun MapScreen(
     map: WorldMap?,
     focus: MapFocus?,
     canLocate: Boolean,
+    locating: Boolean,
     onLocation: (granted: Boolean) -> Unit,
     onPick: (RegionKey) -> Unit,
     onBack: () -> Unit,
@@ -100,7 +102,7 @@ fun MapScreen(
             Controls(canLocate, onLocation, Modifier.align(Alignment.TopEnd)) { glide(camera.zoom(it)) }
             Pad(camera.canPick, Modifier.align(Alignment.BottomEnd)) { glide(camera.step(it)) }
         }
-        PickPanel(camera.canPick) { onPick(camera.region) }
+        PickPanel(camera.canPick, enabled = !locating) { onPick(camera.region) }
     }
 }
 
@@ -174,7 +176,7 @@ private fun Guide(camera: MapCamera, modifier: Modifier) {
 }
 
 @Composable
-private fun PickPanel(canPick: Boolean, onPick: () -> Unit) {
+private fun PickPanel(canPick: Boolean, enabled: Boolean, onPick: () -> Unit) {
     Column(
         Modifier.fillMaxWidth().background(Palette.Paper, RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
             .navigationBarsPadding().padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 16.dp),
@@ -188,7 +190,7 @@ private fun PickPanel(canPick: Boolean, onPick: () -> Unit) {
             stringResource(if (canPick) R.string.map_hunt_here else R.string.map_zoom_to_pick),
             onPick,
             icon = if (canPick) WildIcons.Chevron else null,
-            enabled = canPick,
+            enabled = canPick && enabled,
         )
         PrivateLine(stringResource(R.string.map_private))
     }

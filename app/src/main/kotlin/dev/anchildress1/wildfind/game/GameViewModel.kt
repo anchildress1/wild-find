@@ -24,6 +24,7 @@ import dev.anchildress1.wildfind.core.verify.PlantGate
 import dev.anchildress1.wildfind.core.verify.Verdict
 import dev.anchildress1.wildfind.inat.InatClient
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -50,6 +51,7 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
     private var verifier: CaptureVerifier? = null
     private var models: Models? = null
     private val retry = RetryWindow(SystemClock::elapsedRealtime)
+    private var loading: Job? = null
 
     // Store writes run one at a time and in order, so a quick find-then-finish never lands out of order.
     private val disk = Dispatchers.IO.limitedParallelism(1)
@@ -157,6 +159,8 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
         viewModelScope.launch {
             val region = graph.location.region()
             state.update { it.copy(locating = false) }
+            // A fix that lands after the kid moved on (picked on the map, went back) must not start a hunt.
+            if (state.value.screen != screen) return@launch
             when {
                 region == null -> fallback?.let(::show)
 
@@ -191,7 +195,9 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
     private fun load() {
         val region = flags.region ?: return show(Screen.Region(back = null))
         show(Screen.Loading)
-        viewModelScope.launch {
+        // One pull at a time: a newer pick or retry replaces the older one, whichever would have finished last.
+        loading?.cancel()
+        loading = viewModelScope.launch {
             val models = graph.models.await()
             var offline = false
             val result = withContext(Dispatchers.IO) {
