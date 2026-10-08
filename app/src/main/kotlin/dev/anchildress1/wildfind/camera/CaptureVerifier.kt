@@ -18,6 +18,7 @@ import dev.anchildress1.wildfind.core.verify.VerifyStreak
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.util.concurrent.atomic.AtomicReference
 
 /**
  * Upright size of the visible analysis frame, which the reticle ring is drawn from.
@@ -66,7 +67,7 @@ class CaptureVerifier(private val verifier: FrameVerifier) {
     private val focus = FocusTrack()
     private val size = MutableStateFlow<FrameSize?>(null)
 
-    @Volatile private var pending: Pending? = null
+    private val pending = AtomicReference<Pending?>(null)
 
     /** The sensor's active-array width, for the crop-region zoom fallback; set once the camera is bound. */
     @Volatile var activeArrayWidth = 0
@@ -75,7 +76,7 @@ class CaptureVerifier(private val verifier: FrameVerifier) {
     val frameSize: StateFlow<FrameSize?> = size.asStateFlow()
 
     /** True while a capture's frames are being verified. */
-    val capturing: Boolean get() = pending != null
+    val capturing: Boolean get() = pending.get() != null
 
     /** Records every capture result's focus reading by sensor timestamp; attach to the camera session. */
     val captureCallback = object : CameraCaptureSession.CaptureCallback() {
@@ -102,15 +103,12 @@ class CaptureVerifier(private val verifier: FrameVerifier) {
      * Starts one capture for [goal]; [onFrame] gets each verified frame on the analysis thread. False, and nothing
      * starts, while another capture is still running.
      */
-    fun capture(goal: Goal, onFrame: (CapturedFrame) -> Unit): Boolean {
-        if (pending != null) return false
-        pending = Pending(goal, onFrame)
-        return true
-    }
+    fun capture(goal: Goal, onFrame: (CapturedFrame) -> Unit): Boolean =
+        pending.compareAndSet(null, Pending(goal, onFrame))
 
     /** Drops a running capture, e.g. when its screen leaves; a frame already in flight still reports. */
     fun cancel() {
-        pending = null
+        pending.set(null)
     }
 
     /** Verifies [proxy] while a capture is pending; always closes it. */
@@ -122,15 +120,16 @@ class CaptureVerifier(private val verifier: FrameVerifier) {
         val frame =
             RgbaFrame(plane.buffer, plane.rowStride, Box(crop.left, crop.top, crop.width(), crop.height()), rotation)
         size.value = FrameSize(frame.width, frame.height)
-        val capture = pending ?: return@use
+        val capture = pending.get() ?: return@use
         val received = SystemClock.elapsedRealtimeNanos()
         val sensorNs = proxy.imageInfo.timestamp
         val first = capture.left == VerifyStreak.FRAMES
         val result = verifier.analyze(frame, capture.goal) { focus.at(sensorNs) }
         val verdict = capture.streak.next(result.evidence)
         capture.left = if (verdict is Verdict.Matching) capture.left - 1 else 0
-        // Cleared before the callback, so a listener may start the next capture at once.
-        if (capture.left == 0) pending = null
+        // Cleared before the callback, so a listener may start the next capture at once. Only this capture: a cancel
+        // while its frame was in flight may already have let a new one start.
+        if (capture.left == 0) pending.compareAndSet(capture, null)
         capture.onFrame(
             CapturedFrame(result, verdict, first, rotation, sensorNs, received, SystemClock.elapsedRealtimeNanos()),
         )
