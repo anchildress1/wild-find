@@ -52,6 +52,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.Observer
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import dev.anchildress1.wildfind.R
 import dev.anchildress1.wildfind.camera.CaptureVerifier
 import dev.anchildress1.wildfind.camera.Viewfinder
@@ -86,6 +87,14 @@ fun CameraScreen(
         denied = !it
     }
     LaunchedEffect(Unit) { if (!granted) ask.launch(Manifest.permission.CAMERA) }
+    // The denial card sends the kid's grown-up to Settings; a grant made there must count on return.
+    LifecycleResumeEffect(Unit) {
+        if (context.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            granted = true
+            denied = false
+        }
+        onPauseOrDispose {}
+    }
     LightStatusIcons()
     Column(Modifier.fillMaxSize().background(Palette.Night).container(stopKey(target.row))) {
         TopBar(target, onBack)
