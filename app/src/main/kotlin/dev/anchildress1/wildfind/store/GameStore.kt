@@ -119,7 +119,7 @@ class GameStore(private val dir: File) {
             if (!temp.renameTo(file)) throw IOException("can't replace $file")
         } catch (e: IOException) {
             Log.w(TAG, "can't save $file", e)
-            temp.delete()
+            if (temp.exists() && !temp.delete()) Log.w(TAG, "can't remove $temp")
         }
     }
 
