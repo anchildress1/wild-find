@@ -7,6 +7,14 @@ class BriarStateTest {
     @Test
     fun `every state names its packed sheet`() {
         assertEquals(listOf("opener", "welcome", "found", "complete"), BriarState.entries.map { it.sheet })
-        assertEquals(listOf(BriarState.OPENER), BriarState.entries.filter { it.holdsLastFrame })
+        assertEquals(
+            mapOf(BriarState.OPENER to 1_500L),
+            BriarState.entries.mapNotNull { s ->
+                s.replayAfterMillis?.let {
+                    s to
+                        it
+                }
+            }.toMap(),
+        )
     }
 }

@@ -27,6 +27,7 @@ import dev.anchildress1.wildfind.R
 import dev.anchildress1.wildfind.core.sprite.BriarState
 import dev.anchildress1.wildfind.core.sprite.SpriteSheet
 import dev.anchildress1.wildfind.ui.theme.LocalReducedMotion
+import kotlinx.coroutines.delay
 import org.json.JSONObject
 
 /**
@@ -45,16 +46,19 @@ fun Briar(state: BriarState?, description: String, modifier: Modifier = Modifier
     LaunchedEffect(playing, reduced) {
         // With animations off the state's first frame holds, so Briar still shows how the game reacted.
         if (reduced) return@LaunchedEffect
-        val start = withFrameNanos { it }
-        var done = false
-        while (!done) {
-            withFrameNanos { now ->
-                frame = sheet.meta.frameAt(now - start)
-                done = !sheet.meta.loop && frame == sheet.meta.frames - 1
+        do {
+            val start = withFrameNanos { it }
+            var done = false
+            while (!done) {
+                withFrameNanos { now ->
+                    frame = sheet.meta.frameAt(now - start)
+                    done = !sheet.meta.loop && frame == sheet.meta.frames - 1
+                }
             }
-        }
-        // The opener stops on its warning pose; every other play-once sheet hands over to idle.
-        if (state?.holdsLastFrame != true) playing = BriarState.IDLE
+            // The opener rests on its warning pose, then plays again; every other play-once sheet hands over to idle.
+            val rest = state?.takeIf { it.sheet == playing }?.replayAfterMillis?.also { delay(it) }
+        } while (rest != null)
+        playing = BriarState.IDLE
     }
     // A fixed box sized to the largest sheet keeps Briar from jumping when sheets of different cell sizes swap.
     val box = with(LocalDensity.current) { DpSize(BOX_PX.toDp(), BOX_PX.toDp()) }

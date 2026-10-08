@@ -366,7 +366,7 @@ Briar and the opener play finished sprite sheets, one per state. A Rive rig was 
 | Briar state sources | Finished per-state art, not yet packed: 32-frame 8 × 4 sheets on 512 px cells `welcome-32`, `rest-blink-32`, `searching-32`, `searching-hint-32`, `found-32`, `retry-32`, `complete-32`; drafts stay out of git in assets/generated/ until finished | assets/source/briar-*.png, assets/source/welcome-32.png, assets/source/complete-32.png |
 | Briar sprite sheets | Packed `idle`, `welcome`, `found`, and `complete` (`make sprites`); `found` plays `complete-32`, since `found-32` bakes a fern into every frame | app/src/main/assets/briar/ |
 | Plant-type icons | Shown with the target's name, one per type from S17 | Path pending |
-| Opener art | Briar holds up a warning paw beside a three-leaf seedling; 32 frames, plays once and holds its last frame | assets/source/opener-ivy-32.png, packed to app/src/main/assets/briar/opener.png |
+| Opener art | Briar holds up a warning paw beside a three-leaf seedling; 32 frames, plays, rests 1.5 s on its last frame, and plays again while the opener shows | assets/source/opener-ivy-32.png, packed to app/src/main/assets/briar/opener.png |
 
 - Animation-first interactions; illustrations, not licensed photos, in v1
 - Kid copy principle: "Look. Photograph. Leave it where it grows."

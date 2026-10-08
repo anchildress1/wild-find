@@ -5,11 +5,11 @@ package dev.anchildress1.wildfind.core.sprite
  * stays off hunt pages, so no state reacts to a single capture.
  *
  * @property sheet the sheet's asset name
- * @property holdsLastFrame true when the sheet stops on its last frame instead of handing over to idle
+ * @property replayAfterMillis how long the last frame holds before the sheet plays again, or null to hand over to idle
  */
-enum class BriarState(val sheet: String, val holdsLastFrame: Boolean = false) {
-    /** The safety opener: Briar warns beside a three-leaf plant, then holds that pose. */
-    OPENER("opener", holdsLastFrame = true),
+enum class BriarState(val sheet: String, val replayAfterMillis: Long? = null) {
+    /** The safety opener: Briar warns beside a three-leaf plant, again and again with a short rest between. */
+    OPENER("opener", replayAfterMillis = OPENER_REST_MS),
 
     /** First launch, the tutorial, and the hunt list. */
     WELCOME("welcome"),
@@ -27,3 +27,6 @@ enum class BriarState(val sheet: String, val holdsLastFrame: Boolean = false) {
         const val IDLE = "idle"
     }
 }
+
+// The opener's rest on its last frame before it replays; long enough to read the pose, short enough to stay alive.
+private const val OPENER_REST_MS = 1_500L
