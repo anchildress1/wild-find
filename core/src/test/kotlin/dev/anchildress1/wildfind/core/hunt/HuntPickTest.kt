@@ -62,4 +62,43 @@ class HuntPickTest {
         assertEquals((0..5).toSet(), (hunt.targets + hunt.queue).map { it.row }.toSet())
         assertEquals(6, hunt.targets.size + hunt.queue.size)
     }
+
+    private fun describedTable(vararg described: Int) = table.mapIndexed { row, species ->
+        species.copy(description = if (row in described) "A tall tree." else null)
+    }
+
+    @Test
+    fun `described species fill the hunt first, by sightings, one per genus`() {
+        val table = describedTable(1, 3, 4, 5)
+        repeat(200) { seed ->
+            val hunt = HuntPick(table, Random(seed)).next(local(900, 1, 900, 1, 1, 1), tutorialDone = true)
+
+            assertTrue(hunt.targets.all { table[it.row].description != null }, hunt.targets.toString())
+            assertEquals(3, hunt.targets.map { table[it.row].genus }.distinct().size)
+        }
+    }
+
+    @Test
+    fun `too few described species leave the rest of the hunt to the undescribed`() {
+        val table = describedTable(4)
+        repeat(50) { seed ->
+            val hunt = HuntPick(table, Random(seed)).next(local(10, 10, 10, 10, 10, 10), tutorialDone = true)
+
+            assertEquals(4, hunt.targets.first().row)
+            assertEquals(3, hunt.targets.size)
+            assertEquals(3, hunt.targets.map { table[it.row].genus }.distinct().size)
+        }
+    }
+
+    @Test
+    fun `the skip queue lists described species before undescribed ones`() {
+        val table = describedTable(0, 2, 3)
+        repeat(50) { seed ->
+            val hunt = HuntPick(table, Random(seed)).next(local(10, 10, 10, 10, 10, 10), tutorialDone = true)
+            val flags = hunt.queue.map { table[it.row].description != null }
+
+            assertEquals(flags.sortedDescending(), flags, hunt.queue.toString())
+            assertEquals(6, hunt.targets.size + hunt.queue.size)
+        }
+    }
 }
