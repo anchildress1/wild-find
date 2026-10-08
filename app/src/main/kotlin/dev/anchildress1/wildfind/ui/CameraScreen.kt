@@ -130,11 +130,12 @@ private fun TopBar(target: CameraTarget, onBack: () -> Unit) {
                 style = MaterialTheme.typography.titleLarge,
                 color = Color.White,
             )
-            typeLabel(target.type)?.let { type ->
+            // The description names the type too ("A tall tree with…"), so it replaces the bare type when there is one.
+            (target.description ?: typeLabel(target.type)?.replaceFirstChar { it.titlecase() })?.let { look ->
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     target.type?.let { PlantArt(it, Modifier.size(24.dp)) }
                     Text(
-                        type.replaceFirstChar { it.titlecase() },
+                        look,
                         Modifier.padding(start = 6.dp),
                         style = MaterialTheme.typography.bodyMedium,
                         color = Color.White,

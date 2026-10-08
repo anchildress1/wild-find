@@ -56,6 +56,7 @@ class BundledAssets(private val assets: AssetManager) {
                     it.getBoolean("toxic"),
                     PlantType.of(if (it.isNull("type")) null else it.getString("type")),
                     it.getJSONArray("synonyms").let { names -> List(names.length(), names::getString) },
+                    if (it.isNull("description")) null else it.getString("description"),
                 )
             }
         }

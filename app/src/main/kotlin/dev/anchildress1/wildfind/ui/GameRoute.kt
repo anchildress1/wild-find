@@ -172,14 +172,15 @@ private fun MapRoute(state: GameState, vm: GameViewModel) {
 private fun cameraTarget(row: Int?, state: GameState): CameraTarget {
     val stop =
         row?.let(state::stop) ?: return CameraTarget(null, stringResource(R.string.grass), null, 0, state.stops.size)
-    return CameraTarget(row, stop.name, stop.type, state.stops.indexOf(stop) + 1, state.stops.size)
+    return CameraTarget(row, stop.name, stop.type, state.stops.indexOf(stop) + 1, state.stops.size, stop.description)
 }
 
 @Composable
 private fun foundInfo(row: Int?, state: GameState): FoundInfo {
     val next = state.stops.firstOrNull { !it.found }?.name
-    val name = row?.let(state::stop)?.name ?: stringResource(R.string.grass)
-    return FoundInfo(name, state.stars, state.stops.size, next, tutorial = row == null)
+    val stop = row?.let(state::stop)
+    val name = stop?.name ?: stringResource(R.string.grass)
+    return FoundInfo(name, state.stars, state.stops.size, next, tutorial = row == null, stop?.description)
 }
 
 private const val ENTER_SHARE = 8

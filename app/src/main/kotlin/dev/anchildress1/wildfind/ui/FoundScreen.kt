@@ -69,6 +69,9 @@ fun FoundScreen(info: FoundInfo, crop: Pixels?, onNext: () -> Unit, onHunt: () -
                 color = Palette.Forest,
                 textAlign = TextAlign.Center,
             )
+            info.description?.let {
+                Text(it, style = MaterialTheme.typography.bodyLarge, color = Palette.Ink2, textAlign = TextAlign.Center)
+            }
         }
         Box(Modifier.fillMaxWidth().heightIn(min = 320.dp)) {
             // Briar first, so his cheering arms never cover the photo or the star.

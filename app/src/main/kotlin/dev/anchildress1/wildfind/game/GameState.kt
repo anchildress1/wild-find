@@ -80,9 +80,16 @@ sealed interface Screen {
  * @property row the species-table row
  * @property name the iNat common name
  * @property type its plant type, or null for name only
+ * @property description what to look for, from USDA traits, or null to show the type alone
  * @property found already found this hunt
  */
-data class Stop(val row: Int, val name: String, val type: PlantType?, val found: Boolean)
+data class Stop(
+    val row: Int,
+    val name: String,
+    val type: PlantType?,
+    val found: Boolean,
+    val description: String? = null,
+)
 
 /**
  * The camera screen between taps.

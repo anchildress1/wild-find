@@ -183,11 +183,12 @@ private fun alignmentFor(horizontal: Alignment.Horizontal) =
 @Composable
 private fun StopCard(number: Int, stop: Stop, onClick: () -> Unit, onCenter: (Offset) -> Unit) {
     val type = typeLabel(stop.type)
-    val description = when {
+    val spoken = when {
         type == null -> stringResource(R.string.stop_plain, number, stop.name)
         stop.found -> stringResource(R.string.stop_found, number, stop.name, type)
         else -> stringResource(R.string.stop_open, number, stop.name, type)
     }
+    val description = listOfNotNull(spoken, stop.description).joinToString(". ")
     Column(
         Modifier.width(STOP_WIDTH).clearAndSetSemantics {
             contentDescription = description
@@ -210,7 +211,14 @@ private fun StopCard(number: Int, stop: Stop, onClick: () -> Unit, onCenter: (Of
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(stop.name, style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center)
-            type?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = Palette.Ink2) }
+            (stop.description ?: type)?.let {
+                Text(
+                    it,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Palette.Ink2,
+                    textAlign = TextAlign.Center,
+                )
+            }
         }
     }
 }

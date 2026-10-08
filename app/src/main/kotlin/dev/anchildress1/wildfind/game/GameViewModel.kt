@@ -292,7 +292,8 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
     private fun publish(models: Models, active: ActiveHunt) = state.update { ui ->
         ui.copy(
             stops = active.progress.targets.map {
-                Stop(it.row, it.common, models.rows[it.row].type, it.row in active.progress.found)
+                val species = models.rows[it.row]
+                Stop(it.row, it.common, species.type, it.row in active.progress.found, species.description)
             },
         )
     }
