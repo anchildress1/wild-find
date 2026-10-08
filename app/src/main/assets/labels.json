@@ -1,5 +1,5 @@
 {
- "schema_version": 1,
+ "schema_version": 2,
  "text_model": {
   "repo": "imageomics/bioclip-2.5-vith14",
   "revision": "6e3d04e3d6522012c88181085c5ae666e14c45cd"
@@ -10,98 +10,46 @@
  },
  "labels": [
   {
-   "id": "oak",
-   "kind": "word",
-   "scientific": "Quercus",
-   "prompt": "a photo of Quercus."
-  },
-  {
-   "id": "pine",
-   "kind": "word",
-   "scientific": "Pinus",
-   "prompt": "a photo of Pinus."
-  },
-  {
-   "id": "clover",
-   "kind": "word",
-   "scientific": "Trifolium",
-   "prompt": "a photo of Trifolium."
-  },
-  {
-   "id": "dandelion",
-   "kind": "word",
-   "scientific": "Taraxacum",
-   "prompt": "a photo of Taraxacum."
-  },
-  {
-   "id": "fern",
-   "kind": "word",
-   "scientific": "Polypodiopsida",
-   "prompt": "a photo of Polypodiopsida."
-  },
-  {
-   "id": "Poaceae",
-   "kind": "tutorial",
    "scientific": "Poaceae",
    "prompt": "a photo of Poaceae."
   },
   {
-   "id": "Quercus",
-   "kind": "tutorial",
    "scientific": "Quercus",
    "prompt": "a photo of Quercus."
   },
   {
-   "id": "Polypodiopsida",
-   "kind": "tutorial",
    "scientific": "Polypodiopsida",
    "prompt": "a photo of Polypodiopsida."
   },
   {
-   "id": "Trifolium",
-   "kind": "tutorial",
    "scientific": "Trifolium",
    "prompt": "a photo of Trifolium."
   },
   {
-   "id": "Pinus",
-   "kind": "tutorial",
    "scientific": "Pinus",
    "prompt": "a photo of Pinus."
   },
   {
-   "id": "Taraxacum",
-   "kind": "tutorial",
    "scientific": "Taraxacum",
    "prompt": "a photo of Taraxacum."
   },
   {
-   "id": "Toxicodendron radicans",
-   "kind": "tutorial",
    "scientific": "Toxicodendron radicans",
    "prompt": "a photo of Toxicodendron radicans."
   },
   {
-   "id": "Toxicodendron pubescens",
-   "kind": "tutorial",
    "scientific": "Toxicodendron pubescens",
    "prompt": "a photo of Toxicodendron pubescens."
   },
   {
-   "id": "Toxicodendron vernix",
-   "kind": "tutorial",
    "scientific": "Toxicodendron vernix",
    "prompt": "a photo of Toxicodendron vernix."
   },
   {
-   "id": "Phytolacca americana",
-   "kind": "tutorial",
    "scientific": "Phytolacca americana",
    "prompt": "a photo of Phytolacca americana."
   },
   {
-   "id": "Solanum carolinense",
-   "kind": "tutorial",
    "scientific": "Solanum carolinense",
    "prompt": "a photo of Solanum carolinense."
   }

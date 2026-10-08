@@ -64,18 +64,18 @@ class BundledAssets(private val assets: AssetManager) {
         labels.map { it.scientific in local }.toBooleanArray(),
     )
 
-    /** Menu-word and tutorial text vectors from `labels.npy`, with their `labels.json` entries. */
+    /** Tutorial text vectors from `labels.npy`, named by `labels.json`. */
     fun labels(): LabelSet {
         val json = JSONObject(String(bytes(LABELS_JSON)))
         val version = json.getInt("schema_version")
         require(version == LABELS_SCHEMA) { "labels.json schema_version $version, expected $LABELS_SCHEMA" }
         val rows = json.getJSONArray("labels")
-        val entries = List(rows.length()) { i ->
-            rows.getJSONObject(i).let {
-                LabelSet.Entry(it.getString("id"), LabelSet.Kind.of(it.getString("kind")), it.getString("scientific"))
-            }
-        }
-        return LabelSet(entries, Npy.floatMatrix(bytes(LABELS_NPY)))
+        return LabelSet(
+            List(rows.length()) {
+                rows.getJSONObject(it).getString("scientific")
+            },
+            Npy.floatMatrix(bytes(LABELS_NPY)),
+        )
     }
 
     private fun bytes(name: String) = assets.open(name).use { it.readBytes() }
@@ -97,6 +97,6 @@ class BundledAssets(private val assets: AssetManager) {
         const val SPECIES_LABELS = "species_labels.json"
         const val LABELS_NPY = "labels.npy"
         const val LABELS_JSON = "labels.json"
-        const val LABELS_SCHEMA = 1
+        const val LABELS_SCHEMA = 2
     }
 }

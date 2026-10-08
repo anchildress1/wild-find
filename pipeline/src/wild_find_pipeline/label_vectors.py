@@ -1,4 +1,4 @@
-"""labels.npy and labels.json: teacher text vectors for every menu word plus the fixed tutorial labels (R3)."""
+"""labels.npy and labels.json: teacher text vectors for the fixed grass-tutorial labels (R3)."""
 
 import json
 import sys
@@ -6,19 +6,16 @@ from pathlib import Path
 
 import numpy as np
 
-from wild_find_pipeline.labels import DEV_WORDS, TUTORIAL, embedding_versions, prompt, teacher_model
+from wild_find_pipeline.labels import TUTORIAL, embedding_versions, prompt, teacher_model
 from wild_find_pipeline.paths import LABELS_DIR
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 UNIT_TOLERANCE = 1e-4
 
 
-def label_rows(words: dict[str, str]) -> list[dict[str, str]]:
-    """One row per menu word, then one per tutorial label, in labels.npy order."""
-    return [
-        *({"id": word, "kind": "word", "scientific": taxon} for word, taxon in words.items()),
-        *({"id": taxon, "kind": "tutorial", "scientific": taxon} for taxon in TUTORIAL),
-    ]
+def label_rows(taxa: tuple[str, ...] = TUTORIAL) -> list[dict[str, str]]:
+    """One row per tutorial label, in labels.npy order."""
+    return [{"scientific": taxon, "prompt": prompt(taxon)} for taxon in taxa]
 
 
 def check_vectors(vectors: np.ndarray, count: int) -> np.ndarray:
@@ -46,7 +43,7 @@ def write(out: Path, rows: list[dict[str, str]], vectors: np.ndarray) -> None:
                 "schema_version": SCHEMA_VERSION,
                 "text_model": teacher_model(),
                 "packages": embedding_versions(),
-                "labels": [{**row, "prompt": prompt(row["scientific"])} for row in rows],
+                "labels": rows,
             },
             indent=1,
         )
@@ -54,13 +51,13 @@ def write(out: Path, rows: list[dict[str, str]], vectors: np.ndarray) -> None:
     )
 
 
-def check_committed(out: Path = LABELS_DIR, words: dict[str, str] = DEV_WORDS) -> None:
+def check_committed(out: Path = LABELS_DIR, taxa: tuple[str, ...] = TUTORIAL) -> None:
     """Raise ValueError unless the committed labels match the label lists, prompt, teacher pin, and packages.
 
-    They need the teacher to rebuild, so nothing else would notice a changed word, tutorial row, or prompt.
+    They need the teacher to rebuild, so nothing else would notice a changed tutorial row or prompt.
     """
     meta = json.loads((out / "labels.json").read_text())
-    expected = [{**row, "prompt": prompt(row["scientific"])} for row in label_rows(words)]
+    expected = label_rows(taxa)
     if meta.get("schema_version") != SCHEMA_VERSION or meta.get("text_model") != teacher_model():
         raise ValueError("labels.json predates the current schema or teacher pin; run make labels")
     if meta.get("packages") != embedding_versions():
@@ -71,11 +68,11 @@ def check_committed(out: Path = LABELS_DIR, words: dict[str, str] = DEV_WORDS) -
 
 
 def main() -> int:
-    """Embed the stand-in menu and the tutorial labels with the pinned teacher."""
+    """Embed the tutorial labels with the pinned teacher."""
     from wild_find_pipeline.reference import embed_texts
 
-    rows = label_rows(DEV_WORDS)
-    write(LABELS_DIR, rows, embed_texts([prompt(row["scientific"]) for row in rows]))
+    rows = label_rows()
+    write(LABELS_DIR, rows, embed_texts([row["prompt"] for row in rows]))
     print(f"OK: wrote {len(rows)} labels to {LABELS_DIR}")
     return 0
 
