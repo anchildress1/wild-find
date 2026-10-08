@@ -29,9 +29,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -49,6 +51,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.Observer
@@ -75,6 +78,7 @@ fun CameraScreen(
     verifier: CaptureVerifier?,
     executor: Executor,
     onCapture: () -> Unit,
+    onSkip: () -> Unit,
     onBack: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -105,7 +109,13 @@ fun CameraScreen(
             }
             Feedback(target, camera, Modifier.align(Alignment.BottomCenter))
         }
-        BottomPanel(camera, enabled = granted && camera.ready && verifier != null, onCapture)
+        BottomPanel(
+            camera,
+            enabled = granted && camera.ready && verifier != null,
+            practice = target.number == 0,
+            onCapture,
+            onSkip,
+        )
     }
 }
 
@@ -240,7 +250,14 @@ private fun HazardCard() {
 }
 
 @Composable
-private fun BottomPanel(camera: CameraState, enabled: Boolean, onCapture: () -> Unit) {
+@Suppress("LongParameterList")
+private fun BottomPanel(
+    camera: CameraState,
+    enabled: Boolean,
+    practice: Boolean,
+    onCapture: () -> Unit,
+    onSkip: () -> Unit,
+) {
     Column(
         Modifier.fillMaxWidth().background(Palette.Paper, RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
             .navigationBarsPadding().padding(start = 20.dp, end = 20.dp, top = 18.dp, bottom = 16.dp),
@@ -255,6 +272,19 @@ private fun BottomPanel(camera: CameraState, enabled: Boolean, onCapture: () -> 
                 Modifier.heightIn(min = 64.dp),
                 icon = WildIcons.Camera,
                 enabled = enabled,
+            )
+        }
+        // Not every target grows everywhere: a skip swaps in the next plant from the hunt's queue.
+        TextButton(
+            onSkip,
+            Modifier.fillMaxWidth().heightIn(min = 48.dp),
+            enabled = !camera.checking,
+            colors = ButtonDefaults.textButtonColors(contentColor = Palette.Forest),
+        ) {
+            Text(
+                stringResource(if (practice) R.string.skip_practice else R.string.skip_target),
+                style = MaterialTheme.typography.titleMedium,
+                textDecoration = TextDecoration.Underline,
             )
         }
         RuleLine()

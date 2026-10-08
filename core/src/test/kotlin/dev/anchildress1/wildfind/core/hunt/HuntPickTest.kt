@@ -54,4 +54,12 @@ class HuntPickTest {
         assertTrue(HuntPick(table, Random(1)).next(local(5, 5, 5, 5), tutorialDone = false).tutorial)
         assertFalse(HuntPick(table, Random(1)).next(local(5, 5, 5, 5), tutorialDone = true).tutorial)
     }
+
+    @Test
+    fun `every eligible species not picked waits in the queue`() {
+        val hunt = HuntPick(table, Random(3)).next(local(10, 10, 10, 10, 10, 10), tutorialDone = true)
+
+        assertEquals((0..5).toSet(), (hunt.targets + hunt.queue).map { it.row }.toSet())
+        assertEquals(6, hunt.targets.size + hunt.queue.size)
+    }
 }

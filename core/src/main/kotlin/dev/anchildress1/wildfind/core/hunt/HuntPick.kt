@@ -7,8 +7,9 @@ import kotlin.random.Random
  *
  * @property tutorial true when the grass tutorial opens the hunt
  * @property targets up to [HuntPick.TARGETS] species, never two from one genus; fewer means the coverage message
+ * @property queue every other eligible species, shuffled; a skip swaps the next one in
  */
-data class Hunt(val tutorial: Boolean, val targets: List<Eligible>)
+data class Hunt(val tutorial: Boolean, val targets: List<Eligible>, val queue: List<Eligible> = emptyList())
 
 /**
  * Picks a hunt's targets by sighting-weighted random from the local list.
@@ -26,7 +27,7 @@ class HuntPick(private val table: List<SpeciesRow>, private val random: Random =
             targets += chosen
             left.removeAll { table[it.row].genus == table[chosen.row].genus }
         }
-        return Hunt(!tutorialDone, targets)
+        return Hunt(!tutorialDone, targets, (local.eligible - targets.toSet()).shuffled(random))
     }
 
     private fun draw(from: List<Eligible>): Eligible {

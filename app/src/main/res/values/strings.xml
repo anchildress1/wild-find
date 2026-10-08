@@ -93,6 +93,8 @@
     <string name="camera_progress">%1$d of %2$d</string>
     <string name="back_to_hunt">Back to your hunt</string>
     <string name="capture">Capture</string>
+    <string name="skip_target">Can\'t find it? Try another plant</string>
+    <string name="skip_practice">Skip practice</string>
     <string name="checking">Checking…</string>
     <string name="zoom">%.1f×</string>
     <string name="cue_point">Point the camera at a plant</string>

@@ -47,4 +47,25 @@ class HuntProgressTest {
     fun `app flags start unset`() {
         assertEquals(AppFlags(openerSeen = false, tutorialDone = false, region = null), AppFlags())
     }
+
+    @Test
+    fun `a skip swaps in the next species and sends the skipped one to the back`() {
+        val queue = listOf(Eligible(7, "mistflower", 362), Eligible(8, "beautyberry", 230))
+        val progress = HuntProgress(false, targets, queue = queue).skip(9)
+
+        assertEquals(listOf(4, 7, 2), progress.targets.map { it.row })
+        assertEquals(listOf(8, 9), progress.queue.map { it.row })
+        assertEquals(listOf(4, 8, 2), progress.skip(7).targets.map { it.row })
+        assertEquals(listOf(9, 7), progress.skip(7).queue.map { it.row })
+    }
+
+    @Test
+    fun `with an empty queue a skip changes nothing, and only open targets skip`() {
+        val progress = HuntProgress.start(Hunt(false, targets))
+
+        assertEquals(progress, progress.skip(9))
+        assertThrows<IllegalStateException> { HuntProgress.start(Hunt(true, targets)).skip(9) }
+        assertThrows<IllegalArgumentException> { progress.skip(7) }
+        assertThrows<IllegalArgumentException> { progress.targetFound(9).skip(9) }
+    }
 }

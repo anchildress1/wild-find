@@ -99,6 +99,7 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
             is GameEvent.OpenCamera -> openCamera(event.row)
             GameEvent.Capture -> capture(screen)
             GameEvent.Next -> next(screen)
+            GameEvent.Skip -> skip(screen)
             GameEvent.ToHunt -> toHunt()
             GameEvent.FinishHunt -> finish()
             GameEvent.HuntAgain -> endHunt().also { load() }
@@ -328,6 +329,28 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
             found.row == null -> show(Screen.Hunt)
             progress.complete -> show(Screen.Complete)
             else -> openCamera(progress.remaining.first().row)
+        }
+    }
+
+    // A kid somewhere a target doesn't grow swaps it for the next species in the queue and keeps hunting on the same
+    // camera; the grass tutorial has no queue, so its skip moves on to the hunt.
+    private fun skip(screen: Screen) {
+        val camera = screen as? Screen.Camera ?: return
+        val active = hunt ?: return
+        verifier?.cancel()
+        session++
+        val row = camera.row
+        val progress = if (row == null) active.progress.tutorialPassed() else active.progress.skip(row)
+        val updated = active.copy(progress = progress)
+        hunt = updated
+        persist(updated)
+        models?.let { publish(it, updated) }
+        if (row == null) {
+            save(flags.copy(tutorialDone = true))
+            show(Screen.Hunt)
+        } else {
+            // The swap keeps the target's slot, so the camera opens on whatever now sits there.
+            openCamera(progress.targets[active.progress.targets.indexOfFirst { it.row == row }].row)
         }
     }
 

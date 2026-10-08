@@ -18,8 +18,14 @@ data class AppFlags(val openerSeen: Boolean = false, val tutorialDone: Boolean =
  * @property tutorialPending the grass tutorial still opens the hunt
  * @property targets this hunt's targets, in pick order
  * @property found the rows of targets already found; the kid finds them in any order
+ * @property queue the hunt's other eligible species, next in line for a skip
  */
-data class HuntProgress(val tutorialPending: Boolean, val targets: List<Eligible>, val found: Set<Int> = emptySet()) {
+data class HuntProgress(
+    val tutorialPending: Boolean,
+    val targets: List<Eligible>,
+    val found: Set<Int> = emptySet(),
+    val queue: List<Eligible> = emptyList(),
+) {
     init {
         require(targets.distinctBy { it.row }.size == targets.size) { "repeated target" }
         require(found.all { row -> targets.any { it.row == row } }) { "found row outside the hunt" }
@@ -47,9 +53,21 @@ data class HuntProgress(val tutorialPending: Boolean, val targets: List<Eligible
         return copy(found = found + row)
     }
 
+    /**
+     * The kid skipped the target at [row]: the next species in the queue takes its place, and the skipped one goes
+     * to the back of the queue. With an empty queue nothing changes.
+     */
+    fun skip(row: Int): HuntProgress {
+        check(!tutorialPending) { "the tutorial comes first" }
+        require(targets.any { it.row == row } && row !in found) { "row $row is not an open target" }
+        val next = queue.firstOrNull() ?: return this
+        val skipped = targets.first { it.row == row }
+        return copy(targets = targets.map { if (it.row == row) next else it }, queue = queue.drop(1) + skipped)
+    }
+
     /** Starts the hunt [hunt] planned. */
     companion object {
         /** A fresh hunt with nothing found. */
-        fun start(hunt: Hunt): HuntProgress = HuntProgress(hunt.tutorial, hunt.targets)
+        fun start(hunt: Hunt): HuntProgress = HuntProgress(hunt.tutorial, hunt.targets, queue = hunt.queue)
     }
 }

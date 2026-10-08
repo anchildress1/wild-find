@@ -139,6 +139,7 @@ private fun ScreenFor(screen: Screen, state: GameState, vm: GameViewModel) {
             vm.capture,
             vm.analysis,
             onCapture = { on(GameEvent.Capture) },
+            onSkip = { on(GameEvent.Skip) },
             onBack = { on(GameEvent.Back) },
         )
 

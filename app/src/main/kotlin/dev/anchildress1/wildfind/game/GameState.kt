@@ -172,6 +172,9 @@ sealed interface GameEvent {
     /** Capture tapped. */
     data object Capture : GameEvent
 
+    /** Swap the camera's target for the next species in the hunt's queue, or move past the grass tutorial. */
+    data object Skip : GameEvent
+
     /** After a find, the next target or the stars. */
     data object Next : GameEvent
 

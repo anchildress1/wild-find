@@ -27,6 +27,7 @@ class GameStoreTest {
             tutorialPending = false,
             targets = listOf(Eligible(4, "water oak", 72), Eligible(9, "sweetgum", 183)),
             found = setOf(9),
+            queue = listOf(Eligible(12, "redbud", 76)),
         ),
         RegionKey(34, -85),
         eligible = listOf(4, 9, 12),

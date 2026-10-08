@@ -43,11 +43,14 @@ class GameStore(private val dir: File) {
     /** The hunt saved under [tableVersion], or null: another table build moved its rows. */
     fun hunt(tableVersion: String): ActiveHunt? = parse(HUNT) {
         if (it.getString("table_version") != tableVersion) return@parse null
-        val targets = it.getJSONArray("targets").objects().map { t ->
-            Eligible(t.getInt("row"), t.getString("common"), t.getInt("count"))
-        }
+        val targets = it.getJSONArray("targets").species()
         ActiveHunt(
-            HuntProgress(it.getBoolean("tutorial_pending"), targets, it.getJSONArray("found").ints().toSet()),
+            HuntProgress(
+                it.getBoolean("tutorial_pending"),
+                targets,
+                it.getJSONArray("found").ints().toSet(),
+                it.getJSONArray("queue").species(),
+            ),
             region(it.getString("region")),
             it.getJSONArray("eligible").ints(),
             it.getJSONArray("blockers").ints(),
@@ -61,14 +64,8 @@ class GameStore(private val dir: File) {
             .put("table_version", tableVersion)
             .put("region", hunt.region.toString())
             .put("tutorial_pending", hunt.progress.tutorialPending)
-            .put(
-                "targets",
-                JSONArray(
-                    hunt.progress.targets.map {
-                        JSONObject().put("row", it.row).put("common", it.common).put("count", it.count)
-                    },
-                ),
-            )
+            .put("targets", species(hunt.progress.targets))
+            .put("queue", species(hunt.progress.queue))
             .put("found", JSONArray(hunt.progress.found.sorted()))
             .put("eligible", JSONArray(hunt.eligible))
             .put("blockers", JSONArray(hunt.blockers)),
@@ -159,3 +156,10 @@ private fun entry(json: JSONObject): CacheEntry {
 private fun JSONArray.objects() = List(length(), ::getJSONObject)
 
 private fun JSONArray.ints() = List(length(), ::getInt)
+
+private fun JSONArray.species() = objects().map {
+    Eligible(it.getInt("row"), it.getString("common"), it.getInt("count"))
+}
+
+private fun species(list: List<Eligible>) =
+    JSONArray(list.map { JSONObject().put("row", it.row).put("common", it.common).put("count", it.count) })
