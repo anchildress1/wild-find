@@ -405,7 +405,7 @@ No blockers remain; every open hole below closes or falls back during calibratio
 
 | # | Hole | Why it matters | Fix | Severity |
 | --- | --- | --- | --- | --- |
-| 3 | Label text format | Day 1: with common names, a white oak photo scored "poison oak" top-1 on both the teacher and the mobile model; scientific names put oak top-1 on both | Applies only to the 11 fixed tutorial labels: targets and hazards score against the pinned species table's own text. Tutorial labels embed as "a photo of <scientific name>."; confirm on the calibration set (S15) | High |
+| 3 | Label text format | Day 1: with common names, a white oak photo scored "poison oak" top-1 on both the teacher and the mobile model; scientific names put oak top-1 on both | Resolved Oct 8 on fresh CC0 photos: scientific-name labels pass 10 of 10 grass photos and no oak reads as grass. New finding: the tutorial's grass-in-top-3 rule also passes 7 of 10 plants that aren't grass (clover, dandelion, plantain, and others); grass at rank 1 would pass 8 of 10 grass and 2 of 10 others (`docs/results/day-3/calibration.log`). The rule stays until decided | Low |
 | 4 | Latency | Continuous verify ran 366 ms a frame at p50 outdoors (Oct 7), so verify moved to Capture: 189 ms a frame, 3 frames per tap | Resolved by Capture | Low |
 | 10 | Heat and battery | Continuous verify reached severe thermal status in 36 minutes on Oct 7; capture mode stayed at none for 5.5 minutes unplugged | A 20-minute capture-mode run (S05) | Medium |
 | 13 | No telemetry | Field failures stay invisible by design | Resolved: the debug-only gate harness logs every capture, memory, and heat to local CSVs that `make gate-pull` exports; release builds log nothing | Low |
