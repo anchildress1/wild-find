@@ -73,7 +73,7 @@ data class GateStatus(
 class GateRun(private val context: Context, private val target: String, val log: GateLog) : Closeable {
     private val bundled = BundledAssets(context.assets)
     private val table = bundled.speciesTable()
-    private val labels = bundled.speciesLabels()
+    private val labels = bundled.speciesLabels(table)
     private val species = labels.map { it.scientific }
     private val rowOf = species.withIndex().associate { (row, name) -> name to row }
 

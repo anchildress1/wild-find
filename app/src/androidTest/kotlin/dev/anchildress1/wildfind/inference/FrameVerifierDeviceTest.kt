@@ -33,7 +33,7 @@ class FrameVerifierDeviceTest {
     @Test
     fun theFixtureFramePassesTheGateAndNoHazardWithTheLaptopPlantShare() {
         val table = bundled.speciesTable()
-        val species = bundled.speciesLabels()
+        val species = bundled.speciesLabels(table)
         val rows = species.map { it.scientific }
         // The fixture is a northern red oak; a rival genus keeps the goal from passing any plant.
         val goal = TargetGoal(

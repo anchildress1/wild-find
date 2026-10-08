@@ -42,10 +42,10 @@ class BundledAssets(private val assets: AssetManager) {
     /** BioCLIP species table: one unit text vector per row of [speciesLabels]. */
     fun speciesTable(): FloatMatrix = Npy.floatMatrix(bytes(SPECIES_TABLE))
 
-    /** Name, genus, and flags per species-table row. */
-    fun speciesLabels(): List<SpeciesRow> {
+    /** Name, genus, and flags per row of [table], checked against it. */
+    fun speciesLabels(table: FloatMatrix): List<SpeciesRow> {
         val rows = JSONArray(String(bytes(SPECIES_LABELS)))
-        return List(rows.length()) { i ->
+        val parsed = List(rows.length()) { i ->
             rows.getJSONObject(i).let {
                 SpeciesRow(
                     it.getString("scientific"),
@@ -55,6 +55,7 @@ class BundledAssets(private val assets: AssetManager) {
                 )
             }
         }
+        return SpeciesRow.checked(parsed, table.rows)
     }
 
     /** Verify row 1's hazard rule over [table], naming only [local] species as the top species. */
@@ -68,7 +69,9 @@ class BundledAssets(private val assets: AssetManager) {
     fun labels(): LabelSet {
         val json = JSONObject(String(bytes(LABELS_JSON)))
         val version = json.getInt("schema_version")
-        require(version == LABELS_SCHEMA) { "labels.json schema_version $version, expected $LABELS_SCHEMA" }
+        require(version == LabelSet.SCHEMA_VERSION) {
+            "labels.json schema_version $version, expected ${LabelSet.SCHEMA_VERSION}"
+        }
         val rows = json.getJSONArray("labels")
         return LabelSet(
             List(rows.length()) {
@@ -97,6 +100,5 @@ class BundledAssets(private val assets: AssetManager) {
         const val SPECIES_LABELS = "species_labels.json"
         const val LABELS_NPY = "labels.npy"
         const val LABELS_JSON = "labels.json"
-        const val LABELS_SCHEMA = 2
     }
 }

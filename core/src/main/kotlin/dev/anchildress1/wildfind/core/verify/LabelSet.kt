@@ -26,5 +26,8 @@ class LabelSet(val names: List<String>, val vectors: FloatMatrix) {
 
         /** Poaceae, Quercus, Polypodiopsida, Trifolium, Pinus, Taraxacum, and the 5 hazard species. */
         const val TUTORIAL_SIZE = 11
+
+        /** The only `labels.json` schema_version this build reads. */
+        const val SCHEMA_VERSION = 2
     }
 }

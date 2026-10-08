@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 class LocalSpeciesTest {
     private val table = listOf(
@@ -102,5 +103,19 @@ class LocalSpeciesTest {
     @Test
     fun `an empty pull widens`() {
         assertTrue(local.of(emptyList()).needsWiden)
+    }
+
+    @Test
+    fun `species labels must line up with the table and keep their invariants`() {
+        assertEquals(table, SpeciesRow.checked(table, table.size))
+        assertThrows<IllegalArgumentException> { SpeciesRow.checked(table, table.size + 1) }
+        assertThrows<IllegalArgumentException> { SpeciesRow.checked(table + table[0], table.size + 1) }
+        assertThrows<IllegalArgumentException> {
+            SpeciesRow.checked(listOf(table[0].copy(genus = "Acer")) + table.drop(1), table.size)
+        }
+        assertThrows<IllegalArgumentException> { SpeciesRow.checked(table.filterNot { it.hazard }, table.size - 1) }
+        assertThrows<IllegalArgumentException> {
+            SpeciesRow.checked(table.map { if (it.hazard) it.copy(toxic = false) else it }, table.size)
+        }
     }
 }

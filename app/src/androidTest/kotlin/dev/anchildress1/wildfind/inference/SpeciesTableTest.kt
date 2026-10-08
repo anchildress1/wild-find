@@ -17,7 +17,7 @@ class SpeciesTableTest {
     @Test
     fun tableRowsMatchLabelsAndCarryTheHazards() {
         val table = bundled.speciesTable()
-        val labels = bundled.speciesLabels()
+        val labels = bundled.speciesLabels(table)
 
         assertEquals(labels.size, table.rows)
         assertEquals(EMBEDDING_SIZE, table.cols)

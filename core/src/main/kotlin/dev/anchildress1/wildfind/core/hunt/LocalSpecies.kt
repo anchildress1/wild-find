@@ -22,6 +22,28 @@ data class Sighting(val scientific: String, val common: String?, val count: Int)
 data class SpeciesRow(val scientific: String, val genus: String, val hazard: Boolean, val toxic: Boolean) {
     /** Neither toxic nor a hazard, so it can be a target. */
     val playable: Boolean get() = !toxic && !hazard
+
+    /** Validates `species_labels.json`. */
+    companion object {
+        /**
+         * Returns [rows] after checking them against `species_table.npy`'s [tableRows]; throws
+         * [IllegalArgumentException] on any break, so a mismatched build never ships.
+         */
+        fun checked(rows: List<SpeciesRow>, tableRows: Int): List<SpeciesRow> {
+            require(rows.size == tableRows) { "${rows.size} species labels for $tableRows table rows" }
+            require(rows.distinctBy { it.scientific }.size == rows.size) { "duplicate species names" }
+            // Genus pass and the one-per-genus pick read this field, so it must be the name's own genus.
+            rows.firstOrNull { it.genus != it.scientific.substringBefore(' ') }?.let {
+                throw IllegalArgumentException("${it.scientific} has genus ${it.genus}")
+            }
+            require(rows.any { it.hazard }) { "no hazard species" }
+            // A hazard must never be a target, even if a toxicity rebuild misses it.
+            rows.firstOrNull { it.hazard && !it.toxic }?.let {
+                throw IllegalArgumentException("hazard ${it.scientific} is not toxic-flagged")
+            }
+            return rows
+        }
+    }
 }
 
 /**

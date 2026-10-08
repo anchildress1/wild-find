@@ -28,7 +28,7 @@ The Oct 7 redesign (PRD Redesign) dropped the build-time menu: the old S10–S16
 
 ## Game logic · core · Oct 8
 
-- [ ] **S20 Contracts** — parse and validate `species_labels.json` (genus, hazard, toxic, type), `hazards.json`, `labels.json`, `plant_gate.json`, cache entry; reject unknown `schema_version`; parsing moves out of `app`'s `BundledAssets` into core
+- [x] **S20 Contracts** — core validates what the app parses: `SpeciesRow.checked` lines `species_labels.json` up with `species_table.npy` (unique names, each genus its name's own, every hazard toxic-flagged), `LabelSet` holds `labels.json` to schema 2 and the 11 tutorial labels, `PlantGate` checks `plant_gate.json`; any break throws at load. The app keeps the JSON reading (org.json), since core has no JSON library. The cache entry lands with S23, `type` with S17, `hazards.json` with S31
 - [x] **S21 Region key** — whole-degree rounding; the `34_-85`-only gate is superseded by S28
 - [x] **S28 Any region** (core) — redesign: the `34_-85`-only gate in `RegionKey` is gone; any whole-degree key plays, and its whole degrees are the center the query sends; R2
 - [ ] **S22 Sightings** — aggregate `species_counts` pages; match iNat names to species-table rows through GBIF accepted names and synonyms (PRD hole 22), logging the match rate before and after; eligible at 0.5%+ of the query's plant sightings and 3+ sightings, in the species table, not toxic or hazard, common name of 3 words or fewer in the device locale; widen to 150 km once when < 3 eligible; every local toxic or hazard species with a table row comes back as a blocker for S29; R2
