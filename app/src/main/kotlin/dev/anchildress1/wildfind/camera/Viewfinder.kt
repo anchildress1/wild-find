@@ -121,7 +121,11 @@ private fun Preview(request: SurfaceRequest, camera: Camera?) {
             .pointerInput(camera) {
                 detectTransformGestures { _, _, zoom, _ ->
                     val live = camera ?: return@detectTransformGestures
-                    live.cameraControl.setZoomRatio((live.cameraInfo.zoomState.value?.zoomRatio ?: 1f) * zoom)
+                    val state = live.cameraInfo.zoomState.value ?: return@detectTransformGestures
+                    // CameraX rejects a ratio outside the lens range, which would stall the pinch short of the limit.
+                    live.cameraControl.setZoomRatio(
+                        (state.zoomRatio * zoom).coerceIn(state.minZoomRatio, state.maxZoomRatio),
+                    )
                 }
             },
     )
