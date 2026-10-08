@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalLocale
@@ -140,16 +141,29 @@ private fun OfflineBanner() {
     }
 }
 
-// Stops zigzag down the page with the dashed trail drawn through their tiles; growing text pushes them down, so
-// nothing overlaps at 200% font scale.
+// Stops zigzag down the page, each rising halfway up beside the one before, and the trail ends at Briar; the dashed
+// trail runs behind them through the gaps. Positions follow measured heights, so growing text pushes later stops
+// down and nothing overlaps at 200% font scale.
 @Composable
 private fun Trail(stops: List<Stop>, onStop: (Int) -> Unit) {
     val centers = remember { mutableStateMapOf<Int, Offset>() }
     var origin by remember { mutableStateOf(Offset.Zero) }
     val dash = remember { PathEffect.dashPathEffect(floatArrayOf(TRAIL_DASH, TRAIL_GAP)) }
-    Column(
-        Modifier.fillMaxWidth().onGloballyPositioned { origin = it.positionInRoot() }.drawBehind {
-            val points = stops.indices.mapNotNull(centers::get).map { it - origin }
+    Layout(
+        content = {
+            stops.forEachIndexed { index, stop ->
+                StopCard(index + 1, stop, Modifier.rise(index), { onStop(stop.row) }) { centers[index] = it }
+            }
+            Briar(
+                BriarState.WELCOME,
+                briarText(BriarState.WELCOME),
+                Modifier.rise(stops.size).onGloballyPositioned {
+                    centers[stops.size] = it.positionInRoot() + Offset(it.size.width / 2f, it.size.height / 2f)
+                },
+            )
+        },
+        modifier = Modifier.fillMaxWidth().onGloballyPositioned { origin = it.positionInRoot() }.drawBehind {
+            val points = (0..stops.size).mapNotNull(centers::get).map { it - origin }
             if (points.size < 2) return@drawBehind
             val path = Path().apply {
                 moveTo(points[0].x, points[0].y)
@@ -159,29 +173,27 @@ private fun Trail(stops: List<Stop>, onStop: (Int) -> Unit) {
             }
             drawPath(path, Palette.Moss, style = Stroke(3.dp.toPx(), cap = StrokeCap.Round, pathEffect = dash))
         },
-    ) {
-        stops.forEachIndexed { index, stop ->
-            val alignment = if (index % 2 == 0) Alignment.Start else Alignment.End
-            val last = index == stops.lastIndex
-            Row(
-                Modifier.fillMaxWidth().rise(index),
-                horizontalArrangement = if (last) Arrangement.SpaceBetween else Arrangement.Start,
-                verticalAlignment = Alignment.Bottom,
-            ) {
-                if (last) Briar(BriarState.WELCOME, briarText(BriarState.WELCOME), Modifier.weight(1f, fill = false))
-                Box(Modifier.weight(1f, fill = !last), contentAlignment = alignmentFor(alignment)) {
-                    StopCard(index + 1, stop, { onStop(stop.row) }) { centers[index] = it }
-                }
+    ) { measurables, constraints ->
+        val placeables = measurables.map { it.measure(constraints.copy(minWidth = 0, minHeight = 0)) }
+        val gap = SAME_SIDE_GAP.roundToPx()
+        val tops = IntArray(placeables.size)
+        for (i in 1..placeables.lastIndex) {
+            val halfway = tops[i - 1] + placeables[i - 1].height / 2
+            // Never into the stop above on the same side.
+            val clear = if (i >= 2) tops[i - 2] + placeables[i - 2].height + gap else 0
+            tops[i] = maxOf(halfway, clear)
+        }
+        val height = placeables.indices.maxOfOrNull { tops[it] + placeables[it].height } ?: 0
+        layout(constraints.maxWidth, height) {
+            placeables.forEachIndexed { i, placeable ->
+                placeable.place(if (i % 2 == 0) 0 else constraints.maxWidth - placeable.width, tops[i])
             }
         }
     }
 }
 
-private fun alignmentFor(horizontal: Alignment.Horizontal) =
-    if (horizontal == Alignment.Start) Alignment.TopStart else Alignment.TopEnd
-
 @Composable
-private fun StopCard(number: Int, stop: Stop, onClick: () -> Unit, onCenter: (Offset) -> Unit) {
+private fun StopCard(number: Int, stop: Stop, modifier: Modifier, onClick: () -> Unit, onCenter: (Offset) -> Unit) {
     val type = typeLabel(stop.type)
     val spoken = when {
         type == null -> stringResource(R.string.stop_plain, number, stop.name)
@@ -190,7 +202,7 @@ private fun StopCard(number: Int, stop: Stop, onClick: () -> Unit, onCenter: (Of
     }
     val description = listOfNotNull(spoken, stop.description).joinToString(". ")
     Column(
-        Modifier.width(STOP_WIDTH).clearAndSetSemantics {
+        modifier.width(STOP_WIDTH).clearAndSetSemantics {
             contentDescription = description
             role = Role.Button
         }.clickable(onClick = onClick),
@@ -236,6 +248,7 @@ private fun Badge(number: Int, found: Boolean, modifier: Modifier) {
 
 private val TILE = 104.dp
 private val BADGE_NUDGE = 12.dp
-private val STOP_WIDTH = 150.dp
+private val STOP_WIDTH = 168.dp
+private val SAME_SIDE_GAP = 12.dp
 private const val TRAIL_DASH = 12f
 private const val TRAIL_GAP = 26f
