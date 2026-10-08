@@ -7,7 +7,7 @@ wild-find sends kids 8 and up outside to find and photograph plants that grow ne
 ## How it works
 
 - One iNaturalist query per hunt picks targets that grow nearby this month
-- Each target shows its common name and what kind of plant it is (tree, vine, fern…)
+- Each target shows its common name
 - When the kid taps Capture, TinyCLIP checks that the camera is on a plant and BioCLIP 2.5 Mobile checks that it's the target
 
 The full spec is in [docs/PRD.md](docs/PRD.md). The build queue is in [docs/stories.md](docs/stories.md).
