@@ -1,4 +1,4 @@
-# Stand-in iNat pull for the gate harness until the iNat client (S33) exists: species_counts for
+# A fixed iNat pull, so gate-harness runs are reproducible whatever iNat returns today: species_counts for
 # research-grade plants within 75 km of (34, -85) in any October, pulled Oct 7 2026
 # (docs/results/day-2/inat_species_oct.csv). Tab-separated: count, scientific name, English common name.
 362	Conoclinium coelestinum	blue mistflower
