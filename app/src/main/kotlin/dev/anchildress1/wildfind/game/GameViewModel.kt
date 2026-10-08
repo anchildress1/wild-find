@@ -17,6 +17,7 @@ import dev.anchildress1.wildfind.core.hunt.Sighting
 import dev.anchildress1.wildfind.core.inat.InatLocale
 import dev.anchildress1.wildfind.core.inat.RetryWindow
 import dev.anchildress1.wildfind.core.inat.SpeciesCountsQuery
+import dev.anchildress1.wildfind.core.map.Places
 import dev.anchildress1.wildfind.core.map.WorldMap
 import dev.anchildress1.wildfind.core.region.RegionKey
 import dev.anchildress1.wildfind.core.verify.CaptureCue
@@ -81,6 +82,7 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
         viewModelScope.launch {
             flags = withContext(disk) { graph.store.flags() }
             state.update { it.copy(region = flags.region) }
+            relabel()
             if (flags.openerSeen) resume() else show(Screen.Opener(back = null))
         }
     }
@@ -93,7 +95,7 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
             GameEvent.OpenerDone -> openerDone(screen)
             is GameEvent.LocationAnswer -> located(event.granted)
             is GameEvent.PickRegion -> pick(event.region)
-            GameEvent.OpenMap -> show(Screen.Map(back = screen))
+            GameEvent.OpenMap -> openMap(Screen.Map(back = screen))
             GameEvent.ChangeRegion -> show(Screen.Region(back = null))
             GameEvent.LoadHunt -> load()
             is GameEvent.OpenCamera -> openCamera(event.row)
@@ -105,7 +107,7 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
             GameEvent.HuntAgain -> endHunt().also { load() }
             GameEvent.Home -> endHunt().also { show(Screen.Start) }
             GameEvent.OpenGrownUps -> show(Screen.GrownUps(from = screen))
-            GameEvent.EditRegion -> show(Screen.Map(back = screen))
+            GameEvent.EditRegion -> openMap(Screen.Map(back = screen))
             GameEvent.ReplayOpener -> show(Screen.Opener(back = screen))
             GameEvent.Back -> back(screen)
         }
@@ -182,6 +184,28 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
         }
     }
 
+    // With location already allowed, the map opens on the rough location, zoomed in enough to pick; it never asks
+    // here, so without permission (or a fix) it stays on the whole world.
+    private fun openMap(map: Screen.Map) {
+        show(map)
+        viewModelScope.launch {
+            val region = graph.location.region() ?: return@launch
+            if (state.value.screen === map) {
+                state.update { it.copy(mapFocus = MapFocus(region, (it.mapFocus?.serial ?: 0) + 1, opening = true)) }
+            }
+        }
+    }
+
+    private fun relabel() {
+        viewModelScope.launch {
+            val places = graph.places.await()
+            state.update { ui -> ui.copy(regionLabel = ui.region?.let { Places.label(it, places.nameAt(it)) }) }
+        }
+    }
+
+    /** Offline place names, once read. */
+    suspend fun places(): Places = graph.places.await()
+
     /** The built-in map, once read. */
     suspend fun map(): WorldMap = graph.map.await()
 
@@ -198,6 +222,7 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
         if (region == flags.region && back != null) return show(back)
         save(flags.copy(region = region))
         state.update { it.copy(region = region) }
+        relabel()
         endHunt()
         load()
     }

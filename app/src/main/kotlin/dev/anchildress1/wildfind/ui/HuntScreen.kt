@@ -57,11 +57,14 @@ import java.time.format.TextStyle
  * The hunt list: a trail of numbered stops, each showing its name and plant type from the start, a check and a star
  * once found; tapping a stop opens the camera on it.
  *
+ * @param area the hunting area's label, or null until the offline names load
  * @param offline the list came from the cache because iNat didn't answer
  */
 @Composable
+@Suppress("LongParameterList")
 fun HuntScreen(
     stops: List<Stop>,
+    area: String?,
     offline: Boolean,
     onStop: (Int) -> Unit,
     onFinish: () -> Unit,
@@ -75,7 +78,7 @@ fun HuntScreen(
             RuleLine()
         },
     ) {
-        Header(stops.size, onGrownUps)
+        Header(stops.size, area, onGrownUps)
         if (offline) OfflineBanner()
         Trail(stops, onStop)
         // Below the trail, not pinned: ending early is the rare path, and the pinned area stays short.
@@ -90,7 +93,7 @@ fun HuntScreen(
 }
 
 @Composable
-private fun Header(count: Int, onGrownUps: () -> Unit) {
+private fun Header(count: Int, area: String?, onGrownUps: () -> Unit) {
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
@@ -103,7 +106,7 @@ private fun Header(count: Int, onGrownUps: () -> Unit) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             val month = LocalDate.now().month.getDisplayName(TextStyle.FULL, LocalLocale.current.platformLocale)
             Text(
-                stringResource(R.string.hunt_where, stringResource(R.string.region_near_you), month),
+                stringResource(R.string.hunt_where, area ?: stringResource(R.string.region_near_you), month),
                 Modifier.weight(1f),
                 style = MaterialTheme.typography.bodyLarge,
                 color = Palette.Ink2,

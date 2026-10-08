@@ -104,6 +104,7 @@ data class CameraState(
  *
  * @property screen the current screen
  * @property region the hunting area, null until picked
+ * @property regionLabel the area as the kid reads it, `34°N, 85°W · Georgia`, once the offline names load
  * @property stops this hunt's targets in pick order
  * @property offline the hunt's list came from the cache because iNat didn't answer
  * @property locating waiting for the rough location
@@ -115,6 +116,7 @@ data class CameraState(
 data class GameState(
     val screen: Screen = Screen.Starting,
     val region: RegionKey? = null,
+    val regionLabel: String? = null,
     val stops: List<Stop> = emptyList(),
     val offline: Boolean = false,
     val locating: Boolean = false,
@@ -135,8 +137,9 @@ data class GameState(
  *
  * @property region the rough location's whole-degree region
  * @property serial bumps on every Locate, so finding the same area again still recenters
+ * @property opening found on its own as the map opened, so it yields to a kid who already started moving the map
  */
-data class MapFocus(val region: RegionKey, val serial: Int)
+data class MapFocus(val region: RegionKey, val serial: Int, val opening: Boolean = false)
 
 /** What the kid did. */
 sealed interface GameEvent {

@@ -29,7 +29,7 @@ import dev.anchildress1.wildfind.ui.theme.Palette
 
 /** Privacy facts, the hunting area, the opener replay (R1), and credits. */
 @Composable
-fun GrownUpsScreen(onBack: () -> Unit, onArea: () -> Unit, onReplay: () -> Unit) {
+fun GrownUpsScreen(area: String?, onBack: () -> Unit, onArea: () -> Unit, onReplay: () -> Unit) {
     val context = LocalContext.current
     val version =
         remember(context) { context.packageManager.getPackageInfo(context.packageName, 0).versionName.orEmpty() }
@@ -67,7 +67,7 @@ fun GrownUpsScreen(onBack: () -> Unit, onArea: () -> Unit, onReplay: () -> Unit)
             Link(
                 WildIcons.Map,
                 stringResource(R.string.hunting_area),
-                stringResource(R.string.hunting_area_detail),
+                area ?: stringResource(R.string.region_near_you),
                 onArea,
             )
             Box(Modifier.fillMaxWidth().height(1.5.dp).background(Palette.Line))

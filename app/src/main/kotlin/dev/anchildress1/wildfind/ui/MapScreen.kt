@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import dev.anchildress1.wildfind.R
 import dev.anchildress1.wildfind.core.map.Heading
 import dev.anchildress1.wildfind.core.map.MapCamera
+import dev.anchildress1.wildfind.core.map.Places
 import dev.anchildress1.wildfind.core.map.WorldMap
 import dev.anchildress1.wildfind.core.region.RegionKey
 import dev.anchildress1.wildfind.game.MapFocus
@@ -66,6 +67,7 @@ private val CameraSaver = Saver<MapCamera, List<Double>>(
  * crosshairs' whole-degree spot ever leaves the phone (R2, R7).
  *
  * @param map the built-in map, null while it loads
+ * @param places offline state and country names for the label, null while they load
  * @param focus where Locate found the rough location
  * @param canLocate location was never denied, so Locate may ask once
  * @param locating Locate is waiting for the rough location, so "Hunt here" waits too
@@ -74,6 +76,7 @@ private val CameraSaver = Saver<MapCamera, List<Double>>(
 @Suppress("LongParameterList")
 fun MapScreen(
     map: WorldMap?,
+    places: Places?,
     focus: MapFocus?,
     canLocate: Boolean,
     locating: Boolean,
@@ -83,8 +86,16 @@ fun MapScreen(
 ) {
     var camera by rememberSaveable(stateSaver = CameraSaver) { mutableStateOf(MapCamera()) }
     val glide = rememberGlide({ camera }, { camera = it })
+    // A fix can take seconds; once the kid has moved the map, the opening one no longer yanks it away.
+    var moved by rememberSaveable { mutableStateOf(false) }
+    val steer: (MapCamera) -> Unit = {
+        moved = true
+        glide(it)
+    }
     LaunchedEffect(focus) {
-        focus?.let { glide(camera.copy(span = minOf(camera.span, MapCamera.AREA_SPAN)).at(it.region)) }
+        if (focus != null && !(focus.opening && moved)) {
+            glide(camera.copy(span = minOf(camera.span, MapCamera.AREA_SPAN)).at(focus.region))
+        }
     }
     Column(Modifier.fillMaxSize().background(Palette.Ground)) {
         Row(Modifier.fillMaxWidth().statusBarsPadding().padding(start = 8.dp, end = 20.dp, top = 8.dp, bottom = 8.dp)) {
@@ -96,14 +107,24 @@ fun MapScreen(
             )
         }
         Box(Modifier.weight(1f).fillMaxWidth().clipToBounds()) {
-            Pannable(map, camera, { camera = it }) { glide(camera.at(camera.region)) }
+            Pannable(map, camera, label(camera, places), {
+                moved = true
+                camera = it
+            }) { glide(camera.at(camera.region)) }
             Crosshairs(Modifier.align(Alignment.Center))
-            Guide(camera, Modifier.align(Alignment.TopCenter))
-            Controls(canLocate, onLocation, Modifier.align(Alignment.TopEnd)) { glide(camera.zoom(it)) }
-            Pad(camera.canPick, Modifier.align(Alignment.BottomEnd)) { glide(camera.step(it)) }
+            Guide(camera, places, Modifier.align(Alignment.TopCenter))
+            Controls(canLocate, onLocation, Modifier.align(Alignment.TopEnd)) { steer(camera.zoom(it)) }
+            Pad(camera.canPick, Modifier.align(Alignment.BottomEnd)) { steer(camera.step(it)) }
         }
         PickPanel(camera.canPick, enabled = !locating) { onPick(camera.region) }
     }
+}
+
+// The crosshairs' region as the chip and TalkBack read it: whole degrees, then its state or country when on land.
+@Composable
+private fun label(camera: MapCamera, places: Places?): String {
+    val region = camera.region
+    return remember(region, places) { Places.label(region, places?.nameAt(region)) }
 }
 
 // The arrow pad shows only once picking unlocks.
@@ -119,12 +140,18 @@ private fun Pad(visible: Boolean, modifier: Modifier, onStep: (Heading) -> Unit)
 
 // Drags and pinches move the camera directly; lifting the last finger snaps the crosshairs to a whole degree.
 @Composable
-private fun Pannable(map: WorldMap?, camera: MapCamera, onMove: (MapCamera) -> Unit, onRelease: () -> Unit) {
+private fun Pannable(
+    map: WorldMap?,
+    camera: MapCamera,
+    label: String,
+    onMove: (MapCamera) -> Unit,
+    onRelease: () -> Unit,
+) {
     var size by remember { mutableStateOf(IntSize.Zero) }
     // The gesture detector outlives recompositions, so it reads the newest camera, never the first one it saw.
     val current by rememberUpdatedState(camera)
     val world = stringResource(R.string.map_world_label)
-    val area = stringResource(R.string.map_area_label, MapCamera.degrees(camera.region))
+    val area = stringResource(R.string.map_area_label, label)
     Box(
         Modifier.fillMaxSize()
             .onSizeChanged { size = it }
@@ -149,7 +176,7 @@ private fun Pannable(map: WorldMap?, camera: MapCamera, onMove: (MapCamera) -> U
 }
 
 @Composable
-private fun Guide(camera: MapCamera, modifier: Modifier) {
+private fun Guide(camera: MapCamera, places: Places?, modifier: Modifier) {
     val chip = Modifier.background(
         Palette.Paper,
         RoundedCornerShape(18.dp),
@@ -157,7 +184,7 @@ private fun Guide(camera: MapCamera, modifier: Modifier) {
     Box(modifier.padding(top = 16.dp, start = 72.dp, end = 72.dp)) {
         if (camera.canPick) {
             Text(
-                stringResource(R.string.map_chip, MapCamera.degrees(camera.region)),
+                label(camera, places),
                 chip,
                 style = MaterialTheme.typography.labelMedium,
                 color = Palette.Forest,

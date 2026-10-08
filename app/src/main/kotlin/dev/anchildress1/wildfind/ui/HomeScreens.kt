@@ -26,7 +26,7 @@ import dev.anchildress1.wildfind.ui.theme.Palette
 
 /** No hunt yet: Briar waves, and one button starts a hunt in the saved area. */
 @Composable
-fun StartScreen(onStart: () -> Unit, onGrownUps: () -> Unit) {
+fun StartScreen(area: String?, onStart: () -> Unit, onGrownUps: () -> Unit) {
     Page(
         top = { MenuRow(onGrownUps) },
         bottom = {
@@ -41,7 +41,7 @@ fun StartScreen(onStart: () -> Unit, onGrownUps: () -> Unit) {
             textAlign = TextAlign.Center,
         )
         Text(
-            stringResource(R.string.region_near_you),
+            area ?: stringResource(R.string.region_near_you),
             Modifier.fillMaxWidth().rise(index = 1),
             style = MaterialTheme.typography.bodyLarge,
             color = Palette.Ink2,

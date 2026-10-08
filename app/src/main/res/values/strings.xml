@@ -33,9 +33,8 @@
     <string name="map_place">Put the crosshairs on your area.</string>
     <string name="map_hunt_here">Hunt here</string>
     <string name="map_private">The map is on this phone. Only the crosshairs\' spot goes to iNaturalist.</string>
-    <string name="map_chip">About %s</string>
     <string name="map_world_label">World map. Zoom in to find your area.</string>
-    <string name="map_area_label">Map zoomed to an area. Crosshairs mark the hunting spot, about %s.</string>
+    <string name="map_area_label">Map zoomed to an area. Crosshairs mark the hunting spot: %s.</string>
     <string name="map_locate">Go to my area</string>
     <string name="map_zoom_in">Zoom in</string>
     <string name="map_zoom_out">Zoom out</string>
@@ -148,7 +147,6 @@
     <string name="privacy_location">Approximate location only, rounded to whole degrees; iNaturalist gets the region center</string>
     <string name="privacy_network">Talks only to iNaturalist, to see which plants grow nearby. Nothing downloads after install</string>
     <string name="hunting_area">Hunting area</string>
-    <string name="hunting_area_detail">Near you · change it on the map</string>
     <string name="replay_opener">Watch the safety intro again</string>
     <string name="made_with">Made with</string>
     <string name="credits_models">Models on this phone: BioCLIP 2.5 Mobile · TinyCLIP ViT-8M</string>

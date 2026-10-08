@@ -25,6 +25,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import dev.anchildress1.wildfind.R
 import dev.anchildress1.wildfind.WildFindApp
+import dev.anchildress1.wildfind.core.map.Places
 import dev.anchildress1.wildfind.core.map.WorldMap
 import dev.anchildress1.wildfind.game.GameEffect
 import dev.anchildress1.wildfind.game.GameEvent
@@ -102,18 +103,7 @@ private fun ScreenFor(screen: Screen, state: GameState, vm: GameViewModel) {
             onMap = { on(GameEvent.OpenMap) },
         )
 
-        is Screen.Map -> {
-            val map by produceState<WorldMap?>(null) { value = vm.map() }
-            MapScreen(
-                map,
-                state.mapFocus,
-                canLocate = !state.locationFailed,
-                locating = state.locating,
-                onLocation = { on(GameEvent.LocationAnswer(it)) },
-                onPick = { on(GameEvent.PickRegion(it)) },
-                onBack = { on(GameEvent.Back) },
-            )
-        }
+        is Screen.Map -> MapRoute(state, vm)
 
         Screen.Loading -> LoadingScreen()
 
@@ -121,12 +111,13 @@ private fun ScreenFor(screen: Screen, state: GameState, vm: GameViewModel) {
 
         Screen.NotEnough -> NotEnoughScreen { on(GameEvent.ChangeRegion) }
 
-        Screen.Start -> StartScreen({ on(GameEvent.LoadHunt) }, { on(GameEvent.OpenGrownUps) })
+        Screen.Start -> StartScreen(state.regionLabel, { on(GameEvent.LoadHunt) }, { on(GameEvent.OpenGrownUps) })
 
         Screen.Tutorial -> TutorialScreen({ on(GameEvent.OpenCamera(null)) }, { on(GameEvent.OpenGrownUps) })
 
         Screen.Hunt -> HuntScreen(
             state.stops,
+            state.regionLabel,
             state.offline,
             onStop = { on(GameEvent.OpenCamera(it)) },
             onFinish = { on(GameEvent.FinishHunt) },
@@ -153,11 +144,28 @@ private fun ScreenFor(screen: Screen, state: GameState, vm: GameViewModel) {
         Screen.Complete -> CompleteScreen(state.stops, { on(GameEvent.HuntAgain) }, { on(GameEvent.Home) })
 
         is Screen.GrownUps -> GrownUpsScreen(
+            state.regionLabel,
             onBack = { on(GameEvent.Back) },
             onArea = { on(GameEvent.EditRegion) },
             onReplay = { on(GameEvent.ReplayOpener) },
         )
     }
+}
+
+@Composable
+private fun MapRoute(state: GameState, vm: GameViewModel) {
+    val map by produceState<WorldMap?>(null) { value = vm.map() }
+    val places by produceState<Places?>(null) { value = vm.places() }
+    MapScreen(
+        map,
+        places,
+        state.mapFocus,
+        canLocate = !state.locationFailed,
+        locating = state.locating,
+        onLocation = { vm.onEvent(GameEvent.LocationAnswer(it)) },
+        onPick = { vm.onEvent(GameEvent.PickRegion(it)) },
+        onBack = { vm.onEvent(GameEvent.Back) },
+    )
 }
 
 @Composable
