@@ -366,7 +366,7 @@ Briar and the opener play finished sprite sheets, one per state. A Rive rig was 
 | Briar state sources | Finished per-state art, not yet packed: 32-frame 8 × 4 sheets on 512 px cells `welcome-32`, `rest-blink-32`, `searching-32`, `searching-hint-32`, `found-32`, `retry-32`, `complete-32`; drafts stay out of git in assets/generated/ until finished | assets/source/briar-*.png, assets/source/welcome-32.png, assets/source/complete-32.png |
 | Briar sprite sheets | Packed `idle`, `welcome`, `found`, and `complete` (`make sprites`); `found-32` bakes a fern into every frame and needs a redraw | app/src/main/assets/briar/ |
 | Plant-type icons | Shown with the target's name, one per type from S17 | Path pending |
-| Opener art | Bees and snakes, with poison ivy drawn in; a sprite sheet under the same contract | Path pending |
+| Opener art | Briar holds up a warning paw beside a three-leaf seedling; 32 frames, plays once and holds its last frame | assets/source/opener-warning-32.png, packed to app/src/main/assets/briar/opener.png |
 
 - Animation-first interactions; illustrations, not licensed photos, in v1
 - Kid copy principle: "Look. Photograph. Leave it where it grows."
@@ -444,7 +444,7 @@ Two questions block the build; two can wait.
 
 **Blocking**
 
-- [ ] Visual: Briar's five state sheets are packed into `app/src/main/assets/briar/` (Oct 8); the opener sheet, logo, and plant-type icon art still need paths
+- [ ] Visual: two images still need art: a `found` redraw without the baked-in fern, and the app icon (an adaptive icon: 432 px foreground inside a 264 px safe zone, a background, and a monochrome layer); the opener landed Oct 8, and the wordmark and plant-type icons are drawn in code
 - [ ] Legal: do coarse location plus whole-degree rounding clear the precise-geolocation bar?
 - [x] Data: flat 25+ sightings or a share of local sightings? Decided Oct 7: at least 0.5% of the place's sightings and at least 3 (Decisions: Local filter); the floor of 3 stops one stray sighting from making a target in sparse places
 

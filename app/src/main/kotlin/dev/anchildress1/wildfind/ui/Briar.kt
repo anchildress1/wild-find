@@ -53,7 +53,8 @@ fun Briar(state: BriarState?, description: String, modifier: Modifier = Modifier
                 done = !sheet.meta.loop && frame == sheet.meta.frames - 1
             }
         }
-        playing = BriarState.IDLE
+        // The opener stops on its warning pose; every other play-once sheet hands over to idle.
+        if (state?.holdsLastFrame != true) playing = BriarState.IDLE
     }
     // A fixed box sized to the largest sheet keeps Briar from jumping when sheets of different cell sizes swap.
     val box = with(LocalDensity.current) { DpSize(BOX_PX.toDp(), BOX_PX.toDp()) }
@@ -93,6 +94,7 @@ private const val BOX_PX = 520
 fun briarText(state: BriarState?): String = stringResource(
     when (state) {
         null -> R.string.briar_idle
+        BriarState.OPENER -> R.string.briar_opener
         BriarState.WELCOME -> R.string.briar_welcome
         BriarState.FOUND -> R.string.briar_found
         BriarState.COMPLETE -> R.string.briar_complete

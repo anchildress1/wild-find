@@ -26,9 +26,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.anchildress1.wildfind.R
+import dev.anchildress1.wildfind.core.sprite.BriarState
 import dev.anchildress1.wildfind.ui.theme.Palette
 
-/** R1: the leave-it rule before anything else; the opener art is pending, so a placeholder card holds its place. */
+/** R1: the leave-it rule before anything else, with Briar warning beside a three-leaf plant. */
 @Composable
 fun OpenerScreen(replay: Boolean, onDone: () -> Unit) {
     Page(
@@ -45,7 +46,11 @@ fun OpenerScreen(replay: Boolean, onDone: () -> Unit) {
                 color = Palette.Forest,
             )
         }
-        ArtPlaceholder(Modifier.rise(index = 0))
+        Briar(
+            BriarState.OPENER,
+            briarText(BriarState.OPENER),
+            Modifier.rise(index = 0).align(Alignment.CenterHorizontally),
+        )
         Text(
             stringResource(R.string.opener_intro),
             Modifier.rise(index = 1),
@@ -55,31 +60,6 @@ fun OpenerScreen(replay: Boolean, onDone: () -> Unit) {
         RuleStep(WildIcons.Eye, stringResource(R.string.rule_look), Modifier.rise(index = 2))
         RuleStep(WildIcons.Camera, stringResource(R.string.rule_photograph), Modifier.rise(index = 3))
         RuleStep(WildIcons.Sprout, stringResource(R.string.rule_leave), Modifier.rise(index = 4))
-    }
-}
-
-@Composable
-private fun ArtPlaceholder(modifier: Modifier) {
-    val dash = PathEffect.dashPathEffect(floatArrayOf(DASH, DASH))
-    Box(
-        modifier.fillMaxWidth().heightIn(min = 220.dp)
-            .background(Palette.Paper, RoundedCornerShape(28.dp))
-            .drawBehind {
-                drawRoundRect(
-                    Palette.Moss,
-                    cornerRadius = CornerRadius(28.dp.toPx()),
-                    style = Stroke(width = 2.dp.toPx(), pathEffect = dash),
-                )
-            }
-            .padding(24.dp),
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(
-            stringResource(R.string.opener_art),
-            style = MaterialTheme.typography.bodyLarge,
-            color = Palette.Ink2,
-            textAlign = TextAlign.Center,
-        )
     }
 }
 
@@ -96,5 +76,3 @@ private fun RuleStep(icon: ImageVector, text: String, modifier: Modifier) {
         )
     }
 }
-
-private const val DASH = 18f
