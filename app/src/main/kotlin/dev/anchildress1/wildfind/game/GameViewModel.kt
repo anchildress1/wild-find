@@ -193,7 +193,8 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
 
             else -> null
         }
-        if (region == flags.region && hunt != null && back != null) return show(back)
+        // Confirming the area already set changes nothing, hunt or not: no new pull, just back where the kid came from.
+        if (region == flags.region && back != null) return show(back)
         save(flags.copy(region = region))
         state.update { it.copy(region = region) }
         endHunt()
