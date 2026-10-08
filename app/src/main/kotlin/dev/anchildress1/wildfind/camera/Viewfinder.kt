@@ -58,7 +58,11 @@ fun Viewfinder(
     LaunchedEffect(size) {
         if (size == IntSize.Zero) return@LaunchedEffect
         bindVerifyCamera(
-            context, owner, view.display.rotation, size.width, size.height, verifier, executor,
+            context,
+            owner,
+            ViewGeometry(size.width, size.height, view.display.rotation),
+            verifier,
+            executor,
             onSurface = { request = it },
             onBound = { live, useCases ->
                 camera = live

@@ -25,11 +25,11 @@ import dev.anchildress1.wildfind.core.frame.Crops
 import java.util.concurrent.Executor
 
 /**
- * Binds the back camera's preview and analysis to one [viewWidth] x [viewHeight] viewport, so the models read exactly
+ * Binds the back camera's preview and analysis to one [view]-sized viewport, so the models read exactly
  * what the kid sees and the ring sits on the scored reticle square (PRD Crops). Replaces any earlier binding; call
  * again with the new size after a resize or rotation.
  *
- * @param rotation the display's current `Surface.ROTATION_*`
+ * @param view the viewfinder's size and the display's rotation
  * @param executor the analysis thread; [CaptureVerifier.analyze] runs on it
  * @param onSurface receives the preview's surface request
  * @param onBound receives the live camera and the use cases bound for it, on the main thread
@@ -39,9 +39,7 @@ import java.util.concurrent.Executor
 fun bindVerifyCamera(
     context: Context,
     owner: LifecycleOwner,
-    rotation: Int,
-    viewWidth: Int,
-    viewHeight: Int,
+    view: ViewGeometry,
     verifier: CaptureVerifier,
     executor: Executor,
     onSurface: (SurfaceRequest) -> Unit,
@@ -55,11 +53,11 @@ fun bindVerifyCamera(
         // Same aspect as analysis, so the preview's field of view is the analysis frame's.
         val preview = Preview.Builder()
             .setResolutionSelector(fourByThree)
-            .setTargetRotation(rotation)
+            .setTargetRotation(view.rotation)
             .build()
             .apply { setSurfaceProvider(onSurface) }
         val analysisBuilder = ImageAnalysis.Builder()
-            .setTargetRotation(rotation)
+            .setTargetRotation(view.rotation)
             .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
             .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
             .setResolutionSelector(
@@ -78,7 +76,7 @@ fun bindVerifyCamera(
         // Capture results carry the autofocus reading; the verifier pairs them with frames by sensor timestamp.
         Camera2Interop.Extender(analysisBuilder).setSessionCaptureCallback(verifier.captureCallback)
         val analysis = analysisBuilder.build().apply { setAnalyzer(executor, verifier::analyze) }
-        val viewPort = ViewPort.Builder(Rational(viewWidth, viewHeight), rotation)
+        val viewPort = ViewPort.Builder(Rational(view.width, view.height), view.rotation)
             .setScaleType(ViewPort.FILL_CENTER)
             .build()
         val group = UseCaseGroup.Builder().setViewPort(viewPort).addUseCase(preview).addUseCase(analysis).build()
