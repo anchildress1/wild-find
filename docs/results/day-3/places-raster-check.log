@@ -1,0 +1,20 @@
+raster: 1984 names over 65160 whole-degree centers
+
+full-resolution polygons: 0 mismatches of 65160; {}; 0 within 60 degrees of the equator
+
+polygons as shipped, 0.05 degrees: 333 mismatches of 65160; {'water vs land': 96, 'two names': 237}; 243 within 60 degrees of the equator
+  82,-80: raster='' polygons='Canada'
+  82,-31: raster='Greenland' polygons='Northeast Greenland National Park'
+  82,-29: raster='' polygons='Northeast Greenland National Park'
+  82,-19: raster='Greenland' polygons=''
+  81,-87: raster='Nunavut' polygons='Canada'
+  81,-86: raster='' polygons='Nunavut'
+  80,-82: raster='Nunavut' polygons=''
+  80,94: raster='Krasnoyarsk Krai' polygons=''
+  79,-87: raster='Canada' polygons='Nunavut'
+  79,12: raster='' polygons='Svalbard'
+  79,101: raster='Krasnoyarsk Krai' polygons='Russia'
+  78,-99: raster='Nunavut' polygons=''
+  77,-95: raster='Canada' polygons=''
+  77,89: raster='Krasnoyarsk Krai' polygons=''
+  76,-91: raster='Nunavut' polygons='Canada'
