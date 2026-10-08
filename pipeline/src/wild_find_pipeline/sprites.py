@@ -93,8 +93,14 @@ def solid_height(frame: Image.Image) -> int:
 
 
 def feet(frame: Image.Image) -> tuple[float, int]:
-    """Anchor point: horizontal center of the lowest FEET_ROWS rows of solid pixels, and the bottom row."""
-    alpha = np.asarray(frame)[..., 3] > 128
+    """Anchor point: horizontal center of the lowest FEET_ROWS rows of Briar's solid pixels, and the bottom row.
+
+    Only the largest outline counts: a prop beside him (the opener's seedling) would drag the anchor and make him
+    slide from frame to frame.
+    """
+    labels, count = ndimage.label(np.asarray(frame)[..., 3] > 128)
+    sizes = ndimage.sum(np.ones_like(labels), labels, range(1, count + 1))
+    alpha = labels == int(np.argmax(sizes)) + 1
     bottom = int(np.nonzero(alpha.any(axis=1))[0].max())
     _, xs = np.nonzero(alpha[max(0, bottom - FEET_ROWS) : bottom + 1])
     return float(xs.mean()), bottom

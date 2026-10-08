@@ -47,6 +47,14 @@ def test_feet_center_on_the_lowest_rows():
     assert x == pytest.approx(29.5)
 
 
+def test_feet_ignore_a_prop_beside_briar():
+    frame = Image.new("RGBA", (80, 60))
+    frame.paste((0, 0, 0, 255), (0, 0, 20, 60))  # Briar
+    frame.paste((40, 140, 40, 255), (60, 40, 70, 60))  # a seedling standing on the same ground
+
+    assert feet(frame) == (pytest.approx(9.5), 59)
+
+
 def test_rejects_a_sheet_with_too_few_frames():
     with pytest.raises(ValueError, match="8 frames"):
         frames_of(sheet_with(SPOTS[:5]), columns=4, rows=2)
