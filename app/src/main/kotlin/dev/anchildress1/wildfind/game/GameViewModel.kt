@@ -53,6 +53,10 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
     private val retry = RetryWindow(SystemClock::elapsedRealtime)
     private var loading: Job? = null
 
+    // Bumped on every capture and whenever the camera opens or leaves; a frame from an older session is dropped, so
+    // a cancelled capture can't land in a new one on the same target and award its star.
+    private var session = 0
+
     // Store writes run one at a time and in order, so a quick find-then-finish never lands out of order.
     private val disk = Dispatchers.IO.limitedParallelism(1)
 
@@ -106,7 +110,10 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
     }
 
     private fun show(screen: Screen) {
-        if (state.value.screen is Screen.Camera && screen !is Screen.Camera) verifier?.cancel()
+        if (state.value.screen is Screen.Camera && screen != state.value.screen) {
+            verifier?.cancel()
+            session++
+        }
         state.update { it.copy(screen = screen) }
     }
 
@@ -269,13 +276,18 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
         val models = models
         if (active == null || capturing == null || models == null) return
         val goal: Goal = camera.row?.let { active.goal(models.table, models.genus, it) } ?: models.tutorial
-        val started = capturing.capture(goal) { frame -> viewModelScope.launch { captured(camera, frame) } }
-        if (started) state.update { it.copy(camera = it.camera.copy(checking = true, matched = 0)) }
+        val id = session + 1
+        val started = capturing.capture(goal) { frame -> viewModelScope.launch { captured(camera, id, frame) } }
+        // Frames post to the main thread, so they arrive after this; a refused tap leaves the running session alone.
+        if (started) {
+            session = id
+            state.update { it.copy(camera = it.camera.copy(checking = true, matched = 0)) }
+        }
     }
 
-    private fun captured(camera: Screen.Camera, frame: CapturedFrame) {
-        // A capture that finishes after its screen left changes nothing.
-        if (state.value.screen != camera) return
+    private fun captured(camera: Screen.Camera, id: Int, frame: CapturedFrame) {
+        // A capture that finishes after its screen left, or after a newer capture began, changes nothing.
+        if (id != session || state.value.screen != camera) return
         val verdict = frame.verdict
         if (verdict is Verdict.Matching) {
             return state.update { it.copy(camera = it.camera.copy(matched = verdict.frames)) }
