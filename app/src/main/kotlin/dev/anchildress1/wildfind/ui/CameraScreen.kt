@@ -117,40 +117,42 @@ fun CameraScreen(
 
 @Composable
 private fun TopBar(target: CameraTarget, onBack: () -> Unit) {
-    Row(
+    Column(
         // The bars are hidden, so only the front camera's cutout needs clearing.
         Modifier.fillMaxWidth().background(Palette.Forest).displayCutoutPadding()
             .padding(start = 8.dp, end = 20.dp, top = 8.dp, bottom = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
     ) {
-        RoundIconButton(WildIcons.Back, stringResource(R.string.back_to_hunt), onBack, tint = Color.White)
-        Column(Modifier.weight(1f).padding(start = 4.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            RoundIconButton(WildIcons.Back, stringResource(R.string.back_to_hunt), onBack, tint = Color.White)
             Text(
                 stringResource(R.string.camera_find, target.name),
+                Modifier.weight(1f).padding(start = 4.dp),
                 style = MaterialTheme.typography.titleLarge,
                 color = Color.White,
             )
-            // The description names the type too ("A tall tree with…"), so it replaces the bare type when there is one.
-            (target.description ?: typeLabel(target.type)?.replaceFirstChar { it.titlecase() })?.let { look ->
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    target.type?.let { PlantArt(it, Modifier.size(24.dp)) }
-                    Text(
-                        look,
-                        Modifier.padding(start = 6.dp),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color.White,
-                    )
-                }
+            if (target.number == 0) {
+                PracticeChip()
+            } else {
+                Text(
+                    stringResource(R.string.camera_progress, target.number, target.total),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = Color.White,
+                )
             }
         }
-        if (target.number == 0) {
-            PracticeChip()
-        } else {
-            Text(
-                stringResource(R.string.camera_progress, target.number, target.total),
-                style = MaterialTheme.typography.labelMedium,
-                color = Color.White,
-            )
+        // The description names the type too ("A tall tree with…"), so it replaces the bare type when there is one.
+        // It runs the bar's full width, so at 200% font it wraps into a few lines, not a narrow column that eats the
+        // viewfinder.
+        (target.description ?: typeLabel(target.type)?.replaceFirstChar { it.titlecase() })?.let { look ->
+            Row(Modifier.padding(start = 12.dp, top = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+                target.type?.let { PlantArt(it, Modifier.size(24.dp)) }
+                Text(
+                    look,
+                    Modifier.padding(start = 8.dp),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.White,
+                )
+            }
         }
     }
 }
