@@ -17,44 +17,26 @@ class PlacesTest {
         Places.parse(file.readBytes())
     }
 
-    // One state (a 10° square with a 2° hole) inside one country (a 20° square), in places.bin's layout.
-    private fun file(trailing: Int = 0): ByteArray {
-        val names = listOf("Inner", "Outer").map { it.toByteArray() }
-        fun square(west: Int, south: Int, side: Int) = listOf(
-            west to south,
-            west + side to south,
-            west + side to south + side,
-            west to south + side,
-            west to south,
-        )
-        val places = listOf(
-            0 to listOf(square(0, 0, 10), square(4, 4, 2)),
-            1 to listOf(square(-5, -5, 20)),
-        )
-        val size =
-            7 + names.sumOf { 2 + it.size } + 4 + places.sumOf { (_, rings) -> 5 + rings.sumOf { 4 + it.size * 4 } }
-        val buffer = ByteBuffer.allocate(size + trailing).order(ByteOrder.LITTLE_ENDIAN)
-        buffer.put("WFPL".toByteArray()).put(1).putShort(names.size.toShort())
-        names.forEach { buffer.putShort(it.size.toShort()).put(it) }
-        buffer.putInt(places.size)
-        places.forEachIndexed { kind, (name, rings) ->
-            buffer.put(kind.toByte()).putShort(name.toShort()).putShort(rings.size.toShort())
-            rings.forEach { ring ->
-                buffer.putInt(ring.size)
-                ring.forEach { (x, y) -> buffer.putShort((x * 100).toShort()).putShort((y * 100).toShort()) }
-            }
+    // Two names; 34,-85 holds the first and -90,179 the second, in places.bin's layout.
+    private fun file(
+        cells: Map<Pair<Int, Int>, Int> = mapOf((34 to -85) to 1, (-90 to 179) to 2),
+        grid: Int = 181 * 360,
+    ) = ByteBuffer.allocate(7 + 2 + 5 + 2 + 5 + grid * 2).order(ByteOrder.LITTLE_ENDIAN).apply {
+        put("WFPL".toByteArray()).put(2).putShort(2)
+        listOf("Inner", "Outer").forEach { putShort(it.length.toShort()).put(it.toByteArray()) }
+        val start = position()
+        cells.forEach { (point, value) ->
+            putShort(start + ((90 - point.first) * 360 + point.second + 180) * 2, value.toShort())
         }
-        return buffer.array()
-    }
+    }.array()
 
     @Test
-    fun `a point names its state first, its country outside the state, and nothing over water`() {
+    fun `each whole-degree point reads its own cell, and an empty cell names nothing`() {
         val places = Places.parse(file())
 
-        assertEquals("Inner", places.nameAt(RegionKey(2, 2)))
-        assertEquals("Outer", places.nameAt(RegionKey(5, 5)))
-        assertEquals("Outer", places.nameAt(RegionKey(12, -3)))
-        assertNull(places.nameAt(RegionKey(30, 30)))
+        assertEquals("Inner", places.nameAt(RegionKey(34, -85)))
+        assertEquals("Outer", places.nameAt(RegionKey(-90, 179)))
+        assertNull(places.nameAt(RegionKey(34, -84)))
     }
 
     @Test
@@ -64,18 +46,19 @@ class PlacesTest {
     }
 
     @Test
-    fun `the bundled map names real places offline`() {
+    fun `the bundled index names real places offline`() {
         assertEquals("Georgia", bundled.nameAt(RegionKey(34, -85)))
         assertEquals("Georgia", bundled.nameAt(RegionKey(34, -84)))
         assertEquals("California", bundled.nameAt(RegionKey(38, -121)))
-        assertNull(bundled.nameAt(RegionKey(0, -30)))
         // In the country of Georgia, the state level names one of its regions.
         assertEquals("Mtskheta-Mtianeti", bundled.nameAt(RegionKey(42, 45)))
+        assertNull(bundled.nameAt(RegionKey(0, -30)))
     }
 
     @Test
-    fun `refuses another format or a padded file`() {
+    fun `refuses another format, a short grid, or a cell past the name table`() {
         assertThrows<IllegalArgumentException> { Places.parse("NOPE".toByteArray() + file().drop(4)) }
-        assertThrows<IllegalArgumentException> { Places.parse(file(trailing = 2)) }
+        assertThrows<IllegalArgumentException> { Places.parse(file(cells = emptyMap(), grid = 100)) }
+        assertThrows<IllegalArgumentException> { Places.parse(file(mapOf((0 to 0) to 3))) }
     }
 }
