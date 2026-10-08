@@ -85,7 +85,7 @@ Every call below is settled; open items live in Open Questions.
 | Difficulty | Selector exists; v1 ships Low only |
 | Region | Any whole-degree region; a region needs one online iNaturalist pull before it plays offline, since no bundled list can cover every region; tested in the West Georgia region, key 34\_-85 |
 | Targets | Species from the live iNaturalist pull that are in BioCLIP Mobile's species table, aren't toxic-flagged or hazards, and have a common name of 3 words or fewer in the device language; species with no common name there are skipped; at most one target per genus in a hunt |
-| Local filter | A species is eligible with 25+ research-grade sightings in the region for the current calendar month, across all available years; under review (Open Questions: sighting threshold) |
+| Local filter | A species is eligible when its research-grade sightings in the region for the current calendar month, across all available years, are at least 0.5% of all plant sightings there and at least 3. Decided Oct 7: a flat 25+ left 0 to 5 playable species anywhere in the country of Georgia; the share leaves 9 to 24 in every place tested. It is stricter in busy places (West Georgia 65 → 23) and looser in quiet ones (Borjomi 0 → 9) (`docs/results/day-2/playable_species.log`) |
 | Plant type | Shown with the target: USDA PLANTS growth habit (tree, shrub, vine, herb, grass) where it has one, else fern, moss, grass, or conifer from taxonomy, else none |
 | Hunt shape | First-ever hunt: grass tutorial, then 3 targets; later hunts: 3 targets; targets picked by sighting-weighted random |
 | Look-alikes | A find passes when the target, or another species in its genus, outscores the hunt's other locally eligible species on the reticle crop, so look-alikes inside the genus pass; never taught in v1 |
@@ -136,7 +136,7 @@ Eight P0s ship the hunt; one P1 follows; four P2s shape the design now. Requirem
 | ID | Requirement | Acceptance criteria |
 | --- | --- | --- |
 | R1 | Safety opener | First launch shows bees and snakes, with poison ivy drawn into the art; one rule: "Look. Photograph. Leave it where it grows."; no copy says safe, harmless, not poisonous, or okay to touch; replayable from the menu |
-| R2 | Hunt list | One iNaturalist query per hunt, requiring at most three paginated HTTP requests: coarse region coordinates, current calendar month across all available years, plants, research grade, device locale for common names; a species is eligible with 25+ sightings, a species-table row, no toxic or hazard flag, and a common name of 3 words or fewer; fewer than 3 eligible widens the radius to 150 km once; cached under the versioned cache key; location denied falls back to a manual region pick; still fewer than 3 shows the coverage message |
+| R2 | Hunt list | One iNaturalist query per hunt, requiring at most three paginated HTTP requests: coarse region coordinates, current calendar month across all available years, plants, research grade, device locale for common names; a species is eligible with at least 0.5% of the query's plant sightings and at least 3, a species-table row, no toxic or hazard flag, and a common name of 3 words or fewer; fewer than 3 eligible widens the radius to 150 km once; cached under the versioned cache key; location denied falls back to a manual region pick; still fewer than 3 shows the coverage message |
 | R3 | Grass tutorial | The first-ever hunt opens with grass, followed by 3 normal targets; a grass close-up passes when TinyCLIP calls the reticle crop a plant and grass is in BioCLIP's top 3 of the fixed tutorial label set, the 11 labels Day 1 measured (Poaceae, Quercus, Polypodiopsida, Trifolium, Pinus, Taraxacum, and the 5 hazard species), never the hunt's full label universe (49 of 52 CC0 grass photos passed both on Day 1; BioCLIP top 3 alone passed 50 and top-1 alone 45; the one lawn the gate rejected scored a plant share of 0.39); the plant gate's labels include grass; the hazard check doesn't run during the tutorial, because 9 of 54 grass photos warned against the menu labels on Day 1 (1 of 54 against the species table), and the leave-it rule stays on screen; done in under 60 seconds; never repeats once completed |
 | R4 | Target pick | 3 targets per hunt by sighting-weighted random from eligible species, never two from one genus; a hazard or toxic-flagged species is never a target |
 | R5 | Verify | Follows the Runtime Logic verify table on each Capture tap; a find needs the target (or its genus) to outscore the hunt's other locally eligible species on the reticle crop for 3 frames in a row; a hazard match shows a warning and gives no star; no result is ever presented as evidence of safety |
@@ -198,7 +198,7 @@ flowchart TD
 
     subgraph app["App time · the phone, every hunt"]
         A1["Opener<br/>bees and snakes; poison ivy art"]
-        A2["Local list<br/>iNat species in the table,<br/>not toxic, 25+ sightings"]
+        A2["Local list<br/>iNat species in the table,<br/>not toxic, 0.5%+ of sightings"]
         A3["Pick the hunt<br/>grass first, then 3 weighted,<br/>one per genus"]
         A5["Verify on Capture, 3 frames<br/>TinyCLIP: is it a plant?<br/>BioCLIP: target or its genus?"]
         A1 --> A2 --> A3 --> A5
@@ -393,7 +393,7 @@ Each choice below buys speed or privacy for v1 and names the point where it gets
 | TinyCLIP plant gate before BioCLIP | A third model: about 33 MB in the APK and 40 ms per embedding on the test phone, twice per frame (S06); on the laptop it kept 176 of 176 plant photos and passed 2 of 63 non-plants on the full frame (175 and 3 on the reticle crop) | Holdout non-plant false-pass rate over 5% |
 | Deterministic framing | Approximate focus distance is coarse; clutter inside the reticle can lower the target's score | Holdout false-pass rate over 5% |
 | No language model | No reactive hints and no plant descriptions; the name and type are all the help a kid gets | An on-device model describes local plants accurately (E2B got 4 of 20 right on Oct 7) |
-| Live iNaturalist list at app time | Needs signal once per region and month; coarse coordinates and request metadata reach iNaturalist; sparse places get the coverage message (Tbilisi, Georgia: 6 species with 25+ October sightings) | A fully offline mode is required |
+| Live iNaturalist list at app time | Needs signal once per region and month; coarse coordinates and request metadata reach iNaturalist; places with few sightings get fewer targets (Borjomi, Georgia: 9 playable species in October) | A fully offline mode is required |
 | Targets limited to BioCLIP's species table | A common local plant outside the table never becomes a target (West Georgia: 104 of 117 common species in it; Tbilisi: 4 of 6) | A bigger on-device table |
 | Text-based toxicity flag | Best effort: wording varies by article author; wrongly drops about 6 of 117 species; misses toxicity an article never states | An open, structured toxicity source covers the region |
 | Fixed 3-target hunt | Less variety per hunt | Field tests show hunts end too fast |
@@ -432,13 +432,13 @@ Acceptance metrics come from the holdout set, which never touches calibration; t
 
 ## Open Questions
 
-Two questions block the build; three can wait.
+Two questions block the build; two can wait.
 
 **Blocking**
 
 - [ ] Visual: Briar's five state sheets landed Oct 7; the opener sheet, logo, and category icons still need paths
 - [ ] Legal: do coarse location plus whole-degree rounding clear the precise-geolocation bar?
-- [ ] Data: keep a flat 25+ sightings, or switch to a share of local sightings? 25+ leaves 0 to 11 species anywhere in the country of Georgia; 0.5% of the place's sightings with at least 3 leaves 9 to 24 playable species in every place tested, 23 to 24 in West Georgia and Atlanta (`docs/results/day-2/threshold_regions.log`). The floor of 3 stops one stray sighting from making a target in sparse places
+- [x] Data: flat 25+ sightings or a share of local sightings? Decided Oct 7: at least 0.5% of the place's sightings and at least 3 (Decisions: Local filter); the floor of 3 stops one stray sighting from making a target in sparse places
 
 **Non-blocking**
 
