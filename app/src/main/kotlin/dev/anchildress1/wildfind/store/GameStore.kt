@@ -2,6 +2,7 @@ package dev.anchildress1.wildfind.store
 
 import dev.anchildress1.wildfind.core.cache.CacheEntry
 import dev.anchildress1.wildfind.core.cache.CacheKey
+import dev.anchildress1.wildfind.core.hunt.ActiveHunt
 import dev.anchildress1.wildfind.core.hunt.AppFlags
 import dev.anchildress1.wildfind.core.hunt.Eligible
 import dev.anchildress1.wildfind.core.hunt.HuntProgress
@@ -21,40 +22,54 @@ import java.io.File
 class GameStore(private val dir: File) {
     /** The saved flags, or defaults. */
     fun flags(): AppFlags = parse("flags.json") {
-        AppFlags(it.getBoolean("opener_seen"), it.getBoolean("tutorial_done"))
+        AppFlags(
+            it.getBoolean("opener_seen"),
+            it.getBoolean("tutorial_done"),
+            if (it.isNull("region")) null else region(it.getString("region")),
+        )
     } ?: AppFlags()
 
     /** Saves [flags]. */
     fun save(flags: AppFlags) = write(
         "flags.json",
-        JSONObject().put("opener_seen", flags.openerSeen).put("tutorial_done", flags.tutorialDone),
+        JSONObject()
+            .put("opener_seen", flags.openerSeen)
+            .put("tutorial_done", flags.tutorialDone)
+            .put("region", flags.region?.toString() ?: JSONObject.NULL),
     )
 
     /** The hunt saved under [tableVersion], or null: another table build moved its rows. */
-    fun hunt(tableVersion: String): HuntProgress? = parse(HUNT) {
+    fun hunt(tableVersion: String): ActiveHunt? = parse(HUNT) {
         if (it.getString("table_version") != tableVersion) return@parse null
         val targets = it.getJSONArray("targets").objects().map { t ->
             Eligible(t.getInt("row"), t.getString("common"), t.getInt("count"))
         }
-        val found = it.getJSONArray("found").let { f -> List(f.length(), f::getInt).toSet() }
-        HuntProgress(it.getBoolean("tutorial_pending"), targets, found)
+        ActiveHunt(
+            HuntProgress(it.getBoolean("tutorial_pending"), targets, it.getJSONArray("found").ints().toSet()),
+            region(it.getString("region")),
+            it.getJSONArray("eligible").ints(),
+            it.getJSONArray("blockers").ints(),
+        )
     }
 
-    /** Saves [progress] against [tableVersion]. */
-    fun save(progress: HuntProgress, tableVersion: String) = write(
+    /** Saves [hunt] against [tableVersion]. */
+    fun save(hunt: ActiveHunt, tableVersion: String) = write(
         HUNT,
         JSONObject()
             .put("table_version", tableVersion)
-            .put("tutorial_pending", progress.tutorialPending)
+            .put("region", hunt.region.toString())
+            .put("tutorial_pending", hunt.progress.tutorialPending)
             .put(
                 "targets",
                 JSONArray(
-                    progress.targets.map {
+                    hunt.progress.targets.map {
                         JSONObject().put("row", it.row).put("common", it.common).put("count", it.count)
                     },
                 ),
             )
-            .put("found", JSONArray(progress.found.sorted())),
+            .put("found", JSONArray(hunt.progress.found.sorted()))
+            .put("eligible", JSONArray(hunt.eligible))
+            .put("blockers", JSONArray(hunt.blockers)),
     )
 
     /** Forgets the current hunt, after Hunt Again or Home. */
@@ -108,11 +123,12 @@ class GameStore(private val dir: File) {
 // One file per region, locale, month, and radius; the key check inside still discards a stale schema or table.
 private fun cacheFile(key: CacheKey) = "inat/${key.region}_${key.locale}_${key.month}_${key.radiusKm}.json"
 
+private fun region(key: String): RegionKey = key.split('_').map(String::toInt).let { (lat, lng) -> RegionKey(lat, lng) }
+
 private fun entry(json: JSONObject): CacheEntry {
-    val (lat, lng) = json.getString("region").split('_').map(String::toInt)
     val key = CacheKey(
         json.getString("table_version"),
-        RegionKey(lat, lng),
+        region(json.getString("region")),
         json.getString("locale"),
         json.getInt("month"),
         json.getInt("radius_km"),
@@ -129,3 +145,5 @@ private fun entry(json: JSONObject): CacheEntry {
 }
 
 private fun JSONArray.objects() = List(length(), ::getJSONObject)
+
+private fun JSONArray.ints() = List(length(), ::getInt)
