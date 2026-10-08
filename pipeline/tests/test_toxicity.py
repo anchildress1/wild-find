@@ -31,6 +31,7 @@ def test_toxic_sentence_finds_the_claim():
         "Poison-oak and poison sumac grow nearby.",
         "It is a non-toxic plant.",
         "They are nontoxic to pets and non-poisonous to people.",
+        "The coloring is not toxic, and the leaves are not poisonous.",
     ],
 )
 def test_toxic_sentence_ignores_other_plants_and_genus_names(text):

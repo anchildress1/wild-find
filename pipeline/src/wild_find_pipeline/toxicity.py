@@ -36,8 +36,8 @@ MIN_CHARS = 1500
 BATCH = 50
 # Other plants' names that carry the keywords; removed first so a mention isn't a claim.
 OTHER_PLANTS = re.compile(r"\bpoison[- ](?:ivy|ivies|oak|oaks|sumac|sumacs|hemlock)\b", re.I)
-# Words that say the opposite; removed too, so "non-toxic" isn't read as a toxicity claim.
-NOT_TOXIC = re.compile(r"\bnon-?(?:toxic|poisonous)\b", re.I)
+# Words that say the opposite; removed too, so "non-toxic" or "not toxic" isn't read as a toxicity claim.
+NOT_TOXIC = re.compile(r"\b(?:non-?|not )(?:toxic|poisonous)\b", re.I)
 # Whole words only: "Toxicodendron" must not match.
 TOXIC = re.compile(r"\b(?:toxic|toxicity|toxins?|poisons?|poisonous|poisoning)\b", re.I)
 SENTENCE = re.compile(r"[^.!?\n]+[.!?]?")

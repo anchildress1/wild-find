@@ -23,7 +23,7 @@ Every runtime model (TinyCLIP, BioCLIP, Gemma) runs on the test phone, or nothin
 
 The Oct 7 redesign (PRD Redesign) dropped the build-time menu: the old S10–S16 (candidates, resolve, gates, fact cards, fact-check, fallback) are gone, and iNat supplies targets live. S10 now names the toxicity flag; S15 keeps its number.
 
-- [x] **S10 Toxicity flag** (pipeline) — `make toxicity` reads every species-table row's English Wikipedia article and USDA PLANTS ratings (GBIF synonyms); flags per the PRD rule; commits `pipeline/data/toxicity.json` with evidence and revision; `make assets` merges `toxic` and `genus` into species_labels.json; Oct 7 build: 2,166 of 4,272 flagged (1,369 stubs; "non-toxic" never counts), 64 of the 104 common West Georgia species pass
+- [x] **S10 Toxicity flag** (pipeline) — `make toxicity` reads every species-table row's English Wikipedia article and USDA PLANTS ratings (GBIF synonyms); flags per the PRD rule; commits `pipeline/data/toxicity.json` with evidence and revision; `make assets` merges `toxic` and `genus` into species_labels.json; Oct 7 build: 2,161 of 4,272 flagged (1,369 stubs; "non-toxic" and "not toxic" never count), 64 of the 104 common West Georgia species pass
 - [ ] **S15 Tutorial labels** (pipeline) — `make labels` writes only the 11 fixed tutorial labels into `labels.npy` + `labels.json`; drop the stand-in menu words; label text format per hole 3
 - [ ] **S17 Plant type** (pipeline) — USDA PLANTS growth habit per species-table row through GBIF synonyms, else fern, moss, grass, or conifer from taxonomy, else null; merged into species_labels.json as `type`; shown with the target name
 

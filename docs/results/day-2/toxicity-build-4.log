@@ -1,0 +1,9 @@
+# make toxicity (S10, "not toxic" no longer counts), 2026-10-07 21:46 EDT, Python 3.13.14
+usda: 1 moderate/severe rows have no taxon row and are skipped: ['LUEL4']
+OK: /Users/anchildress1/git_personal/wild-find/pipeline/data/toxicity.json: 2161 of 4272 flagged {'stub': 1369, 'wikipedia': 685, 'no article': 87, 'usda': 20}
+flag changes 5
+  Austroderia richardii True -> False | wikipedia: It is not poisonous but it can be assumed that most herbivores would not attempt to eat the leaves 
+  Bixa orellana True -> False | wikipedia: It is used commonly in foods because the coloring does not alter the flavor and is not toxic, thoug
+  Maclura pomifera True -> False | wikipedia: The fruit is not poisonous to humans or livestock, but is not preferred by them, because it is most
+  Magnolia tripetala True -> False | wikipedia: tripetala have been described to have unpleasant smells but are not toxic to organisms.
+  Plantago lanceolata True -> False | wikipedia: While generally not toxic to livestock, it can be unpalatable and reduce the quality of pasture for

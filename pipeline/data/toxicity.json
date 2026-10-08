@@ -571,7 +571,7 @@
   },
   "Aesculus hippocastanum": {
    "toxic": true,
-   "evidence": "wikipedia: The pollen is not poisonous for honey bees.",
+   "evidence": "wikipedia: Toxicity",
    "article": "Aesculus hippocastanum",
    "revid": 1376507054
   },
@@ -2508,8 +2508,8 @@
    "revid": 1376240967
   },
   "Austroderia richardii": {
-   "toxic": true,
-   "evidence": "wikipedia: It is not poisonous but it can be assumed that most herbivores would not attempt to eat the leaves of the Austroderia richardii as it has very sharp edges and tiny teeth that run along the leaves of the plant which is why it has the nickname 'cutty grass' (Kimberley, 2011).",
+   "toxic": false,
+   "evidence": "",
    "article": "Austroderia richardii",
    "revid": 1372878460
   },
@@ -2946,8 +2946,8 @@
    "revid": 1372377846
   },
   "Bixa orellana": {
-   "toxic": true,
-   "evidence": "wikipedia: It is used commonly in foods because the coloring does not alter the flavor and is not toxic, though it may trigger allergic reactions in those who are sensitive.",
+   "toxic": false,
+   "evidence": "",
    "article": "Bixa orellana",
    "revid": 1366713192
   },
@@ -14010,8 +14010,8 @@
    "revid": 1297845139
   },
   "Maclura pomifera": {
-   "toxic": true,
-   "evidence": "wikipedia: The fruit is not poisonous to humans or livestock, but is not preferred by them, because it is mostly inedible due to its large size (about the diameter of a softball) and hard, dry texture.",
+   "toxic": false,
+   "evidence": "",
    "article": "Maclura pomifera",
    "revid": 1374126648
   },
@@ -14076,8 +14076,8 @@
    "revid": 1361860548
   },
   "Magnolia tripetala": {
-   "toxic": true,
-   "evidence": "wikipedia: tripetala have been described to have unpleasant smells but are not toxic to organisms.",
+   "toxic": false,
+   "evidence": "",
    "article": "Magnolia tripetala",
    "revid": 1361870579
   },
@@ -17988,8 +17988,8 @@
    "revid": 1368203906
   },
   "Plantago lanceolata": {
-   "toxic": true,
-   "evidence": "wikipedia: While generally not toxic to livestock, it can be unpalatable and reduce the quality of pasture for grazing animals.",
+   "toxic": false,
+   "evidence": "",
    "article": "Plantago lanceolata",
    "revid": 1377190915
   },
