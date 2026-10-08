@@ -1,6 +1,7 @@
 package dev.anchildress1.wildfind
 
 import android.app.Application
+import android.system.Os
 import dev.anchildress1.wildfind.inat.InatClient
 import dev.anchildress1.wildfind.inference.BundledAssets
 import dev.anchildress1.wildfind.store.GameStore
@@ -20,6 +21,10 @@ class WildFindApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        // ONNX Runtime's Android build ships Microsoft 1DS telemetry and opened a connection to
+        // mobile.events.data.microsoft.com on Oct 8; the API switch can't stop its init event, so the variable must be
+        // set before the runtime first loads. The only network call is iNat (R7).
+        Os.setenv("ORT_DISABLE_TELEMETRY", "1", true)
         graph = Graph(this)
     }
 }

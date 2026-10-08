@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.CAMERA" />
     <!-- Rough area only, rounded to whole degrees on the phone; never fine location (R7). -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <!-- Only for the iNat species_counts query (R7). -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- ONNX Runtime merges this in for its telemetry uploader, which the app turns off. -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" tools:node="remove" />
     <uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <application

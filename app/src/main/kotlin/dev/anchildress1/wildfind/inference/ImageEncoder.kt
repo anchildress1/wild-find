@@ -20,7 +20,7 @@ import java.nio.FloatBuffer
 class ImageEncoder(model: ByteBuffer) :
     ImageEmbedder,
     AutoCloseable {
-    private val env = OrtEnvironment.getEnvironment()
+    private val env = OrtEnvironment.getEnvironment().apply { setTelemetry(false) }
     private val options = OrtSession.SessionOptions()
     private val session = env.createSession(model, options)
 
