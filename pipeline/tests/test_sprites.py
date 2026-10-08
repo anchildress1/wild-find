@@ -26,7 +26,7 @@ def test_frames_come_out_in_reading_order():
 
 
 def test_repack_plants_every_frame_on_the_same_feet_point():
-    sheet, cell = repack(sheet_with(SPOTS), columns=4, rows=2)
+    sheet, cell, _ = repack(sheet_with(SPOTS), columns=4, rows=2)
 
     assert sheet.size == (4 * cell, 2 * cell)
     points = []
@@ -89,3 +89,9 @@ def test_plant_art_trims_the_margin_and_stands_the_plant_on_the_bottom_edge():
 def test_plant_art_rejects_an_empty_picture():
     with pytest.raises(ValueError):
         plant_art(Image.new("RGBA", (100, 100)))
+
+
+def test_repack_reports_the_figure_height():
+    _, _, figure = repack(sheet_with(SPOTS), columns=4, rows=2)
+
+    assert figure == 30

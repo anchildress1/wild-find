@@ -84,6 +84,12 @@ def frames_of(source: Image.Image, columns: int, rows: int) -> list[Image.Image]
     return frames
 
 
+def solid_height(frame: Image.Image) -> int:
+    """Rows from the top to the bottom of a frame's solid (alpha > 128) pixels."""
+    rows = np.nonzero((np.asarray(frame)[..., 3] > 128).any(axis=1))[0]
+    return int(rows.max() - rows.min() + 1)
+
+
 def feet(frame: Image.Image) -> tuple[float, int]:
     """Anchor point: horizontal center of the lowest FEET_ROWS rows of solid pixels, and the bottom row."""
     alpha = np.asarray(frame)[..., 3] > 128
@@ -92,12 +98,13 @@ def feet(frame: Image.Image) -> tuple[float, int]:
     return float(xs.mean()), bottom
 
 
-def repack(source: Image.Image, columns: int, rows: int) -> tuple[Image.Image, int]:
+def repack(source: Image.Image, columns: int, rows: int) -> tuple[Image.Image, int, int]:
     """Place every frame on a square whole-pixel cell with its feet at one shared point, so the loop stays planted.
 
-    Returns the repacked sheet and its cell size.
+    Returns the repacked sheet, its cell size, and Briar's median height in it, which the app scales to.
     """
     frames = frames_of(source, columns, rows)
+    figure = int(np.median([solid_height(f) for f in frames]))
     anchors = [feet(f) for f in frames]
     left = max(ax for ax, _ in anchors)
     right = max(f.width - ax for f, (ax, _) in zip(frames, anchors, strict=True))
@@ -111,7 +118,7 @@ def repack(source: Image.Image, columns: int, rows: int) -> tuple[Image.Image, i
     for n, (frame, (ax, ay)) in enumerate(zip(frames, anchors, strict=True)):
         col, row = n % columns, n // columns
         sheet.alpha_composite(frame, (col * cell + round(fx - ax), row * cell + round(fy - ay)))
-    return sheet, cell
+    return sheet, cell, figure
 
 
 def plant_art(source: Image.Image) -> Image.Image:
@@ -149,9 +156,11 @@ def main() -> int:
         plant_art(Image.open(SOURCE / f"{kind}.png")).save(PLANTS_OUT / f"{kind}.webp", quality=90, method=6)
         print(f"OK: plant {kind} {PLANT_PX}x{PLANT_PX}")
     for name, (file, columns, rows, fps) in SHEETS.items():
-        sheet, cell = repack(Image.open(SOURCE / file).convert("RGBA"), columns, rows)
+        sheet, cell, figure = repack(Image.open(SOURCE / file).convert("RGBA"), columns, rows)
         sheet.save(OUT / f"{name}.png", optimize=True)
         meta = {"frame_width": cell, "frame_height": cell, "frames": columns * rows, "columns": columns, "fps": fps}
+        # Each source draws Briar at its own size; the app scales every sheet so he stands one height everywhere.
+        meta["figure_height"] = figure
         (OUT / f"{name}.json").write_text(json.dumps({**meta, "loop": name in LOOPING}) + "\n")
         print(f"OK: {name} {sheet.width}x{sheet.height}, {columns * rows} frames of {cell} px at {fps} fps")
     return 0

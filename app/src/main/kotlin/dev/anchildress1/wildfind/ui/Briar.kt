@@ -23,12 +23,14 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.dp
 import dev.anchildress1.wildfind.R
 import dev.anchildress1.wildfind.core.sprite.BriarState
 import dev.anchildress1.wildfind.core.sprite.SpriteSheet
 import dev.anchildress1.wildfind.ui.theme.LocalReducedMotion
 import kotlinx.coroutines.delay
 import org.json.JSONObject
+import kotlin.math.roundToInt
 
 /**
  * Plays Briar's [state] sheet once, then loops `idle` until Briar leaves the screen; a looping sheet such as `complete`
@@ -60,24 +62,23 @@ fun Briar(state: BriarState?, description: String, modifier: Modifier = Modifier
         } while (rest != null)
         playing = BriarState.IDLE
     }
-    // A fixed box sized to the largest sheet keeps Briar from jumping when sheets of different cell sizes swap.
-    val box = with(LocalDensity.current) { DpSize(BOX_PX.toDp(), BOX_PX.toDp()) }
+    // Each source draws Briar at its own size, so every sheet scales until he stands FIGURE tall; a screen keeps
+    // one sheet, so the box can follow it.
+    val density = LocalDensity.current
+    val scale = with(density) { FIGURE.toPx() } / sheet.figureHeight
+    val cell = IntSize(sheet.meta.frameWidth, sheet.meta.frameHeight)
+    val drawn = IntSize((cell.width * scale).roundToInt(), (cell.height * scale).roundToInt())
+    val box = with(density) { DpSize(drawn.width.toDp(), drawn.height.toDp()) }
     Canvas(modifier.size(box).semantics { contentDescription = description }) {
-        val cell = IntSize(sheet.meta.frameWidth, sheet.meta.frameHeight)
         val (x, y) = sheet.meta.offsetOf(frame)
-        // One sheet pixel per screen pixel: generated frames turn soft when scaled.
-        drawImage(
-            sheet.image,
-            srcOffset = IntOffset(x, y),
-            srcSize = cell,
-            dstOffset = IntOffset((BOX_PX - cell.width) / 2, BOX_PX - cell.height),
-            dstSize = cell,
-        )
+        drawImage(sheet.image, srcOffset = IntOffset(x, y), srcSize = cell, dstSize = drawn)
     }
 }
 
 private class Loaded(assets: AssetManager, name: String) {
-    val meta: SpriteSheet = JSONObject(assets.open("briar/$name.json").bufferedReader().use { it.readText() }).run {
+    private val json = JSONObject(assets.open("briar/$name.json").bufferedReader().use { it.readText() })
+    val figureHeight: Int = json.getInt("figure_height")
+    val meta: SpriteSheet = json.run {
         SpriteSheet(
             getInt("frame_width"),
             getInt("frame_height"),
@@ -90,8 +91,8 @@ private class Loaded(assets: AssetManager, name: String) {
     val image: ImageBitmap = assets.open("briar/$name.png").use(BitmapFactory::decodeStream).asImageBitmap()
 }
 
-// The largest packed cell (idle, 520 px).
-private const val BOX_PX = 520
+// Briar's height on every screen; idle's art drew him about this tall at one sheet pixel per screen pixel.
+private val FIGURE = 168.dp
 
 /** What a screen reader says for Briar in [state]. */
 @Composable
