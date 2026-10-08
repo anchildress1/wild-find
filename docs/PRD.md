@@ -382,7 +382,7 @@ Every failure degrades to a playable hunt or a plain message; none crash or stal
 | Location denied | The built-in map picker; never asked again |
 | iNat unreachable, matching cache exists | Use the cached entry |
 | iNat unreachable, no matching cache | No hunt; say this place needs signal once |
-| iNat returns 429 | Wait per Retry-After, at most 30 seconds, then use the cache |
+| iNat returns 429 | Use the cache at once; no request, the widened query included, goes to iNat until Retry-After passes (60 seconds when it gives none) |
 | Cache entry mismatch (schema, table, region, locale, month, or radius) | Discard the entry and refetch |
 | Fewer than 3 eligible species | Widen the radius to 150 km once, one extra query of up to three requests; still short, show "Not enough plants spotted here yet" |
 | Autofocus reports no focus distance | The capture gives no verdict; the kid sees "Tap the plant to focus" |

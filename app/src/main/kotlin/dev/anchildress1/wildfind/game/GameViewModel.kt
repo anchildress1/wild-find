@@ -1,5 +1,6 @@
 package dev.anchildress1.wildfind.game
 
+import android.os.SystemClock
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.anchildress1.wildfind.Graph
@@ -13,6 +14,7 @@ import dev.anchildress1.wildfind.core.hunt.LocalListResult
 import dev.anchildress1.wildfind.core.hunt.LocalListSource
 import dev.anchildress1.wildfind.core.hunt.LocalSpecies
 import dev.anchildress1.wildfind.core.hunt.Sighting
+import dev.anchildress1.wildfind.core.inat.RetryWindow
 import dev.anchildress1.wildfind.core.inat.SpeciesCountsQuery
 import dev.anchildress1.wildfind.core.map.WorldMap
 import dev.anchildress1.wildfind.core.region.RegionKey
@@ -33,7 +35,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.util.Locale
-import java.util.concurrent.TimeUnit
 
 /**
  * The game: one hunt at a time, saved on every change so it survives process death (S38).
@@ -48,6 +49,7 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
     private var hunt: ActiveHunt? = null
     private var verifier: CaptureVerifier? = null
     private var models: Models? = null
+    private val retry = RetryWindow(SystemClock::elapsedRealtime)
 
     // Store writes run one at a time and in order, so a quick find-then-finish never lands out of order.
     private val disk = Dispatchers.IO.limitedParallelism(1)
@@ -219,16 +221,20 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
         }
     }
 
-    // One query; a 429 waits out Retry-After, then the cache answers (PRD Failure Handling).
-    private fun pull(query: SpeciesCountsQuery): List<Sighting>? = when (val pull = graph.inat.pull(query)) {
-        is InatClient.Pull.Pulled -> pull.sightings
+    // One query; after a 429 nothing goes to iNat until Retry-After passes, and the cache answers (PRD Failure
+    // Handling), so the widened query never fires inside the window.
+    private fun pull(query: SpeciesCountsQuery): List<Sighting>? {
+        if (retry.open) return null
+        return when (val pull = graph.inat.pull(query)) {
+            is InatClient.Pull.Pulled -> pull.sightings
 
-        is InatClient.Pull.RateLimited -> {
-            TimeUnit.SECONDS.sleep((pull.retryAfterSeconds ?: 0).coerceAtMost(MAX_RATE_LIMIT_WAIT_S))
-            null
+            is InatClient.Pull.RateLimited -> {
+                retry.rateLimited(pull.retryAfterSeconds)
+                null
+            }
+
+            is InatClient.Pull.Failed -> null
         }
-
-        is InatClient.Pull.Failed -> null
     }
 
     private fun startHunt(models: Models, active: ActiveHunt) {
@@ -316,10 +322,5 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
     private fun save(updated: AppFlags) {
         flags = updated
         viewModelScope.launch(disk) { graph.store.save(updated) }
-    }
-
-    private companion object {
-        // Retry-After can ask for minutes; a kid on the loading screen gets the cache after this long at most.
-        const val MAX_RATE_LIMIT_WAIT_S = 30L
     }
 }

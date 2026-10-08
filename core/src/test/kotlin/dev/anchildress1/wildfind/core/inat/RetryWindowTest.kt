@@ -1,0 +1,31 @@
+package dev.anchildress1.wildfind.core.inat
+
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
+
+class RetryWindowTest {
+    private var now = 1_000L
+    private val window = RetryWindow { now }
+
+    @Test
+    fun `closed until a 429, then open for exactly its Retry-After`() {
+        assertFalse(window.open)
+        window.rateLimited(120)
+        now += 119_999
+        assertTrue(window.open)
+        now += 1
+        assertFalse(window.open)
+    }
+
+    @Test
+    fun `a 429 without Retry-After waits the default, and a shorter ask never shortens a longer one`() {
+        window.rateLimited(null)
+        now += RetryWindow.DEFAULT_SECONDS * 1_000 - 1
+        assertTrue(window.open)
+        window.rateLimited(0)
+        assertTrue(window.open)
+        now += 1
+        assertFalse(window.open)
+    }
+}
