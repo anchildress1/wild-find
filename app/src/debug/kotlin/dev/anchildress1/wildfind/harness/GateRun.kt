@@ -4,21 +4,15 @@ import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.hardware.camera2.CameraCaptureSession
-import android.hardware.camera2.CaptureRequest
-import android.hardware.camera2.CaptureResult
-import android.hardware.camera2.TotalCaptureResult
 import android.os.BatteryManager
 import android.os.Debug
 import android.os.PowerManager
 import android.os.SystemClock
-import androidx.camera.core.ImageProxy
-import dev.anchildress1.wildfind.core.frame.Box
-import dev.anchildress1.wildfind.core.frame.RgbaFrame
+import dev.anchildress1.wildfind.camera.CaptureVerifier
+import dev.anchildress1.wildfind.camera.CapturedFrame
 import dev.anchildress1.wildfind.core.hunt.LocalSpecies
+import dev.anchildress1.wildfind.core.hunt.NameIndex
 import dev.anchildress1.wildfind.core.hunt.Sighting
-import dev.anchildress1.wildfind.core.verify.Focus
-import dev.anchildress1.wildfind.core.verify.FocusTrack
 import dev.anchildress1.wildfind.core.verify.FrameVerifier
 import dev.anchildress1.wildfind.core.verify.Goal
 import dev.anchildress1.wildfind.core.verify.TargetGoal
@@ -33,13 +27,10 @@ import kotlinx.coroutines.flow.update
 import java.io.Closeable
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * What the harness screen shows.
  *
- * @property frameWidth upright visible analysis frame width, 0 before the first frame
- * @property frameHeight upright visible analysis frame height
  * @property verdict the last frame's verdict
  * @property frameMs the last frame's time from buffer to verdict
  * @property found Found verdicts this run
@@ -50,8 +41,6 @@ import java.util.concurrent.atomic.AtomicInteger
  * @property target the scientific name this run looks for, or [GateRun.TUTORIAL]
  */
 data class GateStatus(
-    val frameWidth: Int = 0,
-    val frameHeight: Int = 0,
     val verdict: Verdict? = null,
     val frameMs: Double = 0.0,
     val found: Int = 0,
@@ -75,7 +64,7 @@ class GateRun(private val context: Context, private val target: String, val log:
     private val table = bundled.speciesTable()
     private val labels = bundled.speciesLabels(table)
     private val species = labels.map { it.scientific }
-    private val rowOf = species.withIndex().associate { (row, name) -> name to row }
+    private val names = NameIndex(labels)
 
     // West Georgia's October pull, a debug asset; the hunt's own iNat pull replaces it in the app.
     private val sightings = context.assets.open(LOCAL_SPECIES).bufferedReader().useLines { lines ->
@@ -83,7 +72,7 @@ class GateRun(private val context: Context, private val target: String, val log:
             line.split('\t').let { Sighting(it[1], it.getOrNull(2)?.ifBlank { null }, it[0].toInt()) }
         }.toList()
     }
-    private val local = LocalSpecies(labels, rowOf::get).of(sightings)
+    private val local = LocalSpecies(labels, names::rowOf).of(sightings)
 
     // The hunt's eligible species compete, with the local toxic and hazard species as blockers.
     private val goal: Goal = if (target == TUTORIAL) {
@@ -99,45 +88,23 @@ class GateRun(private val context: Context, private val target: String, val log:
     }
     private val gateEncoder = ImageEncoder(bundled.plantGateModel())
     private val bioclip = ImageEncoder(bundled.bioclipModel())
-    private val verifier = FrameVerifier(
-        bundled.plantGate(),
-        gateEncoder,
-        bioclip,
-        bundled.hazardCheck(table, labels, sightings.map { it.scientific }.toSet()),
-    )
-    private val streak = VerifyStreak()
-    private val focus = FocusTrack()
     private val sampler = Executors.newSingleThreadScheduledExecutor()
-    private val captureLeft = AtomicInteger(0)
     private val state = MutableStateFlow(GateStatus(target = target))
 
     private var lastFrameNs = 0L
 
-    /** The sensor's active-array width, for the crop-region zoom fallback; set once the camera is bound. */
-    @Volatile var activeArrayWidth = 0
+    /** The capture loop the camera feeds; focus_matched=false in the log means a frame had no reading. */
+    val verifier = CaptureVerifier(
+        FrameVerifier(
+            bundled.plantGate(),
+            gateEncoder,
+            bioclip,
+            bundled.hazardCheck(table, labels, sightings.map { it.scientific }.toSet()),
+        ),
+    )
 
     /** Screen state. */
     val status: StateFlow<GateStatus> = state.asStateFlow()
-
-    /** Records every capture result's focus reading by sensor timestamp; attach to the camera session. */
-    val captureCallback = object : CameraCaptureSession.CaptureCallback() {
-        override fun onCaptureCompleted(
-            session: CameraCaptureSession,
-            request: CaptureRequest,
-            result: TotalCaptureResult,
-        ) {
-            val timestamp = result.get(CaptureResult.SENSOR_TIMESTAMP) ?: return
-            val zoom = Focus.zoomRatio(
-                result.get(CaptureResult.CONTROL_ZOOM_RATIO),
-                activeArrayWidth,
-                result.get(CaptureResult.SCALER_CROP_REGION)?.width(),
-            ) ?: return // no zoom means no close-range reading; the frame logs focus_matched=false
-            focus.record(
-                timestamp,
-                Focus(result.get(CaptureResult.CONTROL_AF_STATE), result.get(CaptureResult.LENS_FOCUS_DISTANCE), zoom),
-            )
-        }
-    }
 
     /** Starts sampling. */
     fun start() {
@@ -145,25 +112,12 @@ class GateRun(private val context: Context, private val target: String, val log:
         log.event(
             now(),
             "local_species",
-            "${sightings.count { it.scientific in rowOf }} of ${sightings.size} local names in the species table; " +
+            "${sightings.count {
+                names.rowOf(it.scientific) != null
+            }} of ${sightings.size} local names in the species table; " +
                 "${local.eligible.size} eligible, ${local.blockers.size} blockers",
         )
         sampler.scheduleWithFixedDelay(::sample, 0, SAMPLE_MS, TimeUnit.MILLISECONDS)
-    }
-
-    /** Verifies [proxy] while a capture is pending; always closes it. */
-    fun analyze(proxy: ImageProxy) = proxy.use {
-        if (captureLeft.get() == 0) return@use
-        val plane = proxy.planes[0]
-        check(plane.pixelStride == RGBA_BYTES) { "pixel stride ${plane.pixelStride}" }
-        val crop = proxy.cropRect
-        val frame = RgbaFrame(
-            plane.buffer,
-            plane.rowStride,
-            Box(crop.left, crop.top, crop.width(), crop.height()),
-            proxy.imageInfo.rotationDegrees,
-        )
-        verify(frame, proxy.imageInfo.rotationDegrees, proxy.imageInfo.timestamp)
     }
 
     /**
@@ -171,23 +125,21 @@ class GateRun(private val context: Context, private val target: String, val log:
      * the streak, so a Found still needs that many matching frames in a row.
      */
     fun requestCapture() {
-        // Main thread only, and the analyzer only lowers the count, so check-then-set can't race another tap. The
-        // button state goes first: set after the count, it could land after the analyzer already finished the
-        // capture and disable the button for the rest of the run.
-        if (captureLeft.get() != 0) return
+        // Main thread only. The button state goes first: set after the capture starts, it could land after the
+        // analyzer already finished it and disable the button for the rest of the run.
+        if (verifier.capturing) return
         state.update { it.copy(capturing = true) }
         log.event(now(), "capture", target)
-        captureLeft.set(VerifyStreak.FRAMES)
+        verifier.capture(goal, ::record)
     }
 
-    private fun verify(frame: RgbaFrame, rotation: Int, sensorNs: Long) {
-        val received = now()
+    private fun record(frame: CapturedFrame) {
+        val result = frame.result
+        val verdict = frame.verdict
         // A capture's first frame has no gap: the time since the last capture is the tester's pause, not cadence.
-        val gapMs = if (captureLeft.get() == VerifyStreak.FRAMES) null else ms(received - lastFrameNs)
-        lastFrameNs = received
-        val result = verifier.analyze(frame, goal) { focus.at(sensorNs) }
-        val verdict = streak.next(result.evidence)
-        val frameMs = ms(now() - received)
+        val gapMs = if (frame.first) null else ms(frame.receivedNs - lastFrameNs)
+        lastFrameNs = frame.receivedNs
+        val frameMs = ms(frame.doneNs - frame.receivedNs)
         val reading = result.evidence.focus
         val times = result.times
         val streakFrames = when (verdict) {
@@ -197,9 +149,10 @@ class GateRun(private val context: Context, private val target: String, val log:
         }
         val reticleRank = result.reticleRanking
         val fullRank = result.fullRanking
+        val upright = verifier.frameSize.value
         log.frame(
-            received, sensorNs, gapMs, frame.width, frame.height, rotation, name(verdict), streakFrames,
-            result.reticleShare, result.fullShare, reticleRank?.hazardRank, fullRank?.hazardRank,
+            frame.receivedNs, frame.sensorNs, gapMs, upright?.width, upright?.height, frame.rotation, name(verdict),
+            streakFrames, result.reticleShare, result.fullShare, reticleRank?.hazardRank, fullRank?.hazardRank,
             reticleRank?.let { species[it.topRow] }, reticleRank?.let { species[it.hazardRow] },
             fullRank?.let { species[it.topRow] }, fullRank?.let { species[it.hazardRow] },
             result.goal?.score, result.goal?.rank,
@@ -207,17 +160,13 @@ class GateRun(private val context: Context, private val target: String, val log:
             ms(times.crop), ms(times.resize), ms(times.plantGate), ms(times.bioclip), ms(times.hazard), ms(times.goal),
             ms(times.total), frameMs,
         )
-        val left = if (verdict is Verdict.Matching) captureLeft.decrementAndGet() else 0
-        captureLeft.set(left)
         state.update {
             it.copy(
-                frameWidth = frame.width,
-                frameHeight = frame.height,
                 verdict = verdict,
                 frameMs = frameMs,
                 found = it.found + if (verdict == Verdict.Found) 1 else 0,
                 species = reticleRank?.let { rank -> species[rank.topRow] } ?: it.species,
-                capturing = left > 0,
+                capturing = verifier.capturing,
             )
         }
     }
@@ -277,7 +226,6 @@ class GateRun(private val context: Context, private val target: String, val log:
         const val SAMPLE_MS = 2_000L
 
         private const val LOCAL_SPECIES = "local_species.tsv"
-        private const val RGBA_BYTES = 4
         private const val NANOS_PER_MS = 1_000_000L
         private const val BYTES_PER_KB = 1024
         private const val TENTHS = 10.0
