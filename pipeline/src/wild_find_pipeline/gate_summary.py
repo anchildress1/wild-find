@@ -115,6 +115,14 @@ def frame_lines(frames: list[dict[str, str]], camera_event: str) -> list[str]:
     return lines
 
 
+def _charging(system: list[dict[str, str]]) -> str:
+    # Counted per sample: plugging in to pull a run flips the last samples, so the final state misreports the run.
+    states = [r["charging"] for r in system if r["charging"] in ("true", "false")]
+    if not states:
+        return "charging unavailable"
+    return f"charging {states.count('true')} of {len(states)} samples"
+
+
 def system_lines(system: list[dict[str, str]]) -> list[str]:
     """Summary lines for system.csv."""
     if not system:
@@ -136,8 +144,7 @@ def system_lines(system: list[dict[str, str]]) -> list[str]:
         if r["thermal_headroom"] not in ("", "NaN")
     ]
     return [
-        f"system: {minutes:.1f} min sampled, charging "
-        + {"true": "yes", "false": "no"}.get(system[-1]["charging"], "unavailable"),
+        f"system: {minutes:.1f} min sampled, " + _charging(system),
         f"PSS MB: start {pss[0]:.0f}, max {max(pss):.0f}, end {pss[-1]:.0f}",
         f"thermal status max {THERMAL_NAMES[max(statuses)]}" + (f"; first {', '.join(firsts)}" if firsts else ""),
         f"thermal headroom: first {headroom[0][1]:.2f} at {headroom[0][0]:.1f} min, "

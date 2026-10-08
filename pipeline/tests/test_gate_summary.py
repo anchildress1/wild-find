@@ -195,6 +195,14 @@ def test_a_missing_charging_state_reads_unavailable(run):
     assert "charging unavailable" in summarize(run)
 
 
+def test_charging_counts_every_sample_not_the_last(run):
+    system = (run / "system.csv").read_text()
+    head, last = system.rstrip("\n").rsplit("\n", 1)
+    (run / "system.csv").write_text(f"{head}\n{last.rsplit(',', 1)[0]},true\n")
+
+    assert "charging 1 of 2 samples" in summarize(run)
+
+
 def test_a_run_with_a_truncated_row_fails_alone(run, capsys):
     with (run / "events.csv").open("a") as f:
         f.write("5\n")
