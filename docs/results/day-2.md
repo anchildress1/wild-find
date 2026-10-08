@@ -20,7 +20,7 @@ Both runs used the S24 Ultra (SM-S928U, Android 16) in Ashley's yard with the ga
 
 **2. Hazard warnings fire on look-alikes at the edge of the cutoff.**
 - Run 2's one warning was a capture BioCLIP read as northern dewberry (*Rubus flagellaris*), with eastern poison ivy ranked 5th. A rank of 5 or better warns.
-- Run 1 had 22 warning frames. Their best hazard ranked anywhere from 1st to 5th, and 5 frames ranked one 1st. That run predates species logging, so which plants set them off is unknown; Ashley's yard is full of blackberries.
+- Run 1 had 22 warning frames. Their best hazard ranked anywhere from 1st to 5th, and in 5 of those frames a hazard species ranked 1st. That run predates species logging, so which plants set them off is unknown; Ashley's yard is full of blackberries.
 - The per-capture "closest hazard" column names a hazard on every row, pokeweed or horsenettle included. That's only the nearest one, often ranked in the hundreds; it isn't a warning.
 
 **3. BioCLIP ranks against plants from every continent.**
