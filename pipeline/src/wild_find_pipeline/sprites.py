@@ -13,7 +13,16 @@ from wild_find_pipeline.paths import REPO
 SOURCE = REPO / "assets/source"
 OUT = REPO / "app/src/main/assets/briar"
 # name: (source file, columns, rows, fps)
-SHEETS = {"idle": ("briar-rest-blink-16.png", 4, 4, 8)}
+SHEETS = {
+    "idle": ("briar-rest-blink-16.png", 4, 4, 8),
+    "welcome": ("welcome-32.png", 8, 4, 16),
+    "searching": ("briar-searching-32.png", 8, 4, 16),
+    "found": ("briar-found-32.png", 8, 4, 16),
+    "retry": ("briar-retry-32.png", 8, 4, 16),
+    "complete": ("complete-32.png", 8, 4, 16),
+}
+# Only idle loops; every state sheet plays once, then idle takes over (PRD sprite sheet contract).
+LOOPING = {"idle"}
 # Rows of each frame's lowest pixels that count as its feet.
 FEET_ROWS = 24
 # Soft fur edges sit outside the alpha > 128 outline; grow the outline this far to keep them.
@@ -85,7 +94,7 @@ def main() -> int:
         sheet, cell = repack(Image.open(SOURCE / file).convert("RGBA"), columns, rows)
         sheet.save(OUT / f"{name}.png", optimize=True)
         meta = {"frame_width": cell, "frame_height": cell, "frames": columns * rows, "columns": columns, "fps": fps}
-        (OUT / f"{name}.json").write_text(json.dumps({**meta, "loop": True}) + "\n")
+        (OUT / f"{name}.json").write_text(json.dumps({**meta, "loop": name in LOOPING}) + "\n")
         print(f"OK: {name} {sheet.width}x{sheet.height}, {columns * rows} frames of {cell} px at {fps} fps")
     return 0
 
