@@ -64,7 +64,7 @@ The Oct 7 redesign (PRD Redesign) dropped the build-time menu: the old S10–S16
 
 ## Open holes
 
-New holes found while drafting these stories. PRD holes 10 and 19 still stand (19 only until the field test). H-numbers below are this file's own list, separate from PRD hole numbers; H9 was never assigned.
+New holes found while drafting these stories. PRD holes 4, 10, and 19 still stand (19 only until the field test). H-numbers below are this file's own list, separate from PRD hole numbers; H9 was never assigned.
 
 | # | Hole | Proposed fix | Severity |
 | --- | --- | --- | --- |
