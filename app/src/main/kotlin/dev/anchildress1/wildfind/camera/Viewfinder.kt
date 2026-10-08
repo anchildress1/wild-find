@@ -119,13 +119,16 @@ private fun Preview(request: SurfaceRequest, camera: Camera?) {
                 }
             }
             .pointerInput(camera) {
+                // The reported zoom lags the requests by a frame or more, so each pinch step builds on the last ratio
+                // asked for; building on the stale report drops steps and can snap the zoom back mid-pinch.
+                var requested = 0f
                 detectTransformGestures { _, _, zoom, _ ->
                     val live = camera ?: return@detectTransformGestures
                     val state = live.cameraInfo.zoomState.value ?: return@detectTransformGestures
+                    val base = requested.takeIf { it > 0f } ?: state.zoomRatio
                     // CameraX rejects a ratio outside the lens range, which would stall the pinch short of the limit.
-                    live.cameraControl.setZoomRatio(
-                        (state.zoomRatio * zoom).coerceIn(state.minZoomRatio, state.maxZoomRatio),
-                    )
+                    requested = (base * zoom).coerceIn(state.minZoomRatio, state.maxZoomRatio)
+                    live.cameraControl.setZoomRatio(requested)
                 }
             },
     )
