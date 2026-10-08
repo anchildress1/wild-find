@@ -45,6 +45,7 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.anchildress1.wildfind.R
@@ -222,7 +223,12 @@ private fun StopCard(number: Int, stop: Stop, modifier: Modifier, onClick: () ->
             Modifier.background(Palette.Paper, RoundedCornerShape(12.dp)).padding(horizontal = 10.dp, vertical = 2.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(stop.name, style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center)
+            // A long name in a narrow card at 200% font breaks mid-word ("mistflowe/r"); a hyphen keeps it readable.
+            Text(
+                stop.name,
+                style = MaterialTheme.typography.titleMedium.copy(hyphens = Hyphens.Auto),
+                textAlign = TextAlign.Center,
+            )
             (stop.description ?: type)?.let {
                 Text(
                     it,

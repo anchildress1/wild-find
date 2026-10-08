@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.anchildress1.wildfind.R
@@ -84,7 +85,12 @@ private fun Finished(stop: Stop, modifier: Modifier) {
         verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         TypeTile(stop.type, 88.dp)
-        Text(stop.name, style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center)
+        // A long name in a narrow card at 200% font breaks mid-word ("mistflowe/r"); a hyphen keeps it readable.
+        Text(
+            stop.name,
+            style = MaterialTheme.typography.titleMedium.copy(hyphens = Hyphens.Auto),
+            textAlign = TextAlign.Center,
+        )
         Text(status, style = MaterialTheme.typography.bodyMedium, color = Palette.Ink2)
     }
 }
