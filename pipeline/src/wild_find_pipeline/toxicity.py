@@ -18,7 +18,7 @@ import urllib.request
 from datetime import date
 from pathlib import Path
 
-from wild_find_pipeline.paths import MODEL_CACHE, TOXICITY, file_sha256, verified_artifact
+from wild_find_pipeline.paths import MODEL_CACHE, TOXICITY, ensure_artifact, file_sha256
 
 USER_AGENT = "wild-find-pipeline/0.1 (+https://github.com/anchildress1/wild-find)"
 WIKIPEDIA = "https://en.wikipedia.org/w/api.php"
@@ -165,6 +165,7 @@ def usda_ratings(archive: bytes) -> dict[str, str]:
 
 def usda_archive() -> bytes:
     """The pinned USDA PLANTS traits archive, cached in .models and checked by SHA-256."""
+    MODEL_CACHE.mkdir(exist_ok=True)
     path = MODEL_CACHE / "usda_plant_traits.tar.gz"
     if not path.is_file() or file_sha256(path) != USDA_SHA256:
         request = urllib.request.Request(USDA_URL, headers={"User-Agent": USER_AGENT})
@@ -199,7 +200,7 @@ def main() -> int:
     """Write toxicity.json: flag, evidence, and article revision for every species-table row."""
     from wild_find_pipeline.labels import HAZARDS
 
-    names = [e["scientific"] for e in json.loads(verified_artifact("taxa_labels").read_text())]
+    names = [e["scientific"] for e in json.loads(ensure_artifact("taxa_labels").read_text())]
     names += [n for n in HAZARDS.values() if n not in names and " " in n]
     usda = with_synonyms(usda_ratings(usda_archive()))
     pages = articles(sorted(set(names)))

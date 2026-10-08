@@ -48,9 +48,9 @@ def verified_artifact(model: str, cache: Path = MODEL_CACHE, manifest: Path = MA
     pins = pin(model, manifest)
     path = cache / pins["file"]
     if not path.is_file():
-        raise ValueError(f"{path} missing; run make fetch-models")
+        raise ValueError(f"{path} missing")
     if path.stat().st_size != int(pins["bytes"]) or file_sha256(path) != pins["sha256"]:
-        raise ValueError(f"{path} does not match its pinned size/SHA-256; run make fetch-models")
+        raise ValueError(f"{path} does not match its pinned size/SHA-256")
     return path
 
 

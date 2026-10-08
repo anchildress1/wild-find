@@ -77,7 +77,7 @@ sprites:
 
 # S10: rebuilds the committed pipeline/data/toxicity.json from Wikipedia, USDA PLANTS, and GBIF; CI never runs it.
 toxicity:
-	$(UV) run python -W error -m wild_find_pipeline.toxicity
+	$(UV) run --group reference python -W error -m wild_find_pipeline.toxicity
 
 # Rebuilds the committed hazard_vectors.json; pulls the 3.9 GB BioCLIP teacher (as does reference), so CI runs neither.
 hazard-vectors:
