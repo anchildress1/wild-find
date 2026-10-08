@@ -13,7 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import dev.anchildress1.wildfind.ui.BriarSprite
+import dev.anchildress1.wildfind.ui.Briar
 
 /** Single-activity host for the Compose UI. */
 class MainActivity : ComponentActivity() {
@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    BriarSprite("idle", stringResource(R.string.briar_description))
+                    Briar(null, stringResource(R.string.briar_description))
                     Text(stringResource(R.string.leave_it_rule), style = MaterialTheme.typography.headlineMedium)
                 }
             }
