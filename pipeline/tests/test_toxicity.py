@@ -29,6 +29,8 @@ def test_toxic_sentence_finds_the_claim():
         "It often grows beside poison ivy and sassafras.",
         "It is sometimes mistaken for Toxicodendron radicans.",
         "Poison-oak and poison sumac grow nearby.",
+        "It is a non-toxic plant.",
+        "They are nontoxic to pets and non-poisonous to people.",
     ],
 )
 def test_toxic_sentence_ignores_other_plants_and_genus_names(text):
@@ -152,3 +154,8 @@ def test_query_all_merges_continued_pages_and_keeps_the_ones_with_content(monkey
 
     assert pages["B"]["revisions"] == [{"revid": 2}]
     assert "rvcontinue=2%7Cx" in urls[1]
+
+
+def test_toxic_sentence_still_flags_a_claim_beside_non_toxic():
+    text = "Although it is nontoxic itself, the honey from its flowers is poisonous."
+    assert toxic_sentence(text) == text

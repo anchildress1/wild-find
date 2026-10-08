@@ -553,7 +553,7 @@
   },
   "Aegopodium podagraria": {
    "toxic": true,
-   "evidence": "wikipedia: As a member of Apiaceae, its flowers may be confused with extremely toxic species such as and hemlock water dropwort; attention to the leaves is required for a conclusive identification.",
+   "evidence": "wikipedia: As a member of Apiaceae, its flowers may be confused with extremely toxic species such as poison hemlock and hemlock water dropwort; attention to the leaves is required for a conclusive identification.",
    "article": "Aegopodium podagraria",
    "revid": 1358106247
   },
@@ -2383,7 +2383,7 @@
   },
   "Astragalus danicus": {
    "toxic": true,
-   "evidence": "wikipedia: The species is non-toxic and its common name in English comes from the popular belief in history that cows fed with purple milk-vetch yielded more milk.",
+   "evidence": "wikipedia: Some other species in the genus Astragalus are known to be toxic to animals and referred to in the US as 'locoweed'.",
    "article": "Astragalus danicus",
    "revid": 1329389909
   },
@@ -5851,7 +5851,7 @@
   },
   "Conium maculatum": {
    "toxic": true,
-   "evidence": "wikipedia: Conium maculatum, commonly known as hemlock (British English) or (in North America), is a highly poisonous flowering plant and a nitrophile weed species in the carrot family Apiaceae.",
+   "evidence": "wikipedia: Conium maculatum, commonly known as hemlock (British English) or poison hemlock (in North America), is a highly poisonous flowering plant and a nitrophile weed species in the carrot family Apiaceae.",
    "article": "Conium maculatum",
    "revid": 1377694071
   },
@@ -6357,7 +6357,7 @@
    "toxic": false,
    "evidence": "",
    "article": "Crataegus monogyna",
-   "revid": 1354256761
+   "revid": 1379100832
   },
   "Crepis capillaris": {
    "toxic": true,
@@ -11733,7 +11733,7 @@
    "toxic": true,
    "evidence": "wikipedia: The 17th-century herbalist Nicholas Culpeper considered elecampane to be ruled by Mercury and used it to warm a cold and windy stomach, to resist poison, to strengthen sight, and to clear internal blockages.",
    "article": "Elecampane",
-   "revid": 1333854561
+   "revid": 1379098911
   },
   "Inula salicina": {
    "toxic": false,
@@ -12696,8 +12696,8 @@
    "revid": 1368873811
   },
   "Leontopodium nivale": {
-   "toxic": true,
-   "evidence": "wikipedia: It is a non-toxic plant.",
+   "toxic": false,
+   "evidence": "",
    "article": "Edelweiss",
    "revid": 1378394533
   },
@@ -14340,8 +14340,8 @@
    "revid": 1375671188
   },
   "Matricaria discoidea": {
-   "toxic": true,
-   "evidence": "wikipedia: Extracts from the flowers and other aerial parts of the plant have been shown to possess non-toxic, pain-relieving, and mildly sedative effects, reflecting the biological activity concentrated in the floral tissues.",
+   "toxic": false,
+   "evidence": "",
    "article": "Matricaria discoidea",
    "revid": 1374482176
   },
@@ -15960,8 +15960,8 @@
    "revid": 1332483993
   },
   "Opuntia ficus-indica": {
-   "toxic": true,
-   "evidence": "wikipedia: Mucilage from prickly pear may work as a natural, non-toxic dispersant for oil spills.",
+   "toxic": false,
+   "evidence": "",
    "article": "Opuntia ficus-indica",
    "revid": 1370770669
   },
@@ -19107,7 +19107,7 @@
    "toxic": true,
    "evidence": "stub: 920 chars",
    "article": "Psychotria nervosa",
-   "revid": 1362438076
+   "revid": 1379099832
   },
   "Psychotria poeppigiana": {
    "toxic": true,
@@ -23605,7 +23605,7 @@
   },
   "Toxicodendron vernix": {
    "toxic": true,
-   "evidence": "wikipedia: Like its toxic relatives and , all parts of the plant contain a resin called urushiol, which causes skin and mucous membrane irritation to humans.",
+   "evidence": "wikipedia: Like its toxic relatives poison ivy and poison oak, all parts of the plant contain a resin called urushiol, which causes skin and mucous membrane irritation to humans.",
    "article": "Toxicodendron vernix",
    "revid": 1360934822
   },
@@ -25608,8 +25608,8 @@
    "revid": 1368067044
   },
   "Zinnia grandiflora": {
-   "toxic": true,
-   "evidence": "wikipedia: They are non-toxic to pets.",
+   "toxic": false,
+   "evidence": "",
    "article": "Zinnia grandiflora",
    "revid": 1368074256
   },
