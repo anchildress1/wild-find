@@ -25,7 +25,7 @@ data class HuntProgress(val tutorialPending: Boolean, val targets: List<Eligible
         require(found.all { row -> targets.any { it.row == row } }) { "found row outside the hunt" }
     }
 
-    /** One star per find (R15); leave-it stars (R10) are P1. */
+    /** One star per find (R15). */
     val stars: Int get() = found.size
 
     /** True once the tutorial is done and every target is found. */

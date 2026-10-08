@@ -91,7 +91,7 @@ Every call below is settled; open items live in Open Questions.
 | Hunt shape | First-ever hunt: grass tutorial, then 3 targets; later hunts: 3 targets; targets picked by sighting-weighted random |
 | Look-alikes | A find passes when the target, or another species in its genus, outscores the hunt's other locally eligible species on the reticle crop and leads every local toxic or hazard species by at least 0.048, so look-alikes inside the genus pass; a toxic or hazard species on top, or within the margin, never passes, even inside the target's genus. Decided Oct 7: on 249 CC0 photos it let 0 of 180 local toxic photos pass as any target and kept 34 of 69 real finds; without the margin 4 toxic photos passed (`docs/results/day-2/toxic_block.log`); never taught in v1 |
 | Framing | Live camera with a center reticle and a Capture button; verify runs only on a capture; a far subject still passes, and "Get closer or zoom in" shows only when a capture misses and the focused distance in diopters times the zoom ratio is under 2.0; pinch zoom allowed; no capture verdict without a focused reading |
-| Scoring | One star per find; one leave-it star when the plant is clearly still rooted |
+| Scoring | One star per find; no leave-it star in v1 (R10 dropped Oct 8) |
 | Hints | None. The target's common name and type show from the start of each hunt |
 | Toxicity flag | Built once on the laptop for every species-table row. A species is flagged when its English Wikipedia article has a sentence with the whole word toxic, toxin, or poison (other plants' names such as poison ivy removed first), when USDA PLANTS rates it moderate or severe, or when it has no article or one under 1,500 characters. Names match through GBIF. Best effort, like hazard detection, never a safety claim; on Oct 7 it flagged 30 of 117 West Georgia species and wrongly dropped about 6 |
 | Location | Android coarse location only, rounded to whole degrees; the device is in a region only when its rounded key equals that region's key; the query always sends the region center, never device coordinates; manual region pick supported |
@@ -130,7 +130,7 @@ The kid hunts and leaves every plant where it grows; the parent sets the boundar
 
 ## Functional Requirements
 
-Eight P0s ship the hunt; one P1 follows; four P2s shape the design now. Requirement IDs stay fixed; R6 and R9 were dropped with Gemma on Oct 7.
+Eight P0s ship the hunt; four P2s shape the design now. Requirement IDs stay fixed; R6 and R9 were dropped with Gemma on Oct 7, and R10 (the leave-it star) on Oct 8, since no on-device check can tell a rooted plant from a picked one.
 
 ### P0: Must ship
 
@@ -144,12 +144,6 @@ Eight P0s ship the hunt; one P1 follows; four P2s shape the design now. Requirem
 | R7 | Privacy | Android coarse location permission only; no fine location requested; coordinates rounded again before the query; no photo or precise location leaves the device; no account; no analytics |
 | R8 | Offline | Both models ship in the APK; a cached hunt completes in airplane mode; a region never pulled online can't start a hunt offline and says it needs signal once |
 | R15 | Hunt complete | The last target passes, a short success animation plays, the stars show, then Hunt Again or Home; only the current hunt's state persists |
-
-### P1: Fast follow
-
-| ID | Requirement | Acceptance criteria |
-| --- | --- | --- |
-| R10 | Leave-it star | One star per valid find; a second star when the photo clearly shows the plant still rooted; a held, picked, or cut plant gets no leave-it star; copy encourages leaving plants growing without sounding punitive; the model never judges whether touching was safe |
 
 ### P2: Design for, don't build
 
@@ -341,7 +335,7 @@ hazard_warns(region) = plant_gate(region)
 
 1. The last target passes
 2. A short success animation plays
-3. Stars show: one per find, plus leave-it stars
+3. Stars show: one per find
 4. Two choices: Hunt Again or Home
 
 Only the current hunt's state persists; there is no history, streak, or sharing.

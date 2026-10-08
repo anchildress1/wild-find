@@ -51,7 +51,7 @@ The Oct 7 redesign (PRD Redesign) dropped the build-time menu: the old S10–S16
 - [ ] **S37 Offline** — airplane-mode hunt from cache; a never-pulled region says it needs signal once; R8
 - [ ] **S38 Lifecycle** — hunt state restored after the app goes to the background
 - [ ] **S39 Privacy proof** — network log on the test phone shows only iNat; R7
-- [ ] **S40 Leave-it star** (P1) — R10; H4
+- [ ] ~~**S40 Leave-it star**~~ — dropped Oct 8 with R10: no on-device check can tell a rooted plant from a picked one
 
 ## Ship · Oct 9–11
 
@@ -71,7 +71,7 @@ New holes found while drafting these stories. PRD holes 3, 10, 13, 19, 20 still 
 | H1 | Grass tutorial target isn't in any contract: no taxon, label row, or floor | Resolved by the redesign: grass is a fixed tutorial label in `labels.json` (R3), not a target | Low |
 | H2 | "Only the current hunt persists" vs flags that must survive (opener seen, tutorial done, models verified) | Allow a fixed list of app flags; no history beyond them | Low |
 | H3 | Widened 150 km counts get cached under the same key as 75 km counts | Resolved: the PRD cache entry carries `radius_km`; mismatch discards | Low |
-| H4 | R10 never says what judges "still rooted" | No language model ships; decide a BioCLIP or rule-based check before S40, or drop R10 | Medium |
+| H4 | R10 never says what judges "still rooted" | Resolved Oct 8: R10 and S40 dropped for v1 | Low |
 | H5 | Fallback file is October-only; offline cold starts after October get October targets | Resolved by the redesign: no fallback file; a region needs one online pull | Low |
 | H6 | Hazard false alarms on safe plants | Resolved on Day 1 by scoring hazards against BioCLIP's species table (4,271 species plus *T. pubescens*) (warn when a hazard species is in the top 5): 48 of 52 hazards caught, 1 of 253 safe photos warned. Against menu labels alone, magnolia warned 10 of 10 and honeysuckle 9 of 10 | Low |
 | H7 | Build-time menu gate uses 75 km while the app can widen to 150 km | Resolved by the redesign: no build-time gate; the app applies its sighting floor at whichever radius it queried | Low |
