@@ -418,7 +418,7 @@ No blockers remain; every open hole below closes or falls back during calibratio
 | 17 | BioCLIP Mobile vs non-plant labels | Laptop side resolved on Day 1: 16 of 63 free non-plant photos scored a plant target top-1 on the reticle crop (20 of 63 on the full frame), and a pair of sneakers scored oak (0.605) above a real oak (0.572). TinyCLIP ViT-8M kept 176 of 176 plant photos and passed 2 of 63 non-plants on the full frame, so it gates every frame first. The fp32 export now matches the laptop on the phone (cosine 0.99999999, same plant share) and reproduces all 307 Day-1 reticle verdicts | Resolved (S06) | Low |
 | 19 | Approximate focus distance | Resolved on the test phone for a can at desk range (S09): focused readings split far (1.8 or less) from closer (2.0 or more) in three runs, and every lens reports about the same distance as zoom switches lenses. Unmeasured outdoors on plants and beyond about 1 m | Rule: diopters × zoom ≥ 2.0 while focused; recheck wide-shot calls in the field test (S52) | Medium |
 | 20 | Species-table coverage | Outside the US, common plants may be missing from the 4,271-species table: in Tbilisi, Georgia, half the top 20 October species are missing, though 89% have their genus in it | Measure more regions; a genus-level target list is the fallback | Medium |
-| 22 | iNat names vs the species table | Only 641 of the 1,029 species iNat lists for West Georgia in October match a species-table name exactly (the gate harness logs the count at run start); synonym drift such as *Mahonia bealei* vs *Berberis bealei* is the likely cause | S22 matches iNat names to table rows through GBIF's accepted names and synonyms, as `make toxicity` does for USDA; measure the match rate before and after | High |
+| 22 | iNat names vs the species table | Only 641 of the 1,029 species iNat lists for West Georgia in October match a species-table name exactly | Resolved Oct 8: the build ships GBIF aliases that keep the row's epithet and resolve back to its taxon, and the app matches through them; West Georgia reaches 647 and playable targets stay at 23 in every place tested, so the rest is table coverage (hole 20) (`docs/results/day-3/name_match.log`) | Low |
 
 ## Success Metrics
 
@@ -439,7 +439,7 @@ Two questions block the build; two can wait.
 
 **Blocking**
 
-- [ ] Visual: Briar's five state sheets landed in `assets/source/` Oct 7 and still need packing (S30); the opener sheet, logo, and plant-type icons still need paths
+- [ ] Visual: Briar's five state sheets are packed into `app/src/main/assets/briar/` (Oct 8); the opener sheet, logo, and plant-type icon art still need paths
 - [ ] Legal: do coarse location plus whole-degree rounding clear the precise-geolocation bar?
 - [x] Data: flat 25+ sightings or a share of local sightings? Decided Oct 7: at least 0.5% of the place's sightings and at least 3 (Decisions: Local filter); the floor of 3 stops one stray sighting from making a target in sparse places
 
