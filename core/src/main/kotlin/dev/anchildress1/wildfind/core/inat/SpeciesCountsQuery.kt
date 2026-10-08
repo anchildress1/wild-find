@@ -29,8 +29,9 @@ data class SpeciesCountsQuery(val region: RegionKey, val month: Int, val locale:
             "per_page" to PER_PAGE,
             "page" to page,
         )
+        // The Charset overload is API 33; minSdk is 30.
         return BASE +
-            params.joinToString("&") { (name, value) -> "$name=${URLEncoder.encode("$value", Charsets.UTF_8)}" }
+            params.joinToString("&") { (name, value) -> "$name=${URLEncoder.encode("$value", "UTF-8")}" }
     }
 
     /** iNat etiquette and page limits from PRD R2. */
