@@ -441,6 +441,7 @@ Two questions block the build; two can wait.
 
 - [ ] Post: verify Snappit, ForestForay Kids, and SnapScout before naming them as prior art
 - [ ] Build: minSdk 34 existed only for the user-initiated download job, which left with Gemma on Oct 7; lower it or keep it
+- [ ] Cleanup: delete unused source art once the user says go, with its Visual System rows: `briar-searching-32.png`, `briar-searching-hint-32.png`, and `briar-retry-32.png` (no screen plays them; Briar stays off hunt pages), `briar-rest-blink-32.png` (idle packs from the 16-frame sheet), and `wild-find-sprite-1.png` and `wild-find-app-design.png` (the design canvas replaced both)
 - [x] Product: how does a kid learn what a target looks like? Resolved Oct 7: the target's common name and type (S17); no hints, no fact cards
 
 ## Milestones
