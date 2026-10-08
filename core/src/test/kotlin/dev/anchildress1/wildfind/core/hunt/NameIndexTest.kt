@@ -21,6 +21,21 @@ class NameIndexTest {
     }
 
     @Test
+    fun `a synonym finds its row, and a name on two rows fails the build`() {
+        val withAlias =
+            rows + SpeciesRow("Hexastylis arifolia", "Hexastylis", false, true, synonyms = listOf("Asarum arifolium"))
+
+        assertEquals(2, NameIndex(withAlias).rowOf("Asarum arifolium"))
+        assertEquals(2, NameIndex(withAlias).rowOf("Hexastylis arifolia"))
+        assertThrows<IllegalArgumentException> {
+            NameIndex(
+                withAlias +
+                    SpeciesRow("Asarum canadense", "Asarum", false, false, synonyms = listOf("Asarum arifolium")),
+            )
+        }
+    }
+
+    @Test
     fun `plant types read the pipeline's names, null for none, and reject unknown ones`() {
         assertEquals(PlantType.CONIFER, PlantType.of("conifer"))
         assertNull(PlantType.of(null))
