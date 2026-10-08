@@ -82,8 +82,10 @@ fun MapCanvas(map: WorldMap?, camera: MapCamera) {
                         ),
                     ),
                 )
-                drawPath(level.borders, Palette.Paper, style = Stroke(BORDER_HALO.dp.toPx() / scale))
-                drawPath(level.borders, Palette.Ink, style = Stroke(BORDER.dp.toPx() / scale))
+                // The whole world packs borders tightly, so they draw thin there and heavy once zoomed in.
+                val border = if (camera.level == 0) WORLD_BORDER else BORDER
+                drawPath(level.borders, Palette.Paper, style = Stroke(border * 2 * density / scale))
+                drawPath(level.borders, Palette.Ink, style = Stroke(border * density / scale))
             }
         }
         if (camera.canPick) {
@@ -202,7 +204,7 @@ private const val STATE = 1.5f
 private const val STATE_DASH = 6f
 private const val STATE_GAP = 4f
 private const val BORDER = 2.5f
-private const val BORDER_HALO = 5f
+private const val WORLD_BORDER = 1f
 private const val CELL_DASH = 14f
 private const val ARM = 0.44f
 private const val GAP = 0.14f
