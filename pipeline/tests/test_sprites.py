@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from PIL import Image
 
-from wild_find_pipeline.sprites import feet, frames_of, repack
+from wild_find_pipeline.sprites import PLANT_PX, feet, frames_of, plant_art, repack
 
 
 def sheet_with(spots: list[tuple[int, int]], size=(400, 200), box=(20, 30)) -> Image.Image:
@@ -71,3 +71,15 @@ def test_a_prop_drawn_apart_joins_its_frame():
 
     assert frames[0].size == (31, 30)
     assert {f.size for f in frames[1:]} == {(20, 30)}
+
+
+def test_plant_art_shrinks_square_art_and_keeps_alpha():
+    art = plant_art(Image.new("RGBA", (1254, 1254), (0, 120, 0, 0)))
+
+    assert art.size == (PLANT_PX, PLANT_PX)
+    assert art.mode == "RGBA"
+
+
+def test_plant_art_rejects_non_square_art():
+    with pytest.raises(ValueError):
+        plant_art(Image.new("RGBA", (100, 80)))

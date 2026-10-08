@@ -1,4 +1,4 @@
-"""Repack Briar source sprite sheets onto whole-pixel cells and write the PRD sheet contract JSON."""
+"""Repack Briar sprite sheets onto whole-pixel cells with the PRD sheet contract JSON; shrink the plant-type art."""
 
 import json
 import math
@@ -12,6 +12,11 @@ from wild_find_pipeline.paths import REPO
 
 SOURCE = REPO / "assets/source"
 OUT = REPO / "app/src/main/assets/briar"
+PLANTS_OUT = REPO / "app/src/main/assets/plants"
+# One painted picture per PRD plant type, named by its `type` key in species_labels.json.
+PLANT_TYPES = ("tree", "shrub", "vine", "herb", "grass", "fern", "moss", "conifer")
+# Tiles top out near 112 dp, about 340 px on a 3x screen.
+PLANT_PX = 384
 # name: (source file, columns, rows, fps)
 SHEETS = {
     "idle": ("briar-rest-blink-16.png", 4, 4, 8),
@@ -102,9 +107,20 @@ def repack(source: Image.Image, columns: int, rows: int) -> tuple[Image.Image, i
     return sheet, cell
 
 
+def plant_art(source: Image.Image) -> Image.Image:
+    """One plant-type picture, square at PLANT_PX, its transparent margin kept so every type sits alike."""
+    if source.width != source.height:
+        raise ValueError(f"plant art must be square, got {source.size}")
+    return source.convert("RGBA").resize((PLANT_PX, PLANT_PX), Image.Resampling.LANCZOS)
+
+
 def main() -> int:
-    """Write <state>.png and <state>.json for every source sheet."""
+    """Write <state>.png and <state>.json for every source sheet, and one WebP per plant type."""
     OUT.mkdir(parents=True, exist_ok=True)
+    PLANTS_OUT.mkdir(parents=True, exist_ok=True)
+    for kind in PLANT_TYPES:
+        plant_art(Image.open(SOURCE / f"{kind}.png")).save(PLANTS_OUT / f"{kind}.webp", quality=90, method=6)
+        print(f"OK: plant {kind} {PLANT_PX}x{PLANT_PX}")
     for name, (file, columns, rows, fps) in SHEETS.items():
         sheet, cell = repack(Image.open(SOURCE / file).convert("RGBA"), columns, rows)
         sheet.save(OUT / f"{name}.png", optimize=True)

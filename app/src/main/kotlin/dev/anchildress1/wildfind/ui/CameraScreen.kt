@@ -137,7 +137,7 @@ private fun TopBar(target: CameraTarget, onBack: () -> Unit) {
             )
             typeLabel(target.type)?.let { type ->
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    target.type?.let { Icon(WildIcons.of(it), null, Modifier.size(18.dp), tint = Color.White) }
+                    target.type?.let { PlantArt(it, Modifier.size(24.dp)) }
                     Text(
                         type.replaceFirstChar { it.titlecase() },
                         Modifier.padding(start = 6.dp),

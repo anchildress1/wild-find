@@ -176,7 +176,7 @@ fun TypeTile(type: PlantType?, found: Boolean, size: Dp, modifier: Modifier = Mo
         contentAlignment = Alignment.Center,
     ) {
         type?.let {
-            Icon(WildIcons.of(it), contentDescription = null, Modifier.size(size * ICON_SHARE), Palette.Forest)
+            PlantArt(it, Modifier.size(size * ICON_SHARE))
         }
     }
 }

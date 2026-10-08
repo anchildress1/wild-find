@@ -365,7 +365,7 @@ Briar and the opener play finished sprite sheets, one per state. A Rive rig was 
 | Briar idle loop | 16-frame rest-and-blink idle, source for `idle`; plays for every state until per-state art exists | assets/source/briar-rest-blink-16.png |
 | Briar state sources | Finished per-state art, not yet packed: 32-frame 8 × 4 sheets on 512 px cells `welcome-32`, `rest-blink-32`, `searching-32`, `searching-hint-32`, `found-32`, `retry-32`, `complete-32`; drafts stay out of git in assets/generated/ until finished | assets/source/briar-*.png, assets/source/welcome-32.png, assets/source/complete-32.png |
 | Briar sprite sheets | Packed `idle`, `welcome`, `found`, and `complete` (`make sprites`); `found` plays `complete-32`, since `found-32` bakes a fern into every frame | app/src/main/assets/briar/ |
-| Plant-type icons | Shown with the target's name, one per type from S17 | Path pending |
+| Plant-type art | One painted picture per S17 type (tree, shrub, vine, herb, grass, fern, moss, conifer), shown in each target's tile, the camera's top bar, and the grass tutorial; `make sprites` shrinks each to a 384 px WebP | assets/source/<type>.png, packed to app/src/main/assets/plants/ |
 | Opener art | Briar holds up a warning paw beside a three-leaf seedling; 32 frames, plays, rests 1.5 s on its last frame, and plays again while the opener shows | assets/source/opener-ivy-32.png, packed to app/src/main/assets/briar/opener.png |
 
 - Animation-first interactions; illustrations, not licensed photos, in v1
@@ -444,7 +444,7 @@ Two questions block the build; two can wait.
 
 **Blocking**
 
-- [ ] Visual: one image still needs art: the app icon (an adaptive icon: 432 px foreground inside a 264 px safe zone, a background, and a monochrome layer); the opener landed Oct 8, `found` plays the complete cheer since `briar-found-32` bakes in a fern, and the wordmark and plant-type icons are drawn in code
+- [ ] Visual: one image still needs art: the app icon (an adaptive icon: 432 px foreground inside a 264 px safe zone, a background, and a monochrome layer); the opener and the 8 plant-type pictures landed Oct 8, `found` plays the complete cheer since `briar-found-32` bakes in a fern, and the wordmark is drawn in code
 - [ ] Legal: do coarse location plus whole-degree rounding clear the precise-geolocation bar?
 - [x] Data: flat 25+ sightings or a share of local sightings? Decided Oct 7: at least 0.5% of the place's sightings and at least 3 (Decisions: Local filter); the floor of 3 stops one stray sighting from making a target in sparse places
 

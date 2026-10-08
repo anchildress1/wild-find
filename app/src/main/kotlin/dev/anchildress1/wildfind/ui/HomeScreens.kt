@@ -20,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.anchildress1.wildfind.R
+import dev.anchildress1.wildfind.core.hunt.PlantType
 import dev.anchildress1.wildfind.core.sprite.BriarState
 import dev.anchildress1.wildfind.ui.theme.Palette
 
@@ -83,7 +84,7 @@ fun TutorialScreen(onTry: () -> Unit, onGrownUps: () -> Unit) {
             Box(
                 Modifier.rise(index = 1).size(150.dp, 170.dp).background(Palette.Husk, RoundedCornerShape(28.dp)),
                 contentAlignment = Alignment.Center,
-            ) { Icon(WildIcons.Grass, contentDescription = null, Modifier.size(112.dp), tint = Palette.Forest) }
+            ) { PlantArt(PlantType.GRASS, Modifier.size(132.dp)) }
         }
         Text(
             stringResource(R.string.tutorial_point),

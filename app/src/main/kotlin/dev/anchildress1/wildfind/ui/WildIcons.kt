@@ -10,7 +10,6 @@ import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.addPathNodes
 import androidx.compose.ui.unit.dp
-import dev.anchildress1.wildfind.core.hunt.PlantType
 import dev.anchildress1.wildfind.ui.theme.Palette
 
 /** The design spec's line icons on a 24-unit grid; `Icon` tints them with the content color. */
@@ -128,71 +127,10 @@ object WildIcons {
 
     /** An empty star slot. */
     val StarOutline = line("star-outline", STAR, width = 1.4f)
-
-    private val types = PlantType.entries.associateWith(::draw)
-
-    /** The illustration for [type]; the spec draws one per type, never per species. */
-    fun of(type: PlantType): ImageVector = types.getValue(type)
-
-    private fun draw(type: PlantType): ImageVector = when (type) {
-        PlantType.TREE -> line("tree", circle(12f, 9f, 6f), "M12 15v6", "M12 18l-2.5-1.8", "M8 21h8", width = 1.8f)
-
-        PlantType.HERB -> line("herb", "M5 19C5 10 10 5 19 5c0 9-5 14-14 14z", "M5 19l8-8", width = 1.8f)
-
-        PlantType.FERN -> line("fern", "M12 21V4", FERN_FRONDS, width = 1.8f)
-
-        PlantType.GRASS -> GRASS
-
-        PlantType.VINE -> line(
-            "vine",
-            "M4 20c5 0 6-4 8-7s4-6 8-6",
-            "M9 15.5c-1.8-.3-3-1.6-3-3.5 1.8.2 3 1.5 3 3.5z",
-            "M15 9.5c.3-1.8 1.6-3 3.5-3-.2 1.8-1.5 3-3.5 3z",
-            "M20 7c1 1 1 2.5 0 3",
-            width = 1.8f,
-        )
-
-        PlantType.SHRUB -> line(
-            "shrub",
-            "M3 21h18",
-            "M6 18a3.5 3.5 0 0 1 .5-6.9A4.5 4.5 0 0 1 15 9.5a3.5 3.5 0 0 1 3 6.5 2.5 2.5 0 0 1-1 2z",
-            "M10 18v3M14 18v3",
-            width = 1.8f,
-        )
-
-        PlantType.MOSS -> line(
-            "moss",
-            "M3 19h18",
-            "M4 19c0-2 1.5-3.2 3-3.2s3 1.2 3 3.2",
-            "M10 19c0-2.6 2-4 4-4s4 1.4 4 4",
-            "M7 15.8V12M14 15v-4.5M17.5 16.5V13",
-            circle(7f, 11f, 1f),
-            circle(14f, 9.5f, 1f),
-            circle(17.5f, 12f, 1f),
-            width = 1.8f,
-        )
-
-        PlantType.CONIFER -> line("conifer", "M12 3l-5 7h3l-4 6h12l-4-6h3z", "M12 16v5", width = 1.8f)
-    }
-
-    /** The grass tutorial's illustration. */
-    val Grass: ImageVector get() = GRASS
 }
 
 private const val STAR = "M12 3.5l2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L3.6 9.6l5.8-.8z"
 private const val CORNERS = "M4 8V4h4M16 4h4v4M20 16v4h-4M8 20H4v-4"
-private const val FERN_FRONDS =
-    "M12 7l-3-2M12 7l3-2M12 10.5l-4-2.2M12 10.5l4-2.2M12 14l-4.5-2.2M12 14l4.5-2.2M12 17.5l-4-1.8M12 17.5l4-1.8"
-
-private val GRASS = line(
-    "grass",
-    "M4 21h16",
-    "M7 21c0-5 .8-9 2.5-12",
-    "M12 21c0-6 0-10-.5-15",
-    "M17 21c0-4.5-1.2-8-4-10.5",
-    width = 1.8f,
-)
-
 private fun circle(cx: Float, cy: Float, r: Float) = ellipse(cx, cy, r, r)
 
 private fun ellipse(cx: Float, cy: Float, rx: Float, ry: Float) =
