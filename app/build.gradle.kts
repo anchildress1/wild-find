@@ -1,5 +1,6 @@
 import groovy.json.JsonSlurper
 import java.security.MessageDigest
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
@@ -20,7 +21,25 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    // The release key lives only on the developer's machine; without keystore.properties the release APK builds unsigned.
+    val keystoreFile = rootProject.file("keystore.properties")
+    if (keystoreFile.isFile) {
+        val keys = Properties().apply { keystoreFile.inputStream().use(::load) }
+        signingConfigs.create("release") {
+            storeFile = rootProject.file(keys.getProperty("storeFile"))
+            storePassword = keys.getProperty("storePassword")
+            keyAlias = keys.getProperty("keyAlias")
+            keyPassword = keys.getProperty("keyPassword")
+        }
+    }
+
     buildTypes {
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.findByName("release")
+        }
         debug {
             // Debug and release coexist on the single test phone, so a release install never wipes gate-harness runs not yet pulled.
             applicationIdSuffix = ".debug"

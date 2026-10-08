@@ -25,6 +25,29 @@ make ai-checks
 make install   # debug APK to a connected phone
 ```
 
+## Release build
+
+The release key stays on your machine. Create it once, outside the repo:
+
+```sh
+keytool -genkeypair -v -keystore ~/keys/wild-find-release.jks -alias wild-find -keyalg RSA -keysize 4096 -validity 10000
+```
+
+Then add `keystore.properties` at the repo root (gitignored) and build:
+
+```properties
+storeFile=/Users/<you>/keys/wild-find-release.jks
+storePassword=...
+keyAlias=wild-find
+keyPassword=...
+```
+
+```sh
+./gradlew :app:assembleRelease   # signed APK in app/build/outputs/apk/release/
+```
+
+Without `keystore.properties`, the release APK builds unsigned.
+
 ## Credits
 
 - **Models on the phone:** BioCLIP 2.5 Mobile and TinyCLIP ViT-8M/16
