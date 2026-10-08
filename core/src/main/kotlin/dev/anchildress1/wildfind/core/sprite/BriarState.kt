@@ -9,13 +9,13 @@ package dev.anchildress1.wildfind.core.sprite
  */
 enum class BriarState(val sheet: String, val replayAfterMillis: Long? = null) {
     /** The safety opener: Briar warns beside a three-leaf plant, again and again with a short rest between. */
-    OPENER("opener", replayAfterMillis = OPENER_REST_MS),
+    OPENER("opener", replayAfterMillis = REST_MS),
 
-    /** First launch, the tutorial, and the hunt list. */
-    WELCOME("welcome"),
+    /** First launch, the tutorial, and the hunt list: Briar waves, rests, and waves again. */
+    WELCOME("welcome", replayAfterMillis = REST_MS),
 
-    /** The found screen. */
-    FOUND("found"),
+    /** The found screen: Briar cheers, rests, and cheers again. */
+    FOUND("found", replayAfterMillis = REST_MS),
 
     /** The hunt is complete; its sheet loops. */
     COMPLETE("complete"),
@@ -28,5 +28,6 @@ enum class BriarState(val sheet: String, val replayAfterMillis: Long? = null) {
     }
 }
 
-// The opener's rest on its last frame before it replays; long enough to read the pose, short enough to stay alive.
-private const val OPENER_REST_MS = 1_500L
+// The rest on a sheet's last frame before it replays. A screen keeps one sheet: each source draws Briar at its own
+// size (idle stands 472 px tall, welcome 371), so handing over to idle made him jump.
+private const val REST_MS = 1_500L
