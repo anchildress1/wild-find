@@ -6,6 +6,7 @@ PRD rule: flag on a toxicity sentence, a USDA rating of moderate or severe, a st
 
 import contextlib
 import csv
+import email.utils
 import io
 import json
 import re
@@ -15,7 +16,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
-from datetime import date
+from datetime import UTC, date, datetime
 from pathlib import Path
 
 from wild_find_pipeline.paths import MODEL_CACHE, TOXICITY, ensure_artifact, file_sha256
@@ -42,8 +43,23 @@ SENTENCE = re.compile(r"[^.!?\n]+[.!?]?")
 SKIP_SECTIONS = re.compile(r"^(?:references|notes|citations|sources|further reading|external links|see also)$", re.I)
 
 
+def retry_after(value: str | None) -> float:
+    """Seconds to wait from a Retry-After header, in delta seconds or an HTTP date; 10 when absent or unreadable."""
+    if value and value.strip().isdigit():
+        return float(value)
+    if value:
+        try:
+            return max(0.0, (email.utils.parsedate_to_datetime(value) - datetime.now(UTC)).total_seconds())
+        except (TypeError, ValueError):
+            pass
+    return 10.0
+
+
 def get(url: str) -> dict:
-    """GET JSON with the named User-Agent; waits out 429 and 503 per Retry-After, up to 5 tries."""
+    """GET JSON with the named User-Agent, up to 5 tries: 429 and 503 wait per Retry-After, network errors back off.
+
+    Raises the last error once the tries run out, and any other HTTP error at once.
+    """
     for attempt in range(5):
         try:
             request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
@@ -52,7 +68,11 @@ def get(url: str) -> dict:
         except urllib.error.HTTPError as e:
             if attempt == 4 or e.code not in (429, 503):
                 raise
-            time.sleep(int(e.headers.get("Retry-After") or 10))
+            time.sleep(retry_after(e.headers.get("Retry-After")))
+        except (urllib.error.URLError, TimeoutError):
+            if attempt == 4:
+                raise
+            time.sleep(2**attempt)
     raise AssertionError("unreachable")
 
 
@@ -109,24 +129,44 @@ def resolve(names: list[str], reply: dict) -> dict[str, dict | None]:
     return out
 
 
+def query_all(params: dict) -> dict:
+    """One Wikipedia query with every continuation merged.
+
+    The API stops returning page content once a reply gets too big and hands back a continue token; those pages
+    come back without revisions, and treating them as missing would flag them "no article".
+    """
+    normalized, redirects, pages = [], [], {}
+    extra: dict = {}
+    while True:
+        reply = get(f"{WIKIPEDIA}?{urllib.parse.urlencode({**params, **extra})}")
+        query = reply.get("query", {})
+        normalized += query.get("normalized", [])
+        redirects += query.get("redirects", [])
+        for page in query.get("pages", []):
+            if page.get("revisions") or page["title"] not in pages:
+                pages[page["title"]] = page
+        if "continue" not in reply:
+            return {"query": {"normalized": normalized, "redirects": redirects, "pages": list(pages.values())}}
+        extra = reply["continue"]
+        time.sleep(1)
+
+
 def articles(names: list[str]) -> dict[str, dict | None]:
     """Current English Wikipedia article per scientific name: title, revision id, and plain text, or None."""
     out = {}
     for start in range(0, len(names), BATCH):
         batch = names[start : start + BATCH]
-        q = urllib.parse.urlencode(
-            {
-                "action": "query",
-                "prop": "revisions",
-                "rvprop": "ids|content",
-                "rvslots": "main",
-                "titles": "|".join(batch),
-                "redirects": 1,
-                "format": "json",
-                "formatversion": 2,
-            }
-        )
-        for name, page in resolve(batch, get(f"{WIKIPEDIA}?{q}")).items():
+        params = {
+            "action": "query",
+            "prop": "revisions",
+            "rvprop": "ids|content",
+            "rvslots": "main",
+            "titles": "|".join(batch),
+            "redirects": 1,
+            "format": "json",
+            "formatversion": 2,
+        }
+        for name, page in resolve(batch, query_all(params)).items():
             if page is None:
                 out[name] = None
             else:

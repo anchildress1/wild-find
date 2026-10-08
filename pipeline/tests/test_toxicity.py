@@ -3,7 +3,17 @@ import tarfile
 
 import pytest
 
-from wild_find_pipeline.toxicity import MIN_CHARS, flag, plain, resolve, toxic_sentence, usda_ratings
+from wild_find_pipeline import toxicity
+from wild_find_pipeline.toxicity import (
+    MIN_CHARS,
+    flag,
+    plain,
+    query_all,
+    resolve,
+    retry_after,
+    toxic_sentence,
+    usda_ratings,
+)
 
 LONG = "Leaves are lobed and green. " * 80
 
@@ -114,3 +124,31 @@ def test_usda_ratings_keeps_only_moderate_and_severe():
             info.size = len(data)
             tar.addfile(info, io.BytesIO(data))
     assert usda_ratings(buffer.getvalue()) == {"Conium maculatum": "severe", "Mahonia bealei": "moderate"}
+
+
+@pytest.mark.parametrize(
+    ("header", "seconds"),
+    [("30", 30.0), (None, 10.0), ("soon", 10.0), ("Wed, 07 Oct 2020 23:00:00 GMT", 0.0)],
+)
+def test_retry_after_reads_seconds_or_a_past_date(header, seconds):
+    assert retry_after(header) == seconds
+
+
+def test_query_all_merges_continued_pages_and_keeps_the_ones_with_content(monkeypatch):
+    replies = iter(
+        [
+            {
+                "continue": {"rvcontinue": "2|x", "continue": "||"},
+                "query": {"pages": [{"title": "A", "revisions": [{"revid": 1}]}, {"title": "B"}]},
+            },
+            {"query": {"pages": [{"title": "B", "revisions": [{"revid": 2}]}]}},
+        ]
+    )
+    urls = []
+    monkeypatch.setattr(toxicity, "get", lambda url: urls.append(url) or next(replies))
+    monkeypatch.setattr(toxicity.time, "sleep", lambda s: None)
+
+    pages = {p["title"]: p for p in query_all({"titles": "A|B"})["query"]["pages"]}
+
+    assert pages["B"]["revisions"] == [{"revid": 2}]
+    assert "rvcontinue=2%7Cx" in urls[1]
