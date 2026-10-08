@@ -127,6 +127,14 @@ class ScoringTest {
     }
 
     @Test
+    fun `the top species must lead the best blocker by the margin`() {
+        val blockers = intArrayOf(3, 4)
+        // cos 10 - cos 20 is 0.045, under the margin; cos 10 - cos 21 is 0.051, past it.
+        assertFalse(target(10.0, 40.0, 50.0, 20.0, 80.0, blockers = blockers).score(east).met)
+        assertTrue(target(10.0, 40.0, 50.0, 21.0, 80.0, blockers = blockers).score(east).met)
+    }
+
+    @Test
     fun `a tie for top-1 is no pass, even inside the target's genus`() {
         assertFalse(target(10.0, 10.0, 50.0, 70.0, 80.0).score(east).met)
         assertFalse(target(10.0, 40.0, 10.0, 70.0, 80.0).score(east).met)

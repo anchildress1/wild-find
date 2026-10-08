@@ -51,10 +51,10 @@ class LocalSpeciesTest {
     }
 
     @Test
-    fun `a blocker below the floor is not local enough to block`() {
-        val list = local.of(pull(Sighting("Quercus nigra", "water oak", 50), Sighting("Ilex opaca", "holly", 4)))
+    fun `a toxic species blocks at any sighting count`() {
+        val list = local.of(pull(Sighting("Quercus nigra", "water oak", 50), Sighting("Ilex opaca", "holly", 1)))
 
-        assertArrayEquals(intArrayOf(), list.blockers)
+        assertArrayEquals(intArrayOf(2), list.blockers)
     }
 
     @Test

@@ -37,7 +37,8 @@ data class Eligible(val row: Int, val common: String, val count: Int)
  * The hunt's local list from one pull (PRD R2).
  *
  * @property eligible playable species, most sighted first
- * @property blockers local toxic-flagged and hazard rows; never targets, but they compete in verify row 4
+ * @property blockers every local toxic-flagged and hazard row, at any sighting count; never targets, but they block
+ *   verify row 4
  * @property needsWiden fewer than [LocalSpecies.MIN_TARGETS] eligible, so the pull widens to 150 km once
  */
 data class LocalList(val eligible: List<Eligible>, val blockers: IntArray) {
@@ -68,7 +69,8 @@ class LocalSpecies(private val table: List<SpeciesRow>, private val rowOf: (Stri
             val common = byRow.getValue(row).maxBy { it.count }.common?.trim()?.takeIf(::isKidName)
             if (table[row].playable && common != null) Eligible(row, common, count) else null
         }.sortedWith(compareByDescending<Eligible> { it.count }.thenBy { it.row })
-        val blockers = counted.keys.filterNot { table[it].playable }.sorted().toIntArray()
+        // Any sighting blocks: the floor-only blockers let 87 of 180 toxic photos pass as some target on Oct 7.
+        val blockers = byRow.keys.filterNot { table[it].playable }.sorted().toIntArray()
         return LocalList(eligible, blockers)
     }
 

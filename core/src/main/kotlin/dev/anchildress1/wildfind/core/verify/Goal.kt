@@ -21,48 +21,58 @@ sealed interface Goal {
 }
 
 /**
- * PRD verify row 4: the best-scoring row among the hunt's [eligible] species and the local [blockers] is not a
- * blocker and shares the target's genus, so a look-alike in the genus passes.
+ * PRD verify row 4: the best-scoring row among the hunt's [eligible] species shares the target's genus, so a
+ * look-alike in the genus passes, and beats every local toxic or hazard row in [blockers] by at least [MARGIN].
  *
  * Scored against the hunt's own rows, never the whole table: on Day 1 the right genus led the whole table on only 60%
- * of crops. Toxic-flagged local species are [blockers]: never targets, but a frame they lead never passes, even inside
- * the target's genus, so a photo of a toxic plant can't pass as a target it outscores.
+ * of crops. Blockers are never targets; a frame one leads, or comes within [MARGIN] of, never passes, even inside the
+ * target's genus.
  *
  * @param table `species_table.npy`
  * @param genus each table row's genus
  * @param target the target's row
  * @param eligible the hunt's locally eligible species rows, target included
- * @param blockers local toxic-flagged species rows
+ * @param blockers local toxic-flagged and hazard species rows
  */
 class TargetGoal(
     private val table: FloatMatrix,
     private val genus: List<String>,
     private val target: Int,
-    eligible: IntArray,
-    blockers: IntArray,
+    private val eligible: IntArray,
+    private val blockers: IntArray,
 ) : Goal {
-    private val pool = eligible + blockers
-    private val blocking = blockers.toSet()
-
     init {
+        val pool = eligible + blockers
         require(genus.size == table.rows) { "${genus.size} genera for ${table.rows} rows" }
         require(target in eligible) { "target row $target is not eligible" }
         require(pool.distinct().size == pool.size) { "repeated or overlapping pool rows" }
         require(pool.all { it in 0 until table.rows }) { "pool row outside the table" }
         // A pool of one genus has no rival, so any plant would pass.
-        require(pool.any { it in blocking || genus[it] != genus[target] }) { "no row outside the target's genus" }
+        require(blockers.isNotEmpty() || eligible.any { genus[it] != genus[target] }) {
+            "no row outside the target's genus"
+        }
     }
 
     override val checksHazards = true
 
     override fun score(embedding: FloatArray): GoalScore {
-        val scores = pool.map { table.dot(it, embedding) }
+        val scores = eligible.map { table.dot(it, embedding) }
         val best = scores.max()
-        val top = pool[scores.indexOf(best)]
+        val top = eligible[scores.indexOf(best)]
+        val blocker = blockers.maxOfOrNull { table.dot(it, embedding) } ?: Double.NEGATIVE_INFINITY
         val score = table.dot(target, embedding)
         // A tie for top-1 is no pass, whichever rows tie.
-        val met = scores.count { it == best } == 1 && top !in blocking && genus[top] == genus[target]
+        val met = scores.count { it == best } == 1 && genus[top] == genus[target] && best - blocker >= MARGIN
         return GoalScore(met, score, 1 + scores.count { it > score })
+    }
+
+    /** Row 4 constants measured Oct 7 (`docs/results/day-2/toxic_block.log`). */
+    companion object {
+        /**
+         * How far the top species must lead the best blocker: the smallest round margin that let 0 of 180 local toxic
+         * photos pass (a poison ivy photo read as beautyberry won by 0.0477), keeping 34 of 69 real finds.
+         */
+        const val MARGIN = 0.048
     }
 }
 
