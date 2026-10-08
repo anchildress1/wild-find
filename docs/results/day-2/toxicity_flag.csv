@@ -1,0 +1,118 @@
+count,name,common,chars,toxic,hits,first_hit
+362,Conoclinium coelestinum,blue mistflower,2439,False,0,
+230,Callicarpa americana,American beautyberry,3653,False,0,
+183,Liquidambar styraciflua,American sweetgum,17051,False,0,
+183,Persicaria longiseta,low smartweed,1427,False,0,
+159,Magnolia grandiflora,southern magnolia,14469,False,0,
+156,Phytolacca americana,American pokeweed,15147,True,24,"Phytolacca americana, also known as American pokeweed, pokeweed, polk salad, poke sallet, pokeberry, dragonberries, pigeonberry weed, and inkberry, is a poisonous, herbaceous, perennial plant in the pokeweed family Phytolaccaceae."
+154,Liriodendron tulipifera,American tuliptree,19848,False,0,
+151,Eupatorium capillifolium,dogfennel,2451,True,2,"These moths feed on the plant while mature, to store its toxins and ward off predators."
+148,Polystichum acrostichoides,Christmas fern,3762,False,0,
+139,Euonymus americanus,strawberry bush,4741,True,1,"In fact, this genus of plants in general is considered poisonous to humans."
+125,Fagus grandifolia,American beech,8576,False,0,
+124,Lonicera maackii,Amur honeysuckle,7430,True,1,"The berries, on the other hand, are mildly poisonous to humans and therefore should not be consumed."
+116,Erechtites hieraciifolius,American burnweed,2749,False,0,
+103,Ampelopsis glandulosa,Porcelain Berry,4755,False,0,
+97,Diospyros virginiana,American persimmon,9979,False,0,
+92,Eupatorium serotinum,late boneset,2025,False,0,
+89,Ligustrum sinense,Chinese privet,2350,True,1,"3 in) diameter, and considered poisonous."
+84,Platanus occidentalis,American sycamore,11364,False,0,
+84,Asarum arifolium,Little Brown Jugs,803,False,0,
+82,Hedera helix,common ivy,13701,True,5,== Toxicity and medical uses ==
+82,Vitis rotundifolia,muscadine,5673,False,0,
+79,Pueraria montana,kudzu,12020,False,0,
+76,Cercis canadensis,eastern redbud,7028,False,0,
+72,Quercus nigra,water oak,4016,False,0,
+69,Parthenocissus quinquefolia,Virginia creeper,6715,True,3,"It is sometimes mistaken for Toxicodendron radicans (), despite having five leaflets ( has three)."
+65,Albizia julibrissin,Persian silk tree,6541,False,0,
+64,Acer negundo,box elder,12624,True,1,== Toxicity ==
+63,Cornus florida,flowering dogwood,12498,True,1,"For humans, the fruit is poisonous."
+63,Chimaphila maculata,striped wintergreen,2005,False,0,
+63,Nandina domestica,Heavenly bamboo,7396,True,6,"Although a popular ornamental shrub, the berries are toxic to birds, especially towards the end of the winter when other food sources become scarce."
+62,Toxicodendron radicans,eastern poison ivy,15845,True,13,"Toxicodendron radicans, commonly known as eastern  or , is a species of allergenic flowering plant."
+61,Rhus copallinum,shining sumac,6594,False,0,
+60,Solidago altissima,tall goldenrod,6799,False,0,
+60,Ilex cornuta,Chinese holly,2985,False,0,
+57,Solanum carolinense,Carolina horsenettle,5282,True,3,== Toxicity ==
+57,Juglans nigra,eastern black walnut,23255,True,4,"Anecdotally, records of walnut toxicity to other plants have been observed as far back as the first century when Pliny the Elder wrote: ""The shadow of walnut trees is poison to all plants within its compass."
+57,Sassafras albidum,sassafras,11933,False,0,
+57,Tipularia discolor,crane-fly orchid,5598,False,0,
+56,Acer rubrum,red maple,23658,True,6,=== Toxicity ===
+56,Asimina triloba,common pawpaw,39788,True,9,Pawpaw defends against herbivory by producing strong-smelling natural toxins known as acetogenins.
+56,Phyllanthus urinaria,Chamberbitter,1931,False,0,
+54,Ilex opaca,American holly,6638,True,1,"They are poisonous to dogs, cats, and humans, often causing diarrhea, vomiting, dehydration, and drowsiness if ingested."
+54,Perilla frutescens,beefsteak plant,7886,True,3,"In the United States, Perilla frutescens is a pest weed, toxic to cattle after ingestion."
+54,Elaeagnus pungens,thorny olive,3606,False,0,
+53,Symphyotrichum pilosum,frost aster,17105,False,0,
+52,Impatiens capensis,common jewelweed,4722,False,0,
+52,Quercus alba,white oak,14015,False,0,
+50,Ipomoea purpurea,common morning-glory,2140,False,0,
+50,Berberis bealei,leatherleaf mahonia,5954,True,2,This plant can also be used to treat bacterial infections such as dysentery and food poisoning.
+48,Epifagus virginiana,Beechdrops,4520,False,0,
+48,Chasmanthium latifolium,river oats,4437,False,0,
+47,Oxydendrum arboreum,sourwood,3765,False,0,
+47,Magnolia macrophylla,bigleaf magnolia,4549,False,0,
+46,Chrysopsis mariana,Maryland golden-aster,1741,False,0,
+45,Lonicera japonica,Japanese honeysuckle,5437,True,2,== Toxicity ==
+45,Dryopteris erythrosora,autumn fern,2381,False,0,
+44,Pinus taeda,loblolly pine,7420,False,0,
+44,Diphasiastrum digitatum,fan clubmoss,6195,False,0,
+42,Lobelia cardinalis,cardinal flower,3868,True,2,== Toxicity ==
+42,Passiflora incarnata,purple passionflower,9031,False,0,
+41,Physalis angulata,cutleaf groundcherry,1051,True,2,"However, all other parts of the plant are poisonous."
+41,Microstegium vimineum,Japanese stiltgrass,6665,False,0,
+40,Bignonia capreolata,cross vine,5683,False,0,
+40,Chelone glabra,white turtlehead,1763,False,0,
+40,Nephroia carolina,Carolina snailseed,2424,False,0,
+38,Commelina communis,Asiatic dayflower,19303,False,0,
+38,Verbesina alternifolia,Wingstem,1492,False,0,
+38,Lycoris radiata,red spider lily,10249,True,3,== Toxicity and medicinal applications ==
+36,Campsis radicans,American trumpet vine,5360,True,2,"However, the plant is slightly toxic if ingested, and contact with flowers and leaves can result in swelling and skin redness."
+35,Nyssa sylvatica,Black Tupelo,10948,False,0,
+35,Pyrus calleryana,Callery pear,9876,False,0,
+35,Bigelowia nuttallii,Nuttall's Rayless Goldenrod,638,False,0,
+34,Carya illinoinensis,pecan,14910,False,0,
+34,Heterotheca subaxillaris,Camphorweed,1763,False,0,
+33,Magnolia tripetala,umbrella magnolia,7297,True,1,tripetala have been described to have unpleasant smells but are not toxic to organisms.
+33,Pluchea camphorata,Camphor-weed,2642,False,0,
+33,Symphyotrichum georgianum,Georgia aster,2140,False,0,
+32,Rhus glabra,smooth sumac,2121,False,0,
+32,Quercus phellos,willow oak,10261,False,0,
+32,Achyranthes japonica,Japanese Chaff Flower,2670,False,0,
+31,Symphyotrichum dumosum,Bushy Aster,5359,False,0,
+31,Hydrangea quercifolia,oakleaf hydrangea,9800,False,0,
+31,Mikania scandens,climbing hempvine,1882,False,0,
+31,Asplenium platyneuron,ebony spleenwort,28965,False,0,
+31,Lespedeza cuneata,Chinese bushclover,2886,False,0,
+31,Citrus trifoliata,trifoliate orange,5750,False,0,
+30,Glechoma hederacea,ground-ivy,10317,True,3,"However, borax is toxic to ants and to animals at only slightly higher concentrations, and does not break down in the environment."
+30,Symphyotrichum lateriflorum,calico aster,43211,False,0,
+29,Cosmos sulphureus,Yellow Cosmos,3477,False,0,
+29,Trifolium repens,white clover,8559,False,0,
+29,Ilex verticillata,winterberry holly,3199,False,0,
+29,Quercus falcata,southern red oak,6634,False,0,
+29,Mitchella repens,partridgeberry,3793,False,0,
+29,Campanula divaricata,Southern Harebell,407,False,0,
+29,Solidago caesia,bluestem goldenrod,786,False,0,
+29,Euonymus fortunei,fortune's spindle,3896,False,0,
+29,Melothria pendula,creeping cucumber,1057,True,2,== Toxicity ==
+29,Gentiana saponaria,Soapwort Gentian,612,False,0,
+29,Jacquemontia tamnifolia,Hairy cluster-vine,1291,False,0,
+29,Persicaria sagittata,arrow-leaved tearthumb,783,False,0,
+29,Athyrium asplenioides,southern lady fern,762,False,0,
+28,Rudbeckia laciniata,cutleaf coneflower,5646,True,5,"Although toxic to animals, the leaves have culinary uses."
+28,Paulownia tomentosa,princess tree,5789,False,0,
+28,Potentilla indica,mock strawberry,2761,False,0,
+27,Verbesina virginica,frostweed,1281,False,0,
+27,Ipomoea coccinea,red morning glory,2921,False,0,
+27,Macrothelypteris torresiana,Mariana Maiden Fern,768,False,0,
+26,Vaccinium arboreum,sparkleberry,1924,False,0,
+26,Ruellia simplex,Mexican Ruellia,2248,False,0,
+26,Chamaecrista fasciculata,partridge pea,4900,False,0,
+25,Juniperus virginiana,eastern redcedar,11434,True,1,"One minor compound is the podophyllotoxin, a non-alkaloid toxin lignan."
+25,Alnus serrulata,smooth alder,3883,False,0,
+25,Verbascum thapsus,great mullein,19422,True,1,"The seeds contain several compounds (saponins, glycosides, coumarin, rotenone) that are toxic to fish, and have been widely used as piscicide for fishing."
+25,Onoclea sensibilis,sensitive fern,12059,True,4,== Toxicity ==
+25,Smilax bona-nox,saw greenbrier,3608,False,0,
+25,Helianthus angustifolius,narrowleaf sunflower,1704,False,0,
+25,Symphyotrichum patens,late purple aster,1744,False,0,

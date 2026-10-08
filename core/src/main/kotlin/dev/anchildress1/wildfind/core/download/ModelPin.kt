@@ -12,12 +12,9 @@ import java.util.Properties
  * @property sha256 lowercase hex SHA-256 of the file
  */
 data class ModelPin(val repo: String, val revision: String, val file: String, val bytes: Long, val sha256: String) {
-    /** Start URL; the CDN host behind its redirect moves, so only this is pinned. */
-    val url: String get() = "https://huggingface.co/$repo/resolve/$revision/$file"
-
     /** Loads pins from the bundled `models.properties`. */
     companion object {
-        /** Pins for [model] (e.g. `gemma`); throws [IllegalArgumentException] when a key is missing. */
+        /** Pins for [model] (e.g. `bioclip`); throws [IllegalArgumentException] when a key is missing. */
         fun load(model: String): ModelPin {
             val props = Properties()
             val stream = ModelPin::class.java.getResourceAsStream("/models.properties")

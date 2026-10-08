@@ -1,0 +1,6 @@
+# 2026-10-07 18:20 EDT, from docs/results/day-1/species_scores.csv (BioCLIP Mobile vs the 4,272-row species table)
+52 hazard photos, 255 other photos (plants, grass, mixed scenes, non-plants)
+top 1: caught 43 of 52; false alarms 1 of 255 ['grass_77707956.jpg']
+top 2: caught 44 of 52; false alarms 1 of 255 ['grass_77707956.jpg']
+top 3: caught 45 of 52; false alarms 1 of 255 ['grass_77707956.jpg']
+top 5: caught 48 of 52; false alarms 1 of 255 ['grass_77707956.jpg']

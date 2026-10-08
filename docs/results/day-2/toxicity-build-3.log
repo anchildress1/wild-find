@@ -1,0 +1,8 @@
+# make toxicity (S10, non-toxic no longer counts), 2026-10-07 20:56 EDT, Python 3.13.14
+usda: 1 moderate/severe rows have no taxon row and are skipped: ['LUEL4']
+OK: /Users/anchildress1/git_personal/wild-find/pipeline/data/toxicity.json: 2166 of 4272 flagged {'stub': 1369, 'wikipedia': 690, 'no article': 87, 'usda': 20}
+flag changes 4
+  Leontopodium nivale True -> False | wikipedia: It is a non-toxic plant.
+  Matricaria discoidea True -> False | wikipedia: Extracts from the flowers and other aerial parts of the plant have been shown to possess non-toxic,
+  Opuntia ficus-indica True -> False | wikipedia: Mucilage from prickly pear may work as a natural, non-toxic dispersant for oil spills.
+  Zinnia grandiflora True -> False | wikipedia: They are non-toxic to pets.

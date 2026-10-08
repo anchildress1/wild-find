@@ -1,0 +1,3 @@
+# make toxicity (S10, continuation fix), 2026-10-07 20:10 EDT, Python 3.13.14
+usda: 1 moderate/severe rows have no taxon row and are skipped: ['LUEL4']
+OK: /Users/anchildress1/git_personal/wild-find/pipeline/data/toxicity.json: 2170 of 4272 flagged {'stub': 1369, 'wikipedia': 694, 'no article': 87, 'usda': 20}

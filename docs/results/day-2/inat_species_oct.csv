@@ -1,0 +1,1038 @@
+count,taxon_id,rank,name,common,wikipedia_url
+362,119095,species,Conoclinium coelestinum,blue mistflower,http://en.wikipedia.org/wiki/Conoclinium_coelestinum
+230,49193,species,Callicarpa americana,American beautyberry,http://en.wikipedia.org/wiki/Callicarpa_americana
+183,49658,species,Liquidambar styraciflua,American sweetgum,http://en.wikipedia.org/wiki/Liquidambar_styraciflua
+183,143803,species,Persicaria longiseta,low smartweed,http://en.wikipedia.org/wiki/Persicaria_longiseta
+159,83074,species,Magnolia grandiflora,southern magnolia,http://en.wikipedia.org/wiki/Magnolia_grandiflora
+156,48599,species,Phytolacca americana,American pokeweed,http://en.wikipedia.org/wiki/Phytolacca_americana
+154,53582,species,Liriodendron tulipifera,American tuliptree,http://en.wikipedia.org/wiki/Liriodendron_tulipifera
+151,131154,species,Eupatorium capillifolium,dogfennel,http://en.wikipedia.org/wiki/Eupatorium_capillifolium
+148,54412,species,Polystichum acrostichoides,Christmas fern,http://en.wikipedia.org/wiki/Polystichum_acrostichoides
+139,83150,species,Euonymus americanus,strawberry bush,https://en.wikipedia.org/wiki/Euonymus_americanus
+125,49202,species,Fagus grandifolia,American beech,http://en.wikipedia.org/wiki/Fagus_grandifolia
+124,82342,species,Lonicera maackii,Amur honeysuckle,https://en.wikipedia.org/wiki/Lonicera_maackii
+116,130888,species,Erechtites hieraciifolius,American burnweed,http://en.wikipedia.org/wiki/Erechtites_hieraciifolius
+103,204237,species,Ampelopsis glandulosa,Porcelain Berry,http://en.wikipedia.org/wiki/Ampelopsis_glandulosa
+97,83435,species,Diospyros virginiana,American persimmon,http://en.wikipedia.org/wiki/Diospyros_virginiana
+92,52934,species,Eupatorium serotinum,late boneset,http://en.wikipedia.org/wiki/Eupatorium_serotinum
+89,128769,species,Ligustrum sinense,Chinese privet,http://en.wikipedia.org/wiki/Ligustrum_sinense
+84,49662,species,Platanus occidentalis,American sycamore,http://en.wikipedia.org/wiki/Platanus_occidentalis
+84,1455147,species,Asarum arifolium,Little Brown Jugs,https://en.wikipedia.org/wiki/Hexastylis_arifolia
+82,55882,species,Hedera helix,common ivy,http://en.wikipedia.org/wiki/Hedera_helix
+82,82529,species,Vitis rotundifolia,muscadine,http://en.wikipedia.org/wiki/Vitis_rotundifolia
+79,62671,species,Pueraria montana,kudzu,http://en.wikipedia.org/wiki/Pueraria_montana
+76,48502,species,Cercis canadensis,eastern redbud,http://en.wikipedia.org/wiki/Cercis_canadensis
+72,53640,species,Quercus nigra,water oak,http://en.wikipedia.org/wiki/Quercus_nigra
+69,50278,species,Parthenocissus quinquefolia,Virginia creeper,http://en.wikipedia.org/wiki/Parthenocissus_quinquefolia
+65,47443,species,Albizia julibrissin,Persian silk tree,http://en.wikipedia.org/wiki/Albizia_julibrissin
+64,47726,species,Acer negundo,box elder,http://en.wikipedia.org/wiki/Acer_negundo
+63,54777,species,Cornus florida,flowering dogwood,http://en.wikipedia.org/wiki/Cornus_florida
+63,82358,species,Chimaphila maculata,striped wintergreen,http://en.wikipedia.org/wiki/Chimaphila_maculata
+63,127010,species,Nandina domestica,Heavenly bamboo,https://en.wikipedia.org/wiki/Nandina
+62,58732,species,Toxicodendron radicans,eastern poison ivy,http://en.wikipedia.org/wiki/Toxicodendron_radicans
+61,126698,species,Rhus copallinum,shining sumac,https://en.wikipedia.org/wiki/Rhus_copallinum
+60,79148,species,Solidago altissima,tall goldenrod,http://en.wikipedia.org/wiki/Solidago_altissima
+60,164038,species,Ilex cornuta,Chinese holly,http://en.wikipedia.org/wiki/Ilex_cornuta
+57,52899,species,Solanum carolinense,Carolina horsenettle,http://en.wikipedia.org/wiki/Solanum_carolinense
+57,54504,species,Juglans nigra,eastern black walnut,http://en.wikipedia.org/wiki/Juglans_nigra
+57,54795,species,Sassafras albidum,sassafras,http://en.wikipedia.org/wiki/Sassafras_albidum
+57,121490,species,Tipularia discolor,crane-fly orchid,https://en.wikipedia.org/wiki/Tipularia_discolor
+56,48098,species,Acer rubrum,red maple,http://en.wikipedia.org/wiki/Acer_rubrum
+56,50897,species,Asimina triloba,common pawpaw,http://en.wikipedia.org/wiki/Asimina_triloba
+56,166758,species,Phyllanthus urinaria,Chamberbitter,http://en.wikipedia.org/wiki/Phyllanthus_urinaria
+54,60749,species,Ilex opaca,American holly,http://en.wikipedia.org/wiki/Ilex_opaca
+54,119136,species,Perilla frutescens,beefsteak plant,http://en.wikipedia.org/wiki/Perilla_frutescens
+54,162214,species,Elaeagnus pungens,thorny olive,http://en.wikipedia.org/wiki/Elaeagnus_pungens
+53,142279,species,Symphyotrichum pilosum,frost aster,http://en.wikipedia.org/wiki/Symphyotrichum_pilosum
+52,47888,species,Impatiens capensis,common jewelweed,http://en.wikipedia.org/wiki/Impatiens_capensis
+52,54779,species,Quercus alba,white oak,http://en.wikipedia.org/wiki/Quercus_alba
+50,52344,species,Ipomoea purpurea,common morning-glory,http://en.wikipedia.org/wiki/Ipomoea_purpurea
+50,277657,species,Berberis bealei,leatherleaf mahonia,https://en.wikipedia.org/wiki/Mahonia_bealei
+48,62685,species,Epifagus virginiana,Beechdrops,http://en.wikipedia.org/wiki/Epifagus
+48,84364,species,Chasmanthium latifolium,river oats,http://en.wikipedia.org/wiki/Chasmanthium_latifolium
+47,133354,species,Oxydendrum arboreum,sourwood,http://en.wikipedia.org/wiki/Oxydendrum
+47,165075,species,Magnolia macrophylla,bigleaf magnolia,http://en.wikipedia.org/wiki/Magnolia_macrophylla
+46,160557,species,Chrysopsis mariana,Maryland golden-aster,http://en.wikipedia.org/wiki/Chrysopsis_mariana
+45,77835,species,Lonicera japonica,Japanese honeysuckle,https://en.wikipedia.org/wiki/Lonicera_japonica
+45,137722,species,Dryopteris erythrosora,autumn fern,http://en.wikipedia.org/wiki/Dryopteris_erythrosora
+44,59921,species,Pinus taeda,loblolly pine,http://en.wikipedia.org/wiki/Pinus_taeda
+44,122100,species,Diphasiastrum digitatum,fan clubmoss,http://en.wikipedia.org/wiki/Diphasiastrum_digitatum
+42,48038,species,Lobelia cardinalis,cardinal flower,https://en.wikipedia.org/wiki/Lobelia_cardinalis
+42,51453,species,Passiflora incarnata,purple passionflower,http://en.wikipedia.org/wiki/Passiflora_incarnata
+41,61374,species,Physalis angulata,cutleaf groundcherry,http://en.wikipedia.org/wiki/Physalis_angulata
+41,116710,species,Microstegium vimineum,Japanese stiltgrass,http://en.wikipedia.org/wiki/Microstegium_vimineum
+40,67823,species,Bignonia capreolata,cross vine,http://en.wikipedia.org/wiki/Bignonia_capreolata
+40,82316,species,Chelone glabra,white turtlehead,http://en.wikipedia.org/wiki/Chelone_glabra
+40,1555999,species,Nephroia carolina,Carolina snailseed,https://en.wikipedia.org/wiki/Nephroia_carolina
+38,52927,species,Commelina communis,Asiatic dayflower,http://en.wikipedia.org/wiki/Commelina_communis
+38,117442,species,Verbesina alternifolia,Wingstem,http://en.wikipedia.org/wiki/Verbesina_alternifolia
+38,164975,species,Lycoris radiata,red spider lily,http://en.wikipedia.org/wiki/Lycoris_radiata
+36,75995,species,Campsis radicans,American trumpet vine,https://en.wikipedia.org/wiki/Campsis_radicans
+35,54802,species,Nyssa sylvatica,Black Tupelo,https://en.wikipedia.org/wiki/Nyssa_sylvatica
+35,119793,species,Pyrus calleryana,Callery pear,http://en.wikipedia.org/wiki/Pyrus_calleryana
+35,159268,species,Bigelowia nuttallii,Nuttall's Rayless Goldenrod,http://en.wikipedia.org/wiki/Bigelowia_nuttallii
+34,67593,species,Carya illinoinensis,pecan,http://en.wikipedia.org/wiki/Pecan
+34,77398,species,Heterotheca subaxillaris,Camphorweed,http://en.wikipedia.org/wiki/Heterotheca_subaxillaris
+33,84790,species,Magnolia tripetala,umbrella magnolia,http://en.wikipedia.org/wiki/Magnolia_tripetala
+33,167067,species,Pluchea camphorata,Camphor-weed,http://en.wikipedia.org/wiki/Pluchea_camphorata
+33,169465,species,Symphyotrichum georgianum,Georgia aster,http://en.wikipedia.org/wiki/Symphyotrichum_georgianum
+32,54764,species,Rhus glabra,smooth sumac,http://en.wikipedia.org/wiki/Rhus_glabra
+32,119983,species,Quercus phellos,willow oak,http://en.wikipedia.org/wiki/Quercus_phellos
+32,157962,species,Achyranthes japonica,Japanese Chaff Flower,http://en.wikipedia.org/wiki/Achyranthes_japonica
+31,81593,species,Symphyotrichum dumosum,Bushy Aster,http://en.wikipedia.org/wiki/Symphyotrichum_dumosum
+31,83156,species,Hydrangea quercifolia,oakleaf hydrangea,http://en.wikipedia.org/wiki/Hydrangea_quercifolia
+31,119145,species,Mikania scandens,climbing hempvine,http://en.wikipedia.org/wiki/Mikania_scandens
+31,122056,species,Asplenium platyneuron,ebony spleenwort,http://en.wikipedia.org/wiki/Asplenium_platyneuron
+31,164566,species,Lespedeza cuneata,Chinese bushclover,http://en.wikipedia.org/wiki/Lespedeza_cuneata
+31,200071,species,Citrus trifoliata,trifoliate orange,http://en.wikipedia.org/wiki/Trifoliate_orange
+30,55830,species,Glechoma hederacea,ground-ivy,http://en.wikipedia.org/wiki/Glechoma_hederacea
+30,122249,species,Symphyotrichum lateriflorum,calico aster,http://en.wikipedia.org/wiki/Symphyotrichum_lateriflorum
+29,48651,species,Cosmos sulphureus,Yellow Cosmos,http://en.wikipedia.org/wiki/Cosmos_sulphureus
+29,55745,species,Trifolium repens,white clover,http://en.wikipedia.org/wiki/Trifolium_repens
+29,61119,species,Ilex verticillata,winterberry holly,http://en.wikipedia.org/wiki/Ilex_verticillata
+29,61324,species,Quercus falcata,southern red oak,http://en.wikipedia.org/wiki/Quercus_falcata
+29,83799,species,Mitchella repens,partridgeberry,http://en.wikipedia.org/wiki/Mitchella_repens
+29,85337,species,Campanula divaricata,Southern Harebell,http://en.wikipedia.org/wiki/Campanula_divaricata
+29,120005,species,Solidago caesia,bluestem goldenrod,http://en.wikipedia.org/wiki/Solidago_caesia
+29,130893,species,Euonymus fortunei,fortune's spindle,http://en.wikipedia.org/wiki/Euonymus_fortunei
+29,131557,species,Melothria pendula,creeping cucumber,http://en.wikipedia.org/wiki/Melothria_pendula
+29,163236,species,Gentiana saponaria,Soapwort Gentian,http://en.wikipedia.org/wiki/Gentiana_saponaria
+29,164215,species,Jacquemontia tamnifolia,Hairy cluster-vine,https://en.wikipedia.org/wiki/Jacquemontia_tamnifolia
+29,204179,species,Persicaria sagittata,arrow-leaved tearthumb,http://en.wikipedia.org/wiki/Persicaria_sagittata
+29,204244,species,Athyrium asplenioides,southern lady fern,http://en.wikipedia.org/wiki/Athyrium_asplenioides
+28,116735,species,Rudbeckia laciniata,cutleaf coneflower,http://en.wikipedia.org/wiki/Rudbeckia_laciniata
+28,119792,species,Paulownia tomentosa,princess tree,http://en.wikipedia.org/wiki/Paulownia_tomentosa
+28,243824,species,Potentilla indica,mock strawberry,http://en.wikipedia.org/wiki/Mock_strawberry
+27,119982,species,Verbesina virginica,frostweed,http://en.wikipedia.org/wiki/Verbesina_virginica
+27,120518,species,Ipomoea coccinea,red morning glory,http://en.wikipedia.org/wiki/Ipomoea_coccinea
+27,165063,species,Macrothelypteris torresiana,Mariana Maiden Fern,http://en.wikipedia.org/wiki/Macrothelypteris_torresiana
+26,81818,species,Vaccinium arboreum,sparkleberry,http://en.wikipedia.org/wiki/Vaccinium_arboreum
+26,126633,species,Ruellia simplex,Mexican Ruellia,http://en.wikipedia.org/wiki/Ruellia_simplex
+26,127907,species,Chamaecrista fasciculata,partridge pea,http://en.wikipedia.org/wiki/Chamaecrista_fasciculata
+25,49399,species,Juniperus virginiana,eastern redcedar,http://en.wikipedia.org/wiki/Juniperus_virginiana
+25,56033,species,Alnus serrulata,smooth alder,http://en.wikipedia.org/wiki/Alnus_serrulata
+25,59029,species,Verbascum thapsus,great mullein,http://en.wikipedia.org/wiki/Verbascum_thapsus
+25,82576,species,Onoclea sensibilis,sensitive fern,http://en.wikipedia.org/wiki/Onoclea_sensibilis
+25,125677,species,Smilax bona-nox,saw greenbrier,http://en.wikipedia.org/wiki/Smilax_bona-nox
+25,126700,species,Helianthus angustifolius,narrowleaf sunflower,http://en.wikipedia.org/wiki/Helianthus_angustifolius
+25,130810,species,Symphyotrichum patens,late purple aster,https://en.wikipedia.org/wiki/Symphyotrichum_patens
+24,49477,species,Monotropa uniflora,Ghost Pipe,http://en.wikipedia.org/wiki/Monotropa_uniflora
+24,51636,species,Fatoua villosa,hairy crabweed,http://en.wikipedia.org/wiki/Fatoua_villosa
+24,117429,species,Betula nigra,river birch,http://en.wikipedia.org/wiki/Betula_nigra
+24,143859,species,Pseudognaphalium obtusifolium,sweet everlasting,http://en.wikipedia.org/wiki/Pseudognaphalium_obtusifolium
+24,164985,species,Lygodium japonicum,Japanese climbing fern,http://en.wikipedia.org/wiki/Lygodium_japonicum
+24,1616972,species,Anatherum tenuispatheum,Maritime Bushy Bluestem,
+23,58205,species,Maclura pomifera,Osage-orange,http://en.wikipedia.org/wiki/Maclura_pomifera
+23,82813,species,Aralia spinosa,devil's walkingstick,http://en.wikipedia.org/wiki/Aralia_spinosa
+23,125845,species,Prunus caroliniana,Carolina laurelcherry,http://en.wikipedia.org/wiki/Prunus_caroliniana
+22,53034,species,Ambrosia trifida,giant ragweed,http://en.wikipedia.org/wiki/Ambrosia_trifida
+22,62915,species,Senna obtusifolia,American Sicklepod,http://en.wikipedia.org/wiki/Senna_obtusifolia
+22,84813,species,Baccharis halimifolia,groundsel tree,http://en.wikipedia.org/wiki/Baccharis_halimifolia
+22,119142,species,Lobelia puberula,downy lobelia,https://en.wikipedia.org/wiki/Lobelia_puberula
+22,126585,species,Hibiscus syriacus,common hibiscus,http://en.wikipedia.org/wiki/Hibiscus_syriacus
+22,131003,species,Diodia virginiana,buttonweed,https://en.wikipedia.org/wiki/Diodia_virginiana
+22,158769,species,Asimina parviflora,Small-Flower Pawpaw,http://en.wikipedia.org/wiki/Asimina_parviflora
+22,169483,species,Symphyotrichum racemosum,Small White Aster,https://en.wikipedia.org/wiki/Symphyotrichum_racemosum
+21,119048,species,Ageratina altissima,white snakeroot,http://en.wikipedia.org/wiki/Ageratina_altissima
+21,126869,species,Ipomoea quamoclit,Cypress Vine,http://en.wikipedia.org/wiki/Ipomoea_quamoclit
+21,130990,species,Lactuca floridana,woodland lettuce,http://en.wikipedia.org/wiki/Lactuca_floridana
+21,698726,species,Pleopeltis michauxiana,resurrection fern,http://en.wikipedia.org/wiki/Pleopeltis_michauxiana
+20,52763,species,Cephalanthus occidentalis,buttonbush,http://en.wikipedia.org/wiki/Cephalanthus_occidentalis
+20,84305,species,Carya tomentosa,mockernut,http://en.wikipedia.org/wiki/Carya_tomentosa
+20,117435,species,Sicyos angulatus,Oneseed Bur Cucumber,http://en.wikipedia.org/wiki/Sicyos_angulatus
+20,129324,species,Dioscorea villosa,wild yam,http://en.wikipedia.org/wiki/Dioscorea_villosa
+20,135262,species,Ipomoea lacunosa,White Morning-glory,http://en.wikipedia.org/wiki/Ipomoea_lacunosa
+19,52764,species,Prunella vulgaris,common selfheal,http://en.wikipedia.org/wiki/Prunella_vulgaris
+19,53587,species,Ambrosia artemisiifolia,common ragweed,http://en.wikipedia.org/wiki/Ambrosia_artemisiifolia
+19,62997,species,Viburnum acerifolium,mapleleaf viburnum,http://en.wikipedia.org/wiki/Viburnum_acerifolium
+19,75916,species,Buddleja davidii,Butterfly bush,http://en.wikipedia.org/wiki/Buddleja_davidii
+19,84292,species,Ulmus alata,Winged Elm,http://en.wikipedia.org/wiki/Ulmus_alata
+19,119609,species,Elephantopus carolinianus,leafy elephant's-foot,http://en.wikipedia.org/wiki/Elephantopus_carolinianus
+19,169872,species,Tradescantia pallida,Purple Heart,http://en.wikipedia.org/wiki/Tradescantia_pallida
+19,200074,species,Gonolobus suberosus,Anglepod,http://en.wikipedia.org/wiki/Gonolobus_suberosus
+19,200075,species,Smallanthus uvedalia,bear's foot,https://en.wikipedia.org/wiki/Smallanthus_uvedalia
+19,204172,species,Fallopia scandens,climbing false buckwheat,http://en.wikipedia.org/wiki/Fallopia_scandens
+19,559683,species,Cleome houtteana,Spider flower,http://en.wikipedia.org/wiki/Cleome_hassleriana
+18,54801,species,Morus rubra,red mulberry,http://en.wikipedia.org/wiki/Morus_rubra
+18,54834,species,Prunus serotina,black cherry,https://en.wikipedia.org/wiki/Prunus_serotina
+18,62778,species,Clematis virginiana,virgin's-bower,http://en.wikipedia.org/wiki/Clematis_virginiana
+18,77348,species,Helenium amarum,Bitterweed,http://en.wikipedia.org/wiki/Helenium_amarum
+18,77495,species,Ipomoea hederacea,ivy-leaved morning-glory,https://en.wikipedia.org/wiki/Ipomoea_hederacea
+18,127634,species,Trichostema dichotomum,Blue Curls,http://en.wikipedia.org/wiki/Trichostema_dichotomum
+18,169456,species,Symphyotrichum concolor,Eastern Silver Aster,https://en.wikipedia.org/wiki/Symphyotrichum_concolor
+18,1038940,species,Solanum emulans,eastern black nightshade,
+17,61323,species,Conocephalum salebrosum,Snakewort,https://en.wikipedia.org/wiki/Conocephalum_salebrosum
+17,79301,species,Symphyotrichum lanceolatum,panicled aster,http://en.wikipedia.org/wiki/Symphyotrichum_lanceolatum
+17,81605,species,Yucca filamentosa,common yucca,http://en.wikipedia.org/wiki/Yucca_filamentosa
+17,118731,species,Woodwardia areolata,netted chain fern,https://en.wikipedia.org/wiki/Lorinseria
+17,118776,species,Monarda punctata,spotted horsemint,http://en.wikipedia.org/wiki/Monarda_punctata
+17,130898,species,Collinsonia canadensis,citronella horse balm,http://en.wikipedia.org/wiki/Collinsonia_canadensis
+17,136384,species,Verbesina occidentalis,Yellow Crownbeard,http://en.wikipedia.org/wiki/Verbesina_occidentalis
+16,48070,species,Sagittaria latifolia,broadleaf arrowhead,http://en.wikipedia.org/wiki/Sagittaria_latifolia
+16,49395,species,Pinus virginiana,Virginia pine,http://en.wikipedia.org/wiki/Pinus_virginiana
+16,54762,species,Acer saccharinum,silver maple,http://en.wikipedia.org/wiki/Acer_saccharinum
+16,54768,species,Carpinus caroliniana,American hornbeam,http://en.wikipedia.org/wiki/Carpinus_caroliniana
+16,62406,species,Goodyera pubescens,downy rattlesnake plantain,http://en.wikipedia.org/wiki/Goodyera_pubescens
+16,78882,species,Rosa multiflora,multiflora rose,http://en.wikipedia.org/wiki/Rosa_multiflora
+16,119955,species,Ilex vomitoria,Yaupon Holly,https://en.wikipedia.org/wiki/Ilex_vomitoria
+16,120007,species,Agalinis tenuifolia,slender false foxglove,http://en.wikipedia.org/wiki/Agalinis_tenuifolia
+16,126376,species,Mazus pumilus,Asian mazus,http://en.wikipedia.org/wiki/Mazus_pumilus
+16,144047,species,Persicaria virginiana,American jumpseed,http://en.wikipedia.org/wiki/Persicaria_virginiana
+16,163621,species,Helianthus longifolius,Longleaf Sunflower,https://en.wikipedia.org/wiki/Helianthus_longifolius
+16,551846,species,Nekemias arborea,peppervine,https://en.wikipedia.org/wiki/Nekemias_arborea
+16,773385,species,Spiranthes cernua,nodding ladies' tresses,http://en.wikipedia.org/wiki/Spiranthes_cernua
+15,48734,species,Tsuga canadensis,eastern hemlock,http://en.wikipedia.org/wiki/Tsuga_canadensis
+15,49666,species,Taxodium distichum,baldcypress,https://en.wikipedia.org/wiki/Taxodium_distichum
+15,57278,species,Ailanthus altissima,tree-of-heaven,http://en.wikipedia.org/wiki/Ailanthus_altissima
+15,82307,species,Symphyotrichum puniceum,swamp aster,http://en.wikipedia.org/wiki/Symphyotrichum_puniceum
+15,83152,species,Itea virginica,Virginia sweetspire,http://en.wikipedia.org/wiki/Itea_virginica
+15,122608,species,Sorghastrum nutans,Indiangrass,https://en.wikipedia.org/wiki/Sorghastrum_nutans
+15,127066,species,Youngia japonica,Oriental false hawksbeard,http://en.wikipedia.org/wiki/Youngia_japonica
+15,163625,species,Helianthus porteri,Porter's sunflower,http://en.wikipedia.org/wiki/Helianthus_porteri
+15,890511,species,Sesbania vesicaria,Bladder Pod,https://en.wikipedia.org/wiki/Sesbania_vesicaria
+14,51450,species,Passiflora lutea,yellow passionflower,http://en.wikipedia.org/wiki/Passiflora_lutea
+14,52599,species,Pontederia cordata,pickerelweed,https://en.wikipedia.org/wiki/Pontederia_cordata
+14,53720,species,Melia azedarach,Chinaberry,http://en.wikipedia.org/wiki/Melia_azedarach
+14,58893,species,Euphorbia maculata,Spotted spurge,http://en.wikipedia.org/wiki/Euphorbia_maculata
+14,60202,species,Myriophyllum aquaticum,Parrot's feather,http://en.wikipedia.org/wiki/Myriophyllum_aquaticum
+14,62741,species,Rudbeckia hirta,black-eyed Susan,https://en.wikipedia.org/wiki/Rudbeckia_hirta
+14,81823,species,Silphium compositum,Kidney-leaf Rosinweed,https://en.wikipedia.org/wiki/Silphium_compositum
+14,82754,species,Quercus lyrata,overcup oak,http://en.wikipedia.org/wiki/Quercus_lyrata
+14,128698,species,Verbena brasiliensis,Brazilian Vervain,http://en.wikipedia.org/wiki/Verbena_brasiliensis
+14,158068,species,Agalinis purpurea,purple false foxglove,http://en.wikipedia.org/wiki/Agalinis_purpurea
+14,158107,species,Ageratina aromatica,smaller white snakeroot,http://en.wikipedia.org/wiki/Ageratina_aromatica
+14,204165,species,Osmundastrum cinnamomeum,cinnamon fern,http://en.wikipedia.org/wiki/Osmundastrum
+13,54793,species,Lindera benzoin,northern spicebush,http://en.wikipedia.org/wiki/Lindera_benzoin
+13,61168,species,Arum italicum,Italian arum,http://en.wikipedia.org/wiki/Arum_italicum
+13,68562,species,Cosmos bipinnatus,garden cosmos,http://en.wikipedia.org/wiki/Cosmos_bipinnatus
+13,127037,species,Vernonia gigantea,Tall Ironweed,http://en.wikipedia.org/wiki/Vernonia_gigantea
+13,152133,species,Elephantopus tomentosus,common elephant's-foot,http://en.wikipedia.org/wiki/Elephantopus_tomentosus
+13,170344,species,Xanthorhiza simplicissima,Shrub Yellowroot,http://en.wikipedia.org/wiki/Xanthorhiza
+13,1617178,species,Anatherum ternarium,splitbeard bluestem,https://en.wikipedia.org/wiki/Anatherum_ternarium
+12,51875,species,Trifolium pratense,Red Clover,http://en.wikipedia.org/wiki/Trifolium_pratense
+12,53269,species,Sonchus asper,prickly sowthistle,http://en.wikipedia.org/wiki/Sonchus_asper
+12,60746,species,Smilax rotundifolia,roundleaf greenbrier,http://en.wikipedia.org/wiki/Smilax_rotundifolia
+12,62776,species,Clematis terniflora,autumn clematis,http://en.wikipedia.org/wiki/Clematis_terniflora
+12,77740,species,Ligustrum lucidum,tree privet,http://en.wikipedia.org/wiki/Ligustrum_lucidum
+12,81831,species,Smilax glauca,sawbrier,http://en.wikipedia.org/wiki/Smilax_glauca
+12,119817,species,Apios americana,American groundnut,http://en.wikipedia.org/wiki/Apios_americana
+12,122603,species,Schizachyrium scoparium,little bluestem,http://en.wikipedia.org/wiki/Schizachyrium_scoparium
+12,128686,species,Quercus montana,chestnut oak,https://en.wikipedia.org/wiki/Quercus_montana
+12,223938,species,Liriope muscari,Liriope,http://en.wikipedia.org/wiki/Liriope_muscari
+12,1002684,species,Osmunda spectabilis,American Royal Fern,https://en.wikipedia.org/wiki/Osmunda_spectabilis
+11,49005,species,Quercus rubra,northern red oak,http://en.wikipedia.org/wiki/Quercus_rubra
+11,50202,species,Bidens bipinnata,Spanish needles,http://en.wikipedia.org/wiki/Bidens_bipinnata
+11,51714,species,Bidens aristosa,Bearded Beggarticks,http://en.wikipedia.org/wiki/Bidens_aristosa
+11,51768,species,Gaillardia pulchella,firewheel,http://en.wikipedia.org/wiki/Gaillardia_pulchella
+11,82329,species,Quercus marilandica,blackjack oak,http://en.wikipedia.org/wiki/Quercus_marilandica
+11,84300,species,Sambucus canadensis,American black elderberry,http://en.wikipedia.org/wiki/Sambucus_canadensis
+11,117433,species,Euonymus alatus,winged euonymus,http://en.wikipedia.org/wiki/Euonymus_alatus
+11,119269,species,Quercus stellata,post oak,http://en.wikipedia.org/wiki/Quercus_stellata
+11,120151,species,Frangula caroliniana,Carolina buckthorn,https://en.wikipedia.org/wiki/Frangula_caroliniana
+11,128695,species,Eryngium yuccifolium,rattlesnake master,http://en.wikipedia.org/wiki/Eryngium_yuccifolium
+11,169102,species,Solidago erecta,slender goldenrod,https://en.wikipedia.org/wiki/Solidago_erecta
+11,849280,species,Hydrangea barbara,woodvamp,https://en.wikipedia.org/wiki/Hydrangea_barbara
+11,1413422,species,Pelazoneuron kunthii,Widespread Maiden Fern,https://en.wikipedia.org/wiki/Pelazoneuron_kunthii
+11,1569024,species,Senega curtissii,button-rosy,https://en.wikipedia.org/wiki/Senega_curtissii
+10,51712,species,Bidens frondosa,Devil's Beggarticks,http://en.wikipedia.org/wiki/Bidens_frondosa
+10,53925,species,Galax urceolata,galax,https://en.wikipedia.org/wiki/Galax
+10,62207,species,Oenothera biennis,common evening-primrose,http://en.wikipedia.org/wiki/Oenothera_biennis
+10,76765,species,Eclipta prostrata,False Daisy,http://en.wikipedia.org/wiki/Eclipta_prostrata
+10,77349,species,Helenium autumnale,common sneezeweed,http://en.wikipedia.org/wiki/Helenium_autumnale
+10,79002,species,Scirpus cyperinus,woolgrass,http://en.wikipedia.org/wiki/Scirpus_cyperinus
+10,81836,species,Tephrosia virginiana,goat's rue,http://en.wikipedia.org/wiki/Tephrosia_virginiana
+10,85313,species,Physostegia virginiana,obedient plant,http://en.wikipedia.org/wiki/Physostegia_virginiana
+10,119956,species,Morella cerifera,wax myrtle,http://en.wikipedia.org/wiki/Myrica_cerifera
+10,122835,species,Colocasia esculenta,Taro,http://en.wikipedia.org/wiki/Colocasia_esculenta
+10,129778,species,Spiranthes ovalis,Oval Ladies' Tresses,http://en.wikipedia.org/wiki/Spiranthes_ovalis
+10,131568,species,Chamaecrista nictitans,sensitive pea,http://en.wikipedia.org/wiki/Chamaecrista_nictitans
+10,364152,species,Sceptridium biternatum,sparse-lobed grapefern,https://en.wikipedia.org/wiki/Sceptridium_biternatum
+10,1398911,species,Amauropelta noveboracensis,New York fern,https://en.wikipedia.org/wiki/Amauropelta_noveboracensis
+9,49192,species,Castanea mollissima,Chinese chestnut,http://en.wikipedia.org/wiki/Castanea_mollissima
+9,49397,species,Kalmia latifolia,mountain laurel,http://en.wikipedia.org/wiki/Kalmia_latifolia
+9,50616,species,Mirabilis jalapa,marvel of Peru,http://en.wikipedia.org/wiki/Mirabilis_jalapa
+9,52681,species,Pteridium aquilinum,common bracken,http://en.wikipedia.org/wiki/Pteridium_aquilinum
+9,53178,species,Plantago lanceolata,ribwort plantain,http://en.wikipedia.org/wiki/Plantago_lanceolata
+9,53326,species,Vinca major,greater periwinkle,http://en.wikipedia.org/wiki/Vinca_major
+9,57121,species,Salvia azurea,giant blue sage,http://en.wikipedia.org/wiki/Salvia_azurea
+9,63886,species,Persicaria lapathifolia,pale smartweed,http://en.wikipedia.org/wiki/Persicaria_lapathifolia
+9,64093,species,Salvia lyrata,lyreleaf sage,http://en.wikipedia.org/wiki/Salvia_lyrata
+9,67539,species,Clerodendrum trichotomum,Harlequin glorybower,http://en.wikipedia.org/wiki/Clerodendrum_trichotomum
+9,69714,species,Rubus trivialis,southern dewberry,https://en.wikipedia.org/wiki/Rubus_trivialis
+9,75832,species,Boehmeria cylindrica,false nettle,http://en.wikipedia.org/wiki/Boehmeria_cylindrica
+9,77109,species,Euphorbia cyathophora,wild poinsettia,http://en.wikipedia.org/wiki/Euphorbia_cyathophora
+9,78456,species,Persicaria punctata,Dotted Smartweed,http://en.wikipedia.org/wiki/Persicaria_punctata
+9,79077,species,Sida rhombifolia,Cuban jute,http://en.wikipedia.org/wiki/Sida_rhombifolia
+9,81901,species,Pinus palustris,longleaf pine,http://en.wikipedia.org/wiki/Pinus_palustris
+9,125682,species,Commelina virginica,Virginia Dayflower,http://en.wikipedia.org/wiki/Commelina_virginica
+9,127685,species,Eurybia divaricata,White Wood Aster,http://en.wikipedia.org/wiki/Eurybia_divaricata
+9,130377,species,Solidago nemoralis,field goldenrod,https://en.wikipedia.org/wiki/Solidago_nemoralis
+9,130998,species,Ludwigia alternifolia,Seedbox,http://en.wikipedia.org/wiki/Ludwigia_alternifolia
+9,146715,species,Arnoglossum atriplicifolium,pale Indian plantain,http://en.wikipedia.org/wiki/Arnoglossum_atriplicifolium
+9,163237,species,Gentiana villosa,Striped Gentian,http://en.wikipedia.org/wiki/Gentiana_villosa
+9,163770,species,Hibiscus mutabilis,Cotton Rosemallow,http://en.wikipedia.org/wiki/Hibiscus_mutabilis
+9,165474,species,Miscanthus sinensis,Chinese silver grass,http://en.wikipedia.org/wiki/Miscanthus_sinensis
+9,169078,species,Solanum pseudocapsicum,Jerusalem cherry,https://en.wikipedia.org/wiki/Solanum_pseudocapsicum
+9,852222,species,Torenia crustacea,Brittle False Pimpernel,https://en.wikipedia.org/wiki/Torenia_crustacea
+9,1617172,species,Anatherum virginicum,broomsedge bluestem,
+8,48435,species,Adiantum pedatum,northern maidenhair fern,http://en.wikipedia.org/wiki/Adiantum_pedatum
+8,48688,species,Setaria pumila,yellow foxtail,http://en.wikipedia.org/wiki/Setaria_pumila
+8,51062,species,Maianthemum racemosum,Solomon's plume,http://en.wikipedia.org/wiki/Maianthemum_racemosum
+8,52119,species,Populus deltoides,Eastern Cottonwood,http://en.wikipedia.org/wiki/Populus_deltoides
+8,54847,species,Salix nigra,black willow,http://en.wikipedia.org/wiki/Salix_nigra
+8,55459,species,Lamium amplexicaule,henbit deadnettle,http://en.wikipedia.org/wiki/Lamium_amplexicaule
+8,55851,species,Lamium purpureum,red deadnettle,http://en.wikipedia.org/wiki/Lamium_purpureum
+8,57920,species,Xanthium strumarium,rough cocklebur,http://en.wikipedia.org/wiki/Xanthium_strumarium
+8,58387,species,Sorghum halepense,Johnson grass,http://en.wikipedia.org/wiki/Johnson_grass
+8,78455,species,Persicaria pensylvanica,pinkweed,http://en.wikipedia.org/wiki/Polygonum_pensylvanicum
+8,117443,species,Symphyotrichum novae-angliae,New England aster,https://en.wikipedia.org/wiki/Symphyotrichum_novae-angliae
+8,125482,species,Pilea pumila,Canada clearweed,http://en.wikipedia.org/wiki/Pilea_pumila
+8,125727,species,Panicum virgatum,switchgrass,http://en.wikipedia.org/wiki/Panicum_virgatum
+8,131588,species,Polypremum procumbens,Rust Weed,http://en.wikipedia.org/wiki/Polypremum
+8,157903,species,Acalypha rhomboidea,Common Three-seeded Mercury,http://en.wikipedia.org/wiki/Acalypha_rhomboidea
+8,160739,species,Clerodendrum bungei,rose glorybower,https://en.wikipedia.org/wiki/Clerodendrum_bungei
+8,200050,species,Acmella repens,Oppositeleaf Spotflower,http://en.wikipedia.org/wiki/Acmella_repens
+8,474366,species,Humulus scandens,Japanese Hops,http://en.wikipedia.org/wiki/Humulus_japonicus
+8,781401,species,Liatris elegantula,shaggy blazing star,
+8,1030051,species,Cenchrus alopecuroides,Chinese pennisetum,https://en.wikipedia.org/wiki/Cenchrus_alopecuroides
+8,1673458,species,Anacis pulchra,Lookout Mountain Coreopsis,https://en.wikipedia.org/wiki/Anacis_pulchra
+7,51970,species,Hamamelis virginiana,american witch-hazel,https://en.wikipedia.org/wiki/Hamamelis_virginiana
+7,52543,species,Acer saccharum,sugar maple,http://en.wikipedia.org/wiki/Acer_saccharum
+7,53168,species,Oxalis corniculata,Creeping Woodsorrel,http://en.wikipedia.org/wiki/Oxalis_corniculata
+7,54771,species,Ostrya virginiana,American hophornbeam,http://en.wikipedia.org/wiki/Ostrya_virginiana
+7,54789,species,Carya glabra,pignut hickory,http://en.wikipedia.org/wiki/Carya_glabra
+7,54854,species,Tilia americana,basswood,http://en.wikipedia.org/wiki/Tilia_americana
+7,55844,species,Vinca minor,lesser periwinkle,http://en.wikipedia.org/wiki/Vinca_minor
+7,55854,species,Datura stramonium,jimsonweed,http://en.wikipedia.org/wiki/Datura_stramonium
+7,58991,species,Portulaca oleracea,Common Purslane,http://en.wikipedia.org/wiki/Portulaca_oleracea
+7,60742,species,Saururus cernuus,lizard's tail,http://en.wikipedia.org/wiki/Saururus_cernuus
+7,62942,species,Ipomoea triloba,Littlebell,http://en.wikipedia.org/wiki/Ipomoea_triloba
+7,64540,species,Celastrus orbiculatus,Asian bittersweet,http://en.wikipedia.org/wiki/Celastrus_orbiculatus
+7,75371,species,Allium vineale,wild garlic,http://en.wikipedia.org/wiki/Allium_vineale
+7,78087,species,Modiola caroliniana,Bristly Mallow,http://en.wikipedia.org/wiki/Modiola
+7,78387,species,Peltandra virginica,Green Arrow Arum,https://en.wikipedia.org/wiki/Peltandra_virginica
+7,85327,species,Polygonatum biflorum,smooth Solomon's seal,http://en.wikipedia.org/wiki/Polygonatum_biflorum
+7,119045,species,Eupatorium perfoliatum,common boneset,http://en.wikipedia.org/wiki/Eupatorium_perfoliatum
+7,119273,species,Quercus michauxii,swamp chestnut oak,https://en.wikipedia.org/wiki/Quercus_michauxii
+7,121747,species,Arundinaria gigantea,river cane,http://en.wikipedia.org/wiki/Arundinaria_gigantea
+7,125462,species,Nothoscordum bivalve,crowpoison,http://en.wikipedia.org/wiki/Nothoscordum_bivalve
+7,128684,species,Hydrocotyle sibthorpioides,Sibthorp's Pennywort,http://en.wikipedia.org/wiki/Hydrocotyle_sibthorpioides
+7,129607,species,Symphyotrichum laeve,smooth blue aster,http://en.wikipedia.org/wiki/Symphyotrichum_laeve
+7,130554,species,Hydrangea arborescens,wild hydrangea,http://en.wikipedia.org/wiki/Hydrangea_arborescens
+7,142979,species,Vernonia noveboracensis,New York ironweed,http://en.wikipedia.org/wiki/Vernonia_noveboracensis
+7,166757,species,Phyllanthus tenellus,Mascarene Island leaf-flower,http://en.wikipedia.org/wiki/Phyllanthus_tenellus
+7,169048,species,Smilax smallii,Lanceleaf Greenbrier,http://en.wikipedia.org/wiki/Smilax_maritima
+7,1095846,species,Bidens alba,White beggarticks,https://en.wikipedia.org/wiki/Bidens_alba
+6,48079,species,Acer floridanum,southern sugar maple,http://en.wikipedia.org/wiki/Acer_floridanum
+6,48627,species,Echinacea purpurea,purple coneflower,http://en.wikipedia.org/wiki/Echinacea_purpurea
+6,54784,species,Quercus coccinea,scarlet oak,http://en.wikipedia.org/wiki/Quercus_coccinea
+6,56088,species,Robinia pseudoacacia,black locust,http://en.wikipedia.org/wiki/Robinia_pseudoacacia
+6,56090,species,Morus alba,white mulberry,http://en.wikipedia.org/wiki/Morus_alba
+6,58371,species,Cynodon dactylon,Bermuda grass,http://en.wikipedia.org/wiki/Cynodon_dactylon
+6,58917,species,Geranium carolinianum,Carolina crane's-bill,https://en.wikipedia.org/wiki/Geranium_carolinianum
+6,64697,species,Elaeagnus umbellata,autumn olive,http://en.wikipedia.org/wiki/Elaeagnus_umbellata
+6,76610,species,Daucus carota,wild carrot,http://en.wikipedia.org/wiki/Daucus_carota
+6,76907,species,Erigeron canadensis,horseweed,http://en.wikipedia.org/wiki/Erigeron_canadensis
+6,83070,species,Gelsemium sempervirens,yellow jessamine,http://en.wikipedia.org/wiki/Gelsemium_sempervirens
+6,83492,species,Heliotropium indicum,Indian Heliotrope,http://en.wikipedia.org/wiki/Heliotropium_indicum
+6,84772,species,Oxalis dillenii,slender yellow woodsorrel,http://en.wikipedia.org/wiki/Oxalis_dillenii
+6,119141,species,Dioscorea polystachya,Chinese yam,http://en.wikipedia.org/wiki/Chinese_yam
+6,120403,species,Tridens flavus,purpletop tridens,http://en.wikipedia.org/wiki/Tridens_flavus
+6,122081,species,Phegopteris hexagonoptera,broad beech fern,http://en.wikipedia.org/wiki/Phegopteris_hexagonoptera
+6,122085,species,Sceptridium dissectum,Cutleaf Grapefern,http://en.wikipedia.org/wiki/Sceptridium_dissectum
+6,123506,species,Grimmia laevigata,Grimmia Dry Rock Moss,
+6,125186,species,Lespedeza capitata,round-headed bush clover,http://en.wikipedia.org/wiki/Lespedeza_capitata
+6,125790,species,Spiraea japonica,Japanese Spirea,http://en.wikipedia.org/wiki/Spiraea_japonica
+6,126656,species,Symphyotrichum undulatum,wavy-leaf aster,https://en.wikipedia.org/wiki/Symphyotrichum_undulatum
+6,128032,species,Broussonetia papyrifera,Paper mulberry,http://en.wikipedia.org/wiki/Paper_mulberry
+6,128653,species,Ruellia caroliniensis,Carolina ruellia,http://en.wikipedia.org/wiki/Ruellia_caroliniensis
+6,130951,species,Nabalus altissimus,tall rattlesnake root,http://en.wikipedia.org/wiki/Nabalus_altissimus
+6,136376,species,Rudbeckia triloba,brown-eyed Susan,https://en.wikipedia.org/wiki/Rudbeckia_triloba
+6,136397,species,Eupatorium hyssopifolium,hyssopleaf thoroughwort,http://en.wikipedia.org/wiki/Eupatorium_hyssopifolium
+6,142654,species,Rudbeckia fulgida,orange coneflower,https://en.wikipedia.org/wiki/Rudbeckia_fulgida
+6,153200,species,Viburnum nudum,southern wild raisin,http://en.wikipedia.org/wiki/Viburnum_nudum
+6,162829,species,Euphorbia heterophylla,painted spurge,http://en.wikipedia.org/wiki/Euphorbia_heterophylla
+6,164694,species,Liatris microcephala,smallhead blazing star,http://en.wikipedia.org/wiki/Liatris_microcephala
+6,169738,species,Thuidium delicatulum,delicate fern moss,https://en.wikipedia.org/wiki/Thuidium_delicatulum
+6,204361,species,Nabalus serpentaria,lion's foot rattlesnake root,https://en.wikipedia.org/wiki/Nabalus_serpentarius
+6,737472,species,Viburnum alabamense,Alabama Arrowwood,
+6,781187,species,Collinsonia anisata,Anise Horsebalm,https://en.wikipedia.org/wiki/Collinsonia_anisata
+6,1454411,species,Solidago zedia,Gulf Coast axillary goldenrod,
+5,47911,species,Asclepias syriaca,common milkweed,http://en.wikipedia.org/wiki/Asclepias_syriaca
+5,51138,species,Orontium aquaticum,Golden Club,http://en.wikipedia.org/wiki/Orontium_aquaticum
+5,53104,species,Hypochaeris radicata,Common Cat's-ear,http://en.wikipedia.org/wiki/Hypochaeris_radicata
+5,53547,species,Ulmus americana,American elm,http://en.wikipedia.org/wiki/Ulmus_americana
+5,54786,species,Quercus shumardii,Shumard oak,http://en.wikipedia.org/wiki/Quercus_shumardii
+5,54797,species,Gleditsia triacanthos,honey locust,https://en.wikipedia.org/wiki/Honey_locust
+5,54857,species,Celtis occidentalis,common hackberry,http://en.wikipedia.org/wiki/Celtis_occidentalis
+5,56455,species,Pallavicinia lyellii,Ribbonwort,https://en.wikipedia.org/wiki/Pallavicinia_lyellii
+5,59060,species,Cyperus erythrorhizos,redroot flatsedge,http://en.wikipedia.org/wiki/Cyperus_erythrorhizos
+5,62399,species,Mimulus ringens,Allegheny monkeyflower,http://en.wikipedia.org/wiki/Mimulus_ringens
+5,62944,species,Cardiospermum halicacabum,Lesser Balloon Vine,http://en.wikipedia.org/wiki/Cardiospermum_halicacabum
+5,67825,species,Packera anonyma,Small's ragwort,http://en.wikipedia.org/wiki/Packera_anonyma
+5,75855,species,Botrypus virginianus,rattlesnake fern,http://en.wikipedia.org/wiki/Botrypus_virginianus
+5,76541,species,Cucurbita pepo,American pumpkin,http://en.wikipedia.org/wiki/Cucurbita_pepo
+5,79462,species,Ulmus parvifolia,Chinese elm,http://en.wikipedia.org/wiki/Ulmus_parvifolia
+5,81792,species,Celtis laevigata,sugar hackberry,http://en.wikipedia.org/wiki/Celtis_laevigata
+5,117437,species,Phlox paniculata,fall phlox,http://en.wikipedia.org/wiki/Phlox_paniculata
+5,119737,species,Ipomoea pandurata,wild potato vine,http://en.wikipedia.org/wiki/Ipomoea_pandurata
+5,119806,species,Lobelia siphilitica,great blue lobelia,https://en.wikipedia.org/wiki/Lobelia_siphilitica
+5,120006,species,Ilex decidua,possumhaw,http://en.wikipedia.org/wiki/Ilex_decidua
+5,126142,species,Vaccinium darrowii,Darrow's Blueberry,http://en.wikipedia.org/wiki/Vaccinium_darrowii
+5,126485,species,Calycanthus floridus,Carolina sweetshrub,http://en.wikipedia.org/wiki/Calycanthus
+5,127306,species,Wisteria sinensis,Chinese wisteria,http://en.wikipedia.org/wiki/Wisteria_sinensis
+5,127906,species,Magnolia virginiana,sweetbay magnolia,http://en.wikipedia.org/wiki/Magnolia_virginiana
+5,128939,species,Dichondra carolinensis,Carolina ponysfoot,https://en.wikipedia.org/wiki/Dichondra_carolinensis
+5,129318,species,Liatris squarrulosa,Appalachian blazing star,http://en.wikipedia.org/wiki/Liatris_squarrulosa
+5,143558,species,Kummerowia striata,Japanese Clover,http://en.wikipedia.org/wiki/Kummerowia_striata
+5,143955,species,Hedychium coronarium,Butterfly ginger lily,http://en.wikipedia.org/wiki/Hedychium_coronarium
+5,145367,species,Hypericum gentianoides,pineweed,https://en.wikipedia.org/wiki/Hypericum_gentianoides
+5,154326,species,Lespedeza violacea,violet bush clover,http://en.wikipedia.org/wiki/Lespedeza_violacea
+5,161150,species,Crotalaria spectabilis,Showy Rattlebox,https://en.wikipedia.org/wiki/Crotalaria_spectabilis
+5,161570,species,Cyrtomium fortunei,Fortune's Holly-fern,https://en.wikipedia.org/wiki/Cyrtomium_fortunei
+5,162801,species,Eupatorium rotundifolium,round-leaved boneset,http://en.wikipedia.org/wiki/Eupatorium_rotundifolium
+5,164050,species,Illicium floridanum,Florida Anise,http://en.wikipedia.org/wiki/Illicium_floridanum
+5,204420,species,Strophostyles helvola,trailing fuzzy-bean,http://en.wikipedia.org/wiki/Strophostyles_helvola
+5,224046,species,Lobelia amoena,Southern Lobelia,https://en.wikipedia.org/wiki/Lobelia_amoena
+5,224066,species,Lobelia nuttallii,Nuttall's Lobelia,http://en.wikipedia.org/wiki/Lobelia_nuttallii
+5,322755,species,Farfugium japonicum,leopard-plant,http://en.wikipedia.org/wiki/Farfugium_japonicum
+5,372042,species,Nabalus barbatus,barbed rattlesnake root,http://en.wikipedia.org/wiki/Nabalus_barbatus
+5,1372848,species,Sedum smallii,Elf Orpine,https://en.wikipedia.org/wiki/Sedum_smallii
+5,1445698,species,Paepalanthus anceps,common bogbuttons,
+5,1687652,species,Sabdariffa gossypiifolia,Sorrel,https://en.wikipedia.org/wiki/Roselle_(plant)
+4,50625,species,Ptelea trifoliata,common hoptree,http://en.wikipedia.org/wiki/Ptelea_trifoliata
+4,51737,species,Solanum lycopersicum,tomato,http://en.wikipedia.org/wiki/Tomato
+4,52673,species,Equisetum hyemale,rough horsetail,http://en.wikipedia.org/wiki/Equisetum_hyemale
+4,52758,species,Diervilla rivularis,mountain bush honeysuckle,http://en.wikipedia.org/wiki/Diervilla_rivularis
+4,54805,species,Fraxinus americana,white ash,http://en.wikipedia.org/wiki/Fraxinus_americana
+4,54808,species,Fraxinus pennsylvanica,green ash,http://en.wikipedia.org/wiki/Fraxinus_pennsylvanica
+4,56206,species,Aucuba japonica,Japanese aucuba,http://en.wikipedia.org/wiki/Aucuba_japonica
+4,58127,species,Chenopodium album,Common Lambsquarters,http://en.wikipedia.org/wiki/Chenopodium_album
+4,59035,species,Solanum americanum,American black nightshade,http://en.wikipedia.org/wiki/Solanum_americanum
+4,61009,species,Lathyrus latifolius,broad-leaved sweet pea,http://en.wikipedia.org/wiki/Lathyrus_latifolius
+4,62924,species,Catharanthus roseus,Madagascar Periwinkle,http://en.wikipedia.org/wiki/Catharanthus_roseus
+4,76790,species,Eleusine indica,Goose Grass,http://en.wikipedia.org/wiki/Eleusine_indica
+4,76949,species,Eriobotrya japonica,Loquat,http://en.wikipedia.org/wiki/Loquat
+4,78356,species,Paspalum urvillei,Vasey Grass,http://en.wikipedia.org/wiki/Paspalum_urvillei
+4,78453,species,Persicaria hydropiperoides,swamp smartweed,http://en.wikipedia.org/wiki/Persicaria_hydropiperoides
+4,78631,species,Plumbago auriculata,blue plumbago,http://en.wikipedia.org/wiki/Plumbago_auriculata
+4,79388,species,Triadica sebifera,Chinese Tallow,http://en.wikipedia.org/wiki/Triadica_sebifera
+4,81797,species,Hypoxis hirsuta,yellow star grass,http://en.wikipedia.org/wiki/Hypoxis_hirsuta
+4,82311,species,Carex lupulina,hop sedge,https://en.wikipedia.org/wiki/Carex_lupulina
+4,82751,species,Crataegus spathulata,Littlehip hawthorn,http://en.wikipedia.org/wiki/Crataegus_spathulata
+4,83059,species,Rhododendron maximum,great rhododendron,http://en.wikipedia.org/wiki/Rhododendron_maximum
+4,119960,species,Berchemia scandens,Supplejack,http://en.wikipedia.org/wiki/Berchemia_scandens
+4,120008,species,Ludwigia decurrens,Wingleaf Primrose-Willow,http://en.wikipedia.org/wiki/Ludwigia_decurrens
+4,120009,species,Hypericum hypericoides,St. Andrew's cross,http://en.wikipedia.org/wiki/Hypericum_hypericoides
+4,121951,species,Silphium terebinthinaceum,prairie dock,http://en.wikipedia.org/wiki/Silphium_terebinthinaceum
+4,121968,species,Andropogon gerardi,big bluestem,http://en.wikipedia.org/wiki/Andropogon_gerardi
+4,125685,species,Murdannia keisak,marsh dewflower,https://en.wikipedia.org/wiki/Murdannia_keisak
+4,126300,species,Ipomoea hederifolia,scarlet creeper,http://en.wikipedia.org/wiki/Ipomoea_hederifolia
+4,127355,species,Cyclamen hederifolium,Ivy-leaved cyclamen,https://en.wikipedia.org/wiki/Cyclamen_hederifolium
+4,128029,species,Entodon seductrix,seductive entodon moss,http://en.wikipedia.org/wiki/Entodon_seductrix
+4,128234,species,Hieracium gronovii,Beaked Hawkweed,http://en.wikipedia.org/wiki/Hieracium_gronovii
+4,128551,species,Solidago rugosa,common wrinkle-leaved goldenrod,https://en.wikipedia.org/wiki/Solidago_rugosa
+4,128652,species,Salvia coccinea,Tropical sage,http://en.wikipedia.org/wiki/Salvia_coccinea
+4,130887,species,Selaginella apoda,meadow spikemoss,http://en.wikipedia.org/wiki/Selaginella_apoda
+4,130901,species,Cinna arundinacea,stout wood reed,https://en.wikipedia.org/wiki/Cinna_arundinacea
+4,130993,species,Desmodium paniculatum,panicled ticktrefoil,https://en.wikipedia.org/wiki/Desmodium_paniculatum
+4,131000,species,Dichanthelium clandestinum,deertongue,http://en.wikipedia.org/wiki/Dichanthelium_clandestinum
+4,132625,species,Lyonia ligustrina,He-huckleberry,http://en.wikipedia.org/wiki/Lyonia_ligustrina
+4,135263,species,Ipomoea cordatotriloba,Tievine,http://en.wikipedia.org/wiki/Ipomoea_cordatotriloba
+4,142793,species,Cephalotaxus harringtonia,Japanese Plum-yew,http://en.wikipedia.org/wiki/Cephalotaxus_harringtonii
+4,152132,species,Cirsium altissimum,Tall Thistle,http://en.wikipedia.org/wiki/Cirsium_altissimum
+4,154543,species,Cunila origanoides,common dittany,http://en.wikipedia.org/wiki/Cunila_origanoides
+4,154546,species,Solidago petiolaris,downy ragged goldenrod,http://en.wikipedia.org/wiki/Solidago_petiolaris
+4,158053,species,Agalinis fasciculata,Beach False Foxglove,https://en.wikipedia.org/wiki/Agalinis_fasciculata
+4,160493,species,Chelone lyonii,pink turtlehead,https://en.wikipedia.org/wiki/Chelone_lyonii
+4,160757,species,Clinopodium gracile,Slender Wild Basil,https://en.wikipedia.org/wiki/Clinopodium_gracile
+4,160864,species,Corallorhiza odontorhiza,autumn coralroot,http://en.wikipedia.org/wiki/Corallorhiza_odontorhiza
+4,161445,species,Cyperus granitophilus,Granite Flatsedge,https://en.wikipedia.org/wiki/Cyperus_granitophilus
+4,162991,species,Firmiana simplex,Chinese parasol tree,http://en.wikipedia.org/wiki/Firmiana_simplex
+4,163611,species,Helianthus atrorubens,Purpledisk Sunflower,http://en.wikipedia.org/wiki/Helianthus_atrorubens
+4,165103,species,Malus angustifolia,southern crabapple,http://en.wikipedia.org/wiki/Malus_angustifolia
+4,166740,species,Photinia serratifolia,Chinese Photinia,https://en.wikipedia.org/wiki/Photinia_serratifolia
+4,167648,species,Quercus georgiana,Georgia Oak,http://en.wikipedia.org/wiki/Quercus_georgiana
+4,168563,species,Schisandra glabra,Bay Starvine,https://en.wikipedia.org/wiki/Schisandra_glabra
+4,169098,species,Solidago curtisii,Mountain Decumbent Goldenrod,https://en.wikipedia.org/wiki/Solidago_curtisii
+4,204317,species,Eupatorium torreyanum,Torrey's eupatorium,http://en.wikipedia.org/wiki/Eupatorium_hyssopifolium
+4,281273,species,Gomphocarpus physocarpus,balloonplant,http://en.wikipedia.org/wiki/Gomphocarpus_physocarpus
+4,349229,species,Trachelospermum asiaticum,Asiatic jasmine,http://en.wikipedia.org/wiki/Trachelospermum_asiaticum
+4,364009,species,Deparia petersenii,Japanese lady fern,https://en.wikipedia.org/wiki/Deparia_petersenii
+4,741014,species,Hepatica americana,round-lobed hepatica,http://en.wikipedia.org/wiki/Hepatica_nobilis
+4,773801,species,Morus indica,Korean mulberry,https://en.wikipedia.org/wiki/Morus_indica
+4,859237,species,Hypericum walteri,Greater Marsh St. John's-wort,https://en.wikipedia.org/wiki/Hypericum_walteri
+4,1455144,species,Asarum shuttleworthii,largeflower heartleaf,https://en.wikipedia.org/wiki/Asarum_shuttleworthii
+3,47691,species,Sherardia arvensis,Field madder,http://en.wikipedia.org/wiki/Sherardia
+3,47912,species,Asclepias tuberosa,butterfly milkweed,http://en.wikipedia.org/wiki/Asclepias_tuberosa
+3,49396,species,Pinus echinata,shortleaf pine,http://en.wikipedia.org/wiki/Pinus_echinata
+3,51809,species,Lysimachia nummularia,creeping Jenny,http://en.wikipedia.org/wiki/Lysimachia_nummularia
+3,52867,species,Clethra alnifolia,Sweet Pepperbush,http://en.wikipedia.org/wiki/Clethra_alnifolia
+3,52913,species,Cichorium intybus,chicory,https://en.wikipedia.org/wiki/Chicory
+3,53059,species,Galium aparine,catchweed bedstraw,http://en.wikipedia.org/wiki/Galium_aparine
+3,53197,species,Rumex crispus,curled dock,http://en.wikipedia.org/wiki/Rumex_crispus
+3,53478,species,Commelina erecta,whitemouth dayflower,http://en.wikipedia.org/wiki/Commelina_erecta
+3,54410,species,Dryopteris marginalis,marginal wood fern,http://en.wikipedia.org/wiki/Dryopteris_marginalis
+3,54654,species,Chionanthus virginicus,white fringetree,http://en.wikipedia.org/wiki/Chionanthus_virginicus
+3,54785,species,Quercus palustris,pin oak,http://en.wikipedia.org/wiki/Quercus_palustris
+3,54787,species,Carya cordiformis,bitternut hickory,http://en.wikipedia.org/wiki/Carya_cordiformis
+3,54860,species,Ulmus rubra,slippery elm,https://en.wikipedia.org/wiki/Ulmus_rubra
+3,54921,species,Packera glabella,Butterweed,http://en.wikipedia.org/wiki/Packera_glabella
+3,55666,species,Veronica persica,bird's-eye speedwell,http://en.wikipedia.org/wiki/Veronica_persica
+3,56099,species,Ajuga reptans,carpet bugle,https://en.wikipedia.org/wiki/Ajuga_reptans
+3,57805,species,Oxalis articulata,pink-sorrel,http://en.wikipedia.org/wiki/Oxalis_articulata
+3,58320,species,Koelreuteria paniculata,golden rain tree,http://en.wikipedia.org/wiki/Koelreuteria_paniculata
+3,58749,species,Cornus amomum,silky dogwood,http://en.wikipedia.org/wiki/Cornus_amomum
+3,59986,species,Monotropa hypopitys,pinesap,http://en.wikipedia.org/wiki/Monotropa_hypopitys
+3,61317,species,Rubus armeniacus,Armenian Blackberry,http://en.wikipedia.org/wiki/Rubus_armeniacus
+3,62811,species,Carica papaya,Papaya,http://en.wikipedia.org/wiki/Papaya
+3,76584,species,Cyperus esculentus,yellow nutsedge,http://en.wikipedia.org/wiki/Cyperus_esculentus
+3,76897,species,Erigeron annuus,annual fleabane,https://en.wikipedia.org/wiki/Erigeron_annuus
+3,79064,species,Sesbania herbacea,bigpod sesbania,http://en.wikipedia.org/wiki/Sesbania_herbacea
+3,79487,species,Verbena bonariensis,purpletop vervain,http://en.wikipedia.org/wiki/Verbena_bonariensis
+3,83075,species,Epigaea repens,trailing arbutus,http://en.wikipedia.org/wiki/Epigaea_repens
+3,84366,species,Chasmanthium sessiliflorum,Longleaf Woodoats,
+3,84367,species,Manfreda virginica,Eastern False Aloe,https://en.wikipedia.org/wiki/Agave_virginica
+3,84666,species,Sabatia angularis,Rosepink,http://en.wikipedia.org/wiki/Sabatia_angularis
+3,119813,species,Actaea racemosa,black cohosh,http://en.wikipedia.org/wiki/Actaea_racemosa
+3,120519,species,Solanum sarrachoides,Hairy Nightshade,https://en.wikipedia.org/wiki/Solanum_sarrachoides
+3,123005,species,Camellia sinensis,tea,http://en.wikipedia.org/wiki/Camellia_sinensis
+3,123134,species,Dicranum scoparium,Broom Forkmoss,http://en.wikipedia.org/wiki/Dicranum_scoparium
+3,123390,species,Bryum argenteum,Silvery Bryum,http://en.wikipedia.org/wiki/Bryum_argenteum
+3,126169,species,Staphylea trifolia,American bladdernut,http://en.wikipedia.org/wiki/Staphylea_trifolia
+3,126369,species,Anemone virginiana,tall thimbleweed,https://en.wikipedia.org/wiki/Anemone_virginiana
+3,126371,species,Ranunculus abortivus,small-flowered buttercup,http://en.wikipedia.org/wiki/Ranunculus_abortivus
+3,126375,species,Vaccinium elliottii,mayberry,http://en.wikipedia.org/wiki/Vaccinium_elliottii
+3,126645,species,Vitis vulpina,frost grape,http://en.wikipedia.org/wiki/Vitis_vulpina
+3,126891,species,Pycnanthemum tenuifolium,narrowleaf mountainmint,http://en.wikipedia.org/wiki/Pycnanthemum_tenuifolium
+3,128733,species,Pyrrhopappus carolinianus,Carolina desert-chicory,http://en.wikipedia.org/wiki/Pyrrhopappus_carolinianus
+3,129436,species,Solidago arguta,cut-leaf goldenrod,http://en.wikipedia.org/wiki/Solidago_arguta
+3,129555,species,Lespedeza procumbens,trailing lespedeza,https://en.wikipedia.org/wiki/Lespedeza_procumbens
+3,129677,species,Lespedeza bicolor,shrub lespedeza,http://en.wikipedia.org/wiki/Lespedeza_bicolor
+3,130382,species,Heliopsis helianthoides,false sunflower,http://en.wikipedia.org/wiki/Heliopsis_helianthoides
+3,130894,species,Carex aureolensis,golden cattail sedge,https://en.wikipedia.org/wiki/Carex_aureolensis
+3,131183,species,Solidago odora,Sweet Goldenrod,http://en.wikipedia.org/wiki/Solidago_odora
+3,133608,species,Koelreuteria bipinnata,Chinese flame tree,http://en.wikipedia.org/wiki/Koelreuteria_bipinnata
+3,138983,species,Lespedeza hirta,hairy lespedeza,https://en.wikipedia.org/wiki/Lespedeza_hirta
+3,144193,species,Ionactis linariifolia,Flax-leaved Aster,http://en.wikipedia.org/wiki/Ionactis_linariifolia
+3,146816,species,Lablab purpureus,Hyacinth bean,http://en.wikipedia.org/wiki/Lablab
+3,151797,species,Aronia arbutifolia,red chokeberry,http://en.wikipedia.org/wiki/Aronia_arbutifolia
+3,152134,species,Hypericum crux-andreae,St. Peter's-wort,http://en.wikipedia.org/wiki/Hypericum_crux-andreae
+3,157765,species,Abelmoschus esculentus,Okra,http://en.wikipedia.org/wiki/Okra
+3,158729,species,Arundinaria appalachiana,hill cane,http://en.wikipedia.org/wiki/Arundinaria_appalachiana
+3,159499,species,Bryoandersonia illecebra,spoon-leaved moss,
+3,161166,species,Croton michauxii,Michaux's croton,http://en.wikipedia.org/wiki/Croton_michauxii
+3,161582,species,Dahlia pinnata,Garden Dahlia,http://en.wikipedia.org/wiki/Dahlia_pinnata
+3,161826,species,Dicliptera brachiata,Branched Foldwing,https://en.wikipedia.org/wiki/Dicliptera_brachiata
+3,162844,species,Euphorbia pubentissima,False Flowering Spurge,http://en.wikipedia.org/wiki/Euphorbia_pubentissima
+3,163767,species,Hibiscus laevis,Halberd-leaf Rosemallow,http://en.wikipedia.org/wiki/Hibiscus_laevis
+3,164075,species,Ipomoea alba,Moonflower,http://en.wikipedia.org/wiki/Ipomoea_alba
+3,167634,species,Quercus acutissima,Sawtooth oak,http://en.wikipedia.org/wiki/Quercus_acutissima
+3,170202,species,Viburnum obovatum,Walter's Viburnum,https://en.wikipedia.org/wiki/Viburnum_obovatum
+3,170285,species,Wahlenbergia marginata,southern rockbell,
+3,204310,species,Elymus glabriflorus,Southeastern Wildrye,
+3,204330,species,Iris domestica,Blackberry Lily,http://en.wikipedia.org/wiki/Iris_domestica
+3,502611,hybrid,Passiflora incarnata × cincinnata,Passiflora 'Incense',
+3,552282,species,Helianthus verticillatus,Whorled Sunflower,http://en.wikipedia.org/wiki/Helianthus
+3,914922,species,Reynoutria japonica,Japanese knotweed,https://en.wikipedia.org/wiki/Reynoutria_japonica
+3,1467395,species,Phyllostachys reticulata,Giant Timber Bamboo,https://en.wikipedia.org/wiki/Phyllostachys_bambusoides
+3,1503466,species,Erianthus giganteus,sugarcane plumegrass,
+3,1568926,species,Senega nana,candyroot,https://en.wikipedia.org/wiki/Senega_nana
+3,1673456,species,Anacis major,Woodland Coreopsis,https://en.wikipedia.org/wiki/Anacis_major
+2,47603,genus,Taraxacum,dandelions,https://en.wikipedia.org/wiki/Taraxacum
+2,47699,species,Geranium maculatum,wild geranium,http://en.wikipedia.org/wiki/Geranium_maculatum
+2,48622,species,Nepeta cataria,Catnip,https://en.wikipedia.org/wiki/Catnip
+2,48625,species,Oenothera speciosa,Pinkladies,https://en.wikipedia.org/wiki/Oenothera_speciosa
+2,48685,species,Typha latifolia,broadleaf cattail,http://en.wikipedia.org/wiki/Typha_latifolia
+2,49006,species,Quercus velutina,black oak,http://en.wikipedia.org/wiki/Quercus_velutina
+2,50310,species,Arisaema triphyllum,Jack-in-the-Pulpit,http://en.wikipedia.org/wiki/Arisaema_triphyllum
+2,50316,species,Pachysandra procumbens,Allegheny Spurge,http://en.wikipedia.org/wiki/Pachysandra_procumbens
+2,51227,species,Pedicularis canadensis,Canadian lousewort,http://en.wikipedia.org/wiki/Pedicularis_canadensis
+2,51234,species,Justicia americana,American water-willow,http://en.wikipedia.org/wiki/Justicia_americana
+2,52391,species,Pinus strobus,eastern white pine,http://en.wikipedia.org/wiki/Pinus_strobus
+2,52821,species,Achillea millefolium,common yarrow,http://en.wikipedia.org/wiki/Achillea_millefolium
+2,52856,species,Artemisia vulgaris,common mugwort,http://en.wikipedia.org/wiki/Artemisia_vulgaris
+2,53501,species,Brickellia eupatorioides,False Boneset,http://en.wikipedia.org/wiki/Brickellia_eupatorioides
+2,54775,species,Cornus alternifolia,alternate-leaved dogwood,https://en.wikipedia.org/wiki/Cornus_alternifolia
+2,54778,species,Cornus foemina,Stiff Dogwood,https://en.wikipedia.org/wiki/Cornus_foemina
+2,54783,species,Quercus muehlenbergii,chinkapin oak,http://en.wikipedia.org/wiki/Quercus_muehlenbergii
+2,54791,species,Carya ovata,shagbark hickory,http://en.wikipedia.org/wiki/Carya_ovata
+2,55411,species,Raphanus raphanistrum,Wild radish,http://en.wikipedia.org/wiki/Raphanus_raphanistrum
+2,55749,species,Veronica serpyllifolia,thyme-leaved speedwell,http://en.wikipedia.org/wiki/Veronica_serpyllifolia
+2,55895,species,Agrimonia parviflora,swamp agrimony,http://en.wikipedia.org/wiki/Agrimonia_parviflora
+2,56232,species,Rhododendron canescens,Mountain Azalea,https://en.wikipedia.org/wiki/Rhododendron_canescens
+2,56739,species,Ricinus communis,castor bean,http://en.wikipedia.org/wiki/Ricinus
+2,56992,species,Lobularia maritima,sweet alyssum,http://en.wikipedia.org/wiki/Lobularia_maritima
+2,57076,species,Trifolium campestre,hop trefoil,https://en.wikipedia.org/wiki/Trifolium_campestre
+2,57983,species,Helianthus annuus,Common Sunflower,http://en.wikipedia.org/wiki/Helianthus_annuus
+2,58795,species,Apocynum cannabinum,hemp dogbane,http://en.wikipedia.org/wiki/Apocynum_cannabinum
+2,58961,species,Plantago major,greater plantain,http://en.wikipedia.org/wiki/Plantago_major
+2,59063,species,Cyperus strigosus,straw-colored flatsedge,http://en.wikipedia.org/wiki/Cyperus_strigosus
+2,59561,species,Ipomoea tricolor,Garden Morning Glory,http://en.wikipedia.org/wiki/Ipomoea_tricolor
+2,60111,species,Marsilea vestita,water clover,https://en.wikipedia.org/wiki/Marsilea_vestita
+2,60121,species,Hydrocotyle verticillata,Whorled Pennywort,http://en.wikipedia.org/wiki/Hydrocotyle_verticillata
+2,60221,species,Ludwigia palustris,Water Purslane,http://en.wikipedia.org/wiki/Ludwigia_palustris
+2,62351,species,Lobelia inflata,Indian tobacco,https://en.wikipedia.org/wiki/Lobelia_inflata
+2,62371,species,Sparganium americanum,American bur-reed,http://en.wikipedia.org/wiki/Sparganium_americanum
+2,64240,species,Cortaderia selloana,Pampas Grass,http://en.wikipedia.org/wiki/Cortaderia_selloana
+2,64323,species,Trachycarpus fortunei,Chusan Palm,http://en.wikipedia.org/wiki/Trachycarpus_fortunei
+2,75386,species,Alternanthera philoxeroides,Alligatorweed,http://en.wikipedia.org/wiki/Alternanthera_philoxeroides
+2,75858,species,Bouteloua curtipendula,sideoats grama,http://en.wikipedia.org/wiki/Bouteloua_curtipendula
+2,76445,species,Coreopsis tinctoria,plains coreopsis,http://en.wikipedia.org/wiki/Plains_coreopsis
+2,77363,species,Heliotropium amplexicaule,fragrant heliotrope,http://en.wikipedia.org/wiki/Heliotropium_amplexicaule
+2,78090,species,Mollugo verticillata,green carpetweed,http://en.wikipedia.org/wiki/Mollugo_verticillata
+2,78144,species,Muhlenbergia schreberi,nimblewill,http://en.wikipedia.org/wiki/Muhlenbergia_schreberi
+2,78563,species,Phyllostachys aurea,fishpole bamboo,http://en.wikipedia.org/wiki/Phyllostachys_aurea
+2,79312,species,Tagetes erecta,Mexican Marigold,http://en.wikipedia.org/wiki/Tagetes_erecta
+2,81599,species,Silphium perfoliatum,cup plant,https://en.wikipedia.org/wiki/Silphium_perfoliatum
+2,81708,species,Aesculus pavia,Red Buckeye,http://en.wikipedia.org/wiki/Aesculus_pavia
+2,82165,species,Pteris multifida,spider brake,https://en.wikipedia.org/wiki/Pteris_multifida
+2,82310,species,Carex lurida,sallow sedge,https://en.wikipedia.org/wiki/Carex_lurida
+2,82324,species,Clitoria mariana,Pigeonwings,http://en.wikipedia.org/wiki/Clitoria_mariana
+2,82580,species,Lysimachia quadrifolia,whorled loosestrife,http://en.wikipedia.org/wiki/Lysimachia_quadrifolia
+2,83893,species,Parthenium integrifolium,wild quinine,http://en.wikipedia.org/wiki/Parthenium_integrifolium
+2,84005,species,Mimosa microphylla,littleleaf sensitive-briar,https://en.wikipedia.org/wiki/Mimosa_microphylla
+2,116333,species,Panax quinquefolius,American ginseng,http://en.wikipedia.org/wiki/American_ginseng
+2,116688,species,Helianthus giganteus,giant sunflower,http://en.wikipedia.org/wiki/Helianthus_giganteus
+2,117426,species,Magnolia acuminata,Cucumber-tree,http://en.wikipedia.org/wiki/Magnolia_acuminata
+2,118548,species,Thalictrum thalictroides,rue anemone,http://en.wikipedia.org/wiki/Thalictrum_thalictroides
+2,118770,species,Helianthus microcephalus,Small Woodland Sunflower,http://en.wikipedia.org/wiki/Helianthus_microcephalus
+2,119810,species,Lysimachia lanceolata,Lanceleaf Loosestrife,
+2,119812,species,Aconitum uncinatum,southern blue monkshood,http://en.wikipedia.org/wiki/Aconitum_uncinatum
+2,120942,species,Malvaviscus arboreus,Turk's cap,http://en.wikipedia.org/wiki/Malvaviscus_arboreus
+2,122869,species,Cucurbita moschata,Squash,http://en.wikipedia.org/wiki/Cucurbita_moschata
+2,125381,species,Asclepias incarnata,swamp milkweed,http://en.wikipedia.org/wiki/Asclepias_incarnata
+2,125699,species,Helianthus mollis,ashy sunflower,http://en.wikipedia.org/wiki/Helianthus_mollis
+2,126873,species,Elymus virginicus,Virginia wildrye,http://en.wikipedia.org/wiki/Elymus_virginicus
+2,127505,species,Luzula echinata,Hedgehog Woodrush,
+2,127681,species,Centrosema virginianum,butterfly pea,http://en.wikipedia.org/wiki/Centrosema_virginianum
+2,128614,species,Cornus kousa,kousa dogwood,https://en.wikipedia.org/wiki/Cornus_kousa
+2,128838,species,Symphoricarpos orbiculatus,coralberry,http://en.wikipedia.org/wiki/Symphoricarpos_orbiculatus
+2,128943,species,Smilax tamnoides,bristly greenbrier,http://en.wikipedia.org/wiki/Smilax_tamnoides
+2,129032,species,Euthamia caroliniana,slender goldentop,http://en.wikipedia.org/wiki/Euthamia_caroliniana
+2,130742,species,Lespedeza repens,creeping lespedeza,http://en.wikipedia.org/wiki/Lespedeza_repens
+2,130900,species,Menispermum canadense,moonseed,http://en.wikipedia.org/wiki/Menispermum_canadense
+2,131561,species,Euphorbia hyssopifolia,hyssop spurge,https://en.wikipedia.org/wiki/Euphorbia_hyssopifolia
+2,132717,species,Eutrochium fistulosum,Hollow Joe-Pye Weed,http://en.wikipedia.org/wiki/Eutrochium_fistulosum
+2,133038,species,Penthorum sedoides,ditch stonecrop,http://en.wikipedia.org/wiki/Penthorum_sedoides
+2,133266,species,Selaginella rupestris,rock spikemoss,https://en.wikipedia.org/wiki/Selaginella_rupestris
+2,135269,species,Carex cherokeensis,Cherokee sedge,https://en.wikipedia.org/wiki/Carex_cherokeensis
+2,135393,species,Ampelopsis cordata,heart leaf peppervine,http://en.wikipedia.org/wiki/Ampelopsis_cordata
+2,135394,species,Lagerstroemia indica,Crape-myrtle,http://en.wikipedia.org/wiki/Lagerstroemia_indica
+2,141855,species,Symplocos tinctoria,Sweetleaf,http://en.wikipedia.org/wiki/Symplocos_tinctoria
+2,142824,species,Athyrium niponicum,Japanese painted fern,http://en.wikipedia.org/wiki/Athyrium_niponicum
+2,143792,species,Pistacia chinensis,Chinese pistache,http://en.wikipedia.org/wiki/Pistacia_chinensis
+2,153366,species,Gamochaeta americana,American Everlasting,https://en.wikipedia.org/wiki/Gamochaeta_americana
+2,153441,species,Symphyotrichum cordifolium,Common Blue Wood Aster,http://en.wikipedia.org/wiki/Symphyotrichum_cordifolium
+2,154999,species,Malaxis unifolia,green adder's-mouth,http://en.wikipedia.org/wiki/Malaxis_unifolia
+2,156624,species,Phemeranthus mengesii,Menges' fameflower,https://en.wikipedia.org/wiki/Phemeranthus_mengesii
+2,157919,species,Acer leucoderme,chalk maple,http://en.wikipedia.org/wiki/Acer_leucoderme
+2,158161,species,Aletris farinosa,White-tubed Colicroot,http://en.wikipedia.org/wiki/Aletris_farinosa
+2,158727,species,Arthraxon hispidus,small carpetgrass,http://en.wikipedia.org/wiki/Arthraxon_hispidus
+2,160818,species,Commelina diffusa,Scrambling Dayflower,http://en.wikipedia.org/wiki/Commelina_diffusa
+2,161791,species,Dichanthelium laxiflorum,open-flower witchgrass,https://en.wikipedia.org/wiki/Dichanthelium_laxiflorum
+2,162891,species,Eurybia spectabilis,purple wood aster,http://en.wikipedia.org/wiki/Eurybia_spectabilis
+2,162893,species,Eurybia surculosa,Creeping Aster,http://en.wikipedia.org/wiki/Eurybia_surculosa
+2,163872,species,Hydrocotyle bowlesioides,Bowlesia-leaf Pennywort,
+2,164138,species,Iris verna,Dwarf Iris,http://en.wikipedia.org/wiki/Iris_verna
+2,164232,species,Jasminum nudiflorum,Winter jasmine,http://en.wikipedia.org/wiki/Jasminum_nudiflorum
+2,164415,species,Lagenaria siceraria,Calabash,http://en.wikipedia.org/wiki/Calabash
+2,164664,species,Leucothoe fontanesiana,mountain doghobble,http://en.wikipedia.org/wiki/Leucothoe_fontanesiana
+2,164974,species,Lycopus virginicus,sweet bugleweed,http://en.wikipedia.org/wiki/Lycopus_virginicus
+2,165161,species,Marshallia trinervia,Broadleaf Barbara's-buttons,
+2,166004,species,Oxypolis rigidior,stiff cowbane,http://en.wikipedia.org/wiki/Oxypolis_rigidior
+2,166690,species,Phlox carolina,thickleaf phlox,http://en.wikipedia.org/wiki/Phlox_carolina
+2,167010,species,Plantago rugelii,American plantain,http://en.wikipedia.org/wiki/Plantago_rugelii
+2,167316,species,Portulaca umbraticola,wingpod purslane,https://en.wikipedia.org/wiki/Portulaca_umbraticola
+2,167517,species,Psilotum nudum,skeleton fork fern,https://en.wikipedia.org/wiki/Psilotum_nudum
+2,167631,species,Pyrularia pubera,Buffalo-nut,https://en.wikipedia.org/wiki/Pyrularia_pubera
+2,167818,species,Rhododendron minus,gorge rhododendron,http://en.wikipedia.org/wiki/Rhododendron_minus
+2,168201,species,Rudbeckia heliopsidis,Sunfacing Coneflower,
+2,168439,species,Sarracenia oreophila,green pitcher plant,http://en.wikipedia.org/wiki/Sarracenia_oreophila
+2,168847,species,Senna occidentalis,Coffee Senna,http://en.wikipedia.org/wiki/Senna_occidentalis
+2,169040,species,Smilax hugeri,Huger's Carrionflower,https://en.wikipedia.org/wiki/Smilax_hugeri
+2,169793,species,Torenia fournieri,wishbone flower,http://en.wikipedia.org/wiki/Torenia_fournieri
+2,169895,species,Tragia urticifolia,Nettleleaf Noseburn,http://en.wikipedia.org/wiki/Tragia_urticifolia
+2,169983,species,Trillium catesbaei,bashful wakerobin,http://en.wikipedia.org/wiki/Trillium_catesbaei
+2,170203,species,Viburnum plicatum,Japanese snowball,http://en.wikipedia.org/wiki/Viburnum_plicatum
+2,170244,species,Viola hirsutula,Southern wood violet,http://en.wikipedia.org/wiki/Viola_hirsutula
+2,170271,species,Vitex agnus-castus,Lilac chaste tree,http://en.wikipedia.org/wiki/Vitex_agnus-castus
+2,170367,species,Xyris laxifolia,Laxleaf Yellow-eyed Grass,
+2,170379,species,Xyris torta,twisted yellow-eyed grass,http://en.wikipedia.org/wiki/Xyris_torta
+2,179786,species,Hepatica acutiloba,sharp-lobed hepatica,http://en.wikipedia.org/wiki/Anemone_hepatica
+2,200026,species,Persicaria glabra,Dense-flowered smartweed,http://en.wikipedia.org/wiki/Persicaria_glabra
+2,200053,species,Euphorbia prostrata,prostrate sandmat,http://en.wikipedia.org/wiki/Euphorbia_prostrata
+2,204173,species,Hylodesmum nudiflorum,naked-flowered tick-trefoil,https://en.wikipedia.org/wiki/Hylodesmum_nudiflorum
+2,204339,species,Lamium galeobdolon,yellow archangel,http://en.wikipedia.org/wiki/Lamium_galeobdolon
+2,275384,species,Euphorbia hypericifolia,graceful spurge,https://en.wikipedia.org/wiki/Euphorbia_hypericifolia
+2,327754,species,Oxalis triangularis,false shamrock,http://en.wikipedia.org/wiki/Oxalis_triangularis
+2,337792,species,Acer buergerianum,Trident maple,http://en.wikipedia.org/wiki/Acer_buergerianum
+2,341568,species,Scapania nemorea,Grove Earwort,
+2,349786,species,Euonymus japonicus,Japanese spindle tree,http://en.wikipedia.org/wiki/Euonymus_japonicus
+2,369851,species,Christella dentata,Soft Fern,https://en.wikipedia.org/wiki/Christella_dentata
+2,370492,species,Lantana strigocamara,Lantana,
+2,371811,species,Lobelia georgiana,Southern Lobelia,https://en.wikipedia.org/wiki/Lobelia_georgiana
+2,447036,species,Mosla scabra,Mini-shiso,
+2,481743,species,Myriopteris tomentosa,Woolly Lipfern,http://en.wikipedia.org/wiki/Myriopteris_tomentosa
+2,482149,species,Phegopteris decursive-pinnata,Japanese beech fern,
+2,543631,species,Opuntia mesacantha,Southeastern Pricklypear,https://en.wikipedia.org/wiki/Opuntia_mesacantha
+2,545305,species,Cardamine occulta,Nursery bittercress,https://en.wikipedia.org/wiki/Cardamine_occulta
+2,553157,species,Abelia chinensis,Chinese Abelia,https://en.wikipedia.org/wiki/Linnaea_chinensis
+2,635327,species,Hypericum densiflorum,bushy St. John's Wort,http://en.wikipedia.org/wiki/Hypericum_densiflorum
+2,836798,species,Mononeuria glabra,Appalachian sandwort,
+2,891308,species,Acalypha persimilis,hornbeam copperleaf,
+2,950313,species,Eriocapitella japonica,Japanese anemone,https://en.wikipedia.org/wiki/Eriocapitella_japonica
+2,1303099,species,Greeneochloa coarctata,Nuttall's Reedgrass,
+2,1377086,hybrid,Asimina × piedmontana,,https://en.wikipedia.org/wiki/Asimina_×_piedmontana
+2,1473617,species,Asarum reflexum,Reflexed Wild Ginger,https://en.wikipedia.org/wiki/Asarum_canadense
+2,1503418,species,Erianthus alopecuroides,woolly beardgrass,https://en.wikipedia.org/wiki/Saccharum_alopecuroides
+2,1617154,species,Anatherum glomeratum,Bushy Bluestem,
+1,47570,species,Populus alba,white poplar,http://en.wikipedia.org/wiki/Populus_alba
+1,47910,species,Asclepias amplexicaulis,clasping milkweed,http://en.wikipedia.org/wiki/Asclepias_amplexicaulis
+1,48378,species,Tricyrtis hirta,Hairy Toad Lily,http://en.wikipedia.org/wiki/Tricyrtis_hirta
+1,48448,species,Zea mays,Maize,http://en.wikipedia.org/wiki/Maize
+1,48629,species,Prunus americana,American plum,http://en.wikipedia.org/wiki/Prunus_americana
+1,48682,species,Spiraea tomentosa,Steeplebush,http://en.wikipedia.org/wiki/Spiraea_tomentosa
+1,49226,species,Amelanchier arborea,common serviceberry,http://en.wikipedia.org/wiki/Amelanchier_arborea
+1,49486,species,Rhododendron catawbiense,Catawba Rhododendron,http://en.wikipedia.org/wiki/Rhododendron_catawbiense
+1,49668,species,Phoradendron leucarpum,American Mistletoe,http://en.wikipedia.org/wiki/Phoradendron_leucarpum
+1,50333,species,Lantana camara,common lantana,http://en.wikipedia.org/wiki/Lantana_camara
+1,51044,species,Sanguinaria canadensis,bloodroot,https://en.wikipedia.org/wiki/Sanguinaria
+1,51119,species,Nymphaea odorata,American white waterlily,http://en.wikipedia.org/wiki/Nymphaea_odorata
+1,51266,species,Wisteria frutescens,American wisteria,http://en.wikipedia.org/wiki/Wisteria_frutescens
+1,51734,species,Physalis philadelphica,Large-flowered Tomatillo,http://en.wikipedia.org/wiki/Tomatillo
+1,51988,species,Physalis peruviana,Cape gooseberry,http://en.wikipedia.org/wiki/Physalis_peruviana
+1,52329,species,Amaranthus blitum,purple amaranth,http://en.wikipedia.org/wiki/Amaranthus_blitum
+1,52989,species,Cirsium vulgare,Bull Thistle,http://en.wikipedia.org/wiki/Cirsium_vulgare
+1,53076,species,Geranium molle,Dove's-foot crane's-bill,https://en.wikipedia.org/wiki/Geranium_molle
+1,53183,species,Oxalis stricta,upright yellow woodsorrel,http://en.wikipedia.org/wiki/Oxalis_stricta
+1,53294,species,Sonchus oleraceus,Common Sow-thistle,http://en.wikipedia.org/wiki/Sonchus_oleraceus
+1,53298,species,Stellaria media,common chickweed,http://en.wikipedia.org/wiki/Stellaria_media
+1,53324,species,Vicia sativa,Common Vetch,http://en.wikipedia.org/wiki/Vicia_sativa
+1,53806,hybrid,Chrysanthemum × morifolium,Common Chrysanthemum,http://en.wikipedia.org/wiki/Chrysanthemum_morifolium
+1,53856,species,Ilex aquifolium,European holly,http://en.wikipedia.org/wiki/Ilex_aquifolium
+1,53945,species,Styphnolobium japonicum,Japanese pagoda tree,http://en.wikipedia.org/wiki/Styphnolobium_japonicum
+1,54329,species,Tropaeolum majus,garden nasturtium,http://en.wikipedia.org/wiki/Tropaeolum_majus
+1,54461,species,Aristolochia serpentaria,Virginia snakeroot,http://en.wikipedia.org/wiki/Aristolochia_serpentaria
+1,54491,species,Corylus avellana,common hazel,http://en.wikipedia.org/wiki/Corylus_avellana
+1,54520,species,Tanacetum parthenium,feverfew,http://en.wikipedia.org/wiki/Tanacetum_parthenium
+1,54763,species,Acer platanoides,Norway maple,http://en.wikipedia.org/wiki/Acer_platanoides
+1,54859,species,Celtis tenuifolia,Dwarf Hackberry,https://en.wikipedia.org/wiki/Celtis_tenuifolia
+1,55703,species,Lunularia cruciata,Crescent-cup liverwort,http://en.wikipedia.org/wiki/Lunularia
+1,55748,species,Veronica arvensis,corn speedwell,http://en.wikipedia.org/wiki/Veronica_arvensis
+1,55886,species,Lunaria annua,Annual Honesty,http://en.wikipedia.org/wiki/Lunaria_annua
+1,56057,species,Leucanthemum vulgare,oxeye daisy,https://en.wikipedia.org/wiki/Leucanthemum_vulgare
+1,56129,species,Veronica hederifolia,Ivy-leaved Speedwell,http://en.wikipedia.org/wiki/Veronica_hederifolia
+1,56153,species,Juncus effusus,Soft Rush,http://en.wikipedia.org/wiki/Juncus_effusus
+1,56170,species,Galinsoga quadriradiata,shaggy soldier,http://en.wikipedia.org/wiki/Galinsoga_quadriradiata
+1,56325,species,Asarum canadense,Canadian wild ginger,http://en.wikipedia.org/wiki/Asarum_canadense
+1,56846,species,Torilis arvensis,common hedge parsley,http://en.wikipedia.org/wiki/Torilis_arvensis
+1,57254,species,Pyracantha coccinea,Firethorn,http://en.wikipedia.org/wiki/Pyracantha_coccinea
+1,57356,species,Amorpha fruticosa,false indigo bush,http://en.wikipedia.org/wiki/Amorpha_fruticosa
+1,58316,species,Salix babylonica,weeping willow,http://en.wikipedia.org/wiki/Salix_babylonica
+1,58389,species,Sorghum bicolor,Sorghum,http://en.wikipedia.org/wiki/Sorghum_bicolor
+1,58727,species,Berberis thunbergii,Japanese barberry,http://en.wikipedia.org/wiki/Berberis_thunbergii
+1,58792,species,Hydrocotyle umbellata,manyflower marshpennywort,http://en.wikipedia.org/wiki/Hydrocotyle_umbellata
+1,59753,species,Erigeron pulchellus,robin's-plantain,http://en.wikipedia.org/wiki/Erigeron_pulchellus
+1,60214,species,Abutilon theophrasti,velvetleaf,http://en.wikipedia.org/wiki/Abutilon_theophrasti
+1,60234,species,Samolus parviflorus,seaside brookweed,http://en.wikipedia.org/wiki/Samolus_parviflorus
+1,60265,species,Asparagus officinalis,wild asparagus,http://en.wikipedia.org/wiki/Asparagus
+1,60295,species,Paspalum dilatatum,Dallis grass,http://en.wikipedia.org/wiki/Paspalum_dilatatum
+1,60957,species,Gamochaeta purpurea,Purple Cudweed,http://en.wikipedia.org/wiki/Gamochaeta_purpurea
+1,60987,species,Lepidium didymum,Lesser swine-cress,http://en.wikipedia.org/wiki/Lepidium_didymum
+1,60997,species,Ceratophyllum demersum,coontail,http://en.wikipedia.org/wiki/Ceratophyllum_demersum
+1,61012,species,Medicago arabica,Spotted medick,https://en.wikipedia.org/wiki/Medicago_arabica
+1,61340,species,Cirsium discolor,field thistle,https://en.wikipedia.org/wiki/Cirsium_discolor
+1,61432,species,Prunus laurocerasus,Cherry laurel,http://en.wikipedia.org/wiki/Prunus_laurocerasus
+1,61935,species,Scleranthus annuus,Annual Knawel,http://en.wikipedia.org/wiki/Scleranthus_annuus
+1,61963,species,Oxalis debilis,Largeflower pink-sorrel,http://en.wikipedia.org/wiki/Oxalis_debilis
+1,63062,species,Actaea pachypoda,white baneberry,http://en.wikipedia.org/wiki/Actaea_pachypoda
+1,63371,species,Rumex obtusifolius,broad-leaved dock,http://en.wikipedia.org/wiki/Rumex_obtusifolius
+1,63916,species,Adiantum capillus-veneris,black maidenhair fern,http://en.wikipedia.org/wiki/Adiantum_capillus-veneris
+1,64103,species,Agave americana,American century plant,http://en.wikipedia.org/wiki/Agave_americana
+1,64177,species,Leersia oryzoides,rice cutgrass,http://en.wikipedia.org/wiki/Leersia_oryzoides
+1,64547,species,Teucrium canadense,American germander,http://en.wikipedia.org/wiki/Teucrium_canadense
+1,67818,species,Crataegus marshallii,parsley hawthorn,http://en.wikipedia.org/wiki/Crataegus_marshallii
+1,67820,species,Erigeron philadelphicus,Philadelphia fleabane,http://en.wikipedia.org/wiki/Erigeron_philadelphicus
+1,68293,species,Polytrichum commune,Common Haircap Moss,http://en.wikipedia.org/wiki/Polytrichum_commune
+1,68317,species,Pentas lanceolata,Egyptian Star-cluster,http://en.wikipedia.org/wiki/Pentas_lanceolata
+1,68598,species,Platanthera flava,pale green orchid,http://en.wikipedia.org/wiki/Platanthera_flava
+1,68884,species,Phlox subulata,moss phlox,http://en.wikipedia.org/wiki/Phlox_subulata
+1,69752,species,Houstonia caerulea,azure bluet,http://en.wikipedia.org/wiki/Houstonia_caerulea
+1,69753,species,Houstonia longifolia,long-leaved bluets,http://en.wikipedia.org/wiki/Houstonia_longifolia
+1,69930,species,Juncus tenuis,Slender Path Rush,http://en.wikipedia.org/wiki/Juncus_tenuis
+1,75401,species,Amaranthus viridis,green amaranth,http://en.wikipedia.org/wiki/Amaranthus_viridis
+1,75562,species,Aristida oligantha,Oldfield Three-awn,http://en.wikipedia.org/wiki/Aristida_oligantha
+1,75602,species,Asclepias curassavica,tropical milkweed,http://en.wikipedia.org/wiki/Asclepias_curassavica
+1,75766,species,Bidens laevis,Smooth Beggarticks,http://en.wikipedia.org/wiki/Bidens_laevis
+1,75867,species,Brasenia schreberi,Watershield,http://en.wikipedia.org/wiki/Brasenia
+1,75921,species,Cabomba caroliniana,Carolina Fanwort,https://en.wikipedia.org/wiki/Cabomba_caroliniana
+1,76207,species,Cenchrus spinifex,coastal sandbur,http://en.wikipedia.org/wiki/Cenchrus_spinifex
+1,76538,species,Cucumis melo,Muskmelon,http://en.wikipedia.org/wiki/Muskmelon
+1,76585,species,Cyperus flavescens,Yellow Flatsedge,https://en.wikipedia.org/wiki/Cyperus_flavescens
+1,76745,species,Dulichium arundinaceum,Three-way Sedge,http://en.wikipedia.org/wiki/Dulichium_arundinaceum
+1,76755,species,Echinochloa colona,Jungle Rice,http://en.wikipedia.org/wiki/Echinochloa_colona
+1,76904,species,Erigeron bonariensis,Flax-leaved Horseweed,http://en.wikipedia.org/wiki/Erigeron_bonariensis
+1,76943,species,Erigeron sumatrensis,tropical horseweed,http://en.wikipedia.org/wiki/Conyza_sumatrensis
+1,77112,species,Euphorbia dentata,green poinsettia,http://en.wikipedia.org/wiki/Euphorbia_dentata
+1,77155,species,Fragaria virginiana,Virginia strawberry,http://en.wikipedia.org/wiki/Virginia_strawberry
+1,77314,species,Gypsophila elegans,showy baby's-breath,http://en.wikipedia.org/wiki/Gypsophila_elegans
+1,77624,species,Lantana montevidensis,creeping lantana,http://en.wikipedia.org/wiki/Lantana_montevidensis
+1,77676,species,Lepidium virginicum,Virginia pepperweed,http://en.wikipedia.org/wiki/Lepidium_virginicum
+1,77739,species,Ligustrum japonicum,wax-leaf ligustrum,http://en.wikipedia.org/wiki/Ligustrum_japonicum
+1,78217,species,Nicandra physalodes,apple-of-Peru,http://en.wikipedia.org/wiki/Nicandra
+1,78221,species,Nicotiana sylvestris,Woodland Tobacco,http://en.wikipedia.org/wiki/Nicotiana_sylvestris
+1,78243,species,Oenothera laciniata,cutleaf evening primrose,https://en.wikipedia.org/wiki/Oenothera_laciniata
+1,78338,species,Panicum dichotomiflorum,Smooth Witchgrass,http://en.wikipedia.org/wiki/Panicum_dichotomiflorum
+1,78589,species,Pistia stratiotes,Water Lettuce,http://en.wikipedia.org/wiki/Pistia
+1,78889,species,Rotala ramosior,Toothcup,http://en.wikipedia.org/wiki/Rotala_ramosior
+1,78954,species,Salpichroa origanifolia,Cock's-eggs,http://en.wikipedia.org/wiki/Salpichroa_origanifolia
+1,79061,species,Senna marilandica,Maryland senna,http://en.wikipedia.org/wiki/Senna_marilandica
+1,79068,species,Setaria parviflora,knotroot bristlegrass,http://en.wikipedia.org/wiki/Setaria_parviflora
+1,79210,species,Stenotaphrum secundatum,Saint Augustine grass,http://en.wikipedia.org/wiki/St._Augustine_Grass
+1,79383,species,Tradescantia ohiensis,Ohio spiderwort,http://en.wikipedia.org/wiki/Tradescantia_ohiensis
+1,79441,species,Tripleurospermum inodorum,scentless mayweed,http://en.wikipedia.org/wiki/Tripleurospermum_inodorum
+1,79464,species,Utricularia gibba,humped bladderwort,http://en.wikipedia.org/wiki/Utricularia_gibba
+1,81597,species,Potentilla canadensis,dwarf cinquefoil,http://en.wikipedia.org/wiki/Potentilla_canadensis
+1,81722,species,Sanicula canadensis,Black Snakeroot,http://en.wikipedia.org/wiki/Sanicula_canadensis
+1,81796,species,Oxalis violacea,violet woodsorrel,https://en.wikipedia.org/wiki/Oxalis_violacea
+1,81801,species,Viburnum rufidulum,Rusty Blackhaw,http://en.wikipedia.org/wiki/Viburnum_rufidulum
+1,81804,species,Sabal minor,Dwarf Palmetto,http://en.wikipedia.org/wiki/Sabal_minor
+1,81824,species,Euphorbia corollata,flowering spurge,http://en.wikipedia.org/wiki/Euphorbia_corollata
+1,81897,species,Baptisia tinctoria,eastern wild indigo,http://en.wikipedia.org/wiki/Baptisia_tinctoria
+1,82247,species,Viburnum dentatum,southern arrowwood,http://en.wikipedia.org/wiki/Viburnum_dentatum
+1,82317,species,Hibiscus moscheutos,swamp rose mallow,http://en.wikipedia.org/wiki/Hibiscus_moscheutos
+1,82571,species,Lygodium palmatum,Hartford fern,http://en.wikipedia.org/wiki/Lygodium_palmatum
+1,82748,species,Vitis palmata,catbird grape,https://en.wikipedia.org/wiki/Vitis_palmata
+1,82812,species,Iris cristata,dwarf crested iris,https://en.wikipedia.org/wiki/Iris_cristata
+1,83073,species,Solidago gigantea,giant goldenrod,http://en.wikipedia.org/wiki/Solidago_gigantea
+1,84114,species,Helenium flexuosum,Southern Sneezeweed,http://en.wikipedia.org/wiki/Helenium_flexuosum
+1,84227,species,Rubus phoenicolasius,wineberry,http://en.wikipedia.org/wiki/Rubus_phoenicolasius
+1,84261,species,Arisaema dracontium,green dragon,https://en.wikipedia.org/wiki/Arisaema_dracontium
+1,84363,species,Castanea pumila,Allegheny Chinquapin,http://en.wikipedia.org/wiki/Castanea_pumila
+1,84405,species,Calyptocarpus vialis,straggler daisy,https://en.wikipedia.org/wiki/Calyptocarpus_vialis
+1,84667,species,Sabatia campanulata,Slender Rose Gentian,http://en.wikipedia.org/wiki/Sabatia_campanulata
+1,85320,species,Monarda fistulosa,wild bergamot,http://en.wikipedia.org/wiki/Monarda_fistulosa
+1,85325,species,Geum canadense,white avens,http://en.wikipedia.org/wiki/Geum_canadense
+1,85383,species,Polymnia canadensis,leafcup,https://en.wikipedia.org/wiki/Polymnia_canadensis
+1,85485,species,Amphicarpaea bracteata,American hog-peanut,http://en.wikipedia.org/wiki/Amphicarpaea_bracteata
+1,85490,species,Phryma leptostachya,American lopseed,http://en.wikipedia.org/wiki/Phryma
+1,118473,species,Sedum sarmentosum,Stringy Stonecrop,http://en.wikipedia.org/wiki/Sedum_sarmentosum
+1,118742,species,Stenanthium gramineum,featherbells,
+1,119343,species,Symphyotrichum oblongifolium,Aromatic Aster,http://en.wikipedia.org/wiki/Symphyotrichum_oblongifolium
+1,119804,species,Liatris virgata,wand blazing star,
+1,119809,species,Lonicera sempervirens,coral honeysuckle,http://en.wikipedia.org/wiki/Lonicera_sempervirens
+1,119821,species,Antennaria plantaginifolia,plantain-leaved pussytoes,http://en.wikipedia.org/wiki/Antennaria_plantaginifolia
+1,120179,species,Doellingeria umbellata,flat-top white aster,http://en.wikipedia.org/wiki/Doellingeria_umbellata
+1,120355,species,Spiranthes lacera,Slender Ladies' Tresses,https://en.wikipedia.org/wiki/Spiranthes_lacera
+1,122091,species,Woodsia obtusa,blunt woodsia,http://en.wikipedia.org/wiki/Woodsia_obtusa
+1,122251,species,Chamaelirium luteum,devil's bit,http://en.wikipedia.org/wiki/Chamaelirium
+1,122343,species,Allium tuberosum,Garlic Chives,https://en.wikipedia.org/wiki/Allium_tuberosum
+1,122658,species,Leucobryum glaucum,Pincushion Moss,https://en.wikipedia.org/wiki/Leucobryum_glaucum
+1,122783,species,Pyrus pyrifolia,Asian Pear,http://en.wikipedia.org/wiki/Pyrus_pyrifolia
+1,122970,species,Helianthus tuberosus,Jerusalem artichoke,http://en.wikipedia.org/wiki/Jerusalem_artichoke
+1,125379,species,Asclepias verticillata,whorled milkweed,http://en.wikipedia.org/wiki/Asclepias_verticillata
+1,125396,species,Aspidistra elatior,cast-iron plant,http://en.wikipedia.org/wiki/Aspidistra_elatior
+1,126249,species,Akebia quinata,Five-leaf akebia,http://en.wikipedia.org/wiki/Akebia_quinata
+1,126318,species,Rhexia mariana,Maryland meadowbeauty,http://en.wikipedia.org/wiki/Rhexia_mariana
+1,126483,species,Stachys floridana,Florida Hedgenettle,http://en.wikipedia.org/wiki/Stachys_floridana
+1,126549,species,Camellia sasanqua,sasanqua camellia,http://en.wikipedia.org/wiki/Camellia_sasanqua
+1,126550,species,Helleborus orientalis,Lenten-rose,http://en.wikipedia.org/wiki/Helleborus_orientalis
+1,126914,species,Brugmansia arborea,Angel's Trumpet,http://en.wikipedia.org/wiki/Brugmansia_arborea
+1,127045,species,Scutellaria integrifolia,Helmet skullcap,http://en.wikipedia.org/wiki/Scutellaria_integrifolia
+1,127181,species,Pieris japonica,Japanese andromeda,http://en.wikipedia.org/wiki/Pieris_japonica
+1,127609,species,Rhodotypos scandens,jetbead,http://en.wikipedia.org/wiki/Rhodotypos
+1,127942,species,Verbena rigida,Slender Vervain,http://en.wikipedia.org/wiki/Verbena_rigida
+1,128078,species,Carex grayi,Gray's sedge,http://en.wikipedia.org/wiki/Carex_grayi
+1,128268,species,Gomphrena globosa,Globe amaranth,http://en.wikipedia.org/wiki/Gomphrena_globosa
+1,128688,species,Viburnum rhytidophyllum,Leatherleaf viburnum,http://en.wikipedia.org/wiki/Viburnum_rhytidophyllum
+1,128755,species,Prunus mexicana,Mexican Plum,https://en.wikipedia.org/wiki/Prunus_mexicana
+1,128774,species,Parnassia asarifolia,Kidney-leaved Grass of Parnassus,https://en.wikipedia.org/wiki/Parnassia_asarifolia
+1,128798,species,Aronia melanocarpa,black chokeberry,http://en.wikipedia.org/wiki/Aronia_melanocarpa
+1,128839,species,Lobelia spicata,pale-spiked lobelia,http://en.wikipedia.org/wiki/Lobelia_spicata
+1,128938,species,Croton glandulosus,Tropic Croton,http://en.wikipedia.org/wiki/Croton_glandulosus
+1,128942,species,Silene stellata,starry campion,http://en.wikipedia.org/wiki/Silene_stellata
+1,129021,species,Cryptotaenia canadensis,honewort,http://en.wikipedia.org/wiki/Cryptotaenia_canadensis
+1,129090,species,Carex frankii,Frank's sedge,https://en.wikipedia.org/wiki/Carex_frankii
+1,129103,species,Emilia fosbergii,Red Tasselflower,http://en.wikipedia.org/wiki/Emilia_fosbergii
+1,129315,species,Ceanothus americanus,New Jersey tea,http://en.wikipedia.org/wiki/Ceanothus_americanus
+1,129347,species,Ilex glabra,gallberry,http://en.wikipedia.org/wiki/Ilex_glabra
+1,129495,species,Brachyelytrum erectum,Long-awned Wood Grass,https://en.wikipedia.org/wiki/Brachyelytrum_erectum
+1,129773,species,Eryngium prostratum,creeping eryngo,https://en.wikipedia.org/wiki/Eryngium_prostratum
+1,129977,species,Viburnum prunifolium,Blackhaw,http://en.wikipedia.org/wiki/Viburnum_prunifolium
+1,130043,species,Leersia virginica,white grass,http://en.wikipedia.org/wiki/Leersia_virginica
+1,130174,species,Danthonia spicata,Poverty oatgrass,http://en.wikipedia.org/wiki/Danthonia_spicata
+1,130368,species,Osmorhiza longistylis,aniseroot,http://en.wikipedia.org/wiki/Osmorhiza_longistylis
+1,130380,species,Liatris aspera,rough blazing star,http://en.wikipedia.org/wiki/Liatris_aspera
+1,130688,species,Pycnanthemum albescens,Whiteleaf Mountain Mint,
+1,130690,species,Rhexia virginica,Virginia meadowbeauty,http://en.wikipedia.org/wiki/Rhexia_virginica
+1,130741,species,Silphium asteriscus,Starry rosinweed,http://en.wikipedia.org/wiki/Silphium_asteriscus
+1,130866,species,Nephrolepis exaltata,southern sword fern,https://en.wikipedia.org/wiki/Nephrolepis_exaltata
+1,130991,species,Tradescantia virginiana,Virginia spiderwort,http://en.wikipedia.org/wiki/Tradescantia_virginiana
+1,131152,species,Coreopsis leavenworthii,Leavenworth's Tickseed,http://en.wikipedia.org/wiki/Coreopsis_leavenworthii
+1,131563,species,Euphorbia ophthalmica,Florida Hammock Sandmat,https://en.wikipedia.org/wiki/Euphorbia_ophthalmica
+1,131578,species,Indigofera hirsuta,hairy indigo,https://en.wikipedia.org/wiki/Indigofera_hirsuta
+1,132711,species,Hypericum punctatum,spotted St. John's wort,http://en.wikipedia.org/wiki/Hypericum_punctatum
+1,133240,species,Ilex crenata,Japanese holly,http://en.wikipedia.org/wiki/Ilex_crenata
+1,133288,species,Nyssa biflora,Swamp tupelo,http://en.wikipedia.org/wiki/Nyssa_biflora
+1,133294,species,Portulaca pilosa,shaggy portulaca,http://en.wikipedia.org/wiki/Portulaca_pilosa
+1,133334,species,Yucca aloifolia,Aloe Yucca,http://en.wikipedia.org/wiki/Yucca_aloifolia
+1,134213,species,Scutellaria elliptica,Hairy Skullcap,https://en.wikipedia.org/wiki/Scutellaria_elliptica
+1,136375,species,Galium tinctorium,Stiff Marsh Bedstraw,http://en.wikipedia.org/wiki/Galium_tinctorium
+1,136381,species,Cynanchum laeve,honey-vine climbing milkweed,http://en.wikipedia.org/wiki/Cynanchum_laeve
+1,138680,species,Phaseolus polystachios,Thicket Bean,http://en.wikipedia.org/wiki/Phaseolus_polystachios
+1,141634,species,Leonotis nepetifolia,lion's ear,http://en.wikipedia.org/wiki/Leonotis_nepetifolia
+1,141714,species,Crataegus phaenopyrum,Washington hawthorn,http://en.wikipedia.org/wiki/Crataegus_phaenopyrum
+1,143203,species,Salvia splendens,Scarlet Sage,http://en.wikipedia.org/wiki/Salvia_splendens
+1,143422,species,Ageratum conyzoides,billygoat weed,http://en.wikipedia.org/wiki/Ageratum_conyzoides
+1,143787,species,Magnolia kobus,Kobus magnolia,http://en.wikipedia.org/wiki/Magnolia_kobus
+1,144023,species,Galium pilosum,Hairy bedstraw,http://en.wikipedia.org/wiki/Galium_pilosum
+1,154330,species,Spiranthes magnicamporum,Great Plains Ladies' Tresses,http://en.wikipedia.org/wiki/Spiranthes_magnicamporum
+1,154473,species,Pycnanthemum virginianum,Virginia mountain mint,http://en.wikipedia.org/wiki/Pycnanthemum_virginianum
+1,157424,species,Halesia carolina,Carolina Silverbell,http://en.wikipedia.org/wiki/Halesia_carolina
+1,157642,species,Houttuynia cordata,Chameleon Plant,http://en.wikipedia.org/wiki/Houttuynia_cordata
+1,157893,species,Acalypha gracilens,Slender Three-seeded Mercury,https://en.wikipedia.org/wiki/Acalypha_gracilens
+1,158042,species,Aesculus parviflora,bottlebrush buckeye,http://en.wikipedia.org/wiki/Aesculus_parviflora
+1,158056,species,Agalinis gattingeri,Round-stem False Foxglove,http://en.wikipedia.org/wiki/Agalinis_gattingeri
+1,158065,species,Agalinis oligophylla,Ridgestem False Foxglove,
+1,158196,species,Allium speculae,Little River Canyon Onion,https://en.wikipedia.org/wiki/Allium_speculae
+1,158548,species,Arachniodes simplicior,East Indian holly fern,https://en.wikipedia.org/wiki/Arachniodes_simplicior
+1,158589,species,Ardisia japonica,Japanese ardisia,http://en.wikipedia.org/wiki/Ardisia_japonica
+1,159658,species,Callicarpa dichotoma,Purple Beautyberry,http://en.wikipedia.org/wiki/Callicarpa_dichotoma
+1,159769,species,Campanulastrum americanum,tall bellflower,http://en.wikipedia.org/wiki/Campanula_americana
+1,159962,species,Carex glaucescens,Southern Waxy Sedge,https://en.wikipedia.org/wiki/Carex_glaucescens
+1,160037,species,Carex nigromarginata,Black-edge Sedge,http://en.wikipedia.org/wiki/Carex_nigromarginata
+1,160164,species,Carya carolinae-septentrionalis,Carolina shagbark hickory,https://en.wikipedia.org/wiki/Carya_ovata
+1,160259,species,Celosia argentea,Quail Grass,http://en.wikipedia.org/wiki/Celosia_argentea
+1,160297,species,Centratherum punctatum,Brazilian bachelor's button,https://en.wikipedia.org/wiki/Centratherum_punctatum
+1,160358,species,Ceratostigma plumbaginoides,blue leadwort,http://en.wikipedia.org/wiki/Ceratostigma_plumbaginoides
+1,160361,species,Cestrum aurantiacum,orange cestrum,http://en.wikipedia.org/wiki/Cestrum_aurantiacum
+1,160369,species,Chaenomeles speciosa,Chinese quince,https://en.wikipedia.org/wiki/Chaenomeles_speciosa
+1,160463,species,Chasmanthium laxum,Slender Spikegrass,
+1,160759,species,Clitoria ternatea,Blue Pea,http://en.wikipedia.org/wiki/Clitoria_ternatea
+1,161149,species,Crotalaria sagittalis,arrowhead rattlebox,https://en.wikipedia.org/wiki/Crotalaria_sagittalis
+1,161255,species,Cuphea carthagenensis,Colombian waxweed,
+1,161424,species,Cyperus compressus,Poorland Flatsedge,http://en.wikipedia.org/wiki/Cyperus_compressus
+1,161508,species,Cyrilla racemiflora,Swamp titi,http://en.wikipedia.org/wiki/Cyrilla
+1,161803,species,Dichanthelium scoparium,Velvet Panicum,http://en.wikipedia.org/wiki/Dichanthelium_scoparium
+1,162093,species,Drosera brevifolia,dwarf sundew,http://en.wikipedia.org/wiki/Drosera_brevifolia
+1,162109,species,Dryopteris celsa,log fern,https://en.wikipedia.org/wiki/Dryopteris_celsa
+1,162151,species,Dumortiera hirsuta,Dumortier's Liverwort,
+1,162409,species,Eragrostis spectabilis,Purple Lovegrass,http://en.wikipedia.org/wiki/Eragrostis
+1,162557,species,Eriocaulon decangulare,ten-angled pipewort,http://en.wikipedia.org/wiki/Eriocaulon_decangulare
+1,162907,species,Euthamia leptocephala,Bushy Goldentop,http://en.wikipedia.org/wiki/Euthamia_leptocephala
+1,162930,species,Facelis retusa,Annual Trampweed,http://en.wikipedia.org/wiki/Facelis_retusa
+1,163052,species,Forestiera ligustrina,Southern Glade Forestiera,https://en.wikipedia.org/wiki/Forestiera_ligustrina
+1,163370,species,Gratiola virginiana,Virginia hedge-hyssop,
+1,163505,species,Halesia diptera,Two-wing Silverbell,http://en.wikipedia.org/wiki/Halesia_diptera
+1,163506,species,Halesia tetraptera,mountain silverbell,http://en.wikipedia.org/wiki/Halesia_tetraptera
+1,163634,species,Helianthus simulans,Muck Sunflower,http://en.wikipedia.org/wiki/Helianthus_simulans
+1,163763,species,Hibiscus coccineus,Scarlet Rosemallow,http://en.wikipedia.org/wiki/Hibiscus_coccineus
+1,163907,species,Hylotelephium erythrostictum,garden stonecrop,https://en.wikipedia.org/wiki/Hylotelephium_erythrostictum
+1,164042,species,Ilex longipes,Georgia Holly,http://en.wikipedia.org/wiki/Ilex_longipes
+1,164083,species,Ipomoea cristulata,trans-Pecos morning-glory,
+1,164169,species,Isoetes melanospora,Black-spored Quillwort,http://en.wikipedia.org/wiki/Isoetes_melanospora
+1,164222,species,Jamesianthus alabamensis,Alabama Warbonnet,http://en.wikipedia.org/wiki/Jamesianthus
+1,164229,species,Jasminum mesnyi,Primrose jasmine,http://en.wikipedia.org/wiki/Jasminum_mesnyi
+1,164278,species,Juncus repens,Creeping Rush,https://en.wikipedia.org/wiki/Juncus_repens
+1,164571,species,Lespedeza stuevei,tall bush-clover,https://en.wikipedia.org/wiki/Lespedeza_stuevei
+1,164663,species,Leucospora multifida,Obi-Wan conobea,https://en.wikipedia.org/wiki/Leucospora
+1,164698,species,Liatris pilosa,shaggy blazing star,https://en.wikipedia.org/wiki/Liatris_pilosa
+1,164703,species,Liatris squarrosa,scaly blazing star,http://en.wikipedia.org/wiki/Liatris_squarrosa
+1,164861,species,Ludwigia octovalvis,Mexican Primrose-willow,https://en.wikipedia.org/wiki/Ludwigia_octovalvis
+1,164973,species,Lycopus rubellus,taperleaf waterhorehound,https://en.wikipedia.org/wiki/Lycopus_rubellus
+1,165104,species,Malus baccata,Siberian crabapple,http://en.wikipedia.org/wiki/Malus_baccata
+1,165363,species,Metzgeria furcata,Forked Veilwort,http://en.wikipedia.org/wiki/Metzgeria_furcata
+1,165482,species,Mitracarpus hirtus,Tropical Girdlepod,https://en.wikipedia.org/wiki/Mitracarpus_hirtus
+1,165543,species,Muhlenbergia capillaris,Hairawn Muhly,http://en.wikipedia.org/wiki/Muhlenbergia_capillaris
+1,165587,species,Murdannia nudiflora,Nakedstem Dewflower,
+1,166162,species,Parthenocissus tricuspidata,Japanese creeper,http://en.wikipedia.org/wiki/Parthenocissus_tricuspidata
+1,166188,species,Paspalum notatum,Bahia grass,http://en.wikipedia.org/wiki/Paspalum_notatum
+1,166762,species,Phyllostachys aureosulcata,Yellow groove bamboo,http://en.wikipedia.org/wiki/Phyllostachys_aureosulcata
+1,166900,species,Piptochaetium avenaceum,Blackseed Needlegrass,http://en.wikipedia.org/wiki/Stipa_avenacea
+1,167120,species,Pogonatum pensilvanicum,Algal Haircap Moss,
+1,167329,species,Potamogeton pulcher,Spotted Pondweed,
+1,167508,species,Pseudosasa japonica,Arrow Bamboo,http://en.wikipedia.org/wiki/Pseudosasa_japonica
+1,167652,species,Quercus hemisphaerica,Darlington Oak,http://en.wikipedia.org/wiki/Quercus_hemisphaerica
+1,167808,species,Rhodobryum ontariense,Ontario rhodobryum moss,
+1,167856,species,Rhynchospora corniculata,short-bristled horned beaksedge,
+1,167860,species,Rhynchospora debilis,Savannah Beakrush,
+1,167870,species,Rhynchospora glomerata,Clustered Beaksedge,
+1,167898,species,Rhynchospora recognita,Cymose Beaksedge,
+1,167913,species,Ribes curvatum,Granite Gooseberry,http://en.wikipedia.org/wiki/Ribes_curvatum
+1,167940,species,Richardia brasiliensis,Tropical Mexican Clover,http://en.wikipedia.org/wiki/Richardia_brasiliensis
+1,168141,species,Rubus probabilis,,http://en.wikipedia.org/wiki/Rubus_probabilis
+1,168263,species,Sabatia capitata,Cumberland Rose Gentian,https://en.wikipedia.org/wiki/Sabatia_capitata
+1,168649,species,Scirpus polyphyllus,leafy bulrush,
+1,168893,species,Seymeria cassioides,Yaupon Blacksenna,https://en.wikipedia.org/wiki/Seymeria_cassioides
+1,168950,species,Sideroxylon lycioides,Buckthorn Bully,http://en.wikipedia.org/wiki/Sideroxylon_lycioides
+1,169094,species,Solidago auriculata,eared goldenrod,https://en.wikipedia.org/wiki/Solidago_auriculata
+1,169105,species,Solidago flaccidifolia,Mountain Goldenrod,https://en.wikipedia.org/wiki/Solidago_curtisii
+1,169149,species,Sorghastrum elliottii,Slender Indiangrass,https://en.wikipedia.org/wiki/Sorghastrum_elliottii
+1,169231,species,Sphagnum recurvum,Recurved Peatmoss,https://en.wikipedia.org/wiki/Sphagnum_recurvum
+1,169477,species,Symphyotrichum phlogifolium,Thinleaf Late Purple Aster,https://en.wikipedia.org/wiki/Symphyotrichum_phlogifolium
+1,169487,species,Symphyotrichum shortii,Short's aster,http://en.wikipedia.org/wiki/Symphyotrichum_shortii
+1,169492,species,Symphyotrichum urophyllum,Arrow-leaved Aster,https://en.wikipedia.org/wiki/Symphyotrichum_urophyllum
+1,169540,species,Talinum paniculatum,Jewels of Opar,http://en.wikipedia.org/wiki/Talinum_paniculatum
+1,169652,species,Thalia dealbata,Powdery thalia,http://en.wikipedia.org/wiki/Thalia_dealbata
+1,169780,species,Tithonia rotundifolia,Red Sunflower,http://en.wikipedia.org/wiki/Tithonia_rotundifolia
+1,170204,species,Viburnum recognitum,northern arrowwood,https://en.wikipedia.org/wiki/Viburnum_recognitum
+1,170415,species,Zephyranthes candida,White rain-lily,http://en.wikipedia.org/wiki/Zephyranthes_candida
+1,170461,hybrid,Acer × freemanii,Freeman's Maple,https://en.wikipedia.org/wiki/Acer_×_freemanii
+1,170682,hybrid,Dryopteris × australis,Dixie wood fern,
+1,170800,hybrid,Ipomoea × leucantha,Whitestar Morning-glory,
+1,181901,species,Zinnia elegans,Elegant Zinnia,https://en.wikipedia.org/wiki/Zinnia_elegans
+1,200052,species,Euphorbia nutans,nodding spurge,http://en.wikipedia.org/wiki/Euphorbia_nutans
+1,201433,species,Coleataenia anceps,beaked panicum,https://en.wikipedia.org/wiki/Coleataenia_anceps
+1,203008,species,Marsilea minuta,,http://en.wikipedia.org/wiki/Marsilea_minuta
+1,204184,species,Eupatorium pubescens,roundleaf thoroughwort,http://en.wikipedia.org/wiki/Eupatorium_rotundifolium
+1,204198,species,Dendrolycopodium obscurum,flat-branched tree-clubmoss,http://en.wikipedia.org/wiki/Lycopodium_obscurum
+1,204253,species,Bidens polylepis,Tickseed Sunflower,http://en.wikipedia.org/wiki/Bidens_polylepis
+1,223653,species,Ligusticum canadense,American lovage,https://en.wikipedia.org/wiki/Ligusticum_canadense
+1,284004,species,Sisyrinchium micranthum,Blue Pigroot,http://en.wikipedia.org/wiki/Sisyrinchium_micranthum
+1,288060,species,Muhlenbergia expansa,Cutover Muhly,https://en.wikipedia.org/wiki/Muhlenbergia_expansa
+1,288069,species,Avenella flexuosa,wavy hair-grass,http://en.wikipedia.org/wiki/Deschampsia_flexuosa
+1,319691,species,Fraxinus biltmoreana,Biltmore Ash,https://en.wikipedia.org/wiki/Fraxinus_americana
+1,332455,species,Aloysia citrodora,lemon verbena,http://en.wikipedia.org/wiki/Aloysia_citrodora
+1,336585,species,Hypochaeris chillensis,Brazilian Cat's-ear,http://en.wikipedia.org/wiki/Hypochaeris_chillensis
+1,363739,species,Dryopteris cycadina,Black wood fern,http://en.wikipedia.org/wiki/Dryopteris_cycadina
+1,371103,species,Osmanthus fragrans,Sweet olive,http://en.wikipedia.org/wiki/Osmanthus_fragrans
+1,431617,species,Sedum tetractinum,,
+1,452250,species,Ternstroemia gymnanthera,Japanese Ternstroemia,http://en.wikipedia.org/wiki/Ternstroemia_gymnanthera
+1,452363,species,Forsythia koreana,Korean goldenbell tree,http://en.wikipedia.org/wiki/Forsythia_koreana
+1,460736,species,Coleataenia rigidula,redtop panicgrass,
+1,469472,species,Malus domestica,apple,https://en.wikipedia.org/wiki/Apple
+1,472077,hybrid,Lantana × hybrida,New Gold Lantana,
+1,481712,species,Myriopteris lanosa,Hairy Lip Fern,https://en.wikipedia.org/wiki/Myriopteris_lanosa
+1,485180,species,Danae racemosa,Alexandrian Laurel,http://en.wikipedia.org/wiki/Danae_racemosa
+1,485191,species,Silene coronaria,Rose campion,http://en.wikipedia.org/wiki/Silene_coronaria
+1,506262,species,Xanthium orientale,common cocklebur,https://en.wikipedia.org/wiki/Xanthium_orientale
+1,559959,species,Liatris hirsuta,hairy gayfeather,https://en.wikipedia.org/wiki/Liatris_hirsuta
+1,570676,species,Callianthe picta,Redvein Abutilon,http://en.wikipedia.org/wiki/Abutilon_pictum
+1,596540,species,Opuntia drummondii,Creeping Cactus,
+1,634013,species,Silphium asperrimum,Gates' Rosinweed,
+1,709022,species,Acmella oleracea,toothache plant,http://en.wikipedia.org/wiki/Acmella_oleracea
+1,747236,species,Arundinaria tecta,switch cane,http://en.wikipedia.org/wiki/Arundinaria_tecta
+1,769248,species,Andersonglossum virginianum,wild comfrey,https://en.wikipedia.org/wiki/Andersonglossum_virginianum
+1,775366,species,Cyperus sesquiflorus,Fragrant Spikesedge,
+1,779122,species,Cyperus hortensis,low spikesedge,
+1,787459,species,Hexasepalum teres,rough buttonweed,https://en.wikipedia.org/wiki/Hexasepalum_teres
+1,841082,species,Gratiola amphiantha,little amphianthus,http://en.wikipedia.org/wiki/Gratiola_amphiantha
+1,866392,species,Colocasia fontanesii,Blackstem Taro,
+1,868964,species,Eupatorium linearifolium,Narrowleaf Bushy Thoroughwort,https://en.wikipedia.org/wiki/Eupatorium_linearifolium
+1,876629,species,Youngia thunbergiana,Tall false hawksbeard,
+1,924055,species,Berberis fortunei,Chinese mahonia,https://en.wikipedia.org/wiki/Mahonia_fortunei
+1,962637,species,Pontederia crassipes,common water hyacinth,https://en.wikipedia.org/wiki/Pontederia_crassipes
+1,965808,species,Solidago austrina,Southern Goldenrod,
+1,1004655,species,Luffa aegyptiaca,Sponge Gourd,https://en.wikipedia.org/wiki/Luffa_aegyptiaca
+1,1128184,species,Clinopodium talladeganum,Talladega Wild Basil,https://en.wikipedia.org/wiki/Clinopodium_talladeganum
+1,1138520,species,Pseudanomodon attenuatus,tree-skirt moss,https://en.wikipedia.org/wiki/Pseudanomodon_attenuatus
+1,1341071,species,Feijoa sellowiana,Feijoa,https://en.wikipedia.org/wiki/Feijoa_sellowiana
+1,1391871,species,Viola communis,dooryard violet,https://en.wikipedia.org/wiki/Viola_communis
+1,1452295,species,Bothriochloa torreyana,silver bluestem,
+1,1455130,species,Asarum heterophyllum,variable-leaf heartleaf,
+1,1467758,species,Castanea alabamensis,Alabama chinquapin,
+1,1534982,species,Harperella nodosa,harperella,https://en.wikipedia.org/wiki/Harperella
+1,1569114,species,Senega incarnata,Pink Milkwort,https://en.wikipedia.org/wiki/Senega_incarnata
+1,1593175,species,Polystichum polyblepharon,Japanese tassel fern,
+1,1673461,species,Anacis verticillata,Threadleaf Coreopsis,https://en.wikipedia.org/wiki/Anacis_verticillata

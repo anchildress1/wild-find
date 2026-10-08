@@ -1,0 +1,3 @@
+tap_ns,lead_ms,frame_ms,jpeg_ms,scene_ms,wait_ms,hint_ms,total_ms,jpeg_bytes,tags,scene_reply,hint
+164559726590334,19588.314524,241.124583,66.981042,4670.765936,0.0,2389.576874,2390.034374,545529,tree sun lawn,"[""tree"", ""sun"", ""lawn""]",Look for a big tree with a strong trunk near the sun on the lawn.
+164635321140461,22226.731137,331.181302,65.106771,3655.476405,0.0,2106.621249,2107.617343,597136,sun tree lawn,"[""sun"", ""tree"", ""lawn""]",Look for a big tree with a sunny spot on the lawn near the woods edge.

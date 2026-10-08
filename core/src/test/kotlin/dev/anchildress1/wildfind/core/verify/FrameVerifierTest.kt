@@ -30,6 +30,7 @@ class FrameVerifierTest {
     private val hazards = HazardCheck(
         FloatMatrix(7, 2, FloatArray(14) { if (it < 12) (1 - it % 2).toFloat() else (it - 12).toFloat() }),
         BooleanArray(7) { it == 6 },
+        BooleanArray(7) { true },
     )
     private val labels = FloatMatrix(2, 2, floatArrayOf(1f, 0f, 0f, 1f))
     private val target = TargetGoal(labels, 0, intArrayOf(0, 1), null, null)
@@ -57,8 +58,8 @@ class FrameVerifierTest {
 
         assertEquals(listOf("gate:reticle", "gate:full", "bioclip:reticle", "bioclip:full"), calls)
         assertEquals(FrameEvidence(hazard = false, reticlePlant = true, focus = close, goalMet = true), result.evidence)
-        assertEquals(7, result.reticleHazardRank)
-        assertEquals(7, result.fullHazardRank)
+        assertEquals(7, result.reticleRanking?.hazardRank)
+        assertEquals(7, result.fullRanking?.hazardRank)
         assertEquals(1, result.goal?.rank)
     }
 
@@ -68,8 +69,8 @@ class FrameVerifierTest {
 
         assertEquals(listOf("gate:reticle", "gate:full", "bioclip:reticle"), calls)
         assertTrue(result.evidence.hazard)
-        assertEquals(1, result.reticleHazardRank)
-        assertNull(result.fullHazardRank)
+        assertEquals(1, result.reticleRanking?.hazardRank)
+        assertNull(result.fullRanking)
         assertTrue(PlantGate.isPlant(result.reticleShare))
         assertFalse(PlantGate.isPlant(result.fullShare))
     }
@@ -81,8 +82,8 @@ class FrameVerifierTest {
         assertEquals(listOf("gate:reticle", "gate:full", "bioclip:full"), calls)
         assertTrue(result.evidence.hazard)
         assertFalse(result.evidence.reticlePlant)
-        assertNull(result.reticleHazardRank)
-        assertEquals(1, result.fullHazardRank)
+        assertNull(result.reticleRanking)
+        assertEquals(1, result.fullRanking?.hazardRank)
         assertNull(result.goal)
     }
 
@@ -91,8 +92,8 @@ class FrameVerifierTest {
         val result = verifier({ plant }, { if (it) safe else hazard }).analyze(frame, target) { close }
 
         assertTrue(result.evidence.hazard)
-        assertEquals(7, result.reticleHazardRank)
-        assertEquals(1, result.fullHazardRank)
+        assertEquals(7, result.reticleRanking?.hazardRank)
+        assertEquals(1, result.fullRanking?.hazardRank)
     }
 
     @Test
@@ -113,8 +114,8 @@ class FrameVerifierTest {
 
         assertEquals(listOf("gate:reticle", "gate:full", "bioclip:reticle"), calls)
         assertFalse(result.evidence.hazard)
-        assertNull(result.reticleHazardRank)
-        assertNull(result.fullHazardRank)
+        assertNull(result.reticleRanking)
+        assertNull(result.fullRanking)
         assertTrue(result.evidence.goalMet)
     }
 

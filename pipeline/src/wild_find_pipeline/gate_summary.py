@@ -1,4 +1,4 @@
-"""S05 gate-harness summary: per-frame verify time, first eligible frame to Found, hint latency, memory, and heat."""
+"""S05 gate-harness summary: verify time per frame, what BioCLIP saw, time to Found, memory, and heat."""
 
 import csv
 import json
@@ -11,14 +11,17 @@ import numpy as np
 
 NS_PER_MS = 1_000_000
 NS_PER_S = 1_000_000_000
-FRAME_BUDGET_MS = 200.0
+# A capture verifies 3 frames back to back and must finish under 1 s, so each frame gets a third of that.
+FRAME_BUDGET_MS = 333.0
 FOUND_BUDGET_MS = 1500.0
-HINT_BUDGET_MS = 5000.0
 # The PRD's targets are strict "under" limits, so a sample exactly at one counts against it.
 # PowerManager thermal statuses.
 THERMAL_NAMES = {0: "none", 1: "light", 2: "moderate", 3: "severe", 4: "critical", 5: "emergency", 6: "shutdown"}
 # CameraCharacteristics.SENSOR_INFO_TIMESTAMP_SOURCE_REALTIME: sensor time shares elapsedRealtimeNanos' clock.
 REALTIME = "timestamp_source 1"
+# HazardCheck.TOP_K: a hazard species ranked this high or better warns.
+HAZARD_TOP_K = 5
+SPECIES_SHOWN = 10
 
 
 def rows(path: Path) -> list[dict[str, str]]:
@@ -53,6 +56,24 @@ def found_latencies(frames: list[dict[str, str]]) -> list[float]:
     return latencies
 
 
+def species_lines(frames: list[dict[str, str]]) -> list[str]:
+    """What BioCLIP saw: the reticle's top-1 species, and which hazard species set off each warning."""
+    if "reticle_top" not in frames[0]:
+        return []
+    tops = Counter(r["reticle_top"] for r in frames if r["reticle_top"])
+    warned = Counter(
+        r[f"{region}_hazard"]
+        for r in frames
+        for region in ("reticle", "full")
+        if r[f"{region}_hazard_rank"] and int(r[f"{region}_hazard_rank"]) <= HAZARD_TOP_K
+    )
+    return [
+        "reticle top-1 species: " + (", ".join(f"{k} {v}" for k, v in tops.most_common(SPECIES_SHOWN)) or "none"),
+        "hazard warnings by species (region-frames): "
+        + (", ".join(f"{k} {v}" for k, v in warned.most_common()) or "none"),
+    ]
+
+
 def frame_lines(frames: list[dict[str, str]], camera_event: str) -> list[str]:
     """Summary lines for frames.csv."""
     if not frames:
@@ -65,8 +86,8 @@ def frame_lines(frames: list[dict[str, str]], camera_event: str) -> list[str]:
     unmatched_tap = sum(r["verdict"] == "tap_to_focus" and r["focus_matched"] != "true" for r in frames)
     over = sum(t >= FRAME_BUDGET_MS for t in totals)
     lines = [
-        f"frames: {len(frames)} over {seconds:.0f} s ({len(frames) / seconds if seconds else 0:.1f} analyzed/s), "
-        f"upright {frames[0]['frame_w']}x{frames[0]['frame_h']}",
+        # Frames come in capture bursts, so a per-second rate would only measure how often the tester tapped.
+        f"frames: {len(frames)} over {seconds:.0f} s, upright {frames[0]['frame_w']}x{frames[0]['frame_h']}",
         f"frame ms (buffer to verdict): {spread(totals)}; at or over {FRAME_BUDGET_MS:.0f} ms: {over} of {len(totals)}",
         f"frame ms with BioCLIP on both regions: {spread(both)} ({len(both)} frames)",
         "stage p50 ms: "
@@ -77,6 +98,7 @@ def frame_lines(frames: list[dict[str, str]], camera_event: str) -> list[str]:
         f"focus matched by sensor timestamp: {sum(r['focus_matched'] == 'true' for r in frames)} of {len(frames)}",
         "verdicts: " + ", ".join(f"{k} {v}" for k, v in sorted(verdicts.items())),
         f"tap_to_focus with no focus reading for the frame: {unmatched_tap} of {verdicts['tap_to_focus']}",
+        *species_lines(frames),
     ]
     if REALTIME in camera_event:
         lag = [(int(r["t_ns"]) - int(r["sensor_ns"])) / NS_PER_MS for r in frames]
@@ -133,31 +155,10 @@ def system_lines(system: list[dict[str, str]]) -> list[str]:
     ]
 
 
-def hint_lines(hints: list[dict[str, str]], events: list[dict[str, str]]) -> list[str]:
-    """Summary lines for hints.csv and the Gemma load event."""
-    loaded = [e["detail"] for e in events if e["event"] == "gemma_loaded"]
-    lines = [f"Gemma load: {loaded[0]}" if loaded else "Gemma load: not loaded"]
+def error_lines(events: list[dict[str, str]]) -> list[str]:
+    """How many events were errors, and the first one."""
     errors = [e for e in events if e["event"].endswith("_error")]
-    if errors:
-        lines.append(f"errors: {len(errors)}, first {errors[0]['event']}: {errors[0]['detail']}")
-    if not hints:
-        return [*lines, "hints: none"]
-    total = [float(h["total_ms"]) for h in hints]
-    # Guards may reject the first line and retry once (R6): one more hint call on top of the measured tap.
-    worst = [float(h["total_ms"]) + float(h["hint_ms"]) for h in hints]
-    late = sum(t >= HINT_BUDGET_MS for t in total)
-    return [
-        *lines,
-        f"level-2 taps: {len(hints)}; level-2 tap to hint ms: {spread(total)}; at or over {HINT_BUDGET_MS:.0f}: {late}",
-        "hint parts p50 ms: "
-        + ", ".join(
-            f"{part} {pct([float(h[f'{part}_ms']) for h in hints], 50):.0f}"
-            for part in ("lead", "frame", "jpeg", "scene", "wait", "hint")
-        ),
-        f"with one guard retry ms: {spread(worst)}",
-        f"replies with no scene tags: {sum(not h['tags'] for h in hints)}; "
-        f"empty hints: {sum(not h['hint'] for h in hints)}",
-    ]
+    return [f"errors: {len(errors)}, first {errors[0]['event']}: {errors[0]['detail']}"] if errors else []
 
 
 def summarize(run: Path) -> str:
@@ -181,7 +182,7 @@ def summarize(run: Path) -> str:
         header
         + frame_lines(rows(run / "frames.csv"), camera)
         + system_lines(rows(run / "system.csv"))
-        + hint_lines(rows(run / "hints.csv"), events)
+        + error_lines(events)
     )
 
 

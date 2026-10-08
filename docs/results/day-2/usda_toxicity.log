@@ -1,0 +1,3 @@
+# 2026-10-07 14:53 EDT, USDA PLANTS DwC-A zenodo.org/records/17903503 usda_plant_traits.tar.gz sha256 d646ab96b3308a51f66bf5adfe3ac7e31abd68223c9436734789c96da9df014b
+USDA toxicity rows: 1967, [('none', 1749), ('slight', 124), ('moderate', 60), ('severe', 34)]
+117 species: [('missing', 62), ('none', 50), ('slight', 5)]

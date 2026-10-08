@@ -7,7 +7,7 @@ import numpy as np
 import pytest
 
 from wild_find_pipeline import assets, paths
-from wild_find_pipeline.assets import plant_share, species_table
+from wild_find_pipeline.assets import plant_share, species_table, with_toxicity
 from wild_find_pipeline.labels import HAZARDS, embedding_versions, is_hazard, lacking_hazards
 from wild_find_pipeline.paths import pin
 
@@ -205,3 +205,18 @@ def test_embedding_versions_drop_local_labels(monkeypatch):
     monkeypatch.setattr(importlib.metadata, "version", {"open-clip-torch": "3.3.0", "torch": "2.14.1+cpu"}.__getitem__)
 
     assert embedding_versions() == {"open-clip-torch": "3.3.0", "torch": "2.14.1"}
+
+
+def test_with_toxicity_adds_genus_and_the_committed_flag():
+    labels = [{"scientific": "Quercus nigra", "hazard": False}, {"scientific": "Nandina domestica", "hazard": False}]
+    flags = {"Quercus nigra": {"toxic": False}, "Nandina domestica": {"toxic": True}}
+
+    assert with_toxicity(labels, flags) == [
+        {"scientific": "Quercus nigra", "hazard": False, "genus": "Quercus", "toxic": False},
+        {"scientific": "Nandina domestica", "hazard": False, "genus": "Nandina", "toxic": True},
+    ]
+
+
+def test_with_toxicity_rejects_a_row_without_a_flag():
+    with pytest.raises(ValueError, match="run make toxicity"):
+        with_toxicity([{"scientific": "Quercus nigra", "hazard": False}], {})

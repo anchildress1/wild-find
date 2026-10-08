@@ -18,6 +18,10 @@ FRAME_COLUMNS = [
     "full_share",
     "reticle_hazard_rank",
     "full_hazard_rank",
+    "reticle_top",
+    "reticle_hazard",
+    "full_top",
+    "full_hazard",
     "goal_score",
     "goal_rank",
     "af_state",
@@ -49,6 +53,10 @@ def frame(t_ms, verdict, streak=0, frame_ms=150.0, both=True):
         focus_matched="true",
         reticle_hazard_rank=9 if both else "",
         full_hazard_rank=9 if both else "",
+        reticle_top="Quercus alba" if both else "",
+        reticle_hazard="Toxicodendron radicans" if both else "",
+        full_top="Quercus alba" if both else "",
+        full_hazard="Toxicodendron radicans" if both else "",
     )
     return row
 
@@ -111,29 +119,9 @@ def run(tmp_path):
     ]
     write(d / "system.csv", system)
     write(
-        d / "hints.csv",
-        [
-            {
-                "tap_ns": 1,
-                "lead_ms": 2000,
-                "frame_ms": 150,
-                "jpeg_ms": 20,
-                "scene_ms": 2500,
-                "wait_ms": 670,
-                "hint_ms": 900,
-                "total_ms": 3570,
-                "jpeg_bytes": 1,
-                "tags": "shade",
-                "scene_reply": '["shade"]',
-                "hint": "Look up, near the fence.",
-            }
-        ],
-    )
-    write(
         d / "events.csv",
         [
             {"t_ns": 0, "event": "camera", "detail": "viewport 1080x2340, timestamp_source 1"},
-            {"t_ns": 0, "event": "gemma_loaded", "detail": "4100.0 ms, pss 2100000 kB"},
             {"t_ns": 1, "event": "stop", "detail": "oak"},
         ],
     )
@@ -162,18 +150,15 @@ def test_summary_reports_every_gate_number(run):
     text = summarize(run)
 
     assert "frames: 5 over 1 s" in text
-    assert "at or over 200 ms: 1 of 5" in text
+    assert "at or over 333 ms: 0 of 5" in text
     assert "(4 frames)" in text
     assert "capture to analyzer ms: p50 40" in text
     assert "first eligible frame to Found ms: p50 580" in text
     assert "thermal status max moderate; first moderate at 20.0 min" in text
     assert "battery %: 90 to 80 (30 %/h)" in text
     assert "PSS MB: start 2930, max 3027" in text
-    assert "Gemma load: 4100.0 ms" in text
-    assert "level-2 tap to hint ms: p50 3570" in text
-    assert "hint parts p50 ms: lead 2000, frame 150, jpeg 20, scene 2500, wait 670, hint 900" in text
-    assert "with one guard retry ms: p50 4470" in text
-    assert "replies with no scene tags: 0; empty hints: 0" in text
+    assert "reticle top-1 species: Quercus alba 4" in text
+    assert "hazard warnings by species (region-frames): none" in text
     assert "tap_to_focus with no focus reading for the frame: 0 of 0" in text
     assert "1 of 2 samples NaN" in text
     assert "WARNING" not in text
@@ -187,7 +172,7 @@ def test_a_run_without_a_stop_event_is_flagged(run):
 
 
 def test_a_run_that_died_before_any_row_summarizes_as_empty(run):
-    for name in ("frames.csv", "system.csv", "hints.csv"):
+    for name in ("frames.csv", "system.csv"):
         header = (run / name).read_text().splitlines()[0]
         (run / name).write_text(header + "\n")
 
@@ -195,14 +180,13 @@ def test_a_run_that_died_before_any_row_summarizes_as_empty(run):
 
     assert "frames: none" in text
     assert "system: none" in text
-    assert "hints: none" in text
 
 
 def test_a_frame_exactly_at_the_budget_counts_against_it(run):
-    frames = (run / "frames.csv").read_text().replace(",150.0\n", ",200.0\n", 1)
+    frames = (run / "frames.csv").read_text().replace(",150.0\n", ",333.0\n", 1)
     (run / "frames.csv").write_text(frames)
 
-    assert "at or over 200 ms: 2 of 5" in summarize(run)
+    assert "at or over 333 ms: 1 of 5" in summarize(run)
 
 
 def test_a_missing_charging_state_reads_unavailable(run):
@@ -247,13 +231,13 @@ def test_capture_lag_needs_a_realtime_sensor_clock(run):
 
 def test_errors_and_missing_battery_extras_are_reported_not_invented(run):
     with (run / "events.csv").open("a") as f:
-        f.write('2,hint_error,"LiteRtLmJniException: boom"\n')
+        f.write('2,sample_error,"IllegalStateException: boom"\n')
     system = (run / "system.csv").read_text().replace(",30.0,90,", ",,,")
     (run / "system.csv").write_text(system)
 
     text = summarize(run)
 
-    assert "errors: 1, first hint_error: LiteRtLmJniException: boom" in text
+    assert "errors: 1, first sample_error: IllegalStateException: boom" in text
     assert "battery temp C: start 38.5" in text
     assert "battery %: 80 to 80" in text
 
@@ -282,3 +266,10 @@ def test_one_broken_run_still_lets_the_others_summarize(run, capsys):
     assert main([str(run.parent)]) == 1
     assert not (broken / "summary.txt").exists()
     assert (run / "summary.txt").read_text().startswith("run 20261007-090000-oak-1280x960")
+
+
+def test_hazard_warnings_name_the_species_that_set_them_off(run):
+    frames = (run / "frames.csv").read_text().replace(",9,9,Quercus alba,", ",5,9,Quercus alba,", 1)
+    (run / "frames.csv").write_text(frames)
+
+    assert "hazard warnings by species (region-frames): Toxicodendron radicans 1" in summarize(run)

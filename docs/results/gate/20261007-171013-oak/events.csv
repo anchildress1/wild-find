@@ -1,0 +1,15 @@
+t_ns,event,detail
+162258678418816,start,oak
+162258855539701,camera,"viewport 1080x2340, timestamp_source 1"
+162265908923709,gemma_loaded,"7180.984581 ms, pss 2172853 kB"
+162272081262040,gemma_warmed,6111.860519 ms
+164118135412690,resumed,
+164119005332169,analysis_buffer,"1920x1440 crop Rect(0, 277 - 1920, 1163)"
+164123554054615,paused,
+164195474634067,resumed,
+164212982128747,camera,"viewport 2340x1080, timestamp_source 1"
+164216208756298,camera,"viewport 1080x2340, timestamp_source 1"
+164512602328529,camera,"viewport 2340x1080, timestamp_source 1"
+164514739474309,camera,"viewport 1080x2340, timestamp_source 1"
+164737182142870,paused,
+164738733791932,stop,oak

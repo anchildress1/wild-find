@@ -47,7 +47,7 @@ import kotlin.math.roundToInt
 private val NO_STATUS = MutableStateFlow(GateStatus())
 private val SCRIM = Color.Black.copy(alpha = 0.7f)
 
-/** The harness screen: live viewfinder, the reticle ring the models read, a readout, and the hint button. */
+/** The harness screen: live viewfinder, the reticle ring the models read, a readout, and the capture button. */
 @Composable
 fun HarnessScreen(
     runs: StateFlow<GateRun?>,
@@ -68,10 +68,10 @@ fun HarnessScreen(
         Ring(status)
         Readout(status, Modifier.align(Alignment.TopStart))
         Button(
-            onClick = { run?.requestHint() },
-            enabled = status.gemma == "ready" || status.gemma.startsWith("level"),
+            onClick = { run?.requestCapture() },
+            enabled = run != null && !status.capturing,
             modifier = Modifier.align(Alignment.BottomCenter).padding(32.dp).heightIn(min = 56.dp),
-        ) { Text(if (status.gemma.startsWith("level 3")) "Start over" else "Hint", fontSize = 22.sp) }
+        ) { Text("Capture", fontSize = 22.sp) }
     }
 }
 
@@ -126,9 +126,11 @@ private fun Readout(status: GateStatus, modifier: Modifier) {
     val verdict = when (val v = status.verdict) {
         null -> "starting"
         is Verdict.Matching -> "matching ${v.frames}/${VerifyStreak.FRAMES}"
+        Verdict.WalkCloser -> "get closer or zoom in"
         else -> v.toString()
     }
     Column(modifier.fillMaxWidth().background(SCRIM).padding(16.dp)) {
+        Text("Find: ${status.target}", color = Color.White, fontSize = 26.sp)
         Text(
             "$verdict · ${status.frameMs.roundToInt()} ms · found ${status.found}",
             color = Color.White,
@@ -139,7 +141,6 @@ private fun Readout(status: GateStatus, modifier: Modifier) {
             color = Color.White,
             fontSize = 18.sp,
         )
-        Text("Gemma ${status.gemma}", color = Color.White, fontSize = 18.sp)
-        if (status.hint.isNotEmpty()) Text(status.hint, color = Color.White, fontSize = 18.sp)
+        if (status.species.isNotEmpty()) Text("sees ${status.species}", color = Color.White, fontSize = 18.sp)
     }
 }

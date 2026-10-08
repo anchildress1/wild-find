@@ -5,12 +5,17 @@ package dev.anchildress1.wildfind.core.verify
  *
  * @property hazard row 1: a hazard species ranked in the top 5 in a region the plant gate called a plant
  * @property reticlePlant row 2: the plant gate called the reticle crop a plant
- * @property focus rows 3 and 4: this frame's own autofocus reading, or null when it has none
- * @property goalMet row 5: this frame alone meets the goal
+ * @property focus row 3: this frame's own autofocus reading, or null when it has none; distance only explains a
+ *   miss
+ * @property goalMet row 4: this frame alone meets the goal
  */
 data class FrameEvidence(val hazard: Boolean, val reticlePlant: Boolean, val focus: Focus?, val goalMet: Boolean)
 
-/** One frame's outcome under the PRD Runtime Logic verify table; the first matching row wins. */
+/**
+ * One frame's outcome under the verify table; the first matching row wins.
+ *
+ * Distance never blocks a match: the Oct 7 field runs showed the close-range rule stopping 51% of focused frames.
+ */
 sealed interface Verdict {
     /** Row 1: warn, no star. */
     data object Hazard : Verdict
@@ -21,18 +26,18 @@ sealed interface Verdict {
     /** Row 3: "Tap the plant to focus". */
     data object TapToFocus : Verdict
 
-    /** Row 4: "Walk closer". */
-    data object WalkCloser : Verdict
-
     /**
-     * Row 5 holding, before the streak completes: "Hold still".
+     * Row 4 holding, before the streak completes: "Hold still".
      *
      * @property frames consecutive matching frames so far, 1 to [VerifyStreak.FRAMES] - 1
      */
     data class Matching(val frames: Int) : Verdict
 
-    /** Row 5 complete: auto-capture this frame's reticle crop, then Found. */
+    /** Row 4 complete: keep this frame's reticle crop, then Found. */
     data object Found : Verdict
+
+    /** Row 5: no match and the subject is far: "Get closer or zoom in". */
+    data object WalkCloser : Verdict
 
     /** Row 6: "Put the plant in the circle". */
     data object Guide : Verdict
@@ -48,8 +53,8 @@ class VerifyStreak {
             frame.hazard -> Verdict.Hazard
             !frame.reticlePlant -> Verdict.NotPlant
             frame.focus?.isFocused != true -> Verdict.TapToFocus
-            !frame.focus.isClose -> Verdict.WalkCloser
             frame.goalMet -> if (run + 1 == FRAMES) Verdict.Found else Verdict.Matching(run + 1)
+            !frame.focus.isClose -> Verdict.WalkCloser
             else -> Verdict.Guide
         }
         // A Found starts a fresh streak, so one target can take another capture (R12).

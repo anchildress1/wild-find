@@ -5,33 +5,52 @@ import dev.anchildress1.wildfind.core.tensor.FloatMatrix
 /**
  * PRD verify row 1: ranks a region's BioCLIP embedding against the whole species table.
  *
+ * The hazard rank always counts every row, because [TOP_K] was measured that way; a smaller pool would push hazards
+ * up and warn on ordinary plants. Only the reported top species is limited to [local] rows, so a plant from another
+ * continent isn't named as what the kid sees.
+ *
  * @param table one unit text vector per species
  * @param hazard true for each PRD hazard species row
+ * @param local true for each species seen near the player
  */
-class HazardCheck(private val table: FloatMatrix, private val hazard: BooleanArray) {
+class HazardCheck(private val table: FloatMatrix, private val hazard: BooleanArray, local: BooleanArray) {
     init {
         require(hazard.size == table.rows) { "${hazard.size} hazard flags for ${table.rows} rows" }
+        require(local.size == table.rows) { "${local.size} local flags for ${table.rows} rows" }
         require(hazard.any { it }) { "no hazard species in the table" }
     }
 
+    // After the size checks, so a short flag array fails them instead of indexing past its end. With no local row,
+    // the top species falls back to the whole table rather than naming nothing.
+    private val named: List<Int> = (0 until table.rows).filter { local[it] }.ifEmpty { (0 until table.rows).toList() }
+
     /**
-     * 1-based rank of the best-scoring hazard species among all rows.
+     * One region's embedding ranked against every row.
      *
-     * A safe species tied with the hazard ranks below it, so ties warn rather than pass.
+     * @property topRow the best-scoring local species row
+     * @property hazardRow the best-scoring hazard species row
+     * @property hazardRank 1-based rank of [hazardRow]; a safe species tied with it ranks below it, so ties warn
      */
-    fun bestHazardRank(embedding: FloatArray): Int {
+    data class Ranking(val topRow: Int, val hazardRow: Int, val hazardRank: Int) {
+        /** True when the best hazard is within the top [TOP_K]. */
+        val warns: Boolean get() = hazardRank <= TOP_K
+    }
+
+    /** Ranks [embedding]: the hazard against every row, the top species among the local rows. */
+    fun rank(embedding: FloatArray): Ranking {
         val scores = DoubleArray(table.rows) { table.dot(it, embedding) }
-        var best = Double.NEGATIVE_INFINITY
-        for (row in scores.indices) if (hazard[row] && scores[row] > best) best = scores[row]
-        return 1 + scores.count { it > best }
+        var hazardRow = -1
+        for (row in scores.indices) {
+            if (hazard[row] && (hazardRow < 0 || scores[row] > scores[hazardRow])) hazardRow = row
+        }
+        val topRow = named.maxBy { scores[it] }
+        val best = scores[hazardRow]
+        return Ranking(topRow, hazardRow, 1 + scores.count { it > best })
     }
 
     /** Hazard rule constants measured on Day 1. */
     companion object {
         /** A hazard warns within this many top species; caught 48 of 52 hazard photos, warned on 1 of 253 safe ones. */
         const val TOP_K = 5
-
-        /** True when a [bestHazardRank] result is within the top [TOP_K]. */
-        fun warns(rank: Int): Boolean = rank <= TOP_K
     }
 }

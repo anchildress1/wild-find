@@ -38,20 +38,30 @@ class FrameVerifierDeviceTest {
 
         ImageEncoder(bundled.plantGateModel()).use { gate ->
             ImageEncoder(bundled.bioclipModel()).use { bioclip ->
-                val verifier = FrameVerifier(bundled.plantGate(), gate, bioclip, bundled.hazardCheck())
+                val verifier =
+                    FrameVerifier(
+                        bundled.plantGate(),
+                        gate,
+                        bioclip,
+                        bundled.hazardCheck(
+                            bundled.speciesLabels().map {
+                                it.scientific
+                            }.toSet(),
+                        ),
+                    )
                 verifier.analyze(frame, goal) { focus } // warm-up, excluded from timing
                 val runs = List(RUNS) { verifier.analyze(frame, goal) { focus } }
                 runs.forEach { Log.i(TAG, "times ns ${it.times}") }
                 val result = runs.last()
                 Log.i(TAG, "shares ${result.reticleShare} ${result.fullShare}, goal ${result.goal}")
-                Log.i(TAG, "hazard ranks ${result.reticleHazardRank} ${result.fullHazardRank}")
+                Log.i(TAG, "hazard ranks ${result.reticleRanking?.hazardRank} ${result.fullRanking?.hazardRank}")
 
                 assertEquals(5, labels.words.size)
                 // A 224-square fixture: the full-frame crop resizes to itself, so the laptop share must hold.
                 assertEquals(gateReference().getDouble("plant_share"), result.fullShare, SHARE_TOLERANCE)
                 assertTrue(result.evidence.reticlePlant)
                 assertFalse(result.evidence.hazard)
-                assertTrue(result.fullHazardRank!! > HazardCheck.TOP_K)
+                assertTrue(result.fullRanking!!.hazardRank > HazardCheck.TOP_K)
             }
         }
     }

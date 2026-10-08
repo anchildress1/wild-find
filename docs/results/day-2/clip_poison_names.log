@@ -1,0 +1,34 @@
+# 2026-10-07 15:58 EDT, Apple M4 Max, macOS 26.5.2, Python 3.13.14, transformers 5.19.0, BioCLIP 2.5 ViT-H teacher @ 6e3d04e via open_clip
+117 species; hazard 3, wikipedia 30, usda 5
+tinyclip-8m:common:poisonous/harmless: AUC hazard 0.740, wikipedia 0.598, usda 0.475 | top: common jewelweed, purple passionflower, leatherleaf mahonia, ebony spleenwort, American pokeweed, winterberry holly
+tinyclip-8m:common:toxic/safe: AUC hazard 0.713, wikipedia 0.580, usda 0.586 | top: American pokeweed, eastern poison ivy, common jewelweed, cutleaf coneflower, red spider lily, Hairy cluster-vine
+tinyclip-8m:common:poisonous/edible: AUC hazard 0.787, wikipedia 0.517, usda 0.466 | top: crane-fly orchid, cardinal flower, red spider lily, tall goldenrod, purple passionflower, Nuttall's Rayless Goldenrod
+tinyclip-8m:scientific:poisonous/harmless: AUC hazard 0.772, wikipedia 0.612, usda 0.384 | top: cardinal flower, purple passionflower, Little Brown Jugs, autumn fern, Heavenly bamboo, ground-ivy
+tinyclip-8m:scientific:toxic/safe: AUC hazard 0.684, wikipedia 0.464, usda 0.466 | top: red morning glory, common morning-glory, Little Brown Jugs, red spider lily, arrow-leaved tearthumb, crane-fly orchid
+tinyclip-8m:scientific:poisonous/edible: AUC hazard 0.251, wikipedia 0.611, usda 0.532 | top: cardinal flower, red spider lily, striped wintergreen, tall goldenrod, bluestem goldenrod, Heavenly bamboo
+tinyclip-39m:common:poisonous/harmless: AUC hazard 0.801, wikipedia 0.652, usda 0.566 | top: purple passionflower, common jewelweed, eastern poison ivy, American pokeweed, cardinal flower, partridge pea
+tinyclip-39m:common:toxic/safe: AUC hazard 0.637, wikipedia 0.474, usda 0.557 | top: eastern poison ivy, trifoliate orange, Hairy cluster-vine, crane-fly orchid, American burnweed, river oats
+tinyclip-39m:common:poisonous/edible: AUC hazard 0.763, wikipedia 0.600, usda 0.512 | top: eastern poison ivy, ebony spleenwort, red spider lily, cardinal flower, Mexican Ruellia, American trumpet vine
+tinyclip-39m:scientific:poisonous/harmless: AUC hazard 0.860, wikipedia 0.625, usda 0.495 | top: Little Brown Jugs, fortune's spindle, purple passionflower, Heavenly bamboo, common jewelweed, Japanese honeysuckle
+tinyclip-39m:scientific:toxic/safe: AUC hazard 0.684, wikipedia 0.448, usda 0.727 | top: crane-fly orchid, trifoliate orange, Christmas fern, autumn fern, ebony spleenwort, eastern poison ivy
+tinyclip-39m:scientific:poisonous/edible: AUC hazard 0.602, wikipedia 0.539, usda 0.434 | top: Heavenly bamboo, fortune's spindle, striped wintergreen, Christmas fern, Chamberbitter, Chinese privet
+tinyclip-40m:common:poisonous/harmless: AUC hazard 0.716, wikipedia 0.536, usda 0.452 | top: eastern poison ivy, ebony spleenwort, leatherleaf mahonia, American pokeweed, tall goldenrod, cardinal flower
+tinyclip-40m:common:toxic/safe: AUC hazard 0.629, wikipedia 0.587, usda 0.543 | top: flowering dogwood, Yellow Cosmos, common jewelweed, Chinese bushclover, creeping cucumber, Camphorweed
+tinyclip-40m:common:poisonous/edible: AUC hazard 0.749, wikipedia 0.559, usda 0.380 | top: eastern poison ivy, flowering dogwood, crane-fly orchid, blue mistflower, Asiatic dayflower, tall goldenrod
+tinyclip-40m:scientific:poisonous/harmless: AUC hazard 0.860, wikipedia 0.484, usda 0.289 | top: eastern poison ivy, tall goldenrod, bluestem goldenrod, Soapwort Gentian, common jewelweed, Christmas fern
+tinyclip-40m:scientific:toxic/safe: AUC hazard 0.675, wikipedia 0.543, usda 0.637 | top: eastern poison ivy, crane-fly orchid, mock strawberry, Yellow Cosmos, red spider lily, white clover
+tinyclip-40m:scientific:poisonous/edible: AUC hazard 0.778, wikipedia 0.494, usda 0.327 | top: tall goldenrod, bluestem goldenrod, Soapwort Gentian, Christmas fern, frost aster, red morning glory
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 4676.79it/s]
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 2824.76it/s]
+bioclip-2.5-vith14:common:poisonous/harmless: AUC hazard 0.383, wikipedia 0.599, usda 0.555 | top: great mullein, common pawpaw, bigleaf magnolia, Hairy cluster-vine, Camphor-weed, striped wintergreen
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 4181.06it/s]
+bioclip-2.5-vith14:common:toxic/safe: AUC hazard 0.602, wikipedia 0.545, usda 0.400 | top: partridge pea, partridgeberry, Mexican Ruellia, ground-ivy, cardinal flower, Soapwort Gentian
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 3647.22it/s]
+bioclip-2.5-vith14:common:poisonous/edible: AUC hazard 0.795, wikipedia 0.504, usda 0.429 | top: Nuttall's Rayless Goldenrod, fan clubmoss, striped wintergreen, Hairy cluster-vine, American beautyberry, common pawpaw
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 4443.90it/s]
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 3558.52it/s]
+bioclip-2.5-vith14:scientific:poisonous/harmless: AUC hazard 0.485, wikipedia 0.563, usda 0.496 | top: great mullein, common pawpaw, bigleaf magnolia, eastern black walnut, Wingstem, umbrella magnolia
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 4230.97it/s]
+bioclip-2.5-vith14:scientific:toxic/safe: AUC hazard 0.594, wikipedia 0.420, usda 0.429 | top: partridgeberry, cardinal flower, Japanese Chaff Flower, ground-ivy, Soapwort Gentian, Little Brown Jugs
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 3450.21it/s]
+bioclip-2.5-vith14:scientific:poisonous/edible: AUC hazard 0.579, wikipedia 0.518, usda 0.386 | top: Little Brown Jugs, American beautyberry, Nuttall's Rayless Goldenrod, beefsteak plant, Beechdrops, Chinese holly

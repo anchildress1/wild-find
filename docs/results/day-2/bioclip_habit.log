@@ -1,0 +1,9 @@
+# 2026-10-07 16:55 EDT, Python 3.13.14, BioCLIP 2.5 ViT-H teacher @ 6e3d04e, species table from make assets, USDA PLANTS zenodo 17903503
+2405 of 4272 table rows have one USDA habit; BioCLIP top-1 right on 1707 (71.0%)
+always guessing the commonest habit (forbHerb) would be right on 1720 (71.5%)
+usda \ bioclip:      tree     shrub      vine  forbHerb graminoid
+          tree:       200         7         8         9         1
+         shrub:        63        52        37        64        15
+          vine:         1         0        43         4         0
+      forbHerb:       222         9        84      1271       134
+     graminoid:         4         0         0        36       141

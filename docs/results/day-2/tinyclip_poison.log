@@ -1,0 +1,9 @@
+# 2026-10-07 15:15 EDT, Apple M4 Max, macOS 26.5.2, Python 3.13.14, transformers 5.19.0
+Loading weights:   0%|          | 0/222 [00:00<?, ?it/s]Loading weights: 100%|██████████| 222/222 [00:00<00:00, 9894.33it/s]
+wkcn/TinyCLIP-ViT-8M-16-Text-3M-YFCC15M @ a2a8c6e: 52 hazard photos, 124 other plant photos
+poisonous/harmless: AUC 0.634 (0.5 = coin flip)
+  mean P(poisonous) by subject: poisonivy 0.57, pokeweed 0.57, honeysuckle 0.56, moss 0.52, fern 0.52, poison_oak 0.49, violet 0.48, poison_ivy 0.48, poison_sumac 0.48, magnolia 0.45, horsenettle 0.44, oak 0.44, clover 0.42, maple 0.41, sweetgum 0.41, grass 0.36, dandelion 0.35, pine 0.32
+toxic/safe: AUC 0.491 (0.5 = coin flip)
+  mean P(poisonous) by subject: grass 0.72, pokeweed 0.66, poison_oak 0.65, oak 0.64, magnolia 0.64, maple 0.61, dandelion 0.61, honeysuckle 0.61, moss 0.60, clover 0.60, poison_ivy 0.60, fern 0.59, sweetgum 0.59, poison_sumac 0.58, violet 0.56, horsenettle 0.53, pine 0.53, poisonivy 0.47
+poisonous/edible: AUC 0.415 (0.5 = coin flip)
+  mean P(poisonous) by subject: pine 0.71, moss 0.65, fern 0.62, poison_sumac 0.61, honeysuckle 0.59, grass 0.56, dandelion 0.56, sweetgum 0.56, magnolia 0.54, poison_oak 0.51, pokeweed 0.50, oak 0.50, poison_ivy 0.50, poisonivy 0.47, violet 0.44, clover 0.43, horsenettle 0.41, maple 0.40

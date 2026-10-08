@@ -17,6 +17,8 @@ GENERATED_ASSETS = REPO / "app/generated/assets"
 GENERATED_STAMP = REPO / "app/generated/inputs.json"
 # Teacher text vectors for hazard species the pinned species table lacks; committed so CI never needs the teacher.
 HAZARD_VECTORS = REPO / "pipeline/data/hazard_vectors.json"
+# Toxicity flag per species-table row; committed because it needs ~300 network requests (make toxicity).
+TOXICITY = REPO / "pipeline/data/toxicity.json"
 
 
 def pin(model: str, manifest: Path = MANIFEST) -> dict[str, str]:
@@ -46,9 +48,9 @@ def verified_artifact(model: str, cache: Path = MODEL_CACHE, manifest: Path = MA
     pins = pin(model, manifest)
     path = cache / pins["file"]
     if not path.is_file():
-        raise ValueError(f"{path} missing; run make fetch-models")
+        raise ValueError(f"{path} missing")
     if path.stat().st_size != int(pins["bytes"]) or file_sha256(path) != pins["sha256"]:
-        raise ValueError(f"{path} does not match its pinned size/SHA-256; run make fetch-models")
+        raise ValueError(f"{path} does not match its pinned size/SHA-256")
     return path
 
 

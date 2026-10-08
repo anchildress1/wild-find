@@ -1,0 +1,4 @@
+tap_ns,lead_ms,frame_ms,jpeg_ms,scene_ms,wait_ms,hint_ms,total_ms,jpeg_bytes,tags,scene_reply,hint
+165727640366920,0.0,43.658021,23.722187,1282.566666,0.0,852.905677,2202.852551,486032,lawn,"[""lawn""]",Look for the big trees near the edge of the lawn where the woods begin.
+165750943337640,0.0,58.566823,18.388489,1151.427604,0.0,660.15375,1888.536666,358855,,[],Look for big trees in parks or near the edge of the woods.
+165811434949909,0.0,31.420677,25.948281,1536.387708,0.0,655.538541,2249.295207,579224,tree sun woods edge lawn,"[""tree"", ""sun"", ""woods edge"", ""lawn""]",Look for a big tree near the woods edge where the sun shines.

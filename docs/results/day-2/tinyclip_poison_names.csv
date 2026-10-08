@@ -1,0 +1,118 @@
+name,common,hazard,wikipedia,usda,common:poisonous/harmless,common:toxic/safe,common:poisonous/edible,scientific:poisonous/harmless,scientific:toxic/safe,scientific:poisonous/edible
+Conoclinium coelestinum,blue mistflower,False,False,False,0.680537,0.689957,0.793585,0.555297,0.486949,0.768209
+Callicarpa americana,American beautyberry,False,False,False,0.644509,0.715304,0.476275,0.724288,0.731323,0.866305
+Liquidambar styraciflua,American sweetgum,False,False,False,0.394144,0.642835,0.671035,0.439617,0.793959,0.717286
+Persicaria longiseta,low smartweed,False,False,False,0.325102,0.619619,0.528818,0.743534,0.786409,0.819774
+Magnolia grandiflora,southern magnolia,False,False,False,0.332291,0.583856,0.69571,0.448114,0.698624,0.707746
+Phytolacca americana,American pokeweed,True,True,True,0.820359,0.901216,0.823473,0.724746,0.673448,0.71557
+Liriodendron tulipifera,American tuliptree,False,False,False,0.379622,0.521414,0.496898,0.479316,0.732951,0.585618
+Eupatorium capillifolium,dogfennel,False,True,False,0.485938,0.688432,0.711247,0.524586,0.832288,0.737843
+Polystichum acrostichoides,Christmas fern,False,False,False,0.549749,0.672622,0.455527,0.600849,0.789906,0.766
+Euonymus americanus,strawberry bush,False,True,False,0.52934,0.525008,0.175904,0.648185,0.512367,0.764083
+Fagus grandifolia,American beech,False,False,False,0.448849,0.56673,0.617816,0.559937,0.7425,0.574905
+Lonicera maackii,Amur honeysuckle,False,True,False,0.570098,0.511661,0.729084,0.739201,0.605629,0.872764
+Erechtites hieraciifolius,American burnweed,False,False,False,0.462295,0.690309,0.653916,0.368147,0.472876,0.784716
+Ampelopsis glandulosa,Porcelain Berry,False,False,False,0.61637,0.629387,0.4045,0.62497,0.604872,0.830194
+Diospyros virginiana,American persimmon,False,False,False,0.626615,0.668059,0.523749,0.677727,0.335837,0.606336
+Eupatorium serotinum,late boneset,False,False,False,0.376209,0.260737,0.579554,0.663944,0.767013,0.802198
+Ligustrum sinense,Chinese privet,False,True,False,0.620343,0.440985,0.780842,0.545227,0.217799,0.803343
+Platanus occidentalis,American sycamore,False,False,False,0.339022,0.580734,0.573633,0.515023,0.446467,0.79681
+Asarum arifolium,Little Brown Jugs,False,False,False,0.407344,0.477706,0.613489,0.792302,0.840484,0.665838
+Hedera helix,common ivy,False,True,False,0.541346,0.565467,0.494087,0.6688,0.47242,0.502494
+Vitis rotundifolia,muscadine,False,False,False,0.334747,0.259617,0.606191,0.694726,0.681302,0.615528
+Pueraria montana,kudzu,False,False,False,0.429585,0.370387,0.363783,0.409172,0.192966,0.641978
+Cercis canadensis,eastern redbud,False,False,False,0.440038,0.533382,0.755344,0.521689,0.461334,0.802269
+Quercus nigra,water oak,False,False,False,0.324259,0.502799,0.489422,0.478641,0.627075,0.634228
+Parthenocissus quinquefolia,Virginia creeper,False,True,False,0.543135,0.565287,0.666872,0.565078,0.581475,0.67375
+Albizia julibrissin,Persian silk tree,False,False,False,0.569065,0.768521,0.721738,0.504535,0.757962,0.653903
+Acer negundo,box elder,False,True,False,0.248084,0.080869,0.5712,0.430163,0.581984,0.716935
+Cornus florida,flowering dogwood,False,True,False,0.531707,0.603822,0.672117,0.531199,0.716224,0.783825
+Chimaphila maculata,striped wintergreen,False,False,False,0.36516,0.297449,0.410432,0.757712,0.714309,0.893989
+Nandina domestica,Heavenly bamboo,False,True,False,0.249697,0.409817,0.561423,0.673952,0.486018,0.88217
+Toxicodendron radicans,eastern poison ivy,True,True,False,0.690322,0.875647,0.757365,0.664369,0.783745,0.631849
+Rhus copallinum,shining sumac,False,False,False,0.686783,0.658719,0.779521,0.669743,0.655738,0.799783
+Solidago altissima,tall goldenrod,False,False,False,0.520926,0.623398,0.898997,0.522566,0.562867,0.848211
+Ilex cornuta,Chinese holly,False,False,False,0.596466,0.624664,0.496629,0.453854,0.177905,0.429076
+Solanum carolinense,Carolina horsenettle,True,True,False,0.39816,0.273224,0.728745,0.639857,0.553215,0.654077
+Juglans nigra,eastern black walnut,False,True,True,0.327962,0.490457,0.318534,0.489325,0.312111,0.744238
+Sassafras albidum,sassafras,False,False,False,0.444688,0.335227,0.629429,0.593174,0.521511,0.702166
+Tipularia discolor,crane-fly orchid,False,False,False,0.650381,0.742845,0.949179,0.643028,0.834172,0.745819
+Acer rubrum,red maple,False,True,True,0.396573,0.693911,0.769536,0.469979,0.623275,0.707783
+Asimina triloba,common pawpaw,False,True,False,0.757802,0.702945,0.638193,0.433851,0.225863,0.715499
+Phyllanthus urinaria,Chamberbitter,False,False,False,0.281456,0.143868,0.633278,0.679717,0.584856,0.757451
+Ilex opaca,American holly,False,True,False,0.442936,0.379124,0.570514,0.49201,0.234999,0.455742
+Perilla frutescens,beefsteak plant,False,True,False,0.425312,0.591974,0.345212,0.536596,0.443937,0.683801
+Elaeagnus pungens,thorny olive,False,False,False,0.615431,0.690495,0.574217,0.715699,0.559647,0.638031
+Symphyotrichum pilosum,frost aster,False,False,False,0.477954,0.733168,0.70764,0.427229,0.409848,0.606318
+Impatiens capensis,common jewelweed,False,False,False,0.872568,0.841578,0.65835,0.773303,0.796486,0.660964
+Quercus alba,white oak,False,False,False,0.235559,0.359,0.464917,0.427021,0.580343,0.604062
+Ipomoea purpurea,common morning-glory,False,False,False,0.498487,0.480523,0.405687,0.629079,0.845398,0.51077
+Berberis bealei,leatherleaf mahonia,False,True,False,0.790192,0.80476,0.661452,0.710028,0.422399,0.822871
+Epifagus virginiana,Beechdrops,False,False,False,0.44267,0.478173,0.642884,0.522208,0.534655,0.675804
+Chasmanthium latifolium,river oats,False,False,False,0.294943,0.416331,0.457518,0.608221,0.714828,0.806777
+Oxydendrum arboreum,sourwood,False,False,False,0.283518,0.300505,0.478129,0.652744,0.779787,0.872879
+Magnolia macrophylla,bigleaf magnolia,False,False,False,0.40735,0.685307,0.650138,0.42694,0.717387,0.712308
+Chrysopsis mariana,Maryland golden-aster,False,False,False,0.307958,0.556602,0.747006,0.467957,0.544693,0.661241
+Lonicera japonica,Japanese honeysuckle,False,True,False,0.508538,0.667698,0.733098,0.750024,0.612579,0.849568
+Dryopteris erythrosora,autumn fern,False,False,False,0.657048,0.819184,0.601434,0.767955,0.750858,0.762586
+Pinus taeda,loblolly pine,False,False,False,0.257577,0.494614,0.5355,0.197565,0.372314,0.432891
+Diphasiastrum digitatum,fan clubmoss,False,False,False,0.42493,0.512917,0.779153,0.62272,0.636568,0.811002
+Lobelia cardinalis,cardinal flower,False,True,False,0.761764,0.688215,0.909284,0.827028,0.731994,0.930626
+Passiflora incarnata,purple passionflower,False,False,False,0.798897,0.811783,0.881869,0.83345,0.823387,0.874484
+Physalis angulata,cutleaf groundcherry,False,True,False,0.424195,0.52832,0.391657,0.72438,0.786815,0.448087
+Microstegium vimineum,Japanese stiltgrass,False,False,False,0.228993,0.614094,0.584773,0.46234,0.430615,0.753119
+Bignonia capreolata,cross vine,False,False,False,0.47806,0.511931,0.468131,0.523726,0.340938,0.722355
+Chelone glabra,white turtlehead,False,False,False,0.601135,0.685775,0.503548,0.342488,0.215798,0.624786
+Nephroia carolina,Carolina snailseed,False,False,False,0.482502,0.361639,0.544315,0.349362,0.175683,0.58335
+Commelina communis,Asiatic dayflower,False,False,False,0.702967,0.632717,0.647191,0.691243,0.548087,0.619505
+Verbesina alternifolia,Wingstem,False,False,False,0.377476,0.25778,0.631296,0.605846,0.616778,0.699513
+Lycoris radiata,red spider lily,False,True,False,0.702606,0.853392,0.887874,0.565069,0.860503,0.909479
+Campsis radicans,American trumpet vine,False,True,False,0.719619,0.681468,0.55354,0.718419,0.520607,0.745181
+Nyssa sylvatica,Black Tupelo,False,False,False,0.342136,0.39952,0.681987,0.43162,0.244114,0.683169
+Pyrus calleryana,Callery pear,False,False,False,0.359857,0.316611,0.358576,0.405254,0.318649,0.586103
+Bigelowia nuttallii,Nuttall's Rayless Goldenrod,False,False,False,0.588087,0.521759,0.86912,0.383263,0.213493,0.64215
+Carya illinoinensis,pecan,False,False,False,0.297221,0.408555,0.355761,0.623591,0.600555,0.734384
+Heterotheca subaxillaris,Camphorweed,False,False,False,0.575425,0.799557,0.747563,0.641428,0.550116,0.835481
+Magnolia tripetala,umbrella magnolia,False,True,False,0.315703,0.725155,0.581714,0.439962,0.566405,0.735934
+Pluchea camphorata,Camphor-weed,False,False,False,0.464568,0.704441,0.654403,0.541291,0.457463,0.789645
+Symphyotrichum georgianum,Georgia aster,False,False,False,0.284028,0.375621,0.707612,0.296725,0.447639,0.533048
+Rhus glabra,smooth sumac,False,False,False,0.695982,0.807082,0.690701,0.644198,0.673712,0.759575
+Quercus phellos,willow oak,False,False,False,0.29621,0.520185,0.527242,0.505539,0.612593,0.707247
+Achyranthes japonica,Japanese Chaff Flower,False,False,False,0.527856,0.694969,0.631464,0.608729,0.558905,0.826938
+Symphyotrichum dumosum,Bushy Aster,False,False,False,0.470561,0.610619,0.735128,0.423102,0.531639,0.608058
+Hydrangea quercifolia,oakleaf hydrangea,False,False,False,0.416277,0.597937,0.428588,0.538102,0.607252,0.52343
+Mikania scandens,climbing hempvine,False,False,False,0.534222,0.508084,0.474231,0.676035,0.626699,0.734955
+Asplenium platyneuron,ebony spleenwort,False,False,False,0.799902,0.796319,0.523926,0.403132,0.630768,0.630401
+Lespedeza cuneata,Chinese bushclover,False,False,False,0.388138,0.505891,0.566443,0.489444,0.282447,0.686258
+Citrus trifoliata,trifoliate orange,False,False,False,0.418351,0.432866,0.54039,0.607581,0.586282,0.498152
+Glechoma hederacea,ground-ivy,False,True,False,0.410812,0.490969,0.487104,0.773508,0.675553,0.777426
+Symphyotrichum lateriflorum,calico aster,False,False,False,0.296642,0.265127,0.621307,0.449667,0.630032,0.551404
+Cosmos sulphureus,Yellow Cosmos,False,False,False,0.390531,0.758376,0.762022,0.580368,0.653058,0.76174
+Trifolium repens,white clover,False,False,True,0.224205,0.542106,0.364062,0.483957,0.712282,0.561853
+Ilex verticillata,winterberry holly,False,False,False,0.807461,0.684275,0.553979,0.559927,0.422026,0.397619
+Quercus falcata,southern red oak,False,False,False,0.366975,0.509171,0.609028,0.453745,0.596587,0.625526
+Mitchella repens,partridgeberry,False,False,False,0.666627,0.62496,0.410613,0.547405,0.521742,0.616813
+Campanula divaricata,Southern Harebell,False,False,False,0.683812,0.502467,0.848346,0.582857,0.539437,0.788813
+Solidago caesia,bluestem goldenrod,False,False,False,0.537537,0.727909,0.787794,0.622174,0.67207,0.873138
+Euonymus fortunei,fortune's spindle,False,False,False,0.350551,0.378748,0.582759,0.622032,0.417947,0.722268
+Melothria pendula,creeping cucumber,False,True,False,0.499134,0.765808,0.369063,0.590267,0.366574,0.795013
+Gentiana saponaria,Soapwort Gentian,False,False,False,0.563084,0.665599,0.690155,0.717311,0.515566,0.77633
+Jacquemontia tamnifolia,Hairy cluster-vine,False,False,False,0.528233,0.856365,0.488057,0.612305,0.615037,0.71432
+Persicaria sagittata,arrow-leaved tearthumb,False,False,False,0.345262,0.385716,0.633228,0.730701,0.849773,0.845196
+Athyrium asplenioides,southern lady fern,False,False,False,0.652489,0.715075,0.592804,0.524925,0.82072,0.602175
+Rudbeckia laciniata,cutleaf coneflower,False,True,False,0.576706,0.843651,0.731552,0.668821,0.702873,0.866136
+Paulownia tomentosa,princess tree,False,False,False,0.369139,0.434743,0.554664,0.559817,0.530804,0.623922
+Potentilla indica,mock strawberry,False,False,False,0.421974,0.42562,0.158689,0.618681,0.57687,0.534889
+Verbesina virginica,frostweed,False,False,False,0.462463,0.735391,0.553893,0.467026,0.250982,0.694402
+Ipomoea coccinea,red morning glory,False,False,False,0.586057,0.631213,0.452259,0.664726,0.866281,0.614351
+Macrothelypteris torresiana,Mariana Maiden Fern,False,False,False,0.643694,0.648092,0.555039,0.539534,0.404291,0.773414
+Vaccinium arboreum,sparkleberry,False,False,False,0.519681,0.42586,0.421971,0.620313,0.502812,0.721026
+Ruellia simplex,Mexican Ruellia,False,False,False,0.541241,0.564749,0.61109,0.550541,0.535391,0.597333
+Chamaecrista fasciculata,partridge pea,False,False,True,0.69425,0.520209,0.645672,0.612671,0.461692,0.807853
+Juniperus virginiana,eastern redcedar,False,True,False,0.248209,0.438269,0.556096,0.468981,0.648992,0.555918
+Alnus serrulata,smooth alder,False,False,False,0.390839,0.610027,0.49727,0.639389,0.519554,0.714515
+Verbascum thapsus,great mullein,False,True,False,0.696016,0.722821,0.681421,0.726159,0.669656,0.773014
+Onoclea sensibilis,sensitive fern,False,True,False,0.568307,0.773931,0.540235,0.465229,0.274383,0.62693
+Smilax bona-nox,saw greenbrier,False,False,False,0.248099,0.19252,0.503271,0.637024,0.537188,0.638013
+Helianthus angustifolius,narrowleaf sunflower,False,False,False,0.575307,0.73856,0.535895,0.525533,0.733118,0.717306
+Symphyotrichum patens,late purple aster,False,False,False,0.373032,0.648044,0.758918,0.442157,0.572224,0.521515

@@ -1,0 +1,8 @@
+# 2026-10-07 15:20 EDT, Apple M4 Max, macOS 26.5.2, Python 3.13.14, transformers 5.19.0
+wkcn/TinyCLIP-ViT-8M-16-Text-3M-YFCC15M @ a2a8c6e, 117 species; hazard 3, wikipedia 30, usda 5
+common:poisonous/harmless: AUC hazard 0.740, wikipedia 0.599, usda 0.473 | top: common jewelweed, American pokeweed, winterberry holly, ebony spleenwort, purple passionflower, leatherleaf mahonia, cardinal flower, common pawpaw
+common:toxic/safe: AUC hazard 0.687, wikipedia 0.593, usda 0.571 | top: American pokeweed, eastern poison ivy, Hairy cluster-vine, red spider lily, cutleaf coneflower, common jewelweed, autumn fern, purple passionflower
+common:poisonous/edible: AUC hazard 0.871, wikipedia 0.566, usda 0.507 | top: crane-fly orchid, cardinal flower, tall goldenrod, red spider lily, purple passionflower, Nuttall's Rayless Goldenrod, Southern Harebell, American pokeweed
+scientific:poisonous/harmless: AUC hazard 0.784, wikipedia 0.610, usda 0.454 | top: purple passionflower, cardinal flower, Little Brown Jugs, ground-ivy, common jewelweed, autumn fern, striped wintergreen, Japanese honeysuckle
+scientific:toxic/safe: AUC hazard 0.675, wikipedia 0.480, usda 0.486 | top: red morning glory, red spider lily, arrow-leaved tearthumb, common morning-glory, Little Brown Jugs, crane-fly orchid, dogfennel, purple passionflower
+scientific:poisonous/edible: AUC hazard 0.386, wikipedia 0.610, usda 0.512 | top: cardinal flower, red spider lily, striped wintergreen, Heavenly bamboo, purple passionflower, bluestem goldenrod, sourwood, Amur honeysuckle

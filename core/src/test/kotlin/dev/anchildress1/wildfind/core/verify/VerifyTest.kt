@@ -56,7 +56,7 @@ class VerifyTest {
     }
 
     @Test
-    fun `rows are checked in PRD order, first match wins`() {
+    fun `rows are checked in order, first match wins`() {
         val far = Focus(Focus.AF_PASSIVE_FOCUSED, 0.5f, 1f)
         val unfocused = Focus(1, 4f, 1f)
         fun verdict(e: FrameEvidence) = VerifyStreak().next(e)
@@ -65,9 +65,20 @@ class VerifyTest {
         assertEquals(Verdict.NotPlant, verdict(match.copy(reticlePlant = false, focus = null)))
         assertEquals(Verdict.TapToFocus, verdict(match.copy(focus = null)))
         assertEquals(Verdict.TapToFocus, verdict(match.copy(focus = unfocused)))
-        assertEquals(Verdict.WalkCloser, verdict(match.copy(focus = far)))
         assertEquals(Verdict.Matching(1), verdict(match))
+        assertEquals(Verdict.WalkCloser, verdict(match.copy(goalMet = false, focus = far)))
         assertEquals(Verdict.Guide, verdict(match.copy(goalMet = false)))
+    }
+
+    @Test
+    fun `a far subject still matches, and distance only explains a miss`() {
+        val far = Focus(Focus.AF_PASSIVE_FOCUSED, 0.5f, 1f)
+        val streak = VerifyStreak()
+
+        assertEquals(
+            listOf(Verdict.Matching(1), Verdict.Matching(2), Verdict.Found),
+            List(3) { streak.next(match.copy(focus = far)) },
+        )
     }
 
     @Test
@@ -86,7 +97,10 @@ class VerifyTest {
         streak.next(match)
         streak.next(match)
 
-        assertEquals(Verdict.WalkCloser, streak.next(match.copy(focus = Focus(Focus.AF_FOCUSED_LOCKED, 1f, 1f))))
+        assertEquals(
+            Verdict.WalkCloser,
+            streak.next(match.copy(goalMet = false, focus = Focus(Focus.AF_FOCUSED_LOCKED, 1f, 1f))),
+        )
         assertEquals(Verdict.Matching(1), streak.next(match))
     }
 
