@@ -1,7 +1,7 @@
 [project]
 name = "wild-find-pipeline"
 version = "0.1.0"
-description = "Build-time menu, fact cards, and label embeddings for wild-find."
+description = "Build-time species table, toxicity flags, synonyms, tutorial labels, and plant gate for wild-find."
 requires-python = ">=3.13"
 dependencies = [
     "mwparserfromhell>=0.7.2",
