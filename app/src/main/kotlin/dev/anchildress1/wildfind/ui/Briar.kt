@@ -30,8 +30,8 @@ import dev.anchildress1.wildfind.ui.theme.LocalReducedMotion
 import org.json.JSONObject
 
 /**
- * Plays Briar's [state] sheet once, then loops `idle` until Briar leaves the screen; null plays `idle` alone. With
- * the system animator scale at 0, the sheet holds its first frame.
+ * Plays Briar's [state] sheet once, then loops `idle` until Briar leaves the screen; a looping sheet such as `complete`
+ * keeps looping, and null plays `idle` alone. With the system animator scale at 0, the sheet holds its first frame.
  *
  * @param cue bump it to replay the same state, e.g. a second find
  */
@@ -85,7 +85,7 @@ private class Loaded(assets: AssetManager, name: String) {
     val image: ImageBitmap = assets.open("briar/$name.png").use(BitmapFactory::decodeStream).asImageBitmap()
 }
 
-// The largest packed cell (idle and searching, 520 px).
+// The largest packed cell (idle, 520 px).
 private const val BOX_PX = 520
 
 /** What a screen reader says for Briar in [state]. */
@@ -94,9 +94,7 @@ fun briarText(state: BriarState?): String = stringResource(
     when (state) {
         null -> R.string.briar_idle
         BriarState.WELCOME -> R.string.briar_welcome
-        BriarState.SEARCHING -> R.string.briar_searching
         BriarState.FOUND -> R.string.briar_found
-        BriarState.RETRY -> R.string.briar_retry
         BriarState.COMPLETE -> R.string.briar_complete
     },
 )

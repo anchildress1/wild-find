@@ -7,9 +7,7 @@
 
     <string name="briar_idle">Briar resting</string>
     <string name="briar_welcome">Briar waving hello</string>
-    <string name="briar_searching">Briar sniffing around</string>
     <string name="briar_found">Briar cheering</string>
-    <string name="briar_retry">Briar stepping back</string>
     <string name="briar_complete">Briar bouncing</string>
 
     <string name="opener_art">Picture coming soon: bees, a snake, and poison ivy.</string>

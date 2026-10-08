@@ -1,39 +1,25 @@
 package dev.anchildress1.wildfind.core.sprite
 
-import dev.anchildress1.wildfind.core.verify.Verdict
-
 /**
- * Briar's states, one sheet each under `assets/briar/`; game events pick the state, and Compose only plays it.
+ * Briar's states, one sheet each under `assets/briar/`; game events pick the state, and Compose only plays it. Briar
+ * stays off hunt pages, so no state reacts to a single capture.
  *
  * @property sheet the sheet's asset name
  */
 enum class BriarState(val sheet: String) {
-    /** First launch and the opener. */
+    /** First launch, the tutorial, and the hunt list. */
     WELCOME("welcome"),
 
-    /** A hunt or target starts. */
-    SEARCHING("searching"),
-
-    /** Verify found the target. */
+    /** The found screen. */
     FOUND("found"),
 
-    /** A capture missed or warned. */
-    RETRY("retry"),
-
-    /** The hunt is complete. */
+    /** The hunt is complete; its sheet loops. */
     COMPLETE("complete"),
     ;
 
-    /** Picks the state for a capture's outcome. */
+    /** The idle loop. */
     companion object {
-        /** The loop every state sheet hands over to once it has played. */
+        /** The loop every play-once state sheet hands over to. */
         const val IDLE = "idle"
-
-        /** Briar's reaction to a capture's final verdict, or null while the streak is still matching. */
-        fun after(verdict: Verdict): BriarState? = when (verdict) {
-            Verdict.Found -> FOUND
-            is Verdict.Matching -> null
-            Verdict.Hazard, Verdict.NotPlant, Verdict.TapToFocus, Verdict.WalkCloser, Verdict.Guide -> RETRY
-        }
     }
 }

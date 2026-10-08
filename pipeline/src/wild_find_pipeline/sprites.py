@@ -16,13 +16,11 @@ OUT = REPO / "app/src/main/assets/briar"
 SHEETS = {
     "idle": ("briar-rest-blink-16.png", 4, 4, 8),
     "welcome": ("welcome-32.png", 8, 4, 16),
-    "searching": ("briar-searching-32.png", 8, 4, 16),
     "found": ("briar-found-32.png", 8, 4, 16),
-    "retry": ("briar-retry-32.png", 8, 4, 16),
     "complete": ("complete-32.png", 8, 4, 16),
 }
-# Only idle loops; every state sheet plays once, then idle takes over (PRD sprite sheet contract).
-LOOPING = {"idle"}
+# Idle and the hunt-complete celebration loop; every other state sheet plays once, then idle takes over.
+LOOPING = {"idle", "complete"}
 # Rows of each frame's lowest pixels that count as its feet.
 FEET_ROWS = 24
 # Soft fur edges sit outside the alpha > 128 outline; grow the outline this far to keep them.

@@ -41,7 +41,7 @@ The Oct 7 redesign (PRD Redesign) dropped the build-time menu: the old S10–S16
 
 ## App · Oct 8–9
 
-- [x] **S30 Briar host** — Compose sprite player for the PRD sheet contract, five states (welcome, searching, found, retry, complete) driven by game events; each state sheet plays once, then the 16-frame `idle` loops until Briar leaves the screen; every state plays `idle` until per-state art lands
+- [x] **S30 Briar host** — Compose sprite player for the PRD sheet contract, three states (welcome, found, complete) picked by screens; Briar stays off hunt pages; each state sheet plays once, then the 16-frame `idle` loops until Briar leaves the screen, except `complete`, which loops
 - [x] **S31 Safety opener** — R1, placeholder art, replayable, banned-copy check in tests (`BannedCopyTest` scans every shipped string and plural on the phone)
 - [x] **S32 Location** — coarse permission only, manual region pick on deny; coverage message off-region; R2, R7
 - [x] **S33 iNat client** — `SpeciesCountsQuery` (core) builds the one query from the region center, month, locale, and radius, caps it at 3 pages of 500, and reads `Retry-After` seconds; `InatClient` (app) fetches only the pages the first page's total needs, with a named User-Agent, and returns the pull, a 429 wait, or a failure; the widen path is one more query at 150 km; INTERNET is the only new permission; R2
