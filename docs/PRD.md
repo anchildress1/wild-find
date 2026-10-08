@@ -356,7 +356,7 @@ Briar and the opener play finished sprite sheets, one per state. A Rive rig was 
 | Concept board | Poses, icon ideas, palette; reference only, broken alpha | assets/source/wild-find-sprite-1.png |
 | UI direction 01 | Eight-screen review concept: first launch with the hint-download bar (since dropped), grass tutorial, hunt map, live camera, hint (since dropped), found, give it space, hunt complete; reference only | assets/source/wild-find-app-design.png |
 | Briar idle loop | 16-frame rest-and-blink idle, source for `idle`; plays for every state until per-state art exists | assets/source/briar-rest-blink-16.png |
-| Briar state sources | Finished per-state art, not yet packed: 32-frame 8 × 4 sheets on 512 px cells `welcome-32`, `rest-blink-32`, `searching-32`, `searching-hint-32`, `found-32`, `retry-32`, `complete-32`; drafts stay out of git in assets/generated/ until finished | assets/source/briar-*.png, assets/source/welcome-32.png |
+| Briar state sources | Finished per-state art, not yet packed: 32-frame 8 × 4 sheets on 512 px cells `welcome-32`, `rest-blink-32`, `searching-32`, `searching-hint-32`, `found-32`, `retry-32`, `complete-32`; drafts stay out of git in assets/generated/ until finished | assets/source/briar-*.png, assets/source/welcome-32.png, assets/source/complete-32.png |
 | Briar sprite sheets | Per-state sheets: welcome; searching; found; retry; hunt complete | app/src/main/assets/briar/ (only `idle` so far) |
 | Category icons | No category source since fact cards were dropped (Open Questions) | Path pending |
 | Opener art | Bees and snakes, with poison ivy drawn in; a sprite sheet under the same contract | Path pending |
