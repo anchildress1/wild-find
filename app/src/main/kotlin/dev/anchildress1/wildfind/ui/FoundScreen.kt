@@ -74,9 +74,9 @@ fun FoundScreen(info: FoundInfo, crop: Pixels?, onNext: () -> Unit, onHunt: () -
             }
         }
         Box(Modifier.fillMaxWidth().heightIn(min = 320.dp)) {
-            // Briar first, so his cheering arms never cover the photo or the star.
-            Briar(BriarState.FOUND, briarText(BriarState.FOUND), Modifier.align(Alignment.BottomStart))
             Medallion(crop, info.name, Modifier.align(Alignment.TopEnd).padding(end = 12.dp, top = 10.dp))
+            // Briar cheers in front of the photo; only the star sits above him.
+            Briar(BriarState.FOUND, briarText(BriarState.FOUND), Modifier.align(Alignment.BottomStart))
             // Every win looks the same, the grass practice included.
             val star = stringResource(R.string.one_star)
             Star(76.dp, Modifier.align(Alignment.TopEnd).semantics { contentDescription = star }.pop(index = 2))
