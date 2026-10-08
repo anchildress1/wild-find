@@ -27,7 +27,7 @@ import java.util.concurrent.Executor
 /**
  * Binds the back camera's preview and analysis to one [view]-sized viewport, so the models read exactly
  * what the kid sees and the ring sits on the scored reticle square (PRD Crops). Replaces any earlier binding; call
- * again with the new size after a resize or rotation.
+ * again with the new size after a resize or rotation, cancelling the [PendingBind] this returned.
  *
  * @param view the viewfinder's size and the display's rotation
  * @param executor the analysis thread; [CaptureVerifier.analyze] runs on it
@@ -44,9 +44,12 @@ fun bindVerifyCamera(
     executor: Executor,
     onSurface: (SurfaceRequest) -> Unit,
     onBound: (Camera, List<UseCase>) -> Unit,
-) {
+): PendingBind {
+    val pending = PendingBind()
     val future = ProcessCameraProvider.getInstance(context)
     future.addListener({
+        // A screen that left, or rebound at a new size, must not bind: unbindAll here would kill the newer binding.
+        if (pending.cancelled) return@addListener
         val fourByThree = ResolutionSelector.Builder()
             .setAspectRatioStrategy(AspectRatioStrategy.RATIO_4_3_FALLBACK_AUTO_STRATEGY)
             .build()
@@ -87,6 +90,19 @@ fun bindVerifyCamera(
             .getCameraCharacteristic(CameraCharacteristics.SENSOR_INFO_ACTIVE_ARRAY_SIZE)?.width() ?: 0
         onBound(camera, group.useCases)
     }, context.mainExecutor)
+    return pending
+}
+
+/** A bind still waiting on the camera provider; [cancel] it when its screen leaves or rebinds. */
+class PendingBind {
+    /** True once cancelled; read on the main thread, where the provider's callback runs. */
+    var cancelled = false
+        private set
+
+    /** Stops the bind from happening if the provider hasn't answered yet. */
+    fun cancel() {
+        cancelled = true
+    }
 }
 
 /** Releases [useCases] once the screen showing them leaves; a newer binding's use cases stay. */

@@ -54,11 +54,12 @@ fun Viewfinder(
     var request by remember { mutableStateOf<SurfaceRequest?>(null) }
     var camera by remember { mutableStateOf<Camera?>(null) }
     val bound = remember { mutableListOf<UseCase>() }
-    val disposed = remember { booleanArrayOf(false) }
+    val pending = remember { arrayOfNulls<PendingBind>(1) }
     val frame by verifier.frameSize.collectAsStateWithLifecycle()
     LaunchedEffect(size) {
         if (size == IntSize.Zero) return@LaunchedEffect
-        bindVerifyCamera(
+        pending[0]?.cancel()
+        pending[0] = bindVerifyCamera(
             context,
             owner,
             ViewGeometry(size.width, size.height, view.display.rotation),
@@ -66,22 +67,17 @@ fun Viewfinder(
             executor,
             onSurface = { request = it },
             onBound = { live, useCases ->
-                // The provider can finish binding after the kid has left the screen; drop that late binding so the
-                // camera doesn't keep running behind the hunt.
-                if (disposed[0]) {
-                    unbindVerifyCamera(context, useCases)
-                } else {
-                    camera = live
-                    bound += useCases
-                    onCamera(live)
-                }
+                camera = live
+                bound += useCases
+                onCamera(live)
             },
         )
     }
     // Only this viewfinder's own use cases, so a camera screen entering while this one leaves keeps its binding.
     DisposableEffect(Unit) {
         onDispose {
-            disposed[0] = true
+            // The provider can answer after the kid has left; a cancelled bind never starts the camera.
+            pending[0]?.cancel()
             unbindVerifyCamera(context, bound.toList())
         }
     }
