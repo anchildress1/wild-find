@@ -86,8 +86,8 @@ def frame_lines(frames: list[dict[str, str]], camera_event: str) -> list[str]:
     unmatched_tap = sum(r["verdict"] == "tap_to_focus" and r["focus_matched"] != "true" for r in frames)
     over = sum(t >= FRAME_BUDGET_MS for t in totals)
     lines = [
-        f"frames: {len(frames)} over {seconds:.0f} s ({len(frames) / seconds if seconds else 0:.1f} analyzed/s), "
-        f"upright {frames[0]['frame_w']}x{frames[0]['frame_h']}",
+        # Frames come in capture bursts, so a per-second rate would only measure how often the tester tapped.
+        f"frames: {len(frames)} over {seconds:.0f} s, upright {frames[0]['frame_w']}x{frames[0]['frame_h']}",
         f"frame ms (buffer to verdict): {spread(totals)}; at or over {FRAME_BUDGET_MS:.0f} ms: {over} of {len(totals)}",
         f"frame ms with BioCLIP on both regions: {spread(both)} ({len(both)} frames)",
         "stage p50 ms: "
