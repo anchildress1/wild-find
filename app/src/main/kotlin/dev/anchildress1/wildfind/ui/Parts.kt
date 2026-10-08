@@ -37,6 +37,8 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
@@ -138,7 +140,8 @@ fun RuleLine(modifier: Modifier = Modifier, color: Color = Palette.Forest) {
     )
     Text(
         text,
-        modifier.fillMaxWidth(),
+        // The inline sprout's placeholder character would be read aloud; TalkBack gets the rule alone.
+        modifier.fillMaxWidth().clearAndSetSemantics { contentDescription = rule },
         color = color,
         style = MaterialTheme.typography.labelMedium,
         textAlign = TextAlign.Center,
