@@ -25,10 +25,17 @@ FLOWER_COLOR = "TO_0000537"
 LEAF_COLOR = "TO_0000326"
 BLOOM = "BloomPeriod"
 SEED_BEGIN = "SeedPeriodBegin"
+SEED_END = "SeedPeriodEnd"
+LEAF_RETENTION = "PATO_0001729"
 FRUIT_COLOR = "FruitSeedColor"
-FRUIT_PERSISTS = "FruitPersistence"
 SHOWY = "humanAgriculture.owl#Horticulture"
-TRAITS = (HEIGHT, FLOWER_COLOR, LEAF_COLOR, BLOOM, SEED_BEGIN, FRUIT_COLOR, FRUIT_PERSISTS, SHOWY)
+TRAITS = (HEIGHT, FLOWER_COLOR, LEAF_COLOR, BLOOM, SEED_BEGIN, SEED_END, FRUIT_COLOR, LEAF_RETENTION, SHOWY)
+# Leaf Retention: "Does the tree, shrub, or sub-shrub retain its leaves year round?" (PATO evergreen, plant).
+EVERGREEN = "PATO_0001733"
+# Types USDA scores Leaf Retention for (vines climb on woody stems too); only these can claim fall leaves.
+WOODY = ("tree", "shrub", "vine")
+# Seasons in the order a year runs, for the fruit/seed period.
+YEAR = ("spring", "summer", "fall", "winter")
 
 # PATO and USDA color terms, labels checked against the EBI Ontology Lookup Service on Oct 8.
 COLORS = {
@@ -141,6 +148,22 @@ def size(kind: str | None, traits: dict[str, list[str]]) -> str | None:
     return small if feet <= low else big if feet >= high else None
 
 
+def fruit_season(begin: list[str], end: list[str]) -> str | None:
+    """Fall when the Fruit/Seed Period from begin to end covers it, else None: the sentence then names no season.
+
+    USDA defines begin and end as the seasons the earliest and latest fruit is visually obvious, so the begin season
+    alone can be months early (oaks begin in summer). A period that misses fall is left unsaid rather than trusted:
+    on Oct 8 every such tree target (water oak, tuliptree, southern magnolia, witch-hazel) read summer for fruit a
+    kid sees in fall (docs/results/day-3/descriptions.log). Unknown or year-round also says no season.
+    """
+    first, last = season(begin), season(end)
+    if first is None or last is None:
+        return None
+    start, stop = YEAR.index(first), YEAR.index(last)
+    covered = {YEAR[(start + i) % len(YEAR)] for i in range((stop - start) % len(YEAR) + 1)}
+    return FALL if FALL in covered else None
+
+
 def season(values: list[str]) -> str | None:
     """The one season [values] fold into, preferring fall when it is among them; None when unknown."""
     seasons = sorted({SEASONS[v] for v in values if v in SEASONS})
@@ -157,7 +180,11 @@ def features(kind: str | None, traits: dict[str, list[str]]) -> list[tuple[str, 
     """(phrase, season or None) for each feature a kid can see; fall ones first, at most MAX_FEATURES."""
     showy = set(traits.get(SHOWY, []))
     found: list[tuple[str, str | None]] = []
-    if "fallConspicuousYes" in showy:
+    # Fall Conspicuous asks whether the leaves *or fruits* stand out in autumn, so it says leaves only when the plant
+    # isn't evergreen and its fruit isn't the showy part; otherwise it would be a guess.
+    # Leaf Retention is scored only for trees, shrubs, and subshrubs, so other types can't rule out a non-leaf show.
+    leaves_show = "fallConspicuousYes" in showy and "fruitSeedConspicuousYes" not in showy and kind in WOODY
+    if leaves_show and EVERGREEN not in traits.get(LEAF_RETENTION, []):
         found.append(("bright leaves", FALL))
     flower = color(traits.get(FLOWER_COLOR, []))
     # Small plants' flower color counts even unshowy (blue mistflower's blue is how kids spot it); a tree's must be
@@ -168,8 +195,7 @@ def features(kind: str | None, traits: dict[str, list[str]]) -> list[tuple[str, 
     fruit = color(traits.get(FRUIT_COLOR, []))
     if "fruitSeedConspicuousYes" in showy and fruit:
         noun = "seeds" if fruit == "brown" else "fruit"
-        persists = "fruitPersistentYes" in traits.get(FRUIT_PERSISTS, [])
-        found.append((f"{fruit} {noun}", FALL if persists else season(traits.get(SEED_BEGIN, []))))
+        found.append((f"{fruit} {noun}", fruit_season(traits.get(SEED_BEGIN, []), traits.get(SEED_END, []))))
     leaf = color(traits.get(LEAF_COLOR, []))
     if leaf and leaf not in ("green", "red"):
         found.append((f"{leaf} leaves", None))
@@ -227,11 +253,12 @@ def main() -> int:
                     "noun_by_type": {str(k): v for k, v in NOUNS.items()},
                     "size_by_type_feet": {str(k): v for k, v in SIZES.items()},
                     "features": [
-                        "bright leaves in fall: fallConspicuousYes",
+                        "bright leaves in fall: tree, shrub, or vine; fallConspicuousYes, fruit not showy, and not "
+                        "evergreen (Fall Conspicuous covers leaves or fruits)",
                         "<color> flowers [in <bloom season>]: one non-green flower color; trees only when showy; "
                         "never on conifers, ferns, grasses, or mosses",
-                        "<color> fruit, or brown seeds, [in fall when persistent, else in <seed season>]: "
-                        "fruitSeedConspicuousYes and one fruit color",
+                        "<color> fruit, or brown seeds, [in fall when the Fruit/Seed Period Begin-End span covers "
+                        "fall, else no season]: fruitSeedConspicuousYes and one fruit color",
                         "<color> leaves: one leaf color other than green or red",
                     ],
                     "order": f"fall features first; at most {MAX_FEATURES}",
