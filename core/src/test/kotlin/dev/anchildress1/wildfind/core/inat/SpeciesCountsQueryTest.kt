@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import java.time.Instant
 
 class SpeciesCountsQueryTest {
     private val query = SpeciesCountsQuery(RegionKey(34, -85), 10, "en", CacheKey.RADIUS_KM)
@@ -35,10 +36,18 @@ class SpeciesCountsQueryTest {
     }
 
     @Test
-    fun `retry-after reads seconds and nothing else`() {
-        assertEquals(30L, SpeciesCountsQuery.retryAfterSeconds(" 30 "))
-        assertNull(SpeciesCountsQuery.retryAfterSeconds(null))
-        assertNull(SpeciesCountsQuery.retryAfterSeconds("Wed, 21 Oct 2026 07:28:00 GMT"))
-        assertNull(SpeciesCountsQuery.retryAfterSeconds("-1"))
+    fun `retry-after reads delay seconds`() {
+        assertEquals(30L, SpeciesCountsQuery.retryAfterSeconds(" 30 ", now))
+        assertNull(SpeciesCountsQuery.retryAfterSeconds(null, now))
+        assertNull(SpeciesCountsQuery.retryAfterSeconds("-1", now))
+        assertNull(SpeciesCountsQuery.retryAfterSeconds("soon", now))
     }
+
+    @Test
+    fun `retry-after reads an HTTP date as the wait until it, past the 60 second default`() {
+        assertEquals(300L, SpeciesCountsQuery.retryAfterSeconds("Wed, 21 Oct 2026 07:33:00 GMT", now))
+        assertEquals(0L, SpeciesCountsQuery.retryAfterSeconds("Wed, 21 Oct 2026 07:20:00 GMT", now))
+    }
+
+    private val now = Instant.parse("2026-10-21T07:28:00Z")
 }

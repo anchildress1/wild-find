@@ -3,6 +3,11 @@ package dev.anchildress1.wildfind.core.inat
 import dev.anchildress1.wildfind.core.cache.CacheKey
 import dev.anchildress1.wildfind.core.region.RegionKey
 import java.net.URLEncoder
+import java.time.Duration
+import java.time.Instant
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 import kotlin.math.ceil
 
 /**
@@ -51,7 +56,18 @@ data class SpeciesCountsQuery(val region: RegionKey, val month: Int, val locale:
         /** Pages a query with [totalResults] needs, capped at [MAX_PAGES]. */
         fun pages(totalResults: Int): Int = ceil(totalResults / PER_PAGE.toDouble()).toInt().coerceIn(1, MAX_PAGES)
 
-        /** Seconds a 429's `Retry-After` asks for, or null when it's missing or an HTTP date. */
-        fun retryAfterSeconds(header: String?): Long? = header?.trim()?.toLongOrNull()?.takeIf { it >= 0 }
+        /** Seconds a 429's `Retry-After` asks for, as delay seconds or an HTTP date read against [now], or null. */
+        fun retryAfterSeconds(header: String?, now: Instant): Long? {
+            val value = header?.trim() ?: return null
+            return value.toLongOrNull()?.takeIf { it >= 0 } ?: httpDate(value)?.let {
+                Duration.between(now, it).seconds.coerceAtLeast(0)
+            }
+        }
+
+        private fun httpDate(value: String): Instant? = try {
+            ZonedDateTime.parse(value, DateTimeFormatter.RFC_1123_DATE_TIME).toInstant()
+        } catch (_: DateTimeParseException) {
+            null
+        }
     }
 }

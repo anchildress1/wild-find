@@ -7,15 +7,17 @@ import org.json.JSONObject
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URI
+import java.time.Instant
 
 /**
  * The app's only network call: one iNat species_counts query, up to three pages (R2, R7).
  *
  * Blocking; call it off the main thread.
  *
+ * @param now the wall clock a `Retry-After` date is read against
  * @param fetch one GET; the default opens an HTTPS connection with the app's User-Agent
  */
-class InatClient(private val fetch: (String) -> Response = ::get) {
+class InatClient(private val now: () -> Instant = Instant::now, private val fetch: (String) -> Response = ::get) {
     /**
      * One HTTP response.
      *
@@ -37,7 +39,7 @@ class InatClient(private val fetch: (String) -> Response = ::get) {
         /**
          * iNat answered 429.
          *
-         * @property retryAfterSeconds the wait it asked for, or null when it gave none in seconds
+         * @property retryAfterSeconds the wait it asked for, or null when it gave none
          */
         data class RateLimited(val retryAfterSeconds: Long?) : Pull
 
@@ -78,7 +80,11 @@ class InatClient(private val fetch: (String) -> Response = ::get) {
         }
         return when (response.code) {
             HttpURLConnection.HTTP_OK -> parse(response.body, page)
-            HTTP_TOO_MANY_REQUESTS -> Stop(Pull.RateLimited(SpeciesCountsQuery.retryAfterSeconds(response.retryAfter)))
+
+            HTTP_TOO_MANY_REQUESTS -> Stop(
+                Pull.RateLimited(SpeciesCountsQuery.retryAfterSeconds(response.retryAfter, now())),
+            )
+
             else -> Stop(Pull.Failed("page $page: HTTP ${response.code}"))
         }
     }
