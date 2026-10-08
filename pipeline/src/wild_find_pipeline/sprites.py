@@ -17,6 +17,8 @@ PLANTS_OUT = REPO / "app/src/main/assets/plants"
 PLANT_TYPES = ("tree", "shrub", "vine", "herb", "grass", "fern", "moss", "conifer")
 # Tiles top out near 112 dp, about 340 px on a 3x screen.
 PLANT_PX = 384
+# Faint glow pixels below this alpha don't count as the plant's edge.
+ALPHA_FLOOR = 16
 # name: (source file, columns, rows, fps)
 SHEETS = {
     "idle": ("briar-rest-blink-16.png", 4, 4, 8),
@@ -108,10 +110,23 @@ def repack(source: Image.Image, columns: int, rows: int) -> tuple[Image.Image, i
 
 
 def plant_art(source: Image.Image) -> Image.Image:
-    """One plant-type picture, square at PLANT_PX, its transparent margin kept so every type sits alike."""
-    if source.width != source.height:
-        raise ValueError(f"plant art must be square, got {source.size}")
-    return source.convert("RGBA").resize((PLANT_PX, PLANT_PX), Image.Resampling.LANCZOS)
+    """One plant-type picture on a PLANT_PX square, trimmed to the plant and standing on the bottom edge.
+
+    The sources center each plant with a margin all round; trimming and grounding them lets every plant stand on
+    the same line as Briar's feet.
+    """
+    rgba = source.convert("RGBA")
+    box = rgba.getchannel("A").point(lambda a: 255 if a > ALPHA_FLOOR else 0).getbbox()
+    if box is None:
+        raise ValueError("plant art is empty")
+    plant = rgba.crop(box)
+    scale = PLANT_PX / max(plant.width, plant.height)
+    plant = plant.resize(
+        (max(1, round(plant.width * scale)), max(1, round(plant.height * scale))), Image.Resampling.LANCZOS
+    )
+    out = Image.new("RGBA", (PLANT_PX, PLANT_PX))
+    out.alpha_composite(plant, ((PLANT_PX - plant.width) // 2, PLANT_PX - plant.height))
+    return out
 
 
 def main() -> int:

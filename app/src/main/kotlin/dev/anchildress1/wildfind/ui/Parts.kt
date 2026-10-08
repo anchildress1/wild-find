@@ -163,22 +163,14 @@ fun PaperCard(modifier: Modifier = Modifier, content: @Composable ColumnScope.()
 }
 
 /**
- * A plant type's tile; found tiles get a Forest border. No type means no tile (spec: name only).
+ * A plant type's picture standing on its square's bottom edge, with no box around it; no type leaves the square
+ * empty (spec: name only).
  *
- * @param size the tile's side
+ * @param size the square's side
  */
 @Composable
-fun TypeTile(type: PlantType?, found: Boolean, size: Dp, modifier: Modifier = Modifier) {
-    val shape = RoundedCornerShape(size * TILE_RADIUS)
-    Box(
-        modifier.size(size).background(Palette.Paper, shape)
-            .border(if (found) 2.5.dp else 1.5.dp, if (found) Palette.Forest else Palette.Line, shape),
-        contentAlignment = Alignment.Center,
-    ) {
-        type?.let {
-            PlantArt(it, Modifier.size(size * ICON_SHARE))
-        }
-    }
+fun TypeTile(type: PlantType?, size: Dp, modifier: Modifier = Modifier) {
+    Box(modifier.size(size)) { type?.let { PlantArt(it, Modifier.size(size)) } }
 }
 
 /** A find star. */
@@ -205,5 +197,3 @@ fun typeLabel(type: PlantType?): String? = type?.let {
 }
 
 private const val SPROUT = "sprout"
-private const val TILE_RADIUS = 0.27f
-private const val ICON_SHARE = 0.6f

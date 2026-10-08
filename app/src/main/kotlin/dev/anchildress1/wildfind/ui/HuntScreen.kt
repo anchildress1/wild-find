@@ -198,7 +198,7 @@ private fun StopCard(number: Int, stop: Stop, onClick: () -> Unit, onCenter: (Of
                 onCenter(tile.positionInRoot() + Offset(tile.size.width / 2f, tile.size.height / 2f))
             },
         ) {
-            TypeTile(stop.type, stop.found, TILE)
+            TypeTile(stop.type, TILE)
             Badge(number, stop.found, Modifier.align(Alignment.TopStart).offset(-BADGE_NUDGE, -BADGE_NUDGE))
             if (stop.found) Star(34.dp, Modifier.align(Alignment.BottomEnd).offset(12.dp, 10.dp).pop())
         }

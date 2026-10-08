@@ -81,10 +81,8 @@ fun TutorialScreen(onTry: () -> Unit, onGrownUps: () -> Unit) {
             verticalAlignment = Alignment.Bottom,
         ) {
             Briar(BriarState.WELCOME, briarText(BriarState.WELCOME), Modifier.weight(1f, fill = false))
-            Box(
-                Modifier.rise(index = 1).size(150.dp, 170.dp).background(Palette.Husk, RoundedCornerShape(28.dp)),
-                contentAlignment = Alignment.Center,
-            ) { PlantArt(PlantType.GRASS, Modifier.size(132.dp)) }
+            // No box: the grass stands on the same line as Briar's feet.
+            PlantArt(PlantType.GRASS, Modifier.rise(index = 1).size(140.dp))
         }
         Text(
             stringResource(R.string.tutorial_point),

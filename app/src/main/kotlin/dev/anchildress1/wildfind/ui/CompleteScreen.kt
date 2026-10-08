@@ -83,7 +83,7 @@ private fun Finished(stop: Stop, modifier: Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
-        TypeTile(stop.type, stop.found, 88.dp)
+        TypeTile(stop.type, 88.dp)
         Text(stop.name, style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center)
         Text(status, style = MaterialTheme.typography.bodyMedium, color = Palette.Ink2)
     }

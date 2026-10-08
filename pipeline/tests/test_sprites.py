@@ -73,13 +73,19 @@ def test_a_prop_drawn_apart_joins_its_frame():
     assert {f.size for f in frames[1:]} == {(20, 30)}
 
 
-def test_plant_art_shrinks_square_art_and_keeps_alpha():
-    art = plant_art(Image.new("RGBA", (1254, 1254), (0, 120, 0, 0)))
+def test_plant_art_trims_the_margin_and_stands_the_plant_on_the_bottom_edge():
+    source = Image.new("RGBA", (1254, 1254))
+    source.paste((0, 120, 0, 255), (527, 427, 727, 827))  # a 200 x 400 plant, centered with a margin
+
+    art = plant_art(source)
+    box = art.getchannel("A").getbbox()
 
     assert art.size == (PLANT_PX, PLANT_PX)
-    assert art.mode == "RGBA"
+    assert box[3] == PLANT_PX  # on the bottom edge
+    assert box[1] == 0  # the taller side fills the square
+    assert abs((box[0] + box[2]) / 2 - PLANT_PX / 2) <= 1  # centered across
 
 
-def test_plant_art_rejects_non_square_art():
+def test_plant_art_rejects_an_empty_picture():
     with pytest.raises(ValueError):
-        plant_art(Image.new("RGBA", (100, 80)))
+        plant_art(Image.new("RGBA", (100, 100)))
