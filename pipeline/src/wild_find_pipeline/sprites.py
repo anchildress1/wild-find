@@ -23,6 +23,8 @@ SHEETS = {
 LOOPING = {"idle", "complete"}
 # Rows of each frame's lowest pixels that count as its feet.
 FEET_ROWS = 24
+# A separate outline this share of the smallest frame's size or more is a prop, not stray specks.
+PART_SHARE = 0.01
 # Soft fur edges sit outside the alpha > 128 outline; grow the outline this far to keep them.
 EDGE = 6
 
@@ -45,9 +47,22 @@ def frames_of(source: Image.Image, columns: int, rows: int) -> list[Image.Image]
         biggest,
         key=lambda i: (int((boxes[i - 1][0].start + boxes[i - 1][0].stop) / 2 // row_height), boxes[i - 1][1].start),
     )
+    # Props drawn apart from Briar (the opener's seedling) are their own outlines; each joins the nearest frame
+    # in its row.
+    parts = {i: [i] for i in order}
+    floor = sizes[biggest[-1] - 1] * PART_SHARE
+    for i in range(1, count + 1):
+        if i in parts or sizes[i - 1] < floor:
+            continue
+        ys, xs = boxes[i - 1]
+        row = int((ys.start + ys.stop) / 2 // row_height)
+        same_row = [j for j in order if int((boxes[j - 1][0].start + boxes[j - 1][0].stop) / 2 // row_height) == row]
+        center = (xs.start + xs.stop) / 2
+        nearest = min(same_row or order, key=lambda j: abs((boxes[j - 1][1].start + boxes[j - 1][1].stop) / 2 - center))
+        parts[nearest].append(i)
     frames = []
     for i in order:
-        keep = ndimage.binary_dilation(labels == i, iterations=EDGE) & (alpha > 0)
+        keep = ndimage.binary_dilation(np.isin(labels, parts[i]), iterations=EDGE) & (alpha > 0)
         ys, xs = np.nonzero(keep)
         rgba = np.asarray(source).copy()
         rgba[..., 3] = np.where(keep, rgba[..., 3], 0)

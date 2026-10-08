@@ -60,3 +60,14 @@ def test_soft_fur_edges_next_to_a_frame_are_kept():
 
     assert np.asarray(frame)[..., 3].max() == 255
     assert (np.asarray(frame)[..., 3] == 40).any()
+
+
+def test_a_prop_drawn_apart_joins_its_frame():
+    sheet = sheet_with(SPOTS)
+    # A small "seedling" beside the first frame, not touching it.
+    sheet.paste((40, 140, 40, 255), (30, 30, 36, 40))
+
+    frames = frames_of(sheet, columns=4, rows=2)
+
+    assert frames[0].size == (31, 30)
+    assert {f.size for f in frames[1:]} == {(20, 30)}
