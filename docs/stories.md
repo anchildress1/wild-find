@@ -30,7 +30,7 @@ The Oct 7 redesign (PRD Redesign) dropped the build-time menu: the old S10–S16
 
 - [ ] **S20 Contracts** — parse and validate `species_labels.json` (genus, hazard, toxic, type), `hazards.json`, `labels.json`, `plant_gate.json`, cache entry; reject unknown `schema_version`; parsing moves out of `app`'s `BundledAssets` into core
 - [x] **S21 Region key** — whole-degree rounding; the `34_-85`-only gate is superseded by S28
-- [ ] **S28 Any region** (core) — redesign: drop the `34_-85`-only gate in `RegionKey`; any whole-degree key plays; R2
+- [x] **S28 Any region** (core) — redesign: the `34_-85`-only gate in `RegionKey` is gone; any whole-degree key plays, and its whole degrees are the center the query sends; R2
 - [ ] **S22 Sightings** — aggregate `species_counts` pages; match iNat names to species-table rows through GBIF accepted names and synonyms (PRD hole 22), logging the match rate before and after; eligible at 0.5%+ of the query's plant sightings and 3+ sightings, in the species table, not toxic or hazard, common name of 3 words or fewer in the device locale; widen to 150 km once when < 3 eligible; every local toxic or hazard species with a table row comes back as a blocker for S29; R2
 - [ ] **S23 Cache rules** — versioned entry; mismatch on schema, table version, region, locale, month, or radius discards; H3
 - [ ] **S24 Hunt pick** — sighting-weighted random, 3 targets, never two from one genus, never a hazard or toxic species; grass tutorial first-ever only; R3, R4, H1
