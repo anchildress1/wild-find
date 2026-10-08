@@ -22,7 +22,7 @@ android {
 
     buildTypes {
         debug {
-            // Debug and release coexist on the single test phone, so a release install never wipes the model.
+            // Debug and release coexist on the single test phone, so a release install never wipes gate-harness runs not yet pulled.
             applicationIdSuffix = ".debug"
         }
     }

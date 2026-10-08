@@ -34,11 +34,11 @@ setup:
 build:
 	$(GRADLE) :app:assembleDebug :app:assembleDebugAndroidTest
 
-# -r keeps app data, so a sideloaded model survives reinstalls.
+# -r keeps app data, so gate-harness runs not yet pulled survive reinstalls.
 install: build
 	adb install -r -d app/build/outputs/apk/debug/app-debug.apk
 
-# On-device instrumented tests. Not connectedAndroidTest: it uninstalls the app afterwards, deleting the sideloaded model.
+# On-device instrumented tests. Not connectedAndroidTest: it uninstalls the app afterwards, deleting gate-harness runs not yet pulled.
 device-test: install
 	$(GRADLE) :app:assembleDebugAndroidTest
 	adb install -r -d -t app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
@@ -53,8 +53,8 @@ focus-probe: install
 	adb shell am start -n $(WILDFIND_PACKAGE)/dev.anchildress1.wildfind.FocusProbeActivity
 	adb logcat -s FocusProbe:I | tee $(FOCUS_LOG)
 
-# S05 gate harness: the live verify path at about 5 fps, hint taps, memory, and heat, logged on the phone.
-# GATE_WORD is a menu word, or grass for the tutorial. Back ends a run.
+# S05 gate harness: verify on each Capture tap (3 frames), memory, and heat, logged on the phone.
+# GATE_WORD is the target, or grass for the tutorial. Back ends a run.
 GATE_WORD ?= oak
 gate-harness: install
 	adb shell am start -n $(WILDFIND_PACKAGE)/dev.anchildress1.wildfind.harness.GateHarnessActivity --es word $(GATE_WORD)
