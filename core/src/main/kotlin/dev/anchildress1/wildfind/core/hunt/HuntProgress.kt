@@ -8,8 +8,14 @@ import dev.anchildress1.wildfind.core.region.RegionKey
  * @property openerSeen the safety opener (R1) has played once; it stays replayable from the menu
  * @property tutorialDone the grass tutorial (R3) passed, so it never repeats
  * @property region the hunting area, from the rough location or the manual pick; changed from the grown-ups page
+ * @property locationDenied rough location was denied, so it is never asked for again
  */
-data class AppFlags(val openerSeen: Boolean = false, val tutorialDone: Boolean = false, val region: RegionKey? = null)
+data class AppFlags(
+    val openerSeen: Boolean = false,
+    val tutorialDone: Boolean = false,
+    val region: RegionKey? = null,
+    val locationDenied: Boolean = false,
+)
 
 /**
  * The current hunt, the only hunt state that persists; the app saves it on every change and restores it after

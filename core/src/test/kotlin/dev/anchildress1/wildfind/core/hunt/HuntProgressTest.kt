@@ -45,7 +45,10 @@ class HuntProgressTest {
 
     @Test
     fun `app flags start unset`() {
-        assertEquals(AppFlags(openerSeen = false, tutorialDone = false, region = null), AppFlags())
+        assertEquals(
+            AppFlags(openerSeen = false, tutorialDone = false, region = null, locationDenied = false),
+            AppFlags(),
+        )
     }
 
     @Test

@@ -81,7 +81,7 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
         }
         viewModelScope.launch {
             flags = withContext(disk) { graph.store.flags() }
-            state.update { it.copy(region = flags.region) }
+            state.update { it.copy(region = flags.region, locationFailed = flags.locationDenied) }
             relabel()
             if (flags.openerSeen) resume() else show(Screen.Opener(back = null))
         }
@@ -163,6 +163,7 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
         val screen = state.value.screen
         val fallback = Screen.Map(back = screen).takeIf { screen is Screen.Region }
         if (!granted) {
+            save(flags.copy(locationDenied = true))
             state.update { it.copy(locationFailed = true) }
             return fallback?.let(::show) ?: Unit
         }

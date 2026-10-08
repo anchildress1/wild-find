@@ -44,8 +44,8 @@ class GameStoreTest {
         assertEquals(AppFlags(), store.flags())
         store.save(AppFlags(openerSeen = true, tutorialDone = false, region = RegionKey(-34, 151)))
         assertEquals(AppFlags(openerSeen = true, tutorialDone = false, region = RegionKey(-34, 151)), store.flags())
-        store.save(AppFlags(openerSeen = true, tutorialDone = true))
-        assertEquals(AppFlags(openerSeen = true, tutorialDone = true), store.flags())
+        store.save(AppFlags(openerSeen = true, tutorialDone = true, locationDenied = true))
+        assertEquals(AppFlags(openerSeen = true, tutorialDone = true, locationDenied = true), store.flags())
     }
 
     @Test
