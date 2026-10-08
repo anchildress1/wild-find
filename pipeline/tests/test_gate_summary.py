@@ -150,7 +150,7 @@ def test_summary_reports_every_gate_number(run):
     text = summarize(run)
 
     assert "frames: 5 over 1 s" in text
-    assert "at or over 500 ms: 0 of 5" in text
+    assert "at or over 333 ms: 0 of 5" in text
     assert "(4 frames)" in text
     assert "capture to analyzer ms: p50 40" in text
     assert "first eligible frame to Found ms: p50 580" in text
@@ -183,10 +183,10 @@ def test_a_run_that_died_before_any_row_summarizes_as_empty(run):
 
 
 def test_a_frame_exactly_at_the_budget_counts_against_it(run):
-    frames = (run / "frames.csv").read_text().replace(",150.0\n", ",500.0\n", 1)
+    frames = (run / "frames.csv").read_text().replace(",150.0\n", ",333.0\n", 1)
     (run / "frames.csv").write_text(frames)
 
-    assert "at or over 500 ms: 1 of 5" in summarize(run)
+    assert "at or over 333 ms: 1 of 5" in summarize(run)
 
 
 def test_a_missing_charging_state_reads_unavailable(run):

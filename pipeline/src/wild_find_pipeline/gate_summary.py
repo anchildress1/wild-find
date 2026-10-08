@@ -11,8 +11,8 @@ import numpy as np
 
 NS_PER_MS = 1_000_000
 NS_PER_S = 1_000_000_000
-# The harness analyzes a frame every 500 ms; a slower frame makes it skip the next one.
-FRAME_BUDGET_MS = 500.0
+# A capture verifies 3 frames back to back and must finish under 1 s, so each frame gets a third of that.
+FRAME_BUDGET_MS = 333.0
 FOUND_BUDGET_MS = 1500.0
 # The PRD's targets are strict "under" limits, so a sample exactly at one counts against it.
 # PowerManager thermal statuses.
