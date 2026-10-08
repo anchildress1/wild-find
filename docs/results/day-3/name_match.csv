@@ -1,0 +1,6 @@
+place,species,sightings,exact,exact_or_alias,names_sharing_a_row,share_floor,playable_before,playable_after
+west-georgia-us,1029,11093,641,647,0,55.5,23,23
+atlanta-us,1017,14267,653,659,0,71.3,24,24
+tbilisi-georgia,300,956,171,171,0,4.8,12,12
+borjomi-georgia,152,269,72,72,0,3,9,9
+country-georgia,665,2560,355,356,0,12.8,16,16
