@@ -123,6 +123,13 @@ class GateRun(private val context: Context, private val word: String, val log: G
     /** Starts sampling. */
     fun start() {
         log.event(now(), "start", word)
+        log.event(
+            now(),
+            "local_species",
+            "${species.count {
+                it in local
+            }} of ${local.size} local names in the species table",
+        )
         sampler.scheduleWithFixedDelay(::sample, 0, SAMPLE_MS, TimeUnit.MILLISECONDS)
     }
 
@@ -146,14 +153,19 @@ class GateRun(private val context: Context, private val word: String, val log: G
      * the streak, so a Found still needs that many matching frames in a row.
      */
     fun requestCapture() {
-        if (!captureLeft.compareAndSet(0, VerifyStreak.FRAMES)) return
-        log.event(now(), "capture", word)
+        // Main thread only, and the analyzer only lowers the count, so check-then-set can't race another tap. The
+        // button state goes first: set after the count, it could land after the analyzer already finished the
+        // capture and disable the button for the rest of the run.
+        if (captureLeft.get() != 0) return
         state.update { it.copy(capturing = true) }
+        log.event(now(), "capture", word)
+        captureLeft.set(VerifyStreak.FRAMES)
     }
 
     private fun verify(frame: RgbaFrame, rotation: Int, sensorNs: Long) {
         val received = now()
-        val gapMs = if (lastFrameNs == 0L) null else ms(received - lastFrameNs)
+        // A capture's first frame has no gap: the time since the last capture is the tester's pause, not cadence.
+        val gapMs = if (captureLeft.get() == VerifyStreak.FRAMES) null else ms(received - lastFrameNs)
         lastFrameNs = received
         val result = verifier.analyze(frame, goal) { focus.at(sensorNs) }
         val verdict = streak.next(result.evidence)
