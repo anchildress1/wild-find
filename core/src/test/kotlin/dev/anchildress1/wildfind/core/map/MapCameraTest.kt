@@ -26,9 +26,12 @@ class MapCameraTest {
     }
 
     @Test
-    fun `the area detail draws once zoomed in`() {
+    fun `the detailed borders and state lines take over before picking unlocks`() {
+        assertEquals(0, MapCamera().level)
         assertEquals(0, MapCamera(span = 60.0).level)
         assertEquals(1, MapCamera(span = MapCamera.DETAIL_SPAN).level)
+        assertEquals(1, MapCamera(span = MapCamera.PICK_SPAN).level)
+        assertEquals(1, MapCamera(span = MapCamera.MIN_SPAN).level)
     }
 
     @Test

@@ -45,8 +45,8 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import dev.anchildress1.wildfind.R
 import dev.anchildress1.wildfind.core.map.Heading
-import dev.anchildress1.wildfind.core.map.LandMap
 import dev.anchildress1.wildfind.core.map.MapCamera
+import dev.anchildress1.wildfind.core.map.WorldMap
 import dev.anchildress1.wildfind.core.region.RegionKey
 import dev.anchildress1.wildfind.game.MapFocus
 import dev.anchildress1.wildfind.ui.theme.LocalReducedMotion
@@ -65,14 +65,14 @@ private val CameraSaver = Saver<MapCamera, List<Double>>(
  * drag snaps to the nearest whole degree, and "Hunt here" unlocks once zoomed in to about 12° across. Only the
  * crosshairs' whole-degree spot ever leaves the phone (R2, R7).
  *
- * @param land the built-in map, null while it loads
+ * @param map the built-in map, null while it loads
  * @param focus where Locate found the rough location
  * @param canLocate location was never denied, so Locate may ask once
  */
 @Composable
 @Suppress("LongParameterList")
 fun MapScreen(
-    land: LandMap?,
+    map: WorldMap?,
     focus: MapFocus?,
     canLocate: Boolean,
     onLocation: (granted: Boolean) -> Unit,
@@ -94,7 +94,7 @@ fun MapScreen(
             )
         }
         Box(Modifier.weight(1f).fillMaxWidth().clipToBounds()) {
-            Pannable(land, camera, { camera = it }) { glide(camera.at(camera.region)) }
+            Pannable(map, camera, { camera = it }) { glide(camera.at(camera.region)) }
             Crosshairs(Modifier.align(Alignment.Center))
             Guide(camera, Modifier.align(Alignment.TopCenter))
             Controls(canLocate, onLocation, Modifier.align(Alignment.TopEnd)) { glide(camera.zoom(it)) }
@@ -117,7 +117,7 @@ private fun Pad(visible: Boolean, modifier: Modifier, onStep: (Heading) -> Unit)
 
 // Drags and pinches move the camera directly; lifting the last finger snaps the crosshairs to a whole degree.
 @Composable
-private fun Pannable(land: LandMap?, camera: MapCamera, onMove: (MapCamera) -> Unit, onRelease: () -> Unit) {
+private fun Pannable(map: WorldMap?, camera: MapCamera, onMove: (MapCamera) -> Unit, onRelease: () -> Unit) {
     var size by remember { mutableStateOf(IntSize.Zero) }
     // The gesture detector outlives recompositions, so it reads the newest camera, never the first one it saw.
     val current by rememberUpdatedState(camera)
@@ -143,7 +143,7 @@ private fun Pannable(land: LandMap?, camera: MapCamera, onMove: (MapCamera) -> U
                     onRelease()
                 }
             },
-    ) { LandCanvas(land, camera) }
+    ) { MapCanvas(map, camera) }
 }
 
 @Composable

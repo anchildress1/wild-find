@@ -16,7 +16,7 @@ from pathlib import Path
 
 import numpy as np
 
-from wild_find_pipeline import label_vectors, land
+from wild_find_pipeline import label_vectors, world_map
 from wild_find_pipeline.labels import (
     GATE_OTHER,
     GATE_PLANT,
@@ -183,7 +183,7 @@ INPUTS = (
     LABELS_DIR / "labels.npy",
     *(
         REPO / "pipeline/src/wild_find_pipeline" / name
-        for name in ("assets.py", "labels.py", "label_vectors.py", "land.py", "paths.py")
+        for name in ("assets.py", "labels.py", "label_vectors.py", "paths.py", "world_map.py")
     ),
 )
 
@@ -233,7 +233,7 @@ def main() -> int:
             ],
         }
         (staging / "plant_gate.json").write_text(json.dumps(gate) + "\n")
-        map_bytes = land.write(staging / "land.bin")
+        map_bytes = world_map.write(staging / "map.bin")
 
         publish(staging)
     hazards = sum(entry["hazard"] for entry in labels)

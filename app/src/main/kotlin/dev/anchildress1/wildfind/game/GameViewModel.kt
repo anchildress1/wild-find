@@ -14,7 +14,7 @@ import dev.anchildress1.wildfind.core.hunt.LocalListSource
 import dev.anchildress1.wildfind.core.hunt.LocalSpecies
 import dev.anchildress1.wildfind.core.hunt.Sighting
 import dev.anchildress1.wildfind.core.inat.SpeciesCountsQuery
-import dev.anchildress1.wildfind.core.map.LandMap
+import dev.anchildress1.wildfind.core.map.WorldMap
 import dev.anchildress1.wildfind.core.region.RegionKey
 import dev.anchildress1.wildfind.core.verify.CaptureCue
 import dev.anchildress1.wildfind.core.verify.Goal
@@ -168,7 +168,7 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
     }
 
     /** The built-in map, once read. */
-    suspend fun land(): LandMap = graph.land.await()
+    suspend fun map(): WorldMap = graph.map.await()
 
     private fun pick(region: RegionKey) {
         val back = when (val screen = state.value.screen) {

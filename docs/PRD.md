@@ -94,7 +94,7 @@ Every call below is settled; open items live in Open Questions.
 | Scoring | One star per find; no leave-it star in v1 (R10 dropped Oct 8) |
 | Hints | None. The target's common name and type show from the start of each hunt |
 | Toxicity flag | Built once on the laptop for every species-table row. A species is flagged when its English Wikipedia article has a sentence with the whole word toxic, toxin, or poison (other plants' names such as poison ivy removed first), when USDA PLANTS rates it moderate or severe, or when it has no article or one under 1,500 characters. Names match through GBIF. Best effort, like hazard detection, never a safety claim; on Oct 7 it flagged 30 of 117 West Georgia species and wrongly dropped about 6 |
-| Location | Two paths, and no place is ever named in the app (no geocoding; the hunt says "Near you"). "Use my area": Android coarse location only, asked when the kid taps it and never again after a denial, rounded to whole degrees. "Pick on a map": a built-in Natural Earth map (public domain) drawn on the phone, no tile server; it opens on the whole world, pans and zooms under fixed crosshairs, snaps to the nearest whole degree on release, unlocks "Hunt here" at about 12° across or less, offers 1° arrow taps as the no-drag TalkBack path, and shows whole degrees only. A denial goes straight to the map. The device is in a region only when its rounded key equals that region's key; the query always sends the region center, never device coordinates; the rounded hunting area is kept on the phone as an app flag and changed on the map from the grown-ups page |
+| Location | Two paths, and no place is ever named in the app (no geocoding; the hunt says "Near you"). "Use my area": Android coarse location only, asked when the kid taps it and never again after a denial, rounded to whole degrees. "Pick on a map": a built-in Natural Earth map (public domain) drawn on the phone, no tile server, showing land, country borders, and, once zoomed in to area detail (40° across or less), state and province lines, with no place names; it opens on the whole world, pans and zooms under fixed crosshairs, snaps to the nearest whole degree on release, unlocks "Hunt here" at about 12° across or less, offers 1° arrow taps as the no-drag TalkBack path, and shows whole degrees only. A denial goes straight to the map. The device is in a region only when its rounded key equals that region's key; the query always sends the region center, never device coordinates; the rounded hunting area is kept on the phone as an app flag and changed on the map from the grown-ups page |
 | Images | One illustration per plant type (tree, shrub, vine, herb, grass, fern, moss, conifer) in v1; licensed photos in v3 |
 | UI | Animation-first; Jetpack Compose hosts camera and chrome and plays sprite sheets for the opener and Briar, the mascot; no Rive, no React |
 | Distribution | GitHub Release APK with BioCLIP Mobile and the TinyCLIP plant gate inside; nothing downloads after install; outdoor demo video |
@@ -243,7 +243,7 @@ Nine files ship in the app, nothing downloads after install, and every cache ent
 | flora\_student\_fp32.onnx | BioCLIP 2.5 Mobile image encoder, fp32; pinned below and SHA-256 checked at build time | Build pipeline, from crazedcodernate/bioclip-2.5-mobile-fastvit @ 29b474ea2a5d72b4646f036ead9441e0a22a5c62 |
 | plant\_gate.onnx | TinyCLIP ViT-8M/16 image encoder, fp32 (about 33 MB), with CLIP normalization baked in | Build pipeline, exported from the pinned TinyCLIP weights below |
 | plant\_gate.json | Plant and not-plant labels, their 512-d TinyCLIP text vectors, and TinyCLIP's learned logit scale (exp(logit\_scale) = 50.0) | Build pipeline |
-| land.bin | The map picker's built-in world map: Natural Earth land rings at 1:110m (world) and 1:50m (area detail), coordinates in hundredths of a degree (about 270 KB); the phone draws it, so no tile server is ever asked | Build pipeline, from the pinned Natural Earth files below |
+| map.bin | The map picker's built-in world map, no place names: Natural Earth land and country borders at 1:110m (world view) and 1:50m (area detail), plus 1:10m state and province lines (1:50m has them for only 9 countries) thinned to 0.02° with Douglas-Peucker; coordinates in hundredths of a degree (1.0 MB, 0.68 MB compressed in the APK); the phone draws it, so no tile server is ever asked | Build pipeline, from the pinned Natural Earth files below |
 
 **species\_labels.json**
 
@@ -265,7 +265,15 @@ A target is a species-table row; its common name comes from the iNaturalist pull
 
 The build-time text encoder is pinned too, laptop only: BioCLIP 2.5 ViT-H, imageomics/bioclip-2.5-vith14 @ 6e3d04e3d6522012c88181085c5ae666e14c45cd.
 
-The built-in map is pinned the same way: `make assets` fetches `geojson/ne_110m_land.geojson` (138,160 bytes, SHA-256 9e0729ee253ca7d7a5c4ae9395fb1902264c5377c52e224d13dd85010e2835d9) and `geojson/ne_50m_land.geojson` (1,636,166 bytes, SHA-256 e874b27a51d146452be360cafb3cc50c86001074a67d534113e6534682f9826b) from nvkelso/natural-earth-vector @ f1890d9f152c896d250a77557a5751a93d494776 (v5.1.2, public domain) and trusts them only after both match.
+The built-in map is pinned the same way: `make assets` fetches these `geojson/` files from nvkelso/natural-earth-vector @ f1890d9f152c896d250a77557a5751a93d494776 (v5.1.2, public domain) and trusts each only after its size and SHA-256 match.
+
+| File | Bytes | SHA-256 |
+| --- | --- | --- |
+| ne\_110m\_land.geojson | 138,160 | 9e0729ee253ca7d7a5c4ae9395fb1902264c5377c52e224d13dd85010e2835d9 |
+| ne\_50m\_land.geojson | 1,636,166 | e874b27a51d146452be360cafb3cc50c86001074a67d534113e6534682f9826b |
+| ne\_110m\_admin\_0\_boundary\_lines\_land.geojson | 340,010 | d42479fd79552cca4eec7f85fcdca717a790d29ff06be7676f1af0568c6d3f7c |
+| ne\_50m\_admin\_0\_boundary\_lines\_land.geojson | 760,189 | 2faac4f6b34386f3d21b6e018cf151f241f00e5c936d44dd17d7d9bfb147fa48 |
+| ne\_10m\_admin\_1\_states\_provinces\_lines.geojson | 21,092,537 | 1a1f30ccaaf4cc9c4bde34266f0b8cbb955d3a4cf254b756912255f2ec7c75b6 |
 
 The build fetches BioCLIP from `https://huggingface.co/<repo>/resolve/<revision>/<file>`. Integrity comes from the SHA-256 above, read from the Hugging Face file listing on October 5 and 6, 2026, never from a displayed size. fp32 only: on the test phone, ONNX Runtime returned NaN for BioCLIP's fp16 file. Bundled models are generated build assets, never committed; the build regenerates them, and CI caches them. Text vectors that need the 3.9 GB teacher (labels.npy, appended hazard rows) and the toxicity flags that need 4,272 article fetches are committed instead, so CI never downloads either.
 

@@ -25,7 +25,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import dev.anchildress1.wildfind.R
 import dev.anchildress1.wildfind.WildFindApp
-import dev.anchildress1.wildfind.core.map.LandMap
+import dev.anchildress1.wildfind.core.map.WorldMap
 import dev.anchildress1.wildfind.game.GameEffect
 import dev.anchildress1.wildfind.game.GameEvent
 import dev.anchildress1.wildfind.game.GameState
@@ -103,9 +103,9 @@ private fun ScreenFor(screen: Screen, state: GameState, vm: GameViewModel) {
         )
 
         is Screen.Map -> {
-            val land by produceState<LandMap?>(null) { value = vm.land() }
+            val map by produceState<WorldMap?>(null) { value = vm.map() }
             MapScreen(
-                land,
+                map,
                 state.mapFocus,
                 canLocate = !state.locationFailed,
                 onLocation = { on(GameEvent.LocationAnswer(it)) },

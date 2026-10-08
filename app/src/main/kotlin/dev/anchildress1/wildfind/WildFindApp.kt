@@ -2,7 +2,7 @@ package dev.anchildress1.wildfind
 
 import android.app.Application
 import android.system.Os
-import dev.anchildress1.wildfind.core.map.LandMap
+import dev.anchildress1.wildfind.core.map.WorldMap
 import dev.anchildress1.wildfind.inat.InatClient
 import dev.anchildress1.wildfind.inference.BundledAssets
 import dev.anchildress1.wildfind.store.GameStore
@@ -48,7 +48,7 @@ class Graph(app: Application) {
     val location = RoughLocation(app)
 
     /** The built-in world map for the area picker, read once in the background. */
-    val land: Deferred<LandMap> = scope.async { LandMap.parse(app.assets.open(LAND).use { it.readBytes() }) }
+    val map: Deferred<WorldMap> = scope.async { WorldMap.parse(app.assets.open(MAP).use { it.readBytes() }) }
 
     /** Bundled models and tables, loading in the background. */
     val models: Deferred<Models> = scope.async { Models(BundledAssets(app.assets)) }
@@ -57,4 +57,4 @@ class Graph(app: Application) {
     val analysis: ExecutorService = Executors.newSingleThreadExecutor()
 }
 
-private const val LAND = "land.bin"
+private const val MAP = "map.bin"

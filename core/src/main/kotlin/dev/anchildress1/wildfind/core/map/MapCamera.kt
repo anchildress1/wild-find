@@ -36,7 +36,7 @@ data class MapCamera(val lat: Double = 0.0, val lng: Double = 0.0, val span: Dou
     /** "Hunt here" unlocks once the view is about [PICK_SPAN] across or less. */
     val canPick: Boolean get() = span <= PICK_SPAN
 
-    /** The land level to draw: 0 is the world outline, 1 the area detail. */
+    /** The detail level to draw: 0 is the world outline and borders, 1 adds area detail and state lines. */
     val level: Int get() = if (span > DETAIL_SPAN) 0 else 1
 
     /** The whole-degree region under the crosshairs; the iNat query sends only its center. */

@@ -34,8 +34,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.anchildress1.wildfind.R
 import dev.anchildress1.wildfind.core.map.Heading
-import dev.anchildress1.wildfind.core.map.LandMap
 import dev.anchildress1.wildfind.core.map.MapCamera
+import dev.anchildress1.wildfind.core.map.MapLayer
+import dev.anchildress1.wildfind.core.map.WorldMap
 import dev.anchildress1.wildfind.ui.theme.Palette
 
 private val Ocean = Color(0xFFCBDAD3)
@@ -44,52 +45,75 @@ private val ButtonShape = RoundedCornerShape(24.dp)
 private val PadShape = RoundedCornerShape(14.dp)
 
 /**
- * The land rings drawn under [camera], with copies a turn east and west so the date line never shows a gap, and the
- * whole-degree cell under the crosshairs outlined once picking unlocks. Paths are built once in degrees and only
- * transformed per frame.
+ * The built-in map under [camera]: land, then state lines (dashed, area detail only), then country borders (solid
+ * and heaviest), each copied a turn east and west so the date line never shows a gap. No place names, ever. Paths
+ * are built once in degrees and only transformed per frame; the whole-degree cell under the crosshairs is outlined
+ * once picking unlocks.
  */
 @Composable
-fun LandCanvas(land: LandMap?, camera: MapCamera) {
-    val paths = remember(land) {
-        land?.levels?.map { rings ->
-            Path().apply {
-                fillType = PathFillType.EvenOdd
-                rings.forEach { ring ->
-                    moveTo(ring[0], -ring[1])
-                    for (i in 2 until ring.size step 2) lineTo(ring[i], -ring[i + 1])
-                    close()
-                }
-            }
-        }
-    }
+fun MapCanvas(map: WorldMap?, camera: MapCamera) {
+    val paths = remember(map) { map?.let(::paths) }
     val cell = remember { PathEffect.dashPathEffect(floatArrayOf(CELL_DASH, CELL_DASH)) }
     Canvas(Modifier.fillMaxSize().background(Ocean)) {
         val scale = (size.width / camera.span).toFloat()
-        paths?.getOrNull(camera.level)?.let { path ->
-            for (turn in -1..1) {
-                withTransform({
-                    translate(
-                        size.width / 2 + ((turn * TURN - camera.lng) * scale).toFloat(),
-                        size.height / 2 + (camera.lat * scale).toFloat(),
-                    )
-                    scale(scale, scale, Offset.Zero)
-                }) {
-                    drawPath(path, Land)
-                    drawPath(path, Palette.Moss, style = Stroke(COAST.dp.toPx() / scale))
-                }
+        val level = paths?.get(camera.level)
+        for (turn in -1..1) {
+            if (level == null) break
+            withTransform({
+                translate(
+                    size.width / 2 + ((turn * TURN - camera.lng) * scale).toFloat(),
+                    size.height / 2 + (camera.lat * scale).toFloat(),
+                )
+                scale(scale, scale, Offset.Zero)
+            }) {
+                // Stroke widths and dashes are in degrees here, so each divides by the scale to stay fixed on screen.
+                drawPath(level.land, Land)
+                drawPath(level.land, Palette.Moss, style = Stroke(COAST.dp.toPx() / scale))
+                drawPath(
+                    level.states,
+                    Palette.Ink2,
+                    style = Stroke(
+                        STATE.dp.toPx() / scale,
+                        pathEffect = PathEffect.dashPathEffect(
+                            floatArrayOf(
+                                STATE_DASH.dp.toPx() / scale,
+                                STATE_GAP.dp.toPx() / scale,
+                            ),
+                        ),
+                    ),
+                )
+                drawPath(level.borders, Palette.Paper, style = Stroke(BORDER_HALO.dp.toPx() / scale))
+                drawPath(level.borders, Palette.Ink, style = Stroke(BORDER.dp.toPx() / scale))
             }
         }
         if (camera.canPick) {
             val region = camera.region
-            val left = camera.x(region.lng - HALF, size.width)
-            val top = camera.y(region.lat + HALF, size.width, size.height)
             drawRect(
                 Palette.Forest,
-                Offset(left, top),
+                Offset(camera.x(region.lng - HALF, size.width), camera.y(region.lat + HALF, size.width, size.height)),
                 Size(scale, scale),
                 style = Stroke(2.dp.toPx(), pathEffect = cell),
             )
         }
+    }
+}
+
+private class Level(val land: Path, val borders: Path, val states: Path)
+
+private fun paths(map: WorldMap): List<Level> = (0..1).map { level ->
+    Level(
+        path(map.shapes(MapLayer.LAND, level), closed = true),
+        path(map.shapes(MapLayer.BORDERS, level), closed = false),
+        path(map.shapes(MapLayer.STATES, level), closed = false),
+    )
+}
+
+private fun path(shapes: List<FloatArray>, closed: Boolean) = Path().apply {
+    fillType = PathFillType.EvenOdd
+    shapes.forEach { shape ->
+        moveTo(shape[0], -shape[1])
+        for (i in 2 until shape.size step 2) lineTo(shape[i], -shape[i + 1])
+        if (closed) close()
     }
 }
 
@@ -174,6 +198,11 @@ private fun MapButton(icon: ImageVector, description: String, onClick: () -> Uni
 private const val TURN = 360.0
 private const val HALF = 0.5
 private const val COAST = 1f
+private const val STATE = 1.5f
+private const val STATE_DASH = 6f
+private const val STATE_GAP = 4f
+private const val BORDER = 2.5f
+private const val BORDER_HALO = 5f
 private const val CELL_DASH = 14f
 private const val ARM = 0.44f
 private const val GAP = 0.14f
