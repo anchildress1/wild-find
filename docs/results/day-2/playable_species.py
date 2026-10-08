@@ -48,8 +48,9 @@ def main() -> int:
         w = csv.DictWriter(f, fieldnames=list(out[0]))
         w.writeheader()
         w.writerows(out)
-    local = [line for line in (OUT.parents[2] / "app/src/debug/assets/local_species.txt").read_text().splitlines()
-             if line and not line.startswith("#")]  # fmt: skip
+    # The harness asset became a TSV of count, scientific name, and common name on Oct 8.
+    local = [line.split("\t")[1] for line in (OUT.parents[2] / "app/src/debug/assets/local_species.tsv").read_text()
+             .splitlines() if line and not line.startswith("#")]  # fmt: skip
     hits = sum(name in labels for name in local)
     print(f"gate harness local list (West Georgia, October): {hits} of {len(local)} names match the species table")
     return 0

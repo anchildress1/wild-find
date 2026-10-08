@@ -3,7 +3,8 @@ import importlib.util, json, sys
 from pathlib import Path
 from wild_find_pipeline import toxicity as OLD
 D = Path.cwd() / ".models/toxicity-audit"
-spec = importlib.util.spec_from_file_location("toxicity_proposed", D / "scripts/toxicity_proposed.py")
+# The proposed rule is committed beside this script; only the audit data lives in the gitignored .models folder.
+spec = importlib.util.spec_from_file_location("toxicity_proposed", Path(__file__).resolve().parent / "toxicity_proposed.py")
 NEW = importlib.util.module_from_spec(spec); spec.loader.exec_module(NEW)
 tox = json.loads((D / "toxicity.json").read_text())["species"]
 wt = json.loads((D / "wikitext.json").read_text())
