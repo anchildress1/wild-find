@@ -3,6 +3,8 @@
      (BannedCopyTest scans every string here). -->
 <resources>
     <string name="app_name">wild-find</string>
+    <!-- The name under the launcher icon; the in-app wordmark keeps app_name. -->
+    <string name="launcher_name">Wild Find</string>
     <string name="leave_it_rule">Look. Photograph. Leave it where it grows.</string>
 
     <string name="briar_idle">Briar resting</string>
