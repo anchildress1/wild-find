@@ -1,8 +1,8 @@
 """Bundled APK assets: BioCLIP Mobile, the species table with hazard and toxicity flags, and the TinyCLIP plant gate.
 
 Writes into the gitignored app/generated/assets. Needs no BioCLIP teacher: appended hazard rows come from the
-committed hazard_vectors.json (make hazard-vectors) and toxicity flags from toxicity.json (make toxicity), so CI
-can run it. Also checks the committed labels.npy and
+committed hazard_vectors.json (make hazard-vectors), toxicity flags from toxicity.json (make toxicity), and name
+aliases from synonyms.json (make synonyms), so CI can run it. Also checks the committed labels.npy and
 labels.json (make labels) against the current label lists and pins.
 """
 
@@ -33,6 +33,7 @@ from wild_find_pipeline.paths import (
     MANIFEST,
     MODEL_CACHE,
     REPO,
+    SYNONYMS,
     TOXICITY,
     ensure_artifact,
     file_sha256,
@@ -72,6 +73,14 @@ def with_toxicity(labels: list[dict], flags: dict[str, dict]) -> list[dict]:
         {**entry, "genus": entry["scientific"].split()[0], "toxic": flags[entry["scientific"]]["toxic"]}
         for entry in labels
     ]
+
+
+def with_synonyms(labels: list[dict], aliases: dict[str, list[str]]) -> list[dict]:
+    """Add each row's committed GBIF aliases; raises when a row has no entry."""
+    missing = [entry["scientific"] for entry in labels if entry["scientific"] not in aliases]
+    if missing:
+        raise ValueError(f"{SYNONYMS.name} lacks {len(missing)} species, e.g. {missing[:3]}; run make synonyms")
+    return [{**entry, "synonyms": aliases[entry["scientific"]]} for entry in labels]
 
 
 def tinyclip_dir() -> Path:
@@ -158,6 +167,7 @@ INPUTS = (
     MANIFEST,
     HAZARD_VECTORS,
     TOXICITY,
+    SYNONYMS,
     REPO / "pipeline/uv.lock",
     LABELS_DIR / "labels.json",
     LABELS_DIR / "labels.npy",
@@ -198,6 +208,7 @@ def main() -> int:
         extra = hazard_vectors(names)
         table, labels = species_table(np.load(ensure_artifact("taxa")), names, extra)
         labels = with_toxicity(labels, json.loads(TOXICITY.read_text())["species"])
+        labels = with_synonyms(labels, json.loads(SYNONYMS.read_text())["species"])
         np.save(staging / "species_table.npy", table)
         (staging / "species_labels.json").write_text(json.dumps(labels, indent=1) + "\n")
 

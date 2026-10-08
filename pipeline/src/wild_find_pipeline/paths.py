@@ -19,6 +19,8 @@ GENERATED_STAMP = REPO / "app/generated/inputs.json"
 HAZARD_VECTORS = REPO / "pipeline/data/hazard_vectors.json"
 # Toxicity flag per species-table row; committed because it needs ~300 network requests (make toxicity).
 TOXICITY = REPO / "pipeline/data/toxicity.json"
+# GBIF aliases per species-table row; committed because it needs ~13,000 network requests (make synonyms).
+SYNONYMS = REPO / "pipeline/data/synonyms.json"
 
 
 def pin(model: str, manifest: Path = MANIFEST) -> dict[str, str]:

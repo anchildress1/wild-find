@@ -1,4 +1,4 @@
-.PHONY: setup build install device-test focus-probe assets sprites toxicity hazard-vectors labels crop-reference gate-harness gate-pull reference test pipeline-test lint ktlint detekt android-lint pipeline-lint actionlint secret-scan ai-checks clean
+.PHONY: setup build install device-test focus-probe assets sprites toxicity synonyms hazard-vectors labels crop-reference gate-harness gate-pull reference test pipeline-test lint ktlint detekt android-lint pipeline-lint actionlint secret-scan ai-checks clean
 
 SHELL := /bin/bash
 
@@ -78,6 +78,10 @@ sprites:
 # S10: rebuilds the committed pipeline/data/toxicity.json from Wikipedia, USDA PLANTS, and GBIF; CI never runs it.
 toxicity:
 	$(UV) run --group reference python -W error -m wild_find_pipeline.toxicity
+
+# Rebuilds the committed pipeline/data/synonyms.json from the GBIF backbone so drifted iNat names find their row.
+synonyms:
+	$(UV) run --group reference python -W error -m wild_find_pipeline.synonyms
 
 # Rebuilds the committed hazard_vectors.json; pulls the 3.9 GB BioCLIP teacher (as does reference), so CI runs neither.
 hazard-vectors:
