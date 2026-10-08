@@ -14,6 +14,7 @@ import dev.anchildress1.wildfind.core.hunt.LocalListResult
 import dev.anchildress1.wildfind.core.hunt.LocalListSource
 import dev.anchildress1.wildfind.core.hunt.LocalSpecies
 import dev.anchildress1.wildfind.core.hunt.Sighting
+import dev.anchildress1.wildfind.core.inat.InatLocale
 import dev.anchildress1.wildfind.core.inat.RetryWindow
 import dev.anchildress1.wildfind.core.inat.SpeciesCountsQuery
 import dev.anchildress1.wildfind.core.map.WorldMap
@@ -213,7 +214,12 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
                     pull = { query -> pull(query).also { if (it == null) offline = true } },
                     cached = graph.store::cached,
                     save = graph.store::cache,
-                ).load(models.tableVersion, region, Locale.getDefault().language, LocalDate.now().monthValue)
+                ).load(
+                    models.tableVersion,
+                    region,
+                    InatLocale.of(Locale.getDefault().toLanguageTag()),
+                    LocalDate.now().monthValue,
+                )
             }
             val local = (result as? LocalListResult.Ready)?.local
             val planned = local?.let { HuntPick(models.rows).next(it, flags.tutorialDone) }
