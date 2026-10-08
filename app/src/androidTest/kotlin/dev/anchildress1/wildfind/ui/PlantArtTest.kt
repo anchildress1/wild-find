@@ -22,4 +22,11 @@ class PlantArtTest {
             assertTrue(type.key, bitmap.hasAlpha())
         }
     }
+
+    @Test
+    fun theFindStarIsASquarePictureWithTransparency() {
+        val star = assets.open("star.webp").use(BitmapFactory::decodeStream)
+        assertEquals(star.width, star.height)
+        assertTrue(star.hasAlpha())
+    }
 }

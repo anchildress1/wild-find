@@ -1,5 +1,6 @@
 package dev.anchildress1.wildfind.ui
 
+import android.graphics.BitmapFactory
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -32,7 +33,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
@@ -173,10 +176,12 @@ fun TypeTile(type: PlantType?, size: Dp, modifier: Modifier = Modifier) {
     Box(modifier.size(size)) { type?.let { PlantArt(it, Modifier.size(size)) } }
 }
 
-/** A find star. */
+/** A find star, the painted art from `assets/star.webp`. */
 @Composable
 fun Star(size: Dp, modifier: Modifier = Modifier) {
-    Image(WildIcons.Star, contentDescription = null, modifier.size(size))
+    val assets = LocalContext.current.assets
+    val star = remember { assets.open("star.webp").use(BitmapFactory::decodeStream).asImageBitmap() }
+    Image(star, contentDescription = null, modifier.size(size))
 }
 
 /** "a tree", "an herb", or null for no type. */

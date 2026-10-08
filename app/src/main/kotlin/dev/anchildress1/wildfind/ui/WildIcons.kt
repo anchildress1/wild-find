@@ -116,15 +116,6 @@ object WildIcons {
     /** "Checking…" */
     val Dots = fill("dots", circle(6f, 12f, 2f), circle(12f, 12f, 2f), circle(18f, 12f, 2f))
 
-    /** A find star: wheat, outlined in ink, never tinted. */
-    val Star: ImageVector = ImageVector.Builder("star", 24.dp, 24.dp, 24f, 24f).addPath(
-        addPathNodes(STAR),
-        fill = SolidColor(Palette.Wheat),
-        stroke = SolidColor(Palette.Ink),
-        strokeLineWidth = 1.2f,
-        strokeLineJoin = StrokeJoin.Round,
-    ).build()
-
     /** An empty star slot. */
     val StarOutline = line("star-outline", STAR, width = 1.4f)
 }

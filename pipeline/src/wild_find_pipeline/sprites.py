@@ -22,6 +22,8 @@ ICON_LAYERS = ("foreground", "background", "monochrome")
 ICON_DENSITIES = {"mdpi": 108, "hdpi": 162, "xhdpi": 216, "xxhdpi": 324, "xxxhdpi": 432}
 # Tiles top out near 112 dp, about 340 px on a 3x screen.
 PLANT_PX = 384
+# The find star tops out at 76 dp, about 230 px on a 3x screen.
+STAR_PX = 256
 # Faint glow pixels below this alpha don't count as the plant's edge.
 ALPHA_FLOOR = 16
 # name: (source file, columns, rows, fps)
@@ -152,6 +154,13 @@ def main() -> int:
             folder.mkdir(parents=True, exist_ok=True)
             source.resize((px, px), Image.Resampling.LANCZOS).save(folder / f"ic_launcher_{layer}.webp", lossless=True)
     print(f"OK: launcher icon, {len(ICON_LAYERS)} layers at {len(ICON_DENSITIES)} densities")
+    star = Image.open(SOURCE / "star.png").convert("RGBA")
+    star = star.crop(star.getchannel("A").getbbox())
+    side = max(star.size)
+    square = Image.new("RGBA", (side, side))
+    square.alpha_composite(star, ((side - star.width) // 2, (side - star.height) // 2))
+    square.resize((STAR_PX, STAR_PX), Image.Resampling.LANCZOS).save(OUT.parent / "star.webp", quality=90, method=6)
+    print(f"OK: star {STAR_PX}x{STAR_PX}")
     for kind in PLANT_TYPES:
         plant_art(Image.open(SOURCE / f"{kind}.png")).save(PLANTS_OUT / f"{kind}.webp", quality=90, method=6)
         print(f"OK: plant {kind} {PLANT_PX}x{PLANT_PX}")
