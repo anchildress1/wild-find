@@ -6,6 +6,10 @@ Day 2 took the verify path outside for the first time and tested the redesign's 
 
 Both runs used the S24 Ultra (SM-S928U, Android 16) in Ashley's yard with the gate harness, target oak. The first was continuous analysis on a charger; the second was capture-only, unplugged, after the harness changed.
 
+Run 2's `summary.txt` says `charging yes` because the summarizer read only the last sample, and the phone was plugged in for the last 9. Its `system.csv` shows 153 of 162 samples unplugged. The summarizer now counts every sample.
+
+Three 1-minute morning runs (`084701`, `095515`, `101831`) bracket the resize change in [day-2/resize-benchmark.log](day-2/resize-benchmark.log): resize p50 108.8 ms in the first, 17.0 and 21.4 ms after. TinyCLIP called 774 of 776 frames not a plant, so they measure speed only, never verify.
+
 | Run | Mode | Raw data |
 | --- | --- | --- |
 | Run 1, 17:10 | Continuous verify (target 5 frames a second), hint ladder with a hardcoded stand-in line on levels 1 and 3, phone charging | [gate/20261007-171013-oak/](gate/20261007-171013-oak/), with Ashley's spot list in `notes.txt` |
@@ -31,7 +35,7 @@ Both runs used the S24 Ultra (SM-S928U, Android 16) in Ashley's yard with the ga
 **4. Verify is too slow to run continuously.**
 - Run 1 took 366 ms per frame at p50 (924 ms max) once BioCLIP ran on both regions, which it did on 82% of frames outdoors.
 - That's 2.5 analyzed frames a second, and thermal status reached severe at 36 minutes on the charger.
-- Run 2 ran only on capture: 189 ms per capture frame at p50, and thermal status stayed at none.
+- Run 2 ran only on capture and unplugged: 189 ms per capture frame at p50, and thermal status stayed at none over 5.5 minutes. That's too short to show heat on battery; S05's 20-minute run covers it.
 
 **5. Gemma's hints are generic and repetitive.**
 - Run 1 had 2 Gemma hints; run 2 had 3. Every one said some version of "look for a big tree near the woods edge / sun / lawn."
