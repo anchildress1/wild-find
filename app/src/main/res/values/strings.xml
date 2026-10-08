@@ -2,9 +2,7 @@
 <!-- Kid-facing copy: age-8 reading level, no Latin names, and never safe, harmless, not poisonous, or okay to touch
      (BannedCopyTest scans every string here). -->
 <resources>
-    <string name="app_name">wild-find</string>
-    <!-- The name under the launcher icon; the in-app wordmark keeps app_name. -->
-    <string name="launcher_name">Wild Find</string>
+    <string name="app_name">Wild Find</string>
     <string name="leave_it_rule">Look. Photograph. Leave it where it grows.</string>
 
     <string name="briar_idle">Briar resting</string>
@@ -21,7 +19,7 @@
     <string name="opener_done">Done</string>
 
     <string name="region_title">Where are you hunting?</string>
-    <string name="region_body">wild-find picks plants that grow near you. It only uses your rough area.</string>
+    <string name="region_body">Wild Find picks plants that grow near you. It only uses your rough area.</string>
     <string name="region_use_location">Use my area</string>
     <string name="region_pick_map">Pick on a map</string>
     <string name="region_locating">Finding your area…</string>
@@ -156,5 +154,5 @@
     <string name="credits_models">Models on this phone: BioCLIP 2.5 Mobile · TinyCLIP ViT-8M</string>
     <string name="credits_data">Data: iNaturalist · Wikipedia · USDA PLANTS · GBIF · Natural Earth</string>
     <string name="font_credits">Fredoka and Atkinson Hyperlegible fonts, SIL Open Font License 1.1</string>
-    <string name="version">wild-find %s · MIT license</string>
+    <string name="version">Wild Find %s · MIT license</string>
 </resources>

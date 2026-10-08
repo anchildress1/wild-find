@@ -13,7 +13,7 @@
             android:name=".harness.GateHarnessActivity"
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"
             android:exported="true"
-            android:label="wild-find gate"
+            android:label="Wild Find gate"
             android:taskAffinity="dev.anchildress1.wildfind.harness">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
