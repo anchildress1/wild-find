@@ -30,6 +30,7 @@ make install   # debug APK to a connected phone
 The release key stays on your machine. Create it once, outside the repo:
 
 ```sh
+mkdir -p ~/keys && chmod 700 ~/keys   # keytool won't create the folder
 keytool -genkeypair -v -keystore ~/keys/wild-find-release.jks -alias wild-find -keyalg RSA -keysize 4096 -validity 10000
 ```
 
