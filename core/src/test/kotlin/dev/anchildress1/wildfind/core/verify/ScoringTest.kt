@@ -38,14 +38,21 @@ class ScoringTest {
     }
 
     @Test
-    fun `species seen elsewhere neither top the ranking nor push a hazard down`() {
+    fun `the top species is local, but the hazard rank still counts every row`() {
         val check = HazardCheck(
             rows(5.0, 10.0, 20.0, 30.0),
             booleanArrayOf(false, false, false, true),
             booleanArrayOf(false, true, false, false),
         )
 
-        assertEquals(HazardCheck.Ranking(topRow = 1, hazardRow = 3, hazardRank = 2), check.rank(east))
+        assertEquals(HazardCheck.Ranking(topRow = 1, hazardRow = 3, hazardRank = 4), check.rank(east))
+    }
+
+    @Test
+    fun `with no local row the top species falls back to the whole table`() {
+        val check = HazardCheck(rows(5.0, 10.0, 30.0), booleanArrayOf(false, false, true), BooleanArray(3))
+
+        assertEquals(HazardCheck.Ranking(topRow = 0, hazardRow = 2, hazardRank = 3), check.rank(east))
     }
 
     @Test
