@@ -229,7 +229,7 @@ Runs once on the laptop in Python with uv. Gemma never runs here.
 
 ## Data Contracts
 
-Nine files ship in the app, nothing downloads after install, and every cache entry is versioned so a rebuild never serves stale data.
+Ten files ship in the app, nothing downloads after install, and every cache entry is versioned so a rebuild never serves stale data.
 
 **Shipped in the app**
 
@@ -244,6 +244,7 @@ Nine files ship in the app, nothing downloads after install, and every cache ent
 | plant\_gate.onnx | TinyCLIP ViT-8M/16 image encoder, fp32 (about 33 MB), with CLIP normalization baked in | Build pipeline, exported from the pinned TinyCLIP weights below |
 | plant\_gate.json | Plant and not-plant labels, their 512-d TinyCLIP text vectors, and TinyCLIP's learned logit scale (exp(logit\_scale) = 50.0) | Build pipeline |
 | map.bin | The map picker's built-in world map, no place names: Natural Earth land and country borders at 1:110m (world view) and 1:50m (area detail), plus 1:10m state and province lines (1:50m has them for only 9 countries) thinned to 0.02° with Douglas-Peucker; coordinates in hundredths of a degree (1.0 MB, 0.68 MB compressed in the APK); the phone draws it, so no tile server is ever asked | Build pipeline, from the pinned Natural Earth files below |
+| places.bin | Offline place names for the map label: Natural Earth state and province polygons (1:10m, every country) then country polygons (1:50m), each with its English name, thinned to 0.05° with Douglas-Peucker; coordinates in hundredths of a degree (0.69 MB, about 0.55 MB compressed in the APK); the phone looks names up by point-in-polygon, so naming a place makes no network call | Build pipeline, from the pinned Natural Earth files below |
 
 **species\_labels.json**
 
@@ -274,6 +275,8 @@ The built-in map is pinned the same way: `make assets` fetches these `geojson/` 
 | ne\_110m\_admin\_0\_boundary\_lines\_land.geojson | 340,010 | d42479fd79552cca4eec7f85fcdca717a790d29ff06be7676f1af0568c6d3f7c |
 | ne\_50m\_admin\_0\_boundary\_lines\_land.geojson | 760,189 | 2faac4f6b34386f3d21b6e018cf151f241f00e5c936d44dd17d7d9bfb147fa48 |
 | ne\_10m\_admin\_1\_states\_provinces\_lines.geojson | 21,092,537 | 1a1f30ccaaf4cc9c4bde34266f0b8cbb955d3a4cf254b756912255f2ec7c75b6 |
+| ne\_10m\_admin\_1\_states\_provinces.geojson | 40,726,851 | 22d0e3ad85eb3e27f17cabf8ba2d50e554fbc27a87796ff891d958185da62fb5 |
+| ne\_50m\_admin\_0\_countries.geojson | 3,083,490 | 3e458fc036ad0a66411f2c1e6cac49c5d7bfb81cb1123bc513b22511a2b7fdeb |
 
 The build fetches BioCLIP from `https://huggingface.co/<repo>/resolve/<revision>/<file>`. Integrity comes from the SHA-256 above, read from the Hugging Face file listing on October 5 and 6, 2026, never from a displayed size. fp32 only: on the test phone, ONNX Runtime returned NaN for BioCLIP's fp16 file. Bundled models are generated build assets, never committed; the build regenerates them, and CI caches them. Text vectors that need the 3.9 GB teacher (labels.npy, appended hazard rows) and the toxicity flags that need 4,272 article fetches are committed instead, so CI never downloads either.
 
