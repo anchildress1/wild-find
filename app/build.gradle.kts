@@ -62,6 +62,7 @@ val checkBundledAssets = tasks.register("checkBundledAssets") {
         "plant_gate.json",
         "species_table.npy",
         "species_labels.json",
+        "land.bin",
     )
     doLast {
         val missing = required.filterNot { dir.file(it).asFile.isFile }

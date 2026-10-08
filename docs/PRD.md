@@ -229,7 +229,7 @@ Runs once on the laptop in Python with uv. Gemma never runs here.
 
 ## Data Contracts
 
-Eight files ship in the app, nothing downloads after install, and every cache entry is versioned so a rebuild never serves stale data.
+Nine files ship in the app, nothing downloads after install, and every cache entry is versioned so a rebuild never serves stale data.
 
 **Shipped in the app**
 
@@ -243,6 +243,7 @@ Eight files ship in the app, nothing downloads after install, and every cache en
 | flora\_student\_fp32.onnx | BioCLIP 2.5 Mobile image encoder, fp32; pinned below and SHA-256 checked at build time | Build pipeline, from crazedcodernate/bioclip-2.5-mobile-fastvit @ 29b474ea2a5d72b4646f036ead9441e0a22a5c62 |
 | plant\_gate.onnx | TinyCLIP ViT-8M/16 image encoder, fp32 (about 33 MB), with CLIP normalization baked in | Build pipeline, exported from the pinned TinyCLIP weights below |
 | plant\_gate.json | Plant and not-plant labels, their 512-d TinyCLIP text vectors, and TinyCLIP's learned logit scale (exp(logit\_scale) = 50.0) | Build pipeline |
+| land.bin | The map picker's built-in world map: Natural Earth land rings at 1:110m (world) and 1:50m (area detail), coordinates in hundredths of a degree (about 270 KB); the phone draws it, so no tile server is ever asked | Build pipeline, from the pinned Natural Earth files below |
 
 **species\_labels.json**
 
@@ -263,6 +264,8 @@ A target is a species-table row; its common name comes from the iNaturalist pull
 | BioCLIP 2.5 Mobile | Bundled in the APK | crazedcodernate/bioclip-2.5-mobile-fastvit @ 29b474ea2a5d72b4646f036ead9441e0a22a5c62 | flora\_student\_fp32.onnx | 46,986,589 | 8624d44af3727b69a41dc2035c37018a30753b8d9c93ab8801a0c724dd42510f |
 
 The build-time text encoder is pinned too, laptop only: BioCLIP 2.5 ViT-H, imageomics/bioclip-2.5-vith14 @ 6e3d04e3d6522012c88181085c5ae666e14c45cd.
+
+The built-in map is pinned the same way: `make assets` fetches `geojson/ne_110m_land.geojson` (138,160 bytes, SHA-256 9e0729ee253ca7d7a5c4ae9395fb1902264c5377c52e224d13dd85010e2835d9) and `geojson/ne_50m_land.geojson` (1,636,166 bytes, SHA-256 e874b27a51d146452be360cafb3cc50c86001074a67d534113e6534682f9826b) from nvkelso/natural-earth-vector @ f1890d9f152c896d250a77557a5751a93d494776 (v5.1.2, public domain) and trusts them only after both match.
 
 The build fetches BioCLIP from `https://huggingface.co/<repo>/resolve/<revision>/<file>`. Integrity comes from the SHA-256 above, read from the Hugging Face file listing on October 5 and 6, 2026, never from a displayed size. fp32 only: on the test phone, ONNX Runtime returned NaN for BioCLIP's fp16 file. Bundled models are generated build assets, never committed; the build regenerates them, and CI caches them. Text vectors that need the 3.9 GB teacher (labels.npy, appended hazard rows) and the toxicity flags that need 4,272 article fetches are committed instead, so CI never downloads either.
 
@@ -487,4 +490,5 @@ Gate outcomes: the scene labels failed, so TinyCLIP gates non-plants; Gemma was 
 - [NIOSH poisonous plants](https://www.cdc.gov/niosh/outdoor-workers/about/poisonous-plants.html) and [public-domain fact sheet](https://stacks.cdc.gov/view/cdc/5684)
 - [US mushroom exposure data](https://pubmed.ncbi.nlm.nih.gov/30062915/)
 - [USDA PLANTS structured data](https://zenodo.org/records/17903503), [GBIF species name match](https://techdocs.gbif.org/en/openapi/v1/species#/Searching%20names/matchNames), and the [Wikipedia API](https://www.mediawiki.org/wiki/API:Main_page) for the toxicity flag; the [FDA Poisonous Plant Database](https://www.fda.gov/food/science-research-food/fda-poisonous-plant-database) was decommissioned in 2022
+- [Natural Earth](https://www.naturalearthdata.com/about/terms-of-use/) land polygons, public domain, for the built-in map
 - Live iNaturalist pull for the West Georgia region (34, -85), October, run while drafting this PRD: 1,033 plant species

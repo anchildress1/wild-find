@@ -1,4 +1,4 @@
-"""Bundled APK assets: BioCLIP Mobile, the species table with hazard and toxicity flags, and the TinyCLIP plant gate.
+"""Bundled APK assets: BioCLIP Mobile, the species table with its flags, the TinyCLIP plant gate, and the world map.
 
 Writes into the gitignored app/generated/assets. Needs no BioCLIP teacher: appended hazard rows come from the
 committed hazard_vectors.json (make hazard-vectors), toxicity flags from toxicity.json (make toxicity), name
@@ -16,7 +16,7 @@ from pathlib import Path
 
 import numpy as np
 
-from wild_find_pipeline import label_vectors
+from wild_find_pipeline import label_vectors, land
 from wild_find_pipeline.labels import (
     GATE_OTHER,
     GATE_PLANT,
@@ -183,7 +183,7 @@ INPUTS = (
     LABELS_DIR / "labels.npy",
     *(
         REPO / "pipeline/src/wild_find_pipeline" / name
-        for name in ("assets.py", "labels.py", "label_vectors.py", "paths.py")
+        for name in ("assets.py", "labels.py", "label_vectors.py", "land.py", "paths.py")
     ),
 )
 
@@ -233,13 +233,14 @@ def main() -> int:
             ],
         }
         (staging / "plant_gate.json").write_text(json.dumps(gate) + "\n")
+        map_bytes = land.write(staging / "land.bin")
 
         publish(staging)
     hazards = sum(entry["hazard"] for entry in labels)
     toxic = sum(entry["toxic"] for entry in labels)
     print(
         f"OK: {GENERATED_ASSETS}: {len(labels)} species ({hazards} hazards, {toxic} toxic, appended {list(extra)}), "
-        f"scale {scale:.4f}"
+        f"scale {scale:.4f}, map {map_bytes} bytes"
     )
     return 0
 
