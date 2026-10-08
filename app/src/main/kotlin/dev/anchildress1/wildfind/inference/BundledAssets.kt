@@ -1,6 +1,8 @@
 package dev.anchildress1.wildfind.inference
 
 import android.content.res.AssetManager
+import dev.anchildress1.wildfind.core.cache.CacheKey
+import dev.anchildress1.wildfind.core.hunt.PlantType
 import dev.anchildress1.wildfind.core.hunt.SpeciesRow
 import dev.anchildress1.wildfind.core.tensor.FloatMatrix
 import dev.anchildress1.wildfind.core.tensor.Npy
@@ -52,11 +54,15 @@ class BundledAssets(private val assets: AssetManager) {
                     it.getString("genus"),
                     it.getBoolean("hazard"),
                     it.getBoolean("toxic"),
+                    PlantType.of(if (it.isNull("type")) null else it.getString("type")),
                 )
             }
         }
         return SpeciesRow.checked(parsed, table.rows)
     }
+
+    /** The cache's table version: the first 12 hex digits of `species_labels.json`'s SHA-256. */
+    fun tableVersion(): String = CacheKey.tableVersion(bytes(SPECIES_LABELS))
 
     /** Verify row 1's hazard rule over [table], naming only [local] species as the top species. */
     fun hazardCheck(table: FloatMatrix, labels: List<SpeciesRow>, local: Set<String>): HazardCheck = HazardCheck(
@@ -90,8 +96,6 @@ class BundledAssets(private val assets: AssetManager) {
         }
     }
 
-    private fun floats(array: JSONArray) = FloatArray(array.length()) { array.getDouble(it).toFloat() }
-
     private companion object {
         const val BIOCLIP = "flora_student_fp32.onnx"
         const val PLANT_GATE = "plant_gate.onnx"
@@ -102,3 +106,5 @@ class BundledAssets(private val assets: AssetManager) {
         const val LABELS_JSON = "labels.json"
     }
 }
+
+private fun floats(array: JSONArray) = FloatArray(array.length()) { array.getDouble(it).toFloat() }

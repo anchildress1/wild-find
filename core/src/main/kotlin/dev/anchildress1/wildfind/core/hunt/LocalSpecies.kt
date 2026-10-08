@@ -18,8 +18,15 @@ data class Sighting(val scientific: String, val common: String?, val count: Int)
  * @property genus the row's genus
  * @property hazard a PRD hazard species
  * @property toxic flagged by the build-time toxicity rule
+ * @property type the plant type shown with a target, or null when the build found none
  */
-data class SpeciesRow(val scientific: String, val genus: String, val hazard: Boolean, val toxic: Boolean) {
+data class SpeciesRow(
+    val scientific: String,
+    val genus: String,
+    val hazard: Boolean,
+    val toxic: Boolean,
+    val type: PlantType? = null,
+) {
     /** Neither toxic nor a hazard, so it can be a target. */
     val playable: Boolean get() = !toxic && !hazard
 
