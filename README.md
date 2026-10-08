@@ -7,7 +7,7 @@ wild-find sends kids 8 and up outside to find and photograph plants that grow ne
 ## How it works
 
 - One iNaturalist query per hunt picks targets that grow nearby this month
-- Each target shows its common name
+- Each target shows its common name and plant type
 - When the kid taps Capture, TinyCLIP checks that the camera is on a plant and BioCLIP 2.5 Mobile checks that it's the target
 
 The full spec is in [docs/PRD.md](docs/PRD.md). The build queue is in [docs/stories.md](docs/stories.md).
@@ -27,7 +27,9 @@ make install   # debug APK to a connected phone
 
 ## Credits
 
-BioCLIP 2.5 Mobile, BioCLIP 2.5, TinyCLIP, OpenCLIP, iNaturalist, Wikipedia, USDA PLANTS, and GBIF.
+- **Models on the phone:** BioCLIP 2.5 Mobile and TinyCLIP ViT-8M/16
+- **Data:** iNaturalist, Wikipedia, USDA PLANTS, GBIF, and Natural Earth
+- **Build-time only:** BioCLIP 2.5 writes the tutorial label vectors on a laptop with OpenCLIP; neither runs in the app
 
 ## License
 
