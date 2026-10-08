@@ -1,5 +1,6 @@
 package dev.anchildress1.wildfind.store
 
+import android.util.Log
 import dev.anchildress1.wildfind.core.cache.CacheEntry
 import dev.anchildress1.wildfind.core.cache.CacheKey
 import dev.anchildress1.wildfind.core.hunt.ActiveHunt
@@ -74,7 +75,8 @@ class GameStore(private val dir: File) {
 
     /** Forgets the current hunt, after Hunt Again or Home. */
     fun clearHunt() {
-        File(dir, HUNT).delete()
+        val file = File(dir, HUNT)
+        check(!file.exists() || file.delete()) { "can't delete $file" }
     }
 
     /** The pull cached under exactly [key], or null. */
@@ -104,7 +106,9 @@ class GameStore(private val dir: File) {
     // A corrupt or old-format file reads as missing and is deleted, so the app refetches or starts fresh.
     private fun <T> parse(name: String, decode: (JSONObject) -> T?): T? {
         val file = File(dir, name).takeIf { it.isFile } ?: return null
-        return runCatching { decode(JSONObject(file.readText())) }.onFailure { file.delete() }.getOrNull()
+        return runCatching {
+            decode(JSONObject(file.readText()))
+        }.onFailure { if (!file.delete()) Log.w(TAG, "can't delete unreadable $file") }.getOrNull()
     }
 
     private fun write(name: String, json: JSONObject) {
@@ -117,6 +121,7 @@ class GameStore(private val dir: File) {
 
     private companion object {
         const val HUNT = "hunt.json"
+        const val TAG = "GameStore"
     }
 }
 

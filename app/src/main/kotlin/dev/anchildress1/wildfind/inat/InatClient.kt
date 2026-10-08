@@ -6,7 +6,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 import java.net.HttpURLConnection
-import java.net.URL
+import java.net.URI
 
 /**
  * The app's only network call: one iNat species_counts query, up to three pages (R2, R7).
@@ -110,7 +110,7 @@ class InatClient(private val fetch: (String) -> Response = ::get) {
         const val TIMEOUT_MS = 15_000
 
         fun get(url: String): Response {
-            val connection = URL(url).openConnection() as HttpURLConnection
+            val connection = URI(url).toURL().openConnection() as HttpURLConnection
             return try {
                 connection.connectTimeout = TIMEOUT_MS
                 connection.readTimeout = TIMEOUT_MS
