@@ -21,6 +21,8 @@ HAZARD_VECTORS = REPO / "pipeline/data/hazard_vectors.json"
 TOXICITY = REPO / "pipeline/data/toxicity.json"
 # GBIF aliases per species-table row; committed because it needs ~13,000 network requests (make synonyms).
 SYNONYMS = REPO / "pipeline/data/synonyms.json"
+# Plant type per species-table row; committed because it reads the USDA archive and GBIF cache (make plant-types).
+PLANT_TYPES = REPO / "pipeline/data/plant_types.json"
 
 
 def pin(model: str, manifest: Path = MANIFEST) -> dict[str, str]:

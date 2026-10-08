@@ -7,7 +7,7 @@ import numpy as np
 import pytest
 
 from wild_find_pipeline import assets, paths
-from wild_find_pipeline.assets import plant_share, species_table, with_synonyms, with_toxicity
+from wild_find_pipeline.assets import plant_share, species_table, with_plant_types, with_synonyms, with_toxicity
 from wild_find_pipeline.labels import HAZARDS, embedding_versions, is_hazard, lacking_hazards
 from wild_find_pipeline.paths import pin
 
@@ -235,3 +235,21 @@ def test_with_synonyms_adds_each_rows_aliases():
 def test_with_synonyms_rejects_a_row_without_an_entry():
     with pytest.raises(ValueError, match="run make synonyms"):
         with_synonyms([{"scientific": "Quercus nigra", "hazard": False}], {"Quercus alba": []})
+
+
+def test_with_plant_types_adds_each_rows_type_or_none():
+    labels = [
+        {"scientific": "Quercus nigra", "toxic": False},
+        {"scientific": "Erechtites hieraciifolius", "toxic": False},
+    ]
+    types = {"Quercus nigra": {"type": "tree", "source": "usda"}, "Erechtites hieraciifolius": {"type": None}}
+
+    assert with_plant_types(labels, types) == [
+        {"scientific": "Quercus nigra", "toxic": False, "type": "tree"},
+        {"scientific": "Erechtites hieraciifolius", "toxic": False, "type": None},
+    ]
+
+
+def test_with_plant_types_rejects_a_row_without_an_entry():
+    with pytest.raises(ValueError, match="run make plant-types"):
+        with_plant_types([{"scientific": "Quercus nigra", "hazard": False}], {"Quercus alba": {"type": "tree"}})

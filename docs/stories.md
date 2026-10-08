@@ -24,7 +24,7 @@ The Oct 7 redesign (PRD Redesign) dropped the build-time menu: the old S10–S16
 
 - [x] **S10 Toxicity flag** (pipeline) — `make toxicity` reads every species-table row's English Wikipedia article and USDA PLANTS ratings (GBIF synonyms); flags per the PRD rule; commits `pipeline/data/toxicity.json` with evidence and revision; `make assets` merges `toxic` and `genus` into species_labels.json; Oct 7 build: 2,161 of 4,272 flagged (1,369 stubs; "non-toxic" and "not toxic" never count), 64 of the 104 common West Georgia species pass
 - [x] **S15 Tutorial labels** (pipeline) — `make labels` writes only the 11 fixed tutorial labels into `labels.npy` + `labels.json` (schema 2: scientific name and prompt per row); the stand-in menu words are gone; the rebuilt vectors match the old tutorial rows within 1e-7; label text format per hole 3
-- [ ] **S17 Plant type** (pipeline) — USDA PLANTS growth habit per species-table row through GBIF synonyms, else fern, moss, grass, or conifer from taxonomy, else null; merged into species_labels.json as `type`; shown with the target name
+- [x] **S17 Plant type** (pipeline) — `make plant-types` writes `pipeline/data/plant_types.json`: fern, moss, or conifer from GBIF class or phylum first, else USDA PLANTS growth habit by the row name or a shipped GBIF alias (fixed precedence grass, vine, tree, shrub, herb, subshrub as shrub), else grass for Poaceae, else null; merged into species_labels.json as `type`; 3,544 of 4,272 rows typed, 21 of 23 West Georgia targets (`docs/results/day-3/plant_types.log`)
 
 ## Game logic · core · Oct 8
 

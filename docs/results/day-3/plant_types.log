@@ -1,0 +1,50 @@
+plant_types.json built 2026-10-08; species_labels.json from make assets; place west-georgia-us
+rule: {"taxonomy_first": ["class Polypodiopsida: fern", "class Lycopodiopsida: fern", "phylum Bryophyta: moss", "phylum Marchantiophyta: moss", "phylum Anthocerotophyta: moss", "class Pinopsida: conifer"], "usda_names": "row name, then its synonyms.json aliases in order; first with a mapped habit", "usda_habit_precedence": ["graminoid: grass", "vine: vine", "tree: tree", "shrub: shrub", "forbHerb: herb", "subshrub: shrub"], "fallback": "gbif family Poaceae: grass; else null"}
+
+whole table: 4272 rows
+  by type: {'herb': 1954, 'None': 728, 'shrub': 460, 'tree': 444, 'vine': 199, 'grass': 199, 'fern': 160, 'conifer': 86, 'moss': 42}
+  by source: {'usda': 3246, 'none': 728, 'gbif': 298}
+
+West Georgia rows in the table (any count, incl. toxic): 647
+  by type: {'herb': 320, 'tree': 119, 'vine': 60, 'shrub': 40, 'None': 35, 'grass': 35, 'fern': 21, 'moss': 9, 'conifer': 8}
+
+eligible targets: 23
+  by type: {'tree': 12, 'herb': 4, 'shrub': 2, 'None': 2, 'vine': 2, 'fern': 1}
+  by source: {'usda': 20, 'none': 2, 'gbif': 1}
+
+count  scientific                   common                     type     source
+  363  Conoclinium coelestinum      blue mistflower            herb     usda Conoclinium coelestinum: forbHerb
+  231  Callicarpa americana         American beautyberry       shrub    usda Callicarpa americana: shrub
+  184  Liquidambar styraciflua      American sweetgum          tree     usda Liquidambar styraciflua: tree
+  159  Magnolia grandiflora         southern magnolia          tree     usda Magnolia grandiflora: tree
+  154  Liriodendron tulipifera      American tuliptree         tree     usda Liriodendron tulipifera: tree
+  148  Polystichum acrostichoides   Christmas fern             fern     gbif class: Polypodiopsida
+  125  Fagus grandifolia            American beech             tree     usda Fagus grandifolia: tree
+  116  Erechtites hieraciifolius    American burnweed          None     None
+  103  Ampelopsis glandulosa        Porcelain Berry            None     None
+   97  Diospyros virginiana         American persimmon         tree     usda Diospyros virginiana: tree
+   84  Platanus occidentalis        American sycamore          tree     usda Platanus occidentalis: tree
+   82  Vitis rotundifolia           muscadine                  vine     usda Vitis rotundifolia: vine
+   79  Pueraria montana             kudzu                      vine     usda Pueraria montana: vine
+   76  Cercis canadensis            eastern redbud             tree     usda Cercis canadensis: shrub, tree
+   72  Quercus nigra                water oak                  tree     usda Quercus nigra: tree
+   65  Albizia julibrissin          Persian silk tree          tree     usda Albizia julibrissin: shrub, tree
+   63  Chimaphila maculata          striped wintergreen        shrub    usda Chimaphila maculata: subshrub
+   61  Rhus copallinum              shining sumac              tree     usda Rhus copallinum: shrub, tree
+   60  Ilex cornuta                 Chinese holly              tree     usda Ilex cornuta: shrub, tree
+   60  Solidago altissima           tall goldenrod             herb     usda Solidago altissima: forbHerb
+   57  Sassafras albidum            sassafras                  tree     usda Sassafras albidum: shrub, tree
+   57  Tipularia discolor           crane-fly orchid           herb     usda Tipularia discolor: forbHerb
+   56  Phyllanthus urinaria         Chamberbitter              herb     usda Phyllanthus urinaria: forbHerb
+
+spot-check (Oct 8, by hand against USDA PLANTS habits and common knowledge):
+  21 of 23 targets read right for a kid. Tree beats shrub, so Rhus copallinum (shining sumac) and Ilex cornuta
+  (Chinese holly, mostly a landscape shrub) show as tree; Chimaphila maculata (striped wintergreen) is a USDA
+  subshrub and shows as shrub, though it looks like a low herb.
+  null: Erechtites hieraciifolius - USDA has the species (ERHI12) but this export carries no growth habit for it.
+  null: Ampelopsis glandulosa - USDA files porcelain berry as A. brevipedunculata, which GBIF keeps as its own
+  accepted species, so no GBIF alias reaches it.
+  table spot-check: Toxicodendron radicans vine, Pinus taeda and Juniperus virginiana conifer, Polytrichum commune
+  moss, Lycopodium clavatum and Equisetum hyemale fern, Carex lurida grass (USDA graminoid covers sedges),
+  Arundinaria gigantea grass, Smilax rotundifolia vine, Phytolacca americana herb.
+  Most of the 728 table nulls are species outside USDA's range (New Zealand, South Africa, Europe).
