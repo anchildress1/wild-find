@@ -98,7 +98,7 @@ Every call below is settled; open items live in Open Questions.
 | Images | One illustration per plant type (tree, shrub, vine, herb, grass, fern, moss, conifer) in v1; licensed photos in v3 |
 | UI | Animation-first; Jetpack Compose hosts camera and chrome and plays sprite sheets for the opener and Briar, the mascot; no Rive, no React |
 | Distribution | GitHub Release APK with BioCLIP Mobile and the TinyCLIP plant gate inside; nothing downloads after install; outdoor demo video |
-| Credits | README and the grown-ups page credit BioCLIP 2.5 Mobile, BioCLIP 2.5, TinyCLIP, OpenCLIP, iNaturalist, Wikipedia, USDA PLANTS, and GBIF, plus Natural Earth for the built-in map and the Fredoka and Atkinson Hyperlegible fonts (SIL OFL 1.1, bundled with their license text) |
+| Credits | The grown-ups page credits the two models on the phone (BioCLIP 2.5 Mobile, TinyCLIP ViT-8M), the data (iNaturalist, Wikipedia, USDA PLANTS, GBIF, Natural Earth), and the Fredoka and Atkinson Hyperlegible fonts (SIL OFL 1.1, bundled with their license text); the README also credits the build-time-only BioCLIP 2.5 teacher and OpenCLIP |
 | Prize categories | Best Use of Gemma, entered with the measured case for shipping without it; DigitalOcean dropped |
 | Later versions | Tiebreaker shot in v2; licensed photos in v3 |
 

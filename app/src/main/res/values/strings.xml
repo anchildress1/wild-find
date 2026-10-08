@@ -149,7 +149,8 @@
     <string name="hunting_area_detail">Near you · change it on the map</string>
     <string name="replay_opener">Watch the safety intro again</string>
     <string name="made_with">Made with</string>
-    <string name="credits">BioCLIP 2.5 Mobile · BioCLIP 2.5 · TinyCLIP · OpenCLIP · iNaturalist · Wikipedia · USDA PLANTS · GBIF · Natural Earth</string>
+    <string name="credits_models">Models on this phone: BioCLIP 2.5 Mobile · TinyCLIP ViT-8M</string>
+    <string name="credits_data">Data: iNaturalist · Wikipedia · USDA PLANTS · GBIF · Natural Earth</string>
     <string name="font_credits">Fredoka and Atkinson Hyperlegible fonts, SIL Open Font License 1.1</string>
     <string name="version">wild-find %s · MIT license</string>
 </resources>

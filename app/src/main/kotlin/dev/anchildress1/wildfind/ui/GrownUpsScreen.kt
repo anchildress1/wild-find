@@ -75,7 +75,8 @@ fun GrownUpsScreen(onBack: () -> Unit, onArea: () -> Unit, onReplay: () -> Unit)
         }
         Column(Modifier.rise(index = 2), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(stringResource(R.string.made_with), style = MaterialTheme.typography.titleLarge)
-            Text(stringResource(R.string.credits), style = MaterialTheme.typography.bodyMedium)
+            Text(stringResource(R.string.credits_models), style = MaterialTheme.typography.bodyMedium)
+            Text(stringResource(R.string.credits_data), style = MaterialTheme.typography.bodyMedium)
             Text(stringResource(R.string.font_credits), style = MaterialTheme.typography.bodyMedium)
             Text(
                 stringResource(R.string.version, version),
