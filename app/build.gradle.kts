@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "dev.anchildress1.wildfind"
-        minSdk = 34
+        minSdk = 30
         targetSdk = 37
         versionCode = 1
         versionName = "0.1.0"

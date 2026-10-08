@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.LocationManager
+import android.os.Build
 import android.os.CancellationSignal
 import dev.anchildress1.wildfind.core.region.RegionKey
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -35,11 +36,11 @@ class RoughLocation(private val context: Context) {
     private companion object {
         const val TIMEOUT_MS = 15_000L
 
-        // Fused first; with only coarse permission every provider already returns a fuzzed fix.
-        val PROVIDERS = listOf(
-            LocationManager.FUSED_PROVIDER,
-            LocationManager.NETWORK_PROVIDER,
-            LocationManager.GPS_PROVIDER,
-        )
+        // Fused first where it exists (Android 12+); with only coarse permission every provider returns a fuzzed fix.
+        val PROVIDERS = buildList {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) add(LocationManager.FUSED_PROVIDER)
+            add(LocationManager.NETWORK_PROVIDER)
+            add(LocationManager.GPS_PROVIDER)
+        }
     }
 }

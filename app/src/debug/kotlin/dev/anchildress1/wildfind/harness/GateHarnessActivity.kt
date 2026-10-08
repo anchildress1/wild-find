@@ -107,7 +107,7 @@ class GateHarnessActivity : ComponentActivity() {
     private fun runInfo(target: String, size: Size) = JSONObject().apply {
         put("started", SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", Locale.US).format(Date()))
         put("device", "${Build.MANUFACTURER} ${Build.MODEL}")
-        put("soc", Build.SOC_MODEL)
+        put("soc", if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) Build.SOC_MODEL else "unknown")
         put("android", Build.VERSION.RELEASE)
         put("sdk", Build.VERSION.SDK_INT)
         put("app_version", packageManager.getPackageInfo(packageName, 0).versionName)

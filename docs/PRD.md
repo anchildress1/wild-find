@@ -451,7 +451,7 @@ Two questions block the build; two can wait.
 **Non-blocking**
 
 - [ ] Post: verify Snappit, ForestForay Kids, and SnapScout before naming them as prior art
-- [ ] Build: minSdk 34 existed only for the user-initiated download job, which left with Gemma on Oct 7; lower it or keep it
+- [x] Build: minSdk is 30 (Android 11), decided Oct 8. 34 existed only for the Gemma download job. 30 is the floor that keeps every verify rule as built: the close-range rule reads `CONTROL_ZOOM_RATIO` and the coarse fix uses `getCurrentLocation`, both API 30. Fused location is used from Android 12 up. Untested below Android 16 until an older phone is at hand
 - [ ] Cleanup: delete unused source art once the user says go, with its Visual System rows: `briar-searching-32.png`, `briar-searching-hint-32.png`, and `briar-retry-32.png` (no screen plays them; Briar stays off hunt pages), `briar-rest-blink-32.png` (idle packs from the 16-frame sheet), `briar-found-32.png` (its baked-in fern; `found` plays the complete cheer), and `wild-find-sprite-1.png` and `wild-find-app-design.png` (the design canvas replaced both)
 - [x] Product: how does a kid learn what a target looks like? Resolved Oct 7: the target's common name and type (S17); no hints, no fact cards
 
