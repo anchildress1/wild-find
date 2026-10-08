@@ -335,16 +335,24 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
     // A kid somewhere a target doesn't grow swaps it for the next species in the queue and keeps hunting on the same
     // camera; the grass tutorial has no queue, so its skip moves on to the hunt.
     private fun skip(screen: Screen) {
-        val camera = screen as? Screen.Camera ?: return
-        val active = hunt ?: return
+        val camera = screen as? Screen.Camera
+        val active = hunt
+        val models = models
+        if (camera == null || active == null || models == null) return
         verifier?.cancel()
         session++
         val row = camera.row
-        val progress = if (row == null) active.progress.tutorialPassed() else active.progress.skip(row)
+        val progress = if (row ==
+            null
+        ) {
+            active.progress.tutorialPassed()
+        } else {
+            active.progress.skip(row, models.genus::get)
+        }
         val updated = active.copy(progress = progress)
         hunt = updated
         persist(updated)
-        models?.let { publish(it, updated) }
+        publish(models, updated)
         if (row == null) {
             save(flags.copy(tutorialDone = true))
             show(Screen.Hunt)

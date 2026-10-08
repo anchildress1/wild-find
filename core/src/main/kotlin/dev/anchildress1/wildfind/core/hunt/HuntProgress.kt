@@ -54,15 +54,18 @@ data class HuntProgress(
     }
 
     /**
-     * The kid skipped the target at [row]: the next species in the queue takes its place, and the skipped one goes
-     * to the back of the queue. With an empty queue nothing changes.
+     * The kid skipped the target at [row]: the first species in the queue whose genus isn't already on screen takes
+     * its place, and the skipped one goes to the back of the queue. With no such species nothing changes.
+     *
+     * @param genusOf each species row's genus; verify passes on genus, so two targets in one genus could share a find
      */
-    fun skip(row: Int): HuntProgress {
+    fun skip(row: Int, genusOf: (Int) -> String): HuntProgress {
         check(!tutorialPending) { "the tutorial comes first" }
         require(targets.any { it.row == row } && row !in found) { "row $row is not an open target" }
-        val next = queue.firstOrNull() ?: return this
+        val onScreen = targets.filter { it.row != row }.map { genusOf(it.row) }.toSet()
+        val next = queue.firstOrNull { genusOf(it.row) !in onScreen } ?: return this
         val skipped = targets.first { it.row == row }
-        return copy(targets = targets.map { if (it.row == row) next else it }, queue = queue.drop(1) + skipped)
+        return copy(targets = targets.map { if (it.row == row) next else it }, queue = queue - next + skipped)
     }
 
     /** Starts the hunt [hunt] planned. */

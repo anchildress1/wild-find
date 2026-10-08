@@ -51,21 +51,47 @@ class HuntProgressTest {
     @Test
     fun `a skip swaps in the next species and sends the skipped one to the back`() {
         val queue = listOf(Eligible(7, "mistflower", 362), Eligible(8, "beautyberry", 230))
-        val progress = HuntProgress(false, targets, queue = queue).skip(9)
+        val progress = HuntProgress(false, targets, queue = queue).skip(9, genera::getValue)
 
         assertEquals(listOf(4, 7, 2), progress.targets.map { it.row })
         assertEquals(listOf(8, 9), progress.queue.map { it.row })
-        assertEquals(listOf(4, 8, 2), progress.skip(7).targets.map { it.row })
-        assertEquals(listOf(9, 7), progress.skip(7).queue.map { it.row })
+        assertEquals(listOf(4, 8, 2), progress.skip(7, genera::getValue).targets.map { it.row })
+        assertEquals(listOf(9, 7), progress.skip(7, genera::getValue).queue.map { it.row })
     }
 
     @Test
     fun `with an empty queue a skip changes nothing, and only open targets skip`() {
         val progress = HuntProgress.start(Hunt(false, targets))
 
-        assertEquals(progress, progress.skip(9))
-        assertThrows<IllegalStateException> { HuntProgress.start(Hunt(true, targets)).skip(9) }
-        assertThrows<IllegalArgumentException> { progress.skip(7) }
-        assertThrows<IllegalArgumentException> { progress.targetFound(9).skip(9) }
+        assertEquals(progress, progress.skip(9, genera::getValue))
+        assertThrows<IllegalStateException> { HuntProgress.start(Hunt(true, targets)).skip(9, genera::getValue) }
+        assertThrows<IllegalArgumentException> { progress.skip(7, genera::getValue) }
+        assertThrows<IllegalArgumentException> { progress.targetFound(9).skip(9, genera::getValue) }
     }
+
+    @Test
+    fun `a skip passes over a plant whose genus is already on screen`() {
+        // Row 6 is a second oak: with the water oak (row 4) on screen it would let one oak photo earn two stars.
+        val queue = listOf(Eligible(6, "white oak", 90), Eligible(7, "mistflower", 362))
+        val progress = HuntProgress(false, targets, queue = queue).skip(9, genera::getValue)
+
+        assertEquals(listOf(4, 7, 2), progress.targets.map { it.row })
+        assertEquals(listOf(6, 9), progress.queue.map { it.row })
+    }
+
+    @Test
+    fun `with only same-genus plants queued a skip changes nothing`() {
+        val progress = HuntProgress(false, targets, queue = listOf(Eligible(6, "white oak", 90)))
+
+        assertEquals(progress, progress.skip(9, genera::getValue))
+    }
+
+    private val genera = mapOf(
+        4 to "Quercus",
+        9 to "Liquidambar",
+        2 to "Cercis",
+        6 to "Quercus",
+        7 to "Conoclinium",
+        8 to "Callicarpa",
+    )
 }
