@@ -85,7 +85,7 @@ Every call below is settled; open items live in Open Questions.
 | Difficulty | Selector exists; v1 ships Low only |
 | Region | Any whole-degree region; a region needs one online iNaturalist pull before it plays offline, since no bundled list can cover every region; tested in the West Georgia region, key 34\_-85 |
 | Targets | Species from the live iNaturalist pull that are in BioCLIP Mobile's species table, aren't toxic-flagged or hazards, and have a common name of 3 words or fewer in the device language; species with no common name there are skipped; at most one target per genus in a hunt |
-| Local filter | A species is eligible with 25+ research-grade sightings in the region for the current calendar month, across all available years |
+| Local filter | A species is eligible with 25+ research-grade sightings in the region for the current calendar month, across all available years; under review (Open Questions: sighting threshold) |
 | Plant type | Shown with the target: USDA PLANTS growth habit (tree, shrub, vine, herb, grass) where it has one, else fern, moss, grass, or conifer from taxonomy, else none |
 | Hunt shape | First-ever hunt: grass tutorial, then 3 targets; later hunts: 3 targets; targets picked by sighting-weighted random |
 | Look-alikes | A find passes when the target, or another species in its genus, outscores the hunt's other locally eligible species on the reticle crop, so look-alikes inside the genus pass; never taught in v1 |
@@ -397,6 +397,7 @@ Each choice below buys speed or privacy for v1 and names the point where it gets
 | Targets limited to BioCLIP's species table | A common local plant outside the table never becomes a target (West Georgia: 104 of 117 common species in it; Tbilisi: 4 of 6) | A bigger on-device table |
 | Text-based toxicity flag | Best effort: wording varies by article author; wrongly drops about 6 of 117 species; misses toxicity an article never states | An open, structured toxicity source covers the region |
 | Fixed 3-target hunt | Less variety per hunt | Field tests show hunts end too fast |
+| No "What's this?" mode | A kid can't point at any plant and get its name | A model names the right genus on nearly every capture; on Day 1's photos BioCLIP's top pick from the whole table was the right genus 60% of the time, and 85% only on the 41% of captures where its top 3 agree (`docs/results/day-2/whats_this.log`) |
 | Genus-level pass | A kid can pass with the wrong species in the genus and learn the wrong name | The v2 tiebreaker shot |
 | Native Android only | No iOS | An iOS test device is available |
 | Capture, not continuous verify | The kid taps to check instead of the app noticing on its own | The phone runs verify continuously without heating (Oct 7: severe in 36 minutes) |
@@ -415,6 +416,7 @@ No blockers remain; every hole below closes or falls back during the Day-1 gate 
 | 17 | BioCLIP Mobile vs non-plant labels | Laptop side resolved on Day 1: 16 of 63 free non-plant photos scored a plant target top-1 on the reticle crop (20 of 63 on the full frame), and a pair of sneakers scored oak (0.605) above a real oak (0.572). TinyCLIP ViT-8M kept 176 of 176 plant photos and passed 2 of 63 non-plants on the full frame, so it gates every frame first. The fp32 export now matches the laptop on the phone (cosine 0.99999999, same plant share) and reproduces all 307 Day-1 reticle verdicts | Resolved (S06) | Low |
 | 19 | Approximate focus distance | Resolved on the test phone for a can at desk range (S09): focused readings split far (1.8 or less) from closer (2.0 or more) in three runs, and every lens reports about the same distance as zoom switches lenses. Unmeasured outdoors on plants and beyond about 1 m | Rule: diopters × zoom ≥ 2.0 while focused; recheck wide-shot calls in the field test (S52) | Medium |
 | 20 | Species-table coverage | Outside the US, common plants may be missing from the 4,271-species table: in Tbilisi, Georgia, half the top 20 October species are missing, though 89% have their genus in it | Measure more regions; a genus-level target list is the fallback | Medium |
+| 22 | iNat names vs the species table | Only 641 of the 1,029 species iNat lists for West Georgia in October match a species-table name exactly (the gate harness logs the count at run start); synonym drift such as *Mahonia bealei* vs *Berberis bealei* is the likely cause | S22 matches iNat names to table rows through GBIF's accepted names and synonyms, as `make toxicity` does for USDA; measure the match rate before and after | High |
 
 ## Success Metrics
 
@@ -430,17 +432,19 @@ Acceptance metrics come from the holdout set, which never touches calibration; t
 
 ## Open Questions
 
-Three questions block the build; one can wait.
+Two questions block the build; three can wait.
 
 **Blocking**
 
-- [ ] Visual: when do Briar's five sprite sheets and the opener sheet land? Logo and category icons still need paths
+- [ ] Visual: Briar's five state sheets landed Oct 7; the opener sheet, logo, and category icons still need paths
 - [ ] Legal: do coarse location plus whole-degree rounding clear the precise-geolocation bar?
-- [ ] Product: with fact cards and icon\_category gone, how does a kid learn what a target looks like?
+- [ ] Data: keep a flat 25+ sightings, or switch to a share of local sightings? 25+ leaves 0 to 11 species anywhere in the country of Georgia; 0.5% of the place's sightings with at least 3 leaves 9 to 24 playable species in every place tested, 23 to 24 in West Georgia and Atlanta (`docs/results/day-2/threshold_regions.log`). The floor of 3 stops one stray sighting from making a target in sparse places
 
 **Non-blocking**
 
 - [ ] Post: verify Snappit, ForestForay Kids, and SnapScout before naming them as prior art
+- [ ] Build: minSdk 34 existed only for the user-initiated download job, which left with Gemma on Oct 7; lower it or keep it
+- [x] Product: how does a kid learn what a target looks like? Resolved Oct 7: the target's common name and type (S17); no hints, no fact cards
 
 ## Milestones
 
