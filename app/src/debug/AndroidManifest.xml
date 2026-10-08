@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <application>
+    <!-- Debug and release can sit on one phone; the label tells their launcher icons apart. -->
+    <application
+        android:label="Wild Find (debug)"
+        tools:replace="android:label">
         <!-- Debug-only S09 probe; launched over adb by make focus-probe, never from the launcher. -->
         <activity
             android:name=".FocusProbeActivity"
