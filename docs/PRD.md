@@ -1,6 +1,6 @@
 # wild-find — v1 PRD
 
-Oct 5, 2026 · @Ashley
+Oct 5, 2026 · updated Oct 7 · @Ashley
 
 ## Summary
 
@@ -60,7 +60,7 @@ v1 succeeds when a kid finishes a real hunt outside and the verifier stays hones
 | --- | --- |
 | Medium and High difficulty | Needs the tiebreaker shot; v2 |
 | Tiebreaker shot | v2 |
-| Licensed reference photos | v3; category illustrations until then |
+| Licensed reference photos | v3; plant-type illustrations until then |
 | Animals and bugs as targets | Kids chase them on screen and walk up to things that bite |
 | Fungi as targets | BioCLIP Mobile was trained on plants only and can't verify them; a v2 candidate |
 | Teaching look-alikes | Look-alikes simply pass at Low |
@@ -80,7 +80,7 @@ Every call below is settled; open items live in Open Questions.
 | Platform | Native Android in Kotlin; two test phones, Samsung Galaxy S24 Ultra and Google Pixel 9; no iOS; no Vestige code |
 | Repo | wild-find; new repo started inside the challenge window; MIT license |
 | Runtime models | Open-weight only, all running on the phone |
-| Model roles | TinyCLIP ViT-8M (MIT) gates plant vs not-plant on the reticle crop; BioCLIP 2.5 Mobile checks the target and hazards on it; full BioCLIP 2.5 makes the tutorial label vectors at build time; no model judges toxicity; no language model ships (Gemma 4 E2B was tested and dropped Oct 7); Pl@ntNet rejected |
+| Model roles | TinyCLIP ViT-8M (MIT) gates plant vs not-plant on the reticle crop and the full frame; BioCLIP 2.5 Mobile checks the target and hazards on it; full BioCLIP 2.5 makes the tutorial label vectors at build time; no model judges toxicity; no language model ships (Gemma 4 E2B was tested and dropped Oct 7); Pl@ntNet rejected |
 | Safety model | Look, photograph, leave it where it grows. Hazard recognition is an extra warning, never a safety guarantee; the app never tells a child a plant is safe |
 | Difficulty | Selector exists; v1 ships Low only |
 | Region | Any whole-degree region; a region needs one online iNaturalist pull before it plays offline, since no bundled list can cover every region; tested in the West Georgia region, key 34\_-85 |
@@ -94,7 +94,7 @@ Every call below is settled; open items live in Open Questions.
 | Hints | None. The target's common name and type show from the start of each hunt |
 | Toxicity flag | Built once on the laptop for every species-table row. A species is flagged when its English Wikipedia article has a sentence with the whole word toxic, toxin, or poison (other plants' names such as poison ivy removed first), when USDA PLANTS rates it moderate or severe, or when it has no article or one under 1,500 characters. Names match through GBIF. Best effort, like hazard detection, never a safety claim; on Oct 7 it flagged 30 of 117 West Georgia species and wrongly dropped about 6 |
 | Location | Android coarse location only, rounded to whole degrees; the device is in a region only when its rounded key equals that region's key; the query always sends the region center, never device coordinates; manual region pick supported |
-| Images | Category illustrations in v1; licensed photos in v3 |
+| Images | One illustration per plant type (tree, shrub, vine, herb, grass, fern, moss, conifer) in v1; licensed photos in v3 |
 | UI | Animation-first; Jetpack Compose hosts camera and chrome and plays sprite sheets for the opener and Briar, the mascot; no Rive, no React |
 | Distribution | GitHub Release APK with BioCLIP Mobile and the TinyCLIP plant gate inside; nothing downloads after install; outdoor demo video |
 | Credits | README and About screen credit BioCLIP 2.5 Mobile, BioCLIP 2.5, TinyCLIP, OpenCLIP, iNaturalist, Wikipedia, USDA PLANTS, and GBIF |
@@ -174,7 +174,7 @@ Day-1 and Day-2 measurements on the test phone are in hole 4 and `docs/results/d
 | Sunlight | High-contrast, large type that reads in direct sun | Field test |
 | Accessibility | 48 dp touch targets; content descriptions; no color-only signals | Accessibility Scanner |
 | Reading level | All kid-facing text at an age-8 level | Review |
-| iNat etiquette | One query per hunt, requiring at most three paginated HTTP requests, plus one widened query only when fewer than 3 words are eligible; a User-Agent that names the app | Code review |
+| iNat etiquette | One query per hunt, requiring at most three paginated HTTP requests, plus one widened query only when fewer than 3 species are eligible; a User-Agent that names the app | Code review |
 
 ## Architecture
 
@@ -322,7 +322,7 @@ Verify runs when the kid taps Capture: 3 camera frames back to back, stopping at
 | 5 | Focus distance in diopters times the zoom ratio is under 2.0, so the subject looks too small | "Get closer or zoom in" | No |
 | 6 | Anything else | Reticle guidance ("Put the plant in the circle") | No |
 
-The close-range rule was set on the test phone on Day 1 (S09): `LENS_FOCUS_DISTANCE × CONTROL_ZOOM_RATIO >= 2.0`, read only while autofocus reports focused. It used to block every far frame; on Oct 7 it stopped 51% of focused frames and 11 of 19 captures outdoors, so now it only explains a miss. Unfocused frames park the lens near 0.2 diopters, which would read as far. Against a handful of labels, the photo's own group was top-1 on 102 of 114 Day-1 crops; ranked over the whole species table, its genus was top-1 on only 60%, so the target competes only with the hunt's other eligible species (`docs/results/day-2/target_pass.log`). The grass tutorial skips row 1 and scores only its fixed label set (R3). A missed hazard never reads as safe: "Look. Photograph. Leave it where it grows." stays the rule on every screen.
+The close-range rule was set on the test phone on Day 1 (S09): `LENS_FOCUS_DISTANCE × CONTROL_ZOOM_RATIO >= 2.0`, read only while autofocus reports focused. It used to block every far frame; on Oct 7 it stopped 51% of analyzed frames and 11 of 19 captures outdoors, so now it only explains a miss. Unfocused frames park the lens near 0.2 diopters, which would read as far. Against a handful of labels, the photo's own group was top-1 on 102 of 114 Day-1 crops; ranked over the whole species table, its genus was top-1 on only 60%, so the target competes only with the hunt's other eligible species (`docs/results/day-2/target_pass.log`). The grass tutorial skips row 1 and scores only its fixed label set (R3). A missed hazard never reads as safe: "Look. Photograph. Leave it where it grows." stays the rule on every screen.
 
 ```
 pass = genus(top1(eligible_rows, reticle)) == target.genus   // eligible_rows: this hunt's local species; a tie is no pass
@@ -348,7 +348,7 @@ Only the current hunt's state persists; there is no history, streak, or sharing.
 
 Briar and the opener play finished sprite sheets, one per state. A Rive rig was dropped on Oct 6: the rig sheets' parts were drawn at mismatched sizes and didn't assemble into a usable Briar, and the sheets were removed.
 
-**Sprite sheet contract:** each state is `app/src/main/assets/briar/<state>.png` plus `<state>.json`. The PNG is a grid of equal frames, left to right, then top to bottom, on a transparent background. The JSON is `{"frame_width": 512, "frame_height": 512, "frames": 12, "columns": 4, "fps": 12, "loop": false}`. States: `welcome`, `searching`, `found`, `retry`, `complete`; until their art exists, every state plays `idle`. Briar isn't on every screen. A state sheet plays once, start to finish, and never loops; then `idle` loops until Briar leaves the screen, so `idle`'s last frame must flow into its first. The build finds each source frame by its outline and plants every frame on the same feet point, so a source sheet's frames needn't sit on an even grid.
+**Sprite sheet contract:** each state is `app/src/main/assets/briar/<state>.png` plus `<state>.json`. The PNG is a grid of equal frames, left to right, then top to bottom, on a transparent background. The JSON is `{"frame_width": 520, "frame_height": 520, "frames": 16, "columns": 4, "fps": 8, "loop": true}` (`idle`'s); the build sizes each cell to the largest outlined frame plus its fur edge, so cells run a little over the 512 px source cells. States: `welcome`, `searching`, `found`, `retry`, `complete`; until their art exists, every state plays `idle`. Briar isn't on every screen. A state sheet plays once, start to finish, and never loops; then `idle` loops until Briar leaves the screen, so `idle`'s last frame must flow into its first. The build finds each source frame by its outline and plants every frame on the same feet point, so a source sheet's frames needn't sit on an even grid.
 
 | Asset | Used in | File |
 | --- | --- | --- |
@@ -358,7 +358,7 @@ Briar and the opener play finished sprite sheets, one per state. A Rive rig was 
 | Briar idle loop | 16-frame rest-and-blink idle, source for `idle`; plays for every state until per-state art exists | assets/source/briar-rest-blink-16.png |
 | Briar state sources | Finished per-state art, not yet packed: 32-frame 8 × 4 sheets on 512 px cells `welcome-32`, `rest-blink-32`, `searching-32`, `searching-hint-32`, `found-32`, `retry-32`, `complete-32`; drafts stay out of git in assets/generated/ until finished | assets/source/briar-*.png, assets/source/welcome-32.png, assets/source/complete-32.png |
 | Briar sprite sheets | Per-state sheets: welcome; searching; found; retry; hunt complete | app/src/main/assets/briar/ (only `idle` so far) |
-| Category icons | No category source since fact cards were dropped (Open Questions) | Path pending |
+| Plant-type icons | Shown with the target's name, one per type from S17 | Path pending |
 | Opener art | Bees and snakes, with poison ivy drawn in; a sprite sheet under the same contract | Path pending |
 
 - Animation-first interactions; illustrations, not licensed photos, in v1
@@ -405,13 +405,13 @@ Each choice below buys speed or privacy for v1 and names the point where it gets
 
 ## Remaining Holes
 
-No blockers remain; every hole below closes or falls back during the Day-1 gate or the field test. Resolved holes moved into Decisions and Requirements, and numbers stay fixed so references hold.
+No blockers remain; every open hole below closes or falls back during calibration or the field test. Earlier holes were resolved into Decisions and Requirements; recently resolved ones stay listed because stories cite them. Numbers never change, so references hold.
 
 | # | Hole | Why it matters | Fix | Severity |
 | --- | --- | --- | --- | --- |
-| 3 | Label text format | Day 1: with common names, a white oak photo scored "poison oak" top-1 on both the teacher and the mobile model; scientific names put oak top-1 on both | BioCLIP labels embed as "a photo of <scientific name>."; confirm on the calibration set | High |
+| 3 | Label text format | Day 1: with common names, a white oak photo scored "poison oak" top-1 on both the teacher and the mobile model; scientific names put oak top-1 on both | Applies only to the 11 fixed tutorial labels: targets and hazards score against the pinned species table's own text. Tutorial labels embed as "a photo of <scientific name>."; confirm on the calibration set (S15) | High |
 | 4 | Latency | Continuous verify ran 366 ms a frame at p50 outdoors (Oct 7), so verify moved to Capture: 189 ms a frame, 3 frames per tap | Resolved by Capture | Low |
-| 10 | Heat and battery | Continuous verify reached severe thermal status in 36 minutes on Oct 7; capture mode stayed at none for 5.5 minutes | A 20-minute capture-mode run (S05) | Medium |
+| 10 | Heat and battery | Continuous verify reached severe thermal status in 36 minutes on Oct 7; capture mode stayed at none for 5.5 minutes unplugged | A 20-minute capture-mode run (S05) | Medium |
 | 13 | No telemetry | Field failures stay invisible by design | Debug builds only: a local log the developer can export | Medium |
 | 17 | BioCLIP Mobile vs non-plant labels | Laptop side resolved on Day 1: 16 of 63 free non-plant photos scored a plant target top-1 on the reticle crop (20 of 63 on the full frame), and a pair of sneakers scored oak (0.605) above a real oak (0.572). TinyCLIP ViT-8M kept 176 of 176 plant photos and passed 2 of 63 non-plants on the full frame, so it gates every frame first. The fp32 export now matches the laptop on the phone (cosine 0.99999999, same plant share) and reproduces all 307 Day-1 reticle verdicts | Resolved (S06) | Low |
 | 19 | Approximate focus distance | Resolved on the test phone for a can at desk range (S09): focused readings split far (1.8 or less) from closer (2.0 or more) in three runs, and every lens reports about the same distance as zoom switches lenses. Unmeasured outdoors on plants and beyond about 1 m | Rule: diopters × zoom ≥ 2.0 while focused; recheck wide-shot calls in the field test (S52) | Medium |
@@ -436,7 +436,7 @@ Two questions block the build; two can wait.
 
 **Blocking**
 
-- [ ] Visual: Briar's five state sheets landed Oct 7; the opener sheet, logo, and category icons still need paths
+- [ ] Visual: Briar's five state sheets landed in `assets/source/` Oct 7 and still need packing (S30); the opener sheet, logo, and plant-type icons still need paths
 - [ ] Legal: do coarse location plus whole-degree rounding clear the precise-geolocation bar?
 - [x] Data: flat 25+ sightings or a share of local sightings? Decided Oct 7: at least 0.5% of the place's sightings and at least 3 (Decisions: Local filter); the floor of 3 stops one stray sighting from making a target in sparse places
 
@@ -467,7 +467,7 @@ Day 1 is a go or no-go gate: every runtime model must run on the test phone befo
    - Resume after an interrupted download succeeds
    - SHA-256 verification succeeds
    - Low-storage handling tested
-2. Oct 7, 2026: redesign (see Redesign); toxicity flags and tutorial labels built; final assets wired in
+2. Oct 7, 2026: redesign (see Redesign); toxicity flags built; tutorial labels and final asset wiring slipped to Oct 8
 3. Oct 8, 2026: verify loop end to end; collect about 30 calibration photos and 20 to 30 holdout photos from free CC0 or public-domain sources, stored apart; the holdout includes free non-plant negatives (screens, people, pavement)
 4. Oct 9, 2026: outdoor field test, including live wide shots for the wide-shot false-pass rate; any floor decision comes from the calibration set only; hunt-complete flow
 5. Oct 10, 2026: holdout acceptance metrics; record the outdoor demo; draft the post
