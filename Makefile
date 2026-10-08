@@ -1,4 +1,4 @@
-.PHONY: setup build install device-test focus-probe assets sprites toxicity synonyms plant-types hazard-vectors labels crop-reference gate-harness gate-pull reference test pipeline-test lint ktlint detekt android-lint pipeline-lint actionlint secret-scan ai-checks clean
+.PHONY: setup build install device-test focus-probe assets sprites toxicity synonyms plant-types descriptions hazard-vectors labels crop-reference gate-harness gate-pull reference test pipeline-test lint ktlint detekt android-lint pipeline-lint actionlint secret-scan ai-checks clean
 
 SHELL := /bin/bash
 
@@ -86,6 +86,10 @@ synonyms:
 # S17: rebuilds the committed pipeline/data/plant_types.json from USDA PLANTS growth habit and GBIF taxonomy.
 plant-types:
 	$(UV) run --group reference python -W error -m wild_find_pipeline.plant_types
+
+# Rebuilds the committed pipeline/data/descriptions.json: a kid-level sentence per row from USDA PLANTS traits.
+descriptions:
+	$(UV) run --group reference python -W error -m wild_find_pipeline.descriptions
 
 # Rebuilds the committed hazard_vectors.json; pulls the 3.9 GB BioCLIP teacher (as does reference), so CI runs neither.
 hazard-vectors:

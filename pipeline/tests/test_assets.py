@@ -7,7 +7,14 @@ import numpy as np
 import pytest
 
 from wild_find_pipeline import assets, paths
-from wild_find_pipeline.assets import plant_share, species_table, with_plant_types, with_synonyms, with_toxicity
+from wild_find_pipeline.assets import (
+    plant_share,
+    species_table,
+    with_descriptions,
+    with_plant_types,
+    with_synonyms,
+    with_toxicity,
+)
 from wild_find_pipeline.labels import HAZARDS, embedding_versions, is_hazard, lacking_hazards
 from wild_find_pipeline.paths import pin
 
@@ -253,3 +260,18 @@ def test_with_plant_types_adds_each_rows_type_or_none():
 def test_with_plant_types_rejects_a_row_without_an_entry():
     with pytest.raises(ValueError, match="run make plant-types"):
         with_plant_types([{"scientific": "Quercus nigra", "hazard": False}], {"Quercus alba": {"type": "tree"}})
+
+
+def test_with_descriptions_adds_each_rows_sentence_or_none():
+    labels = [{"scientific": "Quercus nigra"}, {"scientific": "Epifagus virginiana"}]
+    found = {"Quercus nigra": {"description": "A tall tree."}, "Epifagus virginiana": {"description": None}}
+
+    assert with_descriptions(labels, found) == [
+        {"scientific": "Quercus nigra", "description": "A tall tree."},
+        {"scientific": "Epifagus virginiana", "description": None},
+    ]
+
+
+def test_with_descriptions_rejects_a_row_without_an_entry():
+    with pytest.raises(ValueError, match="run make descriptions"):
+        with_descriptions([{"scientific": "Quercus nigra"}], {})

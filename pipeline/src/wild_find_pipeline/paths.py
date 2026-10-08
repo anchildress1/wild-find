@@ -23,6 +23,8 @@ TOXICITY = REPO / "pipeline/data/toxicity.json"
 SYNONYMS = REPO / "pipeline/data/synonyms.json"
 # Plant type per species-table row; committed because it reads the USDA archive and GBIF cache (make plant-types).
 PLANT_TYPES = REPO / "pipeline/data/plant_types.json"
+# Kid-level description per species-table row, templated from USDA traits; committed (make descriptions).
+DESCRIPTIONS = REPO / "pipeline/data/descriptions.json"
 
 
 def pin(model: str, manifest: Path = MANIFEST) -> dict[str, str]:

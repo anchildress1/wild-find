@@ -1,0 +1,61 @@
+descriptions.json built 2026-10-08; species_labels.json from make assets
+rule: ["bright leaves in fall: fallConspicuousYes", "<color> flowers [in <bloom season>]: one non-green flower color; trees only when showy; never on conifers, ferns, grasses, or mosses", "<color> fruit, or brown seeds, [in fall when persistent, else in <seed season>]: fruitSeedConspicuousYes and one fruit color", "<color> leaves: one leaf color other than green or red"]; fall features first; at most 2
+
+whole table: 851 of 4272 rows described
+  by type (described/rows): herb 298/1954, None 1/728, shrub 162/460, tree 231/444, vine 40/199, grass 57/199, fern 12/160, conifer 50/86, moss 0/42
+  distinct sentences: 397
+
+West Georgia (34, -85), day-2 pull: 15 of 23 eligible targets described
+count  common                     type     description
+  363  blue mistflower            herb     A plant with bright leaves in fall and blue flowers in summer.
+  231  American beautyberry       shrub    A bush with bright leaves and purple fruit in fall.
+  184  American sweetgum          tree     A tall tree with bright leaves in fall and brown seeds in summer.
+  159  southern magnolia          tree     A tall tree with bright leaves and red fruit in fall.
+  154  American tuliptree         tree     A tall tree with bright leaves in fall and yellow flowers in spring.
+  148  Christmas fern             fern     -
+  125  American beech             tree     A tall tree with bright leaves in fall.
+  116  American burnweed          None     -
+  103  Porcelain Berry            None     -
+   97  American persimmon         tree     A tree with bright leaves and orange fruit in fall.
+   84  American sycamore          tree     A tall tree with bright leaves and brown seeds in fall.
+   82  muscadine                  vine     A vine with bright leaves and purple fruit in fall.
+   79  kudzu                      vine     -
+   76  eastern redbud             tree     A tree with brown seeds in fall and purple flowers in spring.
+   72  water oak                  tree     A tall tree with bright leaves in fall and brown seeds in summer.
+   65  Persian silk tree          tree     A small tree with brown seeds in fall and white flowers in summer.
+   63  striped wintergreen        shrub    -
+   61  shining sumac              tree     A small tree with bright leaves and brown seeds in fall.
+   60  Chinese holly              tree     A small tree with bright leaves and red fruit in fall.
+   60  tall goldenrod             herb     -
+   57  sassafras                  tree     A tall tree with bright leaves in fall and yellow flowers in spring.
+   57  crane-fly orchid           herb     -
+   56  Chamberbitter              herb     -
+
+37, -82, phone cache (en-US, month 10): 16 of 26 eligible targets described
+count  common                     type     description
+   45  fan clubmoss               fern     -
+   44  American tuliptree         tree     A tall tree with bright leaves in fall and yellow flowers in spring.
+   39  sassafras                  tree     A tall tree with bright leaves in fall and yellow flowers in spring.
+   37  american witch-hazel       tree     A small tree with yellow flowers and brown seeds in fall.
+   36  American beech             tree     A tall tree with bright leaves in fall.
+   30  American chestnut          tree     A tall tree with bright leaves and brown seeds in fall.
+   30  eastern hemlock            conifer  A tall evergreen.
+   29  Christmas fern             fern     -
+   27  downy rattlesnake plantain herb     -
+   26  striped wintergreen        shrub    -
+   26  great blue lobelia         herb     -
+   25  striped maple              tree     A tree with bright leaves in fall.
+   25  American mountain ash      tree     A tree with bright leaves and orange fruit in fall.
+   20  Osage-orange               tree     A tree with orange fruit in summer.
+   20  sourwood                   tree     A tree with bright leaves in fall and white flowers in summer.
+   19  sugar maple                tree     A tall tree with bright leaves in fall.
+   19  common selfheal            herb     A low plant with purple flowers in summer and gray-green leaves.
+   15  American persimmon         tree     A tree with bright leaves and orange fruit in fall.
+   15  Beechdrops                 herb     -
+   15  Red Clover                 herb     A plant with red flowers in spring.
+   14  galax                      shrub    -
+   14  common morning-glory       vine     -
+   14  American sycamore          tree     A tall tree with bright leaves and brown seeds in fall.
+   14  three-toothed cinquefoil   herb     -
+   14  swamp aster                herb     A tall plant with bright leaves and blue flowers in fall.
+   14  crane-fly orchid           herb     -

@@ -219,9 +219,10 @@ Runs once on the laptop in Python with uv. Gemma never runs here.
 1. **Species table:** the pinned BioCLIP taxa files plus a row for each hazard species they lack, with hazard flags (species_table.npy, species_labels.json)
 2. **Toxicity flag:** `make toxicity` reads each species-table row's English Wikipedia article (redirects followed, 50 per request, reference sections and citations stripped) and USDA PLANTS' toxicity ratings, widened to every GBIF synonym of each moderate or severe species; flags per the Decisions rule; commits `pipeline/data/toxicity.json` with each flag's evidence and article revision, since CI doesn't fetch articles; `make assets` merges the flag and genus into species_labels.json. The Oct 7 build flagged 2,161 of 4,272 rows: 1,369 stubs (mostly rare species with short English articles), 685 toxicity sentences, 87 with no article, 20 from USDA alone (`docs/results/day-2/toxicity-build-4.log`); "non-toxic", "not toxic", and their "poisonous" forms never count as a claim
 3. **Plant type:** `make plant-types` types each species-table row per the Decisions rule: GBIF class or phylum (Polypodiopsida and Lycopodiopsida fern; Bryophyta, Marchantiophyta, and Anthocerotophyta moss; Pinopsida conifer) from the species/match replies `make synonyms` cached, else USDA PLANTS' growth habit for the row's name or its first shipped GBIF alias, else Poaceae grass; commits `pipeline/data/plant_types.json` with each type's source; `make assets` merges it into species_labels.json as `type`, or null
-4. **Tutorial labels:** the BioCLIP 2.5 ViT-H text encoder writes one vector per fixed tutorial label (R3; text format per hole 3) into labels.npy and labels.json
-5. **Plant gate:** TinyCLIP's image encoder exported to plant_gate.onnx, and its text encoder writes the plant-gate vectors into plant_gate.json
-6. **Output:** species_table.npy, species_labels.json, labels.npy, labels.json, hazards.json, plant_gate.onnx, plant_gate.json; BioCLIP Mobile ships as its pinned file
+4. **Description:** `make descriptions` templates one or two short kid-level sentences per species-table row from the USDA PLANTS traits a kid can see (size from mature height, flower color and season, showy fruit color and season, showy fall leaves, a leaf color other than green), matched by the row's name or its GBIF aliases like the plant type; fall features lead, at most two; never invents a trait, never uses a banned kid word; no model and no network at app time; commits `pipeline/data/descriptions.json` with the rule and each sentence's traits; `make assets` merges it into species_labels.json as `description`, or null when USDA has nothing visible (851 of 4,272 rows; 15 of 23 West Georgia targets, `docs/results/day-3/descriptions.log`)
+5. **Tutorial labels:** the BioCLIP 2.5 ViT-H text encoder writes one vector per fixed tutorial label (R3; text format per hole 3) into labels.npy and labels.json
+6. **Plant gate:** TinyCLIP's image encoder exported to plant_gate.onnx, and its text encoder writes the plant-gate vectors into plant_gate.json
+7. **Output:** species_table.npy, species_labels.json, labels.npy, labels.json, hazards.json, plant_gate.onnx, plant_gate.json; BioCLIP Mobile ships as its pinned file
 
 **Hazard species:** every *Toxicodendron* species (poison ivy, poison oak, poison sumac), *Phytolacca americana* (pokeweed), and *Solanum carolinense* (Carolina horsenettle).
 
@@ -237,7 +238,7 @@ Ten files ship in the app, nothing downloads after install, and every cache entr
 | --- | --- | --- |
 | hazards.json | Hazard species (name, taxon\_id, scientific name) and the two opener hazards (name, rule) | Build pipeline, from NIOSH |
 | species\_table.npy | BioCLIP Mobile's 4,271-species text table plus a row for each hazard species it lacks (today: *Toxicodendron pubescens*); 1024-d unit vectors | Build pipeline, from the pinned taxa\_table.npy |
-| species\_labels.json | One entry per species\_table row: scientific name, genus, hazard flag, toxic flag, plant type (below) | Build pipeline, from the pinned taxa\_labels.json, toxicity.json, synonyms.json, and plant\_types.json |
+| species\_labels.json | One entry per species\_table row: scientific name, genus, hazard flag, toxic flag, plant type, GBIF aliases, and kid-level description (below) | Build pipeline, from the pinned taxa\_labels.json, toxicity.json, synonyms.json, plant\_types.json, and descriptions.json |
 | labels.npy | One 1024-d unit vector per fixed tutorial label (R3) | BioCLIP 2.5 ViT-H text encoder |
 | labels.json | schema\_version, the teacher pin and package versions, and a list parallel to labels.npy: scientific name and prompt per row (schema 2) | Build pipeline |
 | flora\_student\_fp32.onnx | BioCLIP 2.5 Mobile image encoder, fp32; pinned below and SHA-256 checked at build time | Build pipeline, from crazedcodernate/bioclip-2.5-mobile-fastvit @ 29b474ea2a5d72b4646f036ead9441e0a22a5c62 |
@@ -250,7 +251,8 @@ Ten files ship in the app, nothing downloads after install, and every cache entr
 
 ```json
 [
-  { "scientific": "Quercus nigra", "hazard": false, "genus": "Quercus", "toxic": false, "type": "tree" }
+  { "scientific": "Quercus nigra", "hazard": false, "genus": "Quercus", "toxic": false, "type": "tree",
+    "description": "A tall tree with bright leaves in fall and brown seeds in summer." }
 ]
 ```
 

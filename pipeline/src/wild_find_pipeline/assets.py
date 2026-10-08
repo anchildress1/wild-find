@@ -2,7 +2,8 @@
 
 Writes into the gitignored app/generated/assets. Needs no BioCLIP teacher: appended hazard rows come from the
 committed hazard_vectors.json (make hazard-vectors), toxicity flags from toxicity.json (make toxicity), name
-aliases from synonyms.json (make synonyms), and plant types from plant_types.json (make plant-types), so CI can
+aliases from synonyms.json (make synonyms), plant types from plant_types.json (make plant-types), and kid-level
+descriptions from descriptions.json (make descriptions), so CI can
 run it. Also checks the committed labels.npy and labels.json (make labels) against the current label lists and pins.
 """
 
@@ -26,6 +27,7 @@ from wild_find_pipeline.labels import (
     prompt,
 )
 from wild_find_pipeline.paths import (
+    DESCRIPTIONS,
     GENERATED_ASSETS,
     GENERATED_STAMP,
     HAZARD_VECTORS,
@@ -90,6 +92,14 @@ def with_plant_types(labels: list[dict], types: dict[str, dict]) -> list[dict]:
     if missing:
         raise ValueError(f"{PLANT_TYPES.name} lacks {len(missing)} species, e.g. {missing[:3]}; run make plant-types")
     return [{**entry, "type": types[entry["scientific"]]["type"]} for entry in labels]
+
+
+def with_descriptions(labels: list[dict], found: dict[str, dict]) -> list[dict]:
+    """Add each row's committed kid-level description, or None; raises when a row has no entry."""
+    missing = [entry["scientific"] for entry in labels if entry["scientific"] not in found]
+    if missing:
+        raise ValueError(f"{DESCRIPTIONS.name} lacks {len(missing)} species, e.g. {missing[:3]}; run make descriptions")
+    return [{**entry, "description": found[entry["scientific"]]["description"]} for entry in labels]
 
 
 def tinyclip_dir() -> Path:
@@ -178,6 +188,7 @@ INPUTS = (
     TOXICITY,
     SYNONYMS,
     PLANT_TYPES,
+    DESCRIPTIONS,
     REPO / "pipeline/uv.lock",
     LABELS_DIR / "labels.json",
     LABELS_DIR / "labels.npy",
@@ -220,6 +231,7 @@ def main() -> int:
         labels = with_toxicity(labels, json.loads(TOXICITY.read_text())["species"])
         labels = with_synonyms(labels, json.loads(SYNONYMS.read_text())["species"])
         labels = with_plant_types(labels, json.loads(PLANT_TYPES.read_text())["species"])
+        labels = with_descriptions(labels, json.loads(DESCRIPTIONS.read_text())["species"])
         np.save(staging / "species_table.npy", table)
         (staging / "species_labels.json").write_text(json.dumps(labels, indent=1) + "\n")
 
