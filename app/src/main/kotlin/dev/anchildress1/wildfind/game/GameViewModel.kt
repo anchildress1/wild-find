@@ -100,7 +100,7 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
             GameEvent.Capture -> capture(screen)
             GameEvent.Next -> next(screen)
             GameEvent.ToHunt -> toHunt()
-            GameEvent.FinishHunt -> show(Screen.Complete)
+            GameEvent.FinishHunt -> finish()
             GameEvent.HuntAgain -> endHunt().also { load() }
             GameEvent.Home -> endHunt().also { show(Screen.Start) }
             GameEvent.OpenGrownUps -> show(Screen.GrownUps(from = screen))
@@ -328,6 +328,12 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
             progress.complete -> show(Screen.Complete)
             else -> openCamera(progress.remaining.first().row)
         }
+    }
+
+    // An ended hunt leaves disk now, so a relaunch lands on Start, while Complete still shows its stops from memory.
+    private fun finish() {
+        viewModelScope.launch(disk) { graph.store.clearHunt() }
+        show(Screen.Complete)
     }
 
     private fun toHunt() = show(if (hunt?.progress?.tutorialPending == true) Screen.Tutorial else Screen.Hunt)
