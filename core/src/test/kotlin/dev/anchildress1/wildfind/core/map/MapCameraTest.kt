@@ -9,7 +9,27 @@ import org.junit.jupiter.api.assertThrows
 
 class MapCameraTest {
     @Test
-    fun `it opens on the whole world, and picking unlocks at 12 degrees across`() {
+    fun `it opens on the whole world centered on 0, 0`() {
+        assertEquals(MapCamera(lat = 0.0, lng = 0.0, span = MapCamera.WORLD_SPAN), MapCamera())
+    }
+
+    @Test
+    fun `a zoom glide never moves the crosshairs, and a pan glide takes the short way`() {
+        val start = MapCamera()
+        val zoomed = start.zoom(2.0)
+        listOf(0.0, 0.3, 0.7, 1.0).forEach {
+            val step = start.toward(zoomed, it)
+            assertEquals(0.0, step.lat)
+            assertEquals(0.0, step.lng)
+        }
+        assertEquals(zoomed, start.toward(zoomed, 1.0))
+        val east = MapCamera(10.0, 179.0, 8.0)
+        assertEquals(-179.5, east.toward(MapCamera(12.0, -178.0, 8.0), 0.5).lng, 1e-9)
+        assertEquals(11.0, east.toward(MapCamera(12.0, -178.0, 8.0), 0.5).lat, 1e-9)
+    }
+
+    @Test
+    fun `picking unlocks at 12 degrees across`() {
         val world = MapCamera()
 
         assertEquals(MapCamera.WORLD_SPAN, world.span)

@@ -211,12 +211,10 @@ private fun rememberGlide(current: () -> MapCamera, set: (MapCamera) -> Unit): (
         if (reduced) {
             set(target)
         } else {
-            val dLng = MapCamera.eastward(start.lng, target.lng)
             val duration = if (target.span != start.span) Motion.MOVE else Motion.QUICK
             job = scope.launch {
                 animate(0f, 1f, animationSpec = tween(duration, easing = Motion.Decelerate)) { t, _ ->
-                    val span = start.span + (target.span - start.span) * t
-                    set(start.copy(span = span).pan(dLng * t, (target.lat - start.lat) * t))
+                    set(start.toward(target, t.toDouble()))
                 }
             }
         }

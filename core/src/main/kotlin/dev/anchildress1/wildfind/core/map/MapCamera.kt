@@ -54,6 +54,16 @@ data class MapCamera(val lat: Double = 0.0, val lng: Double = 0.0, val span: Dou
     /** One whole degree from the region under the crosshairs toward [heading]. */
     fun step(heading: Heading): MapCamera = region.let { at(RegionKey(it.lat + heading.lat, it.lng + heading.lng)) }
 
+    /**
+     * [fraction] (0 to 1) of the way to [target]: span and latitude straight, longitude the short way around, so a
+     * zoom alone never moves the crosshairs and a glide never circles the globe.
+     */
+    fun toward(target: MapCamera, fraction: Double): MapCamera =
+        copy(span = span + (target.span - span) * fraction).pan(
+            eastward(lng, target.lng) * fraction,
+            (target.lat - lat) * fraction,
+        )
+
     /** Screen x of longitude [lng] in a view [width] wide, taking the shorter way around the globe. */
     fun x(lng: Double, width: Float): Float = (width / 2 + wrap(lng - this.lng) * width / span).toFloat()
 
