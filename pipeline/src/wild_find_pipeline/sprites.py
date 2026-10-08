@@ -15,9 +15,10 @@ OUT = REPO / "app/src/main/assets/briar"
 # name: (source file, columns, rows, fps)
 SHEETS = {
     "idle": ("briar-rest-blink-16.png", 4, 4, 8),
-    "opener": ("opener-warning-32.png", 8, 4, 16),
+    "opener": ("opener-ivy-32.png", 8, 4, 16),
     "welcome": ("welcome-32.png", 8, 4, 16),
-    "found": ("briar-found-32.png", 8, 4, 16),
+    # The complete cheer doubles as found: briar-found-32 bakes a fern into every frame.
+    "found": ("complete-32.png", 8, 4, 16),
     "complete": ("complete-32.png", 8, 4, 16),
 }
 # Idle and the hunt-complete celebration loop; every other state sheet plays once, then idle takes over.

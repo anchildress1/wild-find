@@ -364,9 +364,9 @@ Briar and the opener play finished sprite sheets, one per state. A Rive rig was 
 | UI direction 01 | Eight-screen review concept: first launch with the hint-download bar (since dropped), grass tutorial, hunt map, live camera, hint (since dropped), found, give it space, hunt complete; reference only | assets/source/wild-find-app-design.png |
 | Briar idle loop | 16-frame rest-and-blink idle, source for `idle`; plays for every state until per-state art exists | assets/source/briar-rest-blink-16.png |
 | Briar state sources | Finished per-state art, not yet packed: 32-frame 8 × 4 sheets on 512 px cells `welcome-32`, `rest-blink-32`, `searching-32`, `searching-hint-32`, `found-32`, `retry-32`, `complete-32`; drafts stay out of git in assets/generated/ until finished | assets/source/briar-*.png, assets/source/welcome-32.png, assets/source/complete-32.png |
-| Briar sprite sheets | Packed `idle`, `welcome`, `found`, and `complete` (`make sprites`); `found-32` bakes a fern into every frame and needs a redraw | app/src/main/assets/briar/ |
+| Briar sprite sheets | Packed `idle`, `welcome`, `found`, and `complete` (`make sprites`); `found` plays `complete-32`, since `found-32` bakes a fern into every frame | app/src/main/assets/briar/ |
 | Plant-type icons | Shown with the target's name, one per type from S17 | Path pending |
-| Opener art | Briar holds up a warning paw beside a three-leaf seedling; 32 frames, plays once and holds its last frame | assets/source/opener-warning-32.png, packed to app/src/main/assets/briar/opener.png |
+| Opener art | Briar holds up a warning paw beside a three-leaf seedling; 32 frames, plays once and holds its last frame | assets/source/opener-ivy-32.png, packed to app/src/main/assets/briar/opener.png |
 
 - Animation-first interactions; illustrations, not licensed photos, in v1
 - Kid copy principle: "Look. Photograph. Leave it where it grows."
@@ -444,7 +444,7 @@ Two questions block the build; two can wait.
 
 **Blocking**
 
-- [ ] Visual: two images still need art: a `found` redraw without the baked-in fern, and the app icon (an adaptive icon: 432 px foreground inside a 264 px safe zone, a background, and a monochrome layer); the opener landed Oct 8, and the wordmark and plant-type icons are drawn in code
+- [ ] Visual: one image still needs art: the app icon (an adaptive icon: 432 px foreground inside a 264 px safe zone, a background, and a monochrome layer); the opener landed Oct 8, `found` plays the complete cheer since `briar-found-32` bakes in a fern, and the wordmark and plant-type icons are drawn in code
 - [ ] Legal: do coarse location plus whole-degree rounding clear the precise-geolocation bar?
 - [x] Data: flat 25+ sightings or a share of local sightings? Decided Oct 7: at least 0.5% of the place's sightings and at least 3 (Decisions: Local filter); the floor of 3 stops one stray sighting from making a target in sparse places
 
@@ -452,7 +452,7 @@ Two questions block the build; two can wait.
 
 - [ ] Post: verify Snappit, ForestForay Kids, and SnapScout before naming them as prior art
 - [ ] Build: minSdk 34 existed only for the user-initiated download job, which left with Gemma on Oct 7; lower it or keep it
-- [ ] Cleanup: delete unused source art once the user says go, with its Visual System rows: `briar-searching-32.png`, `briar-searching-hint-32.png`, and `briar-retry-32.png` (no screen plays them; Briar stays off hunt pages), `briar-rest-blink-32.png` (idle packs from the 16-frame sheet), and `wild-find-sprite-1.png` and `wild-find-app-design.png` (the design canvas replaced both)
+- [ ] Cleanup: delete unused source art once the user says go, with its Visual System rows: `briar-searching-32.png`, `briar-searching-hint-32.png`, and `briar-retry-32.png` (no screen plays them; Briar stays off hunt pages), `briar-rest-blink-32.png` (idle packs from the 16-frame sheet), `briar-found-32.png` (its baked-in fern; `found` plays the complete cheer), and `wild-find-sprite-1.png` and `wild-find-app-design.png` (the design canvas replaced both)
 - [x] Product: how does a kid learn what a target looks like? Resolved Oct 7: the target's common name and type (S17); no hints, no fact cards
 
 ## Milestones
