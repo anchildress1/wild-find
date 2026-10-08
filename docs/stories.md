@@ -13,10 +13,9 @@ Every runtime model (TinyCLIP, BioCLIP, Gemma) runs on the test phone, or nothin
 - [x] **S03 BioCLIP on device** (app) — ONNX Runtime loads `flora_student_fp32.onnx` (fp16 returns NaN on ARM); `make device-test` passes: cosine 1.0000 to the S02 reference, oak top-1, load 135 ms, embed 58 ms on the test phone
 - [x] **S04 Gemma on device** — E2B loads on the GPU without out-of-memory (2.1 GB loaded, 2.9 GB peak; 4.0 s warm load) and answers vision prompts in 2.3–2.9 s; too slow for the verify path, so boxing was dropped for deterministic live verify — **dropped Oct 7 with Gemma** (`docs/results/day-2.md`)
 - [x] **S09 Close-range threshold** — `make focus-probe` logged live `LENS_FOCUS_DISTANCE` at far, closer, full-frame, and too-close shots, plus pinch zoom, on the test phone (a can, not a plant); rule: diopters × zoom ≥ 2.0 while autofocus reports focused; PRD hole 19
-- [ ] **S05 Gate harness** (app, debug only) — records verify time per capture frame, what BioCLIP saw (top and hazard species), first eligible frame to Found, RAM, and a 20-minute thermal run to a local exportable log; holes 4, 10, 13; the "wild-find gate" launcher icon starts an untethered run (target oak) and `make gate-harness` (`GATE_WORD`) starts one over adb; `make gate-pull` copies the CSVs into `docs/results/` and summarizes them; ticks after a logged 20-minute capture-mode run on each test phone (Galaxy S24 Ultra, Pixel 9) aimed at a real plant; runs last, once the game is playable
 - [x] **S06 Plant gate** (pipeline + app) — export TinyCLIP ViT-8M's image encoder to fp32 ONNX plus text vectors for the exact Day-1 gate prompts; pin it; `PlantGate` in core; on-device parity passes (cosine 0.99999999, 40 ms per embedding); S34 gates every frame with it; PRD hole 17
 - [x] **S07 Gemma download** (core + app) — R9, Gemma only; starts on its own at launch as a user-initiated transfer job, never behind a wait screen; proven on the test phone (`docs/results/day-1.md`): full pull at about 32 MB/s, kill mid-pull + resume, a 60-second outage with the app closed resumed by the system in a new process, bad hash deleted and pulled again on the next launch; low storage is JVM-tested only; in-app progress lands with the opener (S31) — **dropped Oct 7 with Gemma** (`docs/results/day-2.md`)
-- [x] **S08 Debug/release side by side** (app) — debug uses `applicationIdSuffix = ".debug"` so a release install never wipes the debug app's 2.6 GB model on the one test phone
+- [x] **S08 Debug/release side by side** (app) — debug uses `applicationIdSuffix = ".debug"` so a release install never wipes the debug app's gate-harness runs not yet pulled
 - [x] **S08b Bundle the small models** (build) — `make assets` fetches BioCLIP and the taxa table and labels (SHA-checked), builds species_table.npy and species_labels.json (missing hazard species appended, hazard flags set), and exports TinyCLIP into gitignored `app/generated/assets`; the one missing hazard row comes from the committed `pipeline/data/hazard_vectors.json` (`make hazard-vectors`; it and `make reference` are the manual steps that need the 3.9 GB teacher, while `make assets` and CI never do); CI runs `make assets` with a cache; any build without the assets fails; the app loads all of them from the APK
 
 ## Build pipeline · Oct 7–8
@@ -27,18 +26,18 @@ The Oct 7 redesign (PRD Redesign) dropped the build-time menu: the old S10–S16
 - [ ] **S15 Tutorial labels** (pipeline) — `make labels` writes only the 11 fixed tutorial labels into `labels.npy` + `labels.json`; drop the stand-in menu words; label text format per hole 3
 - [ ] **S17 Plant type** (pipeline) — USDA PLANTS growth habit per species-table row through GBIF synonyms, else fern, moss, grass, or conifer from taxonomy, else null; merged into species_labels.json as `type`; shown with the target name
 
-## Game logic · core
+## Game logic · core · Oct 8
 
-- [ ] **S20 Contracts** — parse and validate `species_labels.json` (genus, hazard, toxic), `hazards.json`, `labels.json`, cache entry; reject unknown `schema_version`
-- [x] **S21 Region key** — whole-degree rounding; supported iff key is `34_-85`
+- [ ] **S20 Contracts** — parse and validate `species_labels.json` (genus, hazard, toxic, type), `hazards.json`, `labels.json`, `plant_gate.json`, cache entry; reject unknown `schema_version`; parsing moves out of `app`'s `BundledAssets` into core
+- [x] **S21 Region key** — whole-degree rounding; the `34_-85`-only gate is superseded by S28
 - [ ] **S28 Any region** (core) — redesign: drop the `34_-85`-only gate in `RegionKey`; any whole-degree key plays; R2
-- [ ] **S22 Sightings** — aggregate `species_counts` pages; eligible at 0.5%+ of the query's plant sightings and 3+ sightings, in the species table, not toxic or hazard, common name of 3 words or fewer in the device locale; widen to 150 km once when < 3 eligible; R2
+- [ ] **S22 Sightings** — aggregate `species_counts` pages; match iNat names to species-table rows through GBIF accepted names and synonyms (PRD hole 22), logging the match rate before and after; eligible at 0.5%+ of the query's plant sightings and 3+ sightings, in the species table, not toxic or hazard, common name of 3 words or fewer in the device locale; widen to 150 km once when < 3 eligible; R2
 - [ ] **S23 Cache rules** — versioned entry; mismatch on schema, table version, region, locale, month, or radius discards; H3
 - [ ] **S24 Hunt pick** — sighting-weighted random, 3 targets, never two from one genus, never a hazard or toxic species; grass tutorial first-ever only; R3, R4, H1
-- [x] **S25 Verify decision** — every PRD verify-table state over live frames, in order: hazard in a region TinyCLIP calls a plant (reticle crop or full frame), reticle not a plant, no focus reading, too far, target top-1 for 3 frames (auto-capture), else reticle guidance; floor + optional margin; R5, R12; `VerifyStreak` reports `Matching(1..2)` for the ring and "Hold still", then `Found`; the grass tutorial goal (R3) skips the hazard row; `FrameVerifier` runs the per-frame model path behind encoder interfaces, so all of it is JVM-tested
+- [x] **S25 Verify decision** — `VerifyStreak` applies the PRD verify table to each capture frame, first match wins: hazard in a region TinyCLIP calls a plant (reticle crop or full frame), reticle not a plant, no focus reading, target pass for 3 frames in a row (`Matching(1..2)` for the ring and "Hold still", then `Found`), too far (explains a miss, never blocks), else reticle guidance; R5, R12; the grass tutorial goal (R3) skips the hazard row; `FrameVerifier` runs the per-frame model path behind encoder interfaces, so all of it is JVM-tested; the target goal itself is S29
 - [ ] ~~**S26 Hint guards**~~ — dropped Oct 7: no hints, no Gemma
 - [ ] **S27 Hunt state** — current hunt survives process death; tutorial/opener flags persist; H2
-- [ ] **S29 Target pass** (core) — redesign: row 4 passes when the top-scoring row among the hunt's eligible local species is the target or shares its genus, for 3 frames; never ranked over the whole table (Day 1: 89% against a few labels vs 60% over the table, `docs/results/day-2/target_pass.log`); drop floor + margin and menu-label scoring; R5
+- [ ] **S29 Target pass** (core) — redesign: row 4 passes when the top-scoring row among the hunt's eligible local species is the target or shares its genus, for 3 frames; never ranked over the whole table (Day 1: 89% against a few labels vs 60% over the table, `docs/results/day-2/target_pass.log`); replace `TargetGoal`'s floor + margin and menu-word scoring, and the harness and device tests that use them, in the same change as S15; R5
 
 ## App · Oct 8–9
 
@@ -59,12 +58,13 @@ The Oct 7 redesign (PRD Redesign) dropped the build-time menu: the old S10–S16
 - [ ] **S50 Calibration** — ~30 free photos (CC0 or public domain, iNaturalist research grade) → genus-pass rate, and whether any floor is needed; the hazard rule needs no calibration
 - [ ] **S51 Holdout** — 20–30 free photos, never used in calibration, including non-plant negatives (screens, people, pavement) → pass rate ≥ 90%, false pass ≤ 5%, hazard false-alarm rate recorded (H6)
 - [ ] **S52 Field test** — screen time per target, find rate per target, and the wide-shot false-pass rate measured live on the test phone, since "walk closer" depends on real autofocus readings
+- [ ] **S05 Gate harness** (app, debug only) — records verify time per capture frame, what BioCLIP saw (top and hazard species), capture to Found, RAM, and a 20-minute thermal run to a local exportable log; holes 10, 13; the "wild-find gate" launcher icon starts an untethered run (target oak) and `make gate-harness` (`GATE_WORD`) starts one over adb; `make gate-pull` copies the CSVs into `docs/results/` and summarizes them; scores the target with S29's pass once it lands; ticks after a logged 20-minute capture-mode run, unplugged, on each test phone (Galaxy S24 Ultra, Pixel 9) aimed at a real plant; runs last, once the game is playable
 - [ ] **S53 Release** — release keystore (local, never committed), R8 minify, signed APK on a GitHub Release, About screen credits; install the release build on the test phone and run a first hunt from it; H10
 - [ ] **S54 Demo + post** — outdoor demo video; post explains the Oct 7 redesign from `docs/results/day-2/`
 
 ## Open holes
 
-New holes found while drafting these stories. PRD holes 3, 4, 5, 10, 12, 13, 19 still stand (19 only until the field test). H-numbers below are this file's own list, separate from PRD hole numbers.
+New holes found while drafting these stories. PRD holes 3, 10, 13, 19, 20, 22 still stand (19 only until the field test). H-numbers below are this file's own list, separate from PRD hole numbers; H9 was never assigned.
 
 | # | Hole | Proposed fix | Severity |
 | --- | --- | --- | --- |
