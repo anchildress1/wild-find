@@ -14,7 +14,7 @@ data class FrameEvidence(val hazard: Boolean, val reticlePlant: Boolean, val foc
 /**
  * One frame's outcome under the verify table; the first matching row wins.
  *
- * Distance never blocks a match: the Oct 7 field runs showed the close-range rule stopping 51% of focused frames.
+ * Distance never blocks a match: the Oct 7 field runs showed the close-range rule stopping 51% of analyzed frames.
  */
 sealed interface Verdict {
     /** Row 1: warn, no star. */
@@ -43,7 +43,7 @@ sealed interface Verdict {
     data object Guide : Verdict
 }
 
-/** Applies the verify table to consecutive frames and counts row 5's streak; one instance per target. */
+/** Applies the verify table to consecutive frames and counts row 4's streak; one instance per target. */
 class VerifyStreak {
     private var run = 0
 
@@ -64,7 +64,7 @@ class VerifyStreak {
 
     /** Verify constants from the PRD. */
     companion object {
-        /** Consecutive matching frames before auto-capture. */
+        /** Consecutive matching frames before Found. */
         const val FRAMES = 3
     }
 }

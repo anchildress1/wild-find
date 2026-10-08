@@ -12,7 +12,7 @@ data class Focus(val afState: Int?, val diopters: Float?, val zoomRatio: Float) 
     val isFocused: Boolean
         get() = afState in FOCUSED_STATES && diopters != null && diopters >= 0f
 
-    /** PRD verify row 4, set on the test phone on Day 1: a focused reading with diopters times zoom at or above 2.0. */
+    /** PRD verify row 5, set on the test phone on Day 1: a focused reading with diopters times zoom at or above 2.0. */
     val isClose: Boolean
         get() = isFocused && diopters != null && diopters.toDouble() * zoomRatio >= CLOSE_RANGE
 
