@@ -444,7 +444,7 @@ Two questions block the build; two can wait.
 
 **Blocking**
 
-- [ ] Visual: one image still needs art: the app icon (an adaptive icon: 432 px foreground inside a 264 px safe zone, a background, and a monochrome layer); the opener and the 8 plant-type pictures landed Oct 8, `found` plays the complete cheer since `briar-found-32` bakes in a fern, and the wordmark is drawn in code
+- [x] Visual: every image has art as of Oct 8: Briar's sheets, the opener, the 8 plant-type pictures, and the adaptive app icon (Briar's head on Forest, with a monochrome layer for themed icons); `found` plays the complete cheer, since `briar-found-32` bakes in a fern, and the wordmark is drawn in code
 - [ ] Legal: do coarse location plus whole-degree rounding clear the precise-geolocation bar?
 - [x] Data: flat 25+ sightings or a share of local sightings? Decided Oct 7: at least 0.5% of the place's sightings and at least 3 (Decisions: Local filter); the floor of 3 stops one stray sighting from making a target in sparse places
 

@@ -15,6 +15,11 @@ OUT = REPO / "app/src/main/assets/briar"
 PLANTS_OUT = REPO / "app/src/main/assets/plants"
 # One painted picture per PRD plant type, named by its `type` key in species_labels.json.
 PLANT_TYPES = ("tree", "shrub", "vine", "herb", "grass", "fern", "moss", "conifer")
+# Adaptive launcher icon layers, 108 dp each, written per density from the 432 px (xxxhdpi) sources.
+ICON_SOURCE = SOURCE / "app_icons"
+ICON_RES = REPO / "app/src/main/res"
+ICON_LAYERS = ("foreground", "background", "monochrome")
+ICON_DENSITIES = {"mdpi": 108, "hdpi": 162, "xhdpi": 216, "xxhdpi": 324, "xxxhdpi": 432}
 # Tiles top out near 112 dp, about 340 px on a 3x screen.
 PLANT_PX = 384
 # Faint glow pixels below this alpha don't count as the plant's edge.
@@ -133,6 +138,13 @@ def main() -> int:
     """Write <state>.png and <state>.json for every source sheet, and one WebP per plant type."""
     OUT.mkdir(parents=True, exist_ok=True)
     PLANTS_OUT.mkdir(parents=True, exist_ok=True)
+    for layer in ICON_LAYERS:
+        source = Image.open(ICON_SOURCE / f"{layer}.png").convert("RGBA")
+        for density, px in ICON_DENSITIES.items():
+            folder = ICON_RES / f"mipmap-{density}"
+            folder.mkdir(parents=True, exist_ok=True)
+            source.resize((px, px), Image.Resampling.LANCZOS).save(folder / f"ic_launcher_{layer}.webp", lossless=True)
+    print(f"OK: launcher icon, {len(ICON_LAYERS)} layers at {len(ICON_DENSITIES)} densities")
     for kind in PLANT_TYPES:
         plant_art(Image.open(SOURCE / f"{kind}.png")).save(PLANTS_OUT / f"{kind}.webp", quality=90, method=6)
         print(f"OK: plant {kind} {PLANT_PX}x{PLANT_PX}")
