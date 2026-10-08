@@ -5,6 +5,7 @@ import androidx.camera.core.Camera
 import androidx.camera.core.FocusMeteringAction
 import androidx.camera.core.SurfaceOrientedMeteringPointFactory
 import androidx.camera.core.SurfaceRequest
+import androidx.camera.core.UseCase
 import androidx.camera.viewfinder.compose.MutableCoordinateTransformer
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -52,19 +53,22 @@ fun Viewfinder(
     var size by remember { mutableStateOf(IntSize.Zero) }
     var request by remember { mutableStateOf<SurfaceRequest?>(null) }
     var camera by remember { mutableStateOf<Camera?>(null) }
+    val bound = remember { mutableListOf<UseCase>() }
     val frame by verifier.frameSize.collectAsStateWithLifecycle()
     LaunchedEffect(size) {
         if (size == IntSize.Zero) return@LaunchedEffect
         bindVerifyCamera(
             context, owner, view.display.rotation, size.width, size.height, verifier, executor,
             onSurface = { request = it },
-            onBound = {
-                camera = it
-                onCamera(it)
+            onBound = { live, useCases ->
+                camera = live
+                bound += useCases
+                onCamera(live)
             },
         )
     }
-    DisposableEffect(Unit) { onDispose { unbindVerifyCamera(context) } }
+    // Only this viewfinder's own use cases, so a camera screen entering while this one leaves keeps its binding.
+    DisposableEffect(Unit) { onDispose { unbindVerifyCamera(context, bound.toList()) } }
     Box(modifier.onSizeChanged { size = it }) {
         request?.let { Preview(it, camera) }
         frame?.let { (width, height) ->

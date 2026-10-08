@@ -108,6 +108,11 @@ class CaptureVerifier(private val verifier: FrameVerifier) {
         return true
     }
 
+    /** Drops a running capture, e.g. when its screen leaves; a frame already in flight still reports. */
+    fun cancel() {
+        pending = null
+    }
+
     /** Verifies [proxy] while a capture is pending; always closes it. */
     fun analyze(proxy: ImageProxy) = proxy.use {
         val plane = proxy.planes[0]

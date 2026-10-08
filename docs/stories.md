@@ -41,15 +41,15 @@ The Oct 7 redesign (PRD Redesign) dropped the build-time menu: the old S10–S16
 
 ## App · Oct 8–9
 
-- [ ] **S30 Briar host** — Compose sprite player for the PRD sheet contract, five states (welcome, searching, found, retry, complete) driven by game events; each state sheet plays once, then the 16-frame `idle` loops until Briar leaves the screen; every state plays `idle` until per-state art lands
-- [ ] **S31 Safety opener** — R1, placeholder art, replayable, banned-copy check in tests
-- [ ] **S32 Location** — coarse permission only, manual region pick on deny; coverage message off-region; R2, R7
+- [x] **S30 Briar host** — Compose sprite player for the PRD sheet contract, five states (welcome, searching, found, retry, complete) driven by game events; each state sheet plays once, then the 16-frame `idle` loops until Briar leaves the screen; every state plays `idle` until per-state art lands
+- [x] **S31 Safety opener** — R1, placeholder art, replayable, banned-copy check in tests (`BannedCopyTest` scans every shipped string and plural on the phone)
+- [x] **S32 Location** — coarse permission only, manual region pick on deny; coverage message off-region; R2, R7
 - [x] **S33 iNat client** — `SpeciesCountsQuery` (core) builds the one query from the region center, month, locale, and radius, caps it at 3 pages of 500, and reads `Retry-After` seconds; `InatClient` (app) fetches only the pages the first page's total needs, with a named User-Agent, and returns the pull, a 429 wait, or a failure; the widen path is one more query at 150 km; INTERNET is the only new permission; R2
-- [ ] **S34 Camera + verify flow** — a Capture button verifies up to 3 frames back to back (the gate harness pattern); per frame: rotation-normalize once; cut the PRD crops (center square, 60% reticle); TinyCLIP on the reticle crop and full frame; BioCLIP hazard check on each region TinyCLIP calls a plant, ranked against local species plus hazards; reticle plant gate → target pass (S29); "Get closer or zoom in" only on a far miss; S25 → Found and kid message; R5
+- [x] **S34 Camera + verify flow** — a Capture button verifies up to 3 frames back to back (the gate harness pattern); per frame: rotation-normalize once; cut the PRD crops (center square, 60% reticle); TinyCLIP on the reticle crop and full frame; BioCLIP hazard check on each region TinyCLIP calls a plant, ranked against local species plus hazards; reticle plant gate → target pass (S29); "Get closer or zoom in" only on a far miss; S25 → Found and kid message; R5
 - [ ] ~~**S35 Hints**~~ — dropped Oct 7: the target's name and type show instead (S17)
-- [ ] **S36 Hunt complete** — success animation, stars, Hunt Again / Home; R15
-- [ ] **S37 Offline** — airplane-mode hunt from cache; a never-pulled region says it needs signal once; R8
-- [ ] **S38 Lifecycle** — hunt state restored after the app goes to the background
+- [x] **S36 Hunt complete** — success animation, stars, Hunt Again / Home; R15
+- [ ] **S37 Offline** — airplane-mode hunt from cache; a never-pulled region says it needs signal once; R8 (wired: cache fallback, "No signal" banner, needs-signal screen; ticks after the airplane-mode run on the phone)
+- [x] **S38 Lifecycle** — hunt state restored after the app goes to the background
 - [ ] **S39 Privacy proof** — network log on the test phone shows only iNat; R7
 - [ ] ~~**S40 Leave-it star**~~ — dropped Oct 8 with R10: no on-device check can tell a rooted plant from a picked one
 

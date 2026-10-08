@@ -94,11 +94,11 @@ Every call below is settled; open items live in Open Questions.
 | Scoring | One star per find; no leave-it star in v1 (R10 dropped Oct 8) |
 | Hints | None. The target's common name and type show from the start of each hunt |
 | Toxicity flag | Built once on the laptop for every species-table row. A species is flagged when its English Wikipedia article has a sentence with the whole word toxic, toxin, or poison (other plants' names such as poison ivy removed first), when USDA PLANTS rates it moderate or severe, or when it has no article or one under 1,500 characters. Names match through GBIF. Best effort, like hazard detection, never a safety claim; on Oct 7 it flagged 30 of 117 West Georgia species and wrongly dropped about 6 |
-| Location | Android coarse location only, rounded to whole degrees; the device is in a region only when its rounded key equals that region's key; the query always sends the region center, never device coordinates; manual region pick supported |
+| Location | Android coarse location only, asked when the kid taps "Use my rough area" and never again after a denial; rounded to whole degrees; the device is in a region only when its rounded key equals that region's key; the query always sends the region center, never device coordinates; manual region pick (West Georgia, or "Somewhere else", which shows the coverage message); the rounded hunting area is kept on the phone as an app flag and changed from the grown-ups page |
 | Images | One illustration per plant type (tree, shrub, vine, herb, grass, fern, moss, conifer) in v1; licensed photos in v3 |
 | UI | Animation-first; Jetpack Compose hosts camera and chrome and plays sprite sheets for the opener and Briar, the mascot; no Rive, no React |
 | Distribution | GitHub Release APK with BioCLIP Mobile and the TinyCLIP plant gate inside; nothing downloads after install; outdoor demo video |
-| Credits | README and About screen credit BioCLIP 2.5 Mobile, BioCLIP 2.5, TinyCLIP, OpenCLIP, iNaturalist, Wikipedia, USDA PLANTS, and GBIF |
+| Credits | README and the grown-ups page credit BioCLIP 2.5 Mobile, BioCLIP 2.5, TinyCLIP, OpenCLIP, iNaturalist, Wikipedia, USDA PLANTS, and GBIF, plus the Fredoka and Atkinson Hyperlegible fonts (SIL OFL 1.1, bundled with their license text) |
 | Prize categories | Best Use of Gemma, entered with the measured case for shipping without it; DigitalOcean dropped |
 | Later versions | Tiebreaker shot in v2; licensed photos in v3 |
 
@@ -311,11 +311,11 @@ Verify runs when the kid taps Capture: 3 camera frames back to back, stopping at
 | # | Condition | Kid sees | Star |
 | --- | --- | --- | --- |
 | 1 | In a region TinyCLIP calls a plant (the reticle crop, the full frame, or both), a hazard species ranks in the top 5 of the species table | "That might be a plant we leave extra space around." | No |
-| 2 | TinyCLIP says the reticle crop isn't a plant | "Point the camera at a plant" | No |
+| 2 | TinyCLIP says the reticle crop isn't a plant | "Put the plant in the circle" when it calls the full frame a plant, else "Point the camera at a plant" | No |
 | 3 | No focused reading: autofocus state is neither focused nor locked (passive focused or focused locked), or the distance is missing or negative | "Tap the plant to focus" | No |
 | 4 | The target, or a species in its genus, outscores the hunt's other locally eligible species and leads every local blocker by at least 0.048 on the reticle crop, for 3 frames in a row | Found | Yes |
 | 5 | Focus distance in diopters times the zoom ratio is under 2.0, so the subject looks too small | "Get closer or zoom in" | No |
-| 6 | Anything else | Reticle guidance ("Put the plant in the circle") | No |
+| 6 | Anything else | "Keep looking for" the target's name, never the plant in view | No |
 
 The close-range rule was set on the test phone on Day 1 (S09): `LENS_FOCUS_DISTANCE × CONTROL_ZOOM_RATIO >= 2.0`, read only while autofocus reports focused. It used to block every far frame; on Oct 7 it stopped 51% of analyzed frames and 11 of 19 captures outdoors, so now it only explains a miss. Unfocused frames park the lens near 0.2 diopters, which would read as far. Against a handful of labels, the photo's own group was top-1 on 102 of 114 Day-1 crops; ranked over the whole species table, its genus was top-1 on only 60%, so the target competes only with the hunt's other eligible species (`docs/results/day-2/target_pass.log`). Every toxic-flagged and hazard species in the local pull, at any sighting count, competes too, as a blocker: never a target, and a frame where one leads or comes within 0.048 of the top species never passes. Blocking only species that cleared the sighting floor let 87 of 180 toxic photos pass as some target; the margin, set just past the one poison ivy photo that still won (by 0.0477), took it to 0 and halved real finds to 34 of 69. Most lost finds lose to doubtful toxic flags such as white oak, yarrow, and a moss, so the flag audit comes next (decided Oct 7). The grass tutorial skips row 1 and scores only its fixed label set (R3). A missed hazard never reads as safe: "Look. Photograph. Leave it where it grows." stays the rule on every screen.
 
@@ -371,7 +371,7 @@ Every failure degrades to a playable hunt or a plain message; none crash or stal
 | Location denied | Manual region pick |
 | iNat unreachable, matching cache exists | Use the cached entry |
 | iNat unreachable, no matching cache | No hunt; say this place needs signal once |
-| iNat returns 429 | Wait per Retry-After, then use the cache |
+| iNat returns 429 | Wait per Retry-After, at most 30 seconds, then use the cache |
 | Cache entry mismatch (schema, table, region, locale, month, or radius) | Discard the entry and refetch |
 | Fewer than 3 eligible species | Widen the radius to 150 km once, one extra query of up to three requests; still short, show "Not enough plants spotted here yet" |
 | Autofocus reports no focus distance | The capture gives no verdict; the kid sees "Tap the plant to focus" |

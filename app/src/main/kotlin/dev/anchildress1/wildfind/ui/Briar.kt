@@ -17,17 +17,21 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
+import dev.anchildress1.wildfind.R
 import dev.anchildress1.wildfind.core.sprite.BriarState
 import dev.anchildress1.wildfind.core.sprite.SpriteSheet
+import dev.anchildress1.wildfind.ui.theme.LocalReducedMotion
 import org.json.JSONObject
 
 /**
- * Plays Briar's [state] sheet once, then loops `idle` until Briar leaves the screen; null plays `idle` alone.
+ * Plays Briar's [state] sheet once, then loops `idle` until Briar leaves the screen; null plays `idle` alone. With
+ * the system animator scale at 0, the sheet holds its first frame.
  *
  * @param cue bump it to replay the same state, e.g. a second find
  */
@@ -37,7 +41,10 @@ fun Briar(state: BriarState?, description: String, modifier: Modifier = Modifier
     val assets = LocalContext.current.assets
     val sheet = remember(playing) { Loaded(assets, playing) }
     var frame by remember(playing) { mutableIntStateOf(0) }
-    LaunchedEffect(playing) {
+    val reduced = LocalReducedMotion.current
+    LaunchedEffect(playing, reduced) {
+        // With animations off the state's first frame holds, so Briar still shows how the game reacted.
+        if (reduced) return@LaunchedEffect
         val start = withFrameNanos { it }
         var done = false
         while (!done) {
@@ -80,3 +87,16 @@ private class Loaded(assets: AssetManager, name: String) {
 
 // The largest packed cell (idle and searching, 520 px).
 private const val BOX_PX = 520
+
+/** What a screen reader says for Briar in [state]. */
+@Composable
+fun briarText(state: BriarState?): String = stringResource(
+    when (state) {
+        null -> R.string.briar_idle
+        BriarState.WELCOME -> R.string.briar_welcome
+        BriarState.SEARCHING -> R.string.briar_searching
+        BriarState.FOUND -> R.string.briar_found
+        BriarState.RETRY -> R.string.briar_retry
+        BriarState.COMPLETE -> R.string.briar_complete
+    },
+)

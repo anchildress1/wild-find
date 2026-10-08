@@ -1,6 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Kid-facing copy: age-8 reading level, no Latin names, and never safe, harmless, not poisonous, or okay to touch
+     (BannedCopyTest scans every string here). -->
 <resources>
     <string name="app_name">wild-find</string>
-    <string name="briar_description">Briar, a fluffy explorer with big ears, looking around</string>
     <string name="leave_it_rule">Look. Photograph. Leave it where it grows.</string>
+
+    <string name="briar_idle">Briar resting</string>
+    <string name="briar_welcome">Briar waving hello</string>
+    <string name="briar_searching">Briar sniffing around</string>
+    <string name="briar_found">Briar cheering</string>
+    <string name="briar_retry">Briar stepping back</string>
+    <string name="briar_complete">Briar bouncing</string>
+
+    <string name="opener_art">Picture coming soon: bees, a snake, and poison ivy.</string>
+    <string name="opener_intro">Bees, snakes, and poison ivy live outside too.</string>
+    <string name="rule_look">Look.</string>
+    <string name="rule_photograph">Photograph.</string>
+    <string name="rule_leave">Leave it where it grows.</string>
+    <string name="opener_go">Let\'s go</string>
+    <string name="opener_done">Done</string>
+
+    <string name="region_title">Where are you hunting?</string>
+    <string name="region_body">wild-find picks plants that grow near you. It only asks for your rough area.</string>
+    <string name="region_use_location">Use my rough area</string>
+    <string name="region_locating">Finding your area…</string>
+    <string name="region_location_failed">We couldn\'t find your area. Pick it below.</string>
+    <string name="region_or">or pick your area</string>
+    <string name="region_west_georgia">West Georgia</string>
+    <string name="region_west_georgia_detail">Around Carrollton</string>
+    <string name="region_elsewhere">Somewhere else</string>
+    <string name="region_elsewhere_detail">We\'ll show what\'s ready</string>
+    <string name="region_private">Your exact spot stays on this phone.</string>
+    <string name="region_next">Next</string>
+    <string name="region_near_you">Near you</string>
+
+    <string name="getting_ready">Getting ready…</string>
+    <string name="loading">Finding plants near you…</string>
+    <string name="not_enough">Not enough plants spotted here yet</string>
+    <string name="elsewhere_detail">Pick West Georgia, or use your rough area to hunt where you are.</string>
+    <string name="pick_area">Pick my area</string>
+    <string name="needs_signal">This place needs signal once.</string>
+    <string name="needs_signal_detail">After that, hunts here work without it.</string>
+    <string name="try_again">Try again</string>
+    <string name="offline_banner">No signal. Using your saved hunt.</string>
+    <string name="camera_needed">The game needs the camera to see the plants you find.</string>
+    <string name="camera_needed_detail">Photos stay on this phone.</string>
+    <string name="open_settings">Open settings</string>
+
+    <string name="start_title">Ready to hunt?</string>
+    <string name="start_button">Start a hunt</string>
+    <string name="grown_ups">For grown-ups</string>
+
+    <plurals name="hunt_title">
+        <item quantity="one">Your %d find</item>
+        <item quantity="other">Your %d finds</item>
+    </plurals>
+    <string name="hunt_where">%1$s · %2$s</string>
+    <string name="difficulty_low">Low</string>
+    <string name="difficulty_label">Difficulty: Low</string>
+    <string name="start_looking">Start looking</string>
+    <string name="finish_hunt">Finish hunt</string>
+    <string name="stop_found">%1$d, %2$s, %3$s, found</string>
+    <string name="stop_open">%1$d, %2$s, %3$s, not found yet</string>
+    <string name="stop_plain">%1$d, %2$s</string>
+
+    <string name="type_tree">a tree</string>
+    <string name="type_shrub">a shrub</string>
+    <string name="type_vine">a vine</string>
+    <string name="type_herb">an herb</string>
+    <string name="type_grass">a grass</string>
+    <string name="type_fern">a fern</string>
+    <string name="type_moss">a moss</string>
+    <string name="type_conifer">a conifer</string>
+
+    <string name="practice">Practice</string>
+    <string name="tutorial_title">First, find grass.</string>
+    <string name="tutorial_point">Point the camera at grass.</string>
+    <string name="tutorial_then">Then find 3 plants.</string>
+    <string name="try_it">Try it</string>
+    <string name="grass">grass</string>
+
+    <string name="camera_find">Find: %s</string>
+    <string name="camera_progress">%1$d of %2$d</string>
+    <string name="back_to_hunt">Back to your hunt</string>
+    <string name="capture">Capture</string>
+    <string name="checking">Checking…</string>
+    <string name="zoom">%.1f×</string>
+    <string name="cue_point">Point the camera at a plant</string>
+    <string name="cue_circle">Put the plant in the circle</string>
+    <string name="cue_focus">Tap the plant to focus</string>
+    <string name="cue_closer">Get closer or zoom in</string>
+    <string name="cue_keep">Keep looking for %s</string>
+    <string name="hazard">That might be a plant we leave extra space around.</string>
+    <string name="hazard_detail">Step back and look somewhere else.</string>
+
+    <string name="found_title">Found it!</string>
+    <plurals name="found_progress">
+        <item quantity="one">%1$d of %2$d found</item>
+        <item quantity="other">%1$d of %2$d found</item>
+    </plurals>
+    <string name="found_photo">Your photo of %s</string>
+    <string name="plus_star">+1 star</string>
+    <string name="one_star">One star</string>
+    <plurals name="left_to_find">
+        <item quantity="one">One more to find.</item>
+        <item quantity="other">%d more to find.</item>
+    </plurals>
+    <string name="all_found">You found them all!</string>
+    <string name="next_target">Next: %s</string>
+    <string name="see_stars">See your stars</string>
+    <string name="now_find">Now find 3 plants.</string>
+    <string name="see_finds">See your 3 finds</string>
+
+    <string name="complete_title">Hunt complete!</string>
+    <plurals name="complete_all">
+        <item quantity="one">%d plant found.</item>
+        <item quantity="other">%d plants found.</item>
+    </plurals>
+    <plurals name="complete_partial">
+        <item quantity="one">%1$d of %2$d plant found.</item>
+        <item quantity="other">%1$d of %2$d plants found.</item>
+    </plurals>
+    <plurals name="stars">
+        <item quantity="one">%d star</item>
+        <item quantity="other">%d stars</item>
+    </plurals>
+    <string name="found_label">Found</string>
+    <string name="still_out">Still out there</string>
+    <string name="hunt_again">Hunt again</string>
+    <string name="home">Home</string>
+
+    <string name="back">Back</string>
+    <string name="privacy">Privacy</string>
+    <string name="privacy_account">No account, no analytics</string>
+    <string name="privacy_photos">Photos never leave this phone</string>
+    <string name="privacy_location">Approximate location only, rounded to whole degrees; iNaturalist gets the region center</string>
+    <string name="privacy_network">Talks only to iNaturalist, to see which plants grow nearby. Nothing downloads after install</string>
+    <string name="hunting_area">Hunting area</string>
+    <string name="replay_opener">Watch the safety intro again</string>
+    <string name="made_with">Made with</string>
+    <string name="credits">BioCLIP 2.5 Mobile · BioCLIP 2.5 · TinyCLIP · OpenCLIP · iNaturalist · Wikipedia · USDA PLANTS · GBIF</string>
+    <string name="font_credits">Fredoka and Atkinson Hyperlegible fonts, SIL Open Font License 1.1</string>
+    <string name="version">wild-find %s · MIT license</string>
 </resources>

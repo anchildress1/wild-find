@@ -13,6 +13,7 @@ import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
 import androidx.camera.core.SurfaceRequest
+import androidx.camera.core.UseCase
 import androidx.camera.core.UseCaseGroup
 import androidx.camera.core.ViewPort
 import androidx.camera.core.resolutionselector.AspectRatioStrategy
@@ -31,7 +32,7 @@ import java.util.concurrent.Executor
  * @param rotation the display's current `Surface.ROTATION_*`
  * @param executor the analysis thread; [CaptureVerifier.analyze] runs on it
  * @param onSurface receives the preview's surface request
- * @param onBound receives the live camera, on the main thread
+ * @param onBound receives the live camera and the use cases bound for it, on the main thread
  */
 @OptIn(ExperimentalCamera2Interop::class)
 @Suppress("LongParameterList")
@@ -44,7 +45,7 @@ fun bindVerifyCamera(
     verifier: CaptureVerifier,
     executor: Executor,
     onSurface: (SurfaceRequest) -> Unit,
-    onBound: (Camera) -> Unit,
+    onBound: (Camera, List<UseCase>) -> Unit,
 ) {
     val future = ProcessCameraProvider.getInstance(context)
     future.addListener({
@@ -86,12 +87,12 @@ fun bindVerifyCamera(
         val camera = provider.bindToLifecycle(owner, CameraSelector.DEFAULT_BACK_CAMERA, group)
         verifier.activeArrayWidth = Camera2CameraInfo.from(camera.cameraInfo)
             .getCameraCharacteristic(CameraCharacteristics.SENSOR_INFO_ACTIVE_ARRAY_SIZE)?.width() ?: 0
-        onBound(camera)
+        onBound(camera, group.useCases)
     }, context.mainExecutor)
 }
 
-/** Releases the camera once the screen showing it leaves. */
-fun unbindVerifyCamera(context: Context) {
+/** Releases [useCases] once the screen showing them leaves; a newer binding's use cases stay. */
+fun unbindVerifyCamera(context: Context, useCases: List<UseCase>) {
     val future = ProcessCameraProvider.getInstance(context)
-    future.addListener({ future.get().unbindAll() }, context.mainExecutor)
+    future.addListener({ useCases.forEach { future.get().unbind(it) } }, context.mainExecutor)
 }
