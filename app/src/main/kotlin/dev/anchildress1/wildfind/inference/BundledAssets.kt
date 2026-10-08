@@ -65,11 +65,11 @@ class BundledAssets(private val assets: AssetManager) {
     /** The cache's table version: the first 12 hex digits of `species_labels.json`'s SHA-256. */
     fun tableVersion(): String = CacheKey.tableVersion(bytes(SPECIES_LABELS))
 
-    /** Verify row 1's hazard rule over [table], naming only [local] species as the top species. */
-    fun hazardCheck(table: FloatMatrix, labels: List<SpeciesRow>, local: Set<String>): HazardCheck = HazardCheck(
+    /** Verify row 1's hazard rule over [table], naming only the hunt's [localRows] as what the camera sees. */
+    fun hazardCheck(table: FloatMatrix, labels: List<SpeciesRow>, localRows: Set<Int>): HazardCheck = HazardCheck(
         table,
         labels.map { it.hazard }.toBooleanArray(),
-        labels.map { it.scientific in local }.toBooleanArray(),
+        BooleanArray(labels.size) { it in localRows },
     )
 
     /** Tutorial text vectors from `labels.npy`, named by `labels.json`. */

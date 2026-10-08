@@ -53,7 +53,7 @@ class FrameVerifierDeviceTest {
                         bundled.plantGate(),
                         gate,
                         bioclip,
-                        bundled.hazardCheck(table, species, rows.toSet()),
+                        bundled.hazardCheck(table, species, species.indices.toSet()),
                     )
                 verifier.analyze(frame, goal) { focus } // warm-up, excluded from timing
                 val runs = List(RUNS) { verifier.analyze(frame, goal) { focus } }

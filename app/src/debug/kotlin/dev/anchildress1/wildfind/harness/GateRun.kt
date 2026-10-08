@@ -99,7 +99,8 @@ class GateRun(private val context: Context, private val target: String, val log:
             bundled.plantGate(),
             gateEncoder,
             bioclip,
-            bundled.hazardCheck(table, labels, sightings.map { it.scientific }.toSet()),
+            // The same local rows the app's hunt names from, so harness logs measure the shipped path.
+            bundled.hazardCheck(table, labels, (local.eligible.map { it.row } + local.blockers.toList()).toSet()),
         ),
     )
 
