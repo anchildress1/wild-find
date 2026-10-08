@@ -1,0 +1,7 @@
+# 2026-10-07 22:29 EDT, Python 3.13.14, threshold_regions.csv (Oct 7 iNat pull), species_labels.json from make assets, toxicity.json (2,161 flagged)
+west-georgia-us: 1029 species, 11093 sightings; 641 match a table name exactly; playable at 0.5% with at least 3 (floor 55.5): 23; playable at 25+: 65
+atlanta-us: 1017 species, 14267 sightings; 653 match a table name exactly; playable at 0.5% with at least 3 (floor 71.3): 24; playable at 25+: 77
+tbilisi-georgia: 300 species, 956 sightings; 171 match a table name exactly; playable at 0.5% with at least 3 (floor 4.8): 12; playable at 25+: 3
+borjomi-georgia: 152 species, 269 sightings; 72 match a table name exactly; playable at 0.5% with at least 3 (floor 3.0): 9; playable at 25+: 0
+country-georgia: 665 species, 2560 sightings; 355 match a table name exactly; playable at 0.5% with at least 3 (floor 12.8): 16; playable at 25+: 5
+gate harness local list (West Georgia, October): 641 of 1029 names match the species table
