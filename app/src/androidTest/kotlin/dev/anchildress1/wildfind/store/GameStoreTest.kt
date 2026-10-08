@@ -77,4 +77,16 @@ class GameStoreTest {
         assertNull(store.hunt("abc123def456"))
         assertEquals(false, File(dir, "hunt.json").exists())
     }
+
+    @Test
+    fun aFailedSaveDoesNotThrow() {
+        // A plain file where the cache folder belongs makes every cache write fail, like a full disk.
+        dir.mkdirs()
+        File(dir, "inat").writeText("not a folder")
+
+        store.cache(key, listOf(Sighting("Quercus nigra", "water oak", 72)))
+        store.save(AppFlags(openerSeen = true))
+        assertNull(store.cached(key))
+        assertEquals(AppFlags(openerSeen = true), store.flags())
+    }
 }

@@ -12,6 +12,7 @@ import dev.anchildress1.wildfind.core.region.RegionKey
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
+import java.io.IOException
 
 /**
  * The only state wild-find keeps on the phone: the fixed app flags, the current hunt, and cached iNat pulls
@@ -76,7 +77,7 @@ class GameStore(private val dir: File) {
     /** Forgets the current hunt, after Hunt Again or Home. */
     fun clearHunt() {
         val file = File(dir, HUNT)
-        check(!file.exists() || file.delete()) { "can't delete $file" }
+        if (file.exists() && !file.delete()) Log.w(TAG, "can't delete $file")
     }
 
     /** The pull cached under exactly [key], or null. */
@@ -111,12 +112,18 @@ class GameStore(private val dir: File) {
         }.onFailure { if (!file.delete()) Log.w(TAG, "can't delete unreadable $file") }.getOrNull()
     }
 
+    // A failed save (a full disk) costs only the saved copy, never the hunt in play, so it logs instead of throwing.
     private fun write(name: String, json: JSONObject) {
         val file = File(dir, name)
-        file.parentFile?.mkdirs()
         val temp = File(file.parentFile, "${file.name}.tmp")
-        temp.writeText(json.toString())
-        check(temp.renameTo(file)) { "can't replace $file" }
+        try {
+            file.parentFile?.mkdirs()
+            temp.writeText(json.toString())
+            if (!temp.renameTo(file)) throw IOException("can't replace $file")
+        } catch (e: IOException) {
+            Log.w(TAG, "can't save $file", e)
+            temp.delete()
+        }
     }
 
     private companion object {
