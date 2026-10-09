@@ -41,9 +41,13 @@ def score(candidate: dict, common: dict[tuple[str, str], float]) -> float:
 
 
 def rank(candidates: list[dict], common: dict[tuple[str, str], float], picks: int = PICKS) -> list[dict]:
-    """The top `picks` scoring candidates, each with its score, best first; ties keep the TIER table's order."""
+    """The top `picks` scoring candidates, each with its score, best first; ties keep the TIER table's order.
+
+    Every season candidate is kept on top of the picks: which one fits is the device month's call at play time.
+    """
     order = list(TIER)
     scored = [{**c, "score": round(score(c, common), 3)} for c in candidates]
     kept = [c for c in scored if c["score"] > 0]
     kept.sort(key=lambda c: (-c["score"], order.index(c["aspect"])))
-    return kept[:picks]
+    others = [c for c in kept if c["aspect"] != "season"][:picks]
+    return others + [c for c in kept if c["aspect"] == "season"]

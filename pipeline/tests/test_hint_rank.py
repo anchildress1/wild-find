@@ -37,9 +37,16 @@ def test_tier_orders_aspects_when_support_and_rarity_match():
 
 
 def test_only_the_top_picks_come_back_and_ties_keep_table_order():
-    ranked = h.rank([hint(a) for a in ("light", "ground", "place", "season")], {})
+    ranked = h.rank([hint(a) for a in ("light", "ground", "place", "nearby")], {})
 
     assert [c["aspect"] for c in ranked] == ["place", "ground", "light"]
+
+
+def test_every_season_hint_comes_back_beyond_the_picks():
+    seasonal = [hint("season", bucket="spring"), hint("season", bucket="fall")]
+    ranked = h.rank([hint(a) for a in ("light", "ground", "place", "edges")] + seasonal, {})
+
+    assert [c["aspect"] for c in ranked] == ["place", "ground", "light", "season", "season"]
 
 
 def test_free_text_hints_have_no_bucket_and_are_never_counted_as_common():

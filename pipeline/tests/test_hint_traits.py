@@ -7,7 +7,8 @@ SHOWY = t.SHOWY
 
 
 def texts(kind, traits):
-    return {c["aspect"]: c["text"] for c in t.candidates(kind, traits)}
+    """Each aspect's first (best) candidate text."""
+    return {c["aspect"]: c["text"] for c in reversed(t.candidates(kind, traits))}
 
 
 def test_a_tree_whose_fruit_shows_in_fall_gets_a_fall_hint_and_a_size_hint():
@@ -111,6 +112,21 @@ def test_candidates_are_usda_backed_and_bucket_by_size_or_season_only():
         {"aspect": "size", "text": "It is a big bush.", "support": "usda", "bucket": "big"},
         {"aspect": "season", "text": "Look for bright leaves in fall.", "support": "usda", "bucket": "fall"},
     ]
+
+
+def test_every_seasonal_feature_is_its_own_candidate_for_the_app_to_pick_by_month():
+    traits = {
+        SHOWY: ["fruitSeedConspicuousYes", "flowerConspicuousYes"],
+        t.FRUIT_COLOR: ["PATO_0000322"],
+        t.SEED_BEGIN: ["Thesaurus.owl#C94733"],
+        t.SEED_END: ["Thesaurus.owl#C94733"],
+        t.FLOWER_COLOR: ["PATO_0000318"],
+        t.BLOOM: ["lateSpring"],
+    }
+
+    seasonal = [(c["text"], c["bucket"]) for c in t.candidates("shrub", traits) if c["aspect"] == "season"]
+
+    assert seasonal == [("Look for red fruit in fall.", "fall"), ("Look for blue flowers in spring.", "spring")]
 
 
 SPAN = {t.SEED_BEGIN: ["Thesaurus.owl#C94731"], t.SEED_END: ["Thesaurus.owl#C94733"]}

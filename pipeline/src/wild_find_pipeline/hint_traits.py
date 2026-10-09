@@ -5,12 +5,7 @@ come out here as hint candidates for hint_rank. Only traits USDA states are used
 color and season, fall color, and a leaf color other than plain green.
 """
 
-import csv
-import io
-import sys
-import tarfile
-from pathlib import Path
-
+from wild_find_pipeline import usda
 from wild_find_pipeline.descriptions import NOUNS, article
 
 # USDA trait terms, by the last segment of their measurementType IRI.
@@ -75,7 +70,6 @@ UNSHOWY_OK = ("herb", "shrub", "vine", None)
 NO_FLOWERS = ("conifer", "fern", "grass", "moss")
 # Fall things lead, since the game ships in October; a plant keeps at most this many features.
 FALL = "fall"
-MAX_FEATURES = 2
 
 
 def usda_traits(archive: bytes, wanted: tuple[str, ...] = TRAITS) -> dict[str, dict[str, list[str]]]:
@@ -83,35 +77,18 @@ def usda_traits(archive: bytes, wanted: tuple[str, ...] = TRAITS) -> dict[str, d
 
     Heights keep their numbers; every other value is the last IRI segment.
     """
-    csv.field_size_limit(sys.maxsize)
-    with tarfile.open(fileobj=io.BytesIO(archive)) as tar:
-        members = {Path(m.name).name: m for m in tar.getmembers()}
-
-        def rows(member: str):
-            text = tar.extractfile(members[member]).read().decode()
-            return csv.DictReader(io.StringIO(text), delimiter="\t", quoting=csv.QUOTE_NONE)
-
-        facts: dict[str, list[tuple[str, str]]] = {}
-        for r in rows("measurement_or_fact_specific.tab"):
-            trait = r["measurementType"].rsplit("/", 1)[-1]
-            if trait in wanted:
-                facts.setdefault(r["occurrenceID"], []).append((trait, r["measurementValue"].rsplit("/", 1)[-1]))
-        by_taxon: dict[str, list[tuple[str, str]]] = {}
-        for r in rows("occurrence_specific.tab"):
-            if r["occurrenceID"] in facts:
-                by_taxon.setdefault(r["taxonID"], []).extend(facts[r["occurrenceID"]])
-        taxa = {r["taxonID"]: r for r in rows("taxon.tab")}
-    species: dict[str, dict[str, set[str]]] = {}
-    infra: dict[str, dict[str, set[str]]] = {}
-    for taxon, found in by_taxon.items():
-        row = taxa.get(taxon)
-        if row is None or row["taxonRank"] == "genus":
-            continue
-        name = " ".join(row["scientificName"].split()[:2])
-        into = (species if row["taxonRank"] == "species" else infra).setdefault(name, {})
-        for trait, value in found:
-            into.setdefault(trait, set()).add(value)
-    return {name: {t: sorted(v) for t, v in traits.items()} for name, traits in (infra | species).items()}
+    found, taxa = usda.measurements(archive, lambda r: r["measurementType"].rsplit("/", 1)[-1] in wanted)
+    facts = (
+        (taxon, (r["measurementType"].rsplit("/", 1)[-1], r["measurementValue"].rsplit("/", 1)[-1]))
+        for taxon, r in found
+    )
+    out: dict[str, dict[str, list[str]]] = {}
+    for name, pairs in usda.by_binomial(facts, taxa).items():
+        traits: dict[str, set[str]] = {}
+        for trait, value in pairs:
+            traits.setdefault(trait, set()).add(value)
+        out[name] = {t: sorted(v) for t, v in traits.items()}
+    return out
 
 
 def size(kind: str | None, traits: dict[str, list[str]]) -> str | None:
@@ -152,7 +129,7 @@ def color(values: list[str]) -> str | None:
 
 
 def features(kind: str | None, traits: dict[str, list[str]]) -> list[tuple[str, str | None]]:
-    """(phrase, season or None) for each feature a kid can see; fall ones first, at most MAX_FEATURES."""
+    """(phrase, season or None) for each feature a kid can see; fall ones first."""
     showy = set(traits.get(SHOWY, []))
     found: list[tuple[str, str | None]] = []
     # Fall Conspicuous asks whether the leaves *or fruits* stand out in autumn, so it says leaves only when the plant
@@ -175,18 +152,22 @@ def features(kind: str | None, traits: dict[str, list[str]]) -> list[tuple[str, 
     if leaf and leaf not in ("green", "red"):
         found.append((f"{leaf} leaves", None))
     found.sort(key=lambda f: f[1] != FALL)
-    return found[:MAX_FEATURES]
+    return found
 
 
 def candidates(kind: str | None, traits: dict[str, list[str]]) -> list[dict]:
-    """Size, season, and sign hint candidates for hint_rank, one per aspect at most, each backed by a USDA trait."""
-    found = {}
+    """Size, season, and sign hint candidates for hint_rank, each backed by a USDA trait.
+
+    Every seasonal feature is a candidate, bucketed by its season, since the app picks the one in season at play time;
+    size and sign get at most one each.
+    """
+    found: list[tuple[str, str, str | None]] = []
     if big := size(kind, traits):
         noun = f"{big} {NOUNS.get(kind, 'plant')}"
-        found["size"] = (f"It is {article(noun).lower()} {noun}.", big)
+        found.append(("size", f"It is {article(noun).lower()} {noun}.", big))
     for phrase, when in features(kind, traits):
-        if when and "season" not in found:
-            found["season"] = (f"Look for {phrase} in {when}.", when)
-        elif not when and "sign" not in found:
-            found["sign"] = (f"Look for {phrase}.", None)
-    return [{"aspect": a, "text": t, "support": "usda", "bucket": b} for a, (t, b) in found.items()]
+        if when:
+            found.append(("season", f"Look for {phrase} in {when}.", when))
+        elif not any(a == "sign" for a, _, _ in found):
+            found.append(("sign", f"Look for {phrase}.", None))
+    return [{"aspect": a, "text": t, "support": "usda", "bucket": b} for a, t, b in found]
