@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -56,23 +57,38 @@ val CardShape = RoundedCornerShape(20.dp)
  * A screen on Ground: [content] scrolls, so every layout holds at 200% font scale, and [bottom] stays pinned.
  *
  * @param top a fixed row above the scrolling content
+ * @param centered centers [content] vertically when it is shorter than the screen; it still scrolls when taller
  */
 @Composable
 fun Page(
     modifier: Modifier = Modifier,
     top: @Composable () -> Unit = {},
     bottom: @Composable ColumnScope.() -> Unit = {},
+    centered: Boolean = false,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Column(
         modifier.fillMaxSize().background(Palette.Ground).safeDrawingPadding().padding(horizontal = 20.dp),
     ) {
         top()
-        Column(
-            Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).padding(vertical = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            content = content,
-        )
+        if (centered) {
+            BoxWithConstraints(Modifier.weight(1f).fillMaxWidth()) {
+                // Scrolled content has no height limit to center in, so it gets at least the viewport's height.
+                val viewport = maxHeight
+                Column(
+                    Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).heightIn(min = viewport)
+                        .padding(vertical = 12.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
+                    content = content,
+                )
+            }
+        } else {
+            Column(
+                Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).padding(vertical = 12.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                content = content,
+            )
+        }
         Column(
             Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
