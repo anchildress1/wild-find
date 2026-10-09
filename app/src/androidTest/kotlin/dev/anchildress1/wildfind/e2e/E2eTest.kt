@@ -33,6 +33,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.rules.TestName
 import java.io.File
+import kotlin.math.abs
 
 /**
  * Drives the real [MainActivity] on the phone from a clean store: no flags, no hunt, no cached iNat pull. The gate
@@ -276,4 +277,9 @@ private fun typeLabel(type: PlantType): Int = when (type) {
 }
 
 /** A hunting area a test plays in, named for failure messages. */
-data class Area(val name: String, val region: RegionKey)
+data class Area(val name: String, val region: RegionKey) {
+    /** The whole degrees the app shows for this area, as in "34°N, 85°W". */
+    val degrees: String
+        get() = "${abs(region.lat)}°${if (region.lat < 0) "S" else "N"}, " +
+            "${abs(region.lng)}°${if (region.lng < 0) "W" else "E"}"
+}

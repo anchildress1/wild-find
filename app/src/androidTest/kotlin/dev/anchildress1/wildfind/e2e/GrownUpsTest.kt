@@ -28,7 +28,8 @@ class GrownUpsTest : E2eTest() {
     @Test
     fun grownUpsShowsTheHuntingAreaInWholeDegrees() {
         openGrownUps()
-        waitForText(text(R.string.hunting_area_detail, "34°N, 85°W · Georgia"))
+        val detail = text(R.string.hunting_area_detail, "").removePrefix(" · ")
+        waitFor(hasText(area.degrees, substring = true) and hasText(detail, substring = true))
     }
 
     @Test

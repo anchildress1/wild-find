@@ -32,10 +32,13 @@ class ScreenRulesTest : E2eTest() {
                 val label = (node.texts() + node.contentDescriptions()).joinToString(" ").trim()
                 val bounds = node.touchBoundsInRoot
                 if (label.isEmpty()) broken += "$screen: a button with no label at $bounds"
+                // Touch bounds are clipped to the screen, so a button scrolled out of view reads 0x0; its laid-out
+                // size still counts. Touch bounds can be the larger one, where a small icon is padded to 48 dp.
+                val width = maxOf(bounds.width, node.size.width.toFloat())
+                val height = maxOf(bounds.height, node.size.height.toFloat())
                 // A hair under 48 dp is rounding between dp and pixels, not a small target.
-                if (bounds.width < min - 1 || bounds.height < min - 1) {
-                    broken += "$screen: \"$label\" is ${bounds.width / min * MIN_TOUCH_DP}x" +
-                        "${bounds.height / min * MIN_TOUCH_DP} dp"
+                if (width < min - 1 || height < min - 1) {
+                    broken += "$screen: \"$label\" is ${width / min * MIN_TOUCH_DP}x${height / min * MIN_TOUCH_DP} dp"
                 }
             }
         }
