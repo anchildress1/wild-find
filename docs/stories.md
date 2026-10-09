@@ -68,8 +68,8 @@ Validation: `make device-test` excludes E2E; `make e2e` uses the separate `.e2e`
 
 - [ ] **S56 Build-time hints** (pipeline + core + app) — PRD Decisions: Hints.
   - **Probe gate:** run the Day-4 probe on Gemma 4 12b and 26b. Grade every grounded hint against its quoted sentence and pick a model, or stop if none writes trustworthy hints. Record it in `docs/results/day-4.md`. Run 26b only, with up to two hints per aspect (each with its own quote), no `range` aspect, and a water-edge filter; the Day-4 script asks one per aspect, so the full run is a new script and its numbers replace Day-4's.
-  - **Pipeline:** `make hints` writes ranked, auto-checked hints for every playable row. `make hint-grades` has Claude grade each one. `pipeline/data/hints.json` is committed with each hint's evidence and verdict.
-  - **Spot-check:** a random 50 go to the owner to grade, and hints ship only on agreement.
+  - **Pipeline:** `make hints` writes ranked, auto-checked hints for every playable row to `pipeline/data/hints.json`, which is committed with each hint's evidence and the checks it failed. Claude grades a random 300 against their quotes into `docs/results/day-4/`; a sample over 20% overreach stops the ship.
+  - **Spot-check:** a random 50 go to the owner to read beside their quotes.
   - **App:** `make assets` merges the supported hints into species_labels.json, `SpeciesRow` carries them (core's `Hint`, `Season`, and `forMonth` order them by the device month, and `HuntPick` prefers hinted species), and the screens show them per the design update.
 
 - [ ] **S55 Contact-hazard list** (pipeline + core) — the warning card knows only 7 North American hazards (every *Toxicodendron*, pokeweed, Carolina horsenettle), so it never fires in places like Tbilisi or Borjomi, even beside giant hogweed. Local toxic flags already block target passes everywhere, but they show no card, and "toxic" can't drive the card: 2,161 of 4,272 rows are flagged, mostly for eating or for a stub article, so a top-5 check on them would warn on nearly every photo.
