@@ -68,7 +68,7 @@ gate-pull:
 assets:
 	$(UV) run --group reference python -W error -m wild_find_pipeline.assets
 
-# Repacks Briar's source sprite sheets into the committed app/src/main/assets/briar/.
+# Packs Briar's source videos into the committed app/src/main/assets/briar/, plus the plant art, star, and icon.
 sprites:
 	$(UV) run python -W error -m wild_find_pipeline.sprites
 

@@ -14,7 +14,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
@@ -26,12 +25,10 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import dev.anchildress1.wildfind.R
 import dev.anchildress1.wildfind.core.sprite.BriarState
-import dev.anchildress1.wildfind.core.sprite.SpriteSheet
 import dev.anchildress1.wildfind.ui.theme.LocalReducedMotion
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
@@ -45,21 +42,20 @@ import kotlin.math.roundToInt
  * others replay after [BriarState.replayAfterMillis], and null loops `idle`. With the system animator scale at 0, the
  * first frame holds.
  *
- * A state plays its animated WebP when one is packed, else its sprite sheet.
- *
  * @param figure how tall Briar stands; one height on every full page, smaller only inside a card
  */
 @Composable
 fun Briar(state: BriarState?, description: String, modifier: Modifier = Modifier, figure: Dp = FIGURE) {
     val name = state?.sheet ?: BriarState.IDLE
-    val assets = LocalContext.current.assets
-    val clip = remember(name) { assets.list("briar")?.contains("$name.webp") == true }
-    val rest = state?.replayAfterMillis
-    if (clip) {
-        Clip(assets, name, state?.loop ?: true, rest, figure, description, modifier)
-    } else {
-        Sheet(assets, name, rest, figure, description, modifier)
-    }
+    Clip(
+        LocalContext.current.assets,
+        name,
+        state?.loop ?: true,
+        state?.replayAfterMillis,
+        figure,
+        description,
+        modifier,
+    )
 }
 
 @Composable
@@ -135,47 +131,6 @@ private suspend fun AnimatedImageDrawable.playOnce() = suspendCancellableCorouti
     start()
 }
 
-@Composable
-@Suppress("LongParameterList")
-private fun Sheet(
-    assets: AssetManager,
-    name: String,
-    rest: Long?,
-    figure: Dp,
-    description: String,
-    modifier: Modifier,
-) {
-    val sheet = remember(name) { SheetMeta(assets, name) }
-    val image = assetImage("briar/$name.png")
-    var frame by remember(name) { mutableIntStateOf(0) }
-    val reduced = LocalReducedMotion.current
-    LaunchedEffect(name, reduced) {
-        // With animations off the state's first frame holds, so Briar still shows how the game reacted.
-        if (reduced) return@LaunchedEffect
-        do {
-            val start = withFrameNanos { it }
-            var done = false
-            while (!done) {
-                withFrameNanos { now ->
-                    frame = sheet.meta.frameAt(now - start)
-                    done = !sheet.meta.loop && frame == sheet.meta.frames - 1
-                }
-            }
-        } while (rest?.let { delay(it) } != null)
-    }
-    // Each source draws Briar at its own size, so every sheet scales until he stands [figure] tall; a screen keeps
-    // one sheet, so the box can follow it.
-    val density = LocalDensity.current
-    val scale = with(density) { figure.toPx() } / sheet.figureHeight
-    val cell = IntSize(sheet.meta.frameWidth, sheet.meta.frameHeight)
-    val drawn = IntSize((cell.width * scale).roundToInt(), (cell.height * scale).roundToInt())
-    val box = with(density) { DpSize(drawn.width.toDp(), drawn.height.toDp()) }
-    Canvas(modifier.size(box).semantics { contentDescription = description }) {
-        val (x, y) = sheet.meta.offsetOf(frame)
-        image?.let { drawImage(it, srcOffset = IntOffset(x, y), srcSize = cell, dstSize = drawn) }
-    }
-}
-
 private fun meta(assets: AssetManager, name: String): JSONObject =
     JSONObject(assets.open("briar/$name.json").bufferedReader().use { it.readText() })
 
@@ -190,21 +145,6 @@ private class LoadedClip(assets: AssetManager, name: String) {
         return IntSize(
             (drawable.intrinsicWidth * scale).roundToInt(),
             (drawable.intrinsicHeight * scale).roundToInt(),
-        )
-    }
-}
-
-private class SheetMeta(assets: AssetManager, name: String) {
-    private val json = meta(assets, name)
-    val figureHeight: Int = json.getInt("figure_height")
-    val meta: SpriteSheet = json.run {
-        SpriteSheet(
-            getInt("frame_width"),
-            getInt("frame_height"),
-            getInt("frames"),
-            getInt("columns"),
-            getInt("fps"),
-            getBoolean("loop"),
         )
     }
 }

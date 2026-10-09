@@ -7,7 +7,7 @@ class BriarStateTest {
     @Test
     fun `every state names its packed sheet`() {
         assertEquals(
-            listOf("opener", "warning", "welcome", "complete", "complete"),
+            listOf("opener", "warning", "opener", "complete", "complete"),
             BriarState.entries.map {
                 it.sheet
             },

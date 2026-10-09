@@ -25,7 +25,7 @@ Spec of record: `docs/PRD.md`. Work queue: `docs/stories.md`. A change that cont
 ## UI
 
 - Animation-first. Every screen transition and state change is animated; no static form or list screens.
-- Briar (the mascot) and the opener are finished sprite sheets per the PRD sprite sheet contract. Game events pick the state; Compose plays the frames and never draws or composites Briar itself.
+- Briar (the mascot) and the opener are animated WebPs packed from videos per the PRD Briar animation contract. Game events pick the state; Compose plays the frames and never draws or composites Briar itself.
 - 48 dp touch targets, content descriptions, no color-only signal, sunlight contrast.
 - Invoke `/compose-skill` before touching `@Composable` code.
 
