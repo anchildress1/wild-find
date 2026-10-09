@@ -37,7 +37,8 @@ LOOPING: set[str] = set()
 # name: (source video, first frame kept, end frame). The cut drops the still stretch at each end, at frames that
 # match so the loop joins without a jump. `found` plays `complete`'s clip.
 VIDEOS = {
-    "opener": ("briar-warning.mp4", 28, 225),
+    "opener": ("briar-welcome.mp4", 10, 217),
+    "warning": ("briar-warning.mp4", 28, 225),
     "idle": ("briar-at-rest.mp4", 7, 108),
     "complete": ("briar-winning.mp4", 10, 202),
 }

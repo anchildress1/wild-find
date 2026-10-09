@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
@@ -50,9 +51,10 @@ import kotlin.math.roundToInt
  * A state plays its animated WebP when one is packed, else its sprite sheet.
  *
  * @param cue bump it to replay the same state, e.g. a second find
+ * @param figure how tall Briar stands; one height on every full page, smaller only inside a card
  */
 @Composable
-fun Briar(state: BriarState?, description: String, modifier: Modifier = Modifier, cue: Int = 0) {
+fun Briar(state: BriarState?, description: String, modifier: Modifier = Modifier, cue: Int = 0, figure: Dp = FIGURE) {
     var playing by remember(state, cue) { mutableStateOf(state?.sheet ?: BriarState.IDLE) }
     val assets = LocalContext.current.assets
     val clip = remember(playing) { assets.list("briar")?.contains("$playing.webp") == true }
@@ -61,9 +63,9 @@ fun Briar(state: BriarState?, description: String, modifier: Modifier = Modifier
     val loop = if (own == null) playing == BriarState.IDLE else own.loop
     val toIdle = { playing = BriarState.IDLE }
     if (clip) {
-        Clip(assets, playing, loop, rest, description, modifier, toIdle)
+        Clip(assets, playing, loop, rest, figure, description, modifier, toIdle)
     } else {
-        Sheet(assets, playing, rest, description, modifier, toIdle)
+        Sheet(assets, playing, rest, figure, description, modifier, toIdle)
     }
 }
 
@@ -74,6 +76,7 @@ private fun Clip(
     name: String,
     loop: Boolean,
     rest: Long?,
+    figure: Dp,
     description: String,
     modifier: Modifier,
     onDone: () -> Unit,
@@ -115,7 +118,7 @@ private fun Clip(
         } while (rest?.let { delay(it) } != null)
         onDone()
     }
-    val size = clip.drawn(LocalDensity.current)
+    val size = clip.drawn(LocalDensity.current, figure)
     val box = with(LocalDensity.current) { DpSize(size.width.toDp(), size.height.toDp()) }
     Canvas(modifier.size(box).semantics { contentDescription = description }) {
         // Reading the frame count here redraws the canvas whenever the drawable has a new frame.
@@ -147,6 +150,7 @@ private fun Sheet(
     assets: AssetManager,
     name: String,
     rest: Long?,
+    figure: Dp,
     description: String,
     modifier: Modifier,
     onDone: () -> Unit,
@@ -169,10 +173,10 @@ private fun Sheet(
         } while (rest?.let { delay(it) } != null)
         onDone()
     }
-    // Each source draws Briar at its own size, so every sheet scales until he stands FIGURE tall; a screen keeps
+    // Each source draws Briar at its own size, so every sheet scales until he stands [figure] tall; a screen keeps
     // one sheet, so the box can follow it.
     val density = LocalDensity.current
-    val scale = with(density) { FIGURE.toPx() } / sheet.figureHeight
+    val scale = with(density) { figure.toPx() } / sheet.figureHeight
     val cell = IntSize(sheet.meta.frameWidth, sheet.meta.frameHeight)
     val drawn = IntSize((cell.width * scale).roundToInt(), (cell.height * scale).roundToInt())
     val box = with(density) { DpSize(drawn.width.toDp(), drawn.height.toDp()) }
@@ -190,9 +194,9 @@ private class LoadedClip(assets: AssetManager, name: String) {
     val drawable = ImageDecoder.decodeDrawable(ImageDecoder.createSource(assets, "briar/$name.webp"))
         as AnimatedImageDrawable
 
-    /** The drawable's pixel size once Briar is scaled to FIGURE tall. */
-    fun drawn(density: Density): IntSize {
-        val scale = with(density) { FIGURE.toPx() } / figureHeight
+    /** The drawable's pixel size once Briar is scaled to [figure] tall. */
+    fun drawn(density: Density, figure: Dp): IntSize {
+        val scale = with(density) { figure.toPx() } / figureHeight
         return IntSize(
             (drawable.intrinsicWidth * scale).roundToInt(),
             (drawable.intrinsicHeight * scale).roundToInt(),
@@ -225,6 +229,7 @@ fun briarText(state: BriarState?): String = stringResource(
     when (state) {
         null -> R.string.briar_idle
         BriarState.OPENER -> R.string.briar_opener
+        BriarState.WARNING -> R.string.briar_warning
         BriarState.WELCOME -> R.string.briar_welcome
         BriarState.FOUND -> R.string.briar_found
         BriarState.COMPLETE -> R.string.briar_complete

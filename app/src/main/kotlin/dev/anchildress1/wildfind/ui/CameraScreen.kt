@@ -57,6 +57,7 @@ import dev.anchildress1.wildfind.R
 import dev.anchildress1.wildfind.camera.CaptureVerifier
 import dev.anchildress1.wildfind.camera.Viewfinder
 import dev.anchildress1.wildfind.core.hunt.PlantType
+import dev.anchildress1.wildfind.core.sprite.BriarState
 import dev.anchildress1.wildfind.core.verify.CaptureCue
 import dev.anchildress1.wildfind.game.CameraState
 import dev.anchildress1.wildfind.ui.theme.Motion
@@ -224,9 +225,10 @@ private fun HazardCard() {
         Modifier.fillMaxWidth().semantics { liveRegion = LiveRegionMode.Assertive }
             .background(Palette.Hazard, CardShape).padding(horizontal = 18.dp, vertical = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Icon(WildIcons.Warning, contentDescription = null, Modifier.size(30.dp), tint = Color.White)
-        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        Briar(BriarState.WARNING, briarText(BriarState.WARNING), figure = WARNING_FIGURE)
+        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Text(stringResource(R.string.hazard), style = MaterialTheme.typography.titleSmall, color = Color.White)
             Text(
                 stringResource(R.string.hazard_detail),
@@ -318,3 +320,6 @@ private fun CameraDenied(modifier: Modifier) {
         }, icon = null)
     }
 }
+
+// Briar fits beside the hazard text without pushing the card over the viewfinder.
+private val WARNING_FIGURE = 88.dp
