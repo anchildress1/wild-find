@@ -28,8 +28,7 @@ PLANT_PX = 384
 STAR_PX = 256
 # Faint glow pixels below this alpha don't count as the plant's edge.
 ALPHA_FLOOR = 16
-# name: (source file, columns, rows, fps). A state moves to VIDEOS once its video replaces the sheet. `opener` keeps
-# its packed sheet in the app until its video arrives, since its source sheet is gone.
+# name: (source file, columns, rows, fps). A state moves to VIDEOS once its video replaces the sheet.
 SHEETS = {
     "welcome": ("welcome-32.png", 8, 4, 16),
 }
@@ -38,6 +37,7 @@ LOOPING: set[str] = set()
 # name: (source video, first frame kept, end frame). The cut drops the still stretch at each end, at frames that
 # match so the loop joins without a jump. `found` plays `complete`'s clip.
 VIDEOS = {
+    "opener": ("briar-warning.mp4", 28, 225),
     "idle": ("briar-at-rest.mp4", 7, 108),
     "complete": ("briar-winning.mp4", 10, 202),
 }
@@ -155,7 +155,8 @@ def key_white(rgb: np.ndarray) -> np.ndarray:
 def clip(frames: list[np.ndarray]) -> tuple[list[Image.Image], int]:
     """Key every frame and crop all of them to the box that holds Briar in any frame.
 
-    Returns the frames and Briar's median height in them, which the app scales to.
+    Returns the frames and Briar's height in the first one, which the app scales to: every cut starts on his rest
+    pose, before props like the opener's leaves grow up around his feet.
     """
     keyed = [key_white(f) for f in frames]
     ys, xs = np.nonzero(np.stack([k[..., 3] for k in keyed]).any(axis=0))
@@ -163,7 +164,7 @@ def clip(frames: list[np.ndarray]) -> tuple[list[Image.Image], int]:
         raise ValueError("the video is all background")
     box = (max(int(xs.min()) - 4, 0), max(int(ys.min()) - 4, 0), int(xs.max()) + 5, int(ys.max()) + 5)
     images = [Image.fromarray(k, "RGBA").crop(box) for k in keyed]
-    return images, int(np.median([solid_height(i) for i in images]))
+    return images, solid_height(images[0])
 
 
 def video_frames(path: Path, first: int, end: int) -> tuple[list[np.ndarray], float]:

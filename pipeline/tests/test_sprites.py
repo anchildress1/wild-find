@@ -129,11 +129,11 @@ def test_key_white_removes_white_spill_from_edges():
     assert abs(int(keyed[20, 10, 0]) - 62) <= 2
 
 
-def test_clip_crops_every_frame_to_one_box_and_reports_the_figure_height():
+def test_clip_crops_every_frame_to_one_box_and_takes_the_figure_height_from_the_first():
     frames = []
-    for shift in (0, 6):
+    for grow in (0, 10):
         frame = np.full((60, 60, 3), 255, np.uint8)
-        frame[20 + shift : 40 + shift, 15:35] = (120, 80, 50)
+        frame[20 : 40 + grow, 15:35] = (120, 80, 50)  # later frames grow leaves below his feet
         frames.append(frame)
 
     images, figure = clip(frames)
