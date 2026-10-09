@@ -275,8 +275,7 @@ private class Turn(private var game: Game, private val random: Random) {
             is Screen.Region -> screen.back?.let(::show)
             is Screen.Map -> screen.back?.let(::show)
             is Screen.GrownUps -> show(screen.from)
-            is Screen.Camera -> toHunt()
-            is Screen.Found -> if (game.hunt?.progress?.complete == true) show(Screen.Complete) else toHunt()
+            is Screen.Camera, is Screen.Found -> toHunt()
             Screen.Complete -> on(GameEvent.Home)
             else -> Unit
         }

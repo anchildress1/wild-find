@@ -205,9 +205,9 @@ class GameRulesTest {
     }
 
     @Test
-    fun `Back from the last find goes to the stars, from any other find to the list`() {
+    fun `Back from any find returns to the list, the last one included, and never skips ahead`() {
         assertEquals(
-            Screen.Complete,
+            Screen.Hunt,
             playing(Screen.Found(2), hunt(found = setOf(0, 1, 2))).after(GameEvent.Back).game.ui.screen,
         )
         assertEquals(Screen.Hunt, playing(Screen.Found(1), hunt(found = setOf(1))).after(GameEvent.Back).game.ui.screen)
