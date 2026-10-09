@@ -18,6 +18,7 @@ import struct
 import urllib.request
 from pathlib import Path
 
+from wild_find_pipeline.gbif import USER_AGENT
 from wild_find_pipeline.paths import MODEL_CACHE, file_sha256
 
 # nvkelso/natural-earth-vector tag v5.1.2; public domain per its LICENSE.md ("Everything here is public domain").
@@ -87,7 +88,9 @@ def fetch(name: str, size: int, sha256: str, cache: Path = CACHE) -> Path:
     path = cache / name
     if not verified(path, size, sha256):
         cache.mkdir(parents=True, exist_ok=True)
-        urllib.request.urlretrieve(URL.format(commit=COMMIT, name=name), path)
+        request = urllib.request.Request(URL.format(commit=COMMIT, name=name), headers={"User-Agent": USER_AGENT})
+        with urllib.request.urlopen(request, timeout=300) as response:
+            path.write_bytes(response.read())
         if not verified(path, size, sha256):
             raise ValueError(f"{name} does not match its pinned size/SHA-256")
     return path

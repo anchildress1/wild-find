@@ -1,4 +1,5 @@
 import hashlib
+import io
 import struct
 
 import pytest
@@ -67,7 +68,7 @@ def test_pack_rejects_a_point_off_the_globe():
 def test_fetch_keeps_a_cached_file_that_matches_its_pins(tmp_path, monkeypatch):
     body = b'{"features": []}'
     (tmp_path / "ne.geojson").write_bytes(body)
-    monkeypatch.setattr(world_map.urllib.request, "urlretrieve", pytest.fail)
+    monkeypatch.setattr(world_map.urllib.request, "urlopen", pytest.fail)
 
     path = world_map.fetch("ne.geojson", len(body), hashlib.sha256(body).hexdigest(), tmp_path)
 
@@ -75,11 +76,12 @@ def test_fetch_keeps_a_cached_file_that_matches_its_pins(tmp_path, monkeypatch):
 
 
 def test_fetch_refuses_bytes_that_do_not_match_its_pins(tmp_path, monkeypatch):
-    def download(url, path):
-        assert world_map.COMMIT in url
-        path.write_bytes(b"tampered")
+    def download(request, timeout):
+        assert world_map.COMMIT in request.full_url
+        assert request.get_header("User-agent") == world_map.USER_AGENT and timeout
+        return io.BytesIO(b"tampered")
 
-    monkeypatch.setattr(world_map.urllib.request, "urlretrieve", download)
+    monkeypatch.setattr(world_map.urllib.request, "urlopen", download)
 
     with pytest.raises(ValueError, match="pinned size/SHA-256"):
         world_map.fetch("ne.geojson", 3, "0" * 64, tmp_path)
