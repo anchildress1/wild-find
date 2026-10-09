@@ -1,5 +1,6 @@
 package dev.anchildress1.wildfind.e2e
 
+import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isEnabled
@@ -32,6 +33,16 @@ class HintSheetTest : E2eTest() {
         tap(R.string.keep_looking)
         waitForText(text(R.string.capture))
         assertTrue(has(hasText(text(R.string.hint))))
+    }
+
+    @Test
+    fun theHintButtonLabelStaysOnOneLine() {
+        startHuntList()
+        tap(R.string.start_looking)
+        waitFor(hasText(text(R.string.hint)) and hasClickAction() and isEnabled(), timeoutMs = NETWORK_TIMEOUT)
+        // The unmerged text node, since the merged button is wide however its label wraps.
+        val label = nodes(hasText(text(R.string.hint)), merged = false).first().boundsInRoot
+        assertTrue("the Hint label wraps: ${label.width} x ${label.height}", label.width > label.height)
     }
 
     @Test

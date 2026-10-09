@@ -285,12 +285,12 @@ private fun BottomPanel(
                 )
             }
             if (camera.checking) {
-                CheckingButton(Modifier.weight(1f))
+                CheckingButton(Modifier.weight(if (hasHint) CAPTURE_SHARE else 1f))
             } else {
                 PrimaryButton(
                     stringResource(if (camera.ready) R.string.capture else R.string.getting_ready),
                     onCapture,
-                    Modifier.weight(1f).heightIn(min = 64.dp),
+                    Modifier.weight(if (hasHint) CAPTURE_SHARE else 1f).heightIn(min = 64.dp),
                     icon = WildIcons.Camera,
                     enabled = enabled,
                 )
@@ -352,8 +352,9 @@ private fun CameraDenied(modifier: Modifier) {
     }
 }
 
-// The Hint button takes about a third of the row beside Capture.
-private const val HINT_SHARE = 0.55f
+// Weights are ratios of the row: Hint 45%, Capture 55% (Capture alone fills it). At 35% the "Hint" label wrapped.
+private const val HINT_SHARE = 0.45f
+private const val CAPTURE_SHARE = 0.55f
 
 // Briar fits beside the hazard text without pushing the card over the viewfinder.
 private val WARNING_FIGURE = 88.dp
