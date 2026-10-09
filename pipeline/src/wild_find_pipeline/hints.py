@@ -48,9 +48,11 @@ SETTING = re.compile(
 # Hints that point a kid at water or its banks, or at traffic; graded unsafe in the Day-4 probes.
 WATER = re.compile(
     r"\b(?:streams?|creeks?|brooks?|rivers?|riverbanks?|riparian|ponds?|lakes?|lakeshores?|swamp\w*|marsh\w*|bogs?|"
-    r"wetlands?|shores?|banks?|waterways?|water|waters|ditch(?:es)?)\b",
+    r"wetlands?|shores?|shorelines?|banks?|waterways?|water|waters|freshwaters?|flood\w*|ditch(?:es)?)\b",
     re.I,
 )
+# Hints that point a kid at a drop or a roof; the Oct 9 full-run sample found cliffs, bluffs, and canyon walls.
+HEIGHT = re.compile(r"\b(?:cliffs?|bluffs?|ledges?|canyon walls?|crags?|roofs?|rooftops?|top of houses)\b", re.I)
 ROAD = re.compile(r"\b(?:roads?|roadsides?|highways?|interstates?|streets?|traffic|railroads?|railways?)\b", re.I)
 # A place that is a country or region is range, not a spot a kid can walk to.
 REGION = re.compile(
@@ -179,6 +181,8 @@ def issues(aspect: str, hint: str, evidence: str, article: str, names: list[str]
         found.append("water")
     if ROAD.search(hint):
         found.append("road")
+    if HEIGHT.search(hint):
+        found.append("height")
     if aspect == "place" and REGION.search(hint):
         found.append("region")
     return found
@@ -330,8 +334,29 @@ def save(species: dict, done: bool) -> None:
     )
 
 
+def recheck() -> int:
+    """Re-apply the pattern checks to the stored model hints and re-rank, without calling the model."""
+    data = json.loads(HINTS.read_text())
+    species = data["species"]
+    added = 0
+    for entry in species.values():
+        for hint in entry["hints"]:
+            if hint["source"] != "model":
+                continue
+            for name, pattern in (("water", WATER), ("road", ROAD), ("height", HEIGHT)):
+                if pattern.search(hint["text"]) and name not in hint["issues"]:
+                    hint["issues"].append(name)
+                    added += 1
+    rank_all(species)
+    save(species, done=True)
+    print(f"OK: {HINTS}: {added} model hints newly flagged")
+    return 0
+
+
 def main() -> int:
-    """Write hints.json for every playable row, resuming from a partial file."""
+    """Write hints.json for every playable row, resuming from a partial file; `--recheck` only re-applies checks."""
+    if "--recheck" in sys.argv:
+        return recheck()
     rows = playable()
     species = json.loads(HINTS.read_text())["species"] if HINTS.exists() else {}
     todo = [r for r in rows if r not in species]

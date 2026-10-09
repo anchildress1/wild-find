@@ -27,6 +27,14 @@ def test_hints_that_send_a_kid_to_water_or_traffic_fail():
         assert "road" in h.issues("edges", text, quote, ARTICLE, [])
 
 
+def test_hints_that_send_a_kid_to_a_drop_or_open_water_fail():
+    quote = "It grows in moist woods."
+    for text in ("Look on rocky cliffs.", "It grows at bluff margins.", "Look on canyon walls."):
+        assert "height" in h.issues("place", text, quote, ARTICLE, [])
+    for text in ("Look along sand dune shorelines.", "It grows in quiet freshwaters.", "Look on flood-prone lands."):
+        assert "water" in h.issues("place", text, quote, ARTICLE, [])
+
+
 def test_a_place_naming_only_a_region_fails_but_other_kinds_may_name_one():
     quote = "It grows in moist woods."
     assert "region" in h.issues("place", "Look in the eastern United States.", quote, ARTICLE, [])
