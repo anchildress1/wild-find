@@ -9,7 +9,9 @@ the row's accepted taxon.
 
 import hashlib
 import json
+import os
 import sys
+import tempfile
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from datetime import date
@@ -33,7 +35,11 @@ def cached_get(url: str, cache: Path = GBIF_CACHE) -> dict:
         return json.loads(path.read_text())
     reply = get(url)
     cache.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(reply))
+    # Pool workers share this cache; a reader must never see a half-written file.
+    fd, pending = tempfile.mkstemp(dir=cache, suffix=".tmp")
+    with os.fdopen(fd, "w") as f:
+        f.write(json.dumps(reply))
+    os.replace(pending, path)
     return reply
 
 
