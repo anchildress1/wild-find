@@ -205,15 +205,18 @@ private fun StopCard(number: Int, stop: Stop, modifier: Modifier, onClick: () ->
     }
     val description = listOfNotNull(spoken, stop.description).joinToString(". ")
     Column(
+        // A found stop is done: re-capturing it would celebrate a star the score never gains.
         modifier.width(STOP_WIDTH).clearAndSetSemantics {
             contentDescription = description
-            role = Role.Button
-            // Cleared semantics drop clickable's action too, so TalkBack needs it declared again.
-            onClick {
-                onClick()
-                true
+            if (!stop.found) {
+                role = Role.Button
+                // Cleared semantics drop clickable's action too, so TalkBack needs it declared again.
+                onClick {
+                    onClick()
+                    true
+                }
             }
-        }.clickable(onClick = onClick),
+        }.clickable(enabled = !stop.found, onClick = onClick),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {

@@ -300,6 +300,7 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
     }
 
     private fun openCamera(row: Int?) {
+        if (row != null && hunt?.progress?.found?.contains(row) == true) return
         state.update { it.copy(camera = CameraState(ready = models != null)) }
         show(Screen.Camera(row))
     }
