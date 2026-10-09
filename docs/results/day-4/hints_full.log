@@ -1,0 +1,151 @@
+2111 playable rows, 0 done, 2111 to go
+wikipedia: 50/2111
+wikipedia: 100/2111
+wikipedia: 150/2111
+wikipedia: 200/2111
+wikipedia: 250/2111
+wikipedia: 300/2111
+wikipedia: 350/2111
+wikipedia: 400/2111
+wikipedia: 450/2111
+wikipedia: 500/2111
+wikipedia: 550/2111
+wikipedia: 600/2111
+wikipedia: 650/2111
+wikipedia: 700/2111
+wikipedia: 750/2111
+wikipedia: 800/2111
+wikipedia: 850/2111
+wikipedia: 900/2111
+wikipedia: 950/2111
+wikipedia: 1000/2111
+wikipedia: 1050/2111
+wikipedia: 1100/2111
+wikipedia: 1150/2111
+wikipedia: 1200/2111
+wikipedia: 1250/2111
+wikipedia: 1300/2111
+wikipedia: 1350/2111
+wikipedia: 1400/2111
+wikipedia: 1450/2111
+wikipedia: 1500/2111
+wikipedia: 1550/2111
+wikipedia: 1600/2111
+wikipedia: 1650/2111
+wikipedia: 1700/2111
+wikipedia: 1750/2111
+wikipedia: 1800/2111
+wikipedia: 1850/2111
+wikipedia: 1900/2111
+wikipedia: 1950/2111
+wikipedia: 2000/2111
+wikipedia: 2050/2111
+wikipedia: 2100/2111
+wikipedia: 2111/2111
+25/2111 61s
+50/2111 114s
+75/2111 199s
+100/2111 278s
+125/2111 350s
+150/2111 419s
+175/2111 489s
+200/2111 562s
+225/2111 633s
+250/2111 703s
+275/2111 768s
+300/2111 831s
+325/2111 903s
+350/2111 981s
+375/2111 1093s
+400/2111 1160s
+425/2111 1231s
+450/2111 1297s
+475/2111 1357s
+500/2111 1436s
+525/2111 1507s
+550/2111 1584s
+575/2111 1659s
+600/2111 1753s
+625/2111 1813s
+650/2111 1879s
+675/2111 1950s
+700/2111 2019s
+725/2111 2095s
+750/2111 2159s
+775/2111 2224s
+800/2111 2294s
+825/2111 2371s
+850/2111 2438s
+875/2111 2512s
+900/2111 2580s
+925/2111 2648s
+950/2111 2713s
+975/2111 2787s
+1000/2111 2847s
+1025/2111 2901s
+1050/2111 2974s
+1075/2111 3052s
+1100/2111 3125s
+1125/2111 3204s
+1150/2111 3278s
+1175/2111 3348s
+1200/2111 3420s
+1225/2111 3482s
+1250/2111 3544s
+1275/2111 3616s
+1300/2111 3684s
+1325/2111 3750s
+1350/2111 3822s
+1375/2111 3896s
+1400/2111 3965s
+1425/2111 4014s
+1450/2111 4080s
+1475/2111 4151s
+1500/2111 4224s
+1525/2111 4280s
+1550/2111 4342s
+1575/2111 4398s
+1600/2111 4467s
+1625/2111 4540s
+1650/2111 4638s
+1675/2111 4723s
+1700/2111 4799s
+1725/2111 4874s
+1750/2111 4942s
+1775/2111 5007s
+1800/2111 5075s
+Traceback (most recent call last):
+  File "<frozen runpy>", line 203, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/anchildress1/git_personal/wild-find/pipeline/src/wild_find_pipeline/hints.py", line 349, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/Users/anchildress1/git_personal/wild-find/pipeline/src/wild_find_pipeline/hints.py", line 338, in main
+    species[row] = hints_for(row, pages[row], aliases.get(row, []), kinds.get(row, {}).get("type"), facts)
+                   ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/anchildress1/git_personal/wild-find/pipeline/src/wild_find_pipeline/hints.py", line 251, in hints_for
+    reply = chat(f"Plant: {row}\n\nArticle sentences:\n{shown or '(no article found)'}")
+  File "/Users/anchildress1/git_personal/wild-find/pipeline/src/wild_find_pipeline/hints.py", line 228, in chat
+    raise ValueError(f"{MODEL}: reply ended {reply.get('done_reason')!r} with no usable content")
+ValueError: gemma4:26b: reply ended 'length' with no usable content
+2111 playable rows, 1800 done, 311 to go
+wikipedia: 50/311
+wikipedia: 100/311
+wikipedia: 150/311
+wikipedia: 200/311
+wikipedia: 250/311
+wikipedia: 300/311
+wikipedia: 311/311
+25/311 51s
+50/311 103s
+75/311 169s
+100/311 242s
+125/311 309s
+150/311 381s
+175/311 451s
+200/311 528s
+225/311 594s
+250/311 654s
+275/311 738s
+300/311 831s
+OK: /Users/anchildress1/git_personal/wild-find/pipeline/data/hints.json: 2111 rows, 1 model replies failed: ['Sequoiadendron giganteum']

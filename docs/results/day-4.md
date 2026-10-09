@@ -114,3 +114,38 @@ Question: can a local Gemma 4 write "where to look" hints that stay true to the 
 - The water check also drops legitimately sourced hints (a fern's "woodlands, stream banks" place hint); that is the intended trade
 - Two supported hints carry no search value ("The tree grows in the wild", "It lives in many kinds of habitats")
 - Grades are Claude's, quote-only. The sample is the same 20 well-documented species
+
+## Full run: every playable row (Oct 9, 2026)
+
+- `make hints` (`pipeline/src/wild_find_pipeline/hints.py`), gemma4:26b (digest 48eb98ec778c) through Ollama on the Apple M4 Max, probe-3 prompt and checks, up to two hints per aspect, `think: false`, Google's sampler (1.0 / 0.95 / 64, seed 1), num_ctx 8192; about 100 minutes wall clock, median under 3 s per row
+- Inputs: the 2,111 species-table rows that are neither toxic-flagged nor hazards, each with its current English Wikipedia article (revision recorded per row in `pipeline/data/hints.json`); every row has an article
+- Output: `pipeline/data/hints.json` (every candidate with its evidence, source, checks failed, and score) and `hints_full.log`
+- One model reply (giant sequoia, *Sequoiadendron giganteum*) hit the 700-token cap and ships with no model hints. The first attempt stopped there, so `hints.py` now records a failed reply on its row and continues
+
+| Count | Value |
+| --- | --- |
+| Rows | 2,111 |
+| Model hints written | 6,827 |
+| Clean (passed every automatic check) | 5,087 after the height recheck below |
+| Dropped: water | 791 |
+| Dropped: repeated quote | 708 |
+| Dropped: road | 296 |
+| Dropped: height (cliff, bluff, ledge, roof) | 61 |
+| Dropped: evidence not in article | 71 |
+| Dropped: region as place | 10 |
+| Rows with three non-season picks | 1,148 (54%) |
+| Rows with one or two | 787 |
+| Rows with none | 172 (8%), which ship with description only |
+| Rows with a season hint | 414 |
+| Picked hints | 5,208: 4,300 from the model, 637 from USDA traits, 271 from USDA ratings |
+
+### Quote-only sample
+
+- 300 hints drawn at random (seed 1) from the picked model hints, which are the hints a kid would see; `hints_sample.csv`, graded in `hints_sample_grades.csv` on whether the quoted sentence says the hint, by Claude, not on whether it is true of the plant
+- Result: 274 supported (91%), 13 overreach, 3 unsupported, 10 unsafe
+- Unsafe hints all slipped past the water and road checks: cliffs, bluffs, canyon walls, shorelines, "freshwater", flood-prone lands, and "on top of houses"
+- Fix: the water pattern gained shorelines, freshwaters, and flood words; a new height pattern covers cliffs, bluffs, ledges, canyon walls, and roofs. `make hints` has a `--recheck` mode that re-applies the patterns to the stored hints without the model: 108 hints were newly flagged, which removed all 10 unsafe hints from the sample and 2 supported ones
+- After the recheck the sample's surviving hints are 272 supported of 288 (94%), 16 overreach or unsupported (5.6%), 0 unsafe. The PRD's stop line is 20% overreach
+- Overreach repeats the probe findings: cultivation advice read as habitat ("requires full sun" in a growing guide), "tolerates" read as "likes", use read as habitat (erosion control, hedging), and sentences about other things (a virus, a plant name, C3 plants in general)
+- Not caught: the sample is 300 of 4,300, so rarer unsafe wordings may remain; cultivation-advice sentences are the likeliest source of further overreach
+- Grades are Claude's. The owner's 50-hint read beside the quotes is still owed
