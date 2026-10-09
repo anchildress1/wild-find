@@ -116,6 +116,13 @@ class LocalSpeciesTest {
     }
 
     @Test
+    fun `a common name comes from the most sighted name that has a kid-sized one`() {
+        val list = local.of(pull(Sighting("Berberis bealei", null, 40), Sighting("Mahonia bealei", "leatherleaf", 10)))
+
+        assertEquals(listOf(Eligible(4, "leatherleaf", 50)), list.eligible)
+    }
+
+    @Test
     fun `an empty pull widens`() {
         assertTrue(local.of(emptyList()).needsWiden)
     }

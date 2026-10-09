@@ -99,7 +99,8 @@ class LocalSpecies(private val table: List<SpeciesRow>, private val rowOf: (Stri
         }.groupBy({ it.first }, { it.second })
         val counted = byRow.mapValues { (_, names) -> names.sumOf { it.count } }.filterValues { it >= floor }
         val eligible = counted.mapNotNull { (row, count) ->
-            val common = byRow.getValue(row).maxBy { it.count }.common?.trim()?.takeIf(::isKidName)
+            val common = byRow.getValue(row).sortedByDescending { it.count }
+                .firstNotNullOfOrNull { it.common?.trim()?.takeIf(::isKidName) }
             if (table[row].playable && common != null) Eligible(row, common, count) else null
         }.sortedWith(compareByDescending<Eligible> { it.count }.thenBy { it.row })
         // Any sighting blocks: the floor-only blockers let 87 of 180 toxic photos pass as some target on Oct 7.
