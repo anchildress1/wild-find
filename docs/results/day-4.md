@@ -28,6 +28,10 @@ Question: can a local Gemma 4 write "where to look" hints that stay true to the 
 - `name_only` always answers and cites nothing; its hints are unverifiable (e.g. "dry, sandy soil" for blue mistflower, whose article says moist soils)
 - 12b made up 3 quotes; 26b made up none and is 2.5x faster
 
+## Re-rank, Oct 9 (no model calls)
+
+`gemma_hints_rerank.py` re-ranked the saved hints with the current `hint_rank`: every season hint now comes back beyond the three picks, and season candidates count toward rarity. Model text and grades are untouched; only the `pick` lines, `pick_count`, and `top_picks` changed. Targets with three picks stay 19 of 20 on both models.
+
 ## Grades (grounded hints, Claude against quoted sentence)
 
 | Model | Graded | Supported | Overreach | Unsafe | Unsupported |
