@@ -29,7 +29,7 @@ import dev.anchildress1.wildfind.R
 import dev.anchildress1.wildfind.core.sprite.BriarState
 import dev.anchildress1.wildfind.ui.theme.Palette
 
-/** R1: the leave-it rule before anything else, with Briar warning beside a three-leaf plant. */
+/** R1: the leave-it rule before anything else, with Briar waving hello above its three steps. */
 @Composable
 fun OpenerScreen(replay: Boolean, onDone: () -> Unit) {
     Page(

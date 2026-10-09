@@ -1,7 +1,6 @@
 package dev.anchildress1.wildfind.ui
 
 import android.content.res.AssetManager
-import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.graphics.drawable.Animatable2
 import android.graphics.drawable.AnimatedImageDrawable
@@ -13,13 +12,10 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalContext
@@ -45,27 +41,24 @@ import kotlin.coroutines.resume
 import kotlin.math.roundToInt
 
 /**
- * Plays Briar's [state] once, then loops `idle` until Briar leaves the screen; a looping state such as `complete`
- * keeps looping, and null plays `idle` alone. With the system animator scale at 0, the first frame holds.
+ * Plays Briar's [state] until Briar leaves the screen: a looping state such as `complete` repeats with no rest, the
+ * others replay after [BriarState.replayAfterMillis], and null loops `idle`. With the system animator scale at 0, the
+ * first frame holds.
  *
  * A state plays its animated WebP when one is packed, else its sprite sheet.
  *
- * @param cue bump it to replay the same state, e.g. a second find
  * @param figure how tall Briar stands; one height on every full page, smaller only inside a card
  */
 @Composable
-fun Briar(state: BriarState?, description: String, modifier: Modifier = Modifier, cue: Int = 0, figure: Dp = FIGURE) {
-    var playing by remember(state, cue) { mutableStateOf(state?.sheet ?: BriarState.IDLE) }
+fun Briar(state: BriarState?, description: String, modifier: Modifier = Modifier, figure: Dp = FIGURE) {
+    val name = state?.sheet ?: BriarState.IDLE
     val assets = LocalContext.current.assets
-    val clip = remember(playing) { assets.list("briar")?.contains("$playing.webp") == true }
-    val own = state?.takeIf { it.sheet == playing }
-    val rest = own?.replayAfterMillis
-    val loop = if (own == null) playing == BriarState.IDLE else own.loop
-    val toIdle = { playing = BriarState.IDLE }
+    val clip = remember(name) { assets.list("briar")?.contains("$name.webp") == true }
+    val rest = state?.replayAfterMillis
     if (clip) {
-        Clip(assets, playing, loop, rest, figure, description, modifier, toIdle)
+        Clip(assets, name, state?.loop ?: true, rest, figure, description, modifier)
     } else {
-        Sheet(assets, playing, rest, figure, description, modifier, toIdle)
+        Sheet(assets, name, rest, figure, description, modifier)
     }
 }
 
@@ -79,7 +72,6 @@ private fun Clip(
     figure: Dp,
     description: String,
     modifier: Modifier,
-    onDone: () -> Unit,
 ) {
     val clip = remember(name) { LoadedClip(assets, name) }
     val drawable = clip.drawable
@@ -116,7 +108,6 @@ private fun Clip(
         do {
             drawable.playOnce()
         } while (rest?.let { delay(it) } != null)
-        onDone()
     }
     val size = clip.drawn(LocalDensity.current, figure)
     val box = with(LocalDensity.current) { DpSize(size.width.toDp(), size.height.toDp()) }
@@ -153,9 +144,9 @@ private fun Sheet(
     figure: Dp,
     description: String,
     modifier: Modifier,
-    onDone: () -> Unit,
 ) {
-    val sheet = remember(name) { Loaded(assets, name) }
+    val sheet = remember(name) { SheetMeta(assets, name) }
+    val image = assetImage("briar/$name.png")
     var frame by remember(name) { mutableIntStateOf(0) }
     val reduced = LocalReducedMotion.current
     LaunchedEffect(name, reduced) {
@@ -171,7 +162,6 @@ private fun Sheet(
                 }
             }
         } while (rest?.let { delay(it) } != null)
-        onDone()
     }
     // Each source draws Briar at its own size, so every sheet scales until he stands [figure] tall; a screen keeps
     // one sheet, so the box can follow it.
@@ -182,7 +172,7 @@ private fun Sheet(
     val box = with(density) { DpSize(drawn.width.toDp(), drawn.height.toDp()) }
     Canvas(modifier.size(box).semantics { contentDescription = description }) {
         val (x, y) = sheet.meta.offsetOf(frame)
-        drawImage(sheet.image, srcOffset = IntOffset(x, y), srcSize = cell, dstSize = drawn)
+        image?.let { drawImage(it, srcOffset = IntOffset(x, y), srcSize = cell, dstSize = drawn) }
     }
 }
 
@@ -204,7 +194,7 @@ private class LoadedClip(assets: AssetManager, name: String) {
     }
 }
 
-private class Loaded(assets: AssetManager, name: String) {
+private class SheetMeta(assets: AssetManager, name: String) {
     private val json = meta(assets, name)
     val figureHeight: Int = json.getInt("figure_height")
     val meta: SpriteSheet = json.run {
@@ -217,7 +207,6 @@ private class Loaded(assets: AssetManager, name: String) {
             getBoolean("loop"),
         )
     }
-    val image: ImageBitmap = assets.open("briar/$name.png").use(BitmapFactory::decodeStream).asImageBitmap()
 }
 
 // Briar's height on every screen; idle's art drew him about this tall at one sheet pixel per screen pixel.

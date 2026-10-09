@@ -1,6 +1,5 @@
 package dev.anchildress1.wildfind.ui
 
-import android.graphics.BitmapFactory
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -10,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -33,9 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -124,7 +122,7 @@ fun OutlineButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifi
 
 /** The leave-it rule, on every screen a kid hunts from; the sprout rides inline so a wrapped line stays centered. */
 @Composable
-fun RuleLine(modifier: Modifier = Modifier, color: Color = Palette.Forest) {
+fun RuleLine(modifier: Modifier = Modifier) {
     val rule = stringResource(R.string.leave_it_rule)
     val text = remember(rule) {
         buildAnnotatedString {
@@ -135,14 +133,14 @@ fun RuleLine(modifier: Modifier = Modifier, color: Color = Palette.Forest) {
     }
     val sprout = mapOf(
         SPROUT to InlineTextContent(Placeholder(20.sp, 20.sp, PlaceholderVerticalAlign.TextCenter)) {
-            Icon(WildIcons.Sprout, contentDescription = null, tint = color)
+            Icon(WildIcons.Sprout, contentDescription = null, tint = Palette.Forest)
         },
     )
     Text(
         text,
         // The inline sprout's placeholder character would be read aloud; TalkBack gets the rule alone.
         modifier.fillMaxWidth().clearAndSetSemantics { contentDescription = rule },
-        color = color,
+        color = Palette.Forest,
         style = MaterialTheme.typography.labelMedium,
         textAlign = TextAlign.Center,
         inlineContent = sprout,
@@ -182,9 +180,8 @@ fun TypeTile(type: PlantType?, size: Dp, modifier: Modifier = Modifier) {
 /** A find star, the painted art from `assets/star.webp`. */
 @Composable
 fun Star(size: Dp, modifier: Modifier = Modifier) {
-    val assets = LocalContext.current.assets
-    val star = remember { assets.open("star.webp").use(BitmapFactory::decodeStream).asImageBitmap() }
-    Image(star, contentDescription = null, modifier.size(size))
+    val star = assetImage("star.webp")
+    if (star == null) Spacer(modifier.size(size)) else Image(star, contentDescription = null, modifier.size(size))
 }
 
 /**
