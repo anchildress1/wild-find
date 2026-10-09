@@ -69,13 +69,20 @@ fun FoundScreen(info: FoundInfo, crop: Pixels?, onNext: () -> Unit, onHunt: () -
             Medallion(crop, info.name, Modifier.align(Alignment.TopEnd).padding(end = 12.dp, top = 10.dp))
             // Briar cheers in front of the photo; only the star sits above him.
             Briar(BriarState.FOUND, briarText(BriarState.FOUND), Modifier.align(Alignment.BottomStart))
-            // Every win looks the same, the grass practice included.
+            // Every win looks the same, the grass practice included, but practice earns no star, so TalkBack says none.
             val star = stringResource(R.string.one_star)
-            Star(76.dp, Modifier.align(Alignment.TopEnd).semantics { contentDescription = star }.pop(index = 2))
+            val said = if (info.tutorial) Modifier else Modifier.semantics { contentDescription = star }
+            Star(76.dp, Modifier.align(Alignment.TopEnd).then(said).pop(index = 2))
         }
         Column(Modifier.fillMaxWidth().rise(index = 3), horizontalAlignment = Alignment.CenterHorizontally) {
             Text(countdown(info), style = MaterialTheme.typography.titleSmall, textAlign = TextAlign.Center)
-            Text(stringResource(R.string.plus_star), style = MaterialTheme.typography.bodyLarge, color = Palette.Ink2)
+            if (!info.tutorial) {
+                Text(
+                    stringResource(R.string.plus_star),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = Palette.Ink2,
+                )
+            }
         }
     }
 }
