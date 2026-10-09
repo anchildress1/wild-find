@@ -43,13 +43,8 @@ class InatClient(private val now: () -> Instant = Instant::now, private val fetc
          */
         data class RateLimited(val retryAfterSeconds: Long?) : Pull
 
-        /**
-         * No usable answer: no signal, a server error, or a malformed body.
-         *
-         * @property reason what went wrong, for the debug log
-         * @property cause the exception behind it, if any
-         */
-        data class Failed(val reason: String, val cause: Throwable? = null) : Pull
+        /** No usable answer: no signal, a server error, or a malformed body. */
+        data object Failed : Pull
     }
 
     /** Runs [query], fetching only the pages its first page's total needs. */
@@ -75,21 +70,21 @@ class InatClient(private val now: () -> Instant = Instant::now, private val fetc
     private fun page(query: SpeciesCountsQuery, page: Int): Step {
         val response = try {
             fetch(query.url(page))
-        } catch (e: IOException) {
-            return Stop(Pull.Failed("page $page: no response", e))
+        } catch (ignored: IOException) {
+            return Stop(Pull.Failed)
         }
         return when (response.code) {
-            HttpURLConnection.HTTP_OK -> parse(response.body, page)
+            HttpURLConnection.HTTP_OK -> parse(response.body)
 
             HTTP_TOO_MANY_REQUESTS -> Stop(
                 Pull.RateLimited(SpeciesCountsQuery.retryAfterSeconds(response.retryAfter, now())),
             )
 
-            else -> Stop(Pull.Failed("page $page: HTTP ${response.code}"))
+            else -> Stop(Pull.Failed)
         }
     }
 
-    private fun parse(body: String, page: Int): Step = try {
+    private fun parse(body: String): Step = try {
         val json = JSONObject(body)
         val results = json.getJSONArray("results")
         Page(
@@ -101,8 +96,8 @@ class InatClient(private val now: () -> Instant = Instant::now, private val fetc
                 Sighting(taxon.getString("name"), common, result.getInt("count"))
             },
         )
-    } catch (e: JSONException) {
-        Stop(Pull.Failed("page $page: malformed body", e))
+    } catch (ignored: JSONException) {
+        Stop(Pull.Failed)
     }
 
     private sealed interface Step

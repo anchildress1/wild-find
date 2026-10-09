@@ -61,13 +61,11 @@ class InatClientTest {
     fun rateLimitsErrorsAndBadBodiesStopThePull() {
         assertEquals(InatClient.Pull.RateLimited(30), client(InatClient.Response(429, "30", "")).pull(query))
         assertEquals(
-            InatClient.Pull.Failed("page 2: HTTP 503"),
+            InatClient.Pull.Failed,
             client(page(900, result("A a", "a", 3)), InatClient.Response(503, null, "")).pull(query),
         )
-        assertEquals(true, client(InatClient.Response(200, null, "<html>")).pull(query) is InatClient.Pull.Failed)
-        assertEquals(true, client(InatClient.Response(200, null, "{}")).pull(query) is InatClient.Pull.Failed)
-        val offline = InatClient { throw IOException("offline") }.pull(query) as InatClient.Pull.Failed
-        assertEquals("page 1: no response", offline.reason)
-        assertEquals("offline", offline.cause?.message)
+        assertEquals(InatClient.Pull.Failed, client(InatClient.Response(200, null, "<html>")).pull(query))
+        assertEquals(InatClient.Pull.Failed, client(InatClient.Response(200, null, "{}")).pull(query))
+        assertEquals(InatClient.Pull.Failed, InatClient { throw IOException("offline") }.pull(query))
     }
 }
