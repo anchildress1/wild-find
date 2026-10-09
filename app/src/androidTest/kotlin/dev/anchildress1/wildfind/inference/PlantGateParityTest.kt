@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import dev.anchildress1.wildfind.core.verify.PlantGate
-import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -15,11 +14,7 @@ import kotlin.math.sqrt
 @RunWith(AndroidJUnit4::class)
 class PlantGateParityTest {
     private val instrumentation = InstrumentationRegistry.getInstrumentation()
-    private val reference = JSONObject(
-        instrumentation.context.assets.open("reference/plant_gate_reference.json").bufferedReader().use {
-            it.readText()
-        },
-    )
+    private val reference = instrumentation.context.assets.readJson("reference/plant_gate_reference.json")
     private val bundled = BundledAssets(instrumentation.targetContext.assets)
 
     @Test
