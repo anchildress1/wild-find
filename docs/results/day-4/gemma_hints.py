@@ -5,15 +5,16 @@ Run from the repo root with Ollama serving and every model already pulled (`olla
 
     uv --project pipeline run python -I docs/results/day-4/gemma_hints.py gemma4:e2b gemma4:12b
 
-Two arms per model, one hint per target in each:
+Each plant gets three hints: place (what kind of place), light (sun or shade), ground (wet or dry, soil).
+Two arms per model, one set of three per target in each:
   name_only  the scientific name alone, as Day 2 did (docs/results/day-2/gemma_describe.py), now for where to look.
-  grounded   the name plus sentences pulled from the plant's English Wikipedia article; the model must copy one
-             sentence from them as evidence, or answer null when they don't say where the plant grows.
+  grounded   the name plus sentences pulled from the plant's English Wikipedia article; for each hint the model must
+             copy one sentence from them as evidence, or answer null when they don't say.
 
 Targets are Day 2's 20 most-seen West Georgia October species that are in the species table and not toxic-flagged,
 so Day 2's E2B grades still compare. Writes gemma_hints.csv and gemma_hints.log next to this file.
 
-The automatic checks catch made-up sources, banned words, name leaks, and length. They can't tell whether the hint
+The automatic checks catch made-up sources, banned words, name leaks, and length. They can't tell whether a hint
 follows from its evidence, so grading against the article stays a person's (or Claude's) job.
 """
 
@@ -39,12 +40,13 @@ DAY2 = OUT.parent / "day-2"
 BASE_URL = "http://localhost:11434"
 # Ollama's default context is small and silently cuts a longer prompt, so the probe sets it and checks the prompt fit.
 NUM_CTX = 8192
-MAX_NEW_TOKENS = 160
+MAX_NEW_TOKENS = 400
 # Gemma 4's recommended sampler, as Day 2 used it.
 SAMPLER = {"temperature": 1.0, "top_p": 0.95, "top_k": 64, "seed": 1}
 LEAD_SENTENCES = 2
 MAX_EXCERPT_SENTENCES = 30
-MAX_WORDS = 25
+MAX_WORDS = 20
+ASPECTS = ("place", "light", "ground")
 # Sentences that can say where a plant grows; the excerpt keeps the first MAX_EXCERPT_SENTENCES in article order.
 SETTING = re.compile(
     r"\b(?:grow\w*|habitat\w*|found|occurs?|native|range|prefers?|thrives?|inhabit\w*|forest\w*|woodland\w*|"
@@ -57,34 +59,71 @@ SETTING = re.compile(
 ACTIONS = re.compile(r"\b(?:eat|eating|eaten|touch|touching|pick|picking|taste|tasting)\b", re.I)
 
 RULES = """# Task
-Tell a child, age 8, where to look outdoors to find a plant.
+Tell a child, age 8, where to look outdoors to find a plant. Give three hints.
+
+# Hints
+- "place": what kind of place (woods, lawn, stream bank, roadside, field edge).
+- "light": how much sun (full sun, part shade, deep shade).
+- "ground": wet or dry ground, and the soil if it matters.
 
 # Rules
-- One sentence, 20 words or fewer, in easy words.
-- Say only where it grows: the kind of place, sun or shade, wet or dry ground.
+- Each hint is one sentence, 15 words or fewer, in easy words.
 - Never write the plant's name. Never mention eating, touching, or picking."""
-NAME_ONLY = RULES + "\n\n# Output\nThe sentence only."
+NAME_ONLY = (
+    RULES
+    + """
+
+# Output
+JSON with the fields "place", "light", "ground", each a sentence."""
+)
 GROUNDED = (
     RULES
     + """
 
 # Source
-You get sentences from the plant's Wikipedia article. Use only what they say. If they do not say where the plant
-grows, answer null for both fields. Never add anything from memory.
+You get sentences from the plant's Wikipedia article. Use only what they say. If they do not say, answer null for
+that hint's sentence and its evidence. Never add anything from memory.
 
 # Output
-JSON with two fields: "hint" (your sentence, or null) and "evidence" (one sentence copied word for word from the
-article sentences, or null)."""
+JSON with the fields "place", "light", "ground". Each is an object with "hint" (your sentence, or null) and
+"evidence" (one sentence copied word for word from the article sentences, or null)."""
 )
-SCHEMA = {
+_TEXT = {"type": ["string", "null"]}
+SCHEMA_NAME_ONLY = {
     "type": "object",
-    "properties": {"hint": {"type": ["string", "null"]}, "evidence": {"type": ["string", "null"]}},
-    "required": ["hint", "evidence"],
+    "properties": {a: {"type": "string"} for a in ASPECTS},
+    "required": list(ASPECTS),
+}
+SCHEMA_GROUNDED = {
+    "type": "object",
+    "properties": {
+        a: {"type": "object", "properties": {"hint": _TEXT, "evidence": _TEXT}, "required": ["hint", "evidence"]}
+        for a in ASPECTS
+    },
+    "required": list(ASPECTS),
 }
 # Few-shot pairs outside the test set, showing the output shape for the name-only arm.
 EXAMPLES = [
-    ("Taraxacum officinale", "Look in sunny lawns, along roadsides, and in the cracks of sidewalks."),
-    ("Trifolium repens", "Look in lawns and grassy parks where the grass is kept short."),
+    (
+        "Taraxacum officinale",
+        json.dumps(
+            {
+                "place": "Look in lawns, along roadsides, and in sidewalk cracks.",
+                "light": "It likes open, sunny spots.",
+                "ground": "It grows in dry or average soil.",
+            }
+        ),
+    ),
+    (
+        "Trifolium repens",
+        json.dumps(
+            {
+                "place": "Look in lawns and grassy parks.",
+                "light": "It grows in sun or light shade.",
+                "ground": "It likes ground that stays a little damp.",
+            }
+        ),
+    ),
 ]
 
 
@@ -110,7 +149,7 @@ def squash(text: str) -> str:
 
 
 def issues(hint: str | None, evidence: str | None, article: str | None, target: dict, grounded: bool) -> list[str]:
-    """Every automatic check the reply fails; empty when it passes. A null hint is an abstention, not a failure."""
+    """Every automatic check one hint fails; empty when it passes. A null hint is an abstention, not a failure."""
     if hint is None:
         return []
     found = []
@@ -127,7 +166,7 @@ def issues(hint: str | None, evidence: str | None, article: str | None, target: 
     return found
 
 
-def chat(base_url: str, model: str, system: str, shots: list[tuple[str, str]], user: str, schema: dict | None) -> dict:
+def chat(base_url: str, model: str, system: str, shots: list[tuple[str, str]], user: str, schema: dict) -> dict:
     """One Ollama chat turn (native API, so num_ctx is honored); returns the reply text, prompt tokens, and seconds."""
     messages = [{"role": "system", "content": system}]
     for question, answer in shots:
@@ -137,10 +176,9 @@ def chat(base_url: str, model: str, system: str, shots: list[tuple[str, str]], u
         "model": model,
         "messages": messages,
         "stream": False,
+        "format": schema,
         "options": {**SAMPLER, "num_ctx": NUM_CTX, "num_predict": MAX_NEW_TOKENS},
     }
-    if schema:
-        body["format"] = schema
     request = urllib.request.Request(
         f"{base_url}/api/chat", json.dumps(body).encode(), {"Content-Type": "application/json"}
     )
@@ -154,23 +192,33 @@ def chat(base_url: str, model: str, system: str, shots: list[tuple[str, str]], u
     }
 
 
+def parse(text: str, grounded: bool) -> dict[str, tuple[str | None, str | None]]:
+    """Reply JSON to {aspect: (hint, evidence)}; an unreadable reply gives null hints, logged as abstained."""
+    try:
+        data = json.loads(text)
+    except json.JSONDecodeError:
+        return {a: (None, None) for a in ASPECTS}
+    out = {}
+    for aspect in ASPECTS:
+        value = data.get(aspect) if isinstance(data, dict) else None
+        if grounded:
+            value = value if isinstance(value, dict) else {}
+            out[aspect] = (value.get("hint") or None, value.get("evidence") or None)
+        else:
+            out[aspect] = (value if isinstance(value, str) and value else None, None)
+    return out
+
+
 def ask(base_url: str, model: str, arm: str, target: dict, article: dict | None) -> dict:
     """Run one target through one arm and return its CSV row, checks included."""
     grounded = arm == "grounded"
     shown = excerpt(article["text"]) if grounded and article else ""
     if grounded:
         user = f"Plant: {target['name']}\n\nArticle sentences:\n{shown or '(no article found)'}"
-        reply = chat(base_url, model, GROUNDED, [], user, SCHEMA)
-        try:
-            parsed = json.loads(reply["text"])
-            hint, evidence = parsed.get("hint") or None, parsed.get("evidence") or None
-        except json.JSONDecodeError:
-            hint, evidence = reply["text"], None
+        reply = chat(base_url, model, GROUNDED, [], user, SCHEMA_GROUNDED)
     else:
-        reply = chat(base_url, model, NAME_ONLY, EXAMPLES, target["name"], None)
-        hint, evidence = reply["text"], None
-    found = issues(hint, evidence, article["text"] if article else None, target, grounded)
-    return {
+        reply = chat(base_url, model, NAME_ONLY, EXAMPLES, target["name"], SCHEMA_NAME_ONLY)
+    row = {
         "model": model,
         "arm": arm,
         "scientific": target["name"],
@@ -181,11 +229,16 @@ def ask(base_url: str, model: str, arm: str, target: dict, article: dict | None)
         "cut_off": reply["prompt_tokens"] >= NUM_CTX - 8,
         "excerpt_chars": len(shown),
         "article_revid": article["revid"] if article else "",
-        "hint": hint or "",
-        "evidence": evidence or "",
-        "abstained": hint is None,
-        "issues": "; ".join(found),
     }
+    for aspect, (hint, evidence) in parse(reply["text"], grounded).items():
+        found = issues(hint, evidence, article["text"] if article else None, target, grounded)
+        row |= {
+            f"{aspect}_hint": hint or "",
+            f"{aspect}_evidence": evidence or "",
+            f"{aspect}_abstained": hint is None,
+            f"{aspect}_issues": "; ".join(found),
+        }
+    return row
 
 
 def digests(base_url: str) -> dict[str, str]:
@@ -204,22 +257,37 @@ def chip() -> str:
         return platform.platform()
 
 
+def hints_of(row: dict) -> list[dict]:
+    """The three hints in a row as {aspect, hint, abstained, issues} dicts."""
+    return [
+        {
+            "aspect": a,
+            "hint": row[f"{a}_hint"],
+            "abstained": row[f"{a}_abstained"],
+            "issues": row[f"{a}_issues"],
+        }
+        for a in ASPECTS
+    ]
+
+
 def summary(rows: list[dict]) -> list[str]:
-    """One line per model and arm: how many hints, abstentions, and clean passes, and the median time."""
+    """One line per model and arm: hints written, abstained, clean, fake evidence, and the median time per target."""
     lines = []
     for model in dict.fromkeys(r["model"] for r in rows):
         for arm in ("name_only", "grounded"):
             part = [r for r in rows if r["model"] == model and r["arm"] == arm]
             if not part:
                 continue
-            hints = [r for r in part if not r["abstained"]]
-            clean = [r for r in hints if not r["issues"]]
-            fake = [r for r in hints if "evidence not in article" in r["issues"]]
+            slots = [h for r in part for h in hints_of(r)]
+            written = [h for h in slots if not h["abstained"]]
+            clean = [h for h in written if not h["issues"]]
+            fake = [h for h in written if "evidence not in article" in h["issues"]]
+            full = [r for r in part if not any(h["abstained"] for h in hints_of(r))]
             cut = [r for r in part if r["cut_off"]]
             lines.append(
-                f"{model:<14} {arm:<9} targets {len(part)}, hints {len(hints)}, abstained {len(part) - len(hints)}, "
-                f"clean {len(clean)}, fake evidence {len(fake)}, prompts cut {len(cut)}, "
-                f"median {median(r['seconds'] for r in part):.1f}s"
+                f"{model:<14} {arm:<9} targets {len(part)}, all 3 hints {len(full)}, "
+                f"hints {len(written)}/{len(slots)}, clean {len(clean)}, fake evidence {len(fake)}, "
+                f"prompts cut {len(cut)}, median {median(r['seconds'] for r in part):.1f}s"
             )
     return lines
 
@@ -256,10 +324,11 @@ def main() -> int:
             for target in chosen:
                 row = ask(args.base_url, model, arm, target, wiki[target["name"]])
                 rows.append(row)
-                shown = row["hint"] or "(abstained)"
-                flag = f"  [{row['issues']}]" if row["issues"] else ""
-                log.append(f"{model} {arm} {target['name']} ({target['common']}): {shown}{flag}")
-                print(log[-1], flush=True)
+                log.append(f"{model} {arm} {target['name']} ({target['common']}):")
+                for h in hints_of(row):
+                    flag = f"  [{h['issues']}]" if h["issues"] else ""
+                    log.append(f"    {h['aspect']:<6} {h['hint'] or '(abstained)'}{flag}")
+                print("\n".join(log[-4:]), flush=True)
     log += ["", *summary(rows)]
     log.append("# Grades go in gemma_hints_grades.csv: each hint judged against its article.")
     (OUT / "gemma_hints.log").write_text("\n".join(log) + "\n")
