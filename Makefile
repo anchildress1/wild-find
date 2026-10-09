@@ -84,7 +84,7 @@ synonyms:
 plant-types:
 	$(UV) run --group reference python -W error -m wild_find_pipeline.plant_types
 
-# Rebuilds the committed pipeline/data/descriptions.json: a kid-level sentence per row from USDA PLANTS traits.
+# Rebuilds the committed pipeline/data/descriptions.json: a generic type sentence per row.
 descriptions:
 	$(UV) run --group reference python -W error -m wild_find_pipeline.descriptions
 
