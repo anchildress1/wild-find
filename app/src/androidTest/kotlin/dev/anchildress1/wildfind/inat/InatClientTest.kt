@@ -3,6 +3,7 @@ package dev.anchildress1.wildfind.inat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dev.anchildress1.wildfind.core.cache.CacheKey
 import dev.anchildress1.wildfind.core.hunt.Sighting
+import dev.anchildress1.wildfind.core.inat.Pull
 import dev.anchildress1.wildfind.core.inat.SpeciesCountsQuery
 import dev.anchildress1.wildfind.core.region.RegionKey
 import org.junit.Assert.assertEquals
@@ -39,7 +40,7 @@ class InatClientTest {
         val pull = client(page(2, result("Quercus nigra", "water oak", 72), result("Carex", null, 9))).pull(query)
 
         assertEquals(
-            InatClient.Pull.Pulled(listOf(Sighting("Quercus nigra", "water oak", 72), Sighting("Carex", null, 9))),
+            Pull.Pulled(listOf(Sighting("Quercus nigra", "water oak", 72), Sighting("Carex", null, 9))),
             pull,
         )
         assertEquals(listOf(query.url(1)), asked)
@@ -53,19 +54,19 @@ class InatClientTest {
             page(1038, result("C c", "c", 1)),
         ).pull(query)
 
-        assertEquals(3, (pull as InatClient.Pull.Pulled).sightings.size)
+        assertEquals(3, (pull as Pull.Pulled).sightings.size)
         assertEquals(listOf(query.url(1), query.url(2), query.url(3)), asked)
     }
 
     @Test
     fun rateLimitsErrorsAndBadBodiesStopThePull() {
-        assertEquals(InatClient.Pull.RateLimited(30), client(InatClient.Response(429, "30", "")).pull(query))
+        assertEquals(Pull.RateLimited(30), client(InatClient.Response(429, "30", "")).pull(query))
         assertEquals(
-            InatClient.Pull.Failed,
+            Pull.Failed,
             client(page(900, result("A a", "a", 3)), InatClient.Response(503, null, "")).pull(query),
         )
-        assertEquals(InatClient.Pull.Failed, client(InatClient.Response(200, null, "<html>")).pull(query))
-        assertEquals(InatClient.Pull.Failed, client(InatClient.Response(200, null, "{}")).pull(query))
-        assertEquals(InatClient.Pull.Failed, InatClient { throw IOException("offline") }.pull(query))
+        assertEquals(Pull.Failed, client(InatClient.Response(200, null, "<html>")).pull(query))
+        assertEquals(Pull.Failed, client(InatClient.Response(200, null, "{}")).pull(query))
+        assertEquals(Pull.Failed, InatClient { throw IOException("offline") }.pull(query))
     }
 }

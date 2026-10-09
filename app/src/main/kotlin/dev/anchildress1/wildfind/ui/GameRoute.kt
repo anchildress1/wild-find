@@ -25,14 +25,14 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import dev.anchildress1.wildfind.R
 import dev.anchildress1.wildfind.WildFindApp
+import dev.anchildress1.wildfind.core.game.GameEffect
+import dev.anchildress1.wildfind.core.game.GameEvent
+import dev.anchildress1.wildfind.core.game.GameState
+import dev.anchildress1.wildfind.core.game.Screen
 import dev.anchildress1.wildfind.core.hunt.PlantType
 import dev.anchildress1.wildfind.core.map.Places
 import dev.anchildress1.wildfind.core.map.WorldMap
-import dev.anchildress1.wildfind.game.GameEffect
-import dev.anchildress1.wildfind.game.GameEvent
-import dev.anchildress1.wildfind.game.GameState
 import dev.anchildress1.wildfind.game.GameViewModel
-import dev.anchildress1.wildfind.game.Screen
 import dev.anchildress1.wildfind.ui.theme.LocalReducedMotion
 import dev.anchildress1.wildfind.ui.theme.Motion
 

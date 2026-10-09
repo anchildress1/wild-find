@@ -57,10 +57,10 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import dev.anchildress1.wildfind.R
 import dev.anchildress1.wildfind.camera.CaptureVerifier
 import dev.anchildress1.wildfind.camera.Viewfinder
+import dev.anchildress1.wildfind.core.game.CameraState
 import dev.anchildress1.wildfind.core.hunt.PlantType
 import dev.anchildress1.wildfind.core.sprite.BriarState
 import dev.anchildress1.wildfind.core.verify.CaptureCue
-import dev.anchildress1.wildfind.game.CameraState
 import dev.anchildress1.wildfind.ui.theme.Motion
 import dev.anchildress1.wildfind.ui.theme.Palette
 import java.util.concurrent.Executor

@@ -1,6 +1,7 @@
 package dev.anchildress1.wildfind.inat
 
 import dev.anchildress1.wildfind.core.hunt.Sighting
+import dev.anchildress1.wildfind.core.inat.Pull
 import dev.anchildress1.wildfind.core.inat.SpeciesCountsQuery
 import org.json.JSONException
 import org.json.JSONObject
@@ -26,26 +27,6 @@ class InatClient(private val now: () -> Instant = Instant::now, private val fetc
      * @property body the response body; empty unless the code is 200
      */
     data class Response(val code: Int, val retryAfter: String?, val body: String)
-
-    /** What one query returned. */
-    sealed interface Pull {
-        /**
-         * Every species the query returned.
-         *
-         * @property sightings one per taxon, any rank; only species ever match the table
-         */
-        data class Pulled(val sightings: List<Sighting>) : Pull
-
-        /**
-         * iNat answered 429.
-         *
-         * @property retryAfterSeconds the wait it asked for, or null when it gave none
-         */
-        data class RateLimited(val retryAfterSeconds: Long?) : Pull
-
-        /** No usable answer: no signal, a server error, or a malformed body. */
-        data object Failed : Pull
-    }
 
     /** Runs [query], fetching only the pages its first page's total needs. */
     fun pull(query: SpeciesCountsQuery): Pull {

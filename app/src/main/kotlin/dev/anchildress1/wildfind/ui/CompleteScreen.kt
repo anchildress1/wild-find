@@ -23,8 +23,8 @@ import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.anchildress1.wildfind.R
+import dev.anchildress1.wildfind.core.game.Stop
 import dev.anchildress1.wildfind.core.sprite.BriarState
-import dev.anchildress1.wildfind.game.Stop
 import dev.anchildress1.wildfind.ui.theme.Palette
 
 /** R15: the stars pop in, the hunt's stops show what was found, then Hunt Again or Home; also after Finish hunt. */

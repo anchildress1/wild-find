@@ -44,12 +44,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import dev.anchildress1.wildfind.R
+import dev.anchildress1.wildfind.core.game.MapFocus
 import dev.anchildress1.wildfind.core.map.Heading
 import dev.anchildress1.wildfind.core.map.MapCamera
 import dev.anchildress1.wildfind.core.map.Places
 import dev.anchildress1.wildfind.core.map.WorldMap
 import dev.anchildress1.wildfind.core.region.RegionKey
-import dev.anchildress1.wildfind.game.MapFocus
 import dev.anchildress1.wildfind.ui.theme.LocalReducedMotion
 import dev.anchildress1.wildfind.ui.theme.Motion
 import dev.anchildress1.wildfind.ui.theme.Palette

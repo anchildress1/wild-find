@@ -1,0 +1,534 @@
+package dev.anchildress1.wildfind.core.game
+
+import dev.anchildress1.wildfind.core.frame.Pixels
+import dev.anchildress1.wildfind.core.hunt.ActiveHunt
+import dev.anchildress1.wildfind.core.hunt.AppFlags
+import dev.anchildress1.wildfind.core.hunt.Eligible
+import dev.anchildress1.wildfind.core.hunt.HuntProgress
+import dev.anchildress1.wildfind.core.hunt.LocalList
+import dev.anchildress1.wildfind.core.hunt.LocalListResult
+import dev.anchildress1.wildfind.core.hunt.SpeciesRow
+import dev.anchildress1.wildfind.core.map.Places
+import dev.anchildress1.wildfind.core.region.RegionKey
+import dev.anchildress1.wildfind.core.verify.CaptureCue
+import dev.anchildress1.wildfind.core.verify.FrameEvidence
+import dev.anchildress1.wildfind.core.verify.FrameResult
+import dev.anchildress1.wildfind.core.verify.StageTimes
+import dev.anchildress1.wildfind.core.verify.Verdict
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertSame
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
+import java.io.File
+import kotlin.random.Random
+
+class GameRulesTest {
+    private val rules = GameRules(Random(7))
+    private val home = RegionKey(34, -85)
+    private val away = RegionKey(40, -74)
+    private val rows = listOf("Quercus", "Acer", "Liquidambar", "Magnolia", "Fagus")
+        .mapIndexed { row, genus ->
+            SpeciesRow("$genus s$row", genus, hazard = false, toxic = false, description = "d$row")
+        }
+    private val targets = listOf(Eligible(0, "oak", 10), Eligible(1, "maple", 10), Eligible(2, "sweetgum", 10))
+    private val queue = listOf(Eligible(3, "magnolia", 5), Eligible(4, "beech", 5))
+    private val crop = Pixels(1, 1, IntArray(1))
+
+    private fun hunt(tutorial: Boolean = false, found: Set<Int> = emptySet(), queue: List<Eligible> = this.queue) =
+        ActiveHunt(HuntProgress(tutorial, targets, found, queue), home, (targets + queue).map { it.row }, emptyList())
+
+    private fun playing(screen: Screen, hunt: ActiveHunt? = hunt(), flags: AppFlags = flags()) =
+        Game(GameState(screen = screen, region = flags.region), flags, hunt, rows)
+
+    private fun flags(region: RegionKey? = home) = AppFlags(openerSeen = true, tutorialDone = true, region = region)
+
+    // Every input in order, with all their commands.
+    private fun Game.after(vararg inputs: GameInput): Step = inputs.fold(Step(this, emptyList())) { step, input ->
+        rules.reduce(step.game, input).let { Step(it.game, step.commands + it.commands) }
+    }
+
+    private fun frame(camera: Screen.Camera, session: Int, verdict: Verdict, fullShare: Double = 0.0) = Outcome.Frame(
+        camera,
+        session,
+        FrameResult(
+            FrameEvidence(hazard = false, reticlePlant = true, focus = null, goalMet = false),
+            crop,
+            reticleShare = 0.9,
+            fullShare = fullShare,
+            reticleRanking = null,
+            fullRanking = null,
+            goal = null,
+            times = StageTimes(0, 0, 0, 0, 0, 0, 0),
+        ),
+        verdict,
+    )
+
+    private fun local(eligible: List<Eligible>) =
+        LocalListResult.Ready(LocalList(eligible, intArrayOf(), needsWiden = false))
+
+    @Test
+    fun `first launch plays the opener, and Let's go saves it and asks for an area`() {
+        val launched = Game().after(Outcome.FlagsRead(AppFlags()))
+        assertEquals(Screen.Opener(back = null), launched.game.ui.screen)
+        assertEquals(listOf(Command.Relabel), launched.commands)
+
+        val done = launched.game.after(GameEvent.OpenerDone)
+        assertEquals(Screen.Region(back = null), done.game.ui.screen)
+        assertEquals(listOf(Command.SaveFlags(AppFlags(openerSeen = true))), done.commands)
+    }
+
+    @Test
+    fun `a later launch restores the area and reads the saved hunt`() {
+        val flags = AppFlags(openerSeen = true, region = home, locationDenied = true)
+        val step = Game().after(Outcome.FlagsRead(flags))
+
+        assertEquals(Screen.Loading, step.game.ui.screen)
+        assertEquals(home, step.game.ui.region)
+        assertTrue(step.game.ui.locationFailed)
+        assertEquals(listOf(Command.Relabel, Command.ReadHunt), step.commands)
+    }
+
+    @Test
+    fun `a saved hunt resumes on its tutorial, its list, or its stars, and none means Start`() {
+        val loading = Game(flags = flags()).after(Outcome.ModelsReady(rows)).game
+
+        assertEquals(Screen.Start, loading.after(Outcome.SavedHunt(null)).game.ui.screen)
+        assertEquals(Screen.Tutorial, loading.after(Outcome.SavedHunt(hunt(tutorial = true))).game.ui.screen)
+        assertEquals(Screen.Complete, loading.after(Outcome.SavedHunt(hunt(found = setOf(0, 1, 2)))).game.ui.screen)
+
+        val resumed = loading.after(Outcome.SavedHunt(hunt(found = setOf(1))))
+        assertEquals(Screen.Hunt, resumed.game.ui.screen)
+        assertEquals(listOf(Command.UseVerifier(setOf(0, 1, 2, 3, 4))), resumed.commands)
+        assertEquals(
+            listOf(
+                Stop(0, "oak", null, found = false, description = "d0", canSkip = true),
+                Stop(1, "maple", null, found = true, description = "d1", canSkip = false),
+                Stop(2, "sweetgum", null, found = false, description = "d2", canSkip = true),
+            ),
+            resumed.game.ui.stops,
+        )
+    }
+
+    @Test
+    fun `the models flip the camera ready`() {
+        val step = Game().after(Outcome.ModelsReady(rows))
+
+        assertTrue(step.game.ui.camera.ready)
+        assertEquals(rows, step.game.rows)
+    }
+
+    @Test
+    fun `the area label names the place, and stays empty without an area`() {
+        val file = File("../app/generated/assets/places.bin")
+        check(file.isFile) { "$file missing; run make assets" }
+        val places = Places.parse(file.readBytes())
+
+        assertEquals(
+            Places.label(home, places.nameAt(home)),
+            playing(Screen.Hunt).after(Outcome.PlacesRead(places)).game.ui.regionLabel,
+        )
+        assertNull(Game().after(Outcome.PlacesRead(places)).game.ui.regionLabel)
+    }
+
+    @Test
+    fun `a replayed opener's Done returns where it came from and saves nothing`() {
+        val step = playing(Screen.GrownUps(from = Screen.Hunt)).after(GameEvent.ReplayOpener, GameEvent.OpenerDone)
+
+        assertEquals(Screen.GrownUps(from = Screen.Hunt), step.game.ui.screen)
+        assertEquals(emptyList<Command>(), step.commands)
+    }
+
+    @Test
+    fun `Back returns along each screen's way in, and does nothing where there is none`() {
+        val grownUps = Screen.GrownUps(from = Screen.Hunt)
+        listOf(
+            Screen.Opener(back = grownUps) to grownUps,
+            Screen.Opener(back = null) to Screen.Opener(back = null),
+            Screen.Region(back = grownUps) to grownUps,
+            Screen.Region(back = null) to Screen.Region(back = null),
+            Screen.Map(back = Screen.Start) to Screen.Start,
+            Screen.Map(back = null) to Screen.Map(back = null),
+            grownUps to Screen.Hunt,
+            Screen.Hunt to Screen.Hunt,
+            Screen.Loading to Screen.Loading,
+        ).forEach { (from, to) -> assertEquals(to, playing(from).after(GameEvent.Back).game.ui.screen, "$from") }
+    }
+
+    @Test
+    fun `Back from the camera leaves for the list or the tutorial and drops the capture`() {
+        val step = playing(Screen.Camera(0)).after(GameEvent.Back)
+        assertEquals(Screen.Hunt, step.game.ui.screen)
+        assertEquals(listOf(Command.CancelCapture), step.commands)
+        assertEquals(1, step.game.session)
+
+        val tutorial = playing(Screen.Camera(null), hunt(tutorial = true)).after(GameEvent.Back)
+        assertEquals(Screen.Tutorial, tutorial.game.ui.screen)
+    }
+
+    @Test
+    fun `Back from the last find goes to the stars, from any other find to the list`() {
+        assertEquals(
+            Screen.Complete,
+            playing(Screen.Found(2), hunt(found = setOf(0, 1, 2))).after(GameEvent.Back).game.ui.screen,
+        )
+        assertEquals(Screen.Hunt, playing(Screen.Found(1), hunt(found = setOf(1))).after(GameEvent.Back).game.ui.screen)
+    }
+
+    @Test
+    fun `Back from the stars goes home and forgets the hunt`() {
+        val step = playing(Screen.Complete).after(GameEvent.Back)
+
+        assertEquals(Screen.Start, step.game.ui.screen)
+        assertNull(step.game.hunt)
+        assertEquals(emptyList<Stop>(), step.game.ui.stops)
+        assertEquals(listOf(Command.UseVerifier(null), Command.ClearHunt), step.commands)
+    }
+
+    @Test
+    fun `confirming the area already set goes back where the kid came from, with no new pull`() {
+        val grownUps = Screen.GrownUps(from = Screen.Hunt)
+        listOf(
+            Screen.Region(back = grownUps) to grownUps,
+            Screen.Map(back = Screen.Region(back = grownUps)) to grownUps,
+            Screen.Map(back = grownUps) to grownUps,
+        ).forEach { (from, to) ->
+            val step = playing(from).after(GameEvent.PickRegion(home))
+            assertEquals(to, step.game.ui.screen, "$from")
+            assertEquals(emptyList<Command>(), step.commands, "$from")
+            assertNotNull(step.game.hunt)
+        }
+    }
+
+    @Test
+    fun `a new area, or the same one with nowhere to go back, ends the hunt and pulls`() {
+        listOf(
+            playing(Screen.Region(back = Screen.GrownUps(Screen.Hunt))) to away,
+            playing(Screen.Map(back = Screen.Region(back = null))) to home,
+        ).forEach { (game, region) ->
+            val step = game.after(GameEvent.PickRegion(region))
+
+            assertEquals(Screen.Loading, step.game.ui.screen)
+            assertEquals(region, step.game.ui.region)
+            assertEquals(region, step.game.flags.region)
+            assertNull(step.game.hunt)
+            assertEquals(
+                listOf(
+                    Command.SaveFlags(flags(region)),
+                    Command.Relabel,
+                    Command.UseVerifier(null),
+                    Command.ClearHunt,
+                    Command.Pull(region),
+                ),
+                step.commands,
+            )
+        }
+    }
+
+    @Test
+    fun `a denied location is saved and sends the area choice to the map`() {
+        val region = Screen.Region(back = null)
+        val step = playing(region, hunt = null).after(GameEvent.LocationAnswer(granted = false))
+
+        assertEquals(Screen.Map(back = region), step.game.ui.screen)
+        assertTrue(step.game.ui.locationFailed)
+        assertEquals(listOf(Command.SaveFlags(flags().copy(locationDenied = true))), step.commands)
+
+        val map = Screen.Map(back = null)
+        assertEquals(map, playing(map).after(GameEvent.LocationAnswer(granted = false)).game.ui.screen)
+    }
+
+    @Test
+    fun `an allowed location asks for a fix, and a fix on the area choice picks it`() {
+        val region = Screen.Region(back = null)
+        val asked = playing(region, hunt = null).after(GameEvent.LocationAnswer(granted = true))
+        assertTrue(asked.game.ui.locating)
+        assertEquals(listOf(Command.Locate(region)), asked.commands)
+
+        val fixed = asked.game.after(Outcome.Located(region, away))
+        assertFalse(fixed.game.ui.locating)
+        assertEquals(Screen.Loading, fixed.game.ui.screen)
+        assertEquals(Command.Pull(away), fixed.commands.last())
+    }
+
+    @Test
+    fun `no fix opens the map from the area choice, and a fix on the map only recenters`() {
+        val region = Screen.Region(back = null)
+        assertEquals(
+            Screen.Map(back = region),
+            playing(region).after(Outcome.Located(region, null)).game.ui.screen,
+        )
+
+        val map = Screen.Map(back = null)
+        val step = playing(map).after(Outcome.Located(map, away), Outcome.Located(map, away))
+        assertEquals(MapFocus(away, 2), step.game.ui.mapFocus)
+        assertEquals(map, step.game.ui.screen)
+        assertEquals(emptyList<Command>(), step.commands)
+    }
+
+    @Test
+    fun `a fix that lands after the kid moved on starts nothing`() {
+        val step = playing(Screen.Hunt).after(Outcome.Located(Screen.Region(back = null), away))
+
+        assertEquals(Screen.Hunt, step.game.ui.screen)
+        assertEquals(emptyList<Command>(), step.commands)
+        assertFalse(step.game.ui.locating)
+    }
+
+    @Test
+    fun `the map opens on the rough location only while that same map is up`() {
+        val opened = playing(Screen.Hunt).after(GameEvent.OpenGrownUps, GameEvent.EditRegion)
+        val map = opened.game.ui.screen as Screen.Map
+        assertEquals(Screen.GrownUps(from = Screen.Hunt), map.back)
+        assertSame(map, (opened.commands.single() as Command.LocateMap).map)
+
+        assertEquals(
+            MapFocus(away, 1, opening = true),
+            opened.game.after(Outcome.MapLocated(map, away)).game.ui.mapFocus,
+        )
+
+        // Left and reopened: an equal map, but not the one that asked.
+        val reopened = opened.game.after(GameEvent.Back, GameEvent.OpenMap).game
+        assertNull(reopened.after(Outcome.MapLocated(map, away)).game.ui.mapFocus)
+    }
+
+    @Test
+    fun `a pull needs an area, and ChangeRegion asks for one`() {
+        assertEquals(
+            Screen.Region(back = null),
+            playing(Screen.NeedsSignal, flags = flags(null)).after(GameEvent.LoadHunt).game.ui.screen,
+        )
+        assertEquals(
+            Screen.Region(back = null),
+            playing(Screen.NotEnough).after(GameEvent.ChangeRegion).game.ui.screen,
+        )
+
+        val step = playing(Screen.NeedsSignal).after(GameEvent.LoadHunt)
+        assertEquals(Screen.Loading, step.game.ui.screen)
+        assertEquals(listOf(Command.Pull(home)), step.commands)
+    }
+
+    @Test
+    fun `a pull with no signal or too few genera says so`() {
+        val loading = playing(Screen.Loading, hunt = null)
+
+        assertEquals(
+            Screen.NeedsSignal,
+            loading.after(Outcome.Pulled(home, LocalListResult.NeedsSignal, offline = true)).game.ui.screen,
+        )
+        assertEquals(
+            Screen.NotEnough,
+            loading.after(Outcome.Pulled(home, LocalListResult.NotEnough, offline = false)).game.ui.screen,
+        )
+        val twoGenera = local(listOf(Eligible(0, "oak", 10), Eligible(1, "maple", 10)))
+        assertEquals(Screen.NotEnough, loading.after(Outcome.Pulled(home, twoGenera, offline = false)).game.ui.screen)
+    }
+
+    @Test
+    fun `a full pull starts and saves a hunt for the area it was pulled for`() {
+        val loading = playing(Screen.Loading, hunt = null, flags = flags().copy(tutorialDone = false))
+        val step = loading.after(Outcome.Pulled(away, local(targets + queue), offline = true))
+        val hunt = checkNotNull(step.game.hunt)
+
+        assertEquals(Screen.Tutorial, step.game.ui.screen)
+        assertEquals(away, hunt.region)
+        assertTrue(hunt.progress.tutorialPending)
+        assertTrue(step.game.ui.offline)
+        assertEquals(3, step.game.ui.stops.size)
+        assertEquals(listOf(Command.UseVerifier(setOf(0, 1, 2, 3, 4)), Command.SaveHunt(hunt)), step.commands)
+
+        val played = playing(Screen.Loading, hunt = null).after(Outcome.Pulled(home, local(targets), offline = false))
+        assertEquals(Screen.Hunt, played.game.ui.screen)
+        assertFalse(played.game.ui.offline)
+    }
+
+    @Test
+    fun `the camera opens fresh on an open target, never on a found one`() {
+        val game = playing(Screen.Hunt, hunt(found = setOf(1))).copy(
+            ui = GameState(screen = Screen.Hunt, camera = CameraState(cue = CaptureCue.GET_CLOSER)),
+        )
+
+        assertEquals(Screen.Hunt, game.after(GameEvent.OpenCamera(1)).game.ui.screen)
+        val opened = game.after(GameEvent.OpenCamera(0)).game.ui
+        assertEquals(Screen.Camera(0), opened.screen)
+        assertEquals(CameraState(ready = true), opened.camera)
+        assertEquals(
+            CameraState(ready = false),
+            game.copy(rows = null).after(GameEvent.OpenCamera(null)).game.ui.camera,
+        )
+    }
+
+    @Test
+    fun `Capture starts a new session only once the verifier takes it`() {
+        val camera = Screen.Camera(0)
+        val game = playing(camera)
+        val tapped = game.after(GameEvent.Capture)
+
+        assertEquals(listOf(Command.Capture(camera, 1, game.hunt!!)), tapped.commands)
+        assertEquals(0, tapped.game.session)
+        assertFalse(tapped.game.ui.camera.checking)
+
+        val started = tapped.game.after(Outcome.CaptureStarted(1)).game
+        assertEquals(1, started.session)
+        assertTrue(started.ui.camera.checking)
+    }
+
+    @Test
+    fun `Capture needs the camera, a hunt, and the models`() {
+        listOf(
+            playing(Screen.Hunt),
+            playing(Screen.Camera(0), hunt = null),
+            playing(Screen.Camera(0)).copy(rows = null),
+        ).forEach { assertEquals(emptyList<Command>(), it.after(GameEvent.Capture).commands) }
+    }
+
+    @Test
+    fun `a frame from an older session or a camera that left changes nothing`() {
+        val camera = Screen.Camera(0)
+        val game = playing(camera).copy(session = 2)
+
+        assertEquals(game, game.after(frame(camera, 1, Verdict.Found)).game)
+        val left = game.copy(ui = game.ui.copy(screen = Screen.Camera(1)))
+        assertEquals(left, left.after(frame(camera, 2, Verdict.Found)).game)
+    }
+
+    @Test
+    fun `matching frames fill the ring and a final verdict sets the cue`() {
+        val camera = Screen.Camera(0)
+        val game = playing(camera).copy(session = 1).after(Outcome.CaptureStarted(1)).game
+
+        assertEquals(2, game.after(frame(camera, 1, Verdict.Matching(2))).game.ui.camera.matched)
+        val missed = game.after(frame(camera, 1, Verdict.NotPlant, fullShare = 0.9))
+        assertEquals(CameraState(checking = false, matched = 0, cue = CaptureCue.PUT_IN_CIRCLE), missed.game.ui.camera)
+        assertEquals(emptyList<Command>(), missed.commands)
+        assertEquals(CaptureCue.POINT_AT_PLANT, game.after(frame(camera, 1, Verdict.NotPlant)).game.ui.camera.cue)
+    }
+
+    @Test
+    fun `a hazard capture buzzes once and stays on the camera`() {
+        val camera = Screen.Camera(0)
+        val step = playing(camera).after(frame(camera, 0, Verdict.Hazard))
+
+        assertEquals(camera, step.game.ui.screen)
+        assertEquals(CaptureCue.HAZARD, step.game.ui.camera.cue)
+        assertEquals(listOf(Command.Haptic(GameEffect.Reject)), step.commands)
+    }
+
+    @Test
+    fun `a found target is saved, starred, and shown with its crop`() {
+        val camera = Screen.Camera(1)
+        val step = playing(camera).after(frame(camera, 0, Verdict.Found))
+        val hunt = step.game.hunt!!
+
+        assertEquals(Screen.Found(1), step.game.ui.screen)
+        assertEquals(setOf(1), hunt.progress.found)
+        assertEquals(1, step.game.ui.stars)
+        assertSame(crop, step.game.ui.crop)
+        assertEquals(
+            listOf(Command.SaveHunt(hunt), Command.Haptic(GameEffect.Confirm), Command.CancelCapture),
+            step.commands,
+        )
+    }
+
+    @Test
+    fun `a found tutorial passes it for good`() {
+        val camera = Screen.Camera(null)
+        val step = playing(camera, hunt(tutorial = true), flags().copy(tutorialDone = false))
+            .after(frame(camera, 0, Verdict.Found))
+
+        assertEquals(Screen.Found(null), step.game.ui.screen)
+        assertFalse(step.game.hunt!!.progress.tutorialPending)
+        assertTrue(step.game.flags.tutorialDone)
+        assertTrue(Command.SaveFlags(step.game.flags) in step.commands)
+    }
+
+    @Test
+    fun `Next after a find opens the next target, the list after the tutorial, or the stars`() {
+        assertEquals(Screen.Hunt, playing(Screen.Found(null)).after(GameEvent.Next).game.ui.screen)
+        assertEquals(
+            Screen.Camera(0),
+            playing(Screen.Found(1), hunt(found = setOf(1))).after(GameEvent.Next).game.ui.screen,
+        )
+        assertEquals(
+            Screen.Complete,
+            playing(Screen.Found(2), hunt(found = setOf(0, 1, 2))).after(GameEvent.Next).game.ui.screen,
+        )
+        assertEquals(Screen.Hunt, playing(Screen.Hunt).after(GameEvent.Next).game.ui.screen)
+        assertEquals(Screen.Found(0), playing(Screen.Found(0), hunt = null).after(GameEvent.Next).game.ui.screen)
+    }
+
+    @Test
+    fun `a skip swaps the target in its own slot and reopens the camera there`() {
+        val step = playing(Screen.Camera(1)).after(GameEvent.Skip)
+        val hunt = step.game.hunt!!
+
+        assertEquals(listOf(0, 3, 2), hunt.progress.targets.map { it.row })
+        assertEquals(Screen.Camera(3), step.game.ui.screen)
+        assertEquals(listOf(0, 3, 2), step.game.ui.stops.map { it.row })
+        assertEquals(2, step.game.session)
+        assertEquals(
+            listOf(Command.CancelCapture, Command.SaveHunt(hunt), Command.CancelCapture),
+            step.commands,
+        )
+    }
+
+    @Test
+    fun `a skip with nothing to swap in keeps the camera on the same target`() {
+        val step = playing(Screen.Camera(1), hunt(queue = emptyList())).after(GameEvent.Skip)
+
+        assertEquals(Screen.Camera(1), step.game.ui.screen)
+        assertEquals(1, step.game.session)
+    }
+
+    @Test
+    fun `skipping the grass tutorial passes it and opens the list`() {
+        val step = playing(Screen.Camera(null), hunt(tutorial = true), flags().copy(tutorialDone = false))
+            .after(GameEvent.Skip)
+
+        assertEquals(Screen.Hunt, step.game.ui.screen)
+        assertFalse(step.game.hunt!!.progress.tutorialPending)
+        assertTrue(step.game.flags.tutorialDone)
+    }
+
+    @Test
+    fun `a skip needs the camera, a hunt, and the models`() {
+        listOf(
+            playing(Screen.Hunt),
+            playing(Screen.Camera(0), hunt = null),
+            playing(Screen.Camera(0)).copy(rows = null),
+        ).forEach { assertEquals(it, it.after(GameEvent.Skip).game) }
+    }
+
+    @Test
+    fun `ending early clears the saved hunt but keeps the stops for the stars`() {
+        val step = Game(flags = flags()).after(Outcome.ModelsReady(rows), Outcome.SavedHunt(hunt())).game
+            .after(GameEvent.FinishHunt)
+
+        assertEquals(Screen.Complete, step.game.ui.screen)
+        assertNotNull(step.game.hunt)
+        assertEquals(3, step.game.ui.stops.size)
+        assertEquals(listOf(Command.ClearHunt), step.commands)
+    }
+
+    @Test
+    fun `Hunt Again forgets the hunt and pulls the same area`() {
+        val game = playing(Screen.Complete).copy(ui = playing(Screen.Complete).ui.copy(offline = true, crop = crop))
+        val step = game.after(GameEvent.HuntAgain)
+
+        assertEquals(Screen.Loading, step.game.ui.screen)
+        assertNull(step.game.hunt)
+        assertNull(step.game.ui.crop)
+        assertFalse(step.game.ui.offline)
+        assertEquals(listOf(Command.UseVerifier(null), Command.ClearHunt, Command.Pull(home)), step.commands)
+    }
+
+    @Test
+    fun `ToHunt and the grown-ups page leave the camera and drop its capture`() {
+        assertEquals(listOf(Command.CancelCapture), playing(Screen.Camera(0)).after(GameEvent.ToHunt).commands)
+        val step = playing(Screen.Camera(0)).after(GameEvent.OpenGrownUps)
+        assertEquals(Screen.GrownUps(from = Screen.Camera(0)), step.game.ui.screen)
+        assertEquals(listOf(Command.CancelCapture), step.commands)
+    }
+}
