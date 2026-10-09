@@ -52,7 +52,7 @@ data class Focus(val afState: Int?, val diopters: Float?, val zoomRatio: Float) 
  * Capture results and analysis frames arrive on different threads; the latest reading can belong to another frame,
  * and unfocused frames park the lens near 0.2 diopters, so a mismatched reading flips "walk closer".
  *
- * @param capacity readings kept; about a second of 30 fps capture results by default
+ * @param capacity readings kept; about five seconds of 30 fps capture results by default
  */
 class FocusTrack(private val capacity: Int = DEFAULT_CAPACITY) {
     private val timestamps = LongArray(capacity)
@@ -78,6 +78,8 @@ class FocusTrack(private val capacity: Int = DEFAULT_CAPACITY) {
     }?.let { readings[it] }
 
     private companion object {
-        const val DEFAULT_CAPACITY = 32
+        // A frame looks up its reading only after inference, and a mid-range phone took up to 1.25 s a frame
+        // (docs/results/day-3/device-moto.log); a short buffer would age the reading out and read as unfocused.
+        const val DEFAULT_CAPACITY = 150
     }
 }

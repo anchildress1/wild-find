@@ -119,6 +119,16 @@ class VerifyTest {
     }
 
     @Test
+    fun `focus track keeps a reading through a slow frame's worth of newer results`() {
+        val track = FocusTrack()
+        track.record(0, close)
+        // 1.25 s of inference at 30 capture results a second, the slowest frame measured on a mid-range phone.
+        for (n in 1..38) track.record(n.toLong(), Focus(1, 0.2f, 1f))
+
+        assertEquals(close, track.at(0))
+    }
+
+    @Test
     fun `focus track starts empty and rejects no capacity`() {
         assertNull(FocusTrack().at(0))
         assertThrows<IllegalArgumentException> { FocusTrack(0) }
