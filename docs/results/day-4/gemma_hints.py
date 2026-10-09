@@ -34,10 +34,10 @@ from datetime import datetime
 from pathlib import Path
 from statistics import median
 
-from wild_find_pipeline import usda
-from wild_find_pipeline.descriptions import BANNED, NOUNS, TRAITS, features, size, usda_traits
-from wild_find_pipeline.descriptions import article as a_an
+from wild_find_pipeline.descriptions import BANNED
 from wild_find_pipeline.hint_rank import PICKS, rank, shares
+from wild_find_pipeline.hint_traits import TRAITS, usda_traits
+from wild_find_pipeline.hint_traits import candidates as trait_hints
 from wild_find_pipeline.paths import PLANT_TYPES, SYNONYMS
 from wild_find_pipeline.toxicity import SENTENCE, TOXICITY, articles
 
@@ -255,20 +255,6 @@ def usda_fallback(aspect: str, names: list[str], facts: dict[str, dict[str, list
     return None
 
 
-def trait_candidates(kind: str | None, traits: dict[str, list[str]]) -> list[dict]:
-    """Size, season and sign hints a kid can check by eye, from USDA traits; the description no longer carries them."""
-    found = {}
-    if big := size(kind, traits):
-        noun = f"{big} {NOUNS.get(kind, 'plant')}"
-        found["size"] = (f"It is {a_an(noun).lower()} {noun}.", big)
-    for phrase, when in features(kind, traits):
-        if when and "season" not in found:
-            found["season"] = (f"Look for {phrase} in {when}.", when)
-        elif not when and "sign" not in found:
-            found["sign"] = (f"Look for {phrase}.", None)
-    return [{"aspect": a, "text": t, "support": "usda", "bucket": b} for a, (t, b) in found.items()]
-
-
 def ask(
     base_url: str, model: str, arm: str, target: dict, article: dict | None, known: tuple[list[str], dict, str | None]
 ) -> tuple[dict, list[dict]]:
@@ -318,7 +304,7 @@ def ask(
             candidates.append({"aspect": aspect, "text": hint, "support": support, "bucket": bucket})
     if grounded:
         traits = next((facts[n] for n in names if n in facts), {})
-        candidates += trait_candidates(kind, traits)
+        candidates += trait_hints(kind, traits)
     return row, candidates
 
 

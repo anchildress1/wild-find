@@ -27,7 +27,7 @@ Now each model does only what data can't, and everything else is a lookup:
 - **What to call it:** the iNaturalist common name in the device language
 - **Is it toxic:** one flag per species-table row, built once from Wikipedia text and USDA PLANTS; no model, because TinyCLIP, its bigger siblings, and the full BioCLIP all scored toxicity near chance (AUC 0.42 to 0.65)
 - **Is it this plant:** BioCLIP, passing at the genus, so a kid's wrong oak still counts
-- **What to look for:** the target's common name and its type (tree, vine, fern…) show from the start, plus a short description templated at build time from USDA PLANTS traits where USDA has any (decided Oct 8); there are no hints
+- **What to look for:** the target's common name and its type (tree, vine, fern…) show from the start, plus a generic one-line description, "A tree." (decided Oct 9: size, color, and season are hints, not description); there are no hints yet
 
 Gemma no longer runs at build time, and fact cards and the Claude fact-check are gone. Every probe behind this is in `docs/results/day-2/`.
 
@@ -93,7 +93,7 @@ Every call below is settled; open items live in Open Questions.
 | Framing | Live camera with a center reticle and a Capture button; verify runs only on a capture; a far subject still passes, and "Get closer or zoom in" shows only when a capture misses and the focused distance in diopters times the zoom ratio is under 2.0; pinch zoom allowed; no capture verdict without a focused reading |
 | Scoring | One star per find; no leave-it star in v1 (R10 dropped Oct 8) |
 | Hints | None. The target's common name and type show from the start of each hunt |
-| Description | Decided Oct 8, since the type alone ("an herb") doesn't help a kid find a plant: one or two short sentences per target, templated at build time from USDA PLANTS traits a kid can see ("A bush with purple fruit in fall."), shown under the name on the hunt list, on the camera top bar, and on Found, and read by TalkBack; no model and no network at app time; never invents a trait; null where USDA has nothing visible, and the type shows alone |
+| Description | Decided Oct 9, replacing the Oct 8 USDA-trait sentences: one generic line per target, the plant type in kid words ("A tree.", "A bush.", "A plant." when the type is unknown), built from plant\_types.json, shown under the name on the hunt list, on the camera top bar, and on Found, and read by TalkBack; no model and no network at app time. Size, flower and fruit color, and season moved to hints (`hint_traits.py`; `hint_rank.py` picks the best three per plant); every row now has a description, so "described first" in Hunt shape no longer separates species until it is repointed at hints |
 | Toxicity flag | Built once on the laptop for every species-table row. A species is flagged when its English Wikipedia article has a sentence with the whole word toxic, toxin, or poison (other plants' names such as poison ivy removed first), when USDA PLANTS rates it moderate or severe, or when it has no article or one under 1,500 characters. Names match through GBIF. Best effort, like hazard detection, never a safety claim; on Oct 7 it flagged 30 of 117 West Georgia species and wrongly dropped about 6 |
 | Location | Two paths. "Use my area": Android coarse location only, asked when the kid taps it and never again after a denial, rounded to whole degrees. "Pick on a map": a built-in Natural Earth map (public domain) drawn on the phone, no tile server, showing land, country borders, and, once zoomed in to area detail (40° across or less), state and province lines; with location already allowed it opens on the rough location, zoomed in enough to pick (a fix that lands after the kid starts moving the map is ignored), else on the whole world; it pans and zooms under fixed crosshairs, snaps to the nearest whole degree on release, unlocks "Hunt here" at about 12° across or less, and offers 1° arrow taps as the no-drag TalkBack path. Decided Oct 8: the area is named, offline. The map chip, the hunt list, and the grown-ups Hunting area read like "34°N, 85°W · Georgia": whole degrees plus the state or province at the region's center from the bundled places.bin, the country where the point misses every state, the degrees alone over water; no geocoding call, so iNaturalist stays the only network peer. A denial goes straight to the map. The device is in a region only when its rounded key equals that region's key; the query always sends the region center, never device coordinates; the rounded hunting area is kept on the phone as an app flag and changed on the map from the grown-ups page |
 | Images | One illustration per plant type (tree, shrub, vine, herb, grass, fern, moss, conifer) in v1; licensed photos in v3 |
@@ -253,7 +253,7 @@ Ten files ship in the app, nothing downloads after install, and every cache entr
 ```json
 [
   { "scientific": "Quercus nigra", "hazard": false, "genus": "Quercus", "toxic": false, "type": "tree",
-    "description": "A tall tree with brown seeds." }
+    "description": "A tree." }
 ]
 ```
 
@@ -410,7 +410,7 @@ Each choice below buys speed or privacy for v1 and names the point where it gets
 | Species-table hazard rule | 17.5 MB more in the APK and one 4,272-row dot product per region; misses 4 of 52 Day-1 hazard photos | Holdout or field test shows a missed hazard rate above 10% |
 | TinyCLIP plant gate before BioCLIP | A third model: about 33 MB in the APK and 40 ms per embedding on the test phone, twice per frame (S06); on the laptop it kept 176 of 176 plant photos and passed 2 of 63 non-plants on the full frame (175 and 3 on the reticle crop) | Holdout non-plant false-pass rate over 5% |
 | Deterministic framing | Approximate focus distance is coarse; clutter inside the reticle can lower the target's score | Holdout false-pass rate over 5% |
-| No language model | No reactive hints; the name, type, and a templated USDA-trait description (where USDA has one) are all the help a kid gets | An on-device model describes local plants accurately (E2B got 4 of 20 right on Oct 7) |
+| No language model | No reactive hints; the name, type, and a generic type description are all the help a kid gets until build-time hints ship | An on-device model describes local plants accurately (E2B got 4 of 20 right on Oct 7) |
 | Live iNaturalist list at app time | Needs signal once per region and month; coarse coordinates and request metadata reach iNaturalist; places with few sightings get fewer targets (Borjomi, Georgia: 9 playable species in October) | A fully offline mode is required |
 | Targets limited to BioCLIP's species table | A common local plant outside the table never becomes a target (West Georgia: 104 of 117 common species in it; Tbilisi: 4 of 6) | A bigger on-device table |
 | Text-based toxicity flag | Best effort: wording varies by article author; wrongly drops about 6 of 117 species; misses toxicity an article never states | An open, structured toxicity source covers the region |
@@ -464,7 +464,7 @@ Two questions block the build; two can wait.
 - [ ] Post: verify Snappit, ForestForay Kids, and SnapScout before naming them as prior art
 - [x] Build: minSdk is 30 (Android 11), decided Oct 8. 34 existed only for the Gemma download job. 30 is the floor that keeps every verify rule as built: the close-range rule reads `CONTROL_ZOOM_RATIO` and the coarse fix uses `getCurrentLocation`, both API 30. Fused location is used from Android 12 up. Untested below Android 16 until an older phone is at hand
 - [ ] Cleanup: delete unused source art once the user says go, with its Visual System rows: `briar-searching-32.png`, `briar-searching-hint-32.png`, and `briar-retry-32.png` (no screen plays them; on hunt pages Briar only warns), `briar-found-32.png` (`briar-winning.mp4` replaced it), and `wild-find-sprite-1.png` (the design canvas replaced it)
-- [x] Product: how does a kid learn what a target looks like? Resolved Oct 7: the target's common name and type (S17); no hints, no fact cards. Oct 8: plus a build-time USDA-trait description (Decisions: Description)
+- [x] Product: how does a kid learn what a target looks like? Resolved Oct 7: the target's common name and type (S17); no hints, no fact cards. Oct 8: plus a build-time USDA-trait description; Oct 9: description is generic, specifics become hints (Decisions: Description)
 
 ## Milestones
 
