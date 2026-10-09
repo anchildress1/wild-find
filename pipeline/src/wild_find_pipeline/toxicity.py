@@ -17,7 +17,7 @@ from wild_find_pipeline import usda
 from wild_find_pipeline.gbif import get, match_url
 from wild_find_pipeline.labels import table_rows
 from wild_find_pipeline.paths import TOXICITY
-from wild_find_pipeline.synonyms import cached_get, usages
+from wild_find_pipeline.synonyms import usages
 
 WIKIPEDIA = "https://en.wikipedia.org/w/api.php"
 USDA_TOXIC = {
@@ -153,7 +153,7 @@ def usda_ratings(archive: bytes) -> dict[str, str]:
     return {usda.species_name(taxa[t]): USDA_TOXIC[r["measurementValue"]] for t, r in found if t in taxa}
 
 
-def with_synonyms(ratings: dict[str, str], fetch: Callable[[str], dict] = cached_get) -> dict[str, str]:
+def with_synonyms(ratings: dict[str, str], fetch: Callable[[str], dict] = get) -> dict[str, str]:
     """Add the binomial of every GBIF accepted name and synonym, varieties included, of each rated name."""
     out = dict(ratings)
     for name, level in ratings.items():
@@ -162,11 +162,13 @@ def with_synonyms(ratings: dict[str, str], fetch: Callable[[str], dict] = cached
         if not key:
             continue
         # Deliberately loose: a variety cut to its binomial can flag a relative (Quercus alba via Q. stellata), but a
-        # false flag only costs a target, while a missed one can send a kid to a toxic plant (decided Oct 9).
+        # false flag only costs a target, while a missed one can send a kid to a toxic plant.
         for usage in usages(key, fetch):
             binomial = " ".join(usage.get("canonicalName", "").split()[:2])
             if binomial.count(" ") == 1:
                 out.setdefault(binomial, level)
+        # Live and uncached on purpose: a rebuild must see synonyms GBIF added since the last one. Paced for its API.
+        time.sleep(0.2)
     return out
 
 
