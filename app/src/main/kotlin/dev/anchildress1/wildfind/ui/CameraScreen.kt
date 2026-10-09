@@ -29,11 +29,9 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -53,7 +51,6 @@ import androidx.compose.ui.semantics.disabled
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Observer
 import androidx.lifecycle.compose.LifecycleResumeEffect
@@ -273,18 +270,11 @@ private fun BottomPanel(
         }
         // Not every target grows everywhere: a skip swaps in the next plant from the hunt's queue. It always shows, but
         // with nothing left that fits it would only reopen the same plant, so it's disabled.
-        TextButton(
+        LinkButton(
+            stringResource(if (practice) R.string.skip_practice else R.string.skip_target),
             onSkip,
-            Modifier.fillMaxWidth().heightIn(min = 48.dp),
             enabled = canSkip && !camera.checking,
-            colors = ButtonDefaults.textButtonColors(contentColor = Palette.Forest),
-        ) {
-            Text(
-                stringResource(if (practice) R.string.skip_practice else R.string.skip_target),
-                style = MaterialTheme.typography.titleMedium,
-                textDecoration = TextDecoration.Underline,
-            )
-        }
+        )
         RuleLine()
     }
 }

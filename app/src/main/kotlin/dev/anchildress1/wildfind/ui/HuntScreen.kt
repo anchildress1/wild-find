@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -18,7 +17,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
@@ -85,13 +83,7 @@ fun HuntScreen(
         if (offline) OfflineBanner()
         Trail(stops, onStop)
         // Below the trail, not pinned: ending early is the rare path, and the pinned area stays short.
-        TextButton(onClick = onFinish, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
-            Text(
-                stringResource(R.string.finish_hunt),
-                style = MaterialTheme.typography.labelMedium,
-                color = Palette.Forest,
-            )
-        }
+        LinkButton(stringResource(R.string.finish_hunt), onFinish)
     }
 }
 

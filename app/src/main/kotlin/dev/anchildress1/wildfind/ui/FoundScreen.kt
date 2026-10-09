@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -33,7 +32,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import dev.anchildress1.wildfind.R
 import dev.anchildress1.wildfind.core.frame.Pixels
@@ -50,13 +48,7 @@ fun FoundScreen(info: FoundInfo, crop: Pixels?, onNext: () -> Unit, onHunt: () -
             RuleLine()
             PrimaryButton(nextLabel(info), onNext)
             if (!info.tutorial && info.next != null) {
-                TextButton(onHunt, Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
-                    Text(
-                        stringResource(R.string.back_to_hunt),
-                        style = MaterialTheme.typography.labelMedium.copy(textDecoration = TextDecoration.Underline),
-                        color = Palette.Forest,
-                    )
-                }
+                LinkButton(stringResource(R.string.back_to_hunt), onHunt)
             }
         },
     ) {
