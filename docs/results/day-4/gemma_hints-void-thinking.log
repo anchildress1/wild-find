@@ -1,0 +1,646 @@
+# VOID RUN, kept as evidence. Oct 9 14:42 EDT, before thinking was turned off: Gemma 4 thinks by default in Ollama,
+# the thinking used the whole 700-token reply budget (done_reason length), every reply came back empty, and the probe
+# logged each one as an abstention. Fixed by sending think: false; see gemma_hints.log for the valid run.
+# 2026-10-09 14:42 EDT, Apple M4 Max, macOS-26.5.2-arm64-arm-64bit-Mach-O, Ollama at http://localhost:11434, models gemma4:12b @ c7597fc90b86, gemma4:26b @ 48eb98ec778c, temperature 1.0, top_p 0.95, top_k 64, seed 1, num_ctx 8192
+# Wikipedia revisions: Conoclinium coelestinum 1368583758, Callicarpa americana 1375086217, Liquidambar styraciflua 1376158564, Magnolia grandiflora 1377878923, Liriodendron tulipifera 1371824047, Polystichum acrostichoides 1327494907, Fagus grandifolia 1376510144, Erechtites hieraciifolius 1368440496, Ampelopsis glandulosa 1369470767, Diospyros virginiana 1379002754, Platanus occidentalis 1378901823, Vitis rotundifolia 1368871184, Pueraria montana 1360603932, Cercis canadensis 1374220375, Quercus nigra 1363279434, Albizia julibrissin 1369296368, Chimaphila maculata 1374761023, Rhus copallinum 1374481064, Solidago altissima 1370399342, Ilex cornuta 1311722172
+# No article: none
+gemma4:12b name_only Conoclinium coelestinum (blue mistflower):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:12b name_only Callicarpa americana (American beautyberry):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:12b name_only Liquidambar styraciflua (American sweetgum):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:12b name_only Magnolia grandiflora (southern magnolia):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:12b name_only Liriodendron tulipifera (American tuliptree):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:12b name_only Polystichum acrostichoides (Christmas fern):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:12b name_only Fagus grandifolia (American beech):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:12b name_only Erechtites hieraciifolius (American burnweed):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:12b name_only Ampelopsis glandulosa (Porcelain Berry):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:12b name_only Diospyros virginiana (American persimmon):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:12b name_only Platanus occidentalis (American sycamore):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:12b name_only Vitis rotundifolia (muscadine):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:12b name_only Pueraria montana (kudzu):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:12b name_only Cercis canadensis (eastern redbud):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:12b name_only Quercus nigra (water oak):
+    place  Look in forests or open woodlands.
+    light  It loves full sun.
+    ground It grows well in dry soil.
+    nearby You can find it near other big trees.
+    edges  Look along the edge of a woodland.
+    range  It grows in the eastern part of the country.
+gemma4:12b name_only Albizia julibrissin (Persian silk tree):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:12b name_only Chimaphila maculata (striped wintergreen):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:12b name_only Rhus copallinum (shining sumac):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:12b name_only Solidago altissima (tall goldenrod):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:12b name_only Ilex cornuta (Chinese holly):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:12b grounded Conoclinium coelestinum (blue mistflower):
+    place  (abstained)
+    light  It can grow in shade, like under trees. (USDA)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+    pick 2.28  season Look for blue flowers in summer.
+    pick 1.8   light  It can grow in shade, like under trees.
+gemma4:12b grounded Callicarpa americana (American beautyberry):
+    place  (abstained)
+    light  (abstained)
+    ground Look on ground that drains well, not soggy. (USDA)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+    pick 1.68  ground Look on ground that drains well, not soggy.
+    pick 1.32  season Look for purple fruit in fall.
+gemma4:12b grounded Liquidambar styraciflua (American sweetgum):
+    place  (abstained)
+    light  Look in open, sunny spots. (USDA)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+    pick 1.68  light  Look in open, sunny spots.
+    pick 1.32  season Look for brown seeds in fall.
+    pick 0.56  size   It is a tall tree.
+gemma4:12b grounded Magnolia grandiflora (southern magnolia):
+    place  (abstained)
+    light  It can grow in shade, like under trees. (USDA)
+    ground Look on ground that drains well, not soggy. (USDA)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+    pick 2.04  season Look for white flowers in spring.
+    pick 1.8   light  It can grow in shade, like under trees.
+    pick 1.68  ground Look on ground that drains well, not soggy.
+gemma4:12b grounded Liriodendron tulipifera (American tuliptree):
+    place  (abstained)
+    light  Look in open, sunny spots. (USDA)
+    ground Look on ground that drains well, not soggy. (USDA)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+    pick 2.04  season Look for yellow flowers in spring.
+    pick 1.68  ground Look on ground that drains well, not soggy.
+    pick 1.68  light  Look in open, sunny spots.
+gemma4:12b grounded Polystichum acrostichoides (Christmas fern):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:12b grounded Fagus grandifolia (American beech):
+    place  (abstained)
+    light  It can grow in shade, like under trees. (USDA)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+    pick 1.8   light  It can grow in shade, like under trees.
+    pick 1.32  season Look for bright leaves in fall.
+    pick 0.56  size   It is a tall tree.
+gemma4:12b grounded Erechtites hieraciifolius (American burnweed):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:12b grounded Ampelopsis glandulosa (Porcelain Berry):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:12b grounded Diospyros virginiana (American persimmon):
+    place  (abstained)
+    light  It can grow in shade, like under trees. (USDA)
+    ground Look on ground that drains well, not soggy. (USDA)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+    pick 1.8   light  It can grow in shade, like under trees.
+    pick 1.68  ground Look on ground that drains well, not soggy.
+    pick 1.32  season Look for orange fruit in fall.
+gemma4:12b grounded Platanus occidentalis (American sycamore):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+    pick 1.32  season Look for brown seeds in fall.
+    pick 0.56  size   It is a tall tree.
+gemma4:12b grounded Vitis rotundifolia (muscadine):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+    pick 1.32  season Look for purple fruit in fall.
+gemma4:12b grounded Pueraria montana (kudzu):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:12b grounded Cercis canadensis (eastern redbud):
+    place  (abstained)
+    light  It can grow in shade, like under trees. (USDA)
+    ground Look on ground that drains well, not soggy. (USDA)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+    pick 2.04  season Look for purple flowers in spring.
+    pick 1.8   light  It can grow in shade, like under trees.
+    pick 1.68  ground Look on ground that drains well, not soggy.
+gemma4:12b grounded Quercus nigra (water oak):
+    place  (abstained)
+    light  Look in open, sunny spots. (USDA)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+    pick 1.68  light  Look in open, sunny spots.
+    pick 1.6   sign   Look for brown seeds.
+    pick 0.56  size   It is a tall tree.
+gemma4:12b grounded Albizia julibrissin (Persian silk tree):
+    place  (abstained)
+    light  Look in open, sunny spots. (USDA)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+    pick 1.68  light  Look in open, sunny spots.
+    pick 1.32  season Look for brown seeds in fall.
+    pick 0.68  size   It is a small tree.
+gemma4:12b grounded Chimaphila maculata (striped wintergreen):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:12b grounded Rhus copallinum (shining sumac):
+    place  (abstained)
+    light  Look in open, sunny spots. (USDA)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+    pick 1.68  light  Look in open, sunny spots.
+    pick 1.32  season Look for brown seeds in fall.
+    pick 0.68  size   It is a small tree.
+gemma4:12b grounded Solidago altissima (tall goldenrod):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:12b grounded Ilex cornuta (Chinese holly):
+    place  (abstained)
+    light  Look in open, sunny spots. (USDA)
+    ground Look on ground that drains well, not soggy. (USDA)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+    pick 1.68  ground Look on ground that drains well, not soggy.
+    pick 1.68  light  Look in open, sunny spots.
+    pick 1.32  season Look for red fruit in fall.
+gemma4:26b name_only Conoclinium coelestinum (blue mistflower):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:26b name_only Callicarpa americana (American beautyberry):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:26b name_only Liquidambar styraciflua (American sweetgum):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:26b name_only Magnolia grandiflora (southern magnolia):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:26b name_only Liriodendron tulipifera (American tuliptree):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:26b name_only Polystichum acrostichoides (Christmas fern):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:26b name_only Fagus grandifolia (American beech):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:26b name_only Erechtites hieraciifolius (American burnweed):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:26b name_only Ampelopsis glandulosa (Porcelain Berry):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:26b name_only Diospyros virginiana (American persimmon):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:26b name_only Platanus occidentalis (American sycamore):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:26b name_only Vitis rotundifolia (muscadine):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:26b name_only Pueraria montana (kudzu):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:26b name_only Cercis canadensis (eastern redbud):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:26b name_only Quercus nigra (water oak):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:26b name_only Albizia julibrissin (Persian silk tree):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:26b name_only Chimaphila maculata (striped wintergreen):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:26b name_only Rhus copallinum (shining sumac):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:26b name_only Solidago altissima (tall goldenrod):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:26b name_only Ilex cornuta (Chinese holly):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:26b grounded Conoclinium coelestinum (blue mistflower):
+    place  (abstained)
+    light  It can grow in shade, like under trees. (USDA)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+    pick 2.28  season Look for blue flowers in summer.
+    pick 1.8   light  It can grow in shade, like under trees.
+gemma4:26b grounded Callicarpa americana (American beautyberry):
+    place  (abstained)
+    light  (abstained)
+    ground Look on ground that drains well, not soggy. (USDA)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+    pick 1.68  ground Look on ground that drains well, not soggy.
+    pick 1.32  season Look for purple fruit in fall.
+gemma4:26b grounded Liquidambar styraciflua (American sweetgum):
+    place  (abstained)
+    light  Look in open, sunny spots. (USDA)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+    pick 1.68  light  Look in open, sunny spots.
+    pick 1.32  season Look for brown seeds in fall.
+    pick 0.56  size   It is a tall tree.
+gemma4:26b grounded Magnolia grandiflora (southern magnolia):
+    place  (abstained)
+    light  It can grow in shade, like under trees. (USDA)
+    ground Look on ground that drains well, not soggy. (USDA)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+    pick 2.04  season Look for white flowers in spring.
+    pick 1.8   light  It can grow in shade, like under trees.
+    pick 1.68  ground Look on ground that drains well, not soggy.
+gemma4:26b grounded Liriodendron tulipifera (American tuliptree):
+    place  (abstained)
+    light  Look in open, sunny spots. (USDA)
+    ground Look on ground that drains well, not soggy. (USDA)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+    pick 2.04  season Look for yellow flowers in spring.
+    pick 1.68  ground Look on ground that drains well, not soggy.
+    pick 1.68  light  Look in open, sunny spots.
+gemma4:26b grounded Polystichum acrostichoides (Christmas fern):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:26b grounded Fagus grandifolia (American beech):
+    place  (abstained)
+    light  It can grow in shade, like under trees. (USDA)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+    pick 1.8   light  It can grow in shade, like under trees.
+    pick 1.32  season Look for bright leaves in fall.
+    pick 0.56  size   It is a tall tree.
+gemma4:26b grounded Erechtites hieraciifolius (American burnweed):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:26b grounded Ampelopsis glandulosa (Porcelain Berry):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:26b grounded Diospyros virginiana (American persimmon):
+    place  (abstained)
+    light  It can grow in shade, like under trees. (USDA)
+    ground Look on ground that drains well, not soggy. (USDA)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+    pick 1.8   light  It can grow in shade, like under trees.
+    pick 1.68  ground Look on ground that drains well, not soggy.
+    pick 1.32  season Look for orange fruit in fall.
+gemma4:26b grounded Platanus occidentalis (American sycamore):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+    pick 1.32  season Look for brown seeds in fall.
+    pick 0.56  size   It is a tall tree.
+gemma4:26b grounded Vitis rotundifolia (muscadine):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+    pick 1.32  season Look for purple fruit in fall.
+gemma4:26b grounded Pueraria montana (kudzu):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:26b grounded Cercis canadensis (eastern redbud):
+    place  (abstained)
+    light  It can grow in shade, like under trees. (USDA)
+    ground Look on ground that drains well, not soggy. (USDA)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+    pick 2.04  season Look for purple flowers in spring.
+    pick 1.8   light  It can grow in shade, like under trees.
+    pick 1.68  ground Look on ground that drains well, not soggy.
+gemma4:26b grounded Quercus nigra (water oak):
+    place  (abstained)
+    light  Look in open, sunny spots. (USDA)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+    pick 1.68  light  Look in open, sunny spots.
+    pick 1.6   sign   Look for brown seeds.
+    pick 0.56  size   It is a tall tree.
+gemma4:26b grounded Albizia julibrissin (Persian silk tree):
+    place  (abstained)
+    light  Look in open, sunny spots. (USDA)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+    pick 1.68  light  Look in open, sunny spots.
+    pick 1.32  season Look for brown seeds in fall.
+    pick 0.68  size   It is a small tree.
+gemma4:26b grounded Chimaphila maculata (striped wintergreen):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:26b grounded Rhus copallinum (shining sumac):
+    place  (abstained)
+    light  Look in open, sunny spots. (USDA)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+    pick 1.68  light  Look in open, sunny spots.
+    pick 1.32  season Look for brown seeds in fall.
+    pick 0.68  size   It is a small tree.
+gemma4:26b grounded Solidago altissima (tall goldenrod):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+gemma4:26b grounded Ilex cornuta (Chinese holly):
+    place  (abstained)
+    light  Look in open, sunny spots. (USDA)
+    ground Look on ground that drains well, not soggy. (USDA)
+    nearby (abstained)
+    edges  (abstained)
+    range  (abstained)
+    pick 1.68  ground Look on ground that drains well, not soggy.
+    pick 1.68  light  Look in open, sunny spots.
+    pick 1.32  season Look for red fruit in fall.
+
+gemma4:12b     name_only targets 20, with 3 ranked picks 0, hints 6/120 (0 from USDA), clean 6, fake evidence 0, prompts cut 0, median 13.6s
+gemma4:12b     grounded  targets 20, with 3 ranked picks 10, hints 17/120 (17 from USDA), clean 17, fake evidence 0, prompts cut 0, median 16.3s
+gemma4:26b     name_only targets 20, with 3 ranked picks 0, hints 0/120 (0 from USDA), clean 0, fake evidence 0, prompts cut 0, median 9.9s
+gemma4:26b     grounded  targets 20, with 3 ranked picks 10, hints 17/120 (17 from USDA), clean 17, fake evidence 0, prompts cut 0, median 8.2s
+# Grades go in gemma_hints_grades.csv: each hint judged against its article.
