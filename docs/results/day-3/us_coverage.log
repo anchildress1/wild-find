@@ -1,0 +1,8 @@
+# 2026-10-08 08:38 EDT, iNat species_counts live pull (October, 75 km, research-grade plants, en), species_labels.json with GBIF synonyms (make assets of 2026-10-08)
+west-georgia (34, -85): 1039 species, 11130 sightings, 649 match a row; floor 55.6; 23 eligible in 23 genera; 283 blockers
+seattle (48, -122): 970 species, 22363 sightings, 668 match a row; floor 111.8; 33 eligible in 25 genera; 279 blockers
+phoenix (33, -112): 333 species, 4601 sightings, 203 match a row; floor 23.0; 22 eligible in 18 genera; 93 blockers
+boston (42, -71): 1317 species, 48372 sightings, 888 match a row; floor 241.9; 24 eligible in 22 genera; 383 blockers
+miami (26, -80): 936 species, 16173 sightings, 329 match a row; floor 80.9; 23 eligible in 22 genera; 166 blockers
+denver (40, -105): 898 species, 15197 sightings, 550 match a row; floor 76.0; 26 eligible in 21 genera; 223 blockers
+chicago (42, -88): 1335 species, 24460 sightings, 914 match a row; floor 122.3; 10 eligible in 9 genera; 402 blockers

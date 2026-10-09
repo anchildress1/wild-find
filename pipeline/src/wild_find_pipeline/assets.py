@@ -1,9 +1,10 @@
-"""Bundled APK assets: BioCLIP Mobile, the species table with hazard and toxicity flags, and the TinyCLIP plant gate.
+"""Bundled APK assets: BioCLIP Mobile, the species table with its flags, the TinyCLIP plant gate, and the world map.
 
 Writes into the gitignored app/generated/assets. Needs no BioCLIP teacher: appended hazard rows come from the
-committed hazard_vectors.json (make hazard-vectors) and toxicity flags from toxicity.json (make toxicity), so CI
-can run it. Also checks the committed labels.npy and
-labels.json (make labels) against the current label lists and pins.
+committed hazard_vectors.json (make hazard-vectors), toxicity flags from toxicity.json (make toxicity), name
+aliases from synonyms.json (make synonyms), plant types from plant_types.json (make plant-types), and kid-level
+descriptions from descriptions.json (make descriptions), so CI can
+run it. Also checks the committed labels.npy and labels.json (make labels) against the current label lists and pins.
 """
 
 import hashlib
@@ -16,7 +17,7 @@ from pathlib import Path
 
 import numpy as np
 
-from wild_find_pipeline import label_vectors
+from wild_find_pipeline import label_vectors, places, world_map
 from wild_find_pipeline.labels import (
     GATE_OTHER,
     GATE_PLANT,
@@ -26,13 +27,16 @@ from wild_find_pipeline.labels import (
     prompt,
 )
 from wild_find_pipeline.paths import (
+    DESCRIPTIONS,
     GENERATED_ASSETS,
     GENERATED_STAMP,
     HAZARD_VECTORS,
     LABELS_DIR,
     MANIFEST,
     MODEL_CACHE,
+    PLANT_TYPES,
     REPO,
+    SYNONYMS,
     TOXICITY,
     ensure_artifact,
     file_sha256,
@@ -72,6 +76,30 @@ def with_toxicity(labels: list[dict], flags: dict[str, dict]) -> list[dict]:
         {**entry, "genus": entry["scientific"].split()[0], "toxic": flags[entry["scientific"]]["toxic"]}
         for entry in labels
     ]
+
+
+def with_synonyms(labels: list[dict], aliases: dict[str, list[str]]) -> list[dict]:
+    """Add each row's committed GBIF aliases; raises when a row has no entry."""
+    missing = [entry["scientific"] for entry in labels if entry["scientific"] not in aliases]
+    if missing:
+        raise ValueError(f"{SYNONYMS.name} lacks {len(missing)} species, e.g. {missing[:3]}; run make synonyms")
+    return [{**entry, "synonyms": aliases[entry["scientific"]]} for entry in labels]
+
+
+def with_plant_types(labels: list[dict], types: dict[str, dict]) -> list[dict]:
+    """Add each row's committed plant type (a PlantType key or None); raises when a row has no entry."""
+    missing = [entry["scientific"] for entry in labels if entry["scientific"] not in types]
+    if missing:
+        raise ValueError(f"{PLANT_TYPES.name} lacks {len(missing)} species, e.g. {missing[:3]}; run make plant-types")
+    return [{**entry, "type": types[entry["scientific"]]["type"]} for entry in labels]
+
+
+def with_descriptions(labels: list[dict], found: dict[str, dict]) -> list[dict]:
+    """Add each row's committed kid-level description, or None; raises when a row has no entry."""
+    missing = [entry["scientific"] for entry in labels if entry["scientific"] not in found]
+    if missing:
+        raise ValueError(f"{DESCRIPTIONS.name} lacks {len(missing)} species, e.g. {missing[:3]}; run make descriptions")
+    return [{**entry, "description": found[entry["scientific"]]["description"]} for entry in labels]
 
 
 def tinyclip_dir() -> Path:
@@ -158,12 +186,15 @@ INPUTS = (
     MANIFEST,
     HAZARD_VECTORS,
     TOXICITY,
+    SYNONYMS,
+    PLANT_TYPES,
+    DESCRIPTIONS,
     REPO / "pipeline/uv.lock",
     LABELS_DIR / "labels.json",
     LABELS_DIR / "labels.npy",
     *(
         REPO / "pipeline/src/wild_find_pipeline" / name
-        for name in ("assets.py", "labels.py", "label_vectors.py", "paths.py")
+        for name in ("assets.py", "labels.py", "label_vectors.py", "paths.py", "places.py", "world_map.py")
     ),
 )
 
@@ -198,6 +229,9 @@ def main() -> int:
         extra = hazard_vectors(names)
         table, labels = species_table(np.load(ensure_artifact("taxa")), names, extra)
         labels = with_toxicity(labels, json.loads(TOXICITY.read_text())["species"])
+        labels = with_synonyms(labels, json.loads(SYNONYMS.read_text())["species"])
+        labels = with_plant_types(labels, json.loads(PLANT_TYPES.read_text())["species"])
+        labels = with_descriptions(labels, json.loads(DESCRIPTIONS.read_text())["species"])
         np.save(staging / "species_table.npy", table)
         (staging / "species_labels.json").write_text(json.dumps(labels, indent=1) + "\n")
 
@@ -211,13 +245,15 @@ def main() -> int:
             ],
         }
         (staging / "plant_gate.json").write_text(json.dumps(gate) + "\n")
+        map_bytes = world_map.write(staging / "map.bin")
+        place_bytes = places.write(staging / "places.bin")
 
         publish(staging)
     hazards = sum(entry["hazard"] for entry in labels)
     toxic = sum(entry["toxic"] for entry in labels)
     print(
         f"OK: {GENERATED_ASSETS}: {len(labels)} species ({hazards} hazards, {toxic} toxic, appended {list(extra)}), "
-        f"scale {scale:.4f}"
+        f"scale {scale:.4f}, map {map_bytes} bytes, places {place_bytes} bytes"
     )
     return 0
 

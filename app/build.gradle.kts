@@ -1,5 +1,6 @@
 import groovy.json.JsonSlurper
 import java.security.MessageDigest
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
@@ -12,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "dev.anchildress1.wildfind"
-        minSdk = 34
+        minSdk = 30
         targetSdk = 37
         versionCode = 1
         versionName = "0.1.0"
@@ -20,9 +21,27 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    // The release key lives only on the developer's machine; without keystore.properties the release APK builds unsigned.
+    val keystoreFile = rootProject.file("keystore.properties")
+    if (keystoreFile.isFile) {
+        val keys = Properties().apply { keystoreFile.inputStream().use(::load) }
+        signingConfigs.create("release") {
+            storeFile = rootProject.file(keys.getProperty("storeFile"))
+            storePassword = keys.getProperty("storePassword")
+            keyAlias = keys.getProperty("keyAlias")
+            keyPassword = keys.getProperty("keyPassword")
+        }
+    }
+
     buildTypes {
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.findByName("release")
+        }
         debug {
-            // Debug and release coexist on the single test phone, so a release install never wipes the model.
+            // Debug and release coexist on the single test phone, so a release install never wipes gate-harness runs not yet pulled.
             applicationIdSuffix = ".debug"
         }
     }
@@ -62,6 +81,8 @@ val checkBundledAssets = tasks.register("checkBundledAssets") {
         "plant_gate.json",
         "species_table.npy",
         "species_labels.json",
+        "map.bin",
+        "places.bin",
     )
     doLast {
         val missing = required.filterNot { dir.file(it).asFile.isFile }
@@ -96,11 +117,13 @@ dependencies {
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)
     implementation(libs.compose.material3)
+    implementation(libs.lifecycle.runtime.compose)
+    implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.onnxruntime.android)
     implementation(libs.camerax.camera2)
     implementation(libs.camerax.lifecycle)
     implementation(libs.camerax.view)
-    debugImplementation(libs.camerax.compose)
+    implementation(libs.camerax.compose)
 
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.androidx.test.ext.junit)

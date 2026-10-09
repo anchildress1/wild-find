@@ -85,46 +85,77 @@ class ScoringTest {
         }
     }
 
-    @Test
-    fun `the target passes only as top-1 above the floor and past the margin`() {
-        val labels = rows(10.0, 30.0, 50.0)
-        val candidates = intArrayOf(0, 1, 2)
-        val top = cos(Math.toRadians(10.0))
-        val gap = top - cos(Math.toRadians(30.0))
+    // Rows 0-1 are oaks, 2 a maple, 3 a toxic oak, 4 a toxic holly; an embedding at 0 degrees ranks lower angles first.
+    private val genera = listOf("Quercus", "Quercus", "Acer", "Quercus", "Ilex")
 
-        assertEquals(GoalScore(true, labels.dot(0, east), 1), TargetGoal(labels, 0, candidates, null, null).score(east))
-        assertEquals(2, TargetGoal(labels, 1, candidates, null, null).score(east).rank)
-        assertFalse(TargetGoal(labels, 1, candidates, null, null).score(east).met)
-        assertTrue(TargetGoal(labels, 0, candidates, top - 1e-6, null).score(east).met)
-        assertFalse(TargetGoal(labels, 0, candidates, top + 1e-6, null).score(east).met)
-        assertTrue(TargetGoal(labels, 0, candidates, null, gap - 1e-6).score(east).met)
-        assertFalse(TargetGoal(labels, 0, candidates, null, gap + 1e-6).score(east).met)
+    private fun target(
+        vararg degrees: Double,
+        eligible: IntArray = intArrayOf(0, 1, 2),
+        blockers: IntArray = intArrayOf(),
+    ) = TargetGoal(rows(*degrees), genera, 0, eligible, blockers)
+
+    @Test
+    fun `the target passes as top-1 and reports its own score and rank`() {
+        val table = rows(10.0, 30.0, 50.0, 70.0, 80.0)
+
+        assertEquals(
+            GoalScore(true, table.dot(0, east), 1),
+            TargetGoal(table, genera, 0, intArrayOf(0, 1, 2), intArrayOf()).score(east),
+        )
     }
 
     @Test
-    fun `a tie with the runner-up is not top-1`() {
-        val goal = TargetGoal(rows(10.0, 10.0), 0, intArrayOf(0, 1), null, null)
+    fun `another species in the target's genus passes as a look-alike`() {
+        val score = target(30.0, 10.0, 50.0, 70.0, 80.0).score(east)
 
-        assertEquals(GoalScore(false, goal.score(east).score, 1), goal.score(east))
+        assertTrue(score.met)
+        assertEquals(2, score.rank)
     }
 
     @Test
-    fun `only candidates compete with the target`() {
-        val labels = rows(20.0, 30.0, 0.0)
+    fun `a species from another genus on top is no pass`() {
+        assertFalse(target(30.0, 40.0, 10.0, 70.0, 80.0).score(east).met)
+    }
 
-        assertTrue(TargetGoal(labels, 0, intArrayOf(0, 1), null, null).score(east).met)
-        assertFalse(TargetGoal(labels, 0, intArrayOf(0, 1, 2), null, null).score(east).met)
+    @Test
+    fun `a toxic blocker on top is no pass, even inside the target's genus`() {
+        val blockers = intArrayOf(3, 4)
+
+        assertFalse(target(30.0, 40.0, 50.0, 70.0, 10.0, blockers = blockers).score(east).met)
+        assertFalse(target(30.0, 40.0, 50.0, 10.0, 70.0, blockers = blockers).score(east).met)
+        assertTrue(target(10.0, 40.0, 50.0, 30.0, 70.0, blockers = blockers).score(east).met)
+    }
+
+    @Test
+    fun `the top species must lead the best blocker by the margin`() {
+        val blockers = intArrayOf(3, 4)
+        // cos 10 - cos 20 is 0.045, under the margin; cos 10 - cos 21 is 0.051, past it.
+        assertFalse(target(10.0, 40.0, 50.0, 20.0, 80.0, blockers = blockers).score(east).met)
+        assertTrue(target(10.0, 40.0, 50.0, 21.0, 80.0, blockers = blockers).score(east).met)
+    }
+
+    @Test
+    fun `a tie for top-1 is no pass, even inside the target's genus`() {
+        assertFalse(target(10.0, 10.0, 50.0, 70.0, 80.0).score(east).met)
+        assertFalse(target(10.0, 40.0, 10.0, 70.0, 80.0).score(east).met)
+    }
+
+    @Test
+    fun `only the hunt's rows compete with the target`() {
+        assertTrue(target(20.0, 40.0, 50.0, 10.0, 5.0).score(east).met)
     }
 
     @Test
     fun `target goal validates its rows`() {
-        val labels = rows(1.0, 2.0)
-        assertThrows<IllegalArgumentException> { TargetGoal(labels, 0, intArrayOf(1), null, null) }
-        assertThrows<IllegalArgumentException> { TargetGoal(labels, 0, intArrayOf(0), null, null) }
-        assertThrows<IllegalArgumentException> { TargetGoal(labels, 0, intArrayOf(0, 5), null, null) }
-        // A repeated target leaves no runner-up, so any plant would pass.
-        assertThrows<IllegalArgumentException> { TargetGoal(labels, 0, intArrayOf(0, 0), null, null) }
-        assertThrows<IllegalArgumentException> { TargetGoal(labels, 0, intArrayOf(0, 1, 1), null, null) }
+        val table = rows(1.0, 2.0, 3.0, 4.0, 5.0)
+        assertThrows<IllegalArgumentException> { TargetGoal(table, genera.take(4), 0, intArrayOf(0, 2), intArrayOf()) }
+        assertThrows<IllegalArgumentException> { TargetGoal(table, genera, 0, intArrayOf(1, 2), intArrayOf()) }
+        assertThrows<IllegalArgumentException> { TargetGoal(table, genera, 0, intArrayOf(0, 2, 2), intArrayOf()) }
+        assertThrows<IllegalArgumentException> { TargetGoal(table, genera, 0, intArrayOf(0, 2), intArrayOf(2)) }
+        assertThrows<IllegalArgumentException> { TargetGoal(table, genera, 0, intArrayOf(0, 7), intArrayOf()) }
+        // With no rival genus and no blocker, any plant would pass.
+        assertThrows<IllegalArgumentException> { TargetGoal(table, genera, 0, intArrayOf(0, 1), intArrayOf()) }
+        TargetGoal(table, genera, 0, intArrayOf(0, 1), intArrayOf(3))
     }
 
     @Test
@@ -136,7 +167,7 @@ class ScoringTest {
         assertFalse(TutorialGoal(labels, 0, all).score(east).met)
         assertTrue(TutorialGoal(labels, 4, all).score(east).met)
         assertFalse(TutorialGoal(labels, 4, all).checksHazards)
-        assertTrue(TargetGoal(labels, 0, all, null, null).checksHazards)
+        assertTrue(TargetGoal(labels, genera, 0, intArrayOf(0, 2), intArrayOf()).checksHazards)
     }
 
     @Test

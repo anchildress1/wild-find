@@ -17,20 +17,16 @@ class SpeciesTableTest {
     @Test
     fun tableRowsMatchLabelsAndCarryTheHazards() {
         val table = bundled.speciesTable()
-        val labels = bundled.speciesLabels()
+        val labels = bundled.speciesLabels(table)
 
         assertEquals(labels.size, table.rows)
         assertEquals(EMBEDDING_SIZE, table.cols)
         // Atlantic poison oak is missing upstream; make assets appends it.
-        assertTrue(Species("Toxicodendron pubescens", hazard = true) in labels)
-        assertTrue(Species("Phytolacca americana", hazard = true) in labels)
-        assertTrue(Species("Solanum carolinense", hazard = true) in labels)
-        assertTrue(
-            labels.filter { it.hazard }.all {
-                it.scientific.startsWith("Toxicodendron ") ||
-                    it.scientific in OTHER_HAZARDS
-            },
-        )
+        val hazards = labels.filter { it.hazard }.map { it.scientific }
+        assertTrue("Toxicodendron pubescens" in hazards)
+        assertTrue("Phytolacca americana" in hazards)
+        assertTrue("Solanum carolinense" in hazards)
+        assertTrue(hazards.all { it.startsWith("Toxicodendron ") || it in OTHER_HAZARDS })
         val lastRow = table.data.copyOfRange((table.rows - 1) * table.cols, table.rows * table.cols)
         assertTrue("appended row is not a unit vector", abs(sqrt(table.dot(table.rows - 1, lastRow)) - 1.0) < 1e-3)
     }
@@ -40,5 +36,3 @@ class SpeciesTableTest {
         val OTHER_HAZARDS = setOf("Phytolacca americana", "Solanum carolinense")
     }
 }
-
-private typealias Species = BundledAssets.Species

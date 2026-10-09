@@ -19,6 +19,12 @@ GENERATED_STAMP = REPO / "app/generated/inputs.json"
 HAZARD_VECTORS = REPO / "pipeline/data/hazard_vectors.json"
 # Toxicity flag per species-table row; committed because it needs ~300 network requests (make toxicity).
 TOXICITY = REPO / "pipeline/data/toxicity.json"
+# GBIF aliases per species-table row; committed because it needs ~13,000 network requests (make synonyms).
+SYNONYMS = REPO / "pipeline/data/synonyms.json"
+# Plant type per species-table row; committed because it reads the USDA archive and GBIF cache (make plant-types).
+PLANT_TYPES = REPO / "pipeline/data/plant_types.json"
+# Kid-level description per species-table row, templated from USDA traits; committed (make descriptions).
+DESCRIPTIONS = REPO / "pipeline/data/descriptions.json"
 
 
 def pin(model: str, manifest: Path = MANIFEST) -> dict[str, str]:

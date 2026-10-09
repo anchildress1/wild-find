@@ -3,33 +3,23 @@ package dev.anchildress1.wildfind
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import dev.anchildress1.wildfind.ui.BriarSprite
+import androidx.activity.enableEdgeToEdge
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import dev.anchildress1.wildfind.ui.GameRoute
+import dev.anchildress1.wildfind.ui.theme.WildFindTheme
 
 /** Single-activity host for the Compose UI. */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-        setContent {
-            MaterialTheme {
-                Column(
-                    Modifier.fillMaxSize().padding(24.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    BriarSprite("idle", stringResource(R.string.briar_description))
-                    Text(stringResource(R.string.leave_it_rule), style = MaterialTheme.typography.headlineMedium)
-                }
-            }
+        // A game wants the whole screen: the status and navigation bars stay hidden; a swipe from an edge shows them.
+        WindowCompat.getInsetsController(window, window.decorView).run {
+            systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            hide(WindowInsetsCompat.Type.systemBars())
         }
+        setContent { WildFindTheme { GameRoute() } }
     }
 }

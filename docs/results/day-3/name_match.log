@@ -1,0 +1,65 @@
+# 2026-10-08, MacBook (no device), Python 3.13.14, GBIF API v1 backbone (api.gbif.org/v1 species/match strict + /species/{key}/synonyms, fetched 2026-10-08)
+# inputs: docs/results/day-2/threshold_regions.csv (Oct 7 iNat pull), species_labels.json from make assets (4,272 rows), pipeline/data/toxicity.json (built 2026-10-07), pipeline/data/synonyms.json (built 2026-10-08)
+# rule: an alias must keep the row's epithet (gender ending aside) and must match back to the row's accepted GBIF key on its own
+
+# synonyms.json built 2026-10-08: 5528 aliases, 22 rows unmatched, 0 ambiguous and 0 table-name aliases dropped
+west-georgia-us: 1029 species; exact 641, exact or alias 647 (0 names share a row with another name); playable at 0.5%/3 (floor 55.5): 23 -> 23; new targets []
+atlanta-us: 1017 species; exact 653, exact or alias 659 (0 names share a row with another name); playable at 0.5%/3 (floor 71.3): 24 -> 24; new targets []
+tbilisi-georgia: 300 species; exact 171, exact or alias 171 (0 names share a row with another name); playable at 0.5%/3 (floor 4.8): 12 -> 12; new targets []
+borjomi-georgia: 152 species; exact 72, exact or alias 72 (0 names share a row with another name); playable at 0.5%/3 (floor 3.0): 9 -> 9; new targets []
+country-georgia: 665 species; exact 355, exact or alias 356 (0 names share a row with another name); playable at 0.5%/3 (floor 12.8): 16 -> 16; new targets []
+
+west-georgia-us: 6 names matched only through an alias (count, iNat name -> table row):
+    84  Asarum arifolium -> Hexastylis arifolia
+    40  Nephroia carolina -> Cocculus carolinus
+    10  Amauropelta noveboracensis -> Parathelypteris noveboracensis
+     9  Anatherum virginicum -> Andropogon virginicus
+     1  Aristolochia serpentaria -> Endodeca serpentaria
+     1  Pseudanomodon attenuatus -> Anomodon attenuatus
+
+# spot-check of all 6 West Georgia alias hits: all correct (genus transfers of the same species):
+#   Asarum arifolium = Hexastylis arifolia; Nephroia carolina = Cocculus carolinus; Amauropelta = Parathelypteris noveboracensis;
+#   Anatherum = Andropogon virginicus; Aristolochia = Endodeca serpentaria; Pseudanomodon = Anomodon attenuatus (moss)
+# toxicity.json flags 3 of the 6 rows toxic (Hexastylis arifolia, Endodeca serpentaria, Anomodon attenuatus), so local-toxic blocking gains them
+# Berberis bealei (the PRD hole-22 example) already matches exactly: iNat now uses Berberis bealei, not Mahonia bealei
+
+# --- rejected first build, same date: every GBIF synonym, species rank, ambiguity and table-name drops only ---
+# 36,632 aliases over 3,798 rows; 583 ambiguous and 203 table-name aliases dropped. Too loose: later homonyms and lumped species merged.
+west-georgia-us: 1029 species; exact 641, exact or alias 666 (8 names share a row with another name); playable at 0.5%/3 (floor 55.5): 23 -> 23; new targets []
+atlanta-us: 1017 species; exact 653, exact or alias 678 (9 names share a row with another name); playable at 0.5%/3 (floor 71.3): 24 -> 24; new targets []
+tbilisi-georgia: 300 species; exact 171, exact or alias 178 (2 names share a row with another name); playable at 0.5%/3 (floor 4.8): 12 -> 14; new targets ['Cyclamen purpurascens', 'Juniperus scopulorum']
+borjomi-georgia: 152 species; exact 72, exact or alias 78 (0 names share a row with another name); playable at 0.5%/3 (floor 3.0): 9 -> 10; new targets ['Cyclamen purpurascens']
+country-georgia: 665 species; exact 355, exact or alias 369 (3 names share a row with another name); playable at 0.5%/3 (floor 12.8): 16 -> 18; new targets ['Cyclamen purpurascens', 'Juniperus scopulorum']
+
+west-georgia-us: 25 names matched only through an alias (count, iNat name -> table row):
+    84  Asarum arifolium -> Hexastylis arifolia
+    40  Nephroia carolina -> Cocculus carolinus
+    29  Gentiana saponaria -> Gentiana andrewsii
+    16  Helianthus longifolius -> Wyethia angustifolia
+    14  Quercus lyrata -> Quercus lobata
+    10  Amauropelta noveboracensis -> Parathelypteris noveboracensis
+     9  Anatherum virginicum -> Andropogon virginicus
+     8  Humulus scandens -> Humulus japonicus
+     7  Hydrocotyle sibthorpioides -> Hydrocotyle moschata
+     4  Hieracium gronovii -> Hieracium venosum
+     4  Eupatorium torreyanum -> Eupatorium hyssopifolium
+     3  Vaccinium elliottii -> Vaccinium corymbosum
+     3  Vitis vulpina -> Vitis aestivalis
+     3  Solidago arguta -> Solidago caesia
+     3  Elymus glabriflorus -> Elymus virginicus
+     2  Mimosa microphylla -> Mimosa quadrivalvis
+     2  Asarum reflexum -> Asarum canadense
+     1  Aristolochia serpentaria -> Endodeca serpentaria
+     1  Celtis tenuifolia -> Celtis occidentalis
+     1  Lespedeza stuevei -> Lespedeza capitata
+     1  Liatris pilosa -> Liatris spicata
+     1  Quercus hemisphaerica -> Quercus virginiana
+     1  Fraxinus biltmoreana -> Fraxinus americana
+     1  Eupatorium linearifolium -> Eupatorium hyssopifolium
+     1  Pseudanomodon attenuatus -> Anomodon attenuatus
+# wrong merges in that list (iNat keeps these as separate accepted species):
+#   Quercus lyrata (overcup oak) -> Q. lobata via homonym Q. lyrata Spreng.; Helianthus longifolius -> Wyethia angustifolia;
+#   Gentiana saponaria -> G. andrewsii; Hydrocotyle sibthorpioides -> H. moschata; Vaccinium elliottii -> V. corymbosum;
+#   Quercus hemisphaerica -> Q. virginiana; Celtis tenuifolia -> C. occidentalis; Liatris pilosa -> L. spicata; Vitis vulpina -> V. aestivalis;
+#   Solidago arguta -> S. caesia; Hieracium gronovii -> H. venosum; Lespedeza stuevei -> L. capitata; Fraxinus biltmoreana -> F. americana
+#   elsewhere: Juniperus excelsa -> J. scopulorum (homonym J. excelsa Pursh); Cyclamen coum -> C. purpurascens (homonym C. coum Rchb.)

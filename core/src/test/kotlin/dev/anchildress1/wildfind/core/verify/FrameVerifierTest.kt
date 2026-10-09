@@ -26,14 +26,15 @@ class FrameVerifierTest {
         50f,
     )
 
-    // Species table: six safe species along x, one hazard along y. Labels: the target along x, a rival along y.
+    // Species table: six safe species along x, one hazard along y.
+    // Target table: the target along x, a rival genus along y.
     private val hazards = HazardCheck(
         FloatMatrix(7, 2, FloatArray(14) { if (it < 12) (1 - it % 2).toFloat() else (it - 12).toFloat() }),
         BooleanArray(7) { it == 6 },
         BooleanArray(7) { true },
     )
     private val labels = FloatMatrix(2, 2, floatArrayOf(1f, 0f, 0f, 1f))
-    private val target = TargetGoal(labels, 0, intArrayOf(0, 1), null, null)
+    private val target = TargetGoal(labels, listOf("Quercus", "Acer"), 0, intArrayOf(0, 1), intArrayOf())
     private val close = Focus(Focus.AF_FOCUSED_LOCKED, 5f, 1f)
 
     private val plant = floatArrayOf(1f, 0f)

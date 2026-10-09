@@ -1,0 +1,25 @@
+# 2026-10-08, phone 2: Motorola moto g stylus (2026), model lamy_g, SoC SM6475, Android 16 (API 36), 7.3 GB RAM
+# make device-test (ANDROID_SERIAL=ZL8326X85Z), 19 of 19 passed; logcat lines from the instrumented tests, verbatim
+10-08 13:17:15.946 16472 16492 I TestRunner: started: fixtureEmbeddingMatchesTheLaptopReferenceAndPicksTheFixtureWord(dev.anchildress1.wildfind.inference.BioclipParityTest)
+10-08 13:17:17.254 16472 16492 I BioclipParity: load 395 ms, embed 360 ms
+10-08 13:17:17.262 16472 16492 I BioclipParity: cosine to laptop reference: 0.9999999987512017
+10-08 13:17:17.274 16472 16492 I BioclipParity: scores: oak=0.5199, Carolina horsenettle=0.3828, poison oak=0.3753, poison ivy=0.3445, pokeweed=0.3426, poison sumac=0.2938, screen=0.2533, field=0.1873, person=0.1869, pavement=0.1735, lawn=0.1631, weedy garden bed=0.1507
+10-08 13:17:17.274 16472 16492 I TestRunner: finished: fixtureEmbeddingMatchesTheLaptopReferenceAndPicksTheFixtureWord(dev.anchildress1.wildfind.inference.BioclipParityTest)
+10-08 13:17:17.281 16472 16492 I TestRunner: started: cropAndResizeAtTheDefaultAnalysisSizeOnATallScreen(dev.anchildress1.wildfind.inference.FrameVerifierDeviceTest)
+10-08 13:17:20.641 16472 16492 I FrameVerifierDevice: upright 886x1920, 8 cores, pool 7; crop ms [40, 30, 56, 20, 34, 30, 23, 24, 24, 21, 25, 25, 22, 22, 22, 30, 19, 24, 23, 21]
+10-08 13:17:20.642 16472 16492 I FrameVerifierDevice: resize ms [53, 58, 59, 43, 42, 41, 27, 31, 40, 26, 32, 40, 36, 33, 32, 55, 38, 28, 39, 52]
+10-08 13:17:20.642 16472 16492 I TestRunner: finished: cropAndResizeAtTheDefaultAnalysisSizeOnATallScreen(dev.anchildress1.wildfind.inference.FrameVerifierDeviceTest)
+10-08 13:17:20.649 16472 16492 I TestRunner: started: theFixtureFramePassesTheGateAndNoHazardWithTheLaptopPlantShare(dev.anchildress1.wildfind.inference.FrameVerifierDeviceTest)
+10-08 13:17:25.535 16472 16492 I FrameVerifierDevice: times ns StageTimes(crop=1012031, resize=8137344, plantGate=142216406, bioclip=391443177, hazard=58991667, goal=62239, total=601871041)
+10-08 13:17:25.535 16472 16492 I FrameVerifierDevice: times ns StageTimes(crop=5655260, resize=71276094, plantGate=699553125, bioclip=451616926, hazard=24002396, goal=71198, total=1252185364)
+10-08 13:17:25.535 16472 16492 I FrameVerifierDevice: times ns StageTimes(crop=2086146, resize=18746302, plantGate=258423854, bioclip=460800365, hazard=36693750, goal=55469, total=776813906)
+10-08 13:17:25.535 16472 16492 I FrameVerifierDevice: times ns StageTimes(crop=1467344, resize=13417344, plantGate=483179895, bioclip=236643959, hazard=20340208, goal=51823, total=755108125)
+10-08 13:17:25.535 16472 16492 I FrameVerifierDevice: times ns StageTimes(crop=932031, resize=5669219, plantGate=169024531, bioclip=194116823, hazard=20120365, goal=53645, total=389952239)
+10-08 13:17:25.535 16472 16492 I FrameVerifierDevice: shares 0.9778267067144639 0.9869904087790642, goal GoalScore(met=true, score=0.5892325686250715, rank=1)
+10-08 13:17:25.535 16472 16492 I FrameVerifierDevice: hazard ranks 13 32
+10-08 13:17:25.546 16472 16492 I TestRunner: finished: theFixtureFramePassesTheGateAndNoHazardWithTheLaptopPlantShare(dev.anchildress1.wildfind.inference.FrameVerifierDeviceTest)
+10-08 13:17:25.547 16472 16492 I TestRunner: started: fixtureEmbeddingAndPlantShareMatchTheLaptop(dev.anchildress1.wildfind.inference.PlantGateParityTest)
+10-08 13:17:25.929 16472 16492 I PlantGateParity: load 176 ms, embed 64 ms
+10-08 13:17:25.934 16472 16492 I PlantGateParity: cosine to laptop reference: 0.9999999889085937, plant share 0.9869904087790642
+10-08 13:17:25.935 16472 16492 I TestRunner: finished: fixtureEmbeddingAndPlantShareMatchTheLaptop(dev.anchildress1.wildfind.inference.PlantGateParityTest)
+10-08 13:17:26.369 16472 16492 I TestRunner: run finished: 19 tests, 0 failed, 0 ignored

@@ -1,4 +1,4 @@
-.PHONY: setup build install device-test focus-probe assets sprites toxicity hazard-vectors labels crop-reference gate-harness gate-pull reference test pipeline-test lint ktlint detekt android-lint pipeline-lint actionlint secret-scan ai-checks clean
+.PHONY: setup build install device-test focus-probe assets sprites toxicity synonyms plant-types descriptions hazard-vectors labels crop-reference gate-harness gate-pull reference test pipeline-test lint ktlint detekt android-lint pipeline-lint actionlint secret-scan ai-checks clean
 
 SHELL := /bin/bash
 
@@ -34,11 +34,11 @@ setup:
 build:
 	$(GRADLE) :app:assembleDebug :app:assembleDebugAndroidTest
 
-# -r keeps app data, so a sideloaded model survives reinstalls.
+# -r keeps app data, so gate-harness runs not yet pulled survive reinstalls.
 install: build
 	adb install -r -d app/build/outputs/apk/debug/app-debug.apk
 
-# On-device instrumented tests. Not connectedAndroidTest: it uninstalls the app afterwards, deleting the sideloaded model.
+# On-device instrumented tests. Not connectedAndroidTest: it uninstalls the app afterwards, deleting gate-harness runs not yet pulled.
 device-test: install
 	$(GRADLE) :app:assembleDebugAndroidTest
 	adb install -r -d -t app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
@@ -53,11 +53,11 @@ focus-probe: install
 	adb shell am start -n $(WILDFIND_PACKAGE)/dev.anchildress1.wildfind.FocusProbeActivity
 	adb logcat -s FocusProbe:I | tee $(FOCUS_LOG)
 
-# S05 gate harness: the live verify path at about 5 fps, hint taps, memory, and heat, logged on the phone.
-# GATE_WORD is a menu word, or grass for the tutorial. Back ends a run.
-GATE_WORD ?= oak
+# S05 gate harness: verify on each Capture tap (3 frames), memory, and heat, logged on the phone.
+# GATE_TARGET is an eligible West Georgia species, or grass for the tutorial. Back ends a run.
+GATE_TARGET ?= Quercus nigra
 gate-harness: install
-	adb shell am start -n $(WILDFIND_PACKAGE)/dev.anchildress1.wildfind.harness.GateHarnessActivity --es word $(GATE_WORD)
+	adb shell am start -n $(WILDFIND_PACKAGE)/dev.anchildress1.wildfind.harness.GateHarnessActivity --es target "'$(GATE_TARGET)'"
 
 # Copies harness runs off the phone and summarizes new ones. One folder for all of them: each run's name starts with
 # its date and time, so pulling again adds new runs instead of copying old ones into another day's folder.
@@ -78,6 +78,18 @@ sprites:
 # S10: rebuilds the committed pipeline/data/toxicity.json from Wikipedia, USDA PLANTS, and GBIF; CI never runs it.
 toxicity:
 	$(UV) run --group reference python -W error -m wild_find_pipeline.toxicity
+
+# Rebuilds the committed pipeline/data/synonyms.json from the GBIF backbone so drifted iNat names find their row.
+synonyms:
+	$(UV) run --group reference python -W error -m wild_find_pipeline.synonyms
+
+# S17: rebuilds the committed pipeline/data/plant_types.json from USDA PLANTS growth habit and GBIF taxonomy.
+plant-types:
+	$(UV) run --group reference python -W error -m wild_find_pipeline.plant_types
+
+# Rebuilds the committed pipeline/data/descriptions.json: a kid-level sentence per row from USDA PLANTS traits.
+descriptions:
+	$(UV) run --group reference python -W error -m wild_find_pipeline.descriptions
 
 # Rebuilds the committed hazard_vectors.json; pulls the 3.9 GB BioCLIP teacher (as does reference), so CI runs neither.
 hazard-vectors:

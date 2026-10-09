@@ -1,0 +1,256 @@
+# 2026-10-08 06:56 EDT, MacBook (no device), Python 3.13.14, onnxruntime 1.30.0; BioCLIP Mobile fp32 ONNX (flora_student_fp32.onnx, sha256 8624d44af3727b69a41dc2035c37018a30753b8d9c93ab8801a0c724dd42510f, laptop = phone); reticle = center 60% Pillow bicubic to 224; species_table.npy + species_labels.json (with GBIF synonyms, pipeline/data/synonyms.json built 2026-10-08) from make assets; pipeline/data/toxicity.json; docs/results/day-2/threshold_regions.csv + inat_species_oct.csv (Oct 7 iNat pull); photos: toxic_block_photos.csv (Day 2 manifest + 9 new, iNat research-grade, CC0, medium); 'after row 1' drops frames where a hazard row is in the whole-table top 5
+# name resolution: scientific name or synonym, counts summed per row (core NameIndex + LocalSpecies); everything else as docs/results/day-2/toxic_block.py
+west-georgia-us: floor 55.5 sightings; 647 table rows matched by name or synonym (6 only via synonym: Asarum arifolium -> Hexastylis arifolia; Nephroia carolina -> Cocculus carolinus; Amauropelta noveboracensis -> Parathelypteris noveboracensis; Anatherum virginicum -> Andropogon virginicus; Pseudanomodon attenuatus -> Anomodon attenuatus; Aristolochia serpentaria -> Endodeca serpentaria)
+23 eligible species; 282 local toxic or hazard blocker rows
+blockers new through synonyms (3 photos each fetched): Hexastylis arifolia; Anomodon attenuatus; Endodeca serpentaria
+photos: 69 positive (23 species), 189 negative (63 toxic species)
+species with fewer than 3 CC0 photos: none
+row-1 hazard warning (hazard row in whole-table top 5): 3 of 69 positives, 9 of 189 negatives
+rule | pool rows | margin | target pass (raw / after row 1) | toxic false pass (raw / after row 1)
+A | 23 | 0.0000 | 58/69 (84%) / 56/69 (81%) | 189/189 / 180/189
+C | 305 | 0.0000 | 43/69 (62%) / 42/69 (61%) | 4/189 / 4/189
+C-m0.01 | 305 | 0.0100 | 42/69 (61%) / 41/69 (59%) | 2/189 / 2/189
+C-m0.02 | 305 | 0.0200 | 37/69 (54%) / 37/69 (54%) | 1/189 / 1/189
+C-m0.03 | 305 | 0.0300 | 35/69 (51%) / 35/69 (51%) | 1/189 / 1/189
+C-m0.04 | 305 | 0.0400 | 34/69 (49%) / 34/69 (49%) | 1/189 / 1/189
+C-m0.048 (shipped) | 305 | 0.0480 | 33/69 (48%) / 33/69 (48%) | 0/189 / 0/189
+C-m0.05 | 305 | 0.0500 | 33/69 (48%) / 33/69 (48%) | 0/189 / 0/189
+C-m0.06 | 305 | 0.0600 | 33/69 (48%) / 33/69 (48%) | 0/189 / 0/189
+C-m0.08 | 305 | 0.0800 | 29/69 (42%) / 29/69 (42%) | 0/189 / 0/189
+C-m0.1 | 305 | 0.1000 | 25/69 (36%) / 25/69 (36%) | 0/189 / 0/189
+C-m*raw | 305 | 0.0477 | 33/69 (48%) / 33/69 (48%) | 0/189 / 0/189
+C-m*hazard | 305 | 0.0477 | 33/69 (48%) / 33/69 (48%) | 0/189 / 0/189
+  A FALSE PASS Persicaria_longiseta_0.jpg top1 Conoclinium coelestinum gap inf passes Conoclinium coelestinum
+  A FALSE PASS Persicaria_longiseta_1.jpg top1 Conoclinium coelestinum gap inf passes Conoclinium coelestinum
+  A FALSE PASS Persicaria_longiseta_2.jpg top1 Phyllanthus urinaria gap inf passes Phyllanthus urinaria
+  A FALSE PASS Phytolacca_americana_0.jpg top1 Callicarpa americana gap inf passes Callicarpa americana (row-1 hazard warns first)
+  A FALSE PASS Phytolacca_americana_1.jpg top1 Callicarpa americana gap inf passes Callicarpa americana (row-1 hazard warns first)
+  A FALSE PASS Phytolacca_americana_2.jpg top1 Callicarpa americana gap inf passes Callicarpa americana
+  A FALSE PASS Eupatorium_capillifolium_0.jpg top1 Phyllanthus urinaria gap inf passes Phyllanthus urinaria
+  A FALSE PASS Eupatorium_capillifolium_1.jpg top1 Erechtites hieraciifolius gap inf passes Erechtites hieraciifolius
+  A FALSE PASS Eupatorium_capillifolium_2.jpg top1 Conoclinium coelestinum gap inf passes Conoclinium coelestinum
+  A FALSE PASS Euonymus_americanus_0.jpg top1 Callicarpa americana gap inf passes Callicarpa americana
+  A FALSE PASS Euonymus_americanus_1.jpg top1 Callicarpa americana gap inf passes Callicarpa americana
+  A FALSE PASS Euonymus_americanus_2.jpg top1 Chimaphila maculata gap inf passes Chimaphila maculata
+  A FALSE PASS Lonicera_maackii_0.jpg top1 Callicarpa americana gap inf passes Callicarpa americana
+  A FALSE PASS Lonicera_maackii_1.jpg top1 Callicarpa americana gap inf passes Callicarpa americana
+  A FALSE PASS Lonicera_maackii_2.jpg top1 Callicarpa americana gap inf passes Callicarpa americana
+  A FALSE PASS Eupatorium_serotinum_0.jpg top1 Conoclinium coelestinum gap inf passes Conoclinium coelestinum
+  A FALSE PASS Eupatorium_serotinum_1.jpg top1 Erechtites hieraciifolius gap inf passes Erechtites hieraciifolius
+  A FALSE PASS Eupatorium_serotinum_2.jpg top1 Solidago altissima gap inf passes Solidago altissima
+  A FALSE PASS Ligustrum_sinense_0.jpg top1 Diospyros virginiana gap inf passes Diospyros virginiana
+  A FALSE PASS Ligustrum_sinense_1.jpg top1 Ilex cornuta gap inf passes Ilex cornuta
+  A FALSE PASS Ligustrum_sinense_2.jpg top1 Callicarpa americana gap inf passes Callicarpa americana
+  A FALSE PASS Hedera_helix_0.jpg top1 Vitis rotundifolia gap inf passes Vitis rotundifolia (row-1 hazard warns first)
+  A FALSE PASS Hedera_helix_1.jpg top1 Ilex cornuta gap inf passes Ilex cornuta
+  A FALSE PASS Hedera_helix_2.jpg top1 Ampelopsis glandulosa gap inf passes Ampelopsis glandulosa
+  A FALSE PASS Parthenocissus_quinquefolia_0.jpg top1 Ampelopsis glandulosa gap inf passes Ampelopsis glandulosa
+  A FALSE PASS Parthenocissus_quinquefolia_1.jpg top1 Ampelopsis glandulosa gap inf passes Ampelopsis glandulosa
+  A FALSE PASS Parthenocissus_quinquefolia_2.jpg top1 Vitis rotundifolia gap inf passes Vitis rotundifolia
+  A FALSE PASS Acer_negundo_0.jpg top1 Pueraria montana gap inf passes Pueraria montana
+  A FALSE PASS Acer_negundo_1.jpg top1 Pueraria montana gap inf passes Pueraria montana
+  A FALSE PASS Acer_negundo_2.jpg top1 Diospyros virginiana gap inf passes Diospyros virginiana
+  A FALSE PASS Cornus_florida_0.jpg top1 Callicarpa americana gap inf passes Callicarpa americana
+  A FALSE PASS Cornus_florida_1.jpg top1 Sassafras albidum gap inf passes Sassafras albidum
+  A FALSE PASS Cornus_florida_2.jpg top1 Diospyros virginiana gap inf passes Diospyros virginiana
+  A FALSE PASS Nandina_domestica_0.jpg top1 Magnolia grandiflora gap inf passes Magnolia grandiflora
+  A FALSE PASS Nandina_domestica_1.jpg top1 Rhus copallinum gap inf passes Rhus copallinum
+  A FALSE PASS Nandina_domestica_2.jpg top1 Phyllanthus urinaria gap inf passes Phyllanthus urinaria
+  A FALSE PASS Toxicodendron_radicans_0.jpg top1 Callicarpa americana gap inf passes Callicarpa americana
+  A FALSE PASS Toxicodendron_radicans_1.jpg top1 Sassafras albidum gap inf passes Sassafras albidum (row-1 hazard warns first)
+  A FALSE PASS Toxicodendron_radicans_2.jpg top1 Ampelopsis glandulosa gap inf passes Ampelopsis glandulosa (row-1 hazard warns first)
+  A FALSE PASS Solanum_carolinense_0.jpg top1 Diospyros virginiana gap inf passes Diospyros virginiana (row-1 hazard warns first)
+  A FALSE PASS Solanum_carolinense_1.jpg top1 Erechtites hieraciifolius gap inf passes Erechtites hieraciifolius
+  A FALSE PASS Solanum_carolinense_2.jpg top1 Sassafras albidum gap inf passes Sassafras albidum (row-1 hazard warns first)
+  A FALSE PASS Juglans_nigra_0.jpg top1 Albizia julibrissin gap inf passes Albizia julibrissin
+  A FALSE PASS Juglans_nigra_1.jpg top1 Albizia julibrissin gap inf passes Albizia julibrissin
+  A FALSE PASS Juglans_nigra_2.jpg top1 Phyllanthus urinaria gap inf passes Phyllanthus urinaria
+  A FALSE PASS Acer_rubrum_0.jpg top1 Liquidambar styraciflua gap inf passes Liquidambar styraciflua
+  A FALSE PASS Acer_rubrum_1.jpg top1 Rhus copallinum gap inf passes Rhus copallinum
+  A FALSE PASS Acer_rubrum_2.jpg top1 Platanus occidentalis gap inf passes Platanus occidentalis
+  A FALSE PASS Asimina_triloba_0.jpg top1 Fagus grandifolia gap inf passes Fagus grandifolia
+  A FALSE PASS Asimina_triloba_1.jpg top1 Sassafras albidum gap inf passes Sassafras albidum
+  A FALSE PASS Asimina_triloba_2.jpg top1 Magnolia grandiflora gap inf passes Magnolia grandiflora
+  A FALSE PASS Ilex_opaca_0.jpg top1 Ilex cornuta gap inf passes Ilex cornuta
+  A FALSE PASS Ilex_opaca_1.jpg top1 Ilex cornuta gap inf passes Ilex cornuta
+  A FALSE PASS Ilex_opaca_2.jpg top1 Magnolia grandiflora gap inf passes Magnolia grandiflora
+  A FALSE PASS Perilla_frutescens_0.jpg top1 Phyllanthus urinaria gap inf passes Phyllanthus urinaria
+  A FALSE PASS Perilla_frutescens_1.jpg top1 Callicarpa americana gap inf passes Callicarpa americana
+  A FALSE PASS Perilla_frutescens_2.jpg top1 Callicarpa americana gap inf passes Callicarpa americana
+  A FALSE PASS Quercus_alba_0.jpg top1 Quercus nigra gap inf passes Quercus nigra
+  A FALSE PASS Quercus_alba_1.jpg top1 Quercus nigra gap inf passes Quercus nigra
+  A FALSE PASS Quercus_alba_2.jpg top1 Quercus nigra gap inf passes Quercus nigra
+  A FALSE PASS Berberis_bealei_0.jpg top1 Ilex cornuta gap inf passes Ilex cornuta
+  A FALSE PASS Berberis_bealei_1.jpg top1 Albizia julibrissin gap inf passes Albizia julibrissin
+  A FALSE PASS Berberis_bealei_2.jpg top1 Ilex cornuta gap inf passes Ilex cornuta
+  A FALSE PASS Lonicera_japonica_0.jpg top1 Ampelopsis glandulosa gap inf passes Ampelopsis glandulosa
+  A FALSE PASS Lonicera_japonica_1.jpg top1 Solidago altissima gap inf passes Solidago altissima
+  A FALSE PASS Lonicera_japonica_2.jpg top1 Pueraria montana gap inf passes Pueraria montana
+  A FALSE PASS Lobelia_cardinalis_0.jpg top1 Erechtites hieraciifolius gap inf passes Erechtites hieraciifolius
+  A FALSE PASS Lobelia_cardinalis_1.jpg top1 Erechtites hieraciifolius gap inf passes Erechtites hieraciifolius
+  A FALSE PASS Lobelia_cardinalis_2.jpg top1 Erechtites hieraciifolius gap inf passes Erechtites hieraciifolius
+  A FALSE PASS Physalis_angulata_0.jpg top1 Phyllanthus urinaria gap inf passes Phyllanthus urinaria
+  A FALSE PASS Physalis_angulata_1.jpg top1 Phyllanthus urinaria gap inf passes Phyllanthus urinaria
+  A FALSE PASS Physalis_angulata_2.jpg top1 Pueraria montana gap inf passes Pueraria montana
+  A FALSE PASS Verbesina_alternifolia_0.jpg top1 Erechtites hieraciifolius gap inf passes Erechtites hieraciifolius
+  A FALSE PASS Verbesina_alternifolia_1.jpg top1 Erechtites hieraciifolius gap inf passes Erechtites hieraciifolius
+  A FALSE PASS Verbesina_alternifolia_2.jpg top1 Erechtites hieraciifolius gap inf passes Erechtites hieraciifolius
+  A FALSE PASS Lycoris_radiata_0.jpg top1 Albizia julibrissin gap inf passes Albizia julibrissin
+  A FALSE PASS Lycoris_radiata_1.jpg top1 Albizia julibrissin gap inf passes Albizia julibrissin
+  A FALSE PASS Lycoris_radiata_2.jpg top1 Albizia julibrissin gap inf passes Albizia julibrissin
+  A FALSE PASS Campsis_radicans_0.jpg top1 Ampelopsis glandulosa gap inf passes Ampelopsis glandulosa
+  A FALSE PASS Campsis_radicans_1.jpg top1 Albizia julibrissin gap inf passes Albizia julibrissin
+  A FALSE PASS Campsis_radicans_2.jpg top1 Ampelopsis glandulosa gap inf passes Ampelopsis glandulosa
+  A FALSE PASS Glechoma_hederacea_0.jpg top1 Ampelopsis glandulosa gap inf passes Ampelopsis glandulosa
+  A FALSE PASS Glechoma_hederacea_1.jpg top1 Conoclinium coelestinum gap inf passes Conoclinium coelestinum
+  A FALSE PASS Glechoma_hederacea_2.jpg top1 Ampelopsis glandulosa gap inf passes Ampelopsis glandulosa
+  A FALSE PASS Persicaria_sagittata_0.jpg top1 Pueraria montana gap inf passes Pueraria montana
+  A FALSE PASS Persicaria_sagittata_1.jpg top1 Conoclinium coelestinum gap inf passes Conoclinium coelestinum
+  A FALSE PASS Persicaria_sagittata_2.jpg top1 Conoclinium coelestinum gap inf passes Conoclinium coelestinum
+  A FALSE PASS Solidago_caesia_0.jpg top1 Solidago altissima gap inf passes Solidago altissima
+  A FALSE PASS Solidago_caesia_1.jpg top1 Polystichum acrostichoides gap inf passes Polystichum acrostichoides
+  A FALSE PASS Solidago_caesia_2.jpg top1 Solidago altissima gap inf passes Solidago altissima
+  A FALSE PASS Melothria_pendula_0.jpg top1 Vitis rotundifolia gap inf passes Vitis rotundifolia
+  A FALSE PASS Melothria_pendula_1.jpg top1 Vitis rotundifolia gap inf passes Vitis rotundifolia
+  A FALSE PASS Melothria_pendula_2.jpg top1 Vitis rotundifolia gap inf passes Vitis rotundifolia
+  A FALSE PASS Jacquemontia_tamnifolia_0.jpg top1 Conoclinium coelestinum gap inf passes Conoclinium coelestinum
+  A FALSE PASS Jacquemontia_tamnifolia_1.jpg top1 Conoclinium coelestinum gap inf passes Conoclinium coelestinum
+  A FALSE PASS Jacquemontia_tamnifolia_2.jpg top1 Conoclinium coelestinum gap inf passes Conoclinium coelestinum
+  A FALSE PASS Rudbeckia_laciniata_0.jpg top1 Solidago altissima gap inf passes Solidago altissima
+  A FALSE PASS Rudbeckia_laciniata_1.jpg top1 Pueraria montana gap inf passes Pueraria montana
+  A FALSE PASS Rudbeckia_laciniata_2.jpg top1 Solidago altissima gap inf passes Solidago altissima
+  A FALSE PASS Verbesina_virginica_0.jpg top1 Conoclinium coelestinum gap inf passes Conoclinium coelestinum
+  A FALSE PASS Verbesina_virginica_1.jpg top1 Callicarpa americana gap inf passes Callicarpa americana
+  A FALSE PASS Verbesina_virginica_2.jpg top1 Callicarpa americana gap inf passes Callicarpa americana
+  A FALSE PASS Vaccinium_arboreum_0.jpg top1 Rhus copallinum gap inf passes Rhus copallinum
+  A FALSE PASS Vaccinium_arboreum_1.jpg top1 Diospyros virginiana gap inf passes Diospyros virginiana
+  A FALSE PASS Vaccinium_arboreum_2.jpg top1 Diospyros virginiana gap inf passes Diospyros virginiana
+  A FALSE PASS Juniperus_virginiana_0.jpg top1 Rhus copallinum gap inf passes Rhus copallinum
+  A FALSE PASS Juniperus_virginiana_1.jpg top1 Ampelopsis glandulosa gap inf passes Ampelopsis glandulosa
+  A FALSE PASS Juniperus_virginiana_2.jpg top1 Phyllanthus urinaria gap inf passes Phyllanthus urinaria
+  A FALSE PASS Verbascum_thapsus_0.jpg top1 Cercis canadensis gap inf passes Cercis canadensis
+  A FALSE PASS Verbascum_thapsus_1.jpg top1 Callicarpa americana gap inf passes Callicarpa americana
+  A FALSE PASS Verbascum_thapsus_2.jpg top1 Callicarpa americana gap inf passes Callicarpa americana
+  A FALSE PASS Onoclea_sensibilis_0.jpg top1 Phyllanthus urinaria gap inf passes Phyllanthus urinaria
+  A FALSE PASS Onoclea_sensibilis_1.jpg top1 Polystichum acrostichoides gap inf passes Polystichum acrostichoides
+  A FALSE PASS Onoclea_sensibilis_2.jpg top1 Polystichum acrostichoides gap inf passes Polystichum acrostichoides
+  A FALSE PASS Helianthus_angustifolius_0.jpg top1 Erechtites hieraciifolius gap inf passes Erechtites hieraciifolius
+  A FALSE PASS Helianthus_angustifolius_1.jpg top1 Solidago altissima gap inf passes Solidago altissima
+  A FALSE PASS Helianthus_angustifolius_2.jpg top1 Conoclinium coelestinum gap inf passes Conoclinium coelestinum
+  A FALSE PASS Monotropa_uniflora_0.jpg top1 Chimaphila maculata gap inf passes Chimaphila maculata
+  A FALSE PASS Monotropa_uniflora_1.jpg top1 Chimaphila maculata gap inf passes Chimaphila maculata
+  A FALSE PASS Monotropa_uniflora_2.jpg top1 Magnolia grandiflora gap inf passes Magnolia grandiflora
+  A FALSE PASS Prunus_caroliniana_0.jpg top1 Magnolia grandiflora gap inf passes Magnolia grandiflora
+  A FALSE PASS Prunus_caroliniana_1.jpg top1 Magnolia grandiflora gap inf passes Magnolia grandiflora
+  A FALSE PASS Prunus_caroliniana_2.jpg top1 Diospyros virginiana gap inf passes Diospyros virginiana
+  A FALSE PASS Senna_obtusifolia_0.jpg top1 Phyllanthus urinaria gap inf passes Phyllanthus urinaria
+  A FALSE PASS Senna_obtusifolia_1.jpg top1 Phyllanthus urinaria gap inf passes Phyllanthus urinaria
+  A FALSE PASS Senna_obtusifolia_2.jpg top1 Phyllanthus urinaria gap inf passes Phyllanthus urinaria
+  A FALSE PASS Baccharis_halimifolia_0.jpg top1 Quercus nigra gap inf passes Quercus nigra
+  A FALSE PASS Baccharis_halimifolia_1.jpg top1 Erechtites hieraciifolius gap inf passes Erechtites hieraciifolius
+  A FALSE PASS Baccharis_halimifolia_2.jpg top1 Rhus copallinum gap inf passes Rhus copallinum
+  A FALSE PASS Lobelia_puberula_0.jpg top1 Conoclinium coelestinum gap inf passes Conoclinium coelestinum
+  A FALSE PASS Lobelia_puberula_1.jpg top1 Conoclinium coelestinum gap inf passes Conoclinium coelestinum
+  A FALSE PASS Lobelia_puberula_2.jpg top1 Conoclinium coelestinum gap inf passes Conoclinium coelestinum
+  A FALSE PASS Diodia_virginiana_0.jpg top1 Phyllanthus urinaria gap inf passes Phyllanthus urinaria
+  A FALSE PASS Diodia_virginiana_1.jpg top1 Chimaphila maculata gap inf passes Chimaphila maculata
+  A FALSE PASS Diodia_virginiana_2.jpg top1 Chimaphila maculata gap inf passes Chimaphila maculata
+  A FALSE PASS Ageratina_altissima_0.jpg top1 Conoclinium coelestinum gap inf passes Conoclinium coelestinum
+  A FALSE PASS Ageratina_altissima_1.jpg top1 Callicarpa americana gap inf passes Callicarpa americana
+  A FALSE PASS Ageratina_altissima_2.jpg top1 Conoclinium coelestinum gap inf passes Conoclinium coelestinum
+  A FALSE PASS Pleopeltis_michauxiana_0.jpg top1 Phyllanthus urinaria gap inf passes Phyllanthus urinaria
+  A FALSE PASS Pleopeltis_michauxiana_1.jpg top1 Magnolia grandiflora gap inf passes Magnolia grandiflora
+  A FALSE PASS Pleopeltis_michauxiana_2.jpg top1 Magnolia grandiflora gap inf passes Magnolia grandiflora
+  A FALSE PASS Cephalanthus_occidentalis_0.jpg top1 Callicarpa americana gap inf passes Callicarpa americana
+  A FALSE PASS Cephalanthus_occidentalis_1.jpg top1 Liquidambar styraciflua gap inf passes Liquidambar styraciflua
+  A FALSE PASS Cephalanthus_occidentalis_2.jpg top1 Callicarpa americana gap inf passes Callicarpa americana
+  A FALSE PASS Ipomoea_lacunosa_0.jpg top1 Ampelopsis glandulosa gap inf passes Ampelopsis glandulosa
+  A FALSE PASS Ipomoea_lacunosa_1.jpg top1 Ampelopsis glandulosa gap inf passes Ampelopsis glandulosa
+  A FALSE PASS Ipomoea_lacunosa_2.jpg top1 Ampelopsis glandulosa gap inf passes Ampelopsis glandulosa
+  A FALSE PASS Gonolobus_suberosus_0.jpg top1 Pueraria montana gap inf passes Pueraria montana
+  A FALSE PASS Gonolobus_suberosus_1.jpg top1 Liriodendron tulipifera gap inf passes Liriodendron tulipifera
+  A FALSE PASS Gonolobus_suberosus_2.jpg top1 Cercis canadensis gap inf passes Cercis canadensis
+  A FALSE PASS Smallanthus_uvedalia_0.jpg top1 Platanus occidentalis gap inf passes Platanus occidentalis
+  A FALSE PASS Smallanthus_uvedalia_1.jpg top1 Erechtites hieraciifolius gap inf passes Erechtites hieraciifolius
+  A FALSE PASS Smallanthus_uvedalia_2.jpg top1 Callicarpa americana gap inf passes Callicarpa americana
+  A FALSE PASS Fallopia_scandens_0.jpg top1 Rhus copallinum gap inf passes Rhus copallinum
+  A FALSE PASS Fallopia_scandens_1.jpg top1 Ampelopsis glandulosa gap inf passes Ampelopsis glandulosa
+  A FALSE PASS Fallopia_scandens_2.jpg top1 Ampelopsis glandulosa gap inf passes Ampelopsis glandulosa
+  A FALSE PASS Prunus_serotina_0.jpg top1 Diospyros virginiana gap inf passes Diospyros virginiana
+  A FALSE PASS Prunus_serotina_1.jpg top1 Quercus nigra gap inf passes Quercus nigra
+  A FALSE PASS Prunus_serotina_2.jpg top1 Quercus nigra gap inf passes Quercus nigra
+  A FALSE PASS Helenium_amarum_0.jpg top1 Conoclinium coelestinum gap inf passes Conoclinium coelestinum
+  A FALSE PASS Helenium_amarum_1.jpg top1 Conoclinium coelestinum gap inf passes Conoclinium coelestinum
+  A FALSE PASS Helenium_amarum_2.jpg top1 Solidago altissima gap inf passes Solidago altissima
+  A FALSE PASS Trichostema_dichotomum_0.jpg top1 Erechtites hieraciifolius gap inf passes Erechtites hieraciifolius
+  A FALSE PASS Trichostema_dichotomum_1.jpg top1 Conoclinium coelestinum gap inf passes Conoclinium coelestinum
+  A FALSE PASS Trichostema_dichotomum_2.jpg top1 Conoclinium coelestinum gap inf passes Conoclinium coelestinum
+  A FALSE PASS Solanum_emulans_0.jpg top1 Conoclinium coelestinum gap inf passes Conoclinium coelestinum (row-1 hazard warns first)
+  A FALSE PASS Solanum_emulans_1.jpg top1 Phyllanthus urinaria gap inf passes Phyllanthus urinaria
+  A FALSE PASS Solanum_emulans_2.jpg top1 Vitis rotundifolia gap inf passes Vitis rotundifolia (row-1 hazard warns first)
+  A FALSE PASS Conocephalum_salebrosum_0.jpg top1 Platanus occidentalis gap inf passes Platanus occidentalis
+  A FALSE PASS Conocephalum_salebrosum_1.jpg top1 Platanus occidentalis gap inf passes Platanus occidentalis
+  A FALSE PASS Conocephalum_salebrosum_2.jpg top1 Platanus occidentalis gap inf passes Platanus occidentalis
+  A FALSE PASS Woodwardia_areolata_0.jpg top1 Polystichum acrostichoides gap inf passes Polystichum acrostichoides
+  A FALSE PASS Woodwardia_areolata_1.jpg top1 Phyllanthus urinaria gap inf passes Phyllanthus urinaria
+  A FALSE PASS Woodwardia_areolata_2.jpg top1 Ampelopsis glandulosa gap inf passes Ampelopsis glandulosa
+  A FALSE PASS Collinsonia_canadensis_0.jpg top1 Erechtites hieraciifolius gap inf passes Erechtites hieraciifolius
+  A FALSE PASS Collinsonia_canadensis_1.jpg top1 Callicarpa americana gap inf passes Callicarpa americana
+  A FALSE PASS Collinsonia_canadensis_2.jpg top1 Albizia julibrissin gap inf passes Albizia julibrissin
+  A FALSE PASS Mazus_pumilus_0.jpg top1 Pueraria montana gap inf passes Pueraria montana
+  A FALSE PASS Mazus_pumilus_1.jpg top1 Phyllanthus urinaria gap inf passes Phyllanthus urinaria
+  A FALSE PASS Mazus_pumilus_2.jpg top1 Cercis canadensis gap inf passes Cercis canadensis
+  A FALSE PASS Hexastylis_arifolia_0.jpg top1 Vitis rotundifolia gap inf passes Vitis rotundifolia
+  A FALSE PASS Hexastylis_arifolia_1.jpg top1 Tipularia discolor gap inf passes Tipularia discolor
+  A FALSE PASS Hexastylis_arifolia_2.jpg top1 Tipularia discolor gap inf passes Tipularia discolor
+  A FALSE PASS Anomodon_attenuatus_0.jpg top1 Polystichum acrostichoides gap inf passes Polystichum acrostichoides
+  A FALSE PASS Anomodon_attenuatus_1.jpg top1 Phyllanthus urinaria gap inf passes Phyllanthus urinaria
+  A FALSE PASS Anomodon_attenuatus_2.jpg top1 Polystichum acrostichoides gap inf passes Polystichum acrostichoides
+  A FALSE PASS Endodeca_serpentaria_0.jpg top1 Vitis rotundifolia gap inf passes Vitis rotundifolia
+  A FALSE PASS Endodeca_serpentaria_1.jpg top1 Tipularia discolor gap inf passes Tipularia discolor
+  A FALSE PASS Endodeca_serpentaria_2.jpg top1 Phyllanthus urinaria gap inf passes Phyllanthus urinaria
+  C FALSE PASS Acer_negundo_0.jpg top1 Pueraria montana gap 0.0093 passes Pueraria montana
+  C FALSE PASS Toxicodendron_radicans_0.jpg top1 Callicarpa americana gap 0.0477 passes Callicarpa americana
+  C FALSE PASS Acer_rubrum_2.jpg top1 Platanus occidentalis gap 0.0091 passes Platanus occidentalis
+  C FALSE PASS Monotropa_uniflora_2.jpg top1 Magnolia grandiflora gap 0.0153 passes Magnolia grandiflora
+  C-m0.01 FALSE PASS Toxicodendron_radicans_0.jpg top1 Callicarpa americana gap 0.0477 passes Callicarpa americana
+  C-m0.01 FALSE PASS Monotropa_uniflora_2.jpg top1 Magnolia grandiflora gap 0.0153 passes Magnolia grandiflora
+  C-m0.02 FALSE PASS Toxicodendron_radicans_0.jpg top1 Callicarpa americana gap 0.0477 passes Callicarpa americana
+  C-m0.03 FALSE PASS Toxicodendron_radicans_0.jpg top1 Callicarpa americana gap 0.0477 passes Callicarpa americana
+  C-m0.04 FALSE PASS Toxicodendron_radicans_0.jpg top1 Callicarpa americana gap 0.0477 passes Callicarpa americana
+  shipped loses Conoclinium_coelestinum_1.jpg: top1 Conoclinium coelestinum, best blocker Ageratina altissima gap 0.0145
+  shipped loses Conoclinium_coelestinum_2.jpg: top1 Verbena rigida, best blocker Verbena rigida gap 0.0000
+  shipped loses Liquidambar_styraciflua_1.jpg: top1 Liquidambar styraciflua, best blocker Aesculus pavia gap 0.0183
+  shipped loses Liquidambar_styraciflua_2.jpg: top1 Liquidambar styraciflua, best blocker Ricinus communis gap 0.0282
+  shipped loses Magnolia_grandiflora_0.jpg: top1 Gomphocarpus physocarpus, best blocker Gomphocarpus physocarpus gap 0.0000
+  shipped loses Liriodendron_tulipifera_1.jpg: top1 Triadica sebifera, best blocker Triadica sebifera gap 0.0000
+  shipped loses Liriodendron_tulipifera_2.jpg: top1 Juglans nigra, best blocker Juglans nigra gap 0.0000
+  shipped loses Polystichum_acrostichoides_0.jpg: top1 Polystichum acrostichoides, best blocker Osmundastrum cinnamomeum gap 0.0205
+  shipped loses Fagus_grandifolia_1.jpg: top1 Fagus grandifolia, best blocker Frangula caroliniana gap 0.0102
+  shipped loses Erechtites_hieraciifolius_0.jpg: top1 Erechtites hieraciifolius, best blocker Nabalus altissimus gap 0.0077
+  shipped loses Erechtites_hieraciifolius_2.jpg: top1 Achillea millefolium, best blocker Achillea millefolium gap 0.0000
+  shipped loses Diospyros_virginiana_0.jpg: top1 Asimina triloba, best blocker Asimina triloba gap 0.0000
+  shipped loses Diospyros_virginiana_1.jpg: top1 Quercus marilandica, best blocker Quercus marilandica gap 0.0000
+  shipped loses Diospyros_virginiana_2.jpg: top1 Quercus nigra, best blocker Quercus marilandica gap 0.0149
+  shipped loses Platanus_occidentalis_0.jpg: top1 Acer negundo, best blocker Acer negundo gap 0.0000, row-1 hazard warns
+  shipped loses Vitis_rotundifolia_0.jpg: top1 Ampelopsis cordata, best blocker Ampelopsis cordata gap 0.0000
+  shipped loses Vitis_rotundifolia_1.jpg: top1 Melothria pendula, best blocker Melothria pendula gap 0.0000
+  shipped loses Vitis_rotundifolia_2.jpg: top1 Actaea pachypoda, best blocker Actaea pachypoda gap 0.0000
+  shipped loses Pueraria_montana_1.jpg: top1 Pontederia crassipes, best blocker Pontederia crassipes gap 0.0000
+  shipped loses Cercis_canadensis_0.jpg: top1 Dichondra carolinensis, best blocker Dichondra carolinensis gap 0.0000
+  shipped loses Cercis_canadensis_2.jpg: top1 Menispermum canadense, best blocker Menispermum canadense gap 0.0000
+  shipped loses Quercus_nigra_0.jpg: top1 Quercus marilandica, best blocker Quercus marilandica gap 0.0000
+  shipped loses Quercus_nigra_1.jpg: top1 Gomphocarpus physocarpus, best blocker Gomphocarpus physocarpus gap 0.0000
+  shipped loses Albizia_julibrissin_1.jpg: top1 Paspalum urvillei, best blocker Paspalum urvillei gap 0.0000
+  shipped loses Albizia_julibrissin_2.jpg: top1 Albizia julibrissin, best blocker Gleditsia triacanthos gap 0.0400
+  shipped loses Rhus_copallinum_0.jpg: top1 Juglans nigra, best blocker Juglans nigra gap 0.0000, row-1 hazard warns
+  shipped loses Rhus_copallinum_1.jpg: top1 Juglans nigra, best blocker Juglans nigra gap 0.0000
+  shipped loses Rhus_copallinum_2.jpg: top1 Rhus copallinum, best blocker Tephrosia virginiana gap 0.0152
+  shipped loses Solidago_altissima_2.jpg: top1 Rhodobryum ontariense, best blocker Rhodobryum ontariense gap 0.0000
+  shipped loses Ilex_cornuta_0.jpg: top1 Ilex cornuta, best blocker Solanum carolinense gap 0.0107, row-1 hazard warns
+  shipped loses Sassafras_albidum_1.jpg: top1 Quercus marilandica, best blocker Quercus marilandica gap 0.0000
+  shipped loses Tipularia_discolor_0.jpg: top1 Pontederia crassipes, best blocker Pontederia crassipes gap 0.0000
+  shipped loses Tipularia_discolor_1.jpg: top1 Magnolia grandiflora, best blocker Photinia serratifolia gap 0.0400
+  shipped loses Tipularia_discolor_2.jpg: top1 Hexastylis arifolia, best blocker Hexastylis arifolia gap 0.0000
+  shipped loses Phyllanthus_urinaria_1.jpg: top1 Phyllanthus urinaria, best blocker Phyllanthus tenellus gap 0.0334
+  shipped loses Phyllanthus_urinaria_2.jpg: top1 Melothria pendula, best blocker Melothria pendula gap 0.0000

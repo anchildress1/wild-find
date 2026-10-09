@@ -7,7 +7,14 @@ import numpy as np
 import pytest
 
 from wild_find_pipeline import assets, paths
-from wild_find_pipeline.assets import plant_share, species_table, with_toxicity
+from wild_find_pipeline.assets import (
+    plant_share,
+    species_table,
+    with_descriptions,
+    with_plant_types,
+    with_synonyms,
+    with_toxicity,
+)
 from wild_find_pipeline.labels import HAZARDS, embedding_versions, is_hazard, lacking_hazards
 from wild_find_pipeline.paths import pin
 
@@ -220,3 +227,51 @@ def test_with_toxicity_adds_genus_and_the_committed_flag():
 def test_with_toxicity_rejects_a_row_without_a_flag():
     with pytest.raises(ValueError, match="run make toxicity"):
         with_toxicity([{"scientific": "Quercus nigra", "hazard": False}], {})
+
+
+def test_with_synonyms_adds_each_rows_aliases():
+    labels = [{"scientific": "Berberis bealei", "toxic": False}, {"scientific": "Quercus nigra", "toxic": False}]
+    aliases = {"Berberis bealei": ["Mahonia bealei"], "Quercus nigra": []}
+
+    assert with_synonyms(labels, aliases) == [
+        {"scientific": "Berberis bealei", "toxic": False, "synonyms": ["Mahonia bealei"]},
+        {"scientific": "Quercus nigra", "toxic": False, "synonyms": []},
+    ]
+
+
+def test_with_synonyms_rejects_a_row_without_an_entry():
+    with pytest.raises(ValueError, match="run make synonyms"):
+        with_synonyms([{"scientific": "Quercus nigra", "hazard": False}], {"Quercus alba": []})
+
+
+def test_with_plant_types_adds_each_rows_type_or_none():
+    labels = [
+        {"scientific": "Quercus nigra", "toxic": False},
+        {"scientific": "Erechtites hieraciifolius", "toxic": False},
+    ]
+    types = {"Quercus nigra": {"type": "tree", "source": "usda"}, "Erechtites hieraciifolius": {"type": None}}
+
+    assert with_plant_types(labels, types) == [
+        {"scientific": "Quercus nigra", "toxic": False, "type": "tree"},
+        {"scientific": "Erechtites hieraciifolius", "toxic": False, "type": None},
+    ]
+
+
+def test_with_plant_types_rejects_a_row_without_an_entry():
+    with pytest.raises(ValueError, match="run make plant-types"):
+        with_plant_types([{"scientific": "Quercus nigra", "hazard": False}], {"Quercus alba": {"type": "tree"}})
+
+
+def test_with_descriptions_adds_each_rows_sentence_or_none():
+    labels = [{"scientific": "Quercus nigra"}, {"scientific": "Epifagus virginiana"}]
+    found = {"Quercus nigra": {"description": "A tall tree."}, "Epifagus virginiana": {"description": None}}
+
+    assert with_descriptions(labels, found) == [
+        {"scientific": "Quercus nigra", "description": "A tall tree."},
+        {"scientific": "Epifagus virginiana", "description": None},
+    ]
+
+
+def test_with_descriptions_rejects_a_row_without_an_entry():
+    with pytest.raises(ValueError, match="run make descriptions"):
+        with_descriptions([{"scientific": "Quercus nigra"}], {})

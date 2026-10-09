@@ -5,22 +5,20 @@ import pytest
 
 from wild_find_pipeline import label_vectors
 from wild_find_pipeline.label_vectors import check_vectors, label_rows, write
-from wild_find_pipeline.labels import DEV_WORDS, GRASS, HAZARDS, TUTORIAL
+from wild_find_pipeline.labels import GRASS, HAZARDS, TUTORIAL
 
 
-def test_label_rows_put_words_first_then_the_eleven_tutorial_labels():
-    rows = label_rows({"oak": "Quercus"})
+def test_label_rows_are_the_eleven_tutorial_labels_in_order():
+    rows = label_rows()
 
-    assert rows[0] == {"id": "oak", "kind": "word", "scientific": "Quercus"}
-    assert [r["id"] for r in rows[1:]] == list(TUTORIAL)
-    assert {r["kind"] for r in rows[1:]} == {"tutorial"}
+    assert [r["scientific"] for r in rows] == list(TUTORIAL)
+    assert rows[0] == {"scientific": GRASS, "prompt": "a photo of Poaceae."}
 
 
 def test_tutorial_set_is_prd_r3():
     assert len(TUTORIAL) == 11
     assert TUTORIAL[0] == GRASS
     assert set(HAZARDS.values()) <= set(TUTORIAL)
-    assert set(DEV_WORDS.values()) <= set(TUTORIAL)
 
 
 def test_check_vectors_returns_little_endian_float32():
@@ -42,7 +40,7 @@ def test_check_vectors_rejects_wrong_count_shape_nan_and_non_unit(vectors):
 def test_write_saves_parallel_npy_and_json(tmp_path, monkeypatch):
     # The real lookup needs the reference group's open-clip-torch, which CI's pipeline tests don't install.
     monkeypatch.setattr(label_vectors, "embedding_versions", lambda: {"open-clip-torch": "x", "torch": "y"})
-    rows = label_rows({"oak": "Quercus"})
+    rows = label_rows()
     vectors = np.zeros((len(rows), 2))
     vectors[:, 0] = 1.0
 
@@ -50,45 +48,46 @@ def test_write_saves_parallel_npy_and_json(tmp_path, monkeypatch):
 
     saved = np.load(tmp_path / "labels.npy")
     meta = json.loads((tmp_path / "labels.json").read_text())
-    assert saved.shape == (12, 2)
-    assert meta["schema_version"] == 1
-    assert meta["labels"][0] == {"id": "oak", "kind": "word", "scientific": "Quercus", "prompt": "a photo of Quercus."}
-    assert len(meta["labels"]) == 12
+    assert saved.shape == (11, 2)
+    assert meta["schema_version"] == 2
+    assert meta["labels"] == rows
     assert meta["packages"] == {"open-clip-torch": "x", "torch": "y"}
 
 
 @pytest.fixture
 def committed(tmp_path, monkeypatch):
     monkeypatch.setattr(label_vectors, "embedding_versions", lambda: {"open-clip-torch": "x", "torch": "y"})
-    words = {"oak": "Quercus"}
-    rows = label_rows(words)
+    rows = label_rows()
     vectors = np.zeros((len(rows), 2))
     vectors[:, 0] = 1.0
     write(tmp_path, rows, vectors)
-    return tmp_path, words
+    return tmp_path
 
 
 def test_committed_labels_that_match_pass(committed):
-    out, words = committed
-
-    label_vectors.check_committed(out, words)
+    label_vectors.check_committed(committed)
 
 
 @pytest.mark.parametrize(
     "drift",
     [
-        lambda out, words, mp: words.update(oak="Quercus alba"),
-        lambda out, words, mp: words.update(pine="Pinus"),
-        lambda out, words, mp: mp.setattr(label_vectors, "prompt", lambda text: f"an image of {text}."),
-        lambda out, words, mp: mp.setattr(label_vectors, "teacher_model", lambda: {"repo": "x", "revision": "y"}),
-        lambda out, words, mp: mp.setattr(label_vectors, "embedding_versions", lambda: {"torch": "z"}),
-        lambda out, words, mp: np.save(out / "labels.npy", np.ones((12, 2), dtype="<f4")),
+        lambda mp: TUTORIAL[:-1],
+        lambda mp: (*TUTORIAL, "Acer"),
+        lambda mp: mp.setattr(label_vectors, "prompt", lambda text: f"an image of {text}.") or TUTORIAL,
+        lambda mp: mp.setattr(label_vectors, "teacher_model", lambda: {"repo": "x", "revision": "y"}) or TUTORIAL,
+        lambda mp: mp.setattr(label_vectors, "embedding_versions", lambda: {"torch": "z"}) or TUTORIAL,
     ],
-    ids=["mapping", "new word", "prompt", "teacher", "packages", "vectors"],
+    ids=["dropped label", "new label", "prompt", "teacher", "packages"],
 )
 def test_committed_labels_that_drift_are_rejected(committed, monkeypatch, drift):
-    out, words = committed
-    drift(out, words, monkeypatch)
+    taxa = drift(monkeypatch)
 
     with pytest.raises(ValueError):
-        label_vectors.check_committed(out, words)
+        label_vectors.check_committed(committed, taxa)
+
+
+def test_committed_vectors_of_the_wrong_count_are_rejected(committed):
+    np.save(committed / "labels.npy", np.ones((12, 2), dtype="<f4"))
+
+    with pytest.raises(ValueError):
+        label_vectors.check_committed(committed)

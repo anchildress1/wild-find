@@ -1,0 +1,208 @@
+descriptions.json built 2026-10-08; species_labels.json from make assets
+rule: ["bright leaves in fall: tree, shrub, or vine; fallConspicuousYes, fruit not showy, and not evergreen (Fall Conspicuous covers leaves or fruits)", "<color> flowers [in <bloom season>]: one non-green flower color; trees only when showy; never on conifers, ferns, grasses, or mosses", "<color> fruit, or brown seeds, [in fall when the Fruit/Seed Period Begin-End span covers fall, else no season]: fruitSeedConspicuousYes and one fruit color", "<color> leaves: one leaf color other than green or red"]; fall features first; at most 2
+
+whole table: 848 of 4272 rows described
+  by type (described/rows): herb 298/1954, None 1/728, shrub 162/460, tree 231/444, vine 40/199, grass 55/199, fern 11/160, conifer 50/86, moss 0/42
+  distinct sentences: 378
+
+West Georgia (34, -85), day-2 pull: 15 of 23 eligible targets described
+
+  363  blue mistflower (Conoclinium coelestinum), herb
+       says: A plant with blue flowers in summer.
+       from: Conoclinium coelestinum: height_ft=3.2, flower=PATO_0000318, leaf=PATO_0000320, bloom=C94732, seed_begin=C94732, seed_end=C94733, leaf_retention=PATO_0001731, showy=coppicePotentialNo/fallConspicuousYes/flowerConspicuousNo/fruitSeedConspicuousNo
+       DOUBT: USDA says Fall Conspicuous; as an herb that can't be tied to leaves, so the template says none
+
+  231  American beautyberry (Callicarpa americana), shrub
+       says: A bush with purple fruit in fall and blue flowers in summer.
+       from: Callicarpa americana: height_ft=6, flower=PATO_0000318, leaf=PATO_0000320, bloom=earlySummer, seed_begin=C94732, seed_end=C94733, fruit=PATO_0000951, leaf_retention=PATO_0001731, showy=coppicePotentialNo/fallConspicuousYes/flowerConspicuousYes/fruitSeedConspicuousYes
+       DOUBT: USDA says blue flowers; field guides call them pink to lavender
+
+  184  American sweetgum (Liquidambar styraciflua), tree
+       says: A tall tree with brown seeds in fall.
+       from: Liquidambar styraciflua: height_ft=100/45, flower=PATO_0000320, leaf=PATO_0000320, bloom=midSpring, seed_begin=C94732, seed_end=C94733, fruit=PATO_0000952, leaf_retention=PATO_0001731, showy=coppicePotentialYes/fallConspicuousYes/flowerConspicuousNo/fruitSeedConspicuousYes
+
+  159  southern magnolia (Magnolia grandiflora), tree
+       says: A tall tree with white flowers in spring and red fruit.
+       from: Magnolia grandiflora: height_ft=100/40, flower=PATO_0000323, leaf=PATO_0000320, bloom=midSpring, seed_begin=C94732, seed_end=C94732, fruit=PATO_0000322, leaf_retention=PATO_0001733, showy=coppicePotentialNo/fallConspicuousYes/flowerConspicuousYes/fruitSeedConspicuousYes
+
+  154  American tuliptree (Liriodendron tulipifera), tree
+       says: A tall tree with yellow flowers in spring and brown seeds.
+       from: Liriodendron tulipifera: height_ft=120/50, flower=PATO_0000324, leaf=PATO_0000320, bloom=midSpring, seed_begin=C94732, seed_end=C94732, fruit=PATO_0000952, leaf_retention=PATO_0001731, showy=coppicePotentialYes/fallConspicuousYes/flowerConspicuousYes/fruitSeedConspicuousYes
+
+  148  Christmas fern (Polystichum acrostichoides), fern
+       says: -
+       from: no USDA characteristics
+
+  125  American beech (Fagus grandifolia), tree
+       says: A tall tree with bright leaves in fall.
+       from: Fagus grandifolia: height_ft=30/80, flower=PATO_0000324, leaf=PATO_0000320, bloom=midSpring, seed_begin=C94732, seed_end=C94733, fruit=PATO_0000952, leaf_retention=PATO_0001731, showy=coppicePotentialNo/fallConspicuousYes/flowerConspicuousNo/fruitSeedConspicuousNo
+
+  116  American burnweed (Erechtites hieraciifolius), None
+       says: -
+       from: no USDA characteristics
+
+  103  Porcelain Berry (Ampelopsis glandulosa), None
+       says: -
+       from: no USDA characteristics
+
+   97  American persimmon (Diospyros virginiana), tree
+       says: A tree with orange fruit in fall.
+       from: Diospyros virginiana: height_ft=25/55, flower=PATO_0000324, leaf=darkGreen, bloom=lateSpring, seed_begin=C94732, seed_end=C94730, fruit=PATO_0000953, leaf_retention=PATO_0001731, showy=coppicePotentialYes/fallConspicuousYes/flowerConspicuousNo/fruitSeedConspicuousYes
+
+   84  American sycamore (Platanus occidentalis), tree
+       says: A tall tree with brown seeds in fall.
+       from: Platanus occidentalis: height_ft=100/65, flower=PATO_0000322, leaf=PATO_0000320, bloom=C94731, seed_begin=C94732, seed_end=C94733, fruit=PATO_0000952, leaf_retention=PATO_0001731, showy=coppicePotentialYes/fallConspicuousYes/flowerConspicuousNo/fruitSeedConspicuousYes
+
+   82  muscadine (Vitis rotundifolia), vine
+       says: A vine with purple fruit in fall and white flowers in spring.
+       from: Vitis rotundifolia: height_ft=30, flower=PATO_0000323, leaf=PATO_0000320, bloom=lateSpring, seed_begin=C94732, seed_end=C94733, fruit=PATO_0000951, leaf_retention=PATO_0001731, showy=coppicePotentialNo/fallConspicuousYes/flowerConspicuousNo/fruitSeedConspicuousYes
+
+   79  kudzu (Pueraria montana), vine
+       says: -
+       from: no USDA characteristics
+
+   76  eastern redbud (Cercis canadensis), tree
+       says: A tree with purple flowers in spring and brown seeds.
+       from: Cercis canadensis: height_ft=25/30, flower=PATO_0000951, leaf=PATO_0000320, bloom=C94731, seed_begin=C94731, seed_end=C94732, fruit=PATO_0000952, leaf_retention=PATO_0001731, showy=coppicePotentialNo/fallConspicuousNo/flowerConspicuousYes/fruitSeedConspicuousYes
+
+   72  water oak (Quercus nigra), tree
+       says: A tall tree with brown seeds.
+       from: Quercus nigra: height_ft=30/90, flower=PATO_0000324, leaf=PATO_0000320, bloom=midSpring, seed_begin=C94732, seed_end=C94732, fruit=PATO_0000952, leaf_retention=PATO_0001731, showy=coppicePotentialNo/fallConspicuousYes/flowerConspicuousNo/fruitSeedConspicuousYes
+
+   65  Persian silk tree (Albizia julibrissin), tree
+       says: A small tree with brown seeds in fall and white flowers in summer.
+       from: Albizia julibrissin: height_ft=20, flower=PATO_0000323, leaf=whiteGrey, bloom=midSummer, seed_begin=C94732, seed_end=C94733, fruit=PATO_0000952, leaf_retention=PATO_0001731, showy=coppicePotentialNo/fallConspicuousNo/flowerConspicuousYes/fruitSeedConspicuousYes
+
+   63  striped wintergreen (Chimaphila maculata), shrub
+       says: -
+       from: no USDA characteristics
+
+   61  shining sumac (Rhus copallinum), tree
+       says: A small tree with brown seeds in fall.
+       from: Rhus copallinum: height_ft=8, flower=PATO_0000324, leaf=PATO_0000320, bloom=midSpring, seed_begin=C94732, seed_end=C94733, fruit=PATO_0000952, leaf_retention=PATO_0001731, showy=coppicePotentialNo/fallConspicuousYes/flowerConspicuousNo/fruitSeedConspicuousYes
+
+   60  Chinese holly (Ilex cornuta), tree
+       says: A small tree with red fruit in fall.
+       from: Ilex cornuta: height_ft=8, flower=PATO_0000323, leaf=PATO_0000320, bloom=earlySpring, seed_begin=C94731, seed_end=C94733, fruit=PATO_0000322, leaf_retention=PATO_0001733, showy=coppicePotentialYes/fallConspicuousYes/flowerConspicuousNo/fruitSeedConspicuousYes
+
+   60  tall goldenrod (Solidago altissima), herb
+       says: -
+       from: no USDA characteristics
+
+   57  sassafras (Sassafras albidum), tree
+       says: A tall tree with bright leaves in fall and yellow flowers in spring.
+       from: Sassafras albidum: height_ft=24/75, flower=PATO_0000324, leaf=PATO_0000320, bloom=lateSpring, seed_begin=C94732, seed_end=C94732, fruit=PATO_0000318, leaf_retention=PATO_0001731, showy=coppicePotentialYes/fallConspicuousYes/flowerConspicuousYes/fruitSeedConspicuousNo
+
+   57  crane-fly orchid (Tipularia discolor), herb
+       says: -
+       from: no USDA characteristics
+
+   56  Chamberbitter (Phyllanthus urinaria), herb
+       says: -
+       from: no USDA characteristics
+
+37, -82, phone cache (en-US, month 10): 16 of 26 eligible targets described
+
+   45  fan clubmoss (Diphasiastrum digitatum), fern
+       says: -
+       from: no USDA characteristics
+
+   44  American tuliptree (Liriodendron tulipifera), tree
+       says: A tall tree with yellow flowers in spring and brown seeds.
+       from: Liriodendron tulipifera: height_ft=120/50, flower=PATO_0000324, leaf=PATO_0000320, bloom=midSpring, seed_begin=C94732, seed_end=C94732, fruit=PATO_0000952, leaf_retention=PATO_0001731, showy=coppicePotentialYes/fallConspicuousYes/flowerConspicuousYes/fruitSeedConspicuousYes
+
+   39  sassafras (Sassafras albidum), tree
+       says: A tall tree with bright leaves in fall and yellow flowers in spring.
+       from: Sassafras albidum: height_ft=24/75, flower=PATO_0000324, leaf=PATO_0000320, bloom=lateSpring, seed_begin=C94732, seed_end=C94732, fruit=PATO_0000318, leaf_retention=PATO_0001731, showy=coppicePotentialYes/fallConspicuousYes/flowerConspicuousYes/fruitSeedConspicuousNo
+
+   37  american witch-hazel (Hamamelis virginiana), tree
+       says: A small tree with yellow flowers in fall and brown seeds.
+       from: Hamamelis virginiana: height_ft=15/20, flower=PATO_0000324, leaf=PATO_0000320, bloom=C94733, seed_begin=C94731, seed_end=C94732, fruit=PATO_0000952, leaf_retention=PATO_0001731, showy=coppicePotentialNo/fallConspicuousNo/flowerConspicuousYes/fruitSeedConspicuousYes
+
+   36  American beech (Fagus grandifolia), tree
+       says: A tall tree with bright leaves in fall.
+       from: Fagus grandifolia: height_ft=30/80, flower=PATO_0000324, leaf=PATO_0000320, bloom=midSpring, seed_begin=C94732, seed_end=C94733, fruit=PATO_0000952, leaf_retention=PATO_0001731, showy=coppicePotentialNo/fallConspicuousYes/flowerConspicuousNo/fruitSeedConspicuousNo
+
+   30  American chestnut (Castanea dentata), tree
+       says: A tall tree with brown seeds in fall and yellow-green leaves.
+       from: Castanea dentata: height_ft=115/35, flower=PATO_0000323, leaf=yellowGreen, bloom=earlySummer, seed_begin=C94732, seed_end=C94733, fruit=PATO_0000952, leaf_retention=PATO_0001731, showy=coppicePotentialYes/fallConspicuousYes/flowerConspicuousNo/fruitSeedConspicuousYes
+
+   30  eastern hemlock (Tsuga canadensis), conifer
+       says: A tall evergreen.
+       from: Tsuga canadensis: height_ft=105/22, flower=PATO_0000324, leaf=darkGreen, bloom=midSpring, seed_begin=C94732, seed_end=C94733, fruit=PATO_0000952, leaf_retention=PATO_0001733, showy=coppicePotentialNo/fallConspicuousNo/flowerConspicuousNo/fruitSeedConspicuousNo
+
+   29  Christmas fern (Polystichum acrostichoides), fern
+       says: -
+       from: no USDA characteristics
+
+   27  downy rattlesnake plantain (Goodyera pubescens), herb
+       says: -
+       from: no USDA characteristics
+
+   26  striped wintergreen (Chimaphila maculata), shrub
+       says: -
+       from: no USDA characteristics
+
+   26  great blue lobelia (Lobelia siphilitica), herb
+       says: -
+       from: no USDA characteristics
+
+   25  striped maple (Acer pensylvanicum), tree
+       says: A tree with bright leaves in fall.
+       from: Acer pensylvanicum: height_ft=25/35, flower=PATO_0000324, leaf=PATO_0000320, bloom=lateSpring, seed_begin=C94732, seed_end=C94733, fruit=PATO_0000952, leaf_retention=PATO_0001731, showy=coppicePotentialNo/fallConspicuousYes/flowerConspicuousNo/fruitSeedConspicuousNo
+
+   25  American mountain ash (Sorbus americana), tree
+       says: A tree with orange fruit in fall and white flowers in summer.
+       from: Sorbus americana: height_ft=30/40, flower=PATO_0000323, leaf=PATO_0000320, bloom=earlySummer, seed_begin=C94732, seed_end=C94733, fruit=PATO_0000953, leaf_retention=PATO_0001731, showy=coppicePotentialNo/fallConspicuousYes/flowerConspicuousYes/fruitSeedConspicuousYes
+
+   20  Osage-orange (Maclura pomifera), tree
+       says: A tree with orange fruit in fall.
+       from: Maclura pomifera: height_ft=20/35, flower=PATO_0000320, leaf=PATO_0000320, bloom=lateSpring, seed_begin=C94732, seed_end=C94733, fruit=PATO_0000953, leaf_retention=PATO_0001731, showy=coppicePotentialNo/fallConspicuousNo/flowerConspicuousNo/fruitSeedConspicuousYes
+
+   20  sourwood (Oxydendrum arboreum), tree
+       says: A tree with bright leaves in fall and white flowers in summer.
+       from: Oxydendrum arboreum: height_ft=20/35, flower=PATO_0000323, leaf=PATO_0000320, bloom=earlySummer, seed_begin=C94732, seed_end=C94733, fruit=PATO_0000952, leaf_retention=PATO_0001731, showy=coppicePotentialYes/fallConspicuousYes/flowerConspicuousYes/fruitSeedConspicuousNo
+
+   19  sugar maple (Acer saccharum), tree
+       says: A tall tree with bright leaves in fall.
+       from: Acer saccharum: height_ft=100/20, flower=PATO_0000320, leaf=PATO_0000320, bloom=midSpring, seed_begin=C94732, seed_end=C94733, fruit=PATO_0000952, leaf_retention=PATO_0001731, showy=coppicePotentialNo/fallConspicuousYes/flowerConspicuousNo/fruitSeedConspicuousNo
+
+   19  common selfheal (Prunella vulgaris), herb
+       says: A low plant with purple flowers in summer and gray-green leaves.
+       from: Prunella vulgaris: height_ft=1.5, flower=PATO_0000951, leaf=grayGreen, bloom=midSummer, seed_begin=C94732, seed_end=C94733, fruit=PATO_0000320, leaf_retention=PATO_0001731, showy=coppicePotentialNo/fallConspicuousNo/flowerConspicuousYes/fruitSeedConspicuousNo
+
+   15  American persimmon (Diospyros virginiana), tree
+       says: A tree with orange fruit in fall.
+       from: Diospyros virginiana: height_ft=25/55, flower=PATO_0000324, leaf=darkGreen, bloom=lateSpring, seed_begin=C94732, seed_end=C94730, fruit=PATO_0000953, leaf_retention=PATO_0001731, showy=coppicePotentialYes/fallConspicuousYes/flowerConspicuousNo/fruitSeedConspicuousYes
+
+   15  Beechdrops (Epifagus virginiana), herb
+       says: -
+       from: no USDA characteristics
+
+   15  Red Clover (Trifolium pratense), herb
+       says: A plant with red flowers in spring.
+       from: Trifolium pratense: height_ft=2, flower=PATO_0000322, leaf=PATO_0000320, bloom=lateSpring, seed_begin=C94731, seed_end=C94732, fruit=PATO_0000952, leaf_retention=PATO_0001731, showy=coppicePotentialNo/fallConspicuousNo/flowerConspicuousYes/fruitSeedConspicuousNo
+
+   14  galax (Galax urceolata), shrub
+       says: -
+       from: no USDA characteristics
+
+   14  common morning-glory (Ipomoea purpurea), vine
+       says: -
+       from: no USDA characteristics
+
+   14  American sycamore (Platanus occidentalis), tree
+       says: A tall tree with brown seeds in fall.
+       from: Platanus occidentalis: height_ft=100/65, flower=PATO_0000322, leaf=PATO_0000320, bloom=C94731, seed_begin=C94732, seed_end=C94733, fruit=PATO_0000952, leaf_retention=PATO_0001731, showy=coppicePotentialYes/fallConspicuousYes/flowerConspicuousNo/fruitSeedConspicuousYes
+
+   14  three-toothed cinquefoil (Sibbaldiopsis tridentata), herb
+       says: -
+       from: no USDA characteristics
+
+   14  swamp aster (Symphyotrichum puniceum), herb
+       says: A tall plant with blue flowers in fall.
+       from: Symphyotrichum puniceum: height_ft=8.1, flower=PATO_0000318, leaf=PATO_0000320, bloom=C94733, seed_begin=C94733, seed_end=C94733, fruit=PATO_0000952, leaf_retention=PATO_0001731, showy=coppicePotentialNo/fallConspicuousYes/flowerConspicuousYes/fruitSeedConspicuousNo
+
+   14  crane-fly orchid (Tipularia discolor), herb
+       says: -
+       from: no USDA characteristics

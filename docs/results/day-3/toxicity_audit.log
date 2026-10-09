@@ -1,0 +1,100 @@
+# toxicity audit, 2026-10-08 06:25 EDT, Python 3.13.14, mwparserfromhell 0.7.2, numpy 2.5.3; laptop only, no device
+# inputs: pipeline/data/toxicity.json (built 2026-10-07) sha256 7def72af12856e0045d93da54fa7a7fc7b39d4477bdfe4b7d99ad54f339b5944
+#   species_labels.json sha256 a7d7d60759662e6023bb06923df543180396acbbf92a82f0bf9d370efdb1795f, species_table.npy sha256 1fd3cf277dddda6c4c0062b696d170e3b405487098e80dcc71138045835cc27d (make assets output of 2026-10-07 22:56, the toxic_block.log run)
+#   docs/results/day-2/threshold_regions.csv (west-georgia-us), toxic_block_photos.csv + cached reticle embeddings (BioCLIP Mobile fp32, as toxic_block.log)
+#   Wikipedia wikitext re-fetched at each row's stored revid (818 rows: every 'wikipedia:' flag table-wide plus the 279 local); USDA archive sha256 d646ab96...014b, with_synonyms() re-run via GBIF
+# proposed rule = current toxicity.py + NOT_TOXIC 'nor is/are it/they', 'no'; OTHER_SENSE phrases removed (toxic/poisonous to fish|carp|internal parasites, food poisoning, antidote for poison); sentences with herbicide|heavy metal|pollut*|fuel skipped; Allelopathy sections dropped
+
+## reproduction: current rule on re-fetched text vs stored evidence
+FLIP Berberis bealei: wikipedia: This plant can also be used to treat bacterial infections such as dysentery and food poisoning.
+FLIP Cichorium intybus: wikipedia: Dietary chicory may be toxic to internal parasites, with studies of ingesting chicory by farm animals having lower worm burdens, leading to
+FLIP Juglans nigra: wikipedia: Anecdotally, records of walnut toxicity to other plants have been observed as far back as the first century when Pliny the Elder wrote: "Th
+FLIP Lespedeza capitata: wikipedia: The Meskwaki used the roots to make an antidote for poison.
+FLIP Myriophyllum aquaticum: wikipedia: The effectiveness of herbicides in controlling the growth of this species has been found to be limited, partly due to the plant's waxy cuti
+FLIP Nelumbo nucifera: wikipedia: The accumulation of heavy metals doesn't show morphological symptoms of metal toxicity; however, the rhizome quality for human consumption 
+FLIP Pistia stratiotes: wikipedia: Yet, the use of herbicides must be critically assessed to prevent negative environmental impacts and possible toxic effects on marine life 
+FLIP Rubus phoenicolasius: wikipedia: They are edible, with no poisonous look-a-likes in North America.
+FLIP Verbascum thapsus: wikipedia: The seeds contain several compounds (saponins, glycosides, coumarin, rotenone) that are toxic to fish, and have been widely used as piscici
+FLIP Vernonia noveboracensis: wikipedia: noveboracensis is not known to be an invasive species, nor is it toxic.
+repro mismatches 0 | rows 818 | flips 10
+still flagged, evidence changed: 4
+  Alocasia odora: wikipedia: Typical of leafy green vegetables—and despite its toxicity if prepared incorrectly—the leaves of this plant are rich in vitamins 
+  Cyperus esculentus: wikipedia: An examination of the fish by a taxidermist concluded tiger nut poisoning was not the cause of death, but rather the fish had die
+  Panicum virgatum: wikipedia: Switchgrass is an excellent forage for cattle; however, it has shown toxicity in horses, sheep, and goats through chemical compou
+  Parthenium hysterophorus: wikipedia: It is also a highly toxic allergen.
+
+## class counts, 279 West Georgia local toxic-flagged species (toxicity_audit.csv)
+Counter({'stub': 129, 'human': 102, 'animals-only': 22, 'irrelevant': 18, 'usda': 4, 'no-article': 3, 'other': 1})
+Counter({'keep': 239, 'user-decides': 19, "keep (rule can't separate)": 9, 'unflag': 8, 'keep (usda/stub)': 4})
+animals-only unflag set: ['Acer negundo', 'Acer rubrum', 'Achillea millefolium', 'Asclepias verticillata', 'Cynodon dactylon', 'Glechoma hederacea', 'Hypochaeris radicata', 'Onoclea sensibilis', 'Osmundastrum cinnamomeum', 'Oxalis stricta', 'Oxypolis rigidior', 'Panicum virgatum', 'Perilla frutescens', 'Quercus marilandica', 'Rudbeckia laciniata', 'Rumex obtusifolius', 'Saururus cernuus', 'Senna obtusifolia']
+usda present in any class: 13 stub any: 132
+
+## toxic_block C-margin re-run (floor 55.5 sightings; positives = 3 CC0 photos per eligible species; negatives = Day-2 negatives of species still flagged)
+== current: 23 eligible, 279 local toxic (pool 302); new eligible vs current: []; photos missing for eligible: []; negatives dropped (now unflagged): []
+  raw         margin 0.048 = 0.0480: target pass 34/69 (49%), toxic false pass 0/180
+  raw         margin m*    = 0.0477: target pass 34/69 (49%), toxic false pass 0/180
+  after row 1 margin 0.048 = 0.0480: target pass 34/69 (49%), toxic false pass 0/180
+  after row 1 margin m*    = 0.0477: target pass 34/69 (49%), toxic false pass 0/180
+  lost at 0.048: 35
+== proposed: 24 eligible, 270 local toxic (pool 294); new eligible vs current: ['Juglans nigra']; photos missing for eligible: []; negatives dropped (now unflagged): ['Berberis bealei', 'Juglans nigra', 'Verbascum thapsus']
+  raw         margin 0.048 = 0.0480: target pass 35/72 (49%), toxic false pass 0/171
+  raw         margin m*    = 0.0477: target pass 35/72 (49%), toxic false pass 0/171
+  after row 1 margin 0.048 = 0.0480: target pass 35/72 (49%), toxic false pass 0/171
+  after row 1 margin m*    = 0.0477: target pass 35/72 (49%), toxic false pass 0/171
+  lost at 0.048: 37
+    new target photo Juglans_nigra_0.jpg: top1 Ailanthus altissima gap 0.0000 pass False
+    new target photo Juglans_nigra_1.jpg: top1 Juglans nigra gap 0.0768 pass True
+    new target photo Juglans_nigra_2.jpg: top1 Pontederia crassipes gap 0.0000 pass False
+== proposed+animals: 26 eligible, 252 local toxic (pool 278); new eligible vs current: ['Acer negundo', 'Acer rubrum', 'Juglans nigra']; photos missing for eligible: []; negatives dropped (now unflagged): ['Acer negundo', 'Acer rubrum', 'Berberis bealei', 'Glechoma hederacea', 'Juglans nigra', 'Onoclea sensibilis', 'Perilla frutescens', 'Rudbeckia laciniata', 'Senna obtusifolia', 'Verbascum thapsus']
+  raw         margin 0.048 = 0.0480: target pass 37/78 (47%), toxic false pass 0/150
+  raw         margin m*    = 0.0477: target pass 37/78 (47%), toxic false pass 0/150
+  after row 1 margin 0.048 = 0.0480: target pass 37/78 (47%), toxic false pass 0/150
+  after row 1 margin m*    = 0.0477: target pass 37/78 (47%), toxic false pass 0/150
+  lost at 0.048: 41
+    new target photo Acer_negundo_0.jpg: top1 Pueraria montana gap 0.0442 pass False
+    new target photo Acer_negundo_1.jpg: top1 Physalis peruviana gap 0.0000 pass False
+    new target photo Acer_negundo_2.jpg: top1 Physalis peruviana gap 0.0000 pass False
+    new target photo Juglans_nigra_0.jpg: top1 Ailanthus altissima gap 0.0000 pass False
+    new target photo Juglans_nigra_1.jpg: top1 Juglans nigra gap 0.0768 pass True
+    new target photo Juglans_nigra_2.jpg: top1 Pontederia crassipes gap 0.0000 pass False
+    new target photo Acer_rubrum_0.jpg: top1 Acer rubrum gap 0.1803 pass True
+    new target photo Acer_rubrum_1.jpg: top1 Ligustrum sinense gap 0.0000 pass False
+    new target photo Acer_rubrum_2.jpg: top1 Platanus occidentalis gap 0.0091 pass False
+
+## best blocker of each positive lost at 0.048 under current flags
+Conoclinium_coelestinum_1.jpg: margin < 0.048; top1 Conoclinium coelestinum; best blocker Ageratina altissima [human/keep] gap 0.0145
+Conoclinium_coelestinum_2.jpg: blocker top-1; top1 Verbena rigida; best blocker Verbena rigida [stub/keep] gap 0.0000
+Liquidambar_styraciflua_1.jpg: margin < 0.048; top1 Liquidambar styraciflua; best blocker Aesculus pavia [human/keep] gap 0.0183
+Liquidambar_styraciflua_2.jpg: margin < 0.048; top1 Liquidambar styraciflua; best blocker Ricinus communis [human/keep] gap 0.0282
+Magnolia_grandiflora_0.jpg: blocker top-1; top1 Gomphocarpus physocarpus; best blocker Gomphocarpus physocarpus [human/keep] gap 0.0000
+Liriodendron_tulipifera_1.jpg: blocker top-1; top1 Triadica sebifera; best blocker Triadica sebifera [human/keep] gap 0.0000
+Liriodendron_tulipifera_2.jpg: blocker top-1; top1 Juglans nigra; best blocker Juglans nigra [irrelevant/unflag] gap 0.0000
+Polystichum_acrostichoides_0.jpg: margin < 0.048; top1 Polystichum acrostichoides; best blocker Osmundastrum cinnamomeum [animals-only/user-decides] gap 0.0205
+Fagus_grandifolia_1.jpg: margin < 0.048; top1 Fagus grandifolia; best blocker Frangula caroliniana [stub/keep] gap 0.0102
+Erechtites_hieraciifolius_0.jpg: margin < 0.048; top1 Erechtites hieraciifolius; best blocker Nabalus altissimus [stub/keep] gap 0.0077
+Erechtites_hieraciifolius_2.jpg: blocker top-1; top1 Achillea millefolium; best blocker Achillea millefolium [animals-only/user-decides] gap 0.0000
+Diospyros_virginiana_0.jpg: blocker top-1; top1 Asimina triloba; best blocker Asimina triloba [human/keep] gap 0.0000
+Diospyros_virginiana_1.jpg: blocker top-1; top1 Quercus marilandica; best blocker Quercus marilandica [animals-only/user-decides] gap 0.0000
+Diospyros_virginiana_2.jpg: wrong genus; top1 Quercus nigra; best blocker Quercus marilandica [animals-only/user-decides] gap 0.0149
+Platanus_occidentalis_0.jpg: blocker top-1; top1 Acer negundo; best blocker Acer negundo [animals-only/user-decides] gap 0.0000
+Vitis_rotundifolia_0.jpg: blocker top-1; top1 Ampelopsis cordata; best blocker Ampelopsis cordata [stub/keep] gap 0.0000
+Vitis_rotundifolia_1.jpg: blocker top-1; top1 Melothria pendula; best blocker Melothria pendula [other/keep] gap 0.0000
+Vitis_rotundifolia_2.jpg: blocker top-1; top1 Actaea pachypoda; best blocker Actaea pachypoda [human/keep] gap 0.0000
+Pueraria_montana_1.jpg: blocker top-1; top1 Pontederia crassipes; best blocker Pontederia crassipes [human/keep] gap 0.0000
+Cercis_canadensis_0.jpg: blocker top-1; top1 Dichondra carolinensis; best blocker Dichondra carolinensis [stub/keep] gap 0.0000
+Cercis_canadensis_2.jpg: blocker top-1; top1 Menispermum canadense; best blocker Menispermum canadense [human/keep] gap 0.0000
+Quercus_nigra_0.jpg: blocker top-1; top1 Quercus marilandica; best blocker Quercus marilandica [animals-only/user-decides] gap 0.0000
+Quercus_nigra_1.jpg: blocker top-1; top1 Gomphocarpus physocarpus; best blocker Gomphocarpus physocarpus [human/keep] gap 0.0000
+Albizia_julibrissin_1.jpg: blocker top-1; top1 Paspalum urvillei; best blocker Paspalum urvillei [stub/keep] gap 0.0000
+Albizia_julibrissin_2.jpg: margin < 0.048; top1 Albizia julibrissin; best blocker Gleditsia triacanthos [irrelevant/keep (rule can't separate)] gap 0.0400
+Rhus_copallinum_0.jpg: blocker top-1; top1 Juglans nigra; best blocker Juglans nigra [irrelevant/unflag] gap 0.0000
+Rhus_copallinum_1.jpg: blocker top-1; top1 Juglans nigra; best blocker Juglans nigra [irrelevant/unflag] gap 0.0000
+Rhus_copallinum_2.jpg: margin < 0.048; top1 Rhus copallinum; best blocker Tephrosia virginiana [human/keep] gap 0.0152
+Solidago_altissima_2.jpg: blocker top-1; top1 Rhodobryum ontariense; best blocker Rhodobryum ontariense [no-article/keep] gap 0.0000
+Ilex_cornuta_0.jpg: margin < 0.048; top1 Ilex cornuta; best blocker Solanum carolinense [human/keep] gap 0.0107
+Sassafras_albidum_1.jpg: blocker top-1; top1 Quercus marilandica; best blocker Quercus marilandica [animals-only/user-decides] gap 0.0000
+Tipularia_discolor_0.jpg: blocker top-1; top1 Pontederia crassipes; best blocker Pontederia crassipes [human/keep] gap 0.0000
+Tipularia_discolor_1.jpg: wrong genus; top1 Magnolia grandiflora; best blocker Photinia serratifolia [human/keep] gap 0.0400
+Phyllanthus_urinaria_1.jpg: margin < 0.048; top1 Phyllanthus urinaria; best blocker Phyllanthus tenellus [stub/keep] gap 0.0334
+Phyllanthus_urinaria_2.jpg: blocker top-1; top1 Melothria pendula; best blocker Melothria pendula [other/keep] gap 0.0000
+Counter({('blocker top-1', 'human'): 8, ('margin < 0.048', 'human'): 5, ('blocker top-1', 'animals-only'): 5, ('blocker top-1', 'stub'): 4, ('blocker top-1', 'irrelevant'): 3, ('margin < 0.048', 'stub'): 3, ('blocker top-1', 'other'): 2, ('margin < 0.048', 'animals-only'): 1, ('wrong genus', 'animals-only'): 1, ('margin < 0.048', 'irrelevant'): 1, ('blocker top-1', 'no-article'): 1, ('wrong genus', 'human'): 1})

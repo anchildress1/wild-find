@@ -1,6 +1,9 @@
 package dev.anchildress1.wildfind.inference
 
 import android.content.res.AssetManager
+import dev.anchildress1.wildfind.core.cache.CacheKey
+import dev.anchildress1.wildfind.core.hunt.PlantType
+import dev.anchildress1.wildfind.core.hunt.SpeciesRow
 import dev.anchildress1.wildfind.core.tensor.FloatMatrix
 import dev.anchildress1.wildfind.core.tensor.Npy
 import dev.anchildress1.wildfind.core.verify.HazardCheck
@@ -41,45 +44,50 @@ class BundledAssets(private val assets: AssetManager) {
     /** BioCLIP species table: one unit text vector per row of [speciesLabels]. */
     fun speciesTable(): FloatMatrix = Npy.floatMatrix(bytes(SPECIES_TABLE))
 
-    /** Scientific name and hazard flag per species-table row. */
-    fun speciesLabels(): List<Species> {
+    /** Name, genus, and flags per row of [table], checked against it. */
+    fun speciesLabels(table: FloatMatrix): List<SpeciesRow> {
         val rows = JSONArray(String(bytes(SPECIES_LABELS)))
-        return List(rows.length()) { i ->
-            rows.getJSONObject(i).let { Species(it.getString("scientific"), it.getBoolean("hazard")) }
+        val parsed = List(rows.length()) { i ->
+            rows.getJSONObject(i).let {
+                SpeciesRow(
+                    it.getString("scientific"),
+                    it.getString("genus"),
+                    it.getBoolean("hazard"),
+                    it.getBoolean("toxic"),
+                    PlantType.of(if (it.isNull("type")) null else it.getString("type")),
+                    it.getJSONArray("synonyms").let { names -> List(names.length(), names::getString) },
+                    if (it.isNull("description")) null else it.getString("description"),
+                )
+            }
         }
+        return SpeciesRow.checked(parsed, table.rows)
     }
 
-    /** Verify row 1's hazard rule over the species table, ranking only [local] species plus every hazard. */
-    fun hazardCheck(local: Set<String>): HazardCheck {
-        val labels = speciesLabels()
-        return HazardCheck(
-            speciesTable(),
-            labels.map { it.hazard }.toBooleanArray(),
-            labels.map { it.scientific in local }.toBooleanArray(),
-        )
-    }
+    /** The cache's table version: the first 12 hex digits of `species_labels.json`'s SHA-256. */
+    fun tableVersion(): String = CacheKey.tableVersion(bytes(SPECIES_LABELS))
 
-    /** Menu-word and tutorial text vectors from `labels.npy`, with their `labels.json` entries. */
+    /** Verify row 1's hazard rule over [table], naming only the hunt's [localRows] as what the camera sees. */
+    fun hazardCheck(table: FloatMatrix, labels: List<SpeciesRow>, localRows: Set<Int>): HazardCheck = HazardCheck(
+        table,
+        labels.map { it.hazard }.toBooleanArray(),
+        BooleanArray(labels.size) { it in localRows },
+    )
+
+    /** Tutorial text vectors from `labels.npy`, named by `labels.json`. */
     fun labels(): LabelSet {
         val json = JSONObject(String(bytes(LABELS_JSON)))
         val version = json.getInt("schema_version")
-        require(version == LABELS_SCHEMA) { "labels.json schema_version $version, expected $LABELS_SCHEMA" }
-        val rows = json.getJSONArray("labels")
-        val entries = List(rows.length()) { i ->
-            rows.getJSONObject(i).let {
-                LabelSet.Entry(it.getString("id"), LabelSet.Kind.of(it.getString("kind")), it.getString("scientific"))
-            }
+        require(version == LabelSet.SCHEMA_VERSION) {
+            "labels.json schema_version $version, expected ${LabelSet.SCHEMA_VERSION}"
         }
-        return LabelSet(entries, Npy.floatMatrix(bytes(LABELS_NPY)))
+        val rows = json.getJSONArray("labels")
+        return LabelSet(
+            List(rows.length()) {
+                rows.getJSONObject(it).getString("scientific")
+            },
+            Npy.floatMatrix(bytes(LABELS_NPY)),
+        )
     }
-
-    /**
-     * One species-table row.
-     *
-     * @property scientific scientific name
-     * @property hazard true for a PRD hazard species
-     */
-    data class Species(val scientific: String, val hazard: Boolean)
 
     private fun bytes(name: String) = assets.open(name).use { it.readBytes() }
 
@@ -90,8 +98,6 @@ class BundledAssets(private val assets: AssetManager) {
         }
     }
 
-    private fun floats(array: JSONArray) = FloatArray(array.length()) { array.getDouble(it).toFloat() }
-
     private companion object {
         const val BIOCLIP = "flora_student_fp32.onnx"
         const val PLANT_GATE = "plant_gate.onnx"
@@ -100,6 +106,7 @@ class BundledAssets(private val assets: AssetManager) {
         const val SPECIES_LABELS = "species_labels.json"
         const val LABELS_NPY = "labels.npy"
         const val LABELS_JSON = "labels.json"
-        const val LABELS_SCHEMA = 1
     }
 }
+
+private fun floats(array: JSONArray) = FloatArray(array.length()) { array.getDouble(it).toFloat() }

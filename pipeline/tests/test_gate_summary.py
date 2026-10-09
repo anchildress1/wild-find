@@ -80,7 +80,7 @@ def run(tmp_path):
                 "android": "16",
                 "app_version": "0.1.0",
                 "goal": "target",
-                "word": "oak",
+                "target": "Quercus nigra",
                 "requested_analysis": "1280x960",
             }
         )
@@ -193,6 +193,14 @@ def test_a_missing_charging_state_reads_unavailable(run):
     (run / "system.csv").write_text((run / "system.csv").read_text().replace(",false\n", ",\n"))
 
     assert "charging unavailable" in summarize(run)
+
+
+def test_charging_counts_every_sample_not_the_last(run):
+    system = (run / "system.csv").read_text()
+    head, last = system.rstrip("\n").rsplit("\n", 1)
+    (run / "system.csv").write_text(f"{head}\n{last.rsplit(',', 1)[0]},true\n")
+
+    assert "charging 1 of 2 samples" in summarize(run)
 
 
 def test_a_run_with_a_truncated_row_fails_alone(run, capsys):

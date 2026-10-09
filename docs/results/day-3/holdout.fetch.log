@@ -1,0 +1,58 @@
+2026-10-08: stderr of the holdout.py run that built holdout.photos.csv (iNat/Commons fetch counts)
+  target Conoclinium coelestinum: 1 of 1
+  target Callicarpa americana: 1 of 1
+  target Liquidambar styraciflua: 1 of 1
+  target Magnolia grandiflora: 1 of 1
+  target Liriodendron tulipifera: 1 of 1
+  target Polystichum acrostichoides: 1 of 1
+  target Fagus grandifolia: 1 of 1
+  target Erechtites hieraciifolius: 2 of 2
+  target Ampelopsis glandulosa: 2 of 2
+  target Diospyros virginiana: 2 of 2
+  target Platanus occidentalis: 2 of 2
+  target Vitis rotundifolia: 2 of 2
+  target Pueraria montana: 2 of 2
+  target Cercis canadensis: 2 of 2
+  target Quercus nigra: 1 of 1
+  target Albizia julibrissin: 1 of 1
+  target Chimaphila maculata: 1 of 1
+  target Rhus copallinum: 1 of 1
+  target Ilex cornuta: 1 of 1
+  target Solidago altissima: 1 of 1
+  target Sassafras albidum: 1 of 1
+  target Tipularia discolor: 1 of 1
+  target Phyllanthus urinaria: 1 of 1
+  toxic Phytolacca americana (iNat Phytolacca americana): 1
+  toxic Toxicodendron radicans (iNat Toxicodendron radicans): 1
+  toxic Solanum carolinense (iNat Solanum carolinense): 1
+  toxic Persicaria longiseta (iNat Persicaria longiseta): 1
+  toxic Eupatorium capillifolium (iNat Eupatorium capillifolium): 1
+  toxic Euonymus americanus (iNat Euonymus americanus): 1
+  toxic Lonicera maackii (iNat Lonicera maackii): 1
+  toxic Eupatorium serotinum (iNat Eupatorium serotinum): 1
+  toxic Ligustrum sinense (iNat Ligustrum sinense): 1
+  toxic Hexastylis arifolia (iNat Asarum arifolium): 1
+  toxic Hedera helix (iNat Hedera helix): 1
+  toxic Parthenocissus quinquefolia (iNat Parthenocissus quinquefolia): 1
+  toxic Acer negundo (iNat Acer negundo): 1
+  toxic Cornus florida (iNat Cornus florida): 1
+  toxic Nandina domestica (iNat Nandina domestica): 1
+  non-plant 'computer monitor': 2 of 2
+  non-plant 'laptop screen': 2 of 2
+  non-plant 'smartphone': 2 of 2
+  non-plant 'television': 1 of 1
+  non-plant 'woman portrait': 2 of 2
+  non-plant 'man portrait': 2 of 2
+  non-plant 'child': 1 of 1
+  non-plant 'people street': 2 of 2
+  non-plant 'asphalt': 2 of 2
+  non-plant 'crosswalk': 1 of 1
+  non-plant 'parking lot': 1 of 1
+  non-plant 'sidewalk': 2 of 2
+  non-plant 'sneakers': 1 of 1
+  non-plant 'dog': 1 of 1
+  non-plant 'car': 1 of 1
+  non-plant 'kitchen': 1 of 1
+  non-plant 'building': 1 of 1
+  non-plant 'bicycle': 1 of 1
+  non-plant 'living room': 1 of 1

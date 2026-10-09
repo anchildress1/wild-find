@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <application>
+    <!-- Debug and release can sit on one phone; the label tells their launcher icons apart. -->
+    <application
+        android:label="Wild Find (debug)"
+        tools:replace="android:label">
         <!-- Debug-only S09 probe; launched over adb by make focus-probe, never from the launcher. -->
         <activity
             android:name=".FocusProbeActivity"
@@ -13,7 +17,7 @@
             android:name=".harness.GateHarnessActivity"
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"
             android:exported="true"
-            android:label="wild-find gate"
+            android:label="Wild Find gate"
             android:taskAffinity="dev.anchildress1.wildfind.harness">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,0 +1,67 @@
+run date 2026-10-08; laptop CPU, onnxruntime 1.30.0, numpy 2.5.3, Pillow 12.3.0, python 3.13.14
+BioCLIP pin crazedcodernate/bioclip-2.5-mobile-fastvit@29b474ea2a5d72b4646f036ead9441e0a22a5c62; TinyCLIP pin wkcn/TinyCLIP-ViT-8M-16-Text-3M-YFCC15M@a2a8c6eaa2549ad66eb7c31b85022bf58273a26c
+  asset flora_student_fp32.onnx sha256 8624d44af3727b69a41dc2035c37018a30753b8d9c93ab8801a0c724dd42510f
+  asset plant_gate.onnx sha256 6da0778325ad6b317d3ac958dd2c89f9683e3cea20aa5dd6754a6c4a21b40306
+  asset plant_gate.json sha256 33e8990299b4cb1450dfbebe600162e5602810dc01b3e747450af4ea66a4818a
+  asset species_table.npy sha256 1fd3cf277dddda6c4c0062b696d170e3b405487098e80dcc71138045835cc27d
+  asset species_labels.json sha256 daf8e1487e1e634e9d629d6b05deac8271b1a33e0dd8c5fbec7ebce772c05831
+  asset labels.npy sha256 c63489be575b96a70febd147445f496a54ed6b666ff79bbf314906efd7e4d80f
+  asset labels.json sha256 f6f31b2421956d8452a821ec4f8be5d0583f6ab8661a0483932d21712a3989c5
+  input docs/results/day-3/calibration.photos.csv sha256 4451ca526b6ddbbe3540ad7089655e0ec5bbf97aac496e11070111db7908379b
+  input docs/results/day-2/threshold_regions.csv sha256 f22335869f6b2bc9c7731508a0b710129d29b977b7300f55745031e5fa15c1d9
+  input docs/results/day-2/inat_species_oct.csv sha256 9eece112c12f8d8b7e2e358805a93fcb167f8029087e88e4d0f8d569f068ab44
+focus (verify rows 3 and 5) cannot be simulated on still photos: every photo is treated as focused
+West Georgia October: 23 eligible, 282 local toxic or hazard blockers
+
+S50 calibration: 30 target photos, 23 species
+genus pass at the shipped rule (rows 1-4): 17/30 (57%)
+  lost to hazard: 0
+  lost to not_plant: 0
+  lost to no_match: 13
+  margin met but top-1 in another target's genus (would pass that target): 0
+row-1 hazard warning on target photos: 0/30
+a blocker tops the whole pool: 9/30; top-1 eligible is the right genus: 26/30
+top-1 score min/q1/median/q3/max:
+  passes (right genus, margin met) (17): 0.512 / 0.606 / 0.647 / 0.662 / 0.689
+  right genus, margin missed (9): 0.462 / 0.483 / 0.512 / 0.520 / 0.561
+  wrong genus, margin met (0): none
+  wrong genus, margin missed (4): 0.394 / 0.446 / 0.487 / 0.514 / 0.525
+gap to best blocker min/q1/median/q3/max:
+  right genus: -0.061 / 0.035 / 0.090 / 0.145 / 0.231
+  wrong genus: -0.088 / -0.046 / -0.030 / -0.020 / 0.002
+  miss target_Liquidambar_styraciflua_405042376.jpg: no_match, top1 Liquidambar styraciflua 0.5197, pool top1 Smallanthus uvedalia, blocker Smallanthus uvedalia gap -0.0272, reticle share 0.9716, hazard ranks 145/141 (Solanum carolinense)
+  miss target_Liquidambar_styraciflua_404493614.jpg: no_match, top1 Cercis canadensis 0.5108, pool top1 Cercis canadensis, blocker Celastrus orbiculatus gap 0.0022, reticle share 0.9383, hazard ranks 229/179 (Toxicodendron vernix)
+  miss target_Magnolia_grandiflora_396800120.jpg: no_match, top1 Magnolia grandiflora 0.5217, pool top1 Photinia serratifolia, blocker Photinia serratifolia gap -0.0437, reticle share 0.9024, hazard ranks 787/241 (Phytolacca americana)
+  miss target_Liriodendron_tulipifera_405512381.jpg: no_match, top1 Platanus occidentalis 0.4629, pool top1 Triadica sebifera, blocker Triadica sebifera gap -0.0279, reticle share 0.9566, hazard ranks 318/525 (Toxicodendron diversilobum)
+  miss target_Liriodendron_tulipifera_405264498.jpg: no_match, top1 Cercis canadensis 0.5255, pool top1 Menispermum canadense, blocker Menispermum canadense gap -0.0320, reticle share 0.9722, hazard ranks 90/157 (Solanum carolinense)
+  miss target_Fagus_grandifolia_405501294.jpg: no_match, top1 Phyllanthus urinaria 0.3937, pool top1 Xanthium orientale, blocker Xanthium orientale gap -0.0880, reticle share 0.9552, hazard ranks 437/413 (Solanum carolinense)
+  miss target_Erechtites_hieraciifolius_405067001.jpg: no_match, top1 Erechtites hieraciifolius 0.4790, pool top1 Liatris aspera, blocker Liatris aspera gap -0.0497, reticle share 0.8645, hazard ranks 430/348 (Solanum carolinense)
+  miss target_Diospyros_virginiana_403124444.jpg: no_match, top1 Diospyros virginiana 0.5610, pool top1 Diospyros virginiana, blocker Asimina triloba gap 0.0332, reticle share 0.9903, hazard ranks 34/26 (Toxicodendron vernix)
+  miss target_Platanus_occidentalis_405314707.jpg: no_match, top1 Platanus occidentalis 0.5119, pool top1 Platanus occidentalis, blocker Acer rubrum gap 0.0405, reticle share 0.9878, hazard ranks 48/35 (Toxicodendron radicans)
+  miss target_Quercus_nigra_400010614.jpg: no_match, top1 Quercus nigra 0.5194, pool top1 Quercus stellata, blocker Quercus stellata gap -0.0552, reticle share 0.8953, hazard ranks 183/57 (Toxicodendron pubescens)
+  miss target_Albizia_julibrissin_401649566.jpg: no_match, top1 Albizia julibrissin 0.4863, pool top1 Gleditsia triacanthos, blocker Gleditsia triacanthos gap -0.0611, reticle share 0.9861, hazard ranks 399/201 (Phytolacca americana)
+  miss target_Rhus_copallinum_405529666.jpg: no_match, top1 Rhus copallinum 0.4620, pool top1 Rhus copallinum, blocker Aesculus pavia gap 0.0450, reticle share 0.9676, hazard ranks 7/6 (Toxicodendron vernix)
+  miss target_Tipularia_discolor_398521399.jpg: no_match, top1 Tipularia discolor 0.4832, pool top1 Sorghum halepense, blocker Sorghum halepense gap -0.0417, reticle share 0.9535, hazard ranks 1338/806 (Toxicodendron radicans)
+
+hole 3 grass: tutorial pass 10/10; reticle plant 10/10; Poaceae rank counts {1: 8, 2: 1, 3: 1}
+  grass_Arundo_donax_406751438.jpg: grass rank 1, tutorial top1 Poaceae, reticle share 0.9711, pass True
+  grass_Hordeum_jubatum_406696238.jpg: grass rank 1, tutorial top1 Poaceae, reticle share 0.9742, pass True
+  grass_Arrhenatherum_elatius_406671945.jpg: grass rank 1, tutorial top1 Poaceae, reticle share 0.9907, pass True
+  grass_Diplachne_fusca_406653544.jpg: grass rank 3, tutorial top1 Pinus, reticle share 0.9497, pass True
+  grass_Steinchisma_hians_406606905.jpg: grass rank 1, tutorial top1 Poaceae, reticle share 0.8761, pass True
+  grass_Andropogon_gerardi_406597519.jpg: grass rank 1, tutorial top1 Poaceae, reticle share 0.6068, pass True
+  grass_Paspalum_distichum_406584892.jpg: grass rank 1, tutorial top1 Poaceae, reticle share 0.9500, pass True
+  grass_Sorghastrum_nutans_406580824.jpg: grass rank 1, tutorial top1 Poaceae, reticle share 0.8836, pass True
+  grass_Panicum_racemosum_406576237.jpg: grass rank 1, tutorial top1 Poaceae, reticle share 0.9283, pass True
+  grass_Pseudoroegneria_spicata_406559012.jpg: grass rank 2, tutorial top1 Trifolium, reticle share 0.9610, pass True
+hole 3 non_grass: tutorial pass 7/10; reticle plant 10/10; Poaceae rank counts {1: 2, 2: 2, 3: 3, 6: 1, 9: 1, 11: 1}
+  non_grass_Trifolium_repens_406359770.jpg: grass rank 3, tutorial top1 Trifolium, reticle share 0.9675, pass True
+  non_grass_Taraxacum_officinale_406035391.jpg: grass rank 3, tutorial top1 Taraxacum, reticle share 0.9755, pass True
+  non_grass_Plantago_lanceolata_406558218.jpg: grass rank 1, tutorial top1 Poaceae, reticle share 0.9636, pass True
+  non_grass_Oxalis_stricta_rufa_406756800.jpg: grass rank 2, tutorial top1 Trifolium, reticle share 0.9553, pass True
+  non_grass_Quercus_alba_405748845.jpg: grass rank 11, tutorial top1 Quercus, reticle share 0.9937, pass False
+  non_grass_Acer_rubrum_405066941.jpg: grass rank 9, tutorial top1 Toxicodendron vernix, reticle share 0.9698, pass False
+  non_grass_Lonicera_japonica_406655855.jpg: grass rank 3, tutorial top1 Solanum carolinense, reticle share 0.9815, pass True
+  non_grass_Rubus_ulmifolius_406649712.jpg: grass rank 2, tutorial top1 Polypodiopsida, reticle share 0.9873, pass True
+  non_grass_Polystichum_acrostichoides_405278830.jpg: grass rank 6, tutorial top1 Polypodiopsida, reticle share 0.9852, pass False
+  non_grass_Carex_enneastachya_406638844.jpg: grass rank 1, tutorial top1 Poaceae, reticle share 0.9611, pass True
