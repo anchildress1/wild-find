@@ -10,6 +10,7 @@
     <string name="briar_warning">Briar holding up a paw as leaves grow around him</string>
     <string name="briar_found">Briar cheering</string>
     <string name="briar_complete">Briar cheering</string>
+    <string name="briar_try_again">Briar shrugging, ready to try again</string>
 
     <string name="opener_intro">Bees, snakes, and poison ivy live outside too.</string>
     <string name="rule_look">Look.</string>

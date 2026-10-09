@@ -34,6 +34,7 @@ VIDEOS = {
     "warning": ("briar-warning.mp4", 28, 225),
     "idle": ("briar-at-rest.mp4", 7, 108),
     "complete": ("briar-winning.mp4", 10, 202),
+    "try_again": ("briar-try-again.mp4", 9, 213),
 }
 # The videos render Briar on white; white touching the frame's edge is background, so white fur inside him stays.
 WHITE = 232

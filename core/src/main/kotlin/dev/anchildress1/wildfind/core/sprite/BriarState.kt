@@ -23,6 +23,9 @@ enum class BriarState(val sheet: String, val replayAfterMillis: Long? = null, va
 
     /** The hunt is complete; its cheer loops. */
     COMPLETE("complete", loop = true),
+
+    /** No signal, or too few plants here: Briar shrugs and turns, ready to try again, rests, and plays again. */
+    TRY_AGAIN("try_again", replayAfterMillis = REST_MS),
     ;
 
     /** The idle loop. */

@@ -167,5 +167,6 @@ fun briarText(state: BriarState?): String = stringResource(
         BriarState.WELCOME -> R.string.briar_welcome
         BriarState.FOUND -> R.string.briar_found
         BriarState.COMPLETE -> R.string.briar_complete
+        BriarState.TRY_AGAIN -> R.string.briar_try_again
     },
 )
