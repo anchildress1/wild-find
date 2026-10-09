@@ -115,12 +115,8 @@ object WildIcons {
 
     /** "Checking…" */
     val Dots = fill("dots", circle(6f, 12f, 2f), circle(12f, 12f, 2f), circle(18f, 12f, 2f))
-
-    /** An empty star slot. */
-    val StarOutline = line("star-outline", STAR, width = 1.4f)
 }
 
-private const val STAR = "M12 3.5l2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L3.6 9.6l5.8-.8z"
 private const val CORNERS = "M4 8V4h4M16 4h4v4M20 16v4h-4M8 20H4v-4"
 private fun circle(cx: Float, cy: Float, r: Float) = ellipse(cx, cy, r, r)
 

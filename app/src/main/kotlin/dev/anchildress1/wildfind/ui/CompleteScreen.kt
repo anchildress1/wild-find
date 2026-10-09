@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -12,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -48,13 +50,9 @@ fun CompleteScreen(stops: List<Stop>, onAgain: () -> Unit, onHome: () -> Unit) {
             horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            stops.forEachIndexed { i, stop ->
-                val size = if (i == 1) 76.dp else 68.dp
-                if (stop.found) {
-                    Star(size, Modifier.pop(i))
-                } else {
-                    Icon(WildIcons.StarOutline, null, Modifier.size(size), tint = Palette.Line)
-                }
+            // Only stars earned show: an empty outline on cream read as nothing at all.
+            stops.filter { it.found }.forEachIndexed { i, _ ->
+                Star(if (i == 1) 76.dp else 68.dp, Modifier.pop(i))
             }
         }
         Text(
@@ -84,7 +82,11 @@ private fun Finished(stop: Stop, modifier: Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
-        TypeTile(stop.type, 88.dp)
+        // Found stops wear their star; the rest fade back, and the status line says it in words.
+        Box {
+            TypeTile(stop.type, 88.dp, Modifier.alpha(if (stop.found) 1f else STILL_OUT_ALPHA))
+            if (stop.found) Star(30.dp, Modifier.align(Alignment.BottomEnd).offset(8.dp, 6.dp))
+        }
         // A long name in a narrow card at 200% font breaks mid-word ("mistflowe/r"); a hyphen keeps it readable.
         Text(
             stop.name,
@@ -94,3 +96,5 @@ private fun Finished(stop: Stop, modifier: Modifier) {
         Text(status, style = MaterialTheme.typography.bodyMedium, color = Palette.Ink2)
     }
 }
+
+private const val STILL_OUT_ALPHA = 0.45f
