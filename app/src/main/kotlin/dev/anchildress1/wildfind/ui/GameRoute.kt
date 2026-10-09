@@ -58,12 +58,18 @@ fun GameRoute(vm: GameViewModel = viewModel(factory = factory)) {
     BackHandler(enabled = hasBack(state.screen)) { vm.onEvent(GameEvent.Back) }
     val reduced = LocalReducedMotion.current
     SharedTransitionLayout {
-        AnimatedContent(state.screen, transitionSpec = { transition(reduced) }, label = "screen") { screen ->
+        // Keyed by screen but fed the whole state, so a leaving screen fades out with the data it last showed.
+        AnimatedContent(
+            state,
+            transitionSpec = { transition(reduced) },
+            contentKey = { it.screen },
+            label = "screen",
+        ) { shown ->
             CompositionLocalProvider(
                 LocalSharedScope provides this@SharedTransitionLayout,
                 LocalScreenScope provides this,
             ) {
-                ScreenFor(screen, state, vm)
+                ScreenFor(shown.screen, shown, vm)
             }
         }
     }
@@ -78,7 +84,7 @@ private fun hasBack(screen: Screen) = when (screen) {
 }
 
 // Move 300, emphasized decelerate; with animations off, a crossfade only.
-private fun AnimatedContentTransitionScope<Screen>.transition(reduced: Boolean): ContentTransform {
+private fun AnimatedContentTransitionScope<GameState>.transition(reduced: Boolean): ContentTransform {
     val fade = fadeIn(tween(Motion.MOVE)) togetherWith fadeOut(tween(Motion.QUICK))
     if (reduced) return fade
     return (
