@@ -25,7 +25,7 @@ import dev.anchildress1.wildfind.ui.theme.Palette
 
 /**
  * Where the kid hunts: the rough location (coarse permission only, rounded to whole degrees) or the built-in map.
- * No place is ever named (R2, R7).
+ * Only whole degrees leave the phone (R2, R7).
  *
  * @param locating waiting for the rough location
  * @param denied location was denied once, so it is never asked again and only the map remains

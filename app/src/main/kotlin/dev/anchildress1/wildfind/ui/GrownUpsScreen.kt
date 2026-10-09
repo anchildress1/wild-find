@@ -67,7 +67,7 @@ fun GrownUpsScreen(area: String?, onBack: () -> Unit, onArea: () -> Unit, onRepl
             Link(
                 WildIcons.Map,
                 stringResource(R.string.hunting_area),
-                area ?: stringResource(R.string.region_near_you),
+                stringResource(R.string.hunting_area_detail, area ?: stringResource(R.string.region_near_you)),
                 onArea,
             )
             Box(Modifier.fillMaxWidth().height(1.5.dp).background(Palette.Line))
