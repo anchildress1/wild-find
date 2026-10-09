@@ -16,6 +16,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -47,7 +48,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.disabled
 import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -66,7 +70,7 @@ import java.util.concurrent.Executor
 
 /**
  * The live camera: verify runs only on a Capture tap (3 frames); the result pill stays until the next tap and the
- * hazard card until a capture comes back without one. No Briar on hunt pages.
+ * hazard card until a capture comes back without one. Briar appears on hunt pages only to warn on the hazard card.
  */
 @Composable
 @Suppress("LongParameterList")
@@ -230,7 +234,11 @@ private fun HazardCard() {
     ) {
         Briar(BriarState.WARNING, briarText(BriarState.WARNING), figure = WARNING_FIGURE)
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Text(stringResource(R.string.hazard), style = MaterialTheme.typography.titleSmall, color = Color.White)
+            // The warning sign stays beside Briar: every cue pairs a symbol with its words.
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Icon(WildIcons.Warning, contentDescription = null, Modifier.size(28.dp), tint = Color.White)
+                Text(stringResource(R.string.hazard), style = MaterialTheme.typography.titleSmall, color = Color.White)
+            }
             Text(
                 stringResource(R.string.hazard_detail),
                 style = MaterialTheme.typography.bodyMedium,
@@ -290,7 +298,12 @@ private fun BottomPanel(
 private fun CheckingButton() {
     Row(
         Modifier.fillMaxWidth().heightIn(min = 64.dp).background(Palette.Husk, RoundedCornerShape(32.dp))
-            .semantics { liveRegion = LiveRegionMode.Polite },
+            .border(2.dp, Palette.Moss, RoundedCornerShape(32.dp))
+            .semantics(mergeDescendants = true) {
+                liveRegion = LiveRegionMode.Polite
+                role = Role.Button
+                disabled()
+            },
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
     ) {

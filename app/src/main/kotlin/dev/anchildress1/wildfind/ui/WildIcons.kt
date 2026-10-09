@@ -71,6 +71,9 @@ object WildIcons {
         circle(12f, 13.5f, 3.5f),
     )
 
+    /** The hazard card's warning sign. */
+    val Warning = line("warning", "M12 3L2 20h20L12 3z", "M12 10v4.5", circle(12f, 17.2f, 0.6f))
+
     /** Location. */
     val Pin = line("pin", "M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z", circle(12f, 9.5f, 2.5f))
 
