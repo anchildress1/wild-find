@@ -8,12 +8,14 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
+/** Copy no screen may show: it would call a plant safe, harmless, not poisonous, or okay to touch (R1). */
+internal val BANNED_COPY =
+    Regex("""\b(safe|harmless|not poisonous|okay to touch|ok to touch)\b""", RegexOption.IGNORE_CASE)
+
 /** R1: no copy the app ships ever calls a plant safe, harmless, not poisonous, or okay to touch. */
 @RunWith(AndroidJUnit4::class)
 class BannedCopyTest {
     private val resources = InstrumentationRegistry.getInstrumentation().targetContext.resources
-    private val banned =
-        Regex("""\b(safe|harmless|not poisonous|okay to touch|ok to touch)\b""", RegexOption.IGNORE_CASE)
 
     // Every string and every plural form, resolved the way the device shows them.
     private fun copy(): Map<String, String> {
@@ -28,7 +30,7 @@ class BannedCopyTest {
     fun noShippedCopySaysAPlantIsSafe() {
         val all = copy()
         assertTrue("found only ${all.size} strings", all.size > 50)
-        assertEquals(emptyMap<String, String>(), all.filterValues { banned.containsMatchIn(it) })
+        assertEquals(emptyMap<String, String>(), all.filterValues { BANNED_COPY.containsMatchIn(it) })
     }
 
     @Test
@@ -40,7 +42,7 @@ class BannedCopyTest {
     @Test
     fun theCheckCatchesEveryBannedPhrase() {
         listOf("It is safe", "harmless fern", "Not poisonous!", "okay to touch").forEach {
-            assertTrue(it, banned.containsMatchIn(it))
+            assertTrue(it, BANNED_COPY.containsMatchIn(it))
         }
     }
 }
