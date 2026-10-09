@@ -14,7 +14,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class SafetyOpenerTest : E2eTest() {
     @Test
-    fun firstLaunchOpensOnTheSafetyRuleWithBriarWaving() {
+    fun firstLaunchOpensOnTheSafetyRuleWithBriarWarning() {
         waitForText(text(R.string.rule_leave))
         assertEquals(
             "Look. Photograph. Leave it where it grows.",
@@ -23,7 +23,7 @@ class SafetyOpenerTest : E2eTest() {
         listOf(R.string.rule_look, R.string.rule_photograph, R.string.rule_leave).forEach {
             assertTrue("missing \"${text(it)}\"", has(hasText(text(it))))
         }
-        assertTrue("Briar isn't waving hello", has(hasContentDescription(text(R.string.briar_opener))))
+        assertTrue("Briar isn't warning", has(hasContentDescription(text(R.string.briar_warning))))
     }
 
     @Test

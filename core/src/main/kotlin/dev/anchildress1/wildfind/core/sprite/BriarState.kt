@@ -9,14 +9,14 @@ package dev.anchildress1.wildfind.core.sprite
  * @property loop the animation repeats with no rest
  */
 enum class BriarState(val sheet: String, val replayAfterMillis: Long? = null, val loop: Boolean = false) {
-    /** The safety opener: Briar waves hello, again and again with a short rest between. */
-    OPENER("opener", replayAfterMillis = REST_MS),
+    /** The safety opener: Briar's raised paw as leaves grow around him, beside the leave-it rule, resting between. */
+    OPENER("warning", replayAfterMillis = REST_MS),
 
     /** The hazard card: Briar holds up a paw as leaves grow around him, rests, and warns again. */
     WARNING("warning", replayAfterMillis = REST_MS),
 
-    /** First launch, the tutorial, and the hunt list: the warning clip's raised paw, resting between plays. */
-    WELCOME("warning", replayAfterMillis = REST_MS),
+    /** Ready to hunt, the tutorial, and the hunt list: Briar waves hello, rests, and waves again. */
+    WELCOME("welcome", replayAfterMillis = REST_MS),
 
     /** The found screen: Briar cheers, rests, and cheers again, with the hunt-complete cheer. */
     FOUND("complete", replayAfterMillis = REST_MS),

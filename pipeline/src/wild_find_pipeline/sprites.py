@@ -28,9 +28,9 @@ STAR_PX = 256
 # Faint glow pixels below this alpha don't count as the plant's edge.
 ALPHA_FLOOR = 16
 # name: (source video, first frame kept, end frame). The cut drops the still stretch at each end, at frames that
-# match so the loop joins without a jump. `found` plays `complete`'s clip, and `welcome` plays `warning`'s.
+# match so the loop joins without a jump. `found` plays `complete`'s clip, and the opener plays `warning`'s.
 VIDEOS = {
-    "opener": ("briar-welcome.mp4", 10, 217),
+    "welcome": ("briar-welcome.mp4", 10, 217),
     "warning": ("briar-warning.mp4", 28, 225),
     "idle": ("briar-at-rest.mp4", 7, 108),
     "complete": ("briar-winning.mp4", 10, 202),
@@ -151,7 +151,10 @@ def main() -> int:
             quality=VIDEO_QUALITY,
             method=6,
         )
-        (OUT / f"{name}.json").write_text(json.dumps({"figure_height": figure}) + "\n")
+        # The app reserves the clip's space from these before its frames decode.
+        width, height = images[0].size
+        meta = {"figure_height": figure, "width": width, "height": height}
+        (OUT / f"{name}.json").write_text(json.dumps(meta) + "\n")
         print(f"OK: {name} {images[0].width}x{images[0].height}, {len(images)} frames at {rate:g} fps")
     return 0
 

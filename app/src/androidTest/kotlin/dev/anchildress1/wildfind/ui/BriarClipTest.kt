@@ -34,7 +34,14 @@ class BriarClipTest {
             assertTrue("$name.json missing", "$name.json" in packed)
             val meta = assets.readJson("briar/$name.json")
             assertTrue("$name.webp missing", "$name.webp" in packed)
-            assertTrue(name, meta.getInt("figure_height") in 1..clip(name).intrinsicHeight)
+            val drawable = clip(name)
+            assertTrue(name, meta.getInt("figure_height") in 1..drawable.intrinsicHeight)
+            // The player reserves Briar's box from these before the clip decodes.
+            assertEquals(
+                name,
+                drawable.intrinsicWidth to drawable.intrinsicHeight,
+                meta.getInt("width") to meta.getInt("height"),
+            )
         }
     }
 
