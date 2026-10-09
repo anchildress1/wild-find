@@ -13,6 +13,7 @@ class ActiveHuntTest {
     private val local = LocalList(
         listOf(Eligible(0, "water oak", 72), Eligible(1, "sweetgum", 50), Eligible(2, "redbud", 40)),
         intArrayOf(3),
+        needsWiden = false,
     )
 
     @Test

@@ -37,14 +37,14 @@ class LocalListSourceTest {
     fun `a fresh pull with enough species plays and is cached`() {
         val result = load(source(mapOf(75 to three)))
 
-        assertEquals(LocalListResult.Ready(species.of(three), 75), result)
+        assertEquals(LocalListResult.Ready(species.of(three)), result)
         assertEquals(listOf(75), asked)
         assertEquals(mapOf(CacheKey("v1", region, "en", 10, 75) to three), saved)
     }
 
     @Test
     fun `with no answer the matching cache plays`() {
-        assertEquals(LocalListResult.Ready(species.of(three), 75), load(source(mapOf(75 to null), mapOf(75 to three))))
+        assertEquals(LocalListResult.Ready(species.of(three)), load(source(mapOf(75 to null), mapOf(75 to three))))
         assertEquals(emptyMap<CacheKey, List<Sighting>>(), saved)
     }
 
@@ -55,19 +55,19 @@ class LocalListSourceTest {
 
     @Test
     fun `too few species widen once to 150 km`() {
-        assertEquals(LocalListResult.Ready(species.of(three), 150), load(source(mapOf(75 to one, 150 to three))))
+        assertEquals(LocalListResult.Ready(species.of(three)), load(source(mapOf(75 to one, 150 to three))))
         assertEquals(listOf(75, 150), asked)
     }
 
     @Test
     fun `still too few after the widen is not enough`() {
-        assertEquals(LocalListResult.NotEnough(species.of(one)), load(source(mapOf(75 to one, 150 to one))))
+        assertEquals(LocalListResult.NotEnough, load(source(mapOf(75 to one, 150 to one))))
     }
 
     @Test
     fun `a widen with no answer falls back to its own cache, else needs signal`() {
         assertEquals(
-            LocalListResult.Ready(species.of(three), 150),
+            LocalListResult.Ready(species.of(three)),
             load(source(mapOf(75 to one, 150 to null), mapOf(150 to three))),
         )
         assertEquals(LocalListResult.NeedsSignal, load(source(mapOf(75 to one, 150 to null))))

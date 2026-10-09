@@ -138,7 +138,7 @@ Eight P0s ship the hunt; four P2s shape the design now. Requirement IDs stay fix
 | ID | Requirement | Acceptance criteria |
 | --- | --- | --- |
 | R1 | Safety opener | First launch shows bees and snakes, with poison ivy drawn into the art; one rule: "Look. Photograph. Leave it where it grows."; no copy says safe, harmless, not poisonous, or okay to touch; replayable from the menu |
-| R2 | Hunt list | One iNaturalist query per hunt, requiring at most three paginated HTTP requests: coarse region coordinates, current calendar month across all available years, plants, research grade, device locale for common names; a species is eligible with at least 0.5% of the query's plant sightings and at least 3, a species-table row, no toxic or hazard flag, and a common name of 3 words or fewer; fewer than 3 eligible widens the radius to 150 km once; cached under the versioned cache key; location denied falls back to picking the area on the built-in map; still fewer than 3 shows the coverage message |
+| R2 | Hunt list | One iNaturalist query per hunt, requiring at most three paginated HTTP requests: coarse region coordinates, current calendar month across all available years, plants, research grade, device locale for common names; a species is eligible with at least 0.5% of the query's plant sightings and at least 3, a species-table row, no toxic or hazard flag, and a common name of 3 words or fewer; fewer than 3 eligible genera (a hunt takes one target per genus) widens the radius to 150 km once; cached under the versioned cache key; location denied falls back to picking the area on the built-in map; still fewer than 3 shows the coverage message |
 | R3 | Grass tutorial | The first-ever hunt opens with grass, followed by 3 normal targets; a grass close-up passes when TinyCLIP calls the reticle crop a plant and grass is in BioCLIP's top 3 of the fixed tutorial label set, the 11 labels Day 1 measured (Poaceae, Quercus, Polypodiopsida, Trifolium, Pinus, Taraxacum, and the 5 hazard species), never the hunt's full label universe (49 of 52 CC0 grass photos passed both on Day 1; BioCLIP top 3 alone passed 50 and top-1 alone 45; the one lawn the gate rejected scored a plant share of 0.39); the plant gate's labels include grass; the hazard check doesn't run during the tutorial, because 9 of 54 grass photos warned against the menu labels on Day 1 (1 of 54 against the species table), and the leave-it rule stays on screen; done in under 60 seconds; never repeats once completed |
 | R4 | Target pick | 3 targets per hunt by sighting-weighted random from eligible species, never two from one genus, drawing from described species first and filling from the rest only when they run out; skips reach undescribed species only after described ones; a hazard or toxic-flagged species is never a target |
 | R5 | Verify | Follows the Runtime Logic verify table on each Capture tap; a find needs the target (or its genus) to outscore the hunt's other locally eligible species and lead every local toxic and hazard species (blockers) by at least 0.048 on the reticle crop, for 3 frames in a row; a hazard match shows a warning and gives no star; no result is ever presented as evidence of safety |
@@ -170,7 +170,7 @@ Day-1 and Day-2 measurements on the test phone are in hole 4 and `docs/results/d
 | Sunlight | High-contrast, large type that reads in direct sun | Field test |
 | Accessibility | 48 dp touch targets; content descriptions; no color-only signals | Accessibility Scanner |
 | Reading level | All kid-facing text at an age-8 level | Review |
-| iNat etiquette | One query per hunt, requiring at most three paginated HTTP requests, plus one widened query only when fewer than 3 species are eligible; a User-Agent that names the app | Code review |
+| iNat etiquette | One query per hunt, requiring at most three paginated HTTP requests, plus one widened query only when fewer than 3 genera are eligible; a User-Agent that names the app | Code review |
 
 ## Architecture
 
@@ -393,7 +393,7 @@ Every failure degrades to a playable hunt or a plain message; none crash or stal
 | iNat unreachable, no matching cache | No hunt; say this place needs signal once |
 | iNat returns 429 | Use the cache at once; no request, the widened query included, goes to iNat until Retry-After passes (60 seconds when it gives none) |
 | Cache entry mismatch (schema, table, region, locale, month, or radius) | Discard the entry and refetch |
-| Fewer than 3 eligible species | Widen the radius to 150 km once, one extra query of up to three requests; still short, show "Not enough plants spotted here yet" |
+| Fewer than 3 eligible genera | Widen the radius to 150 km once, one extra query of up to three requests; still short, show "Not enough plants spotted here yet" |
 | Autofocus reports no focus distance | The capture gives no verdict; the kid sees "Tap the plant to focus" |
 | Camera permission denied | Explain why the game needs it; the hunt can't start |
 | App sent to the background mid-hunt | The current hunt's state is restored |

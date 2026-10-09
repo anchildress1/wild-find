@@ -101,6 +101,21 @@ class LocalSpeciesTest {
     }
 
     @Test
+    fun `three species from two genera still widen, since a hunt takes one per genus`() {
+        val oaks = table + SpeciesRow("Quercus alba", "Quercus", hazard = false, toxic = false)
+        val list = LocalSpecies(oaks) { name -> oaks.indexOfFirst { it.scientific == name }.takeIf { it >= 0 } }.of(
+            pull(
+                Sighting("Quercus nigra", "water oak", 10),
+                Sighting("Quercus alba", "white oak", 10),
+                Sighting("Acer rubrum", "red maple", 20),
+            ),
+        )
+
+        assertEquals(3, list.eligible.size)
+        assertTrue(list.needsWiden)
+    }
+
+    @Test
     fun `an empty pull widens`() {
         assertTrue(local.of(emptyList()).needsWiden)
     }

@@ -10,16 +10,11 @@ sealed interface LocalListResult {
      * Enough species to play.
      *
      * @property local the eligible species and blockers
-     * @property radiusKm 75, or 150 after the widen
      */
-    data class Ready(val local: LocalList, val radiusKm: Int) : LocalListResult
+    data class Ready(val local: LocalList) : LocalListResult
 
-    /**
-     * Still fewer than 3 eligible after the widen: "Not enough plants spotted here yet".
-     *
-     * @property local what the widened pull found
-     */
-    data class NotEnough(val local: LocalList) : LocalListResult
+    /** Still fewer than 3 eligible genera after the widen: "Not enough plants spotted here yet". */
+    data object NotEnough : LocalListResult
 
     /** No answer from iNat and no matching cache: this place needs signal once. */
     data object NeedsSignal : LocalListResult
@@ -27,7 +22,7 @@ sealed interface LocalListResult {
 
 /**
  * Loads a hunt's local list: one iNat query, falling back to a matching cache entry when iNat doesn't answer, and
- * one widened query when fewer than 3 species are eligible.
+ * one widened query when fewer than 3 genera are eligible.
  *
  * @param species the eligibility rule
  * @param pull runs one query; null when iNat failed or rate-limited
@@ -51,10 +46,10 @@ class LocalListSource(
         val wide = if (near?.needsWiden == true) at(CacheKey.WIDE_RADIUS_KM) else null
         return when {
             near == null -> LocalListResult.NeedsSignal
-            !near.needsWiden -> LocalListResult.Ready(near, CacheKey.RADIUS_KM)
+            !near.needsWiden -> LocalListResult.Ready(near)
             wide == null -> LocalListResult.NeedsSignal
-            wide.needsWiden -> LocalListResult.NotEnough(wide)
-            else -> LocalListResult.Ready(wide, CacheKey.WIDE_RADIUS_KM)
+            wide.needsWiden -> LocalListResult.NotEnough
+            else -> LocalListResult.Ready(wide)
         }
     }
 }
