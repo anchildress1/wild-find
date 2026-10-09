@@ -64,6 +64,15 @@ Validation: `make device-test` excludes E2E; `make e2e` uses the separate `.e2e`
 - [ ] **S53 Release** — release keystore (local, never committed), R8 minify, signed APK on a GitHub Release, About screen credits; install the release build on the test phone and run a first hunt from it; H10; before release day, measure the release APK and list what fills it: the debug APK was 341.6 MB on Oct 8, far over the models, tables, sprites, and map combined
 - [ ] **S54 Demo + post** — outdoor demo video; post explains the Oct 7 redesign from `docs/results/day-2/`
 
+## Hazards worldwide · build-time Gemma
+
+- [ ] **S55 Contact-hazard list** (pipeline + core) — the warning card knows only 7 North American hazards (every *Toxicodendron*, pokeweed, Carolina horsenettle), so it never fires in places like Tbilisi or Borjomi, even beside giant hogweed. Local toxic flags already block target passes everywhere, but they show no card, and "toxic" can't drive the card: 2,161 of 4,272 rows are flagged, mostly for eating or for a stub article, so a top-5 check on them would warn on nearly every photo.
+  - **Build:** a build-time step runs Gemma locally over each species row's committed evidence (Wikipedia text, USDA traits). It answers one narrow question: is this a contact or handling hazard (urushiol, phototoxic sap, stinging hairs, irritant latex, spines)? Each answer cites its sentence and lands in a committed file beside `toxicity.json`. Uncertain or uncited rows go to hand review. Rows that fail stay off the list.
+  - **Text:** hazard text comes from the same file and passes the banned-copy check.
+  - **App:** the hazard check reads the list instead of the fixed 7. No new model ships, since BioCLIP already names the species.
+  - **Gate before shipping:** re-measure on the S50 and S51 photo sets plus new contact-hazard photos from other regions. Hazard catch must stay at least 48 of 52, and safe photos warned must stay at most 1 in 250. Tune the top-5 cutoff if the longer list costs false warnings. Record the run in `docs/results/` the same day.
+  - **PRD:** this reverses the fixed hazard list in Build Pipeline and verify row 1, so the PRD changes in the same commit.
+
 ## Open holes
 
 New holes found while drafting these stories. PRD holes 4, 10, and 19 still stand (19 only until the field test). H-numbers below are this file's own list, separate from PRD hole numbers; H9 was never assigned.
@@ -81,3 +90,4 @@ New holes found while drafting these stories. PRD holes 4, 10, and 19 still stan
 | H11 | The toxicity flag catches white, blackjack, and post oak, yarrow, a grass, a moss, and box elder; as blockers they cost 21 of the 35 finds the margin rule loses | Resolved Oct 8 by measurement: unflagging the wrong-sense flags gains one target (black walnut, 35 of 72) and unflagging livestock-only ones two more (37 of 78), with 0 toxic false passes either way; BioCLIP's look-alike confusion, not the flags, costs the finds. The rule stays; water lettuce shows why (`docs/results/day-3/toxicity_audit.md`) | Low |
 | H10 | No release keystore plan for the GitHub Release APK | Local keystore, never committed; `keystore.properties` gitignored | Low |
 | H12 | A Capture takes about 2 s on a mid-range phone (moto g stylus 2026: 390 to 1,250 ms a frame vs about 190 ms on the S24 Ultra), double the 1 s bar (`docs/results/day-3/device-moto.log`, PRD hole 4) | Future work, not v1: measure a real capture on the moto first. Candidates, each to be measured against the Day-1 verdicts before it ships: fewer frames per capture on slow phones; run TinyCLIP on the reticle crop only when it decides; run the plant gate and BioCLIP on separate threads; tune ONNX Runtime's thread count or try its XNNPACK provider; a smaller analysis size. fp16 stays out: it returned NaN on ARM | Medium |
+| H13 | The warning card covers 7 North American hazards only; other regions get blockers but no card, even beside giant hogweed | S55: a build-time contact-hazard list, gated on the hazard catch and false-warning rates | High |
