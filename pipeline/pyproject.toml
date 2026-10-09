@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Build-time species table, toxicity flags, synonyms, tutorial labels, and plant gate for wild-find."
 requires-python = ">=3.13"
 dependencies = [
+    "av>=19.0.1",
     "mwparserfromhell>=0.7.2",
     "numpy>=2.3",
     "pillow>=11.3",
