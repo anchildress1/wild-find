@@ -121,6 +121,14 @@ class GameRulesTest {
     }
 
     @Test
+    fun `a saved hunt that arrives before the table is read again, never cleared`() {
+        val step = Game(flags = flags()).after(Outcome.SavedHunt(hunt()))
+
+        assertEquals(listOf(Command.ReadHunt), step.commands)
+        assertNull(step.game.hunt)
+    }
+
+    @Test
     fun `invalid or differently located saved hunts are cleared before rows are indexed`() {
         val loading = Game(flags = flags()).after(Outcome.ModelsReady(rows)).game
         val saved = hunt()

@@ -187,7 +187,7 @@ sealed interface Command {
 }
 
 /**
- * The game's rules: one hunt at a time, saved on every change so it survives process death (S38).
+ * The game's rules: one hunt at a time, saved on every change so it survives process death.
  *
  * @param random the hunt pick's draw
  */
@@ -302,19 +302,29 @@ private class Turn(private var game: Game, private val random: Random) {
     }
 
     private fun resumed(saved: ActiveHunt?) {
-        if (saved == null) return show(Screen.Start)
-        if (!saved.validFor(game.flags.region, game.rows.orEmpty())) {
-            commands += Command.ClearHunt
-            return show(Screen.Start)
+        val rows = game.rows
+        when {
+            saved == null -> show(Screen.Start)
+
+            // Without the table a valid hunt can't be told from a broken one, so read it again rather than delete it.
+            rows == null -> commands += Command.ReadHunt
+
+            !saved.validFor(game.flags.region, rows) -> {
+                commands += Command.ClearHunt
+                show(Screen.Start)
+            }
+
+            else -> {
+                startHunt(saved)
+                show(
+                    when {
+                        saved.progress.tutorialPending -> Screen.Tutorial
+                        saved.progress.complete -> Screen.Complete
+                        else -> Screen.Hunt
+                    },
+                )
+            }
         }
-        startHunt(saved)
-        show(
-            when {
-                saved.progress.tutorialPending -> Screen.Tutorial
-                saved.progress.complete -> Screen.Complete
-                else -> Screen.Hunt
-            },
-        )
     }
 
     private fun openerDone(screen: Screen) {
