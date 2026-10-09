@@ -20,7 +20,8 @@ data class Sighting(val scientific: String, val common: String?, val count: Int)
  * @property toxic flagged by the build-time toxicity rule
  * @property type the plant type shown with a target, or null when the build found none
  * @property synonyms other names GBIF gives this species, so a drifted iNat name still finds the row
- * @property description a short kid-level sentence from USDA traits, or null when USDA had nothing to see
+ * @property description a generic kid-level sentence, the plant type in kid words, or null when the build found none
+ * @property hints the build's ranked "where to look" hints, every seasonal one included; empty when it wrote none
  */
 data class SpeciesRow(
     val scientific: String,
@@ -30,6 +31,7 @@ data class SpeciesRow(
     val type: PlantType? = null,
     val synonyms: List<String> = emptyList(),
     val description: String? = null,
+    val hints: List<Hint> = emptyList(),
 ) {
     /** Neither toxic nor a hazard, so it can be a target. */
     val playable: Boolean get() = !toxic && !hazard
