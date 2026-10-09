@@ -10,8 +10,13 @@ class HuntPickTest {
     private val table = listOf("Quercus", "Quercus", "Acer", "Liquidambar", "Magnolia", "Fagus")
         .mapIndexed { row, genus -> SpeciesRow("$genus s$row", genus, hazard = false, toxic = false) }
 
-    private fun local(vararg counts: Int) =
-        LocalList(counts.mapIndexed { row, count -> Eligible(row, "name $row", count) }, intArrayOf())
+    private fun local(vararg counts: Int) = LocalList(
+        counts.mapIndexed { row, count ->
+            Eligible(row, "name $row", count)
+        },
+        intArrayOf(),
+        needsWiden = false,
+    )
 
     @Test
     fun `a hunt takes three targets, never two from one genus`() {

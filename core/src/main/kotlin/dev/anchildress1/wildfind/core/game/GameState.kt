@@ -1,4 +1,4 @@
-package dev.anchildress1.wildfind.game
+package dev.anchildress1.wildfind.core.game
 
 import dev.anchildress1.wildfind.core.frame.Pixels
 import dev.anchildress1.wildfind.core.hunt.PlantType
@@ -150,8 +150,11 @@ data class GameState(
  */
 data class MapFocus(val region: RegionKey, val serial: Int, val opening: Boolean = false)
 
+/** Anything the game rules react to: what the kid did, or what a [Command] brought back. */
+sealed interface GameInput
+
 /** What the kid did. */
-sealed interface GameEvent {
+sealed interface GameEvent : GameInput {
     /** Let's go, or Done on a replay. */
     data object OpenerDone : GameEvent
 

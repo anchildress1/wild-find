@@ -11,6 +11,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
+from wild_find_pipeline.gbif import USER_AGENT
 from wild_find_pipeline.labels import HAZARDS, SCENES, prompt
 from wild_find_pipeline.paths import MODEL_CACHE, REFERENCE_DIR, ensure_artifact, pin
 
@@ -19,7 +20,8 @@ FIXTURE_WORD = "oak"
 FIXTURE_TAXON = "Quercus"
 FIXTURE_URL = "https://inaturalist-open-data.s3.amazonaws.com/photos/664105168/medium.jpg"
 FIXTURE_SOURCE = "https://www.inaturalist.org/observations/363799243 (CC0)"
-USER_AGENT = "wild-find-pipeline/0.1 (+https://github.com/anchildress1/wild-find)"
+# The bytes every committed fixture and crop reference was cut from; a recompressed photo would shift every pixel.
+FIXTURE_SHA256 = "097362a038a62eab4239ee9ce11b3626332a59c34c0aeb63a65813567761cd73"
 
 
 def center_crop(img: Image.Image, width: int, height: int) -> Image.Image:
@@ -80,10 +82,13 @@ def embed_texts(texts: list[str]) -> np.ndarray:
 
 
 def fetch_fixture() -> Image.Image:
-    """Download the fixture photo from iNaturalist."""
+    """Download the fixture photo from iNaturalist; raises when its bytes don't match FIXTURE_SHA256."""
     request = urllib.request.Request(FIXTURE_URL, headers={"User-Agent": USER_AGENT})
     with urllib.request.urlopen(request, timeout=30) as response:
-        return Image.open(io.BytesIO(response.read()))
+        data = response.read()
+    if hashlib.sha256(data).hexdigest() != FIXTURE_SHA256:
+        raise ValueError(f"{FIXTURE_URL} does not match its pinned SHA-256")
+    return Image.open(io.BytesIO(data))
 
 
 def main() -> int:

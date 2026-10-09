@@ -72,15 +72,15 @@ data class Eligible(val row: Int, val common: String, val count: Int)
  * @property eligible playable species, most sighted first
  * @property blockers every local toxic-flagged and hazard row, at any sighting count; never targets, but they block
  *   verify row 4
- * @property needsWiden fewer than [LocalSpecies.MIN_TARGETS] eligible, so the pull widens to 150 km once
+ * @property needsWiden fewer than [LocalSpecies.MIN_TARGETS] eligible genera, so the pull widens to 150 km once
  */
-data class LocalList(val eligible: List<Eligible>, val blockers: IntArray) {
-    val needsWiden: Boolean get() = eligible.size < LocalSpecies.MIN_TARGETS
+data class LocalList(val eligible: List<Eligible>, val blockers: IntArray, val needsWiden: Boolean) {
+    override fun equals(other: Any?): Boolean = other is LocalList &&
+        eligible == other.eligible &&
+        blockers.contentEquals(other.blockers) &&
+        needsWiden == other.needsWiden
 
-    override fun equals(other: Any?): Boolean =
-        other is LocalList && eligible == other.eligible && blockers.contentEquals(other.blockers)
-
-    override fun hashCode(): Int = 31 * eligible.hashCode() + blockers.contentHashCode()
+    override fun hashCode(): Int = 31 * (31 * eligible.hashCode() + blockers.contentHashCode()) + needsWiden.hashCode()
 }
 
 /**
@@ -99,12 +99,15 @@ class LocalSpecies(private val table: List<SpeciesRow>, private val rowOf: (Stri
         }.groupBy({ it.first }, { it.second })
         val counted = byRow.mapValues { (_, names) -> names.sumOf { it.count } }.filterValues { it >= floor }
         val eligible = counted.mapNotNull { (row, count) ->
-            val common = byRow.getValue(row).maxBy { it.count }.common?.trim()?.takeIf(::isKidName)
+            val common = byRow.getValue(row).sortedByDescending { it.count }
+                .firstNotNullOfOrNull { it.common?.trim()?.takeIf(::isKidName) }
             if (table[row].playable && common != null) Eligible(row, common, count) else null
         }.sortedWith(compareByDescending<Eligible> { it.count }.thenBy { it.row })
         // Any sighting blocks: the floor-only blockers let 87 of 180 toxic photos pass as some target on Oct 7.
         val blockers = byRow.keys.filterNot { table[it].playable }.sorted().toIntArray()
-        return LocalList(eligible, blockers)
+        // A hunt takes one target per genus, so three species of two genera still can't fill it.
+        val genera = eligible.distinctBy { table[it.row].genus }.size
+        return LocalList(eligible, blockers, needsWiden = genera < MIN_TARGETS)
     }
 
     private fun isKidName(name: String) = name.isNotEmpty() && name.split(WHITESPACE).size <= MAX_NAME_WORDS
@@ -120,7 +123,7 @@ class LocalSpecies(private val table: List<SpeciesRow>, private val rowOf: (Stri
         /** Longest common name a kid is asked to find. */
         const val MAX_NAME_WORDS = 3
 
-        /** A hunt picks this many targets; fewer eligible widens the pull. */
+        /** A hunt picks this many targets, one per genus; fewer eligible genera widens the pull. */
         const val MIN_TARGETS = 3
 
         private val WHITESPACE = Regex("\\s+")

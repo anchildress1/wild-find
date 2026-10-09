@@ -1,7 +1,6 @@
-"""Key Briar's videos into transparent animated WebPs, repack his remaining sprite sheets, and shrink the plant art."""
+"""Key Briar's videos into transparent animated WebPs, and shrink the plant art, star, and launcher icon."""
 
 import json
-import math
 import sys
 from pathlib import Path
 
@@ -28,19 +27,14 @@ PLANT_PX = 384
 STAR_PX = 256
 # Faint glow pixels below this alpha don't count as the plant's edge.
 ALPHA_FLOOR = 16
-# name: (source file, columns, rows, fps). A state moves to VIDEOS once its video replaces the sheet.
-SHEETS = {
-    "welcome": ("welcome-32.png", 8, 4, 16),
-}
-# Sheets that loop; every other sheet plays once.
-LOOPING: set[str] = set()
 # name: (source video, first frame kept, end frame). The cut drops the still stretch at each end, at frames that
-# match so the loop joins without a jump. `found` plays `complete`'s clip.
+# match so the loop joins without a jump. `found` plays `complete`'s clip, and the opener plays `warning`'s.
 VIDEOS = {
-    "opener": ("briar-welcome.mp4", 10, 217),
+    "welcome": ("briar-welcome.mp4", 10, 217),
     "warning": ("briar-warning.mp4", 28, 225),
     "idle": ("briar-at-rest.mp4", 7, 108),
     "complete": ("briar-winning.mp4", 10, 202),
+    "try_again": ("briar-try-again.mp4", 9, 213),
 }
 # The videos render Briar on white; white touching the frame's edge is background, so white fur inside him stays.
 WHITE = 232
@@ -51,96 +45,12 @@ SHADOW_SPREAD = 18
 # The background fades into Briar over this many pixels, softening the keyed edge.
 FADE_PX = 2.5
 VIDEO_QUALITY = 80
-# Rows of each frame's lowest pixels that count as its feet.
-FEET_ROWS = 24
-# A separate outline this share of the smallest frame's size or more is a prop, not stray specks.
-PART_SHARE = 0.01
-# Soft fur edges sit outside the alpha > 128 outline; grow the outline this far to keep them.
-EDGE = 6
-
-
-def frames_of(source: Image.Image, columns: int, rows: int) -> list[Image.Image]:
-    """Cut out each frame by its own outline, in reading order.
-
-    Generated sheets don't keep frames on an even grid, so frames are found by connected alpha, not cell edges.
-    """
-    alpha = np.asarray(source)[..., 3]
-    labels, count = ndimage.label(alpha > 128)
-    sizes = ndimage.sum(np.ones_like(labels), labels, range(1, count + 1))
-    biggest = np.argsort(sizes)[::-1][: columns * rows] + 1
-    if len(biggest) < columns * rows or sizes[biggest[-1] - 1] < sizes[biggest[0] - 1] / 2:
-        raise ValueError(f"expected {columns * rows} frames of similar size")
-    boxes = ndimage.find_objects(labels)
-    # Reading order: bucket by row from the frame's vertical center, then left to right.
-    row_height = source.height / rows
-    order = sorted(
-        biggest,
-        key=lambda i: (int((boxes[i - 1][0].start + boxes[i - 1][0].stop) / 2 // row_height), boxes[i - 1][1].start),
-    )
-    # Props drawn apart from Briar (the opener's seedling) are their own outlines; each joins the nearest frame
-    # in its row.
-    parts = {i: [i] for i in order}
-    floor = sizes[biggest[-1] - 1] * PART_SHARE
-    for i in range(1, count + 1):
-        if i in parts or sizes[i - 1] < floor:
-            continue
-        ys, xs = boxes[i - 1]
-        row = int((ys.start + ys.stop) / 2 // row_height)
-        same_row = [j for j in order if int((boxes[j - 1][0].start + boxes[j - 1][0].stop) / 2 // row_height) == row]
-        center = (xs.start + xs.stop) / 2
-        nearest = min(same_row or order, key=lambda j: abs((boxes[j - 1][1].start + boxes[j - 1][1].stop) / 2 - center))
-        parts[nearest].append(i)
-    frames = []
-    for i in order:
-        keep = ndimage.binary_dilation(np.isin(labels, parts[i]), iterations=EDGE) & (alpha > 0)
-        ys, xs = np.nonzero(keep)
-        rgba = np.asarray(source).copy()
-        rgba[..., 3] = np.where(keep, rgba[..., 3], 0)
-        frames.append(Image.fromarray(rgba).crop((xs.min(), ys.min(), xs.max() + 1, ys.max() + 1)))
-    return frames
 
 
 def solid_height(frame: Image.Image) -> int:
     """Rows from the top to the bottom of a frame's solid (alpha > 128) pixels."""
     rows = np.nonzero((np.asarray(frame)[..., 3] > 128).any(axis=1))[0]
     return int(rows.max() - rows.min() + 1)
-
-
-def feet(frame: Image.Image) -> tuple[float, int]:
-    """Anchor point: horizontal center of the lowest FEET_ROWS rows of Briar's solid pixels, and the bottom row.
-
-    Only the largest outline counts: a prop beside him (the opener's seedling) would drag the anchor and make him
-    slide from frame to frame.
-    """
-    labels, count = ndimage.label(np.asarray(frame)[..., 3] > 128)
-    sizes = ndimage.sum(np.ones_like(labels), labels, range(1, count + 1))
-    alpha = labels == int(np.argmax(sizes)) + 1
-    bottom = int(np.nonzero(alpha.any(axis=1))[0].max())
-    _, xs = np.nonzero(alpha[max(0, bottom - FEET_ROWS) : bottom + 1])
-    return float(xs.mean()), bottom
-
-
-def repack(source: Image.Image, columns: int, rows: int) -> tuple[Image.Image, int, int]:
-    """Place every frame on a square whole-pixel cell with its feet at one shared point, so the loop stays planted.
-
-    Returns the repacked sheet, its cell size, and Briar's median height in it, which the app scales to.
-    """
-    frames = frames_of(source, columns, rows)
-    figure = int(np.median([solid_height(f) for f in frames]))
-    anchors = [feet(f) for f in frames]
-    left = max(ax for ax, _ in anchors)
-    right = max(f.width - ax for f, (ax, _) in zip(frames, anchors, strict=True))
-    above = max(ay for _, ay in anchors)
-    below = max(f.height - ay for f, (_, ay) in zip(frames, anchors, strict=True))
-    cell = 8 * math.ceil(max(left + right, above + below) / 8)
-    # Shared feet point inside every cell, centered on the frames' combined extent.
-    fx = (cell - (left + right)) / 2 + left
-    fy = (cell - (above + below)) / 2 + above
-    sheet = Image.new("RGBA", (cell * columns, cell * rows))
-    for n, (frame, (ax, ay)) in enumerate(zip(frames, anchors, strict=True)):
-        col, row = n % columns, n // columns
-        sheet.alpha_composite(frame, (col * cell + round(fx - ax), row * cell + round(fy - ay)))
-    return sheet, cell, figure
 
 
 def key_white(rgb: np.ndarray) -> np.ndarray:
@@ -210,7 +120,7 @@ def plant_art(source: Image.Image) -> Image.Image:
 
 
 def main() -> int:
-    """Write <state>.webp or <state>.png, each with <state>.json, for every Briar source, and one WebP per plant."""
+    """Write <state>.webp and <state>.json for every Briar video, and one WebP per plant."""
     OUT.mkdir(parents=True, exist_ok=True)
     PLANTS_OUT.mkdir(parents=True, exist_ok=True)
     for layer in ICON_LAYERS:
@@ -242,18 +152,11 @@ def main() -> int:
             quality=VIDEO_QUALITY,
             method=6,
         )
-        (OUT / f"{name}.json").write_text(json.dumps({"figure_height": figure}) + "\n")
-        # A video replaces the state's packed sheet, so the stale sheet doesn't ship beside it.
-        (OUT / f"{name}.png").unlink(missing_ok=True)
+        # The app reserves the clip's space from these before its frames decode.
+        width, height = images[0].size
+        meta = {"figure_height": figure, "width": width, "height": height}
+        (OUT / f"{name}.json").write_text(json.dumps(meta) + "\n")
         print(f"OK: {name} {images[0].width}x{images[0].height}, {len(images)} frames at {rate:g} fps")
-    for name, (file, columns, rows, fps) in SHEETS.items():
-        sheet, cell, figure = repack(Image.open(SOURCE / file).convert("RGBA"), columns, rows)
-        sheet.save(OUT / f"{name}.png", optimize=True)
-        meta = {"frame_width": cell, "frame_height": cell, "frames": columns * rows, "columns": columns, "fps": fps}
-        # Each source draws Briar at its own size; the app scales every sheet so he stands one height everywhere.
-        meta["figure_height"] = figure
-        (OUT / f"{name}.json").write_text(json.dumps({**meta, "loop": name in LOOPING}) + "\n")
-        print(f"OK: {name} {sheet.width}x{sheet.height}, {columns * rows} frames of {cell} px at {fps} fps")
     return 0
 
 

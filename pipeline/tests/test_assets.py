@@ -6,7 +6,7 @@ import types
 import numpy as np
 import pytest
 
-from wild_find_pipeline import assets, paths
+from wild_find_pipeline import assets, labels, paths
 from wild_find_pipeline.assets import (
     plant_share,
     species_table,
@@ -15,7 +15,7 @@ from wild_find_pipeline.assets import (
     with_synonyms,
     with_toxicity,
 )
-from wild_find_pipeline.labels import HAZARDS, embedding_versions, is_hazard, lacking_hazards
+from wild_find_pipeline.labels import HAZARDS, embedding_versions, is_hazard, lacking_hazards, table_rows
 from wild_find_pipeline.paths import pin
 
 
@@ -70,6 +70,14 @@ def test_lacking_hazards_keeps_hazards_order():
     present = [taxon for taxon in HAZARDS.values() if taxon not in ("Toxicodendron vernix", "Phytolacca americana")]
 
     assert lacking_hazards(present) == ["Toxicodendron vernix", "Phytolacca americana"]
+
+
+def test_table_rows_are_the_pinned_names_then_the_hazards_they_lack(tmp_path, monkeypatch):
+    present = [taxon for taxon in HAZARDS.values() if taxon != "Toxicodendron pubescens"]
+    (tmp_path / "taxa.json").write_text(json.dumps([{"scientific": n} for n in ["Quercus alba", *present]]))
+    monkeypatch.setattr(labels, "ensure_artifact", lambda model: tmp_path / "taxa.json")
+
+    assert table_rows() == ["Quercus alba", *present, "Toxicodendron pubescens"]
 
 
 @pytest.mark.parametrize(
@@ -227,6 +235,13 @@ def test_with_toxicity_adds_genus_and_the_committed_flag():
 def test_with_toxicity_rejects_a_row_without_a_flag():
     with pytest.raises(ValueError, match="run make toxicity"):
         with_toxicity([{"scientific": "Quercus nigra", "hazard": False}], {})
+
+
+def test_with_toxicity_rejects_a_hazard_that_is_not_flagged():
+    labels = [{"scientific": "Toxicodendron radicans", "hazard": True}]
+
+    with pytest.raises(ValueError, match=r"hazards \['Toxicodendron radicans'\] unflagged"):
+        with_toxicity(labels, {"Toxicodendron radicans": {"toxic": False}})
 
 
 def test_with_synonyms_adds_each_rows_aliases():

@@ -25,14 +25,14 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import dev.anchildress1.wildfind.R
 import dev.anchildress1.wildfind.WildFindApp
+import dev.anchildress1.wildfind.core.game.GameEffect
+import dev.anchildress1.wildfind.core.game.GameEvent
+import dev.anchildress1.wildfind.core.game.GameState
+import dev.anchildress1.wildfind.core.game.Screen
 import dev.anchildress1.wildfind.core.hunt.PlantType
 import dev.anchildress1.wildfind.core.map.Places
 import dev.anchildress1.wildfind.core.map.WorldMap
-import dev.anchildress1.wildfind.game.GameEffect
-import dev.anchildress1.wildfind.game.GameEvent
-import dev.anchildress1.wildfind.game.GameState
 import dev.anchildress1.wildfind.game.GameViewModel
-import dev.anchildress1.wildfind.game.Screen
 import dev.anchildress1.wildfind.ui.theme.LocalReducedMotion
 import dev.anchildress1.wildfind.ui.theme.Motion
 
@@ -58,12 +58,18 @@ fun GameRoute(vm: GameViewModel = viewModel(factory = factory)) {
     BackHandler(enabled = hasBack(state.screen)) { vm.onEvent(GameEvent.Back) }
     val reduced = LocalReducedMotion.current
     SharedTransitionLayout {
-        AnimatedContent(state.screen, transitionSpec = { transition(reduced) }, label = "screen") { screen ->
+        // Keyed by screen but fed the whole state, so a leaving screen fades out with the data it last showed.
+        AnimatedContent(
+            state,
+            transitionSpec = { transition(reduced) },
+            contentKey = { it.screen },
+            label = "screen",
+        ) { shown ->
             CompositionLocalProvider(
                 LocalSharedScope provides this@SharedTransitionLayout,
                 LocalScreenScope provides this,
             ) {
-                ScreenFor(screen, state, vm)
+                ScreenFor(shown.screen, shown, vm)
             }
         }
     }
@@ -78,7 +84,7 @@ private fun hasBack(screen: Screen) = when (screen) {
 }
 
 // Move 300, emphasized decelerate; with animations off, a crossfade only.
-private fun AnimatedContentTransitionScope<Screen>.transition(reduced: Boolean): ContentTransform {
+private fun AnimatedContentTransitionScope<GameState>.transition(reduced: Boolean): ContentTransform {
     val fade = fadeIn(tween(Motion.MOVE)) togetherWith fadeOut(tween(Motion.QUICK))
     if (reduced) return fade
     return (

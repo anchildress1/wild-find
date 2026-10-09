@@ -11,7 +11,7 @@ import android.os.Looper
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import dev.anchildress1.wildfind.core.sprite.BriarState
-import org.json.JSONObject
+import dev.anchildress1.wildfind.inference.readJson
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -19,7 +19,7 @@ import org.junit.runner.RunWith
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
-/** Briar's video states decode as animations the app can play once, rest, and play again. */
+/** Every Briar state's video is packed and decodes, and a play-once clip plays again. */
 @RunWith(AndroidJUnit4::class)
 class BriarClipTest {
     private val assets = InstrumentationRegistry.getInstrumentation().targetContext.assets
@@ -28,15 +28,20 @@ class BriarClipTest {
         ImageDecoder.decodeDrawable(ImageDecoder.createSource(assets, "briar/$name.webp")) as AnimatedImageDrawable
 
     @Test
-    fun everyPackedClipIsAnAnimationWithItsFigureHeight() {
-        val names = (BriarState.entries.map { it.sheet } + BriarState.IDLE).toSet()
-            .filter { assets.list("briar")!!.contains("$it.webp") }
-        assertTrue("no clips packed", names.isNotEmpty())
-        names.forEach { name ->
-            val figure = JSONObject(assets.open("briar/$name.json").bufferedReader().use { it.readText() })
-                .getInt("figure_height")
+    fun everySheetIsPackedWithItsFigureHeight() {
+        val packed = assets.list("briar")!!.toSet()
+        (BriarState.entries.map { it.sheet } + BriarState.IDLE).toSet().forEach { name ->
+            assertTrue("$name.json missing", "$name.json" in packed)
+            val meta = assets.readJson("briar/$name.json")
+            assertTrue("$name.webp missing", "$name.webp" in packed)
             val drawable = clip(name)
-            assertTrue(name, figure in 1..drawable.intrinsicHeight)
+            assertTrue(name, meta.getInt("figure_height") in 1..drawable.intrinsicHeight)
+            // The player reserves Briar's box from these before the clip decodes.
+            assertEquals(
+                name,
+                drawable.intrinsicWidth to drawable.intrinsicHeight,
+                meta.getInt("width") to meta.getInt("height"),
+            )
         }
     }
 

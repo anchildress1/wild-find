@@ -1,15 +1,16 @@
 package dev.anchildress1.wildfind.ui
 
-import android.graphics.BitmapFactory
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -33,9 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -58,23 +57,38 @@ val CardShape = RoundedCornerShape(20.dp)
  * A screen on Ground: [content] scrolls, so every layout holds at 200% font scale, and [bottom] stays pinned.
  *
  * @param top a fixed row above the scrolling content
+ * @param centered centers [content] vertically when it is shorter than the screen; it still scrolls when taller
  */
 @Composable
 fun Page(
     modifier: Modifier = Modifier,
     top: @Composable () -> Unit = {},
     bottom: @Composable ColumnScope.() -> Unit = {},
+    centered: Boolean = false,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Column(
         modifier.fillMaxSize().background(Palette.Ground).safeDrawingPadding().padding(horizontal = 20.dp),
     ) {
         top()
-        Column(
-            Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).padding(vertical = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            content = content,
-        )
+        if (centered) {
+            BoxWithConstraints(Modifier.weight(1f).fillMaxWidth()) {
+                // Scrolled content has no height limit to center in, so it gets at least the viewport's height.
+                val viewport = maxHeight
+                Column(
+                    Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).heightIn(min = viewport)
+                        .padding(vertical = 12.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
+                    content = content,
+                )
+            }
+        } else {
+            Column(
+                Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).padding(vertical = 12.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                content = content,
+            )
+        }
         Column(
             Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -124,7 +138,7 @@ fun OutlineButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifi
 
 /** The leave-it rule, on every screen a kid hunts from; the sprout rides inline so a wrapped line stays centered. */
 @Composable
-fun RuleLine(modifier: Modifier = Modifier, color: Color = Palette.Forest) {
+fun RuleLine(modifier: Modifier = Modifier) {
     val rule = stringResource(R.string.leave_it_rule)
     val text = remember(rule) {
         buildAnnotatedString {
@@ -135,14 +149,14 @@ fun RuleLine(modifier: Modifier = Modifier, color: Color = Palette.Forest) {
     }
     val sprout = mapOf(
         SPROUT to InlineTextContent(Placeholder(20.sp, 20.sp, PlaceholderVerticalAlign.TextCenter)) {
-            Icon(WildIcons.Sprout, contentDescription = null, tint = color)
+            Icon(WildIcons.Sprout, contentDescription = null, tint = Palette.Forest)
         },
     )
     Text(
         text,
         // The inline sprout's placeholder character would be read aloud; TalkBack gets the rule alone.
         modifier.fillMaxWidth().clearAndSetSemantics { contentDescription = rule },
-        color = color,
+        color = Palette.Forest,
         style = MaterialTheme.typography.labelMedium,
         textAlign = TextAlign.Center,
         inlineContent = sprout,
@@ -182,9 +196,8 @@ fun TypeTile(type: PlantType?, size: Dp, modifier: Modifier = Modifier) {
 /** A find star, the painted art from `assets/star.webp`. */
 @Composable
 fun Star(size: Dp, modifier: Modifier = Modifier) {
-    val assets = LocalContext.current.assets
-    val star = remember { assets.open("star.webp").use(BitmapFactory::decodeStream).asImageBitmap() }
-    Image(star, contentDescription = null, modifier.size(size))
+    val star = assetImage("star.webp")
+    if (star == null) Spacer(modifier.size(size)) else Image(star, contentDescription = null, modifier.size(size))
 }
 
 /**

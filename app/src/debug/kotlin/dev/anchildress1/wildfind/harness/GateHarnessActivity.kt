@@ -15,10 +15,12 @@ import androidx.annotation.OptIn
 import androidx.camera.camera2.interop.Camera2CameraInfo
 import androidx.camera.camera2.interop.ExperimentalCamera2Interop
 import androidx.camera.core.Camera
+import dev.anchildress1.wildfind.WildFindApp
 import dev.anchildress1.wildfind.core.download.ModelPin
 import dev.anchildress1.wildfind.core.frame.Crops
 import dev.anchildress1.wildfind.core.verify.VerifyStreak
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
 import java.io.File
 import java.text.SimpleDateFormat
@@ -70,22 +72,33 @@ class GateHarnessActivity : ComponentActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        // The run closes on the analysis thread, after any frame in flight, so no model closes mid-frame. A run
+        // The run closes on the analysis thread, after any frame in flight, so no frame logs to a closed file. A run
         // still loading closes itself when it sees the activity gone.
         synchronized(gateRun) { gateRun.value }?.let { run -> analysisExecutor.execute { run.close() } }
         analysisExecutor.shutdown()
     }
 
+    // A bad target or a missing asset throws while the run loads; without a caught row the run folder says nothing.
+    @Suppress("TooGenericExceptionCaught")
     private fun startRun() {
         val size = analysisSize
         val stamp = SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US).format(Date())
         val dir = File(requireNotNull(getExternalFilesDir(LOG_DIR)), "$stamp-${target.lowercase().replace(' ', '-')}")
         check(dir.mkdirs()) { "can't create $dir" }
-        // Loading both encoders and the species table takes a second; never on the main thread.
+        // Waiting for the app's models takes a second at launch; never on the main thread.
         thread(name = TAG) {
             val log = GateLog(dir)
             log.run(runInfo(target, size))
-            val run = GateRun(applicationContext, target, log)
+            val run = try {
+                val models = runBlocking { (application as WildFindApp).graph.models.await() }
+                GateRun(applicationContext, models, target, log)
+            } catch (e: Exception) {
+                Log.e(TAG, "run failed to load", e)
+                log.event(SystemClock.elapsedRealtimeNanos(), "load_error", e.toString())
+                log.close()
+                runOnUiThread(::finish)
+                return@thread
+            }
             val alive = synchronized(gateRun) { (!isDestroyed).also { if (it) gateRun.value = run } }
             if (alive) {
                 run.start()

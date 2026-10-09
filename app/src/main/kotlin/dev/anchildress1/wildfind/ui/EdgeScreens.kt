@@ -26,6 +26,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.anchildress1.wildfind.R
+import dev.anchildress1.wildfind.core.sprite.BriarState
 import dev.anchildress1.wildfind.ui.theme.LocalReducedMotion
 import dev.anchildress1.wildfind.ui.theme.Motion
 import dev.anchildress1.wildfind.ui.theme.Palette
@@ -46,7 +47,7 @@ fun LoadingScreen() {
         animationSpec = infiniteRepeatable(tween(Motion.BIG * 2), RepeatMode.Reverse),
         label = "breath",
     )
-    Page {
+    Page(centered = true) {
         Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) { Briar(null, briarText(null)) }
         Text(
             stringResource(R.string.loading),
@@ -66,6 +67,7 @@ fun NeedsSignalScreen(onRetry: () -> Unit, onArea: () -> Unit) {
             OutlineButton(stringResource(R.string.pick_area), onArea)
         },
     ) {
+        TryAgainBriar()
         MessageCard(
             WildIcons.NoSignal,
             stringResource(R.string.needs_signal),
@@ -79,12 +81,21 @@ fun NeedsSignalScreen(onRetry: () -> Unit, onArea: () -> Unit) {
 @Composable
 fun NotEnoughScreen(onArea: () -> Unit) {
     Page(bottom = { OutlineButton(stringResource(R.string.pick_area), onArea) }) {
+        TryAgainBriar()
         MessageCard(
             WildIcons.Pin,
             stringResource(R.string.not_enough),
             null,
             Modifier.rise(),
         )
+    }
+}
+
+// The stuck pages: Briar shrugs above the message, so a dead end still has the mascot in it.
+@Composable
+private fun TryAgainBriar() {
+    Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+        Briar(BriarState.TRY_AGAIN, briarText(BriarState.TRY_AGAIN))
     }
 }
 

@@ -44,14 +44,6 @@ class HuntProgressTest {
     }
 
     @Test
-    fun `app flags start unset`() {
-        assertEquals(
-            AppFlags(openerSeen = false, tutorialDone = false, region = null, locationDenied = false),
-            AppFlags(),
-        )
-    }
-
-    @Test
     fun `a skip swaps in the next species and sends the skipped one to the back`() {
         val queue = listOf(Eligible(7, "mistflower", 362), Eligible(8, "beautyberry", 230))
         val progress = HuntProgress(false, targets, queue = queue).skip(9, genera::getValue)

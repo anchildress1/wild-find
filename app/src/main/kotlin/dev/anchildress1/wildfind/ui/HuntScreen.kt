@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -18,7 +17,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
@@ -50,8 +48,8 @@ import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.anchildress1.wildfind.R
+import dev.anchildress1.wildfind.core.game.Stop
 import dev.anchildress1.wildfind.core.sprite.BriarState
-import dev.anchildress1.wildfind.game.Stop
 import dev.anchildress1.wildfind.ui.theme.Palette
 import java.time.LocalDate
 import java.time.format.TextStyle
@@ -85,13 +83,7 @@ fun HuntScreen(
         if (offline) OfflineBanner()
         Trail(stops, onStop)
         // Below the trail, not pinned: ending early is the rare path, and the pinned area stays short.
-        TextButton(onClick = onFinish, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
-            Text(
-                stringResource(R.string.finish_hunt),
-                style = MaterialTheme.typography.labelMedium,
-                color = Palette.Forest,
-            )
-        }
+        LinkButton(stringResource(R.string.finish_hunt), onFinish)
     }
 }
 
@@ -106,24 +98,12 @@ private fun Header(count: Int, area: String?, onGrownUps: () -> Unit) {
             )
             RoundIconButton(WildIcons.More, stringResource(R.string.grown_ups), onGrownUps)
         }
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            val month = LocalDate.now().month.getDisplayName(TextStyle.FULL, LocalLocale.current.platformLocale)
-            Text(
-                stringResource(R.string.hunt_where, area ?: stringResource(R.string.region_near_you), month),
-                Modifier.weight(1f),
-                style = MaterialTheme.typography.bodyLarge,
-                color = Palette.Ink2,
-            )
-            val label = stringResource(R.string.difficulty_label)
-            Text(
-                stringResource(R.string.difficulty_low),
-                Modifier.semantics { contentDescription = label }
-                    .border(1.5.dp, Palette.Moss, RoundedCornerShape(14.dp))
-                    .padding(horizontal = 14.dp, vertical = 4.dp),
-                style = MaterialTheme.typography.labelMedium,
-                color = Palette.Forest,
-            )
-        }
+        val month = LocalDate.now().month.getDisplayName(TextStyle.FULL, LocalLocale.current.platformLocale)
+        Text(
+            stringResource(R.string.hunt_where, area ?: stringResource(R.string.region_near_you), month),
+            style = MaterialTheme.typography.bodyLarge,
+            color = Palette.Ink2,
+        )
     }
 }
 

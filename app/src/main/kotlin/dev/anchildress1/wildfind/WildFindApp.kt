@@ -7,11 +7,13 @@ import dev.anchildress1.wildfind.core.map.WorldMap
 import dev.anchildress1.wildfind.inat.InatClient
 import dev.anchildress1.wildfind.inference.BundledAssets
 import dev.anchildress1.wildfind.store.GameStore
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -41,6 +43,17 @@ class Graph(app: Application) {
 
     /** Flags, the current hunt, and cached pulls; nothing reaches a cloud backup. */
     val store = GameStore(app.noBackupFilesDir)
+
+    /** The one thread every store read and write runs on, in the order they were asked for. */
+    val disk: CoroutineDispatcher = Dispatchers.IO.limitedParallelism(1)
+
+    // Writes outlive the screen that asked for them: a find saved just before the activity finishes must still land.
+    private val writes = CoroutineScope(SupervisorJob() + disk)
+
+    /** Queues [block] on [disk] for the life of the process. */
+    fun write(block: suspend GameStore.() -> Unit) {
+        writes.launch { store.block() }
+    }
 
     /** The only network call. */
     val inat = InatClient()

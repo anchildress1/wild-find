@@ -1,4 +1,4 @@
-.PHONY: setup build install device-test focus-probe assets sprites toxicity synonyms plant-types descriptions hazard-vectors labels crop-reference gate-harness gate-pull reference test pipeline-test lint ktlint detekt android-lint pipeline-lint actionlint secret-scan ai-checks clean
+.PHONY: setup build install device-test e2e assets sprites toxicity synonyms plant-types descriptions hazard-vectors labels crop-reference gate-harness gate-pull reference test pipeline-test lint ktlint detekt android-lint pipeline-lint actionlint secret-scan ai-checks clean
 
 SHELL := /bin/bash
 
@@ -40,18 +40,15 @@ install: build
 
 # On-device instrumented tests. Not connectedAndroidTest: it uninstalls the app afterwards, deleting gate-harness runs not yet pulled.
 device-test: install
-	$(GRADLE) :app:assembleDebugAndroidTest
 	adb install -r -d -t app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
-	@adb shell am instrument -w $(WILDFIND_PACKAGE).test/androidx.test.runner.AndroidJUnitRunner | tee /dev/stderr | grep -qE '^OK \([1-9][0-9]* tests?\)'
+	@adb shell am instrument -w -e notPackage dev.anchildress1.wildfind.e2e $(WILDFIND_PACKAGE).test/androidx.test.runner.AndroidJUnitRunner | tee /dev/stderr | grep -qE '^OK \([1-9][0-9]* tests?\)'
 
-# S09: logs live autofocus distance (diopters) from the back camera; Ctrl-C to stop.
-# Each run gets its own dated file so no run overwrites another; pass FOCUS_LOG=... to choose one.
-FOCUS_LOG ?= docs/results/$(shell date +%F)/focus-probe-$(shell date +%H%M%S).log
-focus-probe: install
-	mkdir -p $(dir $(FOCUS_LOG))
-	adb logcat -c
-	adb shell am start -n $(WILDFIND_PACKAGE)/dev.anchildress1.wildfind.FocusProbeActivity
-	adb logcat -s FocusProbe:I | tee $(FOCUS_LOG)
+# End-to-end UI tests only (the e2e package) on the phone; they need signal, since each hunt makes one iNat pull.
+e2e:
+	$(GRADLE) -PisolatedE2e=true :app:assembleDebug :app:assembleDebugAndroidTest
+	adb install -r -d app/build/outputs/apk/debug/app-debug.apk
+	adb install -r -d -t app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+	@adb shell am instrument -w -e package dev.anchildress1.wildfind.e2e dev.anchildress1.wildfind.e2e.test/androidx.test.runner.AndroidJUnitRunner | tee /dev/stderr | grep -qE '^OK \([1-9][0-9]* tests?\)'
 
 # S05 gate harness: verify on each Capture tap (3 frames), memory, and heat, logged on the phone.
 # GATE_TARGET is an eligible West Georgia species, or grass for the tutorial. Back ends a run.
@@ -71,7 +68,7 @@ gate-pull:
 assets:
 	$(UV) run --group reference python -W error -m wild_find_pipeline.assets
 
-# Repacks Briar's source sprite sheets into the committed app/src/main/assets/briar/.
+# Packs Briar's source videos into the committed app/src/main/assets/briar/, plus the plant art, star, and icon.
 sprites:
 	$(UV) run python -W error -m wild_find_pipeline.sprites
 

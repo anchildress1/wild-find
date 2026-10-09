@@ -42,7 +42,7 @@ android {
         }
         debug {
             // Debug and release coexist on the single test phone, so a release install never wipes gate-harness runs not yet pulled.
-            applicationIdSuffix = ".debug"
+            applicationIdSuffix = if (providers.gradleProperty("isolatedE2e").orNull == "true") ".e2e" else ".debug"
         }
     }
 
@@ -122,9 +122,12 @@ dependencies {
     implementation(libs.onnxruntime.android)
     implementation(libs.camerax.camera2)
     implementation(libs.camerax.lifecycle)
-    implementation(libs.camerax.view)
     implementation(libs.camerax.compose)
 
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.test.rules)
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.compose.ui.test.junit4)
+    debugImplementation(libs.compose.ui.test.manifest)
 }

@@ -10,9 +10,9 @@ import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
+import dev.anchildress1.wildfind.core.game.CameraState
 import dev.anchildress1.wildfind.core.verify.CaptureCue
 import dev.anchildress1.wildfind.core.verify.VerifyStreak
-import dev.anchildress1.wildfind.game.CameraState
 import dev.anchildress1.wildfind.ui.theme.Palette
 
 /**

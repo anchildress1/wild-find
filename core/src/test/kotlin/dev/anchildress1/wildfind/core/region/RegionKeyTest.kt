@@ -5,19 +5,16 @@ import org.junit.jupiter.api.Test
 
 class RegionKeyTest {
     @Test
-    fun `carrollton rounds into west georgia`() {
+    fun `places anywhere round to their whole-degree region`() {
         assertEquals(RegionKey(34, -85), RegionKey.from(33.58, -85.08))
-    }
-
-    @Test
-    fun `atlanta rounds to its own neighboring region`() {
         assertEquals(RegionKey(34, -84), RegionKey.from(33.75, -84.39))
+        assertEquals(RegionKey(-34, 151), RegionKey.from(-33.87, 151.21))
     }
 
     @Test
-    fun `places anywhere get a region, tbilisi included`() {
-        assertEquals(RegionKey(42, 45), RegionKey.from(41.72, 44.79))
-        assertEquals(RegionKey(-34, 151), RegionKey.from(-33.87, 151.21))
+    fun `both sides of the antimeridian share one key`() {
+        assertEquals(RegionKey(52, -180), RegionKey.from(52.0, 179.6))
+        assertEquals(RegionKey(52, -180), RegionKey.from(52.0, -179.6))
     }
 
     @Test

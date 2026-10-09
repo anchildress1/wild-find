@@ -8,18 +8,14 @@ import android.os.BatteryManager
 import android.os.Debug
 import android.os.PowerManager
 import android.os.SystemClock
-import dev.anchildress1.wildfind.camera.CaptureVerifier
+import dev.anchildress1.wildfind.Models
 import dev.anchildress1.wildfind.camera.CapturedFrame
 import dev.anchildress1.wildfind.core.hunt.LocalSpecies
-import dev.anchildress1.wildfind.core.hunt.NameIndex
 import dev.anchildress1.wildfind.core.hunt.Sighting
-import dev.anchildress1.wildfind.core.verify.FrameVerifier
 import dev.anchildress1.wildfind.core.verify.Goal
 import dev.anchildress1.wildfind.core.verify.TargetGoal
 import dev.anchildress1.wildfind.core.verify.Verdict
 import dev.anchildress1.wildfind.core.verify.VerifyStreak
-import dev.anchildress1.wildfind.inference.BundledAssets
-import dev.anchildress1.wildfind.inference.ImageEncoder
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -55,16 +51,15 @@ data class GateStatus(
  * One gate-harness run: the real verify path on each capture tap, and memory, heat, and battery sampled off the
  * analysis thread, all logged by [log]. Between taps the camera only previews.
  *
- * Construct off the main thread: it loads both ONNX models and the species table.
+ * Construct off the main thread: it reads the local species list.
  *
+ * @param models the app's loaded models, shared so harness memory readings count each ONNX session once
  * @param target the target's scientific name, or [TUTORIAL] for the grass tutorial goal
  */
-class GateRun(private val context: Context, private val target: String, val log: GateLog) : Closeable {
-    private val bundled = BundledAssets(context.assets)
-    private val table = bundled.speciesTable()
-    private val labels = bundled.speciesLabels(table)
-    private val species = labels.map { it.scientific }
-    private val names = NameIndex(labels)
+class GateRun(private val context: Context, models: Models, private val target: String, val log: GateLog) :
+    Closeable {
+    private val species = models.rows.map { it.scientific }
+    private val names = models.names
 
     // West Georgia's October pull, a debug asset; the hunt's own iNat pull replaces it in the app.
     private val sightings = context.assets.open(LOCAL_SPECIES).bufferedReader().useLines { lines ->
@@ -72,37 +67,30 @@ class GateRun(private val context: Context, private val target: String, val log:
             line.split('\t').let { Sighting(it[1], it.getOrNull(2)?.ifBlank { null }, it[0].toInt()) }
         }.toList()
     }
-    private val local = LocalSpecies(labels, names::rowOf).of(sightings)
+    private val local = LocalSpecies(models.rows, names::rowOf).of(sightings)
 
     // The hunt's eligible species compete, with the local toxic and hazard species as blockers.
     private val goal: Goal = if (target == TUTORIAL) {
-        bundled.labels().tutorialGoal()
+        models.tutorial
     } else {
         TargetGoal(
-            table,
-            labels.map { it.genus },
+            models.table,
+            models.genus,
             requireNotNull(local.eligible.firstOrNull { species[it.row] == target }) { "$target is not eligible" }.row,
             local.eligible.map { it.row }.toIntArray(),
             local.blockers,
         )
     }
-    private val gateEncoder = ImageEncoder(bundled.plantGateModel())
-    private val bioclip = ImageEncoder(bundled.bioclipModel())
     private val sampler = Executors.newSingleThreadScheduledExecutor()
     private val state = MutableStateFlow(GateStatus(target = target))
 
     private var lastFrameNs = 0L
 
-    /** The capture loop the camera feeds; focus_matched=false in the log means a frame had no reading. */
-    val verifier = CaptureVerifier(
-        FrameVerifier(
-            bundled.plantGate(),
-            gateEncoder,
-            bioclip,
-            // The same local rows the app's hunt names from, so harness logs measure the shipped path.
-            bundled.hazardCheck(table, labels, (local.eligible.map { it.row } + local.blockers.toList()).toSet()),
-        ),
-    )
+    /**
+     * The capture loop the camera feeds, naming from the same local rows as the app's hunt so harness logs measure
+     * the shipped path; focus_matched=false in the log means a frame had no reading.
+     */
+    val verifier = models.verifier((local.eligible.map { it.row } + local.blockers.toList()).toSet())
 
     /** Screen state. */
     val status: StateFlow<GateStatus> = state.asStateFlow()
@@ -172,14 +160,12 @@ class GateRun(private val context: Context, private val target: String, val log:
         }
     }
 
-    /** Stops sampling and releases every model. Call after the camera stops delivering frames. */
+    /** Stops sampling and closes the log; the app owns the models. Call after the camera stops delivering frames. */
     override fun close() {
         sampler.shutdown()
         // A sample stuck under heat can outlast the wait; the log says so instead of hiding it.
         val drained = sampler.awaitTermination(CLOSE_WAIT_S, TimeUnit.SECONDS)
         log.event(now(), if (drained) "stop" else "stop_timeout", target)
-        gateEncoder.close()
-        bioclip.close()
         // A thread still running would write to a closed log and crash; every row is already flushed, so leaving the
         // files open loses nothing.
         if (drained) log.close()

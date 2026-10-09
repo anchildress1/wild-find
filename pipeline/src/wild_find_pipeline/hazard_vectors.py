@@ -3,15 +3,14 @@
 import json
 import sys
 
-from wild_find_pipeline.labels import embedding_versions, lacking_hazards, prompt, teacher_model
-from wild_find_pipeline.paths import HAZARD_VECTORS, ensure_artifact, pin
+from wild_find_pipeline.labels import embedding_versions, lacking_hazards, prompt, taxa_names, teacher_model
+from wild_find_pipeline.paths import HAZARD_VECTORS, pin
 from wild_find_pipeline.reference import embed_texts
 
 
 def main() -> int:
     """Write hazard_vectors.json: one unit teacher vector per hazard species the table lacks."""
-    names = {entry["scientific"] for entry in json.loads(ensure_artifact("taxa_labels").read_text())}
-    lacking = lacking_hazards(names)
+    lacking = lacking_hazards(taxa_names())
     vectors = embed_texts([prompt(taxon) for taxon in lacking]) if lacking else []
     HAZARD_VECTORS.parent.mkdir(parents=True, exist_ok=True)
     HAZARD_VECTORS.write_text(

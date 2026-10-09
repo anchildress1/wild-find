@@ -12,7 +12,7 @@ object InatLocale {
     )
 
     // Android still reports these retired ISO 639 codes.
-    private val LEGACY = mapOf("iw" to "he", "in" to "id", "ji" to "yi")
+    private val LEGACY = mapOf("iw" to "he", "in" to "id")
 
     /** Names come back in English for any language iNat has no locale for. */
     const val FALLBACK = "en"

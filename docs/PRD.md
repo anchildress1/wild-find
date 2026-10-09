@@ -83,7 +83,7 @@ Every call below is settled; open items live in Open Questions.
 | Runtime models | Open-weight only, all running on the phone; ONNX Runtime's bundled Microsoft telemetry is switched off at launch (`ORT_DISABLE_TELEMETRY`), since it otherwise phones home (S39) |
 | Model roles | TinyCLIP ViT-8M (MIT) gates plant vs not-plant on the reticle crop and the full frame; BioCLIP 2.5 Mobile checks the target and hazards on it; full BioCLIP 2.5 makes the tutorial label vectors at build time; no model judges toxicity; no language model ships (Gemma 4 E2B was tested and dropped Oct 7); Pl@ntNet rejected |
 | Safety model | Look, photograph, leave it where it grows. Hazard recognition is an extra warning, never a safety guarantee; the app never tells a child a plant is safe |
-| Difficulty | Selector exists; v1 ships Low only |
+| Difficulty | v1 ships Low only, with no selector or label on screen (decided Oct 9: a fixed "Low" chip told a kid nothing) |
 | Region | Any whole-degree region; a region needs one online iNaturalist pull before it plays offline, since no bundled list can cover every region; tested in the West Georgia region, key 34\_-85 |
 | Targets | Species from the live iNaturalist pull that are in BioCLIP Mobile's species table, aren't toxic-flagged or hazards, and have a common name of 3 words or fewer in the device language; species with no common name there are skipped; at most one target per genus in a hunt |
 | Local filter | A species is eligible when its research-grade sightings in the region for the current calendar month, across all available years, are at least 0.5% of all plant sightings there and at least 3. Decided Oct 7: a flat 25+ left 0 to 5 playable species anywhere in the country of Georgia; the share leaves 9 to 24 in every place tested. It is stricter in busy places (West Georgia 65 → 23) and looser in quiet ones (Borjomi 0 → 9) (`docs/results/day-2/playable_species.log`) |
@@ -97,9 +97,10 @@ Every call below is settled; open items live in Open Questions.
 | Toxicity flag | Built once on the laptop for every species-table row. A species is flagged when its English Wikipedia article has a sentence with the whole word toxic, toxin, or poison (other plants' names such as poison ivy removed first), when USDA PLANTS rates it moderate or severe, or when it has no article or one under 1,500 characters. Names match through GBIF. Best effort, like hazard detection, never a safety claim; on Oct 7 it flagged 30 of 117 West Georgia species and wrongly dropped about 6 |
 | Location | Two paths. "Use my area": Android coarse location only, asked when the kid taps it and never again after a denial, rounded to whole degrees. "Pick on a map": a built-in Natural Earth map (public domain) drawn on the phone, no tile server, showing land, country borders, and, once zoomed in to area detail (40° across or less), state and province lines; with location already allowed it opens on the rough location, zoomed in enough to pick (a fix that lands after the kid starts moving the map is ignored), else on the whole world; it pans and zooms under fixed crosshairs, snaps to the nearest whole degree on release, unlocks "Hunt here" at about 12° across or less, and offers 1° arrow taps as the no-drag TalkBack path. Decided Oct 8: the area is named, offline. The map chip, the hunt list, and the grown-ups Hunting area read like "34°N, 85°W · Georgia": whole degrees plus the state or province at the region's center from the bundled places.bin, the country where the point misses every state, the degrees alone over water; no geocoding call, so iNaturalist stays the only network peer. A denial goes straight to the map. The device is in a region only when its rounded key equals that region's key; the query always sends the region center, never device coordinates; the rounded hunting area is kept on the phone as an app flag and changed on the map from the grown-ups page |
 | Images | One illustration per plant type (tree, shrub, vine, herb, grass, fern, moss, conifer) in v1; licensed photos in v3 |
-| UI | Animation-first; Jetpack Compose hosts camera and chrome and plays sprite sheets for the opener and Briar, the mascot; no Rive, no React |
+| UI | Animation-first; Jetpack Compose hosts camera and chrome and plays Briar's animated WebPs, packed from videos; no Rive, no React |
 | Distribution | GitHub Release APK with BioCLIP Mobile and the TinyCLIP plant gate inside; nothing downloads after install; outdoor demo video |
 | Credits | The grown-ups page credits the two models on the phone (BioCLIP 2.5 Mobile, TinyCLIP ViT-8M), the data (iNaturalist, Wikipedia, USDA PLANTS, GBIF, Natural Earth), and the Fredoka and Atkinson Hyperlegible fonts (SIL OFL 1.1, bundled with their license text); the README also credits the build-time-only BioCLIP 2.5 teacher and OpenCLIP |
+| iNaturalist disclosure | Decided Oct 9: the grown-ups page has an "iNaturalist and kids" card under Privacy. It says each hunt asks iNaturalist which plants grow nearby, that iNaturalist sees the phone's IP address like any website, that iNaturalist's terms are for ages 13 and up or younger with a parent's permission, that Wild Find has no iNaturalist account and posts nothing there, and that no photos, names, or exact location go with the request. Basis: the Oct 9 check of iNaturalist's API recommended practices, Terms of Use, and Privacy Policy; the kid-facing copy rules still apply (no safe, harmless, or okay to touch) |
 | Prize categories | Best Use of Gemma, entered with the measured case for shipping without it; DigitalOcean dropped |
 | Later versions | Tiebreaker shot in v2; licensed photos in v3 |
 
@@ -137,12 +138,12 @@ Eight P0s ship the hunt; four P2s shape the design now. Requirement IDs stay fix
 
 | ID | Requirement | Acceptance criteria |
 | --- | --- | --- |
-| R1 | Safety opener | First launch shows bees and snakes, with poison ivy drawn into the art; one rule: "Look. Photograph. Leave it where it grows."; no copy says safe, harmless, not poisonous, or okay to touch; replayable from the menu |
-| R2 | Hunt list | One iNaturalist query per hunt, requiring at most three paginated HTTP requests: coarse region coordinates, current calendar month across all available years, plants, research grade, device locale for common names; a species is eligible with at least 0.5% of the query's plant sightings and at least 3, a species-table row, no toxic or hazard flag, and a common name of 3 words or fewer; fewer than 3 eligible widens the radius to 150 km once; cached under the versioned cache key; location denied falls back to picking the area on the built-in map; still fewer than 3 shows the coverage message |
+| R1 | Safety opener | First launch names bees, snakes, and poison ivy beside Briar's warning paw; one rule: "Look. Photograph. Leave it where it grows."; no copy says safe, harmless, not poisonous, or okay to touch; replayable from the menu |
+| R2 | Hunt list | One iNaturalist query per hunt, requiring at most three paginated HTTP requests: coarse region coordinates, current calendar month across all available years, plants, research grade, device locale for common names; a species is eligible with at least 0.5% of the query's plant sightings and at least 3, a species-table row, no toxic or hazard flag, and a common name of 3 words or fewer; fewer than 3 eligible genera (a hunt takes one target per genus) widens the radius to 150 km once; cached under the versioned cache key; location denied falls back to picking the area on the built-in map; still fewer than 3 shows the coverage message |
 | R3 | Grass tutorial | The first-ever hunt opens with grass, followed by 3 normal targets; a grass close-up passes when TinyCLIP calls the reticle crop a plant and grass is in BioCLIP's top 3 of the fixed tutorial label set, the 11 labels Day 1 measured (Poaceae, Quercus, Polypodiopsida, Trifolium, Pinus, Taraxacum, and the 5 hazard species), never the hunt's full label universe (49 of 52 CC0 grass photos passed both on Day 1; BioCLIP top 3 alone passed 50 and top-1 alone 45; the one lawn the gate rejected scored a plant share of 0.39); the plant gate's labels include grass; the hazard check doesn't run during the tutorial, because 9 of 54 grass photos warned against the menu labels on Day 1 (1 of 54 against the species table), and the leave-it rule stays on screen; done in under 60 seconds; never repeats once completed |
 | R4 | Target pick | 3 targets per hunt by sighting-weighted random from eligible species, never two from one genus, drawing from described species first and filling from the rest only when they run out; skips reach undescribed species only after described ones; a hazard or toxic-flagged species is never a target |
 | R5 | Verify | Follows the Runtime Logic verify table on each Capture tap; a find needs the target (or its genus) to outscore the hunt's other locally eligible species and lead every local toxic and hazard species (blockers) by at least 0.048 on the reticle crop, for 3 frames in a row; a hazard match shows a warning and gives no star; no result is ever presented as evidence of safety |
-| R7 | Privacy | Android coarse location permission only; no fine location requested; the map picker is built in, so picking an area makes no request; coordinates rounded again before the query; no photo or precise location leaves the device; no account; no analytics |
+| R7 | Privacy | Android coarse location permission only; no fine location requested; the map picker is built in, so picking an area makes no request; coordinates rounded again before the query; no photo or precise location leaves the device; no account; no analytics; the grown-ups page discloses the iNaturalist request (Decisions: iNaturalist disclosure) |
 | R8 | Offline | Both models ship in the APK; a cached hunt completes in airplane mode; a region never pulled online can't start a hunt offline and says it needs signal once |
 | R15 | Hunt complete | The last target passes, a short success animation plays, the stars show, then Hunt Again or Home; only the current hunt's state persists |
 
@@ -170,7 +171,7 @@ Day-1 and Day-2 measurements on the test phone are in hole 4 and `docs/results/d
 | Sunlight | High-contrast, large type that reads in direct sun | Field test |
 | Accessibility | 48 dp touch targets; content descriptions; no color-only signals | Accessibility Scanner |
 | Reading level | All kid-facing text at an age-8 level | Review |
-| iNat etiquette | One query per hunt, requiring at most three paginated HTTP requests, plus one widened query only when fewer than 3 species are eligible; a User-Agent that names the app | Code review |
+| iNat etiquette | One query per hunt, requiring at most three paginated HTTP requests, plus one widened query only when fewer than 3 genera are eligible; a User-Agent that names the app | Code review |
 
 ## Architecture
 
@@ -193,7 +194,7 @@ flowchart TD
     B3 --> SHIP
 
     subgraph app["App time · the phone, every hunt"]
-        A1["Opener<br/>bees and snakes; poison ivy art"]
+        A1["Opener<br/>bees, snakes, poison ivy; Briar warns"]
         A2["Local list<br/>iNat species in the table,<br/>not toxic, 0.5%+ of sightings"]
         A3["Pick the hunt<br/>grass first, then 3 weighted,<br/>one per genus"]
         A5["Verify on Capture, 3 frames<br/>TinyCLIP: is it a plant?<br/>BioCLIP: target or its genus?"]
@@ -223,7 +224,7 @@ Runs once on the laptop in Python with uv. Gemma never runs here.
 4. **Description:** `make descriptions` templates one or two short kid-level sentences per species-table row from the USDA PLANTS traits a kid can see (size from mature height, flower color and bloom season, showy fruit color with "in fall" only when its Fruit/Seed Period covers fall, showy fall leaves only on a tree, shrub, or vine that isn't evergreen and whose fruit isn't the showy part, since Fall Conspicuous covers leaves or fruits, a leaf color other than green), read per USDA's characteristics data definitions and matched by the row's name or its GBIF aliases like the plant type; fall features lead, at most two; never invents a trait, never uses a banned kid word; no model and no network at app time; commits `pipeline/data/descriptions.json` with the rule and each sentence's traits; `make assets` merges it into species_labels.json as `description`, or null when USDA has nothing visible (848 of 4,272 rows; 15 of 23 West Georgia targets; every target's sentence is audited against its raw USDA values in `docs/results/day-3/descriptions.log`)
 5. **Tutorial labels:** the BioCLIP 2.5 ViT-H text encoder writes one vector per fixed tutorial label (R3; text format per hole 3) into labels.npy and labels.json
 6. **Plant gate:** TinyCLIP's image encoder exported to plant_gate.onnx, and its text encoder writes the plant-gate vectors into plant_gate.json
-7. **Output:** species_table.npy, species_labels.json, labels.npy, labels.json, hazards.json, plant_gate.onnx, plant_gate.json; BioCLIP Mobile ships as its pinned file
+7. **Output:** species_table.npy, species_labels.json, labels.npy, labels.json, plant_gate.onnx, plant_gate.json; BioCLIP Mobile ships as its pinned file
 
 **Hazard species:** every *Toxicodendron* species (poison ivy, poison oak, poison sumac), *Phytolacca americana* (pokeweed), and *Solanum carolinense* (Carolina horsenettle).
 
@@ -237,7 +238,6 @@ Ten files ship in the app, nothing downloads after install, and every cache entr
 
 | File | Contents | Made by |
 | --- | --- | --- |
-| hazards.json | Hazard species (name, taxon\_id, scientific name) and the two opener hazards (name, rule) | Build pipeline, from NIOSH |
 | species\_table.npy | BioCLIP Mobile's 4,271-species text table plus a row for each hazard species it lacks (today: *Toxicodendron pubescens*); 1024-d unit vectors | Build pipeline, from the pinned taxa\_table.npy |
 | species\_labels.json | One entry per species\_table row: scientific name, genus, hazard flag, toxic flag, plant type, GBIF aliases, and kid-level description (below) | Build pipeline, from the pinned taxa\_labels.json, toxicity.json, synonyms.json, plant\_types.json, and descriptions.json |
 | labels.npy | One 1024-d unit vector per fixed tutorial label (R3) | BioCLIP 2.5 ViT-H text encoder |
@@ -359,9 +359,9 @@ Only the current hunt's state persists; there is no history, streak, or sharing.
 
 ## Visual System
 
-Briar and the opener play finished sprite sheets, one per state. A Rive rig was dropped on Oct 6: the rig sheets' parts were drawn at mismatched sizes and didn't assemble into a usable Briar, and the sheets were removed.
+Briar and the opener play finished animations packed from videos, one per state. A Rive rig was dropped on Oct 6: the rig sheets' parts were drawn at mismatched sizes and didn't assemble into a usable Briar, and the sheets were removed.
 
-**Briar animation contract:** each state is `app/src/main/assets/briar/<state>.webp` or `<state>.png`, plus `<state>.json`. A state made from a video is a transparent animated WebP (`make sprites` keys the video's white background and pale grey cast shadows out, keeps the frames between the state's two cut points, and plays at the video's 30 fps); its JSON is `{"figure_height": 370}`. A state still made from a sprite sheet is a PNG grid of equal frames, left to right, then top to bottom, on a transparent background, with JSON `{"frame_width": 440, "frame_height": 440, "frames": 32, "columns": 8, "fps": 16, "figure_height": 372, "loop": false}`; the build finds each source frame by its outline and plants every frame on Briar's own feet point, so a source sheet's frames needn't sit on an even grid. The app plays a state's WebP when one is packed, else its sheet. `figure_height` is Briar's height (in a video, on its first kept frame, his rest pose before props grow around his feet; in a sheet, his median), and the app scales every animation so he stands 168 dp tall, since each source draws him at its own size. A video is cut where its first and last kept frames match, so the loop joins without a jump. States: `opener` (Briar waves hello), `warning` (the hazard card only), `welcome` (tutorial and Your hunt), `found` and `complete` (both play `complete`), and `idle`. On hunt pages Briar appears only on the hazard card, at 88 dp so the card leaves the viewfinder clear, so no searching or retry state ships. A screen keeps its one animation for as long as it shows: `opener`, `warning`, `welcome`, and `found` play, rest 1.5 s on their last frame, and play again, and `complete` and `idle` loop. `idle` shows only where no state plays (decided Oct 8). Video sources replace sheets one state at a time.
+**Briar animation contract:** each state is `app/src/main/assets/briar/<state>.webp` plus `<state>.json`: a transparent animated WebP (`make sprites` keys the video's white background and pale grey cast shadows out, keeps the frames between the state's two cut points, and plays at the video's 30 fps); its JSON is `{"figure_height": 370, "width": 578, "height": 466}`, all three required: the app scales by `figure_height` and reserves the clip's box from `width` and `height` before its frames decode. No state ships as a PNG sheet (decided Oct 9). `figure_height` is Briar's height on the first kept frame, his rest pose before props grow around his feet, and the app scales every animation so he stands 168 dp tall, since each source draws him at its own size. A video is cut where its first and last kept frames match, so the loop joins without a jump. States: `opener` (the safety opener; plays `warning`), `warning` (the hazard card), `welcome` (Briar waves hello on Ready to hunt, the tutorial, and Your hunt), `found` and `complete` (both play `complete`), `try_again` (Briar shrugs above the needs-signal and not-enough messages), and `idle`. On the camera Briar appears only on the hazard card, at 88 dp so the card leaves the viewfinder clear, so no searching or retry state ships. A screen keeps its one animation for as long as it shows: `opener`, `warning`, `welcome`, `found`, and `try_again` play, rest 1.5 s on their last frame, and play again, and `complete` and `idle` loop. `idle` shows only where no state plays (decided Oct 8).
 
 | Asset | Used in | File |
 | --- | --- | --- |
@@ -371,11 +371,13 @@ Briar and the opener play finished sprite sheets, one per state. A Rive rig was 
 | Design spec | Every artboard of the Android design canvas, exported Oct 9 at 2×, plus `wild-find-design-spec.png`, one overview laid out like the canvas; reference only | assets/source/design_spec/ |
 | Briar at rest | 640 px, 30 fps video, cut to frames 7–108 (a 3.4 s loop); source for `idle` | assets/source/briar-at-rest.mp4 |
 | Briar winning | 640 px, 30 fps video, cut to frames 10–202 (a 6.4 s loop); source for `complete`, which `found` also plays | assets/source/briar-winning.mp4 |
-| Briar state sources | Per-state sheets: 32-frame 8 × 4 sheets on 512 px cells `welcome-32` (packed), and unpacked `searching-32`, `searching-hint-32`, `found-32`, `retry-32`, `complete-32` (replaced by `briar-winning.mp4`); drafts stay out of git in assets/generated/ until finished | assets/source/briar-*.png, assets/source/welcome-32.png, assets/source/complete-32.png |
-| Briar animations | Packed by `make sprites`: `opener.webp`, `warning.webp`, `idle.webp`, and `complete.webp` from the videos, and `welcome.png` from its sheet | app/src/main/assets/briar/ |
+| Briar state sources | Unpacked 32-frame sheets `searching-32`, `searching-hint-32`, `found-32`, and `retry-32`, kept for reference until the cleanup below; drafts stay out of git in assets/generated/ until finished | assets/source/briar-*.png |
+| Briar animations | Packed by `make sprites` from the videos: `welcome.webp`, `warning.webp` (also the opener), `idle.webp`, `complete.webp` (also `found`), and `try_again.webp` | app/src/main/assets/briar/ |
 | Plant-type art | One painted picture per S17 type (tree, shrub, vine, herb, grass, fern, moss, conifer), shown in each target's tile, the camera's top bar, and the grass tutorial; `make sprites` shrinks each to a 384 px WebP | assets/source/<type>.png, packed to app/src/main/assets/plants/ |
-| Opener art | Briar waves hello; 640 px, 30 fps video, cut to frames 10–217 (6.9 s); plays, rests 1.5 s on its last frame, and plays again while the opener shows | assets/source/briar-welcome.mp4, packed to app/src/main/assets/briar/opener.webp |
-| Hazard art | Briar holds up a warning paw as leaves grow around his feet; 640 px, 30 fps video, cut to frames 28–225 (6.6 s); plays, rests, and plays again on the hazard card | assets/source/briar-warning.mp4, packed to app/src/main/assets/briar/warning.webp |
+| Opener art | The warning clip (Hazard art), beside the leave-it rule; plays, rests 1.5 s on its last frame, and plays again while the opener shows | assets/source/briar-warning.mp4, packed to app/src/main/assets/briar/warning.webp |
+| Welcome art | Briar waves hello; 640 px, 30 fps video, cut to frames 10–217 (6.9 s); plays, rests, and plays again on Ready to hunt, the grass tutorial, and Your hunt | assets/source/briar-welcome.mp4, packed to app/src/main/assets/briar/welcome.webp |
+| Try-again art | Briar shrugs and turns, ready to try again; 640 px, 30 fps video, cut to frames 9–213 (6.8 s); plays, rests, and plays again above the needs-signal and not-enough messages, never on the camera, where Briar only warns | assets/source/briar-try-again.mp4, packed to app/src/main/assets/briar/try_again.webp |
+| Hazard art | Briar holds up a warning paw as leaves grow around his feet; 640 px, 30 fps video, cut to frames 28–225 (6.6 s); plays, rests, and plays again on the hazard card and the safety opener | assets/source/briar-warning.mp4, packed to app/src/main/assets/briar/warning.webp |
 
 - Animation-first interactions; illustrations, not licensed photos, in v1
 - Kid copy principle: "Look. Photograph. Leave it where it grows."
@@ -393,7 +395,7 @@ Every failure degrades to a playable hunt or a plain message; none crash or stal
 | iNat unreachable, no matching cache | No hunt; say this place needs signal once |
 | iNat returns 429 | Use the cache at once; no request, the widened query included, goes to iNat until Retry-After passes (60 seconds when it gives none) |
 | Cache entry mismatch (schema, table, region, locale, month, or radius) | Discard the entry and refetch |
-| Fewer than 3 eligible species | Widen the radius to 150 km once, one extra query of up to three requests; still short, show "Not enough plants spotted here yet" |
+| Fewer than 3 eligible genera | Widen the radius to 150 km once, one extra query of up to three requests; still short, show "Not enough plants spotted here yet" |
 | Autofocus reports no focus distance | The capture gives no verdict; the kid sees "Tap the plant to focus" |
 | Camera permission denied | Explain why the game needs it; the hunt can't start |
 | App sent to the background mid-hunt | The current hunt's state is restored |
@@ -454,14 +456,14 @@ Two questions block the build; two can wait.
 **Blocking**
 
 - [x] Visual: every image has art as of Oct 8: Briar's animations, the opener, the 8 plant-type pictures, and the adaptive app icon (Briar's head on Forest, with a monochrome layer for themed icons); `found` plays the complete cheer, since `briar-found-32` bakes in a fern, and the wordmark is drawn in code
-- [ ] Legal: do coarse location plus whole-degree rounding clear the precise-geolocation bar?
+- [x] Legal: do coarse location plus whole-degree rounding clear the precise-geolocation bar? Closed Oct 9: whole-degree rounding and the region-center query stay; the iNaturalist terms check found no blocker, and the grown-ups page now discloses the IP address and iNaturalist's age terms (Decisions: iNaturalist disclosure). An owner decision, not a lawyer's review
 - [x] Data: flat 25+ sightings or a share of local sightings? Decided Oct 7: at least 0.5% of the place's sightings and at least 3 (Decisions: Local filter); the floor of 3 stops one stray sighting from making a target in sparse places
 
 **Non-blocking**
 
 - [ ] Post: verify Snappit, ForestForay Kids, and SnapScout before naming them as prior art
 - [x] Build: minSdk is 30 (Android 11), decided Oct 8. 34 existed only for the Gemma download job. 30 is the floor that keeps every verify rule as built: the close-range rule reads `CONTROL_ZOOM_RATIO` and the coarse fix uses `getCurrentLocation`, both API 30. Fused location is used from Android 12 up. Untested below Android 16 until an older phone is at hand
-- [ ] Cleanup: delete unused source art once the user says go, with its Visual System rows: `briar-searching-32.png`, `briar-searching-hint-32.png`, and `briar-retry-32.png` (no screen plays them; on hunt pages Briar only warns), `briar-found-32.png` and `complete-32.png` (`briar-winning.mp4` replaced both), and `wild-find-sprite-1.png` (the design canvas replaced it)
+- [ ] Cleanup: delete unused source art once the user says go, with its Visual System rows: `briar-searching-32.png`, `briar-searching-hint-32.png`, and `briar-retry-32.png` (no screen plays them; on hunt pages Briar only warns), `briar-found-32.png` (`briar-winning.mp4` replaced it), and `wild-find-sprite-1.png` (the design canvas replaced it)
 - [x] Product: how does a kid learn what a target looks like? Resolved Oct 7: the target's common name and type (S17); no hints, no fact cards. Oct 8: plus a build-time USDA-trait description (Decisions: Description)
 
 ## Milestones

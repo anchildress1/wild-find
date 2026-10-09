@@ -98,10 +98,8 @@ class FrameVerifierDeviceTest {
         assertEquals(886 to 1920, frame.width to frame.height)
     }
 
-    private fun gateReference(): JSONObject {
-        val json = instrumentation.context.assets.open("reference/plant_gate_reference.json")
-        return JSONObject(json.bufferedReader().use { it.readText() })
-    }
+    private fun gateReference(): JSONObject =
+        instrumentation.context.assets.readJson("reference/plant_gate_reference.json")
 
     private fun rgbaFrame(pixels: Pixels): RgbaFrame {
         val buffer = ByteBuffer.allocateDirect(pixels.argb.size * BYTES_PER_PIXEL)

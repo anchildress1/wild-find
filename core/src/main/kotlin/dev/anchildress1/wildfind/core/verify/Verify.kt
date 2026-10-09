@@ -39,7 +39,7 @@ sealed interface Verdict {
     /** Row 5: no match and the subject is far: "Get closer or zoom in". */
     data object WalkCloser : Verdict
 
-    /** Row 6: "Put the plant in the circle". */
+    /** Row 6: "Keep looking for" the target. */
     data object Guide : Verdict
 }
 

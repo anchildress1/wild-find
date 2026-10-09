@@ -2,7 +2,6 @@ package dev.anchildress1.wildfind.core.map
 
 import dev.anchildress1.wildfind.core.region.RegionKey
 import kotlin.math.abs
-import kotlin.math.roundToInt
 
 /** A 1° step of the map's arrow pad, the TalkBack path that needs no dragging. */
 enum class Heading(internal val lat: Int, internal val lng: Int) {
@@ -40,7 +39,7 @@ data class MapCamera(val lat: Double = 0.0, val lng: Double = 0.0, val span: Dou
     val level: Int get() = if (span > DETAIL_SPAN) 0 else 1
 
     /** The whole-degree region under the crosshairs; the iNat query sends only its center. */
-    val region: RegionKey get() = RegionKey(lat.roundToInt(), wrap(lng.roundToInt().toDouble()).roundToInt())
+    val region: RegionKey get() = RegionKey.from(lat, lng)
 
     /** Zoomed in by [factor] (below 1 zooms out), kept between [MIN_SPAN] and [WORLD_SPAN]. */
     fun zoom(factor: Double): MapCamera = copy(span = (span / factor).coerceIn(MIN_SPAN, WORLD_SPAN))

@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -33,7 +32,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import dev.anchildress1.wildfind.R
 import dev.anchildress1.wildfind.core.frame.Pixels
@@ -50,13 +48,7 @@ fun FoundScreen(info: FoundInfo, crop: Pixels?, onNext: () -> Unit, onHunt: () -
             RuleLine()
             PrimaryButton(nextLabel(info), onNext)
             if (!info.tutorial && info.next != null) {
-                TextButton(onHunt, Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
-                    Text(
-                        stringResource(R.string.back_to_hunt),
-                        style = MaterialTheme.typography.labelMedium.copy(textDecoration = TextDecoration.Underline),
-                        color = Palette.Forest,
-                    )
-                }
+                LinkButton(stringResource(R.string.back_to_hunt), onHunt)
             }
         },
     ) {
@@ -77,13 +69,20 @@ fun FoundScreen(info: FoundInfo, crop: Pixels?, onNext: () -> Unit, onHunt: () -
             Medallion(crop, info.name, Modifier.align(Alignment.TopEnd).padding(end = 12.dp, top = 10.dp))
             // Briar cheers in front of the photo; only the star sits above him.
             Briar(BriarState.FOUND, briarText(BriarState.FOUND), Modifier.align(Alignment.BottomStart))
-            // Every win looks the same, the grass practice included.
+            // Every win looks the same, the grass practice included, but practice earns no star, so TalkBack says none.
             val star = stringResource(R.string.one_star)
-            Star(76.dp, Modifier.align(Alignment.TopEnd).semantics { contentDescription = star }.pop(index = 2))
+            val said = if (info.tutorial) Modifier else Modifier.semantics { contentDescription = star }
+            Star(76.dp, Modifier.align(Alignment.TopEnd).then(said).pop(index = 2))
         }
         Column(Modifier.fillMaxWidth().rise(index = 3), horizontalAlignment = Alignment.CenterHorizontally) {
             Text(countdown(info), style = MaterialTheme.typography.titleSmall, textAlign = TextAlign.Center)
-            Text(stringResource(R.string.plus_star), style = MaterialTheme.typography.bodyLarge, color = Palette.Ink2)
+            if (!info.tutorial) {
+                Text(
+                    stringResource(R.string.plus_star),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = Palette.Ink2,
+                )
+            }
         }
     }
 }

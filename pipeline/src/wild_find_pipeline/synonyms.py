@@ -9,16 +9,17 @@ the row's accepted taxon.
 
 import hashlib
 import json
+import os
 import sys
-import urllib.parse
+import tempfile
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from datetime import date
 from pathlib import Path
 
-from wild_find_pipeline.labels import lacking_hazards
-from wild_find_pipeline.paths import MODEL_CACHE, SYNONYMS, ensure_artifact
-from wild_find_pipeline.toxicity import GBIF, get
+from wild_find_pipeline.gbif import GBIF, get, match_url
+from wild_find_pipeline.labels import table_rows
+from wild_find_pipeline.paths import MODEL_CACHE, SYNONYMS
 
 GBIF_CACHE = MODEL_CACHE / "gbif"
 WORKERS = 4
@@ -34,7 +35,11 @@ def cached_get(url: str, cache: Path = GBIF_CACHE) -> dict:
         return json.loads(path.read_text())
     reply = get(url)
     cache.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(reply))
+    # Pool workers share this cache; a reader must never see a half-written file.
+    fd, pending = tempfile.mkstemp(dir=cache, suffix=".tmp")
+    with os.fdopen(fd, "w") as f:
+        f.write(json.dumps(reply))
+    os.replace(pending, path)
     return reply
 
 
@@ -55,12 +60,23 @@ def epithet_stem(name: str) -> str:
 
 def accepted_key(name: str, fetch: Callable[[str], dict] = cached_get) -> int | None:
     """GBIF key of the accepted taxon a plant name resolves to; None without an exact species-rank match."""
-    query = urllib.parse.urlencode({"name": name, "kingdom": "Plantae", "strict": "true"})
-    match = fetch(f"{GBIF}/species/match?{query}")
+    match = fetch(match_url(name))
     # A fuzzy or higher-rank match would hand this row another taxon's names.
     if match.get("matchType") != "EXACT" or match.get("rank") != "SPECIES":
         return None
     return match.get("acceptedUsageKey") or match["usageKey"]
+
+
+def usages(key: int, fetch: Callable[[str], dict] = cached_get) -> list[dict]:
+    """A GBIF taxon's accepted usage followed by every page of its synonyms."""
+    found = [fetch(f"{GBIF}/species/{key}")]
+    offset = 0
+    while True:
+        page = fetch(f"{GBIF}/species/{key}/synonyms?limit={PAGE}&offset={offset}")
+        found += page["results"]
+        if page.get("endOfRecords", True) or not page["results"]:
+            return found
+        offset += len(page["results"])
 
 
 def backbone_names(name: str, fetch: Callable[[str], dict] = cached_get) -> list[str] | None:
@@ -71,15 +87,7 @@ def backbone_names(name: str, fetch: Callable[[str], dict] = cached_get) -> list
     key = accepted_key(name, fetch)
     if key is None:
         return None
-    usages = [fetch(f"{GBIF}/species/{key}")]
-    offset = 0
-    while True:
-        page = fetch(f"{GBIF}/species/{key}/synonyms?limit={PAGE}&offset={offset}")
-        usages += page["results"]
-        if page.get("endOfRecords", True) or not page["results"]:
-            break
-        offset += len(page["results"])
-    candidates = {b for usage in usages if (b := binomial(usage))} - {name}
+    candidates = {b for usage in usages(key, fetch) if (b := binomial(usage))} - {name}
     # A synonym listed under this taxon can still be another accepted species' name (a later homonym) when looked
     # up on its own, which is how iNat's name would resolve.
     return sorted(
@@ -103,8 +111,7 @@ def aliases(found: dict[str, list[str]]) -> tuple[dict[str, list[str]], list[str
 
 def main() -> int:
     """Write synonyms.json: the unambiguous GBIF aliases of every species-table row, plus what was dropped."""
-    names = [e["scientific"] for e in json.loads(ensure_artifact("taxa_labels").read_text())]
-    rows = names + lacking_hazards(names)
+    rows = table_rows()
     with ThreadPoolExecutor(WORKERS) as pool:
         resolved = dict(zip(rows, pool.map(backbone_names, rows), strict=True))
     unmatched = sorted(row for row, found in resolved.items() if found is None)

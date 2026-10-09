@@ -1,4 +1,5 @@
 import hashlib
+import io
 import json
 
 import numpy as np
@@ -135,3 +136,19 @@ def test_main_writes_nothing_on_a_tie(monkeypatch, tmp_path):
 def test_main_writes_nothing_when_scores_are_nan(monkeypatch, tmp_path):
     assert run_gate(monkeypatch, tmp_path, winner=-1) == 1
     assert not (tmp_path / "ref").exists()
+
+
+def test_fetch_fixture_refuses_bytes_that_do_not_match_the_pin(monkeypatch):
+    monkeypatch.setattr(reference.urllib.request, "urlopen", lambda request, timeout: io.BytesIO(b"recompressed"))
+
+    with pytest.raises(ValueError, match="pinned SHA-256"):
+        reference.fetch_fixture()
+
+
+def test_fetch_fixture_opens_the_pinned_bytes(monkeypatch):
+    buffer = io.BytesIO()
+    Image.new("RGB", (3, 2)).save(buffer, format="PNG")
+    monkeypatch.setattr(reference, "FIXTURE_SHA256", hashlib.sha256(buffer.getvalue()).hexdigest())
+    monkeypatch.setattr(reference.urllib.request, "urlopen", lambda request, timeout: io.BytesIO(buffer.getvalue()))
+
+    assert reference.fetch_fixture().size == (3, 2)
