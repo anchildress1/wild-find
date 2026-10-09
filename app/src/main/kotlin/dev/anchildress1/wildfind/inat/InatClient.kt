@@ -73,7 +73,7 @@ class InatClient(private val now: () -> Instant = Instant::now, private val fetc
             List(results.length()) { i ->
                 val result = results.getJSONObject(i)
                 val taxon = result.getJSONObject("taxon")
-                val common = taxon.optString("preferred_common_name").takeIf { it.isNotBlank() }
+                val common = (taxon.opt("preferred_common_name") as? String)?.trim()?.takeIf { it.isNotEmpty() }
                 Sighting(taxon.getString("name"), common, result.getInt("count"))
             },
         )

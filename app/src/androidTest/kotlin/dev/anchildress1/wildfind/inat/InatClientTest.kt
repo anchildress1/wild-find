@@ -47,6 +47,18 @@ class InatClientTest {
     }
 
     @Test
+    fun commonNamesMustBeNonblankJsonStrings() {
+        listOf("null", "false", "42", "{}", "[]", "\"\"", "\"   \"").forEach { value ->
+            val result = """{"count": 10, "taxon": {"name": "Quercus nigra", "preferred_common_name": $value}}"""
+            assertEquals(Pull.Pulled(listOf(Sighting("Quercus nigra", null, 10))), client(page(1, result)).pull(query))
+        }
+        assertEquals(
+            Pull.Pulled(listOf(Sighting("Quercus nigra", "water oak", 10))),
+            client(page(1, result("Quercus nigra", "  water oak  ", 10))).pull(query),
+        )
+    }
+
+    @Test
     fun aLongListPullsThreePagesAndNoMore() {
         val pull = client(
             page(1038, result("A a", "a", 3)),
