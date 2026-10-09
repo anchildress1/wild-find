@@ -237,6 +237,13 @@ def test_with_toxicity_rejects_a_row_without_a_flag():
         with_toxicity([{"scientific": "Quercus nigra", "hazard": False}], {})
 
 
+def test_with_toxicity_rejects_a_hazard_that_is_not_flagged():
+    labels = [{"scientific": "Toxicodendron radicans", "hazard": True}]
+
+    with pytest.raises(ValueError, match=r"hazards \['Toxicodendron radicans'\] unflagged"):
+        with_toxicity(labels, {"Toxicodendron radicans": {"toxic": False}})
+
+
 def test_with_synonyms_adds_each_rows_aliases():
     labels = [{"scientific": "Berberis bealei", "toxic": False}, {"scientific": "Quercus nigra", "toxic": False}]
     aliases = {"Berberis bealei": ["Mahonia bealei"], "Quercus nigra": []}

@@ -79,14 +79,18 @@ def merged(labels: list[dict], found: dict, source: Path, step: str, add: Callab
 
 
 def with_toxicity(labels: list[dict], flags: dict[str, dict]) -> list[dict]:
-    """Add each row's genus and committed toxicity flag; raises when a row has no flag."""
-    return merged(
+    """Add each row's genus and committed toxicity flag; raises when a row has no flag or a hazard isn't toxic."""
+    out = merged(
         labels,
         flags,
         TOXICITY,
         "toxicity",
         lambda entry, found: {"genus": entry["scientific"].split()[0], "toxic": found["toxic"]},
     )
+    # The app refuses a species table with an unflagged hazard at load, so fail here instead of on the phone.
+    if unflagged := [entry["scientific"] for entry in out if entry["hazard"] and not entry["toxic"]]:
+        raise ValueError(f"{TOXICITY.name} leaves hazards {unflagged} unflagged; run make toxicity")
+    return out
 
 
 def with_synonyms(labels: list[dict], aliases: dict[str, list[str]]) -> list[dict]:
