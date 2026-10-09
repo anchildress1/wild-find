@@ -11,6 +11,7 @@ from wild_find_pipeline.assets import (
     plant_share,
     species_table,
     with_descriptions,
+    with_hints,
     with_plant_types,
     with_synonyms,
     with_toxicity,
@@ -290,3 +291,36 @@ def test_with_descriptions_adds_each_rows_sentence_or_none():
 def test_with_descriptions_rejects_a_row_without_an_entry():
     with pytest.raises(ValueError, match="run make descriptions"):
         with_descriptions([{"scientific": "Quercus nigra"}], {})
+
+
+def test_with_hints_ships_only_picked_clean_hints_best_first_and_names_the_season():
+    entry = {
+        "hints": [
+            {"aspect": "ground", "text": "It likes moist soil.", "issues": [], "score": 3.0},
+            {"aspect": "place", "text": "Look in woods.", "issues": [], "score": 3.0},
+            {"aspect": "season", "text": "Look for red fruit in fall.", "issues": [], "score": 1.3, "bucket": "fall"},
+            {"aspect": "place", "text": "Look near streams.", "issues": ["water"], "score": None},
+            {"aspect": "light", "text": "It likes sun.", "issues": [], "score": None},
+        ]
+    }
+
+    shipped = with_hints([{"scientific": "Quercus nigra"}], {"done": True, "species": {"Quercus nigra": entry}})
+
+    assert shipped == [
+        {
+            "scientific": "Quercus nigra",
+            "hints": [
+                {"text": "It likes moist soil."},
+                {"text": "Look in woods."},
+                {"text": "Look for red fruit in fall.", "season": "fall"},
+            ],
+        }
+    ]
+
+
+def test_with_hints_gives_rows_the_file_does_not_cover_none_and_refuses_a_checkpoint():
+    assert with_hints([{"scientific": "Abrus precatorius"}], {"done": True, "species": {}}) == [
+        {"scientific": "Abrus precatorius", "hints": []}
+    ]
+    with pytest.raises(ValueError, match="make hints"):
+        with_hints([], {"done": False, "species": {}})
