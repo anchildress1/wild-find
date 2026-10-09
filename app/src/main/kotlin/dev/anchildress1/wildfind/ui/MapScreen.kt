@@ -116,6 +116,7 @@ fun MapScreen(
         Box(Modifier.weight(1f).fillMaxWidth().clipToBounds()) {
             Pannable(map, camera, label(camera, places), {
                 moved = true
+                glide.cancel()
                 camera = it
             }) { glide(camera.at(camera.region)) }
             Crosshairs(Modifier.align(Alignment.Center))
@@ -235,12 +236,13 @@ private fun PickPanel(canPick: Boolean, enabled: Boolean, onPick: () -> Unit) {
  * glide or a finger cancels the last one, and reduced motion jumps straight there.
  */
 @Composable
-private fun rememberGlide(current: () -> MapCamera, set: (MapCamera) -> Unit): (MapCamera) -> Unit {
+private fun rememberGlide(current: () -> MapCamera, set: (MapCamera) -> Unit): Glide {
     val scope = rememberCoroutineScope()
     val reduced = LocalReducedMotion.current
     var job by remember { mutableStateOf<Job?>(null) }
-    return { target ->
-        job?.cancel()
+    val cancel: () -> Unit = { job?.cancel() }
+    return Glide(cancel) { target ->
+        cancel()
         val start = current()
         if (reduced) {
             set(target)
@@ -253,4 +255,9 @@ private fun rememberGlide(current: () -> MapCamera, set: (MapCamera) -> Unit): (
             }
         }
     }
+}
+
+/** Glides the map camera to a target when invoked; [cancel] stops the glide in flight. */
+private class Glide(val cancel: () -> Unit, private val to: (MapCamera) -> Unit) {
+    operator fun invoke(target: MapCamera) = to(target)
 }
