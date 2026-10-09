@@ -1,4 +1,4 @@
-.PHONY: setup build install device-test focus-probe assets sprites toxicity synonyms plant-types descriptions hazard-vectors labels crop-reference gate-harness gate-pull reference test pipeline-test lint ktlint detekt android-lint pipeline-lint actionlint secret-scan ai-checks clean
+.PHONY: setup build install device-test assets sprites toxicity synonyms plant-types descriptions hazard-vectors labels crop-reference gate-harness gate-pull reference test pipeline-test lint ktlint detekt android-lint pipeline-lint actionlint secret-scan ai-checks clean
 
 SHELL := /bin/bash
 
@@ -40,18 +40,8 @@ install: build
 
 # On-device instrumented tests. Not connectedAndroidTest: it uninstalls the app afterwards, deleting gate-harness runs not yet pulled.
 device-test: install
-	$(GRADLE) :app:assembleDebugAndroidTest
 	adb install -r -d -t app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
 	@adb shell am instrument -w $(WILDFIND_PACKAGE).test/androidx.test.runner.AndroidJUnitRunner | tee /dev/stderr | grep -qE '^OK \([1-9][0-9]* tests?\)'
-
-# S09: logs live autofocus distance (diopters) from the back camera; Ctrl-C to stop.
-# Each run gets its own dated file so no run overwrites another; pass FOCUS_LOG=... to choose one.
-FOCUS_LOG ?= docs/results/$(shell date +%F)/focus-probe-$(shell date +%H%M%S).log
-focus-probe: install
-	mkdir -p $(dir $(FOCUS_LOG))
-	adb logcat -c
-	adb shell am start -n $(WILDFIND_PACKAGE)/dev.anchildress1.wildfind.FocusProbeActivity
-	adb logcat -s FocusProbe:I | tee $(FOCUS_LOG)
 
 # S05 gate harness: verify on each Capture tap (3 frames), memory, and heat, logged on the phone.
 # GATE_TARGET is an eligible West Georgia species, or grass for the tutorial. Back ends a run.
