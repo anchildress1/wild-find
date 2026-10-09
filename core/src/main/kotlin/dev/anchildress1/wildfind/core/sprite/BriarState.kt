@@ -2,11 +2,10 @@ package dev.anchildress1.wildfind.core.sprite
 
 /**
  * Briar's states, one animation each under `assets/briar/`; game events pick the state, and Compose only plays it.
- * Briar stays off hunt pages except to warn on the hazard card.
+ * On the camera, Briar shows only to warn on the hazard card.
  *
  * @property sheet the animation's asset name; two states may share one
- * @property replayAfterMillis how long the last frame holds before the animation plays again, or null to hand over
- * to idle
+ * @property replayAfterMillis how long the last frame holds before the animation plays again, or null when it loops
  * @property loop the animation repeats with no rest
  */
 enum class BriarState(val sheet: String, val replayAfterMillis: Long? = null, val loop: Boolean = false) {
@@ -28,7 +27,7 @@ enum class BriarState(val sheet: String, val replayAfterMillis: Long? = null, va
 
     /** The idle loop. */
     companion object {
-        /** The loop every play-once state sheet hands over to. */
+        /** The loop that plays where no state does. */
         const val IDLE = "idle"
     }
 }
