@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from PIL import Image
 
-from wild_find_pipeline.sprites import PLANT_PX, feet, frames_of, plant_art, repack
+from wild_find_pipeline.sprites import PLANT_PX, clip, feet, frames_of, key_white, plant_art, repack
 
 
 def sheet_with(spots: list[tuple[int, int]], size=(400, 200), box=(20, 30)) -> Image.Image:
@@ -103,3 +103,46 @@ def test_repack_reports_the_figure_height():
     _, _, figure = repack(sheet_with(SPOTS), columns=4, rows=2)
 
     assert figure == 30
+
+
+def test_key_white_drops_edge_white_and_keeps_white_inside_briar():
+    frame = np.full((40, 40, 3), 255, np.uint8)
+    frame[10:30, 10:30] = (120, 80, 50)  # Briar
+    frame[18:22, 18:22] = 255  # a white tail stripe inside him
+
+    alpha = key_white(frame)[..., 3]
+
+    assert alpha[0, 0] == 0
+    assert alpha[20, 20] == 255
+    assert alpha[15, 15] == 255
+
+
+def test_key_white_removes_white_spill_from_edges():
+    frame = np.full((40, 40, 3), 255, np.uint8)
+    frame[10:30, 10:30] = (100, 100, 100)
+    frame[10:30, 10] = 177  # half-white blend on Briar's left edge
+
+    keyed = key_white(frame)
+
+    # One pixel in, the edge is 40% opaque; dividing out the white leaves Briar's own grey, not a light rim.
+    assert keyed[20, 10, 3] == 102
+    assert abs(int(keyed[20, 10, 0]) - 62) <= 2
+
+
+def test_clip_crops_every_frame_to_one_box_and_reports_the_figure_height():
+    frames = []
+    for shift in (0, 6):
+        frame = np.full((60, 60, 3), 255, np.uint8)
+        frame[20 + shift : 40 + shift, 15:35] = (120, 80, 50)
+        frames.append(frame)
+
+    images, figure = clip(frames)
+
+    assert len({i.size for i in images}) == 1
+    # The keyed edge fades over its outer row, which falls under the solid-alpha cut on each side.
+    assert figure == 18
+
+
+def test_clip_rejects_a_video_with_no_briar():
+    with pytest.raises(ValueError, match="all background"):
+        clip([np.full((10, 10, 3), 255, np.uint8)])

@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Test
 class BriarStateTest {
     @Test
     fun `every state names its packed sheet`() {
-        assertEquals(listOf("opener", "welcome", "found", "complete"), BriarState.entries.map { it.sheet })
+        assertEquals(listOf("opener", "welcome", "complete", "complete"), BriarState.entries.map { it.sheet })
+        assertEquals(listOf(BriarState.COMPLETE), BriarState.entries.filter { it.loop })
         // A screen keeps replaying its own sheet, so Briar never swaps to idle's differently sized art.
         assertEquals(
             listOf(BriarState.OPENER, BriarState.WELCOME, BriarState.FOUND),

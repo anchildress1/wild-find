@@ -1,9 +1,11 @@
-"""Repack Briar sprite sheets onto whole-pixel cells with the PRD sheet contract JSON; shrink the plant-type art."""
+"""Key Briar's videos into transparent animated WebPs, repack his remaining sprite sheets, and shrink the plant art."""
 
 import json
 import math
 import sys
+from pathlib import Path
 
+import av
 import numpy as np
 from PIL import Image
 from scipy import ndimage
@@ -26,17 +28,24 @@ PLANT_PX = 384
 STAR_PX = 256
 # Faint glow pixels below this alpha don't count as the plant's edge.
 ALPHA_FLOOR = 16
-# name: (source file, columns, rows, fps)
+# name: (source file, columns, rows, fps). A state moves to VIDEOS once its video replaces the sheet. `opener` keeps
+# its packed sheet in the app until its video arrives, since its source sheet is gone.
 SHEETS = {
-    "idle": ("briar-rest-blink-16.png", 4, 4, 8),
-    "opener": ("opener-ivy-32.png", 8, 4, 16),
     "welcome": ("welcome-32.png", 8, 4, 16),
-    # The complete cheer doubles as found: briar-found-32 bakes a fern into every frame.
-    "found": ("complete-32.png", 8, 4, 16),
-    "complete": ("complete-32.png", 8, 4, 16),
 }
-# Idle and the hunt-complete celebration loop; every other state sheet plays once, then idle takes over.
-LOOPING = {"idle", "complete"}
+# Sheets that loop; every other sheet plays once.
+LOOPING: set[str] = set()
+# name: (source video, first frame kept, end frame). The cut drops the still stretch at each end, at frames that
+# match so the loop joins without a jump. `found` plays `complete`'s clip.
+VIDEOS = {
+    "idle": ("briar-at-rest.mp4", 7, 108),
+    "complete": ("briar-winning.mp4", 10, 202),
+}
+# The videos render Briar on white; white touching the frame's edge is background, so white fur inside him stays.
+WHITE = 232
+# The background fades into Briar over this many pixels, softening the keyed edge.
+FADE_PX = 2.5
+VIDEO_QUALITY = 80
 # Rows of each frame's lowest pixels that count as its feet.
 FEET_ROWS = 24
 # A separate outline this share of the smallest frame's size or more is a prop, not stray specks.
@@ -129,6 +138,45 @@ def repack(source: Image.Image, columns: int, rows: int) -> tuple[Image.Image, i
     return sheet, cell, figure
 
 
+def key_white(rgb: np.ndarray) -> np.ndarray:
+    """RGBA from one video frame: near-white connected to the frame's edge turns transparent.
+
+    Edge pixels get their white spill divided out, so no light rim shows on a dark page.
+    """
+    image = rgb.astype(np.float32)
+    labels, _ = ndimage.label(image.min(axis=2) > WHITE)
+    edge = np.unique(np.concatenate([labels[0], labels[-1], labels[:, 0], labels[:, -1]]))
+    background = np.isin(labels, edge[edge > 0])
+    alpha = np.clip(ndimage.distance_transform_edt(~background) / FADE_PX, 0, 1)[..., None]
+    color = np.where(alpha > 0, (image - (1 - alpha) * 255) / np.maximum(alpha, 1e-3), 0)
+    return np.dstack([np.clip(color, 0, 255), alpha[..., 0] * 255]).astype(np.uint8)
+
+
+def clip(frames: list[np.ndarray]) -> tuple[list[Image.Image], int]:
+    """Key every frame and crop all of them to the box that holds Briar in any frame.
+
+    Returns the frames and Briar's median height in them, which the app scales to.
+    """
+    keyed = [key_white(f) for f in frames]
+    ys, xs = np.nonzero(np.stack([k[..., 3] for k in keyed]).any(axis=0))
+    if len(ys) == 0:
+        raise ValueError("the video is all background")
+    box = (max(int(xs.min()) - 4, 0), max(int(ys.min()) - 4, 0), int(xs.max()) + 5, int(ys.max()) + 5)
+    images = [Image.fromarray(k, "RGBA").crop(box) for k in keyed]
+    return images, int(np.median([solid_height(i) for i in images]))
+
+
+def video_frames(path: Path, first: int, end: int) -> tuple[list[np.ndarray], float]:
+    """Frames [first, end) of the video at [path] as RGB arrays, and its frame rate."""
+    with av.open(str(path)) as container:
+        stream = container.streams.video[0]
+        rate = float(stream.average_rate)
+        frames = [f.to_ndarray(format="rgb24") for f in container.decode(stream)]
+    if not 0 <= first < end <= len(frames):
+        raise ValueError(f"cut {first}..{end} outside {len(frames)} frames")
+    return frames[first:end], rate
+
+
 def plant_art(source: Image.Image) -> Image.Image:
     """One plant-type picture on a PLANT_PX square, trimmed to the plant and standing on the bottom edge.
 
@@ -150,7 +198,7 @@ def plant_art(source: Image.Image) -> Image.Image:
 
 
 def main() -> int:
-    """Write <state>.png and <state>.json for every source sheet, and one WebP per plant type."""
+    """Write <state>.webp or <state>.png, each with <state>.json, for every Briar source, and one WebP per plant."""
     OUT.mkdir(parents=True, exist_ok=True)
     PLANTS_OUT.mkdir(parents=True, exist_ok=True)
     for layer in ICON_LAYERS:
@@ -170,6 +218,22 @@ def main() -> int:
     for kind in PLANT_TYPES:
         plant_art(Image.open(SOURCE / f"{kind}.png")).save(PLANTS_OUT / f"{kind}.webp", quality=90, method=6)
         print(f"OK: plant {kind} {PLANT_PX}x{PLANT_PX}")
+    for name, (file, first, end) in VIDEOS.items():
+        frames, rate = video_frames(SOURCE / file, first, end)
+        images, figure = clip(frames)
+        images[0].save(
+            OUT / f"{name}.webp",
+            save_all=True,
+            append_images=images[1:],
+            duration=round(1000 / rate),
+            loop=0,
+            quality=VIDEO_QUALITY,
+            method=6,
+        )
+        (OUT / f"{name}.json").write_text(json.dumps({"figure_height": figure}) + "\n")
+        # A video replaces the state's packed sheet, so the stale sheet doesn't ship beside it.
+        (OUT / f"{name}.png").unlink(missing_ok=True)
+        print(f"OK: {name} {images[0].width}x{images[0].height}, {len(images)} frames at {rate:g} fps")
     for name, (file, columns, rows, fps) in SHEETS.items():
         sheet, cell, figure = repack(Image.open(SOURCE / file).convert("RGBA"), columns, rows)
         sheet.save(OUT / f"{name}.png", optimize=True)
