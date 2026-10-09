@@ -367,7 +367,8 @@ Briar and the opener play finished sprite sheets, one per state. A Rive rig was 
 | --- | --- | --- |
 | Logo | Splash, About | Path pending (Open Questions) |
 | Concept board | Poses, icon ideas, palette; reference only, broken alpha | assets/source/wild-find-sprite-1.png |
-| UI direction 01 | Eight-screen review concept: first launch with the hint-download bar (since dropped), grass tutorial, hunt map, live camera, hint (since dropped), found, give it space, hunt complete; reference only | assets/source/wild-find-app-design.png |
+| UI direction 01 | Eight-screen review concept: first launch with the hint-download bar (since dropped), grass tutorial, hunt map, live camera, hint (since dropped), found, give it space, hunt complete; reference only | assets/source/design_spec/wild-find-app-design.png |
+| Design spec | Every artboard of the Android design canvas, exported Oct 9 at 2×, plus `wild-find-design-spec.png`, one overview laid out like the canvas; reference only | assets/source/design_spec/ |
 | Briar at rest | 640 px, 30 fps video, cut to frames 7–108 (a 3.4 s loop); source for `idle` | assets/source/briar-at-rest.mp4 |
 | Briar winning | 640 px, 30 fps video, cut to frames 10–202 (a 6.4 s loop); source for `complete`, which `found` also plays | assets/source/briar-winning.mp4 |
 | Briar state sources | Per-state sheets: 32-frame 8 × 4 sheets on 512 px cells `welcome-32` (packed), and unpacked `searching-32`, `searching-hint-32`, `found-32`, `retry-32`, `complete-32` (replaced by `briar-winning.mp4`); drafts stay out of git in assets/generated/ until finished | assets/source/briar-*.png, assets/source/welcome-32.png, assets/source/complete-32.png |
@@ -460,7 +461,7 @@ Two questions block the build; two can wait.
 
 - [ ] Post: verify Snappit, ForestForay Kids, and SnapScout before naming them as prior art
 - [x] Build: minSdk is 30 (Android 11), decided Oct 8. 34 existed only for the Gemma download job. 30 is the floor that keeps every verify rule as built: the close-range rule reads `CONTROL_ZOOM_RATIO` and the coarse fix uses `getCurrentLocation`, both API 30. Fused location is used from Android 12 up. Untested below Android 16 until an older phone is at hand
-- [ ] Cleanup: delete unused source art once the user says go, with its Visual System rows: `briar-searching-32.png`, `briar-searching-hint-32.png`, and `briar-retry-32.png` (no screen plays them; on hunt pages Briar only warns), `briar-found-32.png` and `complete-32.png` (`briar-winning.mp4` replaced both), and `wild-find-sprite-1.png` and `wild-find-app-design.png` (the design canvas replaced both)
+- [ ] Cleanup: delete unused source art once the user says go, with its Visual System rows: `briar-searching-32.png`, `briar-searching-hint-32.png`, and `briar-retry-32.png` (no screen plays them; on hunt pages Briar only warns), `briar-found-32.png` and `complete-32.png` (`briar-winning.mp4` replaced both), and `wild-find-sprite-1.png` (the design canvas replaced it)
 - [x] Product: how does a kid learn what a target looks like? Resolved Oct 7: the target's common name and type (S17); no hints, no fact cards. Oct 8: plus a build-time USDA-trait description (Decisions: Description)
 
 ## Milestones
