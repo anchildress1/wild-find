@@ -92,6 +92,11 @@
     <string name="camera_progress">%1$d of %2$d</string>
     <string name="back_to_hunt">Back to your hunt</string>
     <string name="capture">Capture</string>
+    <string name="hint">Hint</string>
+    <string name="hint_n_of">Hint %1$d of %2$d</string>
+    <string name="hint_earlier">%1$d · %2$s</string>
+    <string name="hint_next">Hint %1$d</string>
+    <string name="keep_looking">Keep looking</string>
     <string name="skip_target">Can\'t find it? Try another plant</string>
     <string name="skip_practice">Skip practice</string>
     <string name="checking">Checking…</string>

@@ -66,6 +66,8 @@ Validation: `make device-test` excludes E2E; `make e2e` uses the separate `.e2e`
 
 ## Hazards worldwide · build-time Gemma
 
+- [ ] **S58 Hint sheet** (app) — design 07. A Hint button beside Capture opens a sheet over the live camera: "Hint n of 3" with earlier hints small above, Keep looking back, and the next hint while one is left. Up to three hints from `species_labels.json`, this month's season ones first (`Hint`, `forMonth`); no hints hides the button. The speaker button in the design waits for a decision on read-aloud. Built Oct 9; tick on a `make device-test` pass.
+
 - [ ] **S57 iNaturalist disclosure** (app) — PRD Decisions: iNaturalist disclosure. The grown-ups page has an "iNaturalist and kids" card under Privacy: each hunt asks iNaturalist for nearby plants, it sees the IP address, its terms are 13 and up or a parent's permission, Wild Find has no account there and posts nothing, and no photos, names, or exact location go with the request. Built Oct 9; tick on a `make device-test` pass (`GrownUpsTest`, `BannedCopyTest`).
 
 - [ ] **S56 Build-time hints** (pipeline + core + app) — PRD Decisions: Hints.

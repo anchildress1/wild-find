@@ -37,8 +37,10 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -85,6 +87,8 @@ fun CameraScreen(
         mutableStateOf(context.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)
     }
     var denied by remember { mutableStateOf(false) }
+    // 0 shows the camera panel; n shows hint n. A new target starts on the camera panel.
+    var hintAt by rememberSaveable(target.row) { mutableIntStateOf(0) }
     val ask = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
         granted = it
         denied = !it
@@ -107,14 +111,26 @@ fun CameraScreen(
             }
             Feedback(target, camera, Modifier.align(Alignment.BottomCenter))
         }
-        BottomPanel(
-            camera,
-            enabled = granted && camera.ready && verifier != null,
-            practice = target.number == 0,
-            canSkip = target.canSkip,
-            onCapture,
-            onSkip,
-        )
+        AnimatedContent(
+            hintAt,
+            transitionSpec = { fadeIn(tween(Motion.QUICK)) togetherWith fadeOut(tween(Motion.QUICK)) },
+            label = "panel",
+        ) { shown ->
+            if (shown > 0) {
+                HintPanel(target.hints, shown, onNext = { hintAt = shown + 1 }, onKeepLooking = { hintAt = 0 })
+            } else {
+                BottomPanel(
+                    camera,
+                    enabled = granted && camera.ready && verifier != null,
+                    practice = target.number == 0,
+                    canSkip = target.canSkip,
+                    hasHint = target.hints.isNotEmpty(),
+                    onCapture,
+                    onSkip,
+                    onHint = { hintAt = 1 },
+                )
+            }
+        }
     }
 }
 
@@ -249,24 +265,36 @@ private fun BottomPanel(
     enabled: Boolean,
     practice: Boolean,
     canSkip: Boolean,
+    hasHint: Boolean,
     onCapture: () -> Unit,
     onSkip: () -> Unit,
+    onHint: () -> Unit,
 ) {
     Column(
         Modifier.fillMaxWidth().background(Palette.Paper, RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
             .navigationBarsPadding().padding(start = 20.dp, end = 20.dp, top = 18.dp, bottom = 16.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
-        if (camera.checking) {
-            CheckingButton()
-        } else {
-            PrimaryButton(
-                stringResource(if (camera.ready) R.string.capture else R.string.getting_ready),
-                onCapture,
-                Modifier.heightIn(min = 64.dp),
-                icon = WildIcons.Camera,
-                enabled = enabled,
-            )
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+            if (hasHint) {
+                OutlineButton(
+                    stringResource(R.string.hint),
+                    onHint,
+                    Modifier.weight(HINT_SHARE).heightIn(min = 64.dp),
+                    icon = WildIcons.Bulb,
+                )
+            }
+            if (camera.checking) {
+                CheckingButton(Modifier.weight(1f))
+            } else {
+                PrimaryButton(
+                    stringResource(if (camera.ready) R.string.capture else R.string.getting_ready),
+                    onCapture,
+                    Modifier.weight(1f).heightIn(min = 64.dp),
+                    icon = WildIcons.Camera,
+                    enabled = enabled,
+                )
+            }
         }
         // Not every target grows everywhere: a skip swaps in the next plant from the hunt's queue. It always shows, but
         // with nothing left that fits it would only reopen the same plant, so it's disabled.
@@ -280,9 +308,9 @@ private fun BottomPanel(
 }
 
 @Composable
-private fun CheckingButton() {
+private fun CheckingButton(modifier: Modifier) {
     Row(
-        Modifier.fillMaxWidth().heightIn(min = 64.dp).background(Palette.Husk, RoundedCornerShape(32.dp))
+        modifier.fillMaxWidth().heightIn(min = 64.dp).background(Palette.Husk, RoundedCornerShape(32.dp))
             .border(2.dp, Palette.Moss, RoundedCornerShape(32.dp))
             .semantics(mergeDescendants = true) {
                 liveRegion = LiveRegionMode.Polite
@@ -323,6 +351,9 @@ private fun CameraDenied(modifier: Modifier) {
         }, icon = null)
     }
 }
+
+// The Hint button takes about a third of the row beside Capture.
+private const val HINT_SHARE = 0.55f
 
 // Briar fits beside the hazard text without pushing the card over the viewfinder.
 private val WARNING_FIGURE = 88.dp

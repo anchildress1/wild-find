@@ -1,6 +1,7 @@
 package dev.anchildress1.wildfind.core.game
 
 import dev.anchildress1.wildfind.core.frame.Pixels
+import dev.anchildress1.wildfind.core.hunt.Hint
 import dev.anchildress1.wildfind.core.hunt.PlantType
 import dev.anchildress1.wildfind.core.region.RegionKey
 import dev.anchildress1.wildfind.core.verify.CaptureCue
@@ -83,6 +84,7 @@ sealed interface Screen {
  * @property description what to look for, from USDA traits, or null to show the type alone
  * @property found already found this hunt
  * @property canSkip a skip would swap in another plant; false once the queue holds none that fits
+ * @property hints the build's ranked hints for this plant, season ones included; the screen orders them by month
  */
 data class Stop(
     val row: Int,
@@ -91,6 +93,7 @@ data class Stop(
     val found: Boolean,
     val description: String? = null,
     val canSkip: Boolean = false,
+    val hints: List<Hint> = emptyList(),
 )
 
 /**

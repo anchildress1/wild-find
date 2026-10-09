@@ -436,6 +436,7 @@ private class Turn(private var game: Game, private val random: Random) {
                         it.row in active.progress.found,
                         species.description,
                         active.progress.canSkip(it.row) { row -> rows[row].genus },
+                        species.hints,
                     )
                 },
             )

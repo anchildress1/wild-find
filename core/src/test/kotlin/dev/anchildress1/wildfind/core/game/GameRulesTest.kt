@@ -4,9 +4,11 @@ import dev.anchildress1.wildfind.core.frame.Pixels
 import dev.anchildress1.wildfind.core.hunt.ActiveHunt
 import dev.anchildress1.wildfind.core.hunt.AppFlags
 import dev.anchildress1.wildfind.core.hunt.Eligible
+import dev.anchildress1.wildfind.core.hunt.Hint
 import dev.anchildress1.wildfind.core.hunt.HuntProgress
 import dev.anchildress1.wildfind.core.hunt.LocalList
 import dev.anchildress1.wildfind.core.hunt.LocalListResult
+import dev.anchildress1.wildfind.core.hunt.Season
 import dev.anchildress1.wildfind.core.hunt.SpeciesRow
 import dev.anchildress1.wildfind.core.map.Places
 import dev.anchildress1.wildfind.core.region.RegionKey
@@ -110,6 +112,18 @@ class GameRulesTest {
             ),
             resumed.game.ui.stops,
         )
+    }
+
+    @Test
+    fun `a target's stop carries its species' hints`() {
+        val hint = Hint("Look in woods.", Season.FALL)
+        val hinted = rows.mapIndexed { row, species -> if (row == 0) species.copy(hints = listOf(hint)) else species }
+        val loading = Game(flags = flags()).after(Outcome.ModelsReady(hinted)).game
+
+        val stops = loading.after(Outcome.SavedHunt(hunt())).game.ui.stops
+
+        assertEquals(listOf(hint), stops[0].hints)
+        assertEquals(emptyList<Hint>(), stops[1].hints)
     }
 
     @Test

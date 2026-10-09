@@ -92,6 +92,14 @@ object WildIcons {
     /** Replay the opener. */
     val Replay = line("replay", "M4 12a8 8 0 1 0 2.3-5.6", "M4 4v4h4")
 
+    /** A hint. */
+    val Bulb = line(
+        "bulb",
+        "M9 18h6",
+        "M10 21h4",
+        "M12 3a6 6 0 0 0-4 10.4V15a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-1.4A6 6 0 0 0 12 3z",
+    )
+
     /** "Keep looking for…" */
     val Search = line("search", circle(11f, 11f, 6.5f), "M16 16l4.5 4.5")
 
