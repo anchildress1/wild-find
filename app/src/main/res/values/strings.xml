@@ -70,7 +70,8 @@
     <string name="finish_hunt">Finish hunt</string>
     <string name="stop_found">%1$d, %2$s, %3$s, found</string>
     <string name="stop_open">%1$d, %2$s, %3$s, not found yet</string>
-    <string name="stop_plain">%1$d, %2$s</string>
+    <string name="stop_plain_found">%1$d, %2$s, found</string>
+    <string name="stop_plain_open">%1$d, %2$s, not found yet</string>
 
     <string name="type_tree">a tree</string>
     <string name="type_shrub">a shrub</string>

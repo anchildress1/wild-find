@@ -43,6 +43,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.Hyphens
@@ -197,7 +198,8 @@ private fun Trail(stops: List<Stop>, onStop: (Int) -> Unit) {
 private fun StopCard(number: Int, stop: Stop, modifier: Modifier, onClick: () -> Unit, onCenter: (Offset) -> Unit) {
     val type = typeLabel(stop.type)
     val spoken = when {
-        type == null -> stringResource(R.string.stop_plain, number, stop.name)
+        type == null && stop.found -> stringResource(R.string.stop_plain_found, number, stop.name)
+        type == null -> stringResource(R.string.stop_plain_open, number, stop.name)
         stop.found -> stringResource(R.string.stop_found, number, stop.name, type)
         else -> stringResource(R.string.stop_open, number, stop.name, type)
     }
@@ -206,6 +208,11 @@ private fun StopCard(number: Int, stop: Stop, modifier: Modifier, onClick: () ->
         modifier.width(STOP_WIDTH).clearAndSetSemantics {
             contentDescription = description
             role = Role.Button
+            // Cleared semantics drop clickable's action too, so TalkBack needs it declared again.
+            onClick {
+                onClick()
+                true
+            }
         }.clickable(onClick = onClick),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(6.dp),
