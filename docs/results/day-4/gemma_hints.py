@@ -205,6 +205,9 @@ def chat(base_url: str, model: str, system: str, shots: list[tuple[str, str]], u
         "model": model,
         "messages": messages,
         "stream": False,
+        # Gemma 4 thinks by default, and the thinking spent the whole reply budget: every Oct 9 first-run reply came
+        # back empty and read as an abstention. The answer is a quote lookup, so no thinking is needed.
+        "think": False,
         "format": schema,
         "options": {**SAMPLER, "num_ctx": NUM_CTX, "num_predict": MAX_NEW_TOKENS},
     }
@@ -214,6 +217,9 @@ def chat(base_url: str, model: str, system: str, shots: list[tuple[str, str]], u
     start = time.perf_counter()
     with urllib.request.urlopen(request, timeout=900) as response:
         reply = json.load(response)
+    # A reply cut short or left empty can't be parsed, and parse() would log it as the model abstaining; stop instead.
+    if reply.get("done_reason") != "stop" or not reply["message"]["content"].strip():
+        raise ValueError(f"{model}: reply ended {reply.get('done_reason')!r} with no usable content")
     return {
         "text": reply["message"]["content"].strip(),
         "prompt_tokens": reply.get("prompt_eval_count", 0),
