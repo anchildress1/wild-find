@@ -28,4 +28,12 @@ class RetryWindowTest {
         now += 1
         assertFalse(window.open)
     }
+
+    @Test
+    fun `a huge Retry-After is capped instead of overflowing into the past`() {
+        window.rateLimited(Long.MAX_VALUE / 1_000)
+        assertTrue(window.open)
+        now += RetryWindow.MAX_SECONDS * 1_000
+        assertFalse(window.open)
+    }
 }

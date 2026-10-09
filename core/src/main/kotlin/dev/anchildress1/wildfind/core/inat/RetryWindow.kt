@@ -16,13 +16,18 @@ class RetryWindow(private val clock: () -> Long) {
     /** Records a 429 that asked for [seconds], or [DEFAULT_SECONDS] when it gave none; a longer earlier ask stands. */
     @Synchronized
     fun rateLimited(seconds: Long?) {
-        until = maxOf(until, clock() + (seconds ?: DEFAULT_SECONDS) * MILLIS)
+        // A huge Retry-After would overflow to a past time and reopen the window at once.
+        val wait = (seconds ?: DEFAULT_SECONDS).coerceAtMost(MAX_SECONDS)
+        until = maxOf(until, clock() + wait * MILLIS)
     }
 
     /** Window defaults. */
     companion object {
         /** The quiet period when a 429 carries no usable Retry-After. */
         const val DEFAULT_SECONDS = 60L
+
+        /** Longest quiet honored: a day, far past any real Retry-After. */
+        const val MAX_SECONDS = 86_400L
 
         private const val MILLIS = 1_000L
     }
