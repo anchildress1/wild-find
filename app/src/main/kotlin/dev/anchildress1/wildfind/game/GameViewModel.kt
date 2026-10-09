@@ -294,7 +294,14 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
         ui.copy(
             stops = active.progress.targets.map {
                 val species = models.rows[it.row]
-                Stop(it.row, it.common, species.type, it.row in active.progress.found, species.description)
+                Stop(
+                    it.row,
+                    it.common,
+                    species.type,
+                    it.row in active.progress.found,
+                    species.description,
+                    active.progress.canSkip(it.row, models.genus::get),
+                )
             },
         )
     }

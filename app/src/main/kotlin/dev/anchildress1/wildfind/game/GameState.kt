@@ -82,6 +82,7 @@ sealed interface Screen {
  * @property type its plant type, or null for name only
  * @property description what to look for, from USDA traits, or null to show the type alone
  * @property found already found this hunt
+ * @property canSkip a skip would swap in another plant; false once the queue holds none that fits
  */
 data class Stop(
     val row: Int,
@@ -89,6 +90,7 @@ data class Stop(
     val type: PlantType?,
     val found: Boolean,
     val description: String? = null,
+    val canSkip: Boolean = false,
 )
 
 /**

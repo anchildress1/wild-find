@@ -87,6 +87,17 @@ class HuntProgressTest {
         val progress = HuntProgress(false, targets, queue = listOf(Eligible(6, "white oak", 90)))
 
         assertEquals(progress, progress.skip(9, genera::getValue))
+        assertFalse(progress.canSkip(9, genera::getValue))
+    }
+
+    @Test
+    fun `a target can skip only while a replacement waits and it is still open`() {
+        val progress = HuntProgress(false, targets, queue = listOf(Eligible(7, "mistflower", 362)))
+
+        assertTrue(progress.canSkip(9, genera::getValue))
+        assertFalse(HuntProgress(false, targets).canSkip(9, genera::getValue))
+        assertFalse(progress.targetFound(9).canSkip(9, genera::getValue))
+        assertFalse(HuntProgress(true, targets, queue = progress.queue).canSkip(9, genera::getValue))
     }
 
     private val genera = mapOf(

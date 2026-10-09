@@ -172,7 +172,15 @@ private fun MapRoute(state: GameState, vm: GameViewModel) {
 private fun cameraTarget(row: Int?, state: GameState): CameraTarget {
     val stop =
         row?.let(state::stop) ?: return CameraTarget(null, stringResource(R.string.grass), null, 0, state.stops.size)
-    return CameraTarget(row, stop.name, stop.type, state.stops.indexOf(stop) + 1, state.stops.size, stop.description)
+    return CameraTarget(
+        row,
+        stop.name,
+        stop.type,
+        state.stops.indexOf(stop) + 1,
+        state.stops.size,
+        stop.description,
+        stop.canSkip,
+    )
 }
 
 @Composable

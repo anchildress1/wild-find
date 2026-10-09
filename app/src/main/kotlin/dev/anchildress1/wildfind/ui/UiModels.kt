@@ -11,6 +11,7 @@ import dev.anchildress1.wildfind.core.hunt.PlantType
  * @property description what to look for, or null to show the type alone
  * @property number which find this is, 1-based; 0 for the tutorial
  * @property total the hunt's target count
+ * @property canSkip Skip has a plant to swap in; the tutorial can always skip
  */
 data class CameraTarget(
     val row: Int?,
@@ -19,6 +20,7 @@ data class CameraTarget(
     val number: Int,
     val total: Int,
     val description: String? = null,
+    val canSkip: Boolean = true,
 )
 
 /**

@@ -68,10 +68,18 @@ data class HuntProgress(
     fun skip(row: Int, genusOf: (Int) -> String): HuntProgress {
         check(!tutorialPending) { "the tutorial comes first" }
         require(targets.any { it.row == row } && row !in found) { "row $row is not an open target" }
-        val onScreen = targets.filter { it.row != row }.map { genusOf(it.row) }.toSet()
-        val next = queue.firstOrNull { genusOf(it.row) !in onScreen } ?: return this
+        val next = replacement(row, genusOf) ?: return this
         val skipped = targets.first { it.row == row }
         return copy(targets = targets.map { if (it.row == row) next else it }, queue = queue - next + skipped)
+    }
+
+    /** True when [skip] on the open target at [row] would swap in another species. */
+    fun canSkip(row: Int, genusOf: (Int) -> String): Boolean =
+        !tutorialPending && row !in found && replacement(row, genusOf) != null
+
+    private fun replacement(row: Int, genusOf: (Int) -> String): Eligible? {
+        val onScreen = targets.filter { it.row != row }.map { genusOf(it.row) }.toSet()
+        return queue.firstOrNull { genusOf(it.row) !in onScreen }
     }
 
     /** Starts the hunt [hunt] planned. */

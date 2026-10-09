@@ -110,6 +110,7 @@ fun CameraScreen(
             camera,
             enabled = granted && camera.ready && verifier != null,
             practice = target.number == 0,
+            canSkip = target.canSkip,
             onCapture,
             onSkip,
         )
@@ -245,6 +246,7 @@ private fun BottomPanel(
     camera: CameraState,
     enabled: Boolean,
     practice: Boolean,
+    canSkip: Boolean,
     onCapture: () -> Unit,
     onSkip: () -> Unit,
 ) {
@@ -264,18 +266,21 @@ private fun BottomPanel(
                 enabled = enabled,
             )
         }
-        // Not every target grows everywhere: a skip swaps in the next plant from the hunt's queue.
-        TextButton(
-            onSkip,
-            Modifier.fillMaxWidth().heightIn(min = 48.dp),
-            enabled = !camera.checking,
-            colors = ButtonDefaults.textButtonColors(contentColor = Palette.Forest),
-        ) {
-            Text(
-                stringResource(if (practice) R.string.skip_practice else R.string.skip_target),
-                style = MaterialTheme.typography.titleMedium,
-                textDecoration = TextDecoration.Underline,
-            )
+        // Not every target grows everywhere: a skip swaps in the next plant from the hunt's queue. With nothing left
+        // that fits, the offer would only reopen the same plant, so it goes.
+        if (canSkip) {
+            TextButton(
+                onSkip,
+                Modifier.fillMaxWidth().heightIn(min = 48.dp),
+                enabled = !camera.checking,
+                colors = ButtonDefaults.textButtonColors(contentColor = Palette.Forest),
+            ) {
+                Text(
+                    stringResource(if (practice) R.string.skip_practice else R.string.skip_target),
+                    style = MaterialTheme.typography.titleMedium,
+                    textDecoration = TextDecoration.Underline,
+                )
+            }
         }
         RuleLine()
     }
