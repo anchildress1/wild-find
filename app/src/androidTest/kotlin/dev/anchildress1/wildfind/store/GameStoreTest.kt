@@ -12,6 +12,7 @@ import dev.anchildress1.wildfind.core.region.RegionKey
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.File
@@ -34,6 +35,8 @@ class GameStoreTest {
         blockers = listOf(2, 30),
     )
 
+    // A run killed before @After leaves its files behind for the next run to trip on.
+    @Before
     @After
     fun clean() {
         dir.deleteRecursively()
