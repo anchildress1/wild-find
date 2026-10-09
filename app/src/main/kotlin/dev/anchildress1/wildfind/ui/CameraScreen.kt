@@ -274,21 +274,19 @@ private fun BottomPanel(
                 enabled = enabled,
             )
         }
-        // Not every target grows everywhere: a skip swaps in the next plant from the hunt's queue. With nothing left
-        // that fits, the offer would only reopen the same plant, so it goes.
-        if (canSkip) {
-            TextButton(
-                onSkip,
-                Modifier.fillMaxWidth().heightIn(min = 48.dp),
-                enabled = !camera.checking,
-                colors = ButtonDefaults.textButtonColors(contentColor = Palette.Forest),
-            ) {
-                Text(
-                    stringResource(if (practice) R.string.skip_practice else R.string.skip_target),
-                    style = MaterialTheme.typography.titleMedium,
-                    textDecoration = TextDecoration.Underline,
-                )
-            }
+        // Not every target grows everywhere: a skip swaps in the next plant from the hunt's queue. It always shows, but
+        // with nothing left that fits it would only reopen the same plant, so it's disabled.
+        TextButton(
+            onSkip,
+            Modifier.fillMaxWidth().heightIn(min = 48.dp),
+            enabled = canSkip && !camera.checking,
+            colors = ButtonDefaults.textButtonColors(contentColor = Palette.Forest),
+        ) {
+            Text(
+                stringResource(if (practice) R.string.skip_practice else R.string.skip_target),
+                style = MaterialTheme.typography.titleMedium,
+                textDecoration = TextDecoration.Underline,
+            )
         }
         RuleLine()
     }
