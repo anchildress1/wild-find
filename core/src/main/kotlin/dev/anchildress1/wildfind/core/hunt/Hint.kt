@@ -40,11 +40,14 @@ enum class Season {
  */
 data class Hint(val text: String, val season: Season? = null)
 
+/** The most hints a target shows. */
+const val HINTS_PER_TARGET = 3
+
 /**
  * Up to [limit] hints for [month], in-season ones first and the build's ranking kept within each group, so a
  * "blue flowers in summer" hint yields to a fall one in October.
  */
-fun List<Hint>.forMonth(month: Int, limit: Int = 3): List<Hint> {
+fun List<Hint>.forMonth(month: Int, limit: Int = HINTS_PER_TARGET): List<Hint> {
     val now = Season.of(month)
     val (inSeason, rest) = partition { it.season == now }
     val (yearRound, offSeason) = rest.partition { it.season == null }

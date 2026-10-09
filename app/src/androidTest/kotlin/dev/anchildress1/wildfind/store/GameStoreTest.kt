@@ -49,6 +49,18 @@ class GameStoreTest {
         assertEquals(AppFlags(openerSeen = true, tutorialDone = false, region = RegionKey(-34, 151)), store.flags())
         store.save(AppFlags(openerSeen = true, tutorialDone = true, locationDenied = true))
         assertEquals(AppFlags(openerSeen = true, tutorialDone = true, locationDenied = true), store.flags())
+        store.save(AppFlags(foundSpecies = setOf("Quercus nigra", "Acer rubrum")))
+        assertEquals(AppFlags(foundSpecies = setOf("Quercus nigra", "Acer rubrum")), store.flags())
+    }
+
+    @Test
+    fun flagsSavedBeforeFoundSpeciesWereKeptStillLoad() {
+        dir.mkdirs()
+        File(dir, "flags.json").writeText(
+            """{"opener_seen":true,"tutorial_done":true,"region":"34_-85","location_denied":false}""",
+        )
+
+        assertEquals(AppFlags(openerSeen = true, tutorialDone = true, region = RegionKey(34, -85)), store.flags())
     }
 
     @Test

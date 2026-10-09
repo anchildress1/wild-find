@@ -476,10 +476,50 @@ class GameRulesTest {
         assertEquals(setOf(1), hunt.progress.found)
         assertEquals(1, step.game.ui.stars)
         assertSame(crop, step.game.ui.crop)
+        assertEquals(setOf("Acer s1"), step.game.flags.foundSpecies)
         assertEquals(
-            listOf(Command.SaveHunt(hunt), Command.Haptic(GameEffect.Confirm), Command.CancelCapture),
+            listOf(
+                Command.SaveHunt(hunt),
+                Command.SaveFlags(step.game.flags),
+                Command.Haptic(GameEffect.Confirm),
+                Command.CancelCapture,
+            ),
             step.commands,
         )
+    }
+
+    @Test
+    fun `the next hunt leaves out plants found before while others fill it`() {
+        val foundBefore = flags().copy(foundSpecies = setOf("Quercus s0", "Acer s1"))
+        val loading = playing(Screen.Loading, hunt = null, flags = foundBefore)
+        val pull = local(targets + queue)
+
+        val rows = loading.after(Outcome.Pulled(home, pull, offline = false)).game.hunt!!.progress.targets.map {
+            it.row
+        }
+
+        assertEquals(setOf(2, 3, 4), rows.toSet())
+    }
+
+    @Test
+    fun `each Hint tap opens one more hint, capped at what the plant has, and a new hunt starts over`() {
+        val hinted = rows.mapIndexed { row, species ->
+            species.copy(hints = List(if (row == 0) 5 else 1) { Hint("Look $it.") })
+        }
+        val start = Game(GameState(screen = Screen.Camera(0)), flags(), hunt(), hinted)
+
+        val tapped = start.after(
+            *Array(4) {
+                GameEvent.RevealHint(0)
+            },
+            GameEvent.RevealHint(1),
+            GameEvent.RevealHint(1),
+        )
+
+        assertEquals(mapOf(0 to 3, 1 to 1), tapped.game.ui.hintsShown)
+        val again = tapped.game.copy(ui = tapped.game.ui.copy(screen = Screen.Loading))
+            .after(Outcome.Pulled(home, local(targets + queue), offline = false))
+        assertEquals(emptyMap<Int, Int>(), again.game.ui.hintsShown)
     }
 
     @Test

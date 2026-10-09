@@ -124,6 +124,7 @@ data class CameraState(
  * @property mapFocus where the map's Locate button found the rough location
  * @property camera the camera screen's state
  * @property crop the last find's reticle crop, in memory only
+ * @property hintsShown how many hints the kid has opened per target row this hunt, so the Hint button shows the next
  */
 data class GameState(
     val screen: Screen = Screen.Starting,
@@ -136,6 +137,7 @@ data class GameState(
     val mapFocus: MapFocus? = null,
     val camera: CameraState = CameraState(),
     val crop: Pixels? = null,
+    val hintsShown: Map<Int, Int> = emptyMap(),
 ) {
     /** One star per find. */
     val stars: Int get() = stops.count { it.found }
@@ -189,6 +191,9 @@ sealed interface GameEvent : GameInput {
 
     /** Capture tapped. */
     data object Capture : GameEvent
+
+    /** Hint tapped on the camera for [row]: opens the next hint it has not shown yet, or the last when all are open. */
+    data class RevealHint(val row: Int) : GameEvent
 
     /** Swap the camera's target for the next species in the hunt's queue, or move past the grass tutorial. */
     data object Skip : GameEvent

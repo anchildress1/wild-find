@@ -106,4 +106,37 @@ class HuntPickTest {
             assertEquals(6, hunt.targets.size + hunt.queue.size)
         }
     }
+
+    private fun names(vararg rows: Int) = rows.map { table[it].scientific }.toSet()
+
+    @Test
+    fun `plants found before stay out of the hunt while others can fill it`() {
+        repeat(100) { seed ->
+            val hunt = HuntPick(table, Random(seed)).next(local(9, 9, 9, 9, 9, 9), true, found = names(2, 3))
+
+            assertEquals(3, hunt.targets.size)
+            assertTrue(hunt.targets.none { it.row == 2 || it.row == 3 }, hunt.targets.toString())
+        }
+    }
+
+    @Test
+    fun `found plants return only to fill a hunt the others cannot`() {
+        repeat(50) { seed ->
+            val hunt = HuntPick(table, Random(seed)).next(local(9, 9, 9, 9, 9, 9), true, found = names(2, 3, 4, 5))
+
+            assertEquals(3, hunt.targets.size)
+            assertTrue(hunt.targets.any { it.row == 0 || it.row == 1 }, "the one unfound genus is always in")
+            assertEquals(3, hunt.targets.map { table[it.row].genus }.distinct().size)
+        }
+    }
+
+    @Test
+    fun `the skip queue lists unfound plants before found ones`() {
+        repeat(50) { seed ->
+            val hunt = HuntPick(table, Random(seed)).next(local(9, 9, 9, 9, 9, 9), true, found = names(0, 1, 2))
+            val seen = hunt.queue.map { it.row in setOf(0, 1, 2) }
+
+            assertEquals(seen.sorted(), seen, hunt.queue.toString())
+        }
+    }
 }

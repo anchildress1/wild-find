@@ -3,6 +3,7 @@ package dev.anchildress1.wildfind.core.game
 import dev.anchildress1.wildfind.core.frame.Pixels
 import dev.anchildress1.wildfind.core.hunt.ActiveHunt
 import dev.anchildress1.wildfind.core.hunt.AppFlags
+import dev.anchildress1.wildfind.core.hunt.HINTS_PER_TARGET
 import dev.anchildress1.wildfind.core.hunt.HuntPick
 import dev.anchildress1.wildfind.core.hunt.LocalListResult
 import dev.anchildress1.wildfind.core.hunt.SpeciesRow
@@ -228,6 +229,7 @@ private class Turn(private var game: Game, private val random: Random) {
             GameEvent.Skip -> skip(screen)
             GameEvent.ToHunt -> toHunt()
             GameEvent.FinishHunt -> finish()
+            is GameEvent.RevealHint -> revealHint(event.row)
             GameEvent.HuntAgain -> endHunt().also { load() }
             GameEvent.Home -> endHunt().also { show(Screen.Start) }
             GameEvent.OpenGrownUps -> show(Screen.GrownUps(from = screen))
@@ -401,7 +403,9 @@ private class Turn(private var game: Game, private val random: Random) {
 
     private fun pulled(pulled: Outcome.Pulled) {
         val local = (pulled.result as? LocalListResult.Ready)?.local
-        val planned = local?.let { HuntPick(checkNotNull(game.rows), random).next(it, game.flags.tutorialDone) }
+        val planned = local?.let {
+            HuntPick(checkNotNull(game.rows), random).next(it, game.flags.tutorialDone, game.flags.foundSpecies)
+        }
         when {
             pulled.result == LocalListResult.NeedsSignal -> show(Screen.NeedsSignal)
 
@@ -417,7 +421,14 @@ private class Turn(private var game: Game, private val random: Random) {
         }
     }
 
+    // Opens the next hint for [row], capped at what the plant has and the hint limit.
+    private fun revealHint(row: Int) {
+        val available = minOf(HINTS_PER_TARGET, game.rows?.get(row)?.hints?.size ?: 0)
+        update { ui -> ui.copy(hintsShown = ui.hintsShown + (row to minOf((ui.hintsShown[row] ?: 0) + 1, available))) }
+    }
+
     private fun startHunt(active: ActiveHunt) {
+        update { it.copy(hintsShown = emptyMap()) }
         game = game.copy(hunt = active)
         commands += Command.UseVerifier(active.local)
         publish(active)
@@ -484,7 +495,11 @@ private class Turn(private var game: Game, private val random: Random) {
         val updated = active.copy(progress = progress)
         game = game.copy(hunt = updated)
         persist(updated)
-        if (row == null) save(game.flags.copy(tutorialDone = true))
+        if (row == null) {
+            save(game.flags.copy(tutorialDone = true))
+        } else {
+            game.rows?.get(row)?.scientific?.let { save(game.flags.copy(foundSpecies = game.flags.foundSpecies + it)) }
+        }
         publish(updated)
         update { it.copy(crop = crop) }
         commands += Command.Haptic(GameEffect.Confirm)
