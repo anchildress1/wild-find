@@ -146,6 +146,12 @@
     <string name="privacy_photos">Photos never leave this phone</string>
     <string name="privacy_location">Approximate location only, rounded to whole degrees; iNaturalist gets the region center</string>
     <string name="privacy_network">Talks only to iNaturalist, to see which plants grow nearby. Nothing downloads after install</string>
+    <string name="inat_title">iNaturalist and kids</string>
+    <string name="inat_asks">Each hunt asks iNaturalist which plants grow nearby</string>
+    <string name="inat_ip">iNaturalist sees this phone\'s IP address, like any website</string>
+    <string name="inat_terms">iNaturalist\'s terms are for ages 13 and up, or younger with a parent\'s permission</string>
+    <string name="inat_account">Wild Find has no iNaturalist account and posts nothing there</string>
+    <string name="inat_nothing">No photos, names, or exact location go with the request</string>
     <string name="hunting_area">Hunting area</string>
     <string name="hunting_area_detail">%1$s · change it on the map</string>
     <string name="replay_opener">Watch the safety intro again</string>

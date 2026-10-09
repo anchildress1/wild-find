@@ -245,10 +245,16 @@ def hints_for(row: str, page: dict | None, aliases: list[str], kind: str | None,
     names = [row, *aliases]
     found: list[dict] = []
     cut = False
+    failed = None
     if page:
         words = [page["title"], *row.split()[:2]]
         shown = excerpt(page["text"])
-        reply = chat(f"Plant: {row}\n\nArticle sentences:\n{shown or '(no article found)'}")
+        try:
+            reply = chat(f"Plant: {row}\n\nArticle sentences:\n{shown or '(no article found)'}")
+        except ValueError as error:
+            # One runaway reply must not end a 90-minute run; the row keeps no model hints and says why.
+            failed = str(error)
+            reply = {"text": "{}", "cut_off": False}
         cut = reply["cut_off"]
         for aspect, items in parse(reply["text"]).items():
             used: list[str] = []
@@ -278,6 +284,7 @@ def hints_for(row: str, page: dict | None, aliases: list[str], kind: str | None,
         "article": page["title"] if page else None,
         "revid": page["revid"] if page else None,
         "cut_off": cut,
+        "failed": failed,
         "hints": found,
     }
 
@@ -341,7 +348,8 @@ def main() -> int:
             print(f"{n}/{len(todo)} {time.perf_counter() - start:.0f}s", flush=True)
     rank_all(species)
     save(species, done=True)
-    print(f"OK: {HINTS}: {len(species)} rows")
+    failed = [r for r, e in species.items() if e.get("failed")]
+    print(f"OK: {HINTS}: {len(species)} rows, {len(failed)} model replies failed: {failed}")
     return 0
 
 

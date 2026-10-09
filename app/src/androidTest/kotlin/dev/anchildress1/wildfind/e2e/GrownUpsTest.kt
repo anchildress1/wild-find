@@ -26,6 +26,20 @@ class GrownUpsTest : E2eTest() {
     }
 
     @Test
+    fun grownUpsDisclosesWhatINaturalistSeesAndTheAgeRule() {
+        openGrownUps()
+        listOf(
+            R.string.inat_title,
+            R.string.inat_asks,
+            R.string.inat_ip,
+            R.string.inat_terms,
+            R.string.inat_account,
+            R.string.inat_nothing,
+        ).forEach { assertTrue("missing \"${text(it)}\"", has(hasText(text(it)))) }
+        assertTrue("13" in text(R.string.inat_terms) && "parent" in text(R.string.inat_terms))
+    }
+
+    @Test
     fun grownUpsShowsTheHuntingAreaInWholeDegrees() {
         openGrownUps()
         val detail = text(R.string.hunting_area_detail, "").removePrefix(" · ")

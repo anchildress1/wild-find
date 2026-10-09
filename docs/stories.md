@@ -66,6 +66,8 @@ Validation: `make device-test` excludes E2E; `make e2e` uses the separate `.e2e`
 
 ## Hazards worldwide · build-time Gemma
 
+- [ ] **S57 iNaturalist disclosure** (app) — PRD Decisions: iNaturalist disclosure. The grown-ups page has an "iNaturalist and kids" card under Privacy: each hunt asks iNaturalist for nearby plants, it sees the IP address, its terms are 13 and up or a parent's permission, Wild Find has no account there and posts nothing, and no photos, names, or exact location go with the request. Built Oct 9; tick on a `make device-test` pass (`GrownUpsTest`, `BannedCopyTest`).
+
 - [ ] **S56 Build-time hints** (pipeline + core + app) — PRD Decisions: Hints.
   - **Probe gate:** run the Day-4 probe on Gemma 4 12b and 26b. Grade every grounded hint against its quoted sentence and pick a model, or stop if none writes trustworthy hints. Record it in `docs/results/day-4.md`. Run 26b only, with up to two hints per aspect (each with its own quote), no `range` aspect, and a water-edge filter; the Day-4 script asks one per aspect, so the full run is a new script and its numbers replace Day-4's.
   - **Pipeline:** `make hints` writes ranked, auto-checked hints for every playable row to `pipeline/data/hints.json`, which is committed with each hint's evidence and the checks it failed. Claude grades a random 300 against their quotes into `docs/results/day-4/`; a sample over 20% overreach stops the ship.
