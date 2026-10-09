@@ -65,8 +65,6 @@
         <item quantity="other">Your %d finds</item>
     </plurals>
     <string name="hunt_where">%1$s · %2$s</string>
-    <string name="difficulty_low">Low</string>
-    <string name="difficulty_label">Difficulty: Low</string>
     <string name="start_looking">Start looking</string>
     <string name="finish_hunt">Finish hunt</string>
     <string name="stop_found">%1$d, %2$s, %3$s, found</string>

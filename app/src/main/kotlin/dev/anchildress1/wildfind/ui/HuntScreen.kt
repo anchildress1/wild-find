@@ -98,24 +98,12 @@ private fun Header(count: Int, area: String?, onGrownUps: () -> Unit) {
             )
             RoundIconButton(WildIcons.More, stringResource(R.string.grown_ups), onGrownUps)
         }
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            val month = LocalDate.now().month.getDisplayName(TextStyle.FULL, LocalLocale.current.platformLocale)
-            Text(
-                stringResource(R.string.hunt_where, area ?: stringResource(R.string.region_near_you), month),
-                Modifier.weight(1f),
-                style = MaterialTheme.typography.bodyLarge,
-                color = Palette.Ink2,
-            )
-            val label = stringResource(R.string.difficulty_label)
-            Text(
-                stringResource(R.string.difficulty_low),
-                Modifier.semantics { contentDescription = label }
-                    .border(1.5.dp, Palette.Moss, RoundedCornerShape(14.dp))
-                    .padding(horizontal = 14.dp, vertical = 4.dp),
-                style = MaterialTheme.typography.labelMedium,
-                color = Palette.Forest,
-            )
-        }
+        val month = LocalDate.now().month.getDisplayName(TextStyle.FULL, LocalLocale.current.platformLocale)
+        Text(
+            stringResource(R.string.hunt_where, area ?: stringResource(R.string.region_near_you), month),
+            style = MaterialTheme.typography.bodyLarge,
+            color = Palette.Ink2,
+        )
     }
 }
 
