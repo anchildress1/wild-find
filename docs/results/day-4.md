@@ -87,3 +87,30 @@ Question: can a local Gemma 4 write "where to look" hints that stay true to the 
 - Overreach repeats the earlier pattern: Florida-only evidence generalized, propagation advice read as habitat, "tolerates shade" read as "likes shade", "fixes nitrogen in poor soil" read as "grows well in poor soil"
 - Plants with a second hint often got a near-duplicate of the first ("Look for it in woods", "It likes shade"); the repeated-quote check caught 4 of those
 - Caveat: 20 well-documented species, one run at temperature 1.0, graded by the model family that is being judged for the pipeline's grading pass; the full run over the table is still the go/no-go
+
+## Probe 3: probe 2 plus road, swamp, and region checks and a worked example (Oct 9, 2026)
+
+- Script `gemma_hints_3.py`, output `gemma_hints_3.csv` and `gemma_hints_3.log`; quote-only grades in `gemma_hints_3_grades.csv`
+- Same 20 plants, excerpts, model (gemma4:26b), sampler, and machine as probe 2; thinking off
+- Prompt grounded in Google's Gemma 4 prompt-formatting guide: one consolidated system turn, one worked example (a plant outside the test set), Google's recommended sampler kept so runs compare. Added a rule that a place is a habitat, never a country or region
+- New automatic checks: road (roadside, highway, interstate), swamp and wetland words in the water pattern, and a place hint naming a country or region
+
+| Step | Probe 2 | Probe 3 |
+| --- | --- | --- |
+| Hints written by the model | 77 | 79 |
+| Dropped by automatic checks | 7 | 13 (water 7, repeated quote 4, road 3) |
+| Clean, graded | 70 | 66 |
+| Supported by their quote | 60 | 60 |
+| Overreach | 5 | 6 |
+| Unsafe that got through | 3 | 0 |
+| Range hidden in place that got through | 2 | 0 |
+| Supported share of clean | 86% | 91% |
+| Supported share of written | 78% | 76% |
+| Plants with 3 or more supported | 12 | 11 |
+| Plants with at least one | 20 | 20 |
+
+- The new checks work: 0 unsafe or range hints reached grading, and the interstate-highway hint for shining sumac was caught
+- The prompt changes did not move overreach (6 against 5, within the noise of one run at temperature 1.0): Florida-only evidence generalized, "tolerates shade" read as "likes shade", "fixes nitrogen in poor soil" read as "grows well in poor soil", restoration advice read as habitat. These need a grading pass, not a prompt
+- The water check also drops legitimately sourced hints (a fern's "woodlands, stream banks" place hint); that is the intended trade
+- Two supported hints carry no search value ("The tree grows in the wild", "It lives in many kinds of habitats")
+- Grades are Claude's, quote-only. The sample is the same 20 well-documented species
