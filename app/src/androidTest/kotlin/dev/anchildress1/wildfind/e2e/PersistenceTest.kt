@@ -79,6 +79,6 @@ class PersistenceTest : E2eTest() {
         tap(R.string.start_button)
         awaitHunt(text(R.string.start_looking))
         assertEquals(TARGETS, stops().size)
-        assertEquals(WEST_GEORGIA_LAT to WEST_GEORGIA_LNG, savedHunt().region.let { it.lat to it.lng })
+        assertEquals(area.region, savedHunt().region)
     }
 }

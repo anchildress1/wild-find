@@ -24,11 +24,14 @@ import dev.anchildress1.wildfind.Models
 import dev.anchildress1.wildfind.R
 import dev.anchildress1.wildfind.WildFindApp
 import dev.anchildress1.wildfind.core.hunt.ActiveHunt
+import dev.anchildress1.wildfind.core.hunt.AppFlags
 import dev.anchildress1.wildfind.core.hunt.PlantType
+import dev.anchildress1.wildfind.core.region.RegionKey
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
+import org.junit.rules.TestName
 import java.io.File
 
 /**
@@ -42,6 +45,15 @@ abstract class E2eTest {
 
     @get:Rule(order = 1)
     val compose: ComposeTestRule = createEmptyComposeRule()
+
+    @get:Rule(order = 2)
+    val testName = TestName()
+
+    /**
+     * The area this test hunts in. Each test name maps to one of [AREAS], so a run spans several real iNat pulls
+     * instead of proving the hunt in one place only, and a failing test reruns in the same place.
+     */
+    protected val area: Area get() = AREAS[Math.floorMod(testName.methodName.hashCode(), AREAS.size)]
 
     private val instrumentation = InstrumentationRegistry.getInstrumentation()
     protected val context = instrumentation.targetContext!!
@@ -168,12 +180,15 @@ abstract class E2eTest {
         return lat to lng
     }
 
-    /** From a fresh install to the grass practice in West Georgia, through the opener and the map. */
+    /**
+     * From a first launch whose opener is done and whose area is [area] to the grass practice. The opener and the map
+     * have their own tests; walking the arrow pad to Tbilisi would take over a hundred taps.
+     */
     protected fun startFirstHunt() {
-        passOpener()
-        tap(R.string.region_pick_map)
-        pickOnMap(WEST_GEORGIA_LAT, WEST_GEORGIA_LNG)
-        tap(R.string.map_hunt_here)
+        closeApp()
+        graph.store.save(AppFlags(openerSeen = true, region = area.region))
+        launch()
+        tap(R.string.start_button)
         awaitHunt(text(R.string.tutorial_title))
     }
 
@@ -183,7 +198,7 @@ abstract class E2eTest {
             check(!has(hasText(text(R.string.needs_signal)))) {
                 "iNat didn't answer and nothing is cached: the phone needs signal for this test"
             }
-            check(!has(hasText(text(R.string.not_enough)))) { "West Georgia came back short of 3 genera" }
+            check(!has(hasText(text(R.string.not_enough)))) { "${area.name} came back short of 3 genera" }
             has(hasText(ready))
         }
     }
@@ -225,6 +240,14 @@ abstract class E2eTest {
         const val WEST_GEORGIA_LAT = 34
         const val WEST_GEORGIA_LNG = -85
 
+        /** The places `docs/results/day-2/playable_species.log` measured as playable, near and far, busy and sparse. */
+        val AREAS = listOf(
+            Area("West Georgia", RegionKey(WEST_GEORGIA_LAT, WEST_GEORGIA_LNG)),
+            Area("Atlanta", RegionKey(34, -84)),
+            Area("Tbilisi", RegionKey(42, 45)),
+            Area("Borjomi", RegionKey(42, 43)),
+        )
+
         // 360° across halves on each tap: 5 taps reach 11.25°, inside the 12° "Hunt here" bar.
         const val ZOOM_TAPS = 5
         const val MAX_STEPS = 200
@@ -251,3 +274,6 @@ private fun typeLabel(type: PlantType): Int = when (type) {
     PlantType.MOSS -> R.string.type_moss
     PlantType.CONIFER -> R.string.type_conifer
 }
+
+/** A hunting area a test plays in, named for failure messages. */
+data class Area(val name: String, val region: RegionKey)

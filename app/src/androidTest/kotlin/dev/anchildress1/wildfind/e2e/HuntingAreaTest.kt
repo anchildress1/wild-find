@@ -84,7 +84,11 @@ class HuntingAreaTest : E2eTest() {
 
     @Test
     fun pickingWestGeorgiaOnTheMapStartsAHuntThere() {
-        startHuntList()
+        passOpener()
+        tap(R.string.region_pick_map)
+        pickOnMap(WEST_GEORGIA_LAT, WEST_GEORGIA_LNG)
+        tap(R.string.map_hunt_here)
+        awaitHunt(text(R.string.tutorial_title))
         waitFor(hasText(WEST_GEORGIA, substring = true))
         assertEquals(WEST_GEORGIA_LAT to WEST_GEORGIA_LNG, savedHunt().region.let { it.lat to it.lng })
     }
