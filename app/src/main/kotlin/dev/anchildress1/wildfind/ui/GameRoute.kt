@@ -25,6 +25,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import dev.anchildress1.wildfind.R
 import dev.anchildress1.wildfind.WildFindApp
+import dev.anchildress1.wildfind.core.hunt.PlantType
 import dev.anchildress1.wildfind.core.map.Places
 import dev.anchildress1.wildfind.core.map.WorldMap
 import dev.anchildress1.wildfind.game.GameEffect
@@ -171,7 +172,8 @@ private fun MapRoute(state: GameState, vm: GameViewModel) {
 @Composable
 private fun cameraTarget(row: Int?, state: GameState): CameraTarget {
     val stop =
-        row?.let(state::stop) ?: return CameraTarget(null, stringResource(R.string.grass), null, 0, state.stops.size)
+        row?.let(state::stop)
+            ?: return CameraTarget(null, stringResource(R.string.grass), PlantType.GRASS, 0, state.stops.size)
     return CameraTarget(
         row,
         stop.name,

@@ -196,7 +196,7 @@ private fun Trail(stops: List<Stop>, onStop: (Int) -> Unit) {
 
 @Composable
 private fun StopCard(number: Int, stop: Stop, modifier: Modifier, onClick: () -> Unit, onCenter: (Offset) -> Unit) {
-    val type = typeLabel(stop.type)
+    val type = stop.type?.let { typeLabel(it) }
     val spoken = when {
         type == null && stop.found -> stringResource(R.string.stop_plain_found, number, stop.name)
         type == null -> stringResource(R.string.stop_plain_open, number, stop.name)
@@ -239,14 +239,12 @@ private fun StopCard(number: Int, stop: Stop, modifier: Modifier, onClick: () ->
                 style = MaterialTheme.typography.titleMedium.copy(hyphens = Hyphens.Auto),
                 textAlign = TextAlign.Center,
             )
-            (stop.description ?: type)?.let {
-                Text(
-                    it,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Palette.Ink2,
-                    textAlign = TextAlign.Center,
-                )
-            }
+            PlantLine(
+                stop.description,
+                stop.type,
+                Palette.Ink2,
+                textAlign = TextAlign.Center,
+            )
         }
     }
 }

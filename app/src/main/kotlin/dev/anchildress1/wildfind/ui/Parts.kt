@@ -187,21 +187,35 @@ fun Star(size: Dp, modifier: Modifier = Modifier) {
     Image(star, contentDescription = null, modifier.size(size))
 }
 
-/** "a tree", "an herb", or null for no type. */
+/**
+ * The line that tells a kid what to look for: the USDA description, else the plant type in sentence case ("A tree");
+ * nothing when the plant has neither.
+ */
 @Composable
-fun typeLabel(type: PlantType?): String? = type?.let {
-    stringResource(
-        when (it) {
-            PlantType.TREE -> R.string.type_tree
-            PlantType.SHRUB -> R.string.type_shrub
-            PlantType.VINE -> R.string.type_vine
-            PlantType.HERB -> R.string.type_herb
-            PlantType.GRASS -> R.string.type_grass
-            PlantType.FERN -> R.string.type_fern
-            PlantType.MOSS -> R.string.type_moss
-            PlantType.CONIFER -> R.string.type_conifer
-        },
-    )
+fun PlantLine(
+    description: String?,
+    type: PlantType?,
+    color: Color,
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign? = null,
+) {
+    val line = description ?: type?.let { typeLabel(it).replaceFirstChar(Char::titlecase) } ?: return
+    Text(line, modifier, style = MaterialTheme.typography.bodyMedium, color = color, textAlign = textAlign)
 }
+
+/** "a tree", "an herb": the type as it reads mid-sentence. */
+@Composable
+fun typeLabel(type: PlantType): String = stringResource(
+    when (type) {
+        PlantType.TREE -> R.string.type_tree
+        PlantType.SHRUB -> R.string.type_shrub
+        PlantType.VINE -> R.string.type_vine
+        PlantType.HERB -> R.string.type_herb
+        PlantType.GRASS -> R.string.type_grass
+        PlantType.FERN -> R.string.type_fern
+        PlantType.MOSS -> R.string.type_moss
+        PlantType.CONIFER -> R.string.type_conifer
+    },
+)
 
 private const val SPROUT = "sprout"

@@ -146,20 +146,16 @@ private fun TopBar(target: CameraTarget, onBack: () -> Unit) {
                 )
             }
         }
-        // The description names the type too ("A tall tree with…"), so it replaces the bare type when there is one.
         // It runs the bar's full width, so at 200% font it wraps into a few lines, not a narrow column that eats the
         // viewfinder.
-        val look = target.description ?: typeLabel(target.type)?.replaceFirstChar { it.titlecase() }
-        if (look != null) {
-            Row(Modifier.padding(start = 12.dp, top = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-                target.type?.let { PlantArt(it, Modifier.size(24.dp)) }
-                Text(
-                    look,
-                    Modifier.padding(start = 8.dp),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color.White,
-                )
-            }
+        Row(Modifier.padding(start = 12.dp, top = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+            target.type?.let { PlantArt(it, Modifier.size(24.dp)) }
+            PlantLine(
+                target.description,
+                target.type,
+                Color.White,
+                Modifier.padding(start = 8.dp),
+            )
         }
     }
 }
