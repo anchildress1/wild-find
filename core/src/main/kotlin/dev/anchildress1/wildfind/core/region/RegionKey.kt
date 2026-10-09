@@ -13,8 +13,14 @@ data class RegionKey(val lat: Int, val lng: Int) {
 
     /** Rounds device coordinates into a region. */
     companion object {
-        /** Rounds coarse coordinates to whole degrees; ties round toward positive infinity. */
+        /**
+         * Rounds coarse coordinates to whole degrees; ties round toward positive infinity, and longitude wraps into
+         * -180..179 so both sides of the antimeridian share one key, as the map pick does.
+         */
         fun from(latitude: Double, longitude: Double): RegionKey =
-            RegionKey(latitude.roundToInt(), longitude.roundToInt())
+            RegionKey(latitude.roundToInt(), Math.floorMod(longitude.roundToInt() + HALF_TURN, FULL_TURN) - HALF_TURN)
+
+        private const val HALF_TURN = 180
+        private const val FULL_TURN = 360
     }
 }
