@@ -11,8 +11,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.concurrent.ConcurrentHashMap
 
-// The art set is fixed and small, so it stays decoded for the process; welcome's sheet alone is ~25 MB of pixels and
-// would otherwise decode again on the main thread every time a screen showing it mounts.
+// The art set is fixed and small (the star and eight plant pictures), so it stays decoded for the process instead of
+// decoding again every time a screen showing it mounts.
 private val decoded = ConcurrentHashMap<String, ImageBitmap>()
 
 /** The still image at asset [path], decoded once per process off the main thread; null until that decode finishes. */
