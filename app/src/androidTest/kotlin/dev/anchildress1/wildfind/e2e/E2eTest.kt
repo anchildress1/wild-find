@@ -87,6 +87,9 @@ abstract class E2eTest {
     }
 
     private fun clearStore() {
+        // The last test's saves outlive its activity; let any still queued land first, or one could rewrite the hunt
+        // this test just deleted.
+        runBlocking(graph.disk) {}
         val dir = context.noBackupFilesDir
         listOf("flags.json", "hunt.json").forEach { File(dir, it).delete() }
         File(dir, "inat").deleteRecursively()

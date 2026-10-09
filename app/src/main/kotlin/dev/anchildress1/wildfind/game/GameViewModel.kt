@@ -50,9 +50,6 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
     private val retry = RetryWindow(SystemClock::elapsedRealtime)
     private var loading: Job? = null
 
-    // Store writes run one at a time and in order, so a quick find-then-finish never lands out of order.
-    private val disk = Dispatchers.IO.limitedParallelism(1)
-
     /** Screen state. */
     val ui: StateFlow<GameState> = state.asStateFlow()
 
@@ -67,7 +64,7 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
 
     init {
         viewModelScope.launch { models() }
-        viewModelScope.launch { dispatch(Outcome.FlagsRead(withContext(disk) { graph.store.flags() })) }
+        viewModelScope.launch { dispatch(Outcome.FlagsRead(withContext(graph.disk) { graph.store.flags() })) }
     }
 
     /** The single entry point for what the kid did. */
@@ -97,13 +94,11 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
 
     private fun run(command: Command) {
         when (command) {
-            is Command.SaveFlags -> viewModelScope.launch(disk) { graph.store.save(command.flags) }
+            is Command.SaveFlags -> graph.write { save(command.flags) }
 
-            is Command.SaveHunt -> viewModelScope.launch(disk) {
-                graph.store.save(command.hunt, graph.models.await().tableVersion)
-            }
+            is Command.SaveHunt -> graph.write { save(command.hunt, graph.models.await().tableVersion) }
 
-            Command.ClearHunt -> viewModelScope.launch(disk) { graph.store.clearHunt() }
+            Command.ClearHunt -> graph.write { clearHunt() }
 
             is Command.UseVerifier -> useVerifier(command.local)
 
@@ -115,7 +110,7 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
 
             Command.ReadHunt -> viewModelScope.launch {
                 val tableVersion = models().tableVersion
-                dispatch(Outcome.SavedHunt(withContext(disk) { graph.store.hunt(tableVersion) }))
+                dispatch(Outcome.SavedHunt(withContext(graph.disk) { graph.store.hunt(tableVersion) }))
             }
 
             is Command.Pull -> pull(command.region)
