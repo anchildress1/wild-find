@@ -21,7 +21,7 @@ __pycache__/
 .ruff_cache/
 .pytest_cache/
 
-# Models: downloaded at runtime or sideloaded with adb, never committed
+# Models: built into app/generated/ by make assets, never committed
 *.onnx
 *.safetensors
 
@@ -37,7 +37,7 @@ keystore.properties
 .DS_Store
 .claude/
 
-# Local model cache for sideloading
+# Pipeline download cache: model weights and API replies
 .models/
 
 # Bundled models and tables from make assets; generated, never committed
