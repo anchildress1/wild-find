@@ -15,8 +15,8 @@ enum class BriarState(val sheet: String, val replayAfterMillis: Long? = null, va
     /** The hazard card: Briar holds up a paw as leaves grow around him, rests, and warns again. */
     WARNING("warning", replayAfterMillis = REST_MS),
 
-    /** First launch, the tutorial, and the hunt list: the opener's wave, resting between plays. */
-    WELCOME("opener", replayAfterMillis = REST_MS),
+    /** First launch, the tutorial, and the hunt list: the warning clip's raised paw, resting between plays. */
+    WELCOME("warning", replayAfterMillis = REST_MS),
 
     /** The found screen: Briar cheers, rests, and cheers again, with the hunt-complete cheer. */
     FOUND("complete", replayAfterMillis = REST_MS),

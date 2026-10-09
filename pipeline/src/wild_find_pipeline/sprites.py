@@ -28,7 +28,7 @@ STAR_PX = 256
 # Faint glow pixels below this alpha don't count as the plant's edge.
 ALPHA_FLOOR = 16
 # name: (source video, first frame kept, end frame). The cut drops the still stretch at each end, at frames that
-# match so the loop joins without a jump. `found` plays `complete`'s clip, and `welcome` plays `opener`'s.
+# match so the loop joins without a jump. `found` plays `complete`'s clip, and `welcome` plays `warning`'s.
 VIDEOS = {
     "opener": ("briar-welcome.mp4", 10, 217),
     "warning": ("briar-warning.mp4", 28, 225),

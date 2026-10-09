@@ -158,8 +158,7 @@ fun briarText(state: BriarState?): String = stringResource(
     when (state) {
         null -> R.string.briar_idle
         BriarState.OPENER -> R.string.briar_opener
-        BriarState.WARNING -> R.string.briar_warning
-        BriarState.WELCOME -> R.string.briar_welcome
+        BriarState.WARNING, BriarState.WELCOME -> R.string.briar_warning
         BriarState.FOUND -> R.string.briar_found
         BriarState.COMPLETE -> R.string.briar_complete
     },
