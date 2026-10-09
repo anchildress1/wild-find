@@ -33,6 +33,9 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.rules.TestName
 import java.io.File
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
+import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.math.abs
 
 /**
@@ -88,8 +91,10 @@ abstract class E2eTest {
 
     private fun clearStore() {
         // The last test's saves outlive its activity; let any still queued land first, or one could rewrite the hunt
-        // this test just deleted.
-        runBlocking(graph.disk) {}
+        // this test just deleted. A plain latch: runBlocking inside the compose rule's own coroutine hides the UI.
+        val flushed = CountDownLatch(1)
+        graph.disk.dispatch(EmptyCoroutineContext) { flushed.countDown() }
+        check(flushed.await(UI_TIMEOUT, TimeUnit.MILLISECONDS)) { "store writes never drained" }
         val dir = context.noBackupFilesDir
         listOf("flags.json", "hunt.json").forEach { File(dir, it).delete() }
         File(dir, "inat").deleteRecursively()
