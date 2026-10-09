@@ -6,6 +6,7 @@ Run from the repo root with Ollama serving and every model already pulled (`olla
     uv --project pipeline run python -I docs/results/day-4/gemma_hints.py gemma4:e2b gemma4:12b
 
 Each plant gets three hints: place (what kind of place), light (sun or shade), ground (wet or dry, soil).
+When the grounded arm leaves light or ground null, a clear USDA PLANTS rating fills it (see USDA_HINTS).
 Two arms per model, one set of three per target in each:
   name_only  the scientific name alone, as Day 2 did (docs/results/day-2/gemma_describe.py), now for where to look.
   grounded   the name plus sentences pulled from the plant's English Wikipedia article; for each hint the model must
@@ -32,7 +33,9 @@ from datetime import datetime
 from pathlib import Path
 from statistics import median
 
-from wild_find_pipeline.descriptions import BANNED
+from wild_find_pipeline import usda
+from wild_find_pipeline.descriptions import BANNED, usda_traits
+from wild_find_pipeline.paths import SYNONYMS
 from wild_find_pipeline.toxicity import SENTENCE, TOXICITY, articles
 
 OUT = Path(__file__).resolve().parent
@@ -55,6 +58,18 @@ SETTING = re.compile(
     r"slope\w*|floodplain\w*|bluff\w*|thicket\w*|open)\b",
     re.I,
 )
+# USDA ratings fill a grounded hint the article left null. The value codes were decoded on Oct 9 from species with known
+# answers, because the ontology lookup was unreachable: shade high = Cornus florida, low = Pinus taeda and Salix nigra;
+# wet soil high = Typha latifolia and Taxodium distichum, none = Taraxacum officinale. Only those clear ends are used,
+# and "tolerates shade" never becomes "lives in shade", so the high-shade sentence says "can grow".
+USDA_TRAITS = ("ShadeTolerance", "AnaerobicSoilTolerance")
+USDA_HINTS = {
+    ("light", "PATO_0002394"): "Look in open, sunny spots.",
+    ("light", "PATO_0002393"): "It can grow in shade, like under trees.",
+    ("ground", "PATO_0002393"): "Look where the ground is wet or soggy.",
+    ("ground", "260413007"): "Look on ground that drains well, not soggy.",
+}
+USDA_TRAIT_OF = {"light": "ShadeTolerance", "ground": "AnaerobicSoilTolerance"}
 # What an 8-year-old shouldn't be told to do, beyond descriptions.BANNED (safety claims).
 ACTIONS = re.compile(r"\b(?:eat|eating|eaten|touch|touching|pick|picking|taste|tasting)\b", re.I)
 
@@ -209,8 +224,20 @@ def parse(text: str, grounded: bool) -> dict[str, tuple[str | None, str | None]]
     return out
 
 
-def ask(base_url: str, model: str, arm: str, target: dict, article: dict | None) -> dict:
-    """Run one target through one arm and return its CSV row, checks included."""
+def usda_fallback(aspect: str, names: list[str], usda: dict[str, dict[str, list[str]]]) -> tuple[str, str] | None:
+    """A hint and its USDA evidence for light or ground from the first name with one clear rating, else None."""
+    trait = USDA_TRAIT_OF.get(aspect)
+    for name in names:
+        values = usda.get(name, {}).get(trait, [])
+        if len(values) == 1 and (aspect, values[0]) in USDA_HINTS:
+            return USDA_HINTS[aspect, values[0]], f"USDA {trait} {values[0]} ({name})"
+    return None
+
+
+def ask(
+    base_url: str, model: str, arm: str, target: dict, article: dict | None, usda: tuple[list[str], dict] = ([], {})
+) -> dict:
+    """Run one target through one arm and return its CSV row, checks included; `usda` is (names, ratings)."""
     grounded = arm == "grounded"
     shown = excerpt(article["text"]) if grounded and article else ""
     if grounded:
@@ -230,11 +257,17 @@ def ask(base_url: str, model: str, arm: str, target: dict, article: dict | None)
         "excerpt_chars": len(shown),
         "article_revid": article["revid"] if article else "",
     }
+    names, ratings = usda
     for aspect, (hint, evidence) in parse(reply["text"], grounded).items():
-        found = issues(hint, evidence, article["text"] if article else None, target, grounded)
+        source = "model" if hint else ""
+        if grounded and hint is None and (fallback := usda_fallback(aspect, names, ratings)):
+            (hint, evidence), source = fallback, "usda"
+        # USDA text is ours, not the model's, so only the article quote check is skipped for it.
+        found = issues(hint, evidence, article["text"] if article else None, target, grounded and source != "usda")
         row |= {
             f"{aspect}_hint": hint or "",
             f"{aspect}_evidence": evidence or "",
+            f"{aspect}_source": source,
             f"{aspect}_abstained": hint is None,
             f"{aspect}_issues": "; ".join(found),
         }
@@ -264,6 +297,7 @@ def hints_of(row: dict) -> list[dict]:
             "aspect": a,
             "hint": row[f"{a}_hint"],
             "abstained": row[f"{a}_abstained"],
+            "source": row[f"{a}_source"],
             "issues": row[f"{a}_issues"],
         }
         for a in ASPECTS
@@ -283,11 +317,12 @@ def summary(rows: list[dict]) -> list[str]:
             clean = [h for h in written if not h["issues"]]
             fake = [h for h in written if "evidence not in article" in h["issues"]]
             full = [r for r in part if not any(h["abstained"] for h in hints_of(r))]
+            usda = [h for h in written if h["source"] == "usda"]
             cut = [r for r in part if r["cut_off"]]
             lines.append(
                 f"{model:<14} {arm:<9} targets {len(part)}, all 3 hints {len(full)}, "
-                f"hints {len(written)}/{len(slots)}, clean {len(clean)}, fake evidence {len(fake)}, "
-                f"prompts cut {len(cut)}, median {median(r['seconds'] for r in part):.1f}s"
+                f"hints {len(written)}/{len(slots)} ({len(usda)} from USDA), clean {len(clean)}, "
+                f"fake evidence {len(fake)}, prompts cut {len(cut)}, median {median(r['seconds'] for r in part):.1f}s"
             )
     return lines
 
@@ -311,6 +346,8 @@ def main() -> int:
 
     chosen = targets(args.targets)
     wiki = articles([t["name"] for t in chosen])
+    ratings = usda_traits(usda.archive(), USDA_TRAITS)
+    aliases = json.loads(SYNONYMS.read_text())["species"]
     log = [
         f"# {datetime.now().astimezone():%Y-%m-%d %H:%M %Z}, {chip()}, {platform.platform()}, "
         f"Ollama at {args.base_url}, models {', '.join(f'{m} @ {installed[m]}' for m in args.models)}, "
@@ -322,12 +359,14 @@ def main() -> int:
     for model in args.models:
         for arm in ("name_only", "grounded"):
             for target in chosen:
-                row = ask(args.base_url, model, arm, target, wiki[target["name"]])
+                names = [target["name"], *aliases.get(target["name"], [])]
+                row = ask(args.base_url, model, arm, target, wiki[target["name"]], (names, ratings))
                 rows.append(row)
                 log.append(f"{model} {arm} {target['name']} ({target['common']}):")
                 for h in hints_of(row):
                     flag = f"  [{h['issues']}]" if h["issues"] else ""
-                    log.append(f"    {h['aspect']:<6} {h['hint'] or '(abstained)'}{flag}")
+                    tag = " (USDA)" if h["source"] == "usda" else ""
+                    log.append(f"    {h['aspect']:<6} {h['hint'] or '(abstained)'}{tag}{flag}")
                 print("\n".join(log[-4:]), flush=True)
     log += ["", *summary(rows)]
     log.append("# Grades go in gemma_hints_grades.csv: each hint judged against its article.")

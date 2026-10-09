@@ -94,12 +94,12 @@ MAX_FEATURES = 2
 BANNED = ("safe", "harmless", "not poisonous", "okay to touch", "ok to touch")
 
 
-def usda_traits(archive: bytes) -> dict[str, dict[str, list[str]]]:
-    """Binomial to {trait: sorted values} for TRAITS, from its species row when it has any, else its infraspecific rows.
+def usda_traits(archive: bytes, wanted: tuple[str, ...] = TRAITS) -> dict[str, dict[str, list[str]]]:
+    """Binomial to {trait: sorted values} for `wanted`, from its species row if it has any, else its infraspecific rows.
 
     Heights keep their numbers; every other value is the last IRI segment.
     """
-    found, taxa = usda.measurements(archive, lambda r: r["measurementType"].rsplit("/", 1)[-1] in TRAITS)
+    found, taxa = usda.measurements(archive, lambda r: r["measurementType"].rsplit("/", 1)[-1] in wanted)
     facts = (
         (taxon, (r["measurementType"].rsplit("/", 1)[-1], r["measurementValue"].rsplit("/", 1)[-1]))
         for taxon, r in found
