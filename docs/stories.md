@@ -41,6 +41,8 @@ The Oct 7 redesign (PRD Redesign) dropped the build-time menu: the old S10–S16
 
 ## App · Oct 8–9
 
+Validation: `make device-test` excludes E2E; `make e2e` uses the separate `.e2e` app package and resets only that package's game state.
+
 - [x] **S30 Briar host** — Compose sprite player for the PRD sheet contract, three states (welcome, found, complete) picked by screens; Briar stays off hunt pages; each state sheet plays once, then the 16-frame `idle` loops until Briar leaves the screen, except `complete`, which loops
 - [x] **S31 Safety opener** — R1, placeholder art, replayable, banned-copy check in tests (`BannedCopyTest` scans every shipped string and plural on the phone)
 - [x] **S32 Location** — "Use my area" (coarse permission only, never re-asked after a denial) or "Pick on a map": the built-in Natural Earth map, crosshairs snapped to whole degrees, "Hunt here" at 12° across or less, 1° arrow pad; the map opens on the rough location when allowed; the area reads "34°N, 85°W · Georgia" from offline Natural Earth names; coverage message when an area comes up short; R2, R7

@@ -63,6 +63,9 @@ abstract class E2eTest {
 
     @Before
     fun cleanLaunch() {
+        check(context.packageName == "dev.anchildress1.wildfind.e2e") {
+            "E2E tests reset their store; run make e2e to use the isolated application package"
+        }
         clearStore()
         launch()
     }

@@ -42,7 +42,7 @@ android {
         }
         debug {
             // Debug and release coexist on the single test phone, so a release install never wipes gate-harness runs not yet pulled.
-            applicationIdSuffix = ".debug"
+            applicationIdSuffix = if (providers.gradleProperty("isolatedE2e").orNull == "true") ".e2e" else ".debug"
         }
     }
 
