@@ -23,6 +23,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import dev.anchildress1.wildfind.R
 import dev.anchildress1.wildfind.ui.theme.Palette
@@ -100,7 +101,7 @@ private fun Link(icon: ImageVector, title: String, detail: String?, onClick: () 
     Row(
         Modifier.fillMaxWidth().heightIn(
             min = 64.dp,
-        ).clickable(onClick = onClick).padding(horizontal = 18.dp, vertical = 8.dp),
+        ).clickable(role = Role.Button, onClick = onClick).padding(horizontal = 18.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(icon, contentDescription = null, Modifier.size(24.dp), tint = Palette.Forest)
