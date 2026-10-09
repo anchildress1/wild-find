@@ -27,6 +27,25 @@ data class ActiveHunt(
     /** Every local row the hunt knows, for naming what the camera sees. */
     val local: Set<Int> get() = (eligible + blockers).toSet()
 
+    /** Whether this saved hunt still belongs to [selected] and obeys [table]'s playable-row contract. */
+    fun validFor(selected: RegionKey?, table: List<SpeciesRow>): Boolean {
+        if (region != selected || !validPool(eligible, table, playable = true)) return false
+        return validPool(blockers, table, playable = false) && validPlan(table)
+    }
+
+    private fun validPlan(table: List<SpeciesRow>): Boolean {
+        val planned = progress.targets + progress.queue
+        return planned.map { it.row }.toSet() == eligible.toSet() &&
+            planned.distinctBy { it.row }.size == planned.size &&
+            progress.targets.size == HuntPick.TARGETS &&
+            progress.targets.distinctBy { table[it.row].genus }.size == HuntPick.TARGETS
+    }
+
+    private fun validPool(pool: List<Int>, table: List<SpeciesRow>, playable: Boolean): Boolean =
+        pool.distinct().size == pool.size && pool.all { row ->
+            row in table.indices && table[row].playable == playable
+        }
+
     /** Verify row 4's goal for the target at [row], scored over [table] whose rows have [genus]. */
     fun goal(table: FloatMatrix, genus: List<String>, row: Int): TargetGoal =
         TargetGoal(table, genus, row, eligible.toIntArray(), blockers.toIntArray())

@@ -121,6 +121,34 @@ class GameRulesTest {
     }
 
     @Test
+    fun `invalid or differently located saved hunts are cleared before rows are indexed`() {
+        val loading = Game(flags = flags()).after(Outcome.ModelsReady(rows)).game
+        val saved = hunt()
+        val invalid = listOf(
+            saved.copy(region = away),
+            saved.copy(eligible = saved.eligible + 99),
+            saved.copy(
+                progress = saved.progress.copy(
+                    targets = targets.map {
+                        it.copy(row = it.row + 99)
+                    },
+                    queue = emptyList(),
+                ),
+                eligible = listOf(99, 100, 101),
+            ),
+            saved.copy(progress = saved.progress.copy(queue = listOf(Eligible(99, "missing", 10)))),
+            saved.copy(progress = saved.progress.copy(queue = listOf(queue[0], queue[0], queue[1]))),
+        )
+        invalid.forEach {
+            val step = loading.after(Outcome.SavedHunt(it))
+            assertEquals(Screen.Start, step.game.ui.screen)
+            assertNull(step.game.hunt)
+            assertEquals(listOf(Command.ClearHunt), step.commands)
+            assertTrue(step.game.ui.stops.isEmpty())
+        }
+    }
+
+    @Test
     fun `the area label names the place, and stays empty without an area`() {
         val file = File("../app/generated/assets/places.bin")
         check(file.isFile) { "$file missing; run make assets" }

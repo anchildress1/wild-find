@@ -303,6 +303,10 @@ private class Turn(private var game: Game, private val random: Random) {
 
     private fun resumed(saved: ActiveHunt?) {
         if (saved == null) return show(Screen.Start)
+        if (!saved.validFor(game.flags.region, game.rows.orEmpty())) {
+            commands += Command.ClearHunt
+            return show(Screen.Start)
+        }
         startHunt(saved)
         show(
             when {
