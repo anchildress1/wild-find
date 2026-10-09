@@ -1,4 +1,4 @@
-.PHONY: setup build install device-test e2e assets sprites toxicity synonyms plant-types descriptions hazard-vectors labels crop-reference gate-harness gate-pull reference test pipeline-test lint ktlint detekt android-lint pipeline-lint actionlint secret-scan ai-checks clean
+.PHONY: setup build install device-test e2e assets sprites toxicity synonyms plant-types descriptions hints hazard-vectors labels crop-reference gate-harness gate-pull reference test pipeline-test lint ktlint detekt android-lint pipeline-lint actionlint secret-scan ai-checks clean
 
 SHELL := /bin/bash
 
@@ -87,6 +87,11 @@ plant-types:
 # Rebuilds the committed pipeline/data/descriptions.json: a generic type sentence per row.
 descriptions:
 	$(UV) run --group reference python -W error -m wild_find_pipeline.descriptions
+
+# Rebuilds the committed pipeline/data/hints.json: local Gemma 4 26b over each playable row's Wikipedia article through
+# Ollama, about 90 minutes; resumes from a partial file, and CI never runs it.
+hints:
+	$(UV) run --group reference python -W error -m wild_find_pipeline.hints
 
 # Rebuilds the committed hazard_vectors.json; pulls the 3.9 GB BioCLIP teacher (as does reference), so CI runs neither.
 hazard-vectors:

@@ -25,6 +25,8 @@ SYNONYMS = REPO / "pipeline/data/synonyms.json"
 PLANT_TYPES = REPO / "pipeline/data/plant_types.json"
 # Kid-level description per species-table row, templated from USDA traits; committed (make descriptions).
 DESCRIPTIONS = REPO / "pipeline/data/descriptions.json"
+# Graded-later "where to look" hints per playable row, from a local Gemma 4 run; committed (build step hints).
+HINTS = REPO / "pipeline/data/hints.json"
 
 
 def pin(model: str, manifest: Path = MANIFEST) -> dict[str, str]:
