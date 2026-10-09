@@ -127,7 +127,8 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
             is Screen.Region -> screen.back?.let(::show)
             is Screen.Map -> screen.back?.let(::show)
             is Screen.GrownUps -> show(screen.from)
-            is Screen.Camera, is Screen.Found -> toHunt()
+            is Screen.Camera -> toHunt()
+            is Screen.Found -> if (hunt?.progress?.complete == true) show(Screen.Complete) else toHunt()
             Screen.Complete -> onEvent(GameEvent.Home)
             else -> Unit
         }
