@@ -4,8 +4,8 @@ import urllib.parse
 
 import pytest
 
+from wild_find_pipeline.gbif import GBIF
 from wild_find_pipeline.plant_types import HABIT, habit_type, plant_type, taxonomy, usda_habits
-from wild_find_pipeline.toxicity import GBIF
 
 TERMS = "http://eol.org/schema/terms/"
 

@@ -1,6 +1,8 @@
 """Label sets and the text template the BioCLIP text encoder embeds."""
 
-from wild_find_pipeline.paths import pin
+import json
+
+from wild_find_pipeline.paths import ensure_artifact, pin
 
 # Plant labels embed by scientific name: common names share words ("oak" in "poison oak"), and on Day 1 a
 # white oak photo scored "poison oak" top-1 on both BioCLIP models until labels switched to scientific names.
@@ -59,6 +61,17 @@ def embedding_versions() -> dict[str, str]:
 def lacking_hazards(names: list[str] | set[str]) -> list[str]:
     """PRD hazard species missing from a species list, in HAZARDS order."""
     return [taxon for taxon in HAZARDS.values() if taxon not in names]
+
+
+def taxa_names() -> list[str]:
+    """Scientific names of the pinned BioCLIP Mobile species table, in row order."""
+    return [entry["scientific"] for entry in json.loads(ensure_artifact("taxa_labels").read_text())]
+
+
+def table_rows() -> list[str]:
+    """Every row the app's species table ships: the pinned table's names, then the hazards it lacks."""
+    names = taxa_names()
+    return names + lacking_hazards(names)
 
 
 def is_hazard(scientific: str) -> bool:

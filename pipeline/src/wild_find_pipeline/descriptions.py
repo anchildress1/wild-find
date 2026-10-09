@@ -7,17 +7,13 @@ and season, fall color, and a leaf color other than plain green. A row with none
 the app falls back to the type label.
 """
 
-import csv
-import io
 import json
 import sys
-import tarfile
 from datetime import date
-from pathlib import Path
 
-from wild_find_pipeline.labels import lacking_hazards
-from wild_find_pipeline.paths import DESCRIPTIONS, PLANT_TYPES, SYNONYMS, ensure_artifact
-from wild_find_pipeline.toxicity import USDA_SHA256, USDA_URL, usda_archive
+from wild_find_pipeline import usda
+from wild_find_pipeline.labels import table_rows
+from wild_find_pipeline.paths import DESCRIPTIONS, PLANT_TYPES, SYNONYMS
 
 # USDA trait terms, by the last segment of their measurementType IRI.
 HEIGHT = "TO_0000207"
@@ -103,35 +99,18 @@ def usda_traits(archive: bytes) -> dict[str, dict[str, list[str]]]:
 
     Heights keep their numbers; every other value is the last IRI segment.
     """
-    csv.field_size_limit(sys.maxsize)
-    with tarfile.open(fileobj=io.BytesIO(archive)) as tar:
-        members = {Path(m.name).name: m for m in tar.getmembers()}
-
-        def rows(member: str):
-            text = tar.extractfile(members[member]).read().decode()
-            return csv.DictReader(io.StringIO(text), delimiter="\t", quoting=csv.QUOTE_NONE)
-
-        facts: dict[str, list[tuple[str, str]]] = {}
-        for r in rows("measurement_or_fact_specific.tab"):
-            trait = r["measurementType"].rsplit("/", 1)[-1]
-            if trait in TRAITS:
-                facts.setdefault(r["occurrenceID"], []).append((trait, r["measurementValue"].rsplit("/", 1)[-1]))
-        by_taxon: dict[str, list[tuple[str, str]]] = {}
-        for r in rows("occurrence_specific.tab"):
-            if r["occurrenceID"] in facts:
-                by_taxon.setdefault(r["taxonID"], []).extend(facts[r["occurrenceID"]])
-        taxa = {r["taxonID"]: r for r in rows("taxon.tab")}
-    species: dict[str, dict[str, set[str]]] = {}
-    infra: dict[str, dict[str, set[str]]] = {}
-    for taxon, found in by_taxon.items():
-        row = taxa.get(taxon)
-        if row is None or row["taxonRank"] == "genus":
-            continue
-        name = " ".join(row["scientificName"].split()[:2])
-        into = (species if row["taxonRank"] == "species" else infra).setdefault(name, {})
-        for trait, value in found:
-            into.setdefault(trait, set()).add(value)
-    return {name: {t: sorted(v) for t, v in traits.items()} for name, traits in (infra | species).items()}
+    found, taxa = usda.measurements(archive, lambda r: r["measurementType"].rsplit("/", 1)[-1] in TRAITS)
+    facts = (
+        (taxon, (r["measurementType"].rsplit("/", 1)[-1], r["measurementValue"].rsplit("/", 1)[-1]))
+        for taxon, r in found
+    )
+    out: dict[str, dict[str, list[str]]] = {}
+    for name, pairs in usda.by_binomial(facts, taxa).items():
+        traits: dict[str, set[str]] = {}
+        for trait, value in pairs:
+            traits.setdefault(trait, set()).add(value)
+        out[name] = {t: sorted(v) for t, v in traits.items()}
+    return out
 
 
 def article(word: str) -> str:
@@ -232,22 +211,21 @@ def describe(kind: str | None, usda: list[tuple[str, dict[str, list[str]]]]) -> 
 
 def main() -> int:
     """Write descriptions.json: one entry per species-table row, plus the rules that made them."""
-    names = [e["scientific"] for e in json.loads(ensure_artifact("taxa_labels").read_text())]
-    rows = names + lacking_hazards(names)
+    rows = table_rows()
     aliases = json.loads(SYNONYMS.read_text())["species"]
     types = json.loads(PLANT_TYPES.read_text())["species"]
     if missing := [row for row in rows if row not in aliases or row not in types]:
         raise ValueError(f"synonyms or plant types lack {len(missing)} rows, e.g. {missing[:3]}")
-    traits = usda_traits(usda_archive())
+    traits = usda_traits(usda.archive())
     species = {}
     for row in sorted(rows):
-        usda = [(name, traits[name]) for name in [row, *aliases[row]] if name in traits]
-        species[row] = describe(types[row]["type"], usda)
+        matched = [(name, traits[name]) for name in [row, *aliases[row]] if name in traits]
+        species[row] = describe(types[row]["type"], matched)
     DESCRIPTIONS.write_text(
         json.dumps(
             {
                 "built": date.today().isoformat(),
-                "source": {"usda": {"url": USDA_URL, "sha256": USDA_SHA256}},
+                "source": {"usda": {"url": usda.USDA_URL, "sha256": usda.USDA_SHA256}},
                 "rule": {
                     "usda_names": "row name, then its synonyms.json aliases in order; first that yields a sentence",
                     "noun_by_type": {str(k): v for k, v in NOUNS.items()},

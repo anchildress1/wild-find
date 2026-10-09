@@ -4,8 +4,8 @@ import urllib.parse
 import pytest
 
 from wild_find_pipeline import synonyms
+from wild_find_pipeline.gbif import GBIF
 from wild_find_pipeline.synonyms import aliases, backbone_names, binomial, cached_get, epithet_stem
-from wild_find_pipeline.toxicity import GBIF
 
 
 def fake_gbif(matches: dict[str, dict], usages: dict[int, dict], pages: dict[int, list[list[dict]]]):

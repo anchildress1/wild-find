@@ -11,6 +11,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
+from wild_find_pipeline.gbif import USER_AGENT
 from wild_find_pipeline.labels import HAZARDS, SCENES, prompt
 from wild_find_pipeline.paths import MODEL_CACHE, REFERENCE_DIR, ensure_artifact, pin
 
@@ -19,7 +20,6 @@ FIXTURE_WORD = "oak"
 FIXTURE_TAXON = "Quercus"
 FIXTURE_URL = "https://inaturalist-open-data.s3.amazonaws.com/photos/664105168/medium.jpg"
 FIXTURE_SOURCE = "https://www.inaturalist.org/observations/363799243 (CC0)"
-USER_AGENT = "wild-find-pipeline/0.1 (+https://github.com/anchildress1/wild-find)"
 
 
 def center_crop(img: Image.Image, width: int, height: int) -> Image.Image:

@@ -4,15 +4,16 @@ import tarfile
 import pytest
 
 from wild_find_pipeline import toxicity
+from wild_find_pipeline.gbif import GBIF, match_url
 from wild_find_pipeline.toxicity import (
     MIN_CHARS,
     flag,
     plain,
     query_all,
     resolve,
-    retry_after,
     toxic_sentence,
     usda_ratings,
+    with_synonyms,
 )
 
 LONG = "Leaves are lobed and green. " * 80
@@ -129,14 +130,6 @@ def test_usda_ratings_keeps_only_moderate_and_severe():
     assert usda_ratings(buffer.getvalue()) == {"Conium maculatum": "severe", "Mahonia bealei": "moderate"}
 
 
-@pytest.mark.parametrize(
-    ("header", "seconds"),
-    [("30", 30.0), (None, 10.0), ("soon", 10.0), ("Wed, 07 Oct 2020 23:00:00 GMT", 0.0)],
-)
-def test_retry_after_reads_seconds_or_a_past_date(header, seconds):
-    assert retry_after(header) == seconds
-
-
 def test_query_all_merges_continued_pages_and_keeps_the_ones_with_content(monkeypatch):
     replies = iter(
         [
@@ -160,3 +153,27 @@ def test_query_all_merges_continued_pages_and_keeps_the_ones_with_content(monkey
 def test_toxic_sentence_still_flags_a_claim_beside_non_toxic():
     text = "Although it is nontoxic itself, the honey from its flowers is poisonous."
     assert toxic_sentence(text) == text
+
+
+def test_with_synonyms_spreads_a_rating_to_every_name_varieties_included():
+    replies = {
+        match_url("Quercus stellata"): {"matchType": "EXACT", "rank": "SPECIES", "usageKey": 1},
+        f"{GBIF}/species/1": {"canonicalName": "Quercus stellata", "rank": "SPECIES"},
+        f"{GBIF}/species/1/synonyms?limit=1000&offset=0": {
+            "results": [
+                {"canonicalName": "Quercus obtusiloba", "rank": "SPECIES"},
+                # Kept on purpose: a missed toxic flag costs more than a lost target.
+                {"canonicalName": "Quercus alba minor", "rank": "VARIETY"},
+            ],
+            "endOfRecords": True,
+        },
+        match_url("Nomen nudum"): {"matchType": "NONE"},
+    }
+
+    ratings = {"Quercus stellata": "moderate", "Nomen nudum": "severe"}
+
+    assert with_synonyms(ratings, replies.__getitem__) == {
+        **ratings,
+        "Quercus obtusiloba": "moderate",
+        "Quercus alba": "moderate",
+    }

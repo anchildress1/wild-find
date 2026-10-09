@@ -13,7 +13,9 @@ import os
 import shutil
 import sys
 import tempfile
+from collections.abc import Callable
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 
@@ -25,6 +27,7 @@ from wild_find_pipeline.labels import (
     is_hazard,
     lacking_hazards,
     prompt,
+    taxa_names,
 )
 from wild_find_pipeline.paths import (
     DESCRIPTIONS,
@@ -67,39 +70,38 @@ def species_table(table: np.ndarray, names: list[str], extra: dict[str, np.ndarr
     return table.astype(np.float32), labels
 
 
+def merged(labels: list[dict], found: dict, source: Path, step: str, add: Callable[[dict, Any], dict]) -> list[dict]:
+    """Each row with add(row, its committed entry) merged in; raises when a row has no entry in [source]."""
+    missing = [entry["scientific"] for entry in labels if entry["scientific"] not in found]
+    if missing:
+        raise ValueError(f"{source.name} lacks {len(missing)} species, e.g. {missing[:3]}; run make {step}")
+    return [{**entry, **add(entry, found[entry["scientific"]])} for entry in labels]
+
+
 def with_toxicity(labels: list[dict], flags: dict[str, dict]) -> list[dict]:
     """Add each row's genus and committed toxicity flag; raises when a row has no flag."""
-    missing = [entry["scientific"] for entry in labels if entry["scientific"] not in flags]
-    if missing:
-        raise ValueError(f"{TOXICITY.name} lacks {len(missing)} species, e.g. {missing[:3]}; run make toxicity")
-    return [
-        {**entry, "genus": entry["scientific"].split()[0], "toxic": flags[entry["scientific"]]["toxic"]}
-        for entry in labels
-    ]
+    return merged(
+        labels,
+        flags,
+        TOXICITY,
+        "toxicity",
+        lambda entry, found: {"genus": entry["scientific"].split()[0], "toxic": found["toxic"]},
+    )
 
 
 def with_synonyms(labels: list[dict], aliases: dict[str, list[str]]) -> list[dict]:
     """Add each row's committed GBIF aliases; raises when a row has no entry."""
-    missing = [entry["scientific"] for entry in labels if entry["scientific"] not in aliases]
-    if missing:
-        raise ValueError(f"{SYNONYMS.name} lacks {len(missing)} species, e.g. {missing[:3]}; run make synonyms")
-    return [{**entry, "synonyms": aliases[entry["scientific"]]} for entry in labels]
+    return merged(labels, aliases, SYNONYMS, "synonyms", lambda _, found: {"synonyms": found})
 
 
 def with_plant_types(labels: list[dict], types: dict[str, dict]) -> list[dict]:
     """Add each row's committed plant type (a PlantType key or None); raises when a row has no entry."""
-    missing = [entry["scientific"] for entry in labels if entry["scientific"] not in types]
-    if missing:
-        raise ValueError(f"{PLANT_TYPES.name} lacks {len(missing)} species, e.g. {missing[:3]}; run make plant-types")
-    return [{**entry, "type": types[entry["scientific"]]["type"]} for entry in labels]
+    return merged(labels, types, PLANT_TYPES, "plant-types", lambda _, found: {"type": found["type"]})
 
 
 def with_descriptions(labels: list[dict], found: dict[str, dict]) -> list[dict]:
     """Add each row's committed kid-level description, or None; raises when a row has no entry."""
-    missing = [entry["scientific"] for entry in labels if entry["scientific"] not in found]
-    if missing:
-        raise ValueError(f"{DESCRIPTIONS.name} lacks {len(missing)} species, e.g. {missing[:3]}; run make descriptions")
-    return [{**entry, "description": found[entry["scientific"]]["description"]} for entry in labels]
+    return merged(labels, found, DESCRIPTIONS, "descriptions", lambda _, entry: {"description": entry["description"]})
 
 
 def tinyclip_dir() -> Path:
@@ -225,7 +227,7 @@ def main() -> int:
         bioclip = ensure_artifact("bioclip")
         shutil.copyfile(bioclip, staging / bioclip.name)
 
-        names = [entry["scientific"] for entry in json.loads(ensure_artifact("taxa_labels").read_text())]
+        names = taxa_names()
         extra = hazard_vectors(names)
         table, labels = species_table(np.load(ensure_artifact("taxa")), names, extra)
         labels = with_toxicity(labels, json.loads(TOXICITY.read_text())["species"])

@@ -7,20 +7,16 @@ or, failing that, its first shipped GBIF alias (synonyms.json); else grass for P
 first because USDA calls every fern a forb/herb and every pine a tree, which would leave those types unused.
 """
 
-import csv
-import io
 import json
 import sys
-import tarfile
-import urllib.parse
 from collections.abc import Callable
 from datetime import date
-from pathlib import Path
 
-from wild_find_pipeline.labels import lacking_hazards
-from wild_find_pipeline.paths import PLANT_TYPES, SYNONYMS, ensure_artifact
+from wild_find_pipeline import usda
+from wild_find_pipeline.gbif import GBIF, match_url
+from wild_find_pipeline.labels import table_rows
+from wild_find_pipeline.paths import PLANT_TYPES, SYNONYMS
 from wild_find_pipeline.synonyms import cached_get
-from wild_find_pipeline.toxicity import GBIF, USDA_SHA256, USDA_URL, usda_archive
 
 # GBIF backbone groups, checked before USDA. Lycophytes (clubmosses, spikemosses, quillworts) count as ferns: they
 # are spore-bearing vascular plants, the old "fern allies", and not mosses.
@@ -48,33 +44,9 @@ HABIT = "http://eol.org/schema/terms/PlantHabit"
 
 def usda_habits(archive: bytes) -> dict[str, list[str]]:
     """Binomial to its USDA growth habits, from the species row when it has any, else from its infraspecific rows."""
-    csv.field_size_limit(sys.maxsize)
-    with tarfile.open(fileobj=io.BytesIO(archive)) as tar:
-        members = {Path(m.name).name: m for m in tar.getmembers()}
-
-        def rows(member: str):
-            text = tar.extractfile(members[member]).read().decode()
-            return csv.DictReader(io.StringIO(text), delimiter="\t", quoting=csv.QUOTE_NONE)
-
-        habits = {
-            r["occurrenceID"]: r["measurementValue"].rsplit("/", 1)[-1]
-            for r in rows("measurement_or_fact_specific.tab")
-            if r["measurementType"] == HABIT
-        }
-        by_taxon: dict[str, set[str]] = {}
-        for r in rows("occurrence_specific.tab"):
-            if r["occurrenceID"] in habits:
-                by_taxon.setdefault(r["taxonID"], set()).add(habits[r["occurrenceID"]])
-        taxa = {r["taxonID"]: r for r in rows("taxon.tab")}
-    species: dict[str, set[str]] = {}
-    infra: dict[str, set[str]] = {}
-    for taxon, found in by_taxon.items():
-        row = taxa.get(taxon)
-        if row is None or row["taxonRank"] == "genus":
-            continue
-        name = " ".join(row["scientificName"].split()[:2])
-        (species if row["taxonRank"] == "species" else infra).setdefault(name, set()).update(found)
-    return {name: sorted(found) for name, found in (infra | species).items()}
+    found, taxa = usda.measurements(archive, lambda r: r["measurementType"] == HABIT)
+    habits = usda.by_binomial(((taxon, r["measurementValue"].rsplit("/", 1)[-1]) for taxon, r in found), taxa)
+    return {name: sorted(set(values)) for name, values in habits.items()}
 
 
 def habit_type(habits: list[str]) -> str | None:
@@ -84,8 +56,7 @@ def habit_type(habits: list[str]) -> str | None:
 
 def taxonomy(name: str, fetch: Callable[[str], dict] = cached_get) -> dict:
     """GBIF species/match reply for a plant name: the same strict query make synonyms cached."""
-    query = urllib.parse.urlencode({"name": name, "kingdom": "Plantae", "strict": "true"})
-    return fetch(f"{GBIF}/species/match?{query}")
+    return fetch(match_url(name))
 
 
 def plant_type(match: dict, usda: list[tuple[str, list[str]]]) -> dict:
@@ -103,21 +74,20 @@ def plant_type(match: dict, usda: list[tuple[str, list[str]]]) -> dict:
 
 def main() -> int:
     """Write plant_types.json: type and source for every species-table row, plus the rule."""
-    names = [e["scientific"] for e in json.loads(ensure_artifact("taxa_labels").read_text())]
-    rows = names + lacking_hazards(names)
+    rows = table_rows()
     aliases = json.loads(SYNONYMS.read_text())["species"]
     if missing := [row for row in rows if row not in aliases]:
         raise ValueError(f"{SYNONYMS.name} lacks {len(missing)} species, e.g. {missing[:3]}; run make synonyms")
-    habits = usda_habits(usda_archive())
+    habits = usda_habits(usda.archive())
     species = {}
     for row in sorted(rows):
-        usda = [(name, habits[name]) for name in [row, *aliases[row]] if name in habits]
-        species[row] = plant_type(taxonomy(row), usda)
+        matched = [(name, habits[name]) for name in [row, *aliases[row]] if name in habits]
+        species[row] = plant_type(taxonomy(row), matched)
     PLANT_TYPES.write_text(
         json.dumps(
             {
                 "built": date.today().isoformat(),
-                "source": {"usda": {"url": USDA_URL, "sha256": USDA_SHA256}, "gbif": GBIF},
+                "source": {"usda": {"url": usda.USDA_URL, "sha256": usda.USDA_SHA256}, "gbif": GBIF},
                 "rule": {
                     "taxonomy_first": [f"{rank} {group}: {kind}" for rank, group, kind in TAXON_TYPES],
                     "usda_names": "row name, then its synonyms.json aliases in order; first with a mapped habit",

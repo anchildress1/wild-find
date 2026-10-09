@@ -5,28 +5,21 @@ PRD rule: flag on a toxicity sentence, a USDA rating of moderate or severe, a st
 """
 
 import contextlib
-import csv
-import email.utils
-import io
 import json
 import re
 import sys
-import tarfile
 import time
-import urllib.error
 import urllib.parse
-import urllib.request
-from datetime import UTC, date, datetime
-from pathlib import Path
+from collections.abc import Callable
+from datetime import date
 
-from wild_find_pipeline.paths import MODEL_CACHE, TOXICITY, ensure_artifact, file_sha256
+from wild_find_pipeline import usda
+from wild_find_pipeline.gbif import get, match_url
+from wild_find_pipeline.labels import table_rows
+from wild_find_pipeline.paths import TOXICITY
+from wild_find_pipeline.synonyms import cached_get, usages
 
-USER_AGENT = "wild-find-pipeline/0.1 (+https://github.com/anchildress1/wild-find)"
 WIKIPEDIA = "https://en.wikipedia.org/w/api.php"
-GBIF = "https://api.gbif.org/v1"
-# USDA PLANTS traits as published to Zenodo on Dec 11, 2025; pinned by bytes, like the models.
-USDA_URL = "https://zenodo.org/api/records/17903503/files/usda_plant_traits.tar.gz/content"
-USDA_SHA256 = "d646ab96b3308a51f66bf5adfe3ac7e31abd68223c9436734789c96da9df014b"
 USDA_TOXIC = {
     "http://purl.obolibrary.org/obo/PATO_0000395": "moderate",
     "http://purl.obolibrary.org/obo/PATO_0000396": "severe",
@@ -43,39 +36,6 @@ TOXIC = re.compile(r"\b(?:toxic|toxicity|toxins?|poisons?|poisonous|poisoning)\b
 SENTENCE = re.compile(r"[^.!?\n]+[.!?]?")
 # Sections whose citation titles and links say "toxic" about other things.
 SKIP_SECTIONS = re.compile(r"^(?:references|notes|citations|sources|further reading|external links|see also)$", re.I)
-
-
-def retry_after(value: str | None) -> float:
-    """Seconds to wait from a Retry-After header, in delta seconds or an HTTP date; 10 when absent or unreadable."""
-    if value and value.strip().isdigit():
-        return float(value)
-    if value:
-        try:
-            return max(0.0, (email.utils.parsedate_to_datetime(value) - datetime.now(UTC)).total_seconds())
-        except (TypeError, ValueError):
-            pass
-    return 10.0
-
-
-def get(url: str) -> dict:
-    """GET JSON with the named User-Agent, up to 5 tries: 429 and 503 wait per Retry-After, network errors back off.
-
-    Raises the last error once the tries run out, and any other HTTP error at once.
-    """
-    for attempt in range(5):
-        try:
-            request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-            with urllib.request.urlopen(request, timeout=60) as response:
-                return json.load(response)
-        except urllib.error.HTTPError as e:
-            if attempt == 4 or e.code not in (429, 503):
-                raise
-            time.sleep(retry_after(e.headers.get("Retry-After")))
-        except (urllib.error.URLError, TimeoutError):
-            if attempt == 4:
-                raise
-            time.sleep(2**attempt)
-    raise AssertionError("unreachable")
 
 
 def plain(wikitext: str) -> str:
@@ -102,12 +62,12 @@ def toxic_sentence(text: str) -> str | None:
     return None
 
 
-def flag(text: str | None, usda: str | None) -> tuple[bool, str]:
+def flag(text: str | None, rating: str | None) -> tuple[bool, str]:
     """PRD toxicity rule for one species; returns the flag and its evidence."""
     if text is not None and (sentence := toxic_sentence(text)):
         return True, f"wikipedia: {sentence[:300]}"
-    if usda:
-        return True, f"usda: {usda}"
+    if rating:
+        return True, f"usda: {rating}"
     if text is None:
         return True, "no article"
     if len(text) < MIN_CHARS:
@@ -182,74 +142,43 @@ def articles(names: list[str]) -> dict[str, dict | None]:
 
 def usda_ratings(archive: bytes) -> dict[str, str]:
     """Binomial to USDA HumanLivestockToxicity for every moderate or severe row in the traits archive."""
-    csv.field_size_limit(sys.maxsize)
-    with tarfile.open(fileobj=io.BytesIO(archive)) as tar:
-        # The published archive stores members as ./name.tab.
-        members = {Path(m.name).name: m for m in tar.getmembers()}
-
-        def rows(member: str):
-            text = tar.extractfile(members[member]).read().decode()
-            return csv.DictReader(io.StringIO(text), delimiter="\t", quoting=csv.QUOTE_NONE)
-
-        levels = {
-            r["occurrenceID"]: USDA_TOXIC[r["measurementValue"]]
-            for r in rows("measurement_or_fact_specific.tab")
-            if r["measurementType"].endswith("HumanLivestockToxicity") and r["measurementValue"] in USDA_TOXIC
-        }
-        taxa = {r["occurrenceID"]: r["taxonID"] for r in rows("occurrence_specific.tab") if r["occurrenceID"] in levels}
-        names = {r["taxonID"]: " ".join(r["scientificName"].split()[:2]) for r in rows("taxon.tab")}
-    unnamed = sorted(str(taxa.get(o)) for o in levels if taxa.get(o) not in names)
+    found, taxa = usda.measurements(
+        archive,
+        lambda r: r["measurementType"].endswith("HumanLivestockToxicity") and r["measurementValue"] in USDA_TOXIC,
+    )
+    unnamed = sorted(str(taxon) for taxon, _ in found if taxon not in taxa)
     if unnamed:
         # The published export lacks a few taxon rows; say which instead of dropping them silently.
         print(f"usda: {len(unnamed)} moderate/severe rows have no taxon row and are skipped: {unnamed}")
-    return {names[taxa[o]]: level for o, level in levels.items() if taxa.get(o) in names}
+    return {usda.species_name(taxa[t]): USDA_TOXIC[r["measurementValue"]] for t, r in found if t in taxa}
 
 
-def usda_archive() -> bytes:
-    """The pinned USDA PLANTS traits archive, cached in .models and checked by SHA-256."""
-    MODEL_CACHE.mkdir(exist_ok=True)
-    path = MODEL_CACHE / "usda_plant_traits.tar.gz"
-    if not path.is_file() or file_sha256(path) != USDA_SHA256:
-        request = urllib.request.Request(USDA_URL, headers={"User-Agent": USER_AGENT})
-        with urllib.request.urlopen(request, timeout=300) as response:
-            path.write_bytes(response.read())
-    if file_sha256(path) != USDA_SHA256:
-        raise ValueError(f"{path} does not match its pinned SHA-256")
-    return path.read_bytes()
-
-
-def with_synonyms(ratings: dict[str, str]) -> dict[str, str]:
-    """Add every GBIF backbone synonym and accepted name of each rated binomial, so naming drift still matches."""
+def with_synonyms(ratings: dict[str, str], fetch: Callable[[str], dict] = cached_get) -> dict[str, str]:
+    """Add the binomial of every GBIF accepted name and synonym, varieties included, of each rated name."""
     out = dict(ratings)
     for name, level in ratings.items():
-        match = get(
-            f"{GBIF}/species/match?" + urllib.parse.urlencode({"name": name, "kingdom": "Plantae", "strict": "true"})
-        )
+        match = fetch(match_url(name))
         key = match.get("acceptedUsageKey") or match.get("usageKey")
         if not key:
             continue
-        accepted = get(f"{GBIF}/species/{key}")
-        synonyms = get(f"{GBIF}/species/{key}/synonyms?limit=1000")["results"]
-        for usage in [accepted, *synonyms]:
+        # Deliberately loose: a variety cut to its binomial can flag a relative (Quercus alba via Q. stellata), but a
+        # false flag only costs a target, while a missed one can send a kid to a toxic plant (decided Oct 9).
+        for usage in usages(key, fetch):
             binomial = " ".join(usage.get("canonicalName", "").split()[:2])
             if binomial.count(" ") == 1:
                 out.setdefault(binomial, level)
-        time.sleep(0.2)
     return out
 
 
 def main() -> int:
     """Write toxicity.json: flag, evidence, and article revision for every species-table row."""
-    from wild_find_pipeline.labels import HAZARDS
-
-    names = [e["scientific"] for e in json.loads(ensure_artifact("taxa_labels").read_text())]
-    names += [n for n in HAZARDS.values() if n not in names and " " in n]
-    usda = with_synonyms(usda_ratings(usda_archive()))
-    pages = articles(sorted(set(names)))
+    names = sorted(table_rows())
+    ratings = with_synonyms(usda_ratings(usda.archive()))
+    pages = articles(names)
     species = {}
-    for name in sorted(set(names)):
+    for name in names:
         page = pages[name]
-        toxic, evidence = flag(page["text"] if page else None, usda.get(name))
+        toxic, evidence = flag(page["text"] if page else None, ratings.get(name))
         species[name] = {
             "toxic": toxic,
             "evidence": evidence,
@@ -261,7 +190,7 @@ def main() -> int:
             {
                 "built": date.today().isoformat(),
                 "rule": {"min_chars": MIN_CHARS, "keywords": TOXIC.pattern, "other_plants": OTHER_PLANTS.pattern},
-                "usda": {"url": USDA_URL, "sha256": USDA_SHA256, "moderate_or_severe": len(usda)},
+                "usda": {"url": usda.USDA_URL, "sha256": usda.USDA_SHA256, "moderate_or_severe": len(ratings)},
                 "species": species,
             },
             indent=1,
