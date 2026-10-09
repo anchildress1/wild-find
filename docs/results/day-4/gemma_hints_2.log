@@ -1,0 +1,179 @@
+# 2026-10-09 16:08 EDT, Apple M4 Max, macOS-26.5.2-arm64-arm-64bit-Mach-O, Ollama at http://localhost:11434, model gemma4:26b @ 48eb98ec778c, temperature 1.0, top_p 0.95, top_k 64, seed 1, num_ctx 8192, up to 2 per aspect
+# Wikipedia revisions: Conoclinium coelestinum 1368583758, Callicarpa americana 1375086217, Liquidambar styraciflua 1376158564, Magnolia grandiflora 1377878923, Liriodendron tulipifera 1371824047, Polystichum acrostichoides 1327494907, Fagus grandifolia 1376510144, Erechtites hieraciifolius 1368440496, Ampelopsis glandulosa 1369470767, Diospyros virginiana 1379002754, Platanus occidentalis 1378901823, Vitis rotundifolia 1368871184, Pueraria montana 1360603932, Cercis canadensis 1374220375, Quercus nigra 1363279434, Albizia julibrissin 1369296368, Chimaphila maculata 1374761023, Rhus copallinum 1374481064, Solidago altissima 1370399342, Ilex cornuta 1311722172
+# No article: none
+gemma4:26b Conoclinium coelestinum (blue mistflower):
+    place  1 Look for it in wood edges or clearings.
+    place  2 You might find it in a wet meadow.  [repeats an earlier quote]
+    light  1 It grows in shade or in full sun.
+    ground 1 This plant likes to grow in moist soils.
+    edges  1 Check near the edges of the woods.
+    pick 3.0   place  Look for it in wood edges or clearings.
+    pick 3.0   ground This plant likes to grow in moist soils.
+    pick 3.0   light  It grows in shade or in full sun.
+    pick 2.04  season Look for blue flowers in summer.
+gemma4:26b Callicarpa americana (American beautyberry):
+    place  1 Look for it in gardens and yards.
+    ground 1 It can grow on bare ground.
+    pick 3.0   place  Look for it in gardens and yards.
+    pick 3.0   ground It can grow on bare ground.
+    pick 2.04  season Look for blue flowers in summer.
+    pick 1.32  season Look for purple fruit in fall.
+gemma4:26b Liquidambar styraciflua (American sweetgum):
+    place  1 Look for this in the forest.
+    light  1 It does not like to grow in shady areas.
+    ground 1 It likes to grow in moist soil.
+    nearby 1 It grows near willow oak and sweetbay magnolia.
+    pick 3.0   place  Look for this in the forest.
+    pick 3.0   ground It likes to grow in moist soil.
+    pick 3.0   light  It does not like to grow in shady areas.
+    pick 1.32  season Look for brown seeds in fall.
+gemma4:26b Magnolia grandiflora (southern magnolia):
+    place  1 Look for it in the forests near the coast.
+    light  1 It likes to grow in shady areas.
+    ground 1 The soil should let water drain away easily.  [water]
+    nearby 1 It grows near sweetgum trees.
+    nearby 2 It can be found next to water oaks.  [water; repeats an earlier quote]
+    pick 3.0   place  Look for it in the forests near the coast.
+    pick 3.0   light  It likes to grow in shady areas.
+    pick 2.0   nearby It grows near sweetgum trees.
+    pick 1.92  season Look for white flowers in spring.
+gemma4:26b Liriodendron tulipifera (American tuliptree):
+    place  1 Look in the temperate deciduous forests.
+    light  1 It does not like too much shade.
+    ground 1 It likes soil that is rich and rather moist.
+    ground 2 It prefers soils that are well-drained.
+    pick 3.0   place  Look in the temperate deciduous forests.
+    pick 3.0   ground It likes soil that is rich and rather moist.
+    pick 3.0   ground It prefers soils that are well-drained.
+    pick 1.92  season Look for yellow flowers in spring.
+gemma4:26b Polystichum acrostichoides (Christmas fern):
+    place  1 Look for it in the woods.
+    light  1 It likes to grow in the shade.
+    ground 1 Find it where the ground is moist.
+    pick 3.0   place  Look for it in the woods.
+    pick 3.0   ground Find it where the ground is moist.
+    pick 3.0   light  It likes to grow in the shade.
+gemma4:26b Fagus grandifolia (American beech):
+    place  1 You can find it in forests.
+    light  1 It likes to grow in the shade.
+    ground 1 Look for it on moist slopes or in bottomlands.
+    ground 2 It likes a well-watered spot.
+    nearby 1 It often grows near sugar maple trees.
+    pick 3.0   place  You can find it in forests.
+    pick 3.0   ground Look for it on moist slopes or in bottomlands.
+    pick 3.0   ground It likes a well-watered spot.
+    pick 1.32  season Look for bright leaves in fall.
+gemma4:26b Erechtites hieraciifolius (American burnweed):
+    place  1 Look in places where lots of things have happened to the land.
+    place  2 You can find it near cities and where people live.
+    ground 1 Look for it in damp places.
+    nearby 1 Check near a spot where a tree once fell over.
+    pick 3.0   place  Look in places where lots of things have happened to the land.
+    pick 3.0   place  You can find it near cities and where people live.
+    pick 3.0   ground Look for it in damp places.
+gemma4:26b Ampelopsis glandulosa (Porcelain Berry):
+    place  1 Look for it near the edges of a forest.
+    place  2 It can be found along roadsides or in old fields.
+    light  1 It likes places with lots of sun or a little shade.
+    ground 1 Do not look in soil that stays wet all the time.
+    nearby 1 It might climb up and cover larger plants.
+    edges  1 It grows where the land has been disturbed.
+    pick 3.0   place  Look for it near the edges of a forest.
+    pick 3.0   place  It can be found along roadsides or in old fields.
+    pick 3.0   ground Do not look in soil that stays wet all the time.
+gemma4:26b Diospyros virginiana (American persimmon):
+    place  1 You can find this plant growing in the wild.
+    light  1 It can grow in shade, like under trees. (USDA)
+    ground 1 It likes to grow in sandy soil that drains well.
+    ground 2 It also grows in rich southern bottom lands.  [repeats an earlier quote]
+    pick 3.0   place  You can find this plant growing in the wild.
+    pick 3.0   ground It likes to grow in sandy soil that drains well.
+    pick 2.16  light  It can grow in shade, like under trees.
+    pick 1.32  season Look for orange fruit in fall.
+gemma4:26b Platanus occidentalis (American sycamore):
+    place  1 Look for this in the eastern United States.
+    ground 1 It likes to grow in wet areas.
+    ground 2 You might see it near rivers or streams.  [water]
+    pick 3.0   place  Look for this in the eastern United States.
+    pick 3.0   ground It likes to grow in wet areas.
+    pick 0.56  size   It is a tall tree.
+    pick 1.32  season Look for brown seeds in fall.
+gemma4:26b Vitis rotundifolia (muscadine):
+    place  1 You can find them in the southeastern United States.
+    ground 1 Look for fertile sandy loam or alluvial soils.
+    ground 2 They grow in well-drained bottom lands.
+    pick 3.0   place  You can find them in the southeastern United States.
+    pick 3.0   ground Look for fertile sandy loam or alluvial soils.
+    pick 3.0   ground They grow in well-drained bottom lands.
+    pick 1.92  season Look for white flowers in spring.
+    pick 1.32  season Look for purple fruit in fall.
+gemma4:26b Pueraria montana (kudzu):
+    place  1 Look in areas where new forest is growing back.
+    light  1 It can grow in the bright sun.
+    light  2 It also grows well in partial shade.  [repeats an earlier quote]
+    ground 1 It can grow well in poor soil.
+    nearby 1 Look for it growing on trees.
+    edges  1 It likes to grow at the edge of habitats.
+    pick 3.0   place  Look in areas where new forest is growing back.
+    pick 3.0   ground It can grow well in poor soil.
+    pick 3.0   light  It can grow in the bright sun.
+gemma4:26b Cercis canadensis (eastern redbud):
+    place  1 Look for it in mixed forests.
+    light  1 It can grow in shade, like under trees. (USDA)
+    ground 1 Look on ground that drains well, not soggy. (USDA)
+    nearby 1 You might find it in hedgerows.
+    edges  1 It can grow in gardens and parks.
+    pick 3.0   place  Look for it in mixed forests.
+    pick 2.28  ground Look on ground that drains well, not soggy.
+    pick 2.16  light  It can grow in shade, like under trees.
+    pick 1.92  season Look for purple flowers in spring.
+gemma4:26b Quercus nigra (water oak):
+    place  1 Look for it in old fields.
+    light  1 It needs a lot of sun.
+    ground 1 It likes wet and swampy areas.
+    ground 2 It can grow in sandy soils or red clays.
+    edges  1 Look near the borders of swamps or streams.  [water]
+    pick 3.0   place  Look for it in old fields.
+    pick 3.0   ground It likes wet and swampy areas.
+    pick 3.0   ground It can grow in sandy soils or red clays.
+gemma4:26b Albizia julibrissin (Persian silk tree):
+    place  1 Look for it in parks and gardens.
+    place  2 It grows in dry plains and sandy valleys.
+    light  1 It can grow in full sun.
+    ground 1 It likes to live in dry areas.
+    pick 3.0   place  Look for it in parks and gardens.
+    pick 3.0   place  It grows in dry plains and sandy valleys.
+    pick 3.0   ground It likes to live in dry areas.
+    pick 2.04  season Look for white flowers in summer.
+    pick 1.32  season Look for brown seeds in fall.
+gemma4:26b Chimaphila maculata (striped wintergreen):
+    place  1 Look for it in the woods.
+    light  1 It likes to grow in the shade.
+    ground 1 It grows in sandy soil.
+    pick 3.0   place  Look for it in the woods.
+    pick 3.0   ground It grows in sandy soil.
+    pick 3.0   light  It likes to grow in the shade.
+gemma4:26b Rhus copallinum (shining sumac):
+    place  1 Look for it along interstate highways.
+    light  1 It grows in full sun or part shade.
+    ground 1 It likes to grow in well-drained soils.
+    ground 2 It can grow in shallow, rocky soil.
+    nearby 1 It can grow near pines and hardwoods.
+    pick 3.0   place  Look for it along interstate highways.
+    pick 3.0   ground It likes to grow in well-drained soils.
+    pick 3.0   ground It can grow in shallow, rocky soil.
+    pick 1.32  season Look for brown seeds in fall.
+gemma4:26b Solidago altissima (tall goldenrod):
+    edges  1 It grows in places where humans have changed the land.
+    pick 1.0   edges  It grows in places where humans have changed the land.
+gemma4:26b Ilex cornuta (Chinese holly):
+    light  1 It can grow in part sun or shade.
+    light  2 Look for it on mountain ridges with lots of sun.
+    ground 1 It likes most soils except very wet ones.
+    pick 3.0   ground It likes most soils except very wet ones.
+    pick 3.0   light  It can grow in part sun or shade.
+    pick 3.0   light  Look for it on mountain ridges with lots of sun.
+    pick 1.32  season Look for red fruit in fall.
+
+gemma4:26b targets 20, hints 77 written, 70 clean, flagged repeats an earlier quote 4, water 4, plants with 3+ clean hints 17, with none 0, median 2.6s
+# Grades go in gemma_hints_2_grades.csv: each hint judged against its quoted sentence.

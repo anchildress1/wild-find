@@ -63,3 +63,27 @@ Question: can a local Gemma 4 write "where to look" hints that stay true to the 
 - 19 of 20 plants keep at least one supported hint on 26b, 8 keep three or more, 1 keeps none (American sycamore)
 - Viable only behind the Claude grading pass: about one hint in five that survives the filters still misleads
 - Grades are Claude's. The owner spot-checked but could not establish what is true from reading a hint alone, so the grades have no human ground truth yet; no hint ships on them alone
+
+## Probe 2: up to two hints per aspect (Oct 9, 2026)
+
+- Script `gemma_hints_2.py`, output `gemma_hints_2.csv` (one row per hint) and `gemma_hints_2.log`; grades in `gemma_hints_2_grades.csv`
+- Same 20 plants, excerpts, sampler, and Apple M4 Max as above; gemma4:26b only, grounded only, `range` removed, water-edge check added, `think: false`
+- Grading method changed: each hint judged only on whether its quoted sentence says it, not on whether it is true of the plant (the owner could not verify truth, see PRD Open Questions: Hints spot-check). Grades are still Claude's
+
+| Step | Hints |
+| --- | --- |
+| Written by the model | 77 |
+| Dropped by automatic checks | 7 (4 water, 4 repeated quote, one hint hit both) |
+| Clean, graded | 70 |
+| Supported by their quote | 60 (86% of clean, 78% of written) |
+| Overreach | 5 |
+| Unsafe | 3 (roadsides, interstate highways, swamps) |
+| Range hidden in a place hint | 2 |
+
+- Probe 1 on the same model: 50% of graded hints supported (78% after dropping `range` and water edges by hand); probe 2 gets 78% with the filters built in
+- Coverage: all 20 plants have at least one supported hint, 12 have three or more (probe 1: 19 and 8); median 2.6 s per plant, against 4.2 s
+- Not caught by the automatic checks: `roadsides` and `interstate highways` send a kid toward traffic, and `swamp`/`swampy` slipped past the water pattern; each needs a check before the full run
+- The model smuggles range into `place` ("the eastern United States"); a place hint naming only a country or region needs a check
+- Overreach repeats the earlier pattern: Florida-only evidence generalized, propagation advice read as habitat, "tolerates shade" read as "likes shade", "fixes nitrogen in poor soil" read as "grows well in poor soil"
+- Plants with a second hint often got a near-duplicate of the first ("Look for it in woods", "It likes shade"); the repeated-quote check caught 4 of those
+- Caveat: 20 well-documented species, one run at temperature 1.0, graded by the model family that is being judged for the pipeline's grading pass; the full run over the table is still the go/no-go
