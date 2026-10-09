@@ -59,4 +59,7 @@ Question: can a local Gemma 4 write "where to look" hints that stay true to the 
 - Model pick: 26b (no fake quotes, faster, slightly higher supported rate); 12b is not needed
 - Not shippable as-is: ship only supported hints after a banned-place filter and dropping `range`
 - Still owed per PRD Decisions: Hints: owner spot-check of a random 50 and the same probe at scale
-- Grades are Claude's, not the owner's; no hint ships on them alone
+- After dropping `range` and water-edge hints, 26b keeps 43 of 55 graded hints supported (78%); 12b keeps 43 of 63 (68%)
+- 19 of 20 plants keep at least one supported hint on 26b, 8 keep three or more, 1 keeps none (American sycamore)
+- Viable only behind the Claude grading pass: about one hint in five that survives the filters still misleads
+- Grades are Claude's. The owner spot-checked but could not establish what is true from reading a hint alone, so the grades have no human ground truth yet; no hint ships on them alone
