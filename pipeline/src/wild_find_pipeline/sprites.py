@@ -43,6 +43,10 @@ VIDEOS = {
 }
 # The videos render Briar on white; white touching the frame's edge is background, so white fur inside him stays.
 WHITE = 232
+# Cast shadows are pale neutral grey; grey this light and this even, touching the background, goes with it. Fur and
+# leaves are warmer or darker, so they stay.
+SHADOW_MIN = 150
+SHADOW_SPREAD = 18
 # The background fades into Briar over this many pixels, softening the keyed edge.
 FADE_PX = 2.5
 VIDEO_QUALITY = 80
@@ -139,14 +143,20 @@ def repack(source: Image.Image, columns: int, rows: int) -> tuple[Image.Image, i
 
 
 def key_white(rgb: np.ndarray) -> np.ndarray:
-    """RGBA from one video frame: near-white connected to the frame's edge turns transparent.
+    """RGBA from one video frame: near-white connected to the frame's edge turns transparent, with any pale grey
+    shadow touching it.
 
     Edge pixels get their white spill divided out, so no light rim shows on a dark page.
     """
     image = rgb.astype(np.float32)
-    labels, _ = ndimage.label(image.min(axis=2) > WHITE)
+    low = image.min(axis=2)
+    labels, _ = ndimage.label(low > WHITE)
     edge = np.unique(np.concatenate([labels[0], labels[-1], labels[:, 0], labels[:, -1]]))
-    background = np.isin(labels, edge[edge > 0])
+    white = np.isin(labels, edge[edge > 0])
+    shadow = (low > SHADOW_MIN) & (image.max(axis=2) - low < SHADOW_SPREAD)
+    grown, _ = ndimage.label(white | shadow)
+    touching = np.unique(grown[white])
+    background = np.isin(grown, touching[touching > 0])
     alpha = np.clip(ndimage.distance_transform_edt(~background) / FADE_PX, 0, 1)[..., None]
     color = np.where(alpha > 0, (image - (1 - alpha) * 255) / np.maximum(alpha, 1e-3), 0)
     return np.dstack([np.clip(color, 0, 255), alpha[..., 0] * 255]).astype(np.uint8)

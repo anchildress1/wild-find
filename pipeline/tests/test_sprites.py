@@ -117,16 +117,28 @@ def test_key_white_drops_edge_white_and_keeps_white_inside_briar():
     assert alpha[15, 15] == 255
 
 
+def test_key_white_drops_a_grey_shadow_touching_the_background():
+    frame = np.full((40, 40, 3), 255, np.uint8)
+    frame[10:30, 10:30] = (60, 140, 50)  # leaves
+    frame[30:34, 8:32] = 205  # their grey shadow on the ground
+    frame[14:18, 14:18] = 205  # the same grey inside the leaves, which stays
+
+    alpha = key_white(frame)[..., 3]
+
+    assert alpha[33, 20] == 0
+    assert alpha[16, 16] == 255
+
+
 def test_key_white_removes_white_spill_from_edges():
     frame = np.full((40, 40, 3), 255, np.uint8)
-    frame[10:30, 10:30] = (100, 100, 100)
-    frame[10:30, 10] = 177  # half-white blend on Briar's left edge
+    frame[10:30, 10:30] = (120, 80, 50)
+    frame[10:30, 10] = (187, 167, 152)  # half-white blend on Briar's left edge
 
     keyed = key_white(frame)
 
-    # One pixel in, the edge is 40% opaque; dividing out the white leaves Briar's own grey, not a light rim.
+    # One pixel in, the edge is 40% opaque; dividing out the white leaves a darker fur tone, not a light rim.
     assert keyed[20, 10, 3] == 102
-    assert abs(int(keyed[20, 10, 0]) - 62) <= 2
+    assert abs(int(keyed[20, 10, 0]) - 85) <= 2
 
 
 def test_clip_crops_every_frame_to_one_box_and_takes_the_figure_height_from_the_first():
