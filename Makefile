@@ -1,4 +1,4 @@
-.PHONY: setup build install device-test assets sprites toxicity synonyms plant-types descriptions hazard-vectors labels crop-reference gate-harness gate-pull reference test pipeline-test lint ktlint detekt android-lint pipeline-lint actionlint secret-scan ai-checks clean
+.PHONY: setup build install device-test e2e assets sprites toxicity synonyms plant-types descriptions hazard-vectors labels crop-reference gate-harness gate-pull reference test pipeline-test lint ktlint detekt android-lint pipeline-lint actionlint secret-scan ai-checks clean
 
 SHELL := /bin/bash
 
@@ -42,6 +42,11 @@ install: build
 device-test: install
 	adb install -r -d -t app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
 	@adb shell am instrument -w $(WILDFIND_PACKAGE).test/androidx.test.runner.AndroidJUnitRunner | tee /dev/stderr | grep -qE '^OK \([1-9][0-9]* tests?\)'
+
+# End-to-end UI tests only (the e2e package) on the phone; they need signal, since each hunt makes one iNat pull.
+e2e: install
+	adb install -r -d -t app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+	@adb shell am instrument -w -e package dev.anchildress1.wildfind.e2e $(WILDFIND_PACKAGE).test/androidx.test.runner.AndroidJUnitRunner | tee /dev/stderr | grep -qE '^OK \([1-9][0-9]* tests?\)'
 
 # S05 gate harness: verify on each Capture tap (3 frames), memory, and heat, logged on the phone.
 # GATE_TARGET is an eligible West Georgia species, or grass for the tutorial. Back ends a run.
