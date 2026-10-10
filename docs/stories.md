@@ -94,14 +94,14 @@ Validation: `make device-test` excludes E2E; `make e2e` uses the separate `.e2e`
 
 From the owner's play on the S24, debug and release.
 
-- [x] **S63 Offline area pick** (app) — an area picked offline was already saved, but the needs-signal page had no way to Grown-ups, so Cache my area was out of reach; the page now links to Grown-ups. `GameRulesTest` walks offline pick, cache, back, and the later pull; the e2e harness can't fake no signal.
-- [x] **S64 Dismiss the hazard card** (core + app) — "Look somewhere else", a 48 dp button, clears the warning and its line; the card never times out. `CaptureRulesTest` covers it; passed `make device-test` and `make e2e` on the S24 Oct 10.
-- [x] **S65 Untyped plant picture** (pipeline + app) — the 728 species with no type showed no picture; the owner's `plant.png` packs to `plants/plant.webp` and shows on the hunt list, camera bar, and win page. Herbs now say "An herb." and keep the herb picture (the audience is an 8-year-old with a parent). `PlantArtTest` gates the file; passed `make device-test` on the S24 Oct 10.
-- [ ] **S66 Opener background** (pipeline + app) — the owner's watercolor forest goes full-bleed behind the safety opener, text on Paper at 90%. Ticks when the owner sees it on the phone.
-- [ ] **S67 Clean Briar's white** (pipeline) — the warning clip still showed white along the bottom on the opener and hazard card; `make sprites` keys the leftover white while keeping white fur. Ticks when the owner sees it on the phone.
+- [x] **S63 Offline area pick** (app) — picking an area with no signal already saved it, but the no-signal page had no way to Grown-ups, so Cache my area was out of reach. The page now links there. Covered by a core test; the phone tests can't turn signal off.
+- [x] **S64 Dismiss the hazard card** (core + app) — a "Look somewhere else" button closes the warning. The card never closes on its own. Passed the phone tests Oct 10.
+- [x] **S65 Untyped plant picture** (pipeline + app) — 728 species with no known type showed no picture; they now show the owner's plant picture on the hunt list, camera bar, and win page. Herbs now say "An herb." and keep the herb picture, since a parent can explain the word. Passed the phone tests Oct 10.
+- [ ] **S66 Opener background** (pipeline + app) — the owner's watercolor forest fills the safety opener, with the text on a light panel so it stays readable. Ticks when the owner sees it on the phone.
+- [ ] **S67 Clean Briar's white** (pipeline) — the warning animation showed white along the bottom, trapped between the leaves. It's gone now, and Briar's white fur stays. Ticks when the owner sees it on the phone.
 
 - [ ] **S68 Better target matching** (core) — a capture now checks the whole picture as well as the circle, so more real targets pass: 116 of 198 test photos, up from 97, and still no toxic plant passes (0 of 267). It costs the phone nothing extra (`docs/results/day-5.md`). Ticks after the S05 run on the phone.
-- [x] **S69 Hold back unconfirmable targets** (pipeline + core) — `pipeline/data/no_target.json` lists sweetgum, tulip tree, persimmon, and winged sumac with a reason each (0 of 4–5 fresh photos under every rule, `day-5/target_pass/test.csv`); `make assets` ships `target: false`, `HuntPick` never picks or queues those rows, they still compete in row 4, and a pull whose only third genus is one of them widens. `test_assets`, `HuntPickTest`, `LocalSpeciesTest`, and `SpeciesTableTest` cover it; passed `make device-test` Oct 10.
+- [x] **S69 Skip targets the app can't confirm** (pipeline + core) — sweetgum, tulip tree, persimmon, and winged sumac passed none of their fresh test photos, so hunts never pick them. They still count when checking other plants, so a look-alike can't pass as them. Listed with reasons in `pipeline/data/no_target.json`. Passed the phone tests Oct 10.
 - [ ] **S70 Repeat intro** (core + app) — the grown-ups link reads "Repeat intro" and replays the safety opener and then the grass practice, as on a first launch, keeping the area, cache, and finds.
 
 ## Open holes
