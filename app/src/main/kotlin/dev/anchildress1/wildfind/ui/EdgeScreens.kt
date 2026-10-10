@@ -6,6 +6,7 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -47,7 +48,7 @@ fun LoadingScreen() {
         animationSpec = infiniteRepeatable(tween(Motion.BIG * 2), RepeatMode.Reverse),
         label = "breath",
     )
-    Page(centered = true) {
+    Page(arrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)) {
         Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) { Briar(null, briarText(null)) }
         Text(
             stringResource(R.string.loading),
