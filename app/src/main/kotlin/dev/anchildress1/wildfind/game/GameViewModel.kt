@@ -118,10 +118,12 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
 
             is Command.CacheArea, Command.CancelCacheArea ->
                 areaRun.on(command, viewModelScope) { region ->
-                    val done = cacheArea(graph, models(), region, retry) {
-                        viewModelScope.launch { dispatch(Outcome.AreaReport(region, it, finished = false)) }
+                    runAreaCache({ onMonth -> cacheArea(graph, models(), region, retry, onMonth) }) { done, finished ->
+                        // On Main and awaited in turn, so the final report cannot be overtaken by an earlier one.
+                        withContext(Dispatchers.Main.immediate) {
+                            dispatch(Outcome.AreaReport(region, done, finished))
+                        }
                     }
-                    dispatch(Outcome.AreaReport(region, done, finished = true))
                 }
 
             is Command.Locate -> viewModelScope.launch {
