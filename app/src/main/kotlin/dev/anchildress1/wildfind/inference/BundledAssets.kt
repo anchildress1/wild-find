@@ -66,7 +66,7 @@ class BundledAssets(private val assets: AssetManager) {
                             }
                         }
                     } ?: emptyList(),
-                    it.optString("hazard_line").ifEmpty { null },
+                    if (it.isNull("hazard_line")) null else it.getString("hazard_line"),
                     it.optBoolean("hazard_floor"),
                 )
             }
