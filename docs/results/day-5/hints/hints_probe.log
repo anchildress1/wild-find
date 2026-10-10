@@ -1,0 +1,58 @@
+S72 probe 2026-10-10: gemma4:26b digest 48eb98ec778c, sampler {'temperature': 1.0, 'top_p': 0.95, 'top_k': 64, 'seed': 1}
+48 rows from hints_spotcheck.md, model time 75s
+habitat shares from the full Oct 9 run: woods 36.4%, grass 20.4%, open 7.6%, gardens 7.0%, mountains 5.3%, scrub 1.8%; cut at 15%
+
+ 1 y lost Acourtia microcephala (place): was 'Look in woodland or chaparral.' -> Look in woodland areas. ['generic habitat']
+ 2 y kept Thelesperma filifolium (ground): was 'It likes dry or sandy soil.' -> It grows in dry, sandy or gravelly soil.
+ 3 y kept Monarda fistulosa (ground): was 'It grows in dry, rich soil.' -> It grows in dry, rich soil.
+ 4 o gone Rosa californica (ground): was 'It can also grow in damp areas.' -> (quote not cited)
+ 5 y kept Heterotheca villosa (ground): was 'It grows well on dry lands.' -> Look on dry lands.; Look on rocky slopes and cliffs. ['height', 'hedged', 'repeats an earlier quote']
+ 6 y kept Castanea sativa (ground): was 'It likes soil that drains well.' -> It likes well draining soil.
+ 7 o gone Polygonatum multiflorum (place): was 'Look in a woodland style area.' -> (quote not cited)
+ 8 y kept Bidens frondosa (light): was 'It grows best with sun.' -> It grows best where there is sun.
+ 9 y kept Pellaea glabella (ground): was 'It grows in cracks with little or no soil.' -> Look for it on limestone rocks.
+10 y kept Lamium amplexicaule (place): was 'Look in gardens, fields, or meadows.' -> Look in gardens, fields, and meadows.
+11 y lost Fraxinus nigra (ground): was 'It grows in a seasonally wet habitat.' -> Look in a seasonally wet riparian habitat. ['water']
+12 y kept Alnus serrulata (light): was 'It needs sun or part-sun.' -> It needs sun or part-sun.
+13 y kept Galax urceolata (light): was 'It grows in shaded places.' -> Look in shaded places.
+14 y kept Asplenium trichomanes (light): was 'It likes full or partial shade.' -> It likes full or partial shade.
+15 y kept Cosmos sulphureus (light): was 'It likes full sun.' -> It likes full sun.
+16 y kept Proboscidea louisianica (edges): was 'Look in disturbed habitat types.' -> It can grow in waste places.
+17 y kept Andropogon virginicus (place): was 'Look in woodlands, grasslands, and forests.' -> Look in open woodlands or grasslands.
+18 y move Dianthus barbatus (ground): was 'It grows in loamy, slightly alkaline soil.' -> It likes loamy soil. ['unseen soil']
+19 y kept Prosopis velutina (ground): was 'It grows in a dry, desert climate.' -> It grows in a dry climate.
+20 o gone Ipomoea quamoclit (ground): was 'Keep the soil moist.' -> Keep the ground moist. ['garden care']
+21 y move Erigeron canadensis (place): was 'Look in fields, meadows, or gardens.' -> (quote not cited)
+22 y lost Cassytha filiformis (nearby): was 'It grows on other plants.' -> (quote not cited)
+23 n gone Eupatorium hyssopifolium (place): was 'Search in woodlands or pastures.' -> You can find it in fields or pastures. ['generic habitat']; It also grows in woodlands. ['hedged', 'repeats an earlier quote']
+24 y move Geum rivale (ground): was 'It grows on poorly drained soils.' -> (quote not cited)
+25 y kept Scutellaria tuberosa (ground): was 'It is most commonly found in dry areas.' -> It likes dry areas.
+26 n gone Erica cinerea (place): was 'You might find it in woodland.' -> It grows in coastal dune heath and dune slack. ['biome']
+27 n BACK Prosopis pubescens (place): was 'Look in deserts.' -> Look in valleys.
+28 n gone Conopholis americana (place): was 'Look in wooded ravines.' -> Look in wooded ravines. ['height']
+29 y kept Berberis thunbergii (place): was 'Look in a temperate forest.' -> Look in a temperate forest.
+30 y kept Gentiana acaulis (place): was 'Look in mountainous regions.' -> Look in mountainous regions.
+31 y lost Epigaea repens (place): was 'Look in an oak-heath forest.' -> Look in an oak-heath forest. ['biome']
+32 n gone Eriophyllum lanatum (place): was 'Look in chaparral or oak woodland.' -> Search in oak woodlands. ['named region']
+33 n BACK Elephantopus carolinianus (ground): was 'The soil is often sandy.' -> Look for damp to wet, often sandy ground.
+34 y lost Corylus avellana (nearby): was 'It grows in hedgerows used as field boundaries.' -> (quote not cited)
+35 y kept Vaccinium parvifolium (ground): was 'Look in moist soil.' -> It grows in moist ground.
+36 y kept Pinus taeda (ground): was 'It grows well in acidic clay soil.' -> It grows in clay soil.
+37 y lost Acaena novae-zelandiae (place): was 'Look in woodlands or grasslands.' -> Look in woodlands, shrublands, or grasslands. ['biome']
+38 y kept Aphyllon purpureum (place): was 'You can find it in woods or thickets.' -> Look in woods or thickets.
+39 n gone Platanus occidentalis (ground): was 'It can grow in deep soils.' -> (quote not cited)
+40 y move Abies concolor (place): was 'You can find it in mountains.' -> (quote not cited)
+41 y kept Abies concolor (place): was 'Look in old growth forests.' -> Look in old growth forests.
+42 y lost Ceanothus perplexans (place): was 'Look in chaparral and desert scrub.' -> (quote not cited)
+43 y move Vachellia constricta (ground): was 'Look in arroyos and washes.' -> (quote not cited)
+44 y move Prosopis pubescens (place): was 'Find it in mesquite woodlands.' -> (quote not cited)
+45 y kept Pinus radiata (nearby): was 'It grows with the Guadalupe palm.' -> Look near the Guadalupe palm.
+46 n gone Thunbergia grandiflora (ground): was 'It likes productive, acidic, permeable soils.' -> (quote not cited)
+47 y kept Polanisia dodecandra (ground): was 'Look in dry or sandy soil.' -> Look for dry, sandy, or gravelly ground.
+48 y kept Eschscholzia californica (light): was 'It grows best in full sun.' -> It likes full sun.
+49 n gone Wachendorfia paniculata (place): was 'You might find it in fynbos.' -> (quote not cited)
+50 n gone Sticherus cunninghamii (place): was 'Look in lowland to montane forest.' -> Look in shaded stream banks. ['water']
+
+misses gone: 11/13
+good kept: 24/37 (65%)
+good kept, 29 not pinned: 21/29 (72%); loose 26/29 (90%)

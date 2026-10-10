@@ -1,0 +1,18 @@
+# S72 tightened hints run, 2026-10-10
+Machine: Apple M4 Max laptop. Model: gemma4:26b through Ollama, digest 48eb98ec778c. Sampler, context, and aspects unchanged from Oct 9.
+Command: make hints (resumed twice from its checkpoint: the harness killed the shell at 1625 rows on low memory, then a session restart), then --recheck.
+Rows: 2093 playable (2111 on Oct 9; new contact hazards left the playable set). Model replies failed: 1 (Lunularia cruciata).
+Recheck: 0 model hints newly flagged. Habitat shares: woods 31.7%, grass 15.9%, open 7.3%, mountains 3.3%, gardens 2.6%, scrub 2.0%; generic cut at 15%.
+
+Probe on the owner's 50 graded plants (hints_probe.log, P4, the gate for the full run):
+- bad hints gone: 11 of 13 (the other 2 came back as the fixes the owner asked for)
+- good hints kept, exact text: 21 of 29 (72%); kept or replaced by an equivalent: 26 of 29 (90%)
+- 8 good hints break the new rules by design and are pinned as expected rejects (owner: rules win)
+
+Coverage, hints with no failed check per playable plant:
+| Run | Plants | 3 or more | 1 or more | none | clean hints |
+| --- | --- | --- | --- | --- | --- |
+| Oct 9 | 2111 | 1206 (57%) | 1939 (92%) | 172 (8%) | 6361 |
+| Oct 10 | 2093 | 884 (42%) | 1800 (86%) | 293 (14%) | 4864 |
+
+The stricter rules cost coverage: 121 more plants have no hint, and fewer have three. Fresh 50 for the owner: hints_spotcheck.md (seed 72, none of the earlier 50 plants).

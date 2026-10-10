@@ -95,7 +95,7 @@ def test_rank_all_scores_only_clean_picked_hints():
     species = {
         "A a": {
             "hints": [
-                {"aspect": "place", "text": "Woods.", "evidence": "q", "source": "model", "issues": []},
+                {"aspect": "place", "text": "Shady woods.", "evidence": "q", "source": "model", "issues": []},
                 {"aspect": "place", "text": "Water.", "evidence": "q", "source": "model", "issues": ["water"]},
             ]
         }
@@ -251,7 +251,7 @@ def test_recheck_flags_stored_hints_that_now_fail_and_reranks_without_the_model(
     entry = {
         "hints": [
             {"aspect": "place", "text": "Look on rocky cliffs.", "evidence": "q", "source": "model", "issues": []},
-            {"aspect": "place", "text": "Look in woods.", "evidence": "q", "source": "model", "issues": []},
+            {"aspect": "place", "text": "Look in shady woods.", "evidence": "q", "source": "model", "issues": []},
             {"aspect": "size", "text": "It is a tall tree.", "source": "trait", "issues": [], "bucket": "big"},
         ]
     }
@@ -269,8 +269,8 @@ def test_recheck_flags_stored_hints_that_now_fail_and_reranks_without_the_model(
 
 def test_recheck_flags_a_repeated_hint_but_keeps_the_first_and_refuses_an_unfinished_file(tmp_path, monkeypatch):
     twice = [
-        {"aspect": "place", "text": "Look in woods.", "evidence": "a", "source": "model", "issues": []},
-        {"aspect": "ground", "text": "look in woods.", "evidence": "b", "source": "model", "issues": []},
+        {"aspect": "place", "text": "Look in shady woods.", "evidence": "a", "source": "model", "issues": []},
+        {"aspect": "ground", "text": "look in shady woods.", "evidence": "b", "source": "model", "issues": []},
     ]
     path = _stored(tmp_path, monkeypatch, {"A a": {"hints": twice}}, done=True)
 
