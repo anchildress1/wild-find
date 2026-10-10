@@ -23,6 +23,10 @@ UNTYPED = "plant"
 BACKGROUND = "background.png"
 BACKGROUND_OUT = REPO / "app/src/main/assets/opener_background.webp"
 BACKGROUND_QUALITY = 80
+# The leafy "Wild Find" title art, shown on Start and the safety opener; it tops out near 300 dp wide, about 900 px.
+TITLE = "wild-find-title-text.png"
+TITLE_OUT = REPO / "app/src/main/assets/title.webp"
+TITLE_PX = 900
 # Adaptive launcher icon layers, 108 dp each, written per density from the 432 px (xxxhdpi) sources.
 ICON_SOURCE = SOURCE / "app_icons"
 ICON_RES = REPO / "app/src/main/res"
@@ -153,6 +157,15 @@ def video_frames(path: Path, first: int, end: int) -> tuple[list[np.ndarray], fl
     return frames[first:end], rate
 
 
+def trimmed(source: Image.Image) -> Image.Image:
+    """The picture as RGBA cropped to its visible pixels, ignoring glow fainter than ALPHA_FLOOR."""
+    rgba = source.convert("RGBA")
+    box = rgba.getchannel("A").point(lambda a: 255 if a >= ALPHA_FLOOR else 0).getbbox()
+    if box is None:
+        raise ValueError("the picture is empty")
+    return rgba.crop(box)
+
+
 def plant_art(source: Image.Image) -> Image.Image:
     """One plant-type picture on a PLANT_PX square, trimmed to the plant and standing on the bottom edge.
 
@@ -174,7 +187,7 @@ def plant_art(source: Image.Image) -> Image.Image:
 
 
 def main() -> int:
-    """Write <state>.webp and <state>.json for every Briar video, one WebP per plant, and the opener background."""
+    """Write each Briar clip with its JSON, one WebP per plant, the opener background, and the title."""
     OUT.mkdir(parents=True, exist_ok=True)
     PLANTS_OUT.mkdir(parents=True, exist_ok=True)
     for layer in ICON_LAYERS:
@@ -194,6 +207,10 @@ def main() -> int:
     background = Image.open(SOURCE / BACKGROUND).convert("RGB")
     background.save(BACKGROUND_OUT, quality=BACKGROUND_QUALITY, method=6)
     print(f"OK: opener background {background.width}x{background.height}, {BACKGROUND_OUT.stat().st_size} bytes")
+    title = trimmed(Image.open(SOURCE / TITLE))
+    title = title.resize((TITLE_PX, round(title.height * TITLE_PX / title.width)), Image.Resampling.LANCZOS)
+    title.save(TITLE_OUT, quality=90, method=6)
+    print(f"OK: title {title.width}x{title.height}, {TITLE_OUT.stat().st_size} bytes")
     for kind in (*PLANT_TYPES, UNTYPED):
         plant_art(Image.open(SOURCE / f"{kind}.png")).save(PLANTS_OUT / f"{kind}.webp", quality=90, method=6)
         print(f"OK: plant {kind} {PLANT_PX}x{PLANT_PX}")

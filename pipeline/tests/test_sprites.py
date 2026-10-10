@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from PIL import Image
 
-from wild_find_pipeline.sprites import PLANT_PX, PLANT_TYPES, UNTYPED, clip, key_white, plant_art
+from wild_find_pipeline.sprites import PLANT_PX, PLANT_TYPES, UNTYPED, clip, key_white, plant_art, trimmed
 
 
 def test_plant_art_trims_the_margin_and_stands_the_plant_on_the_bottom_edge():
@@ -118,3 +118,13 @@ def test_key_white_drops_floor_white_and_warm_shadow_the_leaves_wall_off_but_kee
     assert alpha[87, 55] == 0
     assert alpha[84, 75] == 255
     assert alpha[43, 35] == 255
+
+
+def test_trimmed_crops_to_the_visible_pixels_and_rejects_an_empty_picture():
+    picture = Image.new("RGBA", (50, 40))
+    picture.paste((40, 90, 30, 255), (10, 5, 30, 25))
+    picture.putpixel((45, 35), (255, 255, 255, 4))  # faint glow, under ALPHA_FLOOR
+
+    assert trimmed(picture).size == (20, 20)
+    with pytest.raises(ValueError, match="empty"):
+        trimmed(Image.new("RGBA", (10, 10)))
