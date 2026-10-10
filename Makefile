@@ -5,6 +5,10 @@ SHELL := /bin/bash
 # App id the device-test, gate-harness, and gate-pull targets use; adb reads ANDROID_SERIAL from the shell.
 WILDFIND_PACKAGE ?= dev.anchildress1.wildfind.debug
 export WILDFIND_PACKAGE
+# adb treats an exported empty ANDROID_SERIAL as a device named "", so drop it unless it's set.
+ifeq ($(strip $(ANDROID_SERIAL)),)
+unexport ANDROID_SERIAL
+endif
 
 # Pin JAVA_HOME to the .sdkmanrc JDK; empty in CI where setup-java already exports it.
 SDKMAN_JAVA := $(HOME)/.sdkman/candidates/java/$(shell sed -n 's/^java=//p' .sdkmanrc)
