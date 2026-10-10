@@ -59,7 +59,7 @@ class FrameVerifierTest {
     )
 
     @Test
-    fun `plants in both regions run BioCLIP on each and score the goal on the reticle`() {
+    fun `plants in both regions run BioCLIP on each and score the goal on both`() {
         val result = verifier({ plant }, { safe }).analyze(frame, target) { close }
 
         assertEquals(listOf("gate:reticle", "gate:full", "bioclip:reticle", "bioclip:full"), calls)
@@ -122,6 +122,16 @@ class FrameVerifierTest {
         assertEquals(2, result.reticleRanking?.hazardRank)
         assertEquals(1, result.fullRanking?.hazardRank)
         assertEquals(0, result.evidence.hazardRow)
+    }
+
+    @Test
+    fun `a target scores on both regions when the full frame is a plant, and on the reticle alone when it isn't`() {
+        // The reticle reads the target, the full frame the rival genus: the mean ties them, so no pass.
+        val both = verifier({ plant }, { if (it) safe else hazard }).analyze(frame, target) { close }
+        assertEquals(GoalScore(false, 0.5, 1), both.goal)
+
+        val reticleOnly = verifier({ if (it) plant else notPlant }, { safe }).analyze(frame, target) { close }
+        assertEquals(GoalScore(true, 1.0, 1), reticleOnly.goal)
     }
 
     @Test

@@ -19,6 +19,10 @@ class ScoringTest {
 
     private val east = floatArrayOf(1f, 0f)
 
+    /** A unit embedding at [degrees]; it scores cos(angle - degrees) against each row. */
+    private fun toward(degrees: Double) =
+        floatArrayOf(cos(Math.toRadians(degrees)).toFloat(), sin(Math.toRadians(degrees)).toFloat())
+
     private fun everywhere(rows: Int) = BooleanArray(rows) { true }
 
     /** A check whose every hazard is on the floor, so locality never changes which hazard warns. */
@@ -189,6 +193,49 @@ class ScoringTest {
     @Test
     fun `only the hunt's rows compete with the target`() {
         assertTrue(target(20.0, 40.0, 50.0, 10.0, 5.0).score(east).met)
+    }
+
+    @Test
+    fun `with a full-frame plant each row scores the mean of its reticle and full-frame cosines`() {
+        val table = rows(10.0, 40.0, 50.0, 70.0, 80.0)
+        val full = toward(30.0)
+        val score = TargetGoal(table, genera, 0, intArrayOf(0, 1, 2), intArrayOf()).score(east, full)
+
+        assertEquals((table.dot(0, east) + table.dot(0, full)) / 2, score.score, 1e-12)
+        assertEquals(1, score.rank)
+        assertTrue(score.met)
+    }
+
+    @Test
+    fun `the mean needs the full-frame margin over the best blocker, the reticle alone the reticle margin`() {
+        val blockers = intArrayOf(3, 4)
+        // cos 10 - cos 20 is 0.045: past the full-frame margin, under the reticle one.
+        val between = target(10.0, 40.0, 50.0, 20.0, 80.0, blockers = blockers)
+        assertTrue(between.score(east, east).met)
+        assertFalse(between.score(east).met)
+        // cos 10 - cos 17 is 0.029, under both.
+        assertFalse(target(10.0, 40.0, 50.0, 17.0, 80.0, blockers = blockers).score(east, east).met)
+        assertEquals(0.034, TargetGoal.FULL_MARGIN)
+        assertEquals(0.048, TargetGoal.MARGIN)
+    }
+
+    @Test
+    fun `a target the reticle alone ranks under another genus passes on the mean`() {
+        // On the reticle the maple at 5 degrees leads the oak at 10; the full frame at 30 degrees lifts the oak.
+        val goal = target(10.0, 40.0, 5.0, 70.0, 80.0)
+
+        assertFalse(goal.score(east).met)
+        assertTrue(goal.score(east, toward(30.0)).met)
+    }
+
+    @Test
+    fun `a toxic blocker within the full-frame margin of the top species blocks it`() {
+        val blockers = intArrayOf(3, 4)
+        val full = toward(20.0)
+        // Mean scores: the oak cos 10, the blocker at 15 degrees (cos 15 + cos 5) / 2, 0.004 behind.
+        assertFalse(target(10.0, 40.0, 50.0, 15.0, 80.0, blockers = blockers).score(east, full).met)
+        // At 30 degrees the blocker's mean falls 0.059 behind, past the margin.
+        assertTrue(target(10.0, 40.0, 50.0, 30.0, 80.0, blockers = blockers).score(east, full).met)
     }
 
     @Test

@@ -1,0 +1,23 @@
+# day-5 target pass, mode reproduce, run 2026-10-10T08:41-04:00; arm64 macOS-26.5.2-arm64-arm-64bit-Mach-O; python 3.13.14, onnxruntime 1.30.0, numpy 2.5.3, Pillow 12.3.0
+# BioCLIP pin crazedcodernate/bioclip-2.5-mobile-fastvit@29b474ea2a5d72b4646f036ead9441e0a22a5c62; TinyCLIP pin wkcn/TinyCLIP-ViT-8M-16-Text-3M-YFCC15M@a2a8c6eaa2549ad66eb7c31b85022bf58273a26c
+#   asset 8624d44af3727b69a41dc2035c37018a30753b8d9c93ab8801a0c724dd42510f  flora_student_fp32.onnx
+#   asset bf1bdd2e939ba374498acf76162cbcc56fcc547e6e5a01aa50d5de477f6c58ed  plant_gate.onnx
+#   asset 33e8990299b4cb1450dfbebe600162e5602810dc01b3e747450af4ea66a4818a  plant_gate.json
+#   asset 1fd3cf277dddda6c4c0062b696d170e3b405487098e80dcc71138045835cc27d  species_table.npy
+#   asset 1d0269979f1e9cefa59a28af8a3aa5e0ecaad797c7c98eab855e132c567d5474  species_labels.json
+#   asset c63489be575b96a70febd147445f496a54ed6b666ff79bbf314906efd7e4d80f  labels.npy
+#   asset f6f31b2421956d8452a821ec4f8be5d0583f6ab8661a0483932d21712a3989c5  labels.json
+#   input S50: docs/results/day-3/calibration.photos.csv sha256 4451ca526b6ddbbe3540ad7089655e0ec5bbf97aac496e11070111db7908379b; embeddings .models/target-pass-embeddings/S50.npz
+#   input TB: docs/results/day-3/toxic_block_photos.csv sha256 04e160400f4c94e235dc2877d7acefd51b7febccabc54c8e11040e1a1a296432; embeddings .models/target-pass-embeddings/TB.npz
+#   input S51: docs/results/day-3/holdout.photos.csv sha256 c05e62308d2d1c3cad2698a9e60b309e1b9165432583fd84ceae5fa01130de7d; embeddings .models/target-pass-embeddings/S51.npz
+#   hunt: docs/results/day-2/threshold_regions.csv, inat_species_oct.csv, day-3/toxicity_audit.csv
+S50 target pass 17/30 (Oct 8: 17/30)
+S51 target pass 16/30 (Oct 8: 16/30)
+TB row 4 only: target 33/69 (Oct 8: 33/69); toxic 0/189 (Oct 8: 0/189), Day-2 180 0/180 (Oct 7: 0/180)
+S51 toxic pass 0/15 (Oct 8: 0/15); false pass 0/57 (Oct 8: 0/57)
+per-photo mismatches against day-3 calibration.csv, holdout.csv, toxic_block.csv: 0
+
+shipped row 1 (rule B, Oct 10) instead of the Oct 8 floor:
+  S50 target pass 17/30; warned by row 1 0
+  TB target pass 33/69; warned by row 1 5
+  S51 target pass 15/30; warned by row 1 3
