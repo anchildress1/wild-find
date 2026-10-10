@@ -58,13 +58,17 @@ fun LoadingScreen() {
     }
 }
 
-/** No answer from iNat and nothing cached here: no hunt starts (R8). */
+/**
+ * No answer from iNat and nothing cached here: no hunt starts (R8). The area is already saved, so a grown-up can
+ * cache it from the grown-ups page once signal is back.
+ */
 @Composable
-fun NeedsSignalScreen(onRetry: () -> Unit, onArea: () -> Unit) {
+fun NeedsSignalScreen(onRetry: () -> Unit, onArea: () -> Unit, onGrownUps: () -> Unit) {
     Page(
         bottom = {
             PrimaryButton(stringResource(R.string.try_again), onRetry, icon = null)
             OutlineButton(stringResource(R.string.pick_area), onArea)
+            LinkButton(stringResource(R.string.needs_signal_grown_ups), onGrownUps, Modifier.rise(index = 1))
         },
     ) {
         TryAgainBriar()

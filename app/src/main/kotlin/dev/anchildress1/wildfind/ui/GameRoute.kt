@@ -116,7 +116,11 @@ private fun ScreenFor(screen: Screen, state: GameState, vm: GameViewModel) {
 
         Screen.Loading -> LoadingScreen()
 
-        Screen.NeedsSignal -> NeedsSignalScreen({ on(GameEvent.LoadHunt) }, { on(GameEvent.ChangeRegion) })
+        Screen.NeedsSignal -> NeedsSignalScreen(
+            { on(GameEvent.LoadHunt) },
+            { on(GameEvent.ChangeRegion) },
+            { on(GameEvent.OpenGrownUps) },
+        )
 
         Screen.NotEnough -> NotEnoughScreen { on(GameEvent.ChangeRegion) }
 

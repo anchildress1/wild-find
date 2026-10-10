@@ -50,6 +50,7 @@
     <string name="pick_area">Pick my area</string>
     <string name="needs_signal">This place needs signal once.</string>
     <string name="needs_signal_detail">After that, hunts here work without it.</string>
+    <string name="needs_signal_grown_ups">Grown-ups: save this area for hunts without signal</string>
     <string name="try_again">Try again</string>
     <string name="offline_banner">No signal. Using your saved hunt.</string>
     <string name="camera_needed">The game needs the camera to see the plants you find.</string>

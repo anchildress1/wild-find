@@ -347,6 +347,28 @@ class GameRulesTest {
     }
 
     @Test
+    fun `an area picked offline stays saved, the grown-ups page caches it, and Try again pulls it`() {
+        val picked = playing(Screen.Map(back = Screen.GrownUps(Screen.Hunt))).after(
+            GameEvent.PickRegion(away),
+            Outcome.Pulled(away, LocalListResult.NeedsSignal, offline = true),
+        )
+        assertEquals(Screen.NeedsSignal, picked.game.ui.screen)
+        assertEquals(away, picked.game.flags.region)
+        assertTrue(Command.SaveFlags(flags(away)) in picked.commands)
+
+        val cached = picked.game.after(GameEvent.OpenGrownUps, GameEvent.CacheArea)
+        assertEquals(Screen.GrownUps(from = Screen.NeedsSignal), cached.game.ui.screen)
+        assertEquals(listOf(Command.CacheArea(away)), cached.commands)
+
+        val done = cached.game.after(Outcome.AreaReport(away, 12, finished = true), GameEvent.Back)
+        assertEquals(Screen.NeedsSignal, done.game.ui.screen)
+        val retried = done.game.after(GameEvent.LoadHunt)
+        assertEquals(listOf(Command.Pull(away)), retried.commands)
+        val local = local(targets + queue)
+        assertEquals(Screen.Hunt, retried.game.after(Outcome.Pulled(away, local, offline = true)).game.ui.screen)
+    }
+
+    @Test
     fun `a denied location is saved and sends the area choice to the map`() {
         val region = Screen.Region(back = null)
         val step = playing(region, hunt = null).after(GameEvent.LocationAnswer(granted = false))
