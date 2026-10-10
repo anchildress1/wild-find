@@ -368,6 +368,7 @@ private class Turn(private var game: Game, private val random: Random) {
         val updated = active.copy(progress = active.progress.copy(tutorialPending = true))
         game = game.copy(hunt = updated)
         persist(updated)
+        publish(updated)
         show(Screen.Tutorial)
     }
 

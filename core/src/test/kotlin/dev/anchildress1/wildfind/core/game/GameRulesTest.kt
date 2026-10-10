@@ -225,6 +225,9 @@ class GameRulesTest : GameFixture() {
             listOf(Command.SaveFlags(flags.copy(tutorialDone = false)), Command.SaveHunt(practice)),
             step.commands,
         )
+        // A pending practice blocks skips, so the hunt card must not offer one.
+        assertTrue(step.game.ui.stops.isNotEmpty())
+        assertTrue(step.game.ui.stops.none { it.canSkip })
 
         val camera = Screen.Camera(null)
         val passed = step.game.after(GameEvent.OpenCamera(null), frame(camera, 0, Verdict.Found))
