@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' file:; style-src 'unsafe-inline'; script-src 'unsafe-inline'">
+<title>S52 Slideshow</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #000; overflow: hidden; cursor: none; }
+  img { position: fixed; inset: 0; width: 100vw; height: 100vh; object-fit: contain; }
+  img.blank { visibility: hidden; }
+  /* Tiny and dim so the camera can't read it; CLIP models read text in a frame. */
+  #tag { position: fixed; right: 6px; bottom: 4px; font: 11px/1 monospace; color: #3a3a3a; }
+</style>
+</head>
+<body>
+<img id="photo" alt="">
+<div id="tag"></div>
+<script>
+// Generated from photos.csv: order, file (repo-relative), target_to_set. summarize.py checks they still match.
+const PHOTOS = [
+  [1, ".models/holdout-photos/target_Callicarpa_americana_398710393.jpg", "Callicarpa americana"],
+  [2, ".models/holdout-photos/target_Liquidambar_styraciflua_403739349.jpg", "Liquidambar styraciflua"],
+  [3, ".models/holdout-photos/target_Magnolia_grandiflora_389072742.jpg", "Magnolia grandiflora"],
+  [4, ".models/calibration-photos/target_Sassafras_albidum_405971253.jpg", "Sassafras albidum"],
+  [5, ".models/toxic-block-photos/Ilex_opaca_0.jpg", "Ilex cornuta"],
+  [6, ".models/holdout-photos/target_Tipularia_discolor_394266269.jpg", "Tipularia discolor"],
+  [7, ".models/holdout-photos/toxic_Parthenocissus_quinquefolia_406476317.jpg", "Ampelopsis glandulosa"],
+  [8, ".models/holdout-photos/toxic_Toxicodendron_radicans_406081708.jpg", "Vitis rotundifolia"],
+  [9, ".models/toxic-block-photos/Vitis_rotundifolia_0.jpg", "Ampelopsis glandulosa"],
+  [10, ".models/holdout-photos/target_Conoclinium_coelestinum_402497442.jpg", "Conoclinium coelestinum"],
+  [11, ".models/calibration-photos/target_Vitis_rotundifolia_402327267.jpg", "Vitis rotundifolia"],
+  [12, ".models/holdout-photos/target_Quercus_nigra_396037990.jpg", "Quercus nigra"],
+  [13, ".models/toxic-block-photos/Quercus_alba_0.jpg", "Quercus nigra"],
+  [14, ".models/calibration-photos/non_grass_Trifolium_repens_406359770.jpg", "Phyllanthus urinaria"],
+  [15, ".models/toxic-block-photos/Ampelopsis_glandulosa_0.jpg", "Vitis rotundifolia"],
+  [16, ".models/toxic-block-photos/Toxicodendron_radicans_0.jpg", "Callicarpa americana"],
+  [17, ".models/holdout-photos/target_Erechtites_hieraciifolius_405066909.jpg", "Erechtites hieraciifolius"],
+  [18, ".models/calibration-photos/target_Liriodendron_tulipifera_405264498.jpg", "Liriodendron tulipifera"],
+  [19, ".models/holdout-photos/target_Vitis_rotundifolia_402234219.jpg", "Magnolia grandiflora"],
+  [20, ".models/holdout-photos/target_Polystichum_acrostichoides_405276217.jpg", "Polystichum acrostichoides"],
+  [21, ".models/holdout-photos/target_Ampelopsis_glandulosa_404850238.jpg", "Ampelopsis glandulosa"],
+  [22, ".models/holdout-photos/toxic_Solanum_carolinense_405261312.jpg", "Conoclinium coelestinum"],
+  [23, ".models/holdout-photos/target_Pueraria_montana_403875690.jpg", "Pueraria montana"],
+  [24, ".models/calibration-photos/target_Liquidambar_styraciflua_404493614.jpg", "Liquidambar styraciflua"],
+  [25, ".models/holdout-photos/target_Albizia_julibrissin_399602191.jpg", "Albizia julibrissin"],
+  [26, ".models/toxic-block-photos/Acer_negundo_0.jpg", "Pueraria montana"],
+  [27, ".models/calibration-photos/target_Erechtites_hieraciifolius_405067001.jpg", "Erechtites hieraciifolius"],
+  [28, ".models/holdout-photos/target_Vitis_rotundifolia_401273832.jpg", "Vitis rotundifolia"],
+  [29, ".models/holdout-photos/target_Rhus_copallinum_405335103.jpg", "Rhus copallinum"],
+  [30, ".models/holdout-photos/target_Diospyros_virginiana_400803551.jpg", "Diospyros virginiana"],
+  [31, ".models/calibration-photos/target_Diospyros_virginiana_403124444.jpg", "Diospyros virginiana"],
+  [32, ".models/holdout-photos/target_Sassafras_albidum_405954859.jpg", "Pueraria montana"],
+  [33, ".models/holdout-photos/target_Fagus_grandifolia_404794246.jpg", "Fagus grandifolia"],
+  [34, ".models/calibration-photos/non_grass_Rubus_ulmifolius_406649712.jpg", "Ampelopsis glandulosa"],
+  [35, ".models/calibration-photos/non_grass_Taraxacum_officinale_406035391.jpg", "Erechtites hieraciifolius"],
+  [36, ".models/calibration-photos/target_Ampelopsis_glandulosa_405082405.jpg", "Ampelopsis glandulosa"],
+  [37, ".models/toxic-block-photos/Acer_rubrum_2.jpg", "Platanus occidentalis"],
+  [38, ".models/calibration-photos/target_Albizia_julibrissin_401649566.jpg", "Albizia julibrissin"],
+  [39, ".models/holdout-photos/target_Pueraria_montana_400615536.jpg", "Pueraria montana"],
+  [40, ".models/calibration-photos/target_Liriodendron_tulipifera_405512381.jpg", "Liriodendron tulipifera"],
+  [41, ".models/holdout-photos/target_Platanus_occidentalis_404972710.jpg", "Platanus occidentalis"],
+  [42, ".models/toxic-block-photos/Monotropa_uniflora_2.jpg", "Magnolia grandiflora"],
+  [43, ".models/holdout-photos/target_Phyllanthus_urinaria_389375799.jpg", "Phyllanthus urinaria"],
+  [44, ".models/holdout-photos/target_Ilex_cornuta_354883834.jpg", "Ilex cornuta"],
+  [45, ".models/holdout-photos/target_Cercis_canadensis_402371869.jpg", "Cercis canadensis"],
+  [46, ".models/holdout-photos/target_Ampelopsis_glandulosa_404581096.jpg", "Ampelopsis glandulosa"],
+  [47, ".models/calibration-photos/target_Magnolia_grandiflora_396800120.jpg", "Magnolia grandiflora"],
+  [48, ".models/holdout-photos/target_Liriodendron_tulipifera_405264462.jpg", "Magnolia grandiflora"],
+  [49, ".models/holdout-photos/target_Diospyros_virginiana_402279427.jpg", "Cercis canadensis"],
+  [50, ".models/holdout-photos/toxic_Phytolacca_americana_406342093.jpg", "Ampelopsis glandulosa"],
+  [51, ".models/holdout-photos/target_Chimaphila_maculata_405056544.jpg", "Chimaphila maculata"],
+  [52, ".models/holdout-photos/target_Solidago_altissima_403424772.jpg", "Solidago altissima"],
+];
+// This page sits four levels below the repo root; the .models caches are gitignored, so photos are read in place.
+const ROOT = "../../../../";
+const photo = document.getElementById("photo");
+const tag = document.getElementById("tag");
+let index = 0;
+let showTarget = false;
+
+function render() {
+  const [order, file, target] = PHOTOS[index];
+  photo.classList.remove("blank");
+  photo.src = ROOT + file;
+  tag.textContent = `#${order}/${PHOTOS.length}` + (showTarget ? ` ${target}` : "");
+  if (location.hash !== `#${order}`) history.replaceState(null, "", `#${order}`);
+}
+
+function fromHash() {
+  const i = PHOTOS.findIndex(([order]) => `#${order}` === location.hash);
+  index = i < 0 ? 0 : i;
+  render();
+}
+
+photo.addEventListener("error", () => { tag.textContent += " MISSING"; tag.style.color = "#a33"; });
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowRight" || e.key === " ") index = Math.min(index + 1, PHOTOS.length - 1);
+  else if (e.key === "ArrowLeft") index = Math.max(index - 1, 0);
+  else if (e.key === "i") showTarget = !showTarget;
+  else if (e.key === "b") { photo.classList.toggle("blank"); return; }
+  else if (e.key === "f") { document.documentElement.requestFullscreen(); return; }
+  else return;
+  e.preventDefault();
+  render();
+});
+window.addEventListener("hashchange", fromHash);
+fromHash();
+</script>
+</body>
+</html>
