@@ -9,18 +9,26 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
-/** Every plant type a target can carry has its picture in the APK, so no tile ever comes up empty. */
+/** Every plant type a target can carry, and none, has its picture in the APK, so no tile ever comes up empty. */
 @RunWith(AndroidJUnit4::class)
 class PlantArtTest {
     private val assets = InstrumentationRegistry.getInstrumentation().targetContext.assets
 
     @Test
-    fun everyPlantTypeHasASquarePictureWithTransparency() {
-        PlantType.entries.forEach { type ->
-            val bitmap = assets.open("plants/${type.key}.webp").use(BitmapFactory::decodeStream)
-            assertEquals(type.key, bitmap.width, bitmap.height)
-            assertTrue(type.key, bitmap.hasAlpha())
+    fun everyPlantTypeAndTheUntypedPlantHaveASquarePictureWithTransparency() {
+        // "plant" is the picture PlantArt draws for a species the build found no type for.
+        (PlantType.entries.map { it.key } + "plant").forEach { key ->
+            val bitmap = assets.open("plants/$key.webp").use(BitmapFactory::decodeStream)
+            assertEquals(key, bitmap.width, bitmap.height)
+            assertTrue(key, bitmap.hasAlpha())
         }
+    }
+
+    @Test
+    fun theTitleArtLoadsWithTransparency() {
+        val title = assets.open("title.webp").use(BitmapFactory::decodeStream)
+        assertEquals(TITLE_SIZE, title.width to title.height)
+        assertTrue(title.hasAlpha())
     }
 
     @Test
@@ -28,5 +36,10 @@ class PlantArtTest {
         val star = assets.open("star.webp").use(BitmapFactory::decodeStream)
         assertEquals(star.width, star.height)
         assertTrue(star.hasAlpha())
+    }
+
+    private companion object {
+        // TitleArt reserves its box from this shape before the picture decodes.
+        val TITLE_SIZE = 900 to 755
     }
 }

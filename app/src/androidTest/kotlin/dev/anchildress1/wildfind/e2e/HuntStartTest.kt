@@ -8,6 +8,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import dev.anchildress1.wildfind.R
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -54,6 +55,21 @@ class HuntStartTest : E2eTest() {
         assertEquals(names.toSet(), targets.map { it.common }.toSet())
         assertEquals("two targets share a genus", TARGETS, targets.map { rows[it.row].genus }.distinct().size)
         targets.forEach { assertTrue("${rows[it.row].scientific} is toxic or a hazard", rows[it.row].playable) }
+    }
+
+    @Test
+    fun everyStopShowsItsDescriptionUnderTheNameAndTalkBackReadsIt() {
+        startHuntList()
+        val rows = models().rows
+        val labels = stops()
+        savedHunt().progress.targets.forEach { target ->
+            val description = rows[target.row].description
+            assertNotNull("${rows[target.row].scientific} has no description", description)
+            // The stop card clears its children's semantics, so the line shows only in the unmerged tree.
+            assertTrue("\"$description\" not shown", nodes(hasText(description!!), merged = false).isNotEmpty())
+            val label = labels.single { stopName(it) == target.common }
+            assertTrue("TalkBack label \"$label\" lacks \"$description\"", description in label)
+        }
     }
 
     @Test

@@ -68,6 +68,18 @@ class HuntPickTest {
         assertEquals(6, hunt.targets.size + hunt.queue.size)
     }
 
+    @Test
+    fun `a row held back from picks is never a target or in the queue`() {
+        val held = table.mapIndexed { row, species -> if (row == 2) species.copy(target = false) else species }
+        repeat(200) { seed ->
+            val hunt = HuntPick(held, Random(seed)).next(local(10, 10, 900, 10, 10, 10), tutorialDone = true)
+
+            assertEquals(3, hunt.targets.size)
+            assertFalse((hunt.targets + hunt.queue).any { it.row == 2 })
+            assertEquals(5, hunt.targets.size + hunt.queue.size)
+        }
+    }
+
     private fun hintedTable(vararg hinted: Int) = table.mapIndexed { row, species ->
         species.copy(hints = if (row in hinted) listOf(Hint("Look near water.")) else emptyList())
     }

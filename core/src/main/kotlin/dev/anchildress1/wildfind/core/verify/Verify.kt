@@ -3,13 +3,14 @@ package dev.anchildress1.wildfind.core.verify
 /**
  * What one analyzed frame showed, as the PRD verify table reads it.
  *
- * @property hazard row 1: a hazard species ranked in the top 5 in a region the plant gate called a plant
+ * @property hazardRow row 1: the best-ranked hazard species in the top 5 of a region the plant gate called a plant,
+ *   or null when none warns
  * @property reticlePlant row 2: the plant gate called the reticle crop a plant
  * @property focus row 3: this frame's own autofocus reading, or null when it has none; distance only explains a
  *   miss
  * @property goalMet row 4: this frame alone meets the goal
  */
-data class FrameEvidence(val hazard: Boolean, val reticlePlant: Boolean, val focus: Focus?, val goalMet: Boolean)
+data class FrameEvidence(val hazardRow: Int?, val reticlePlant: Boolean, val focus: Focus?, val goalMet: Boolean)
 
 /**
  * One frame's outcome under the verify table; the first matching row wins.
@@ -17,8 +18,12 @@ data class FrameEvidence(val hazard: Boolean, val reticlePlant: Boolean, val foc
  * Distance never blocks a match: the Oct 7 field runs showed the close-range rule stopping 51% of analyzed frames.
  */
 sealed interface Verdict {
-    /** Row 1: warn, no star. */
-    data object Hazard : Verdict
+    /**
+     * Row 1: warn, no star.
+     *
+     * @property row the species-table row that warned
+     */
+    data class Hazard(val row: Int) : Verdict
 
     /** Row 2: "Point the camera at a plant". */
     data object NotPlant : Verdict
@@ -50,7 +55,7 @@ class VerifyStreak {
     /** The verdict for the next analyzed frame. */
     fun next(frame: FrameEvidence): Verdict {
         val verdict = when {
-            frame.hazard -> Verdict.Hazard
+            frame.hazardRow != null -> Verdict.Hazard(frame.hazardRow)
             !frame.reticlePlant -> Verdict.NotPlant
             frame.focus?.isFocused != true -> Verdict.TapToFocus
             frame.goalMet -> if (run + 1 == FRAMES) Verdict.Found else Verdict.Matching(run + 1)

@@ -73,7 +73,7 @@ def test_trees_need_showy_flowers_and_conifers_ferns_and_grasses_get_none():
 
 
 def test_size_words_follow_the_tallest_height_per_type_and_vines_get_none():
-    assert texts("herb", {t.HEIGHT: ["1"]}) == {"size": "It is a low plant."}
+    assert texts("herb", {t.HEIGHT: ["1"]}) == {"size": "It is a low herb."}
     assert texts("shrub", {t.HEIGHT: ["2", "15"]}) == {"size": "It is a big bush."}
     assert texts("tree", {t.HEIGHT: ["40"]}) == {}
     assert texts("vine", {t.HEIGHT: ["90"]}) == {}

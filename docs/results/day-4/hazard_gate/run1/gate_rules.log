@@ -1,0 +1,492 @@
+run 2026-10-09T23:29:15-04:00; Apple M4 Max, macOS 26.5.2, laptop CPU
+python 3.13.14, onnxruntime 1.30.0, numpy 2.5.3, Pillow 12.3.0
+  pin bioclip: crazedcodernate/bioclip-2.5-mobile-fastvit@29b474ea2a5d72b4646f036ead9441e0a22a5c62 flora_student_fp32.onnx sha256 8624d44af3727b69a41dc2035c37018a30753b8d9c93ab8801a0c724dd42510f
+  pin teacher: imageomics/bioclip-2.5-vith14@6e3d04e3d6522012c88181085c5ae666e14c45cd
+  pin tinyclip: wkcn/TinyCLIP-ViT-8M-16-Text-3M-YFCC15M@a2a8c6eaa2549ad66eb7c31b85022bf58273a26c model.safetensors sha256 9339ee3d736344d0ddcaa6c03edc9f89688f08caaea5401220885233da726fcc
+  pin taxa: crazedcodernate/bioclip-2.5-mobile-fastvit@29b474ea2a5d72b4646f036ead9441e0a22a5c62 taxa_table.npy sha256 75626c967a00556f09bd6534d15c9c97c71ce37b0f3ae591187ba06d53377ae2
+  pin taxa_labels: crazedcodernate/bioclip-2.5-mobile-fastvit@29b474ea2a5d72b4646f036ead9441e0a22a5c62 taxa_labels.json sha256 adb36a6af884fda71ad3d633c20ede66862b335915a282ea613604409b6d4d7f
+  asset flora_student_fp32.onnx sha256 8624d44af3727b69a41dc2035c37018a30753b8d9c93ab8801a0c724dd42510f
+  asset plant_gate.onnx sha256 18d96a53c4f40fecf32fb22461681e9b645271ee2270c2d709beabba01cac935
+  asset plant_gate.json sha256 33e8990299b4cb1450dfbebe600162e5602810dc01b3e747450af4ea66a4818a
+  asset species_table.npy sha256 1fd3cf277dddda6c4c0062b696d170e3b405487098e80dcc71138045835cc27d
+  asset species_labels.json sha256 8b2f31254e529cd75060e3cc28b46245bcd2d28eacf69053e3a87cf9ac91c650
+  asset labels.npy sha256 c63489be575b96a70febd147445f496a54ed6b666ff79bbf314906efd7e4d80f
+  asset labels.json sha256 f6f31b2421956d8452a821ec4f8be5d0583f6ab8661a0483932d21712a3989c5
+  input pipeline/data/contact_hazards.json sha256 bf86cff391636064065cbbb85362e5cf5b6bda8f69075a339ba50238f6584323
+  input pipeline/data/contact_hazards_review.json sha256 6f09198e38c51d9ace911c04c5717d227cbba521b0ee28aa9ddc1141cd538479
+  input docs/results/day-1-photos.tsv sha256 7c472ce6452c1bec02bbfd08666addf4a301f12a7362b56c02d7129b68badd00
+  input docs/results/day-3/calibration.photos.csv sha256 4451ca526b6ddbbe3540ad7089655e0ec5bbf97aac496e11070111db7908379b
+  input docs/results/day-3/holdout.photos.csv sha256 c05e62308d2d1c3cad2698a9e60b309e1b9165432583fd84ceae5fa01130de7d
+  input docs/results/day-4/hazard_gate/photos.csv sha256 6386f01c1e0de9a76e6650828364135051ac57d880bd96dd08e4623d779ab2b8
+  input docs/results/day-1/tinyclip_scores.csv sha256 b28f2bb9afad2f44183db7a5113974eeda2b4e427013578265672f9ff6579251
+  input docs/results/day-1/species_scores.csv sha256 45763b3c914a838de50508398158aed43964e7d85b23ed8b86ab564fbc74dec1
+species rows 4272; hazard rows old 7, new 147; old rows missing from new: []
+rule B local set for Day 1, S50, S51: the cached West Georgia October pull, 647 table rows, 37 of them generated hazards
+
+## Day 1 set (day1_rerun.py)
+
+Day-1 set: 52 hazard photos, 253 safe photos (fixture and label-format excluded, as Day 1)
+old-flag ranks equal to day-1/species_scores.csv best_hazard_rank: 610/610 photo-regions
+gate   rule     k   hazards caught      safe photos warned
+day1   fixed 7  1   43/52 (82.7%)       1/253 (0.4%)
+day1   fixed 7  2   44/52 (84.6%)       1/253 (0.4%)
+day1   fixed 7  3   45/52 (86.5%)       1/253 (0.4%)
+day1   fixed 7  4   46/52 (88.5%)       1/253 (0.4%)
+day1   fixed 7  5   48/52 (92.3%)       1/253 (0.4%)
+day1   rule A   1   43/52 (82.7%)       6/253 (2.4%)
+day1   rule A   2   45/52 (86.5%)       11/253 (4.3%)
+day1   rule A   3   46/52 (88.5%)       17/253 (6.7%)
+day1   rule A   4   47/52 (90.4%)       22/253 (8.7%)
+day1   rule A   5   49/52 (94.2%)       27/253 (10.7%)
+day1   rule B   1   43/52 (82.7%)       2/253 (0.8%)
+day1   rule B   2   44/52 (84.6%)       5/253 (2.0%)
+day1   rule B   3   45/52 (86.5%)       7/253 (2.8%)
+day1   rule B   4   46/52 (88.5%)       8/253 (3.2%)
+day1   rule B   5   48/52 (92.3%)       9/253 (3.6%)
+app    fixed 7  1   43/52 (82.7%)       1/253 (0.4%)
+app    fixed 7  2   44/52 (84.6%)       1/253 (0.4%)
+app    fixed 7  3   45/52 (86.5%)       1/253 (0.4%)
+app    fixed 7  4   46/52 (88.5%)       1/253 (0.4%)
+app    fixed 7  5   48/52 (92.3%)       1/253 (0.4%)
+app    rule A   1   43/52 (82.7%)       6/253 (2.4%)
+app    rule A   2   45/52 (86.5%)       11/253 (4.3%)
+app    rule A   3   46/52 (88.5%)       17/253 (6.7%)
+app    rule A   4   47/52 (90.4%)       22/253 (8.7%)
+app    rule A   5   49/52 (94.2%)       27/253 (10.7%)
+app    rule B   1   43/52 (82.7%)       2/253 (0.8%)
+app    rule B   2   44/52 (84.6%)       5/253 (2.0%)
+app    rule B   3   45/52 (86.5%)       7/253 (2.8%)
+app    rule B   4   46/52 (88.5%)       8/253 (3.2%)
+app    rule B   5   48/52 (92.3%)       9/253 (3.6%)
+
+[day1 gate] at k=5; hazard species warning on safe photos: rule A Trifolium hybridum 3, Plumeria rubra 2, Quercus coccinea 2, Solanum mauritianum 2, Araujia sericifera 1, Campsis radicans 1, Crinum asiaticum 1, Cynanchum laeve 1, Dirca palustris 1, Euphorbia hypericifolia 1, Ficus pumila 1, Gelsemium sempervirens 1, Mangifera indica 1, Nerium oleander 1, Parthenium hysterophorus 1, Parthenocissus quinquefolia 1, Ranunculus hispidus 1, Ricinus communis 1, Rumex obtusifolius 1, Salsola tragus 1, Schinus terebinthifolia 1, Symplocarpus foetidus 1, Syngonium podophyllum 1, Toxicodendron radicans 1, Urtica dioica 1; rule B Quercus coccinea 2, Campsis radicans 1, Cynanchum laeve 1, Euphorbia hypericifolia 1, Gelsemium sempervirens 1, Parthenocissus quinquefolia 1, Ricinus communis 1, Rumex obtusifolius 1, Toxicodendron radicans 1
+  safe warned by rule A: oak_1.jpg reticle/full ranks fixed 7 639/1337 (Phytolacca americana / Phytolacca americana); rule A 1/18 (Plumeria rubra / Plumeria rubra); rule B 22/187 (Ricinus communis / Pontederia crassipes); plant day1 0.6994/0.7115
+  safe warned by rule A, rule B: oak_2.jpg reticle/full ranks fixed 7 89/35 (Toxicodendron pubescens / Toxicodendron pubescens); rule A 3/8 (Quercus coccinea / Quercus coccinea); rule B 3/8 (Quercus coccinea / Quercus coccinea); plant day1 0.9704/0.9835
+  safe warned by rule A: clover_1.jpg reticle/full ranks fixed 7 448/390 (Phytolacca americana / Solanum carolinense); rule A 1/1 (Urtica dioica / Urtica dioica); rule B 55/49 (Galium aparine / Perilla frutescens); plant day1 0.9878/0.9381
+  safe warned by rule A, rule B: pine_1.jpg reticle/full ranks fixed 7 17/105 (Toxicodendron radicans / Toxicodendron radicans); rule A 2/73 (Campsis radicans / Quercus coccinea); rule B 2/73 (Campsis radicans / Quercus coccinea); plant day1 0.8141/0.8214
+  safe warned by rule A: dandelion_1.jpg reticle/full ranks fixed 7 414/1088 (Phytolacca americana / Phytolacca americana); rule A 26/5 (Asparagus aethiopicus / Salsola tragus); rule B 139/209 (Lantana camara / Euphorbia heterophylla); plant day1 0.9882/0.9813
+  hazard warned by rule A: poisonivy_2.jpg reticle/full ranks fixed 7 416/47 (Phytolacca americana / Toxicodendron radicans); rule A 2/8 (Scaevola taccada / Schinus terebinthifolia); rule B 30/33 (Carica papaya / Ricinus communis); plant day1 0.9609/0.9638
+  safe warned by fixed 7, rule A, rule B: grass_77707956.jpg reticle/full ranks fixed 7 1/108 (Toxicodendron radicans / Toxicodendron radicans); rule A 1/4 (Toxicodendron radicans / Cynanchum laeve); rule B 1/4 (Toxicodendron radicans / Cynanchum laeve); plant day1 0.9606/0.9618
+  safe warned by rule A, rule B: grass_53684067.jpg reticle/full ranks fixed 7 192/362 (Solanum carolinense / Solanum carolinense); rule A 10/3 (Euphorbia maculata / Euphorbia hypericifolia); rule B 10/3 (Euphorbia maculata / Euphorbia hypericifolia); plant day1 0.9822/0.9859
+  safe warned by rule A, rule B: grass_303516861.jpg reticle/full ranks fixed 7 629/183 (Toxicodendron radicans / Toxicodendron radicans); rule A 2/2 (Gelsemium sempervirens / Gelsemium sempervirens); rule B 2/2 (Gelsemium sempervirens / Gelsemium sempervirens); plant day1 0.9647/0.9790
+  safe warned by rule A, rule B: oak_53007204.jpg reticle/full ranks fixed 7 134/107 (Toxicodendron pubescens / Toxicodendron pubescens); rule A 4/4 (Quercus coccinea / Quercus coccinea); rule B 4/4 (Quercus coccinea / Quercus coccinea); plant day1 0.9900/0.9751
+  safe warned by rule A: oak_318311909.jpg reticle/full ranks fixed 7 610/623 (Toxicodendron radicans / Toxicodendron radicans); rule A 5/4 (Mangifera indica / Mangifera indica); rule B 22/41 (Carica papaya / Carica papaya); plant day1 0.7808/0.8414
+  safe warned by rule A, rule B: maple_185909345.jpg reticle/full ranks fixed 7 708/524 (Phytolacca americana / Toxicodendron radicans); rule A 5/5 (Parthenocissus quinquefolia / Parthenocissus quinquefolia); rule B 5/5 (Parthenocissus quinquefolia / Parthenocissus quinquefolia); plant day1 0.9843/0.9862
+  safe warned by rule A, rule B: sweetgum_267797916.jpg reticle/full ranks fixed 7 270/260 (Toxicodendron radicans / Toxicodendron radicans); rule A 1/13 (Ricinus communis / Ricinus communis); rule B 1/13 (Ricinus communis / Ricinus communis); plant day1 0.9335/0.9501
+  safe warned by rule A: sweetgum_75817784.jpg reticle/full ranks fixed 7 773/784 (Toxicodendron diversilobum / Toxicodendron radicans); rule A 132/2 (Euphorbia ophthalmica / Symplocarpus foetidus); rule B 132/25 (Euphorbia ophthalmica / Hedera helix); plant day1 0.9470/0.9727
+  safe warned by rule A: sweetgum_388029933.jpg reticle/full ranks fixed 7 913/283 (Toxicodendron diversilobum / Toxicodendron radicans); rule A 5/11 (Schinus terebinthifolia / Ficus pumila); rule B 172/30 (Robinia pseudoacacia / Hedera helix); plant day1 0.7901/0.7052
+  safe warned by rule A, rule B: fern_322314909.jpg reticle/full ranks fixed 7 126/236 (Solanum carolinense / Solanum carolinense); rule A 1/2 (Syngonium podophyllum / Rumex obtusifolius); rule B 11/2 (Arum italicum / Rumex obtusifolius); plant day1 0.9726/0.9766
+  safe warned by rule A: fern_143646740.jpg reticle/full ranks fixed 7 318/236 (Toxicodendron radicans / Toxicodendron radicans); rule A 3/13 (Parthenium hysterophorus / Clematis drummondii); rule B 53/54 (Galium aparine / Artemisia vulgaris); plant day1 0.9711/0.9867
+  safe warned by rule A: clover_166931416.jpg reticle/full ranks fixed 7 904/815 (Toxicodendron rydbergii / Toxicodendron radicans); rule A 3/2 (Trifolium hybridum / Trifolium hybridum); rule B 253/117 (Hypericum punctatum / Daucus carota); plant day1 0.9677/0.9721
+  safe warned by rule A: clover_295532142.jpg reticle/full ranks fixed 7 621/523 (Toxicodendron radicans / Toxicodendron radicans); rule A 4/3 (Trifolium hybridum / Trifolium hybridum); rule B 241/129 (Daucus carota / Daucus carota); plant day1 0.9710/0.9623
+  safe warned by rule A: clover_391225110.jpg reticle/full ranks fixed 7 1427/1141 (Toxicodendron radicans / Toxicodendron radicans); rule A 5/3 (Trifolium hybridum / Trifolium hybridum); rule B 429/410 (Achillea millefolium / Daucus carota); plant day1 0.9546/0.9568
+  safe warned by rule A: magnolia_357301974.jpg reticle/full ranks fixed 7 31/57 (Toxicodendron vernix / Toxicodendron vernix); rule A 3/16 (Dirca palustris / Dirca palustris); rule B 31/51 (Toxicodendron vernix / Morus rubra); plant day1 0.9533/0.9711
+  safe warned by rule A: magnolia_251177662.jpg reticle/full ranks fixed 7 491/458 (Phytolacca americana / Phytolacca americana); rule A 4/7 (Nerium oleander / Nerium oleander); rule B 58/127 (Gelsemium sempervirens / Verbascum thapsus); plant day1 0.9749/0.9781
+  safe warned by rule A: magnolia_371399763.jpg reticle/full ranks fixed 7 105/74 (Phytolacca americana / Phytolacca americana); rule A 2/2 (Solanum mauritianum / Solanum mauritianum); rule B 11/22 (Verbascum thapsus / Verbascum thapsus); plant day1 0.9852/0.9891
+  safe warned by rule A: magnolia_80465557.jpg reticle/full ranks fixed 7 12/19 (Phytolacca americana / Phytolacca americana); rule A 4/4 (Solanum mauritianum / Plumeria rubra); rule B 12/19 (Phytolacca americana / Phytolacca americana); plant day1 0.9308/0.9427
+  safe warned by rule A: violet_74595584.jpg reticle/full ranks fixed 7 236/146 (Solanum carolinense / Solanum carolinense); rule A 1/4 (Ranunculus hispidus / Ranunculus hispidus); rule B 7/12 (Ranunculus abortivus / Ranunculus abortivus); plant day1 0.9832/0.9725
+  safe warned by rule A: honeysuckle_3323351.jpg reticle/full ranks fixed 7 129/104 (Solanum carolinense / Solanum carolinense); rule A 10/5 (Araujia sericifera / Araujia sericifera); rule B 56/54 (Apocynum cannabinum / Gelsemium sempervirens); plant day1 0.9700/0.9790
+  safe warned by rule A: honeysuckle_28400905.jpg reticle/full ranks fixed 7 1191/208 (Phytolacca americana / Solanum carolinense); rule A 4/6 (Crinum asiaticum / Araujia sericifera); rule B 81/22 (Pontederia crassipes / Campsis radicans); plant day1 0.9783/0.9782
+  hazard warned by no rule: poison_ivy_267986184.jpg reticle/full ranks fixed 7 370/100 (Toxicodendron radicans / Toxicodendron radicans); rule A 149/70 (Nolina texana / Gelsemium sempervirens); rule B 370/70 (Toxicodendron radicans / Gelsemium sempervirens); plant day1 0.9099/0.9490
+  hazard warned by no rule: poison_sumac_396031193.jpg reticle/full ranks fixed 7 49/17 (Phytolacca americana / Toxicodendron vernix); rule A 12/17 (Gelsemium sempervirens / Toxicodendron vernix); rule B 12/17 (Gelsemium sempervirens / Toxicodendron vernix); plant day1 0.9881/0.9847
+  hazard warned by no rule: poison_sumac_396810195.jpg reticle/full ranks fixed 7 15/11 (Toxicodendron vernix / Toxicodendron vernix); rule A 15/11 (Toxicodendron vernix / Toxicodendron vernix); rule B 15/11 (Toxicodendron vernix / Toxicodendron vernix); plant day1 0.9884/0.9891
+  safe warned by rule A: np_trampoline_189691419.jpg reticle/full ranks fixed 7 858/378 (Phytolacca americana / Phytolacca americana); rule A 1/5 (Mangifera indica / Ficus pumila); rule B 50/35 (Pontederia crassipes / Hedera helix); plant day1 0.4762/0.5331
+
+[app gate] at k=5; hazard species warning on safe photos: rule A Trifolium hybridum 3, Plumeria rubra 2, Quercus coccinea 2, Solanum mauritianum 2, Araujia sericifera 1, Campsis radicans 1, Crinum asiaticum 1, Cynanchum laeve 1, Dirca palustris 1, Euphorbia hypericifolia 1, Ficus pumila 1, Gelsemium sempervirens 1, Mangifera indica 1, Nerium oleander 1, Parthenium hysterophorus 1, Parthenocissus quinquefolia 1, Ranunculus hispidus 1, Ricinus communis 1, Rumex obtusifolius 1, Salsola tragus 1, Schinus terebinthifolia 1, Symplocarpus foetidus 1, Syngonium podophyllum 1, Toxicodendron radicans 1, Urtica dioica 1; rule B Quercus coccinea 2, Campsis radicans 1, Cynanchum laeve 1, Euphorbia hypericifolia 1, Gelsemium sempervirens 1, Parthenocissus quinquefolia 1, Ricinus communis 1, Rumex obtusifolius 1, Toxicodendron radicans 1
+  safe warned by rule A: oak_1.jpg reticle/full ranks fixed 7 639/1337 (Phytolacca americana / Phytolacca americana); rule A 1/18 (Plumeria rubra / Plumeria rubra); rule B 22/187 (Ricinus communis / Pontederia crassipes); plant app 0.6994/0.7023
+  safe warned by rule A, rule B: oak_2.jpg reticle/full ranks fixed 7 89/35 (Toxicodendron pubescens / Toxicodendron pubescens); rule A 3/8 (Quercus coccinea / Quercus coccinea); rule B 3/8 (Quercus coccinea / Quercus coccinea); plant app 0.9704/0.9835
+  safe warned by rule A: clover_1.jpg reticle/full ranks fixed 7 448/390 (Phytolacca americana / Solanum carolinense); rule A 1/1 (Urtica dioica / Urtica dioica); rule B 55/49 (Galium aparine / Perilla frutescens); plant app 0.9878/0.9369
+  safe warned by rule A, rule B: pine_1.jpg reticle/full ranks fixed 7 17/105 (Toxicodendron radicans / Toxicodendron radicans); rule A 2/73 (Campsis radicans / Quercus coccinea); rule B 2/73 (Campsis radicans / Quercus coccinea); plant app 0.8141/0.8230
+  safe warned by rule A: dandelion_1.jpg reticle/full ranks fixed 7 414/1088 (Phytolacca americana / Phytolacca americana); rule A 26/5 (Asparagus aethiopicus / Salsola tragus); rule B 139/209 (Lantana camara / Euphorbia heterophylla); plant app 0.9882/0.9827
+  hazard warned by rule A: poisonivy_2.jpg reticle/full ranks fixed 7 416/47 (Phytolacca americana / Toxicodendron radicans); rule A 2/8 (Scaevola taccada / Schinus terebinthifolia); rule B 30/33 (Carica papaya / Ricinus communis); plant app 0.9609/0.9620
+  safe warned by fixed 7, rule A, rule B: grass_77707956.jpg reticle/full ranks fixed 7 1/108 (Toxicodendron radicans / Toxicodendron radicans); rule A 1/4 (Toxicodendron radicans / Cynanchum laeve); rule B 1/4 (Toxicodendron radicans / Cynanchum laeve); plant app 0.9606/0.9631
+  safe warned by rule A, rule B: grass_53684067.jpg reticle/full ranks fixed 7 192/362 (Solanum carolinense / Solanum carolinense); rule A 10/3 (Euphorbia maculata / Euphorbia hypericifolia); rule B 10/3 (Euphorbia maculata / Euphorbia hypericifolia); plant app 0.9822/0.9863
+  safe warned by rule A, rule B: grass_303516861.jpg reticle/full ranks fixed 7 629/183 (Toxicodendron radicans / Toxicodendron radicans); rule A 2/2 (Gelsemium sempervirens / Gelsemium sempervirens); rule B 2/2 (Gelsemium sempervirens / Gelsemium sempervirens); plant app 0.9647/0.9799
+  safe warned by rule A, rule B: oak_53007204.jpg reticle/full ranks fixed 7 134/107 (Toxicodendron pubescens / Toxicodendron pubescens); rule A 4/4 (Quercus coccinea / Quercus coccinea); rule B 4/4 (Quercus coccinea / Quercus coccinea); plant app 0.9900/0.9740
+  safe warned by rule A: oak_318311909.jpg reticle/full ranks fixed 7 610/623 (Toxicodendron radicans / Toxicodendron radicans); rule A 5/4 (Mangifera indica / Mangifera indica); rule B 22/41 (Carica papaya / Carica papaya); plant app 0.7808/0.8567
+  safe warned by rule A, rule B: maple_185909345.jpg reticle/full ranks fixed 7 708/524 (Phytolacca americana / Toxicodendron radicans); rule A 5/5 (Parthenocissus quinquefolia / Parthenocissus quinquefolia); rule B 5/5 (Parthenocissus quinquefolia / Parthenocissus quinquefolia); plant app 0.9843/0.9859
+  safe warned by rule A, rule B: sweetgum_267797916.jpg reticle/full ranks fixed 7 270/260 (Toxicodendron radicans / Toxicodendron radicans); rule A 1/13 (Ricinus communis / Ricinus communis); rule B 1/13 (Ricinus communis / Ricinus communis); plant app 0.9335/0.9421
+  safe warned by rule A: sweetgum_75817784.jpg reticle/full ranks fixed 7 773/784 (Toxicodendron diversilobum / Toxicodendron radicans); rule A 132/2 (Euphorbia ophthalmica / Symplocarpus foetidus); rule B 132/25 (Euphorbia ophthalmica / Hedera helix); plant app 0.9470/0.9715
+  safe warned by rule A: sweetgum_388029933.jpg reticle/full ranks fixed 7 913/283 (Toxicodendron diversilobum / Toxicodendron radicans); rule A 5/11 (Schinus terebinthifolia / Ficus pumila); rule B 172/30 (Robinia pseudoacacia / Hedera helix); plant app 0.7901/0.7174
+  safe warned by rule A, rule B: fern_322314909.jpg reticle/full ranks fixed 7 126/236 (Solanum carolinense / Solanum carolinense); rule A 1/2 (Syngonium podophyllum / Rumex obtusifolius); rule B 11/2 (Arum italicum / Rumex obtusifolius); plant app 0.9726/0.9772
+  safe warned by rule A: fern_143646740.jpg reticle/full ranks fixed 7 318/236 (Toxicodendron radicans / Toxicodendron radicans); rule A 3/13 (Parthenium hysterophorus / Clematis drummondii); rule B 53/54 (Galium aparine / Artemisia vulgaris); plant app 0.9711/0.9882
+  safe warned by rule A: clover_166931416.jpg reticle/full ranks fixed 7 904/815 (Toxicodendron rydbergii / Toxicodendron radicans); rule A 3/2 (Trifolium hybridum / Trifolium hybridum); rule B 253/117 (Hypericum punctatum / Daucus carota); plant app 0.9677/0.9709
+  safe warned by rule A: clover_295532142.jpg reticle/full ranks fixed 7 621/523 (Toxicodendron radicans / Toxicodendron radicans); rule A 4/3 (Trifolium hybridum / Trifolium hybridum); rule B 241/129 (Daucus carota / Daucus carota); plant app 0.9710/0.9653
+  safe warned by rule A: clover_391225110.jpg reticle/full ranks fixed 7 1427/1141 (Toxicodendron radicans / Toxicodendron radicans); rule A 5/3 (Trifolium hybridum / Trifolium hybridum); rule B 429/410 (Achillea millefolium / Daucus carota); plant app 0.9546/0.9606
+  safe warned by rule A: magnolia_357301974.jpg reticle/full ranks fixed 7 31/57 (Toxicodendron vernix / Toxicodendron vernix); rule A 3/16 (Dirca palustris / Dirca palustris); rule B 31/51 (Toxicodendron vernix / Morus rubra); plant app 0.9533/0.9779
+  safe warned by rule A: magnolia_251177662.jpg reticle/full ranks fixed 7 491/458 (Phytolacca americana / Phytolacca americana); rule A 4/7 (Nerium oleander / Nerium oleander); rule B 58/127 (Gelsemium sempervirens / Verbascum thapsus); plant app 0.9749/0.9777
+  safe warned by rule A: magnolia_371399763.jpg reticle/full ranks fixed 7 105/74 (Phytolacca americana / Phytolacca americana); rule A 2/2 (Solanum mauritianum / Solanum mauritianum); rule B 11/22 (Verbascum thapsus / Verbascum thapsus); plant app 0.9852/0.9900
+  safe warned by rule A: magnolia_80465557.jpg reticle/full ranks fixed 7 12/19 (Phytolacca americana / Phytolacca americana); rule A 4/4 (Solanum mauritianum / Plumeria rubra); rule B 12/19 (Phytolacca americana / Phytolacca americana); plant app 0.9308/0.9396
+  safe warned by rule A: violet_74595584.jpg reticle/full ranks fixed 7 236/146 (Solanum carolinense / Solanum carolinense); rule A 1/4 (Ranunculus hispidus / Ranunculus hispidus); rule B 7/12 (Ranunculus abortivus / Ranunculus abortivus); plant app 0.9832/0.9709
+  safe warned by rule A: honeysuckle_3323351.jpg reticle/full ranks fixed 7 129/104 (Solanum carolinense / Solanum carolinense); rule A 10/5 (Araujia sericifera / Araujia sericifera); rule B 56/54 (Apocynum cannabinum / Gelsemium sempervirens); plant app 0.9700/0.9796
+  safe warned by rule A: honeysuckle_28400905.jpg reticle/full ranks fixed 7 1191/208 (Phytolacca americana / Solanum carolinense); rule A 4/6 (Crinum asiaticum / Araujia sericifera); rule B 81/22 (Pontederia crassipes / Campsis radicans); plant app 0.9783/0.9780
+  hazard warned by no rule: poison_ivy_267986184.jpg reticle/full ranks fixed 7 370/100 (Toxicodendron radicans / Toxicodendron radicans); rule A 149/70 (Nolina texana / Gelsemium sempervirens); rule B 370/70 (Toxicodendron radicans / Gelsemium sempervirens); plant app 0.9099/0.9469
+  hazard warned by no rule: poison_sumac_396031193.jpg reticle/full ranks fixed 7 49/17 (Phytolacca americana / Toxicodendron vernix); rule A 12/17 (Gelsemium sempervirens / Toxicodendron vernix); rule B 12/17 (Gelsemium sempervirens / Toxicodendron vernix); plant app 0.9881/0.9839
+  hazard warned by no rule: poison_sumac_396810195.jpg reticle/full ranks fixed 7 15/11 (Toxicodendron vernix / Toxicodendron vernix); rule A 15/11 (Toxicodendron vernix / Toxicodendron vernix); rule B 15/11 (Toxicodendron vernix / Toxicodendron vernix); plant app 0.9884/0.9884
+  safe warned by rule A: np_trampoline_189691419.jpg reticle/full ranks fixed 7 858/378 (Phytolacca americana / Phytolacca americana); rule A 1/5 (Mangifera indica / Ficus pumila); rule B 50/35 (Pontederia crassipes / Hedera helix); plant app 0.4762/0.5523
+
+## West Georgia hunt under old and new flags
+
+West Georgia October eligible targets: old flags 23, new 23; blockers 282 -> 287
+  targets lost: none; gained: none
+  local rows that became blockers (5): Impatiens capensis, Leucanthemum vulgare, Morus rubra, Quercus coccinea, Tanacetum parthenium
+
+## S50 calibration and S51 holdout
+
+calibration.log: West Georgia October: 23 eligible, 287 local toxic or hazard blockers | row-1 hazard warning on target photos: 3/30
+holdout.log: West Georgia October: 23 eligible, 287 local toxic or hazard blockers | photos: 30 target (23 species), 15 toxic or hazard (5 hazard species), 27 non-plant | toxic pass as any target (bar 0): 0/15 (0%) -> MET; before row 1: 0; caught by row 1: 8; hazard species warned: 5/5 (100%) | H6 hazard false alarm on target photos: 10/30 (33%); on non-plants: 0/27 (0%)
+
+S50: 50 photos; old-flag k=5 warnings equal to the day-3 CSV hazard_warn on 50/50
+  safe photos warned (50): k=1 fixed 7 0 rule A 1 rule B 0; k=2 fixed 7 0 rule A 2 rule B 1; k=3 fixed 7 0 rule A 4 rule B 2; k=4 fixed 7 0 rule A 5 rule B 2; k=5 fixed 7 0 rule A 6 rule B 3
+  hazard-flagged toxic photos warned (generated flags decide which are hazards) (0): k=1 fixed 7 0 rule A 0 rule B 0; k=2 fixed 7 0 rule A 0 rule B 0; k=3 fixed 7 0 rule A 0 rule B 0; k=4 fixed 7 0 rule A 0 rule B 0; k=5 fixed 7 0 rule A 0 rule B 0
+  other toxic photos warned (0): k=1 fixed 7 0 rule A 0 rule B 0; k=2 fixed 7 0 rule A 0 rule B 0; k=3 fixed 7 0 rule A 0 rule B 0; k=4 fixed 7 0 rule A 0 rule B 0; k=5 fixed 7 0 rule A 0 rule B 0
+  safe target target_Magnolia_grandiflora_396800120.jpg (Magnolia grandiflora): reticle/full fixed 7 787/241 (Phytolacca americana / Toxicodendron vernix); rule A 1/3 (Mangifera indica / Mangifera indica); rule B 171/33 (Carica papaya / Gelsemium sempervirens); plant share 0.9024/0.8941
+  safe target target_Albizia_julibrissin_401649566.jpg (Albizia julibrissin): reticle/full fixed 7 399/201 (Phytolacca americana / Phytolacca americana); rule A 2/14 (Robinia pseudoacacia / Robinia pseudoacacia); rule B 2/14 (Robinia pseudoacacia / Robinia pseudoacacia); plant share 0.9861/0.9956
+  safe target target_Rhus_copallinum_405529666.jpg (Rhus copallinum): reticle/full fixed 7 7/6 (Toxicodendron vernix / Toxicodendron vernix); rule A 4/6 (Schinus terebinthifolia / Toxicodendron vernix); rule B 7/6 (Toxicodendron vernix / Toxicodendron vernix); plant share 0.9676/0.9826
+  safe non_grass non_grass_Oxalis_stricta_rufa_406756800.jpg (Oxalis stricta rufa): reticle/full fixed 7 591/775 (Toxicodendron radicans / Toxicodendron radicans); rule A 34/5 (Centella asiatica / Ranunculus abortivus); rule B 91/5 (Galium aparine / Ranunculus abortivus); plant share 0.9553/0.9727
+  safe non_grass non_grass_Quercus_alba_405748845.jpg (Quercus alba): reticle/full fixed 7 107/72 (Toxicodendron pubescens / Toxicodendron pubescens); rule A 3/4 (Quercus coccinea / Quercus coccinea); rule B 3/4 (Quercus coccinea / Quercus coccinea); plant share 0.9937/0.9900
+  safe non_grass non_grass_Lonicera_japonica_406655855.jpg (Lonicera japonica): reticle/full fixed 7 203/493 (Solanum carolinense / Solanum carolinense); rule A 3/3 (Solanum mauritianum / Solanum mauritianum); rule B 40/61 (Euphorbia heterophylla / Euphorbia heterophylla); plant share 0.9815/0.9649
+
+S51: 72 photos; old-flag k=5 warnings equal to the day-3 CSV hazard_warn on 72/72
+  safe photos warned (57): k=1 fixed 7 1 rule A 2 rule B 2; k=2 fixed 7 1 rule A 4 rule B 4; k=3 fixed 7 1 rule A 6 rule B 4; k=4 fixed 7 1 rule A 8 rule B 6; k=5 fixed 7 1 rule A 10 rule B 6
+  hazard-flagged toxic photos warned (generated flags decide which are hazards) (5): k=1 fixed 7 3 rule A 5 rule B 5; k=2 fixed 7 3 rule A 5 rule B 5; k=3 fixed 7 4 rule A 5 rule B 5; k=4 fixed 7 4 rule A 5 rule B 5; k=5 fixed 7 4 rule A 5 rule B 5
+  other toxic photos warned (10): k=1 fixed 7 0 rule A 0 rule B 0; k=2 fixed 7 0 rule A 1 rule B 0; k=3 fixed 7 0 rule A 1 rule B 0; k=4 fixed 7 0 rule A 1 rule B 0; k=5 fixed 7 0 rule A 3 rule B 1
+  safe target target_Liquidambar_styraciflua_403739349.jpg (Liquidambar styraciflua): reticle/full fixed 7 164/347 (Phytolacca americana / Toxicodendron radicans); rule A 2/2 (Ricinus communis / Ricinus communis); rule B 2/2 (Ricinus communis / Ricinus communis); plant share 0.9866/0.9910
+  safe target target_Liriodendron_tulipifera_405264462.jpg (Liriodendron tulipifera): reticle/full fixed 7 1275/302 (Solanum carolinense / Toxicodendron vernix); rule A 5/17 (Syngonium podophyllum / Ficus pumila); rule B 12/47 (Carica papaya / Robinia pseudoacacia); plant share 0.6919/0.8129
+  safe target target_Erechtites_hieraciifolius_405066909.jpg (Erechtites hieraciifolius): reticle/full fixed 7 1778/2071 (Solanum carolinense / Solanum carolinense); rule A 3/11 (Jacobaea vulgaris / Jacobaea vulgaris); rule B 261/230 (Artemisia vulgaris / Artemisia vulgaris); plant share 0.9727/0.9659
+  safe target target_Ampelopsis_glandulosa_404850238.jpg (Ampelopsis glandulosa): reticle/full fixed 7 57/21 (Phytolacca americana / Toxicodendron radicans); rule A 3/6 (Vitis mustangensis / Vitis mustangensis); rule B 18/15 (Cynanchum laeve / Parthenocissus quinquefolia); plant share 0.9466/0.9501
+  safe target target_Ampelopsis_glandulosa_404581096.jpg (Ampelopsis glandulosa): reticle/full fixed 7 61/201 (Toxicodendron radicans / Toxicodendron radicans); rule A 4/6 (Hedera helix / Ficus pumila); rule B 4/9 (Hedera helix / Hedera helix); plant share 0.9089/0.9555
+  safe target target_Platanus_occidentalis_404834946.jpg (Platanus occidentalis): reticle/full fixed 7 25/62 (Toxicodendron radicans / Toxicodendron radicans); rule A 9/4 (Morus rubra / Morus rubra); rule B 9/4 (Morus rubra / Morus rubra); plant share 0.9675/0.9729
+  safe target target_Pueraria_montana_403875690.jpg (Pueraria montana): reticle/full fixed 7 297/483 (Toxicodendron radicans / Toxicodendron diversilobum); rule A 7/5 (Calotropis gigantea / Calotropis gigantea); rule B 36/56 (Robinia pseudoacacia / Ailanthus altissima); plant share 0.9654/0.9734
+  safe target target_Cercis_canadensis_402371869.jpg (Cercis canadensis): reticle/full fixed 7 255/434 (Toxicodendron radicans / Toxicodendron radicans); rule A 9/2 (Cynanchum laeve / Cynanchum laeve); rule B 9/2 (Cynanchum laeve / Cynanchum laeve); plant share 0.9805/0.9865
+  safe target target_Albizia_julibrissin_399602191.jpg (Albizia julibrissin): reticle/full fixed 7 150/127 (Toxicodendron vernix / Toxicodendron vernix); rule A 1/13 (Robinia pseudoacacia / Robinia pseudoacacia); rule B 1/13 (Robinia pseudoacacia / Robinia pseudoacacia); plant share 0.9530/0.9673
+  safe target target_Rhus_copallinum_405335103.jpg (Rhus copallinum): reticle/full fixed 7 4/1 (Toxicodendron pubescens / Toxicodendron vernix); rule A 3/1 (Schinus terebinthifolia / Toxicodendron vernix); rule B 4/1 (Toxicodendron pubescens / Toxicodendron vernix); plant share 0.9807/0.9562
+
+## New contact-hazard set (photos.csv)
+
+79 region-month pulls (locale en-US); queries sent or read from hazard-gate-inat:
+  43_45 month 9: ready at 75 km, 21 eligible genera, 162 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=43&lng=45&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+  53_-3 month 10: ready at 75 km, 23 eligible genera, 637 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=53&lng=-3&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=53&lng=-3&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+    https://api.inaturalist.org/v1/observations/species_counts?lat=53&lng=-3&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=3
+  53_104 month 9: ready at 75 km, 11 eligible genera, 369 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=53&lng=104&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=53&lng=104&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  52_-55 month 7: ready at 75 km, 32 eligible genera, 190 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=52&lng=-55&radius=75&month=7&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+  43_45 month 6: ready at 150 km, 3 eligible genera, 586 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=43&lng=45&radius=75&month=6&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=43&lng=45&radius=75&month=6&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+    https://api.inaturalist.org/v1/observations/species_counts?lat=43&lng=45&radius=150&month=6&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=43&lng=45&radius=150&month=6&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+    https://api.inaturalist.org/v1/observations/species_counts?lat=43&lng=45&radius=150&month=6&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=3
+  51_14 month 10: ready at 75 km, 14 eligible genera, 508 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=51&lng=14&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=51&lng=14&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  38_26 month 3: ready at 75 km, 9 eligible genera, 59 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=38&lng=26&radius=75&month=3&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+  51_0 month 9: ready at 75 km, 19 eligible genera, 742 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=51&lng=0&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=51&lng=0&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+    https://api.inaturalist.org/v1/observations/species_counts?lat=51&lng=0&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=3
+  39_49 month 1: not_enough at 150 km, 0 eligible genera, 3 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=39&lng=49&radius=75&month=1&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=39&lng=49&radius=150&month=1&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+  43_-81 month 10: ready at 75 km, 23 eligible genera, 866 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=43&lng=-81&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=43&lng=-81&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+    https://api.inaturalist.org/v1/observations/species_counts?lat=43&lng=-81&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=3
+  45_-74 month 9: ready at 75 km, 15 eligible genera, 880 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=45&lng=-74&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=45&lng=-74&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+    https://api.inaturalist.org/v1/observations/species_counts?lat=45&lng=-74&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=3
+  45_-73 month 8: ready at 75 km, 15 eligible genera, 967 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=45&lng=-73&radius=75&month=8&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=45&lng=-73&radius=75&month=8&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+    https://api.inaturalist.org/v1/observations/species_counts?lat=45&lng=-73&radius=75&month=8&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=3
+  46_-75 month 6: ready at 75 km, 19 eligible genera, 679 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=46&lng=-75&radius=75&month=6&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=46&lng=-75&radius=75&month=6&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  53_-2 month 8: ready at 75 km, 25 eligible genera, 762 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=53&lng=-2&radius=75&month=8&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=53&lng=-2&radius=75&month=8&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+    https://api.inaturalist.org/v1/observations/species_counts?lat=53&lng=-2&radius=75&month=8&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=3
+  38_43 month 6: ready at 150 km, 4 eligible genera, 51 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=38&lng=43&radius=75&month=6&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=38&lng=43&radius=150&month=6&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+  44_-80 month 5: ready at 75 km, 19 eligible genera, 914 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=44&lng=-80&radius=75&month=5&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=44&lng=-80&radius=75&month=5&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+    https://api.inaturalist.org/v1/observations/species_counts?lat=44&lng=-80&radius=75&month=5&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=3
+  48_12 month 7: ready at 75 km, 16 eligible genera, 758 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=48&lng=12&radius=75&month=7&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=48&lng=12&radius=75&month=7&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+    https://api.inaturalist.org/v1/observations/species_counts?lat=48&lng=12&radius=75&month=7&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=3
+  49_-124 month 9: ready at 75 km, 27 eligible genera, 745 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=49&lng=-124&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=49&lng=-124&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+    https://api.inaturalist.org/v1/observations/species_counts?lat=49&lng=-124&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=3
+  43_43 month 7: ready at 75 km, 5 eligible genera, 403 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=43&lng=43&radius=75&month=7&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=43&lng=43&radius=75&month=7&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+    https://api.inaturalist.org/v1/observations/species_counts?lat=43&lng=43&radius=75&month=7&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=3
+  54_45 month 9: ready at 75 km, 17 eligible genera, 482 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=54&lng=45&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=54&lng=45&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  57_61 month 9: ready at 75 km, 15 eligible genera, 473 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=57&lng=61&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=57&lng=61&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  58_42 month 8: ready at 75 km, 9 eligible genera, 546 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=58&lng=42&radius=75&month=8&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=58&lng=42&radius=75&month=8&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  47_143 month 7: ready at 75 km, 18 eligible genera, 268 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=47&lng=143&radius=75&month=7&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+  51_-3 month 10: ready at 75 km, 24 eligible genera, 577 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=51&lng=-3&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=51&lng=-3&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  51_6 month 10: ready at 75 km, 15 eligible genera, 570 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=51&lng=6&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=51&lng=6&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  54_-3 month 9: ready at 75 km, 20 eligible genera, 723 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=54&lng=-3&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=54&lng=-3&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+    https://api.inaturalist.org/v1/observations/species_counts?lat=54&lng=-3&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=3
+  53_158 month 7: ready at 75 km, 11 eligible genera, 284 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=53&lng=158&radius=75&month=7&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=53&lng=158&radius=75&month=7&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  54_-111 month 9: ready at 75 km, 14 eligible genera, 96 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=54&lng=-111&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+  53_159 month 8: ready at 75 km, 12 eligible genera, 268 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=53&lng=159&radius=75&month=8&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=53&lng=159&radius=75&month=8&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  54_-123 month 9: ready at 75 km, 34 eligible genera, 235 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=54&lng=-123&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+  53_45 month 8: ready at 75 km, 13 eligible genera, 556 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=53&lng=45&radius=75&month=8&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=53&lng=45&radius=75&month=8&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  57_61 month 7: ready at 75 km, 14 eligible genera, 583 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=57&lng=61&radius=75&month=7&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=57&lng=61&radius=75&month=7&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  50_-96 month 7: ready at 75 km, 21 eligible genera, 533 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=50&lng=-96&radius=75&month=7&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=50&lng=-96&radius=75&month=7&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  60_60 month 10: ready at 75 km, 23 eligible genera, 119 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=60&lng=60&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+  49_-2 month 10: ready at 75 km, 17 eligible genera, 420 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=49&lng=-2&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=49&lng=-2&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  54_88 month 5: ready at 75 km, 11 eligible genera, 206 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=54&lng=88&radius=75&month=5&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+  45_-76 month 5: ready at 75 km, 19 eligible genera, 786 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=45&lng=-76&radius=75&month=5&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=45&lng=-76&radius=75&month=5&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+    https://api.inaturalist.org/v1/observations/species_counts?lat=45&lng=-76&radius=75&month=5&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=3
+  45_14 month 10: ready at 75 km, 12 eligible genera, 365 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=45&lng=14&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=45&lng=14&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  42_45 month 6: ready at 75 km, 7 eligible genera, 357 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=42&lng=45&radius=75&month=6&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=42&lng=45&radius=75&month=6&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  55_38 month 8: ready at 75 km, 16 eligible genera, 690 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=55&lng=38&radius=75&month=8&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=55&lng=38&radius=75&month=8&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+    https://api.inaturalist.org/v1/observations/species_counts?lat=55&lng=38&radius=75&month=8&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=3
+  54_103 month 6: ready at 75 km, 14 eligible genera, 204 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=54&lng=103&radius=75&month=6&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+  54_-113 month 9: ready at 75 km, 19 eligible genera, 385 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=54&lng=-113&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=54&lng=-113&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  48_1 month 10: ready at 75 km, 17 eligible genera, 231 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=48&lng=1&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+  41_45 month 5: ready at 75 km, 15 eligible genera, 209 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=41&lng=45&radius=75&month=5&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+  46_-74 month 9: ready at 75 km, 13 eligible genera, 826 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=46&lng=-74&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=46&lng=-74&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+    https://api.inaturalist.org/v1/observations/species_counts?lat=46&lng=-74&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=3
+  37_-8 month 10: ready at 75 km, 12 eligible genera, 221 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=37&lng=-8&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=37&lng=-8&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  35_34 month 10: ready at 75 km, 11 eligible genera, 68 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=35&lng=34&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+  46_6 month 9: ready at 75 km, 16 eligible genera, 593 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=46&lng=6&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=46&lng=6&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+    https://api.inaturalist.org/v1/observations/species_counts?lat=46&lng=6&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=3
+  41_29 month 8: ready at 75 km, 18 eligible genera, 174 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=41&lng=29&radius=75&month=8&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+  53_-2 month 10: ready at 75 km, 20 eligible genera, 631 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=53&lng=-2&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=53&lng=-2&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+    https://api.inaturalist.org/v1/observations/species_counts?lat=53&lng=-2&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=3
+  56_86 month 6: ready at 75 km, 14 eligible genera, 319 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=56&lng=86&radius=75&month=6&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=56&lng=86&radius=75&month=6&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  48_8 month 10: ready at 75 km, 15 eligible genera, 568 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=48&lng=8&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=48&lng=8&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  36_139 month 4: ready at 75 km, 20 eligible genera, 275 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=36&lng=139&radius=75&month=4&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=36&lng=139&radius=75&month=4&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  55_24 month 10: ready at 75 km, 27 eligible genera, 375 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=55&lng=24&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+  37_34 month 11: not_enough at 150 km, 1 eligible genera, 36 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=37&lng=34&radius=75&month=11&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=37&lng=34&radius=150&month=11&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+  48_7 month 9: ready at 75 km, 15 eligible genera, 604 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=48&lng=7&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=48&lng=7&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  51_-114 month 9: ready at 75 km, 25 eligible genera, 423 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=51&lng=-114&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=51&lng=-114&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  52_-1 month 9: ready at 75 km, 25 eligible genera, 623 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=52&lng=-1&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=52&lng=-1&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  60_11 month 9: ready at 75 km, 23 eligible genera, 362 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=60&lng=11&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+  52_0 month 10: ready at 75 km, 25 eligible genera, 656 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=52&lng=0&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=52&lng=0&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+    https://api.inaturalist.org/v1/observations/species_counts?lat=52&lng=0&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=3
+  56_12 month 8: ready at 75 km, 22 eligible genera, 689 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=56&lng=12&radius=75&month=8&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=56&lng=12&radius=75&month=8&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  49_19 month 9: ready at 75 km, 15 eligible genera, 518 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=49&lng=19&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=49&lng=19&radius=75&month=9&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  32_35 month 7: ready at 75 km, 6 eligible genera, 186 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=32&lng=35&radius=75&month=7&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=32&lng=35&radius=75&month=7&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  47_-1 month 8: ready at 75 km, 25 eligible genera, 422 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=47&lng=-1&radius=75&month=8&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=47&lng=-1&radius=75&month=8&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  43_75 month 5: ready at 75 km, 9 eligible genera, 136 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=43&lng=75&radius=75&month=5&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+  54_-7 month 10: ready at 75 km, 24 eligible genera, 212 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=54&lng=-7&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+  46_-63 month 8: ready at 75 km, 17 eligible genera, 641 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=46&lng=-63&radius=75&month=8&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=46&lng=-63&radius=75&month=8&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  48_16 month 4: ready at 75 km, 14 eligible genera, 814 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=48&lng=16&radius=75&month=4&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=48&lng=16&radius=75&month=4&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+    https://api.inaturalist.org/v1/observations/species_counts?lat=48&lng=16&radius=75&month=4&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=3
+  60_60 month 6: ready at 75 km, 27 eligible genera, 306 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=60&lng=60&radius=75&month=6&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=60&lng=60&radius=75&month=6&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  49_24 month 8: ready at 75 km, 20 eligible genera, 460 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=49&lng=24&radius=75&month=8&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=49&lng=24&radius=75&month=8&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  47_-84 month 7: ready at 75 km, 25 eligible genera, 668 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=47&lng=-84&radius=75&month=7&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=47&lng=-84&radius=75&month=7&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  44_-81 month 6: ready at 75 km, 14 eligible genera, 877 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=44&lng=-81&radius=75&month=6&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=44&lng=-81&radius=75&month=6&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+    https://api.inaturalist.org/v1/observations/species_counts?lat=44&lng=-81&radius=75&month=6&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=3
+  43_-80 month 5: ready at 75 km, 16 eligible genera, 987 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=43&lng=-80&radius=75&month=5&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=43&lng=-80&radius=75&month=5&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+    https://api.inaturalist.org/v1/observations/species_counts?lat=43&lng=-80&radius=75&month=5&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=3
+  44_7 month 10: ready at 75 km, 13 eligible genera, 479 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=44&lng=7&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=44&lng=7&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  35_33 month 3: ready at 75 km, 6 eligible genera, 189 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=35&lng=33&radius=75&month=3&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=35&lng=33&radius=75&month=3&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  56_-4 month 10: ready at 75 km, 24 eligible genera, 437 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=56&lng=-4&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=56&lng=-4&radius=75&month=10&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  24_121 month 5: ready at 75 km, 4 eligible genera, 290 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=24&lng=121&radius=75&month=5&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=24&lng=121&radius=75&month=5&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+    https://api.inaturalist.org/v1/observations/species_counts?lat=24&lng=121&radius=75&month=5&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=3
+  51_17 month 8: ready at 75 km, 18 eligible genera, 512 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=51&lng=17&radius=75&month=8&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=51&lng=17&radius=75&month=8&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+  56_59 month 7: ready at 75 km, 18 eligible genera, 394 table rows
+    https://api.inaturalist.org/v1/observations/species_counts?lat=56&lng=59&radius=75&month=7&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=1
+    https://api.inaturalist.org/v1/observations/species_counts?lat=56&lng=59&radius=75&month=7&iconic_taxa=Plantae&quality_grade=research&locale=en-US&per_page=500&page=2
+
+52 hazard photos (44 of species on the shipped list; off list: Chelidonium majus, Euphorbia virgata; 52 whose own species is in the photo's local pull), 30 safe photos (now flagged: Leucanthemum vulgare); 1 observations have obscured coordinates; photos in an unplayable hunt: 2
+hazard caught, all 52 (52): k=1 fixed 7 0 rule A 34 rule B 29; k=2 fixed 7 0 rule A 42 rule B 34; k=3 fixed 7 0 rule A 43 rule B 36; k=4 fixed 7 0 rule A 44 rule B 38; k=5 fixed 7 0 rule A 45 rule B 41
+hazard caught, shipped-list species only (44): k=1 fixed 7 0 rule A 34 rule B 29; k=2 fixed 7 0 rule A 39 rule B 33; k=3 fixed 7 0 rule A 40 rule B 35; k=4 fixed 7 0 rule A 41 rule B 37; k=5 fixed 7 0 rule A 41 rule B 39
+safe photos warned (30): k=1 fixed 7 0 rule A 3 rule B 2; k=2 fixed 7 0 rule A 5 rule B 3; k=3 fixed 7 0 rule A 6 rule B 4; k=4 fixed 7 0 rule A 7 rule B 4; k=5 fixed 7 0 rule A 10 rule B 5
+safe photos warned, still-unflagged species (28): k=1 fixed 7 0 rule A 1 rule B 0; k=2 fixed 7 0 rule A 3 rule B 1; k=3 fixed 7 0 rule A 4 rule B 2; k=4 fixed 7 0 rule A 5 rule B 2; k=5 fixed 7 0 rule A 8 rule B 3
+per species, caught at k=3/4/5, rule A | rule B:
+  hazard Urtica dioica (5, local in 5): 5/5/5 | 5/5/5
+  hazard Urtica urens (4, local in 4): 4/4/4 | 4/4/4
+  hazard Laportea canadensis (4, local in 4): 4/4/4 | 4/4/4
+  hazard Heracleum mantegazzianum (5, local in 5): 4/4/4 | 3/4/4
+  hazard Heracleum sosnowskyi (5, local in 5): 5/5/5 | 2/3/4
+  hazard Heracleum sphondylium (4, local in 4): 3/4/4 | 2/2/3
+  hazard Heracleum maximum (4, local in 4): 4/4/4 | 4/4/4
+  hazard Pastinaca sativa (5, local in 5): 4/4/4 | 4/4/4
+  hazard Euphorbia cyparissias (4, local in 4): 4/4/4 | 4/4/4
+  hazard Euphorbia virgata (4, off list, local in 4): 3/3/3 | 1/1/1
+  hazard Chelidonium majus (4, off list, local in 4): 0/0/1 | 0/0/1
+  hazard Ficus carica (4, local in 4): 3/3/3 | 3/3/3
+  safe Lamium album (2, off list, local in 2): 1/1/1 | 1/1/1
+  safe Lamium purpureum (2, off list, local in 2): 0/0/0 | 0/0/0
+  safe Lamium maculatum (2, off list, local in 2): 0/1/1 | 0/0/0
+  safe Galeopsis tetrahit (2, off list, local in 2): 0/0/0 | 0/0/0
+  safe Stachys sylvatica (2, off list, local in 2): 0/0/0 | 0/0/0
+  safe Ballota nigra (2, off list, local in 2): 0/0/0 | 0/0/0
+  safe Mentha longifolia (2, off list, local in 2): 0/0/0 | 0/0/0
+  safe Melissa officinalis (2, off list, local in 2): 0/0/0 | 0/0/0
+  safe Filipendula ulmaria (2, off list, local in 2): 0/0/0 | 0/0/0
+  safe Carum carvi (2, off list, local in 2): 1/1/2 | 1/1/1
+  safe Astrantia major (2, off list, local in 2): 0/0/0 | 0/0/0
+  safe Angelica atropurpurea (2, off list, local in 2): 0/0/2 | 0/0/1
+  safe Smyrnium olusatrum (2, off list, local in 2): 2/2/2 | 0/0/0
+  safe Geranium robertianum (2, off list, local in 2): 0/0/0 | 0/0/0
+  safe Leucanthemum vulgare (2, local in 2): 2/2/2 | 2/2/2
+hazard photos missed and safe photos warned at k=5 by rule A or B:
+  hazard hazard hazard_Heracleum_mantegazzianum_394666960.jpg (Heracleum mantegazzianum): reticle/full fixed 7 161/47 (Solanum carolinense / Solanum carolinense); rule A 27/8 (Heracleum mantegazzianum / Heracleum mantegazzianum); rule B 27/8 (Heracleum mantegazzianum / Heracleum mantegazzianum); plant share 0.9780/0.9825
+  hazard hazard hazard_Heracleum_sosnowskyi_384070230.jpg (Heracleum sosnowskyi): reticle/full fixed 7 119/405 (Solanum carolinense / Toxicodendron diversilobum); rule A 12/2 (Heracleum mantegazzianum / Heracleum mantegazzianum); rule B 33/10 (Heracleum sosnowskyi / Heracleum maximum); plant share 0.9840/0.9883
+  hazard hazard hazard_Heracleum_sphondylium_406190071.jpg (Heracleum sphondylium): reticle/full fixed 7 32/61 (Toxicodendron diversilobum / Toxicodendron diversilobum); rule A 4/6 (Heracleum maximum / Heracleum maximum); rule B 32/61 (Toxicodendron diversilobum / Toxicodendron diversilobum); plant share 0.9800/0.9803
+  hazard hazard hazard_Pastinaca_sativa_406497686.jpg (Pastinaca sativa): reticle/full fixed 7 1732/1194 (Toxicodendron diversilobum / Toxicodendron diversilobum); rule A 13/11 (Pastinaca sativa / Heracleum sphondylium); rule B 13/14 (Pastinaca sativa / Pastinaca sativa); plant share 0.9680/0.9872
+  hazard hazard hazard_Euphorbia_virgata_369007998.jpg (Euphorbia virgata): reticle/full fixed 7 567/147 (Toxicodendron rydbergii / Toxicodendron rydbergii); rule A 2/2 (Euphorbia amygdaloides / Euphorbia cyparissias); rule B 108/90 (Sedum acre / Sedum acre); plant share 0.9778/0.9729
+  hazard hazard hazard_Euphorbia_virgata_221036587.jpg (Euphorbia virgata): reticle/full fixed 7 86/42 (Toxicodendron rydbergii / Toxicodendron rydbergii); rule A 2/2 (Euphorbia cyparissias / Euphorbia cyparissias); rule B 38/42 (Pastinaca sativa / Toxicodendron rydbergii); plant share 0.9355/0.9509
+  hazard hazard hazard_Euphorbia_virgata_402628874.jpg (Euphorbia virgata): reticle/full fixed 7 1814/701 (Toxicodendron diversilobum / Toxicodendron rydbergii); rule A 66/11 (Aloe vera / Daphne gnidium); rule B 546/76 (Salsola tragus / Apocynum cannabinum); plant share 0.9725/0.9774
+  hazard hazard hazard_Chelidonium_majus_407057708.jpg (Chelidonium majus): reticle/full fixed 7 596/396 (Solanum carolinense / Solanum carolinense); rule A 11/14 (Fumaria officinalis / Ranunculus repens); rule B 18/14 (Ranunculus repens / Ranunculus repens); plant share 0.9598/0.9460
+  hazard hazard hazard_Chelidonium_majus_360646683.jpg (Chelidonium majus): reticle/full fixed 7 23/274 (Solanum carolinense / Solanum carolinense); rule A 7/10 (Cnidoscolus texanus / Ranunculus repens); rule B 23/10 (Solanum carolinense / Ranunculus repens); plant share 0.9815/0.9765
+  hazard hazard hazard_Chelidonium_majus_403405927.jpg (Chelidonium majus): reticle/full fixed 7 33/33 (Toxicodendron diversilobum / Toxicodendron diversilobum); rule A 29/31 (Heracleum maximum / Heracleum maximum); rule B 33/33 (Toxicodendron diversilobum / Toxicodendron diversilobum); plant share 0.9776/0.9793
+  hazard hazard hazard_Ficus_carica_312884329.jpg (Ficus carica): reticle/full fixed 7 1614/1270 (Toxicodendron diversilobum / Toxicodendron radicans); rule A 50/13 (Clematis paniculata / Araujia sericifera); rule B 227/140 (Hedera helix / Euphorbia peplus); plant share 0.7540/0.8317
+  safe safe safe_Lamium_album_406332622.jpg (Lamium album): reticle/full fixed 7 450/651 (Solanum carolinense / Solanum carolinense); rule A 3/5 (Urtica dioica / Urtica dioica); rule B 3/5 (Urtica dioica / Urtica dioica); plant share 0.9652/0.9684
+  safe safe safe_Lamium_maculatum_35490267.jpg (Lamium maculatum): reticle/full fixed 7 265/909 (Solanum carolinense / Solanum carolinense); rule A 26/4 (Urtica dioica / Urtica dioica); rule B 51/8 (Urtica urens / Urtica urens); plant share 0.9373/0.9737
+  safe safe safe_Carum_carvi_354310919.jpg (Carum carvi): reticle/full fixed 7 919/1268 (Toxicodendron rydbergii / Toxicodendron diversilobum); rule A 4/2 (Conium maculatum / Conium maculatum); rule B 4/2 (Conium maculatum / Conium maculatum); plant share 0.9463/0.9730
+  safe safe safe_Carum_carvi_291827465.jpg (Carum carvi): reticle/full fixed 7 158/425 (Toxicodendron pubescens / Toxicodendron radicans); rule A 5/7 (Daucus carota / Daucus carota); rule B 16/26 (Achillea millefolium / Achillea millefolium); plant share 0.9562/0.9376
+  safe safe safe_Angelica_atropurpurea_370753382.jpg (Angelica atropurpurea): reticle/full fixed 7 1167/896 (Phytolacca americana / Phytolacca americana); rule A 6/5 (Heracleum sphondylium / Heracleum sphondylium); rule B 11/9 (Pastinaca sativa / Heracleum maximum); plant share 0.9736/0.9814
+  safe safe safe_Angelica_atropurpurea_362572431.jpg (Angelica atropurpurea): reticle/full fixed 7 109/402 (Phytolacca americana / Phytolacca americana); rule A 8/5 (Heracleum mantegazzianum / Heracleum maximum); rule B 8/5 (Heracleum mantegazzianum / Heracleum maximum); plant share 0.9714/0.9739
+  safe safe safe_Smyrnium_olusatrum_405866823.jpg (Smyrnium olusatrum): reticle/full fixed 7 1167/1440 (Toxicodendron diversilobum / Phytolacca americana); rule A 2/4 (Conium maculatum / Conium maculatum); rule B 70/11 (Daucus carota / Pastinaca sativa); plant share 0.9038/0.9112
+  safe safe safe_Smyrnium_olusatrum_5218204.jpg (Smyrnium olusatrum): reticle/full fixed 7 545/177 (Phytolacca americana / Toxicodendron diversilobum); rule A 1/4 (Heracleum maximum / Conium maculatum); rule B 36/15 (Ricinus communis / Ficus carica); plant share 0.9621/0.9665
+  safe safe safe_Leucanthemum_vulgare_394789161.jpg (Leucanthemum vulgare): reticle/full fixed 7 1248/1202 (Solanum carolinense / Solanum carolinense); rule A 1/1 (Leucanthemum vulgare / Leucanthemum vulgare); rule B 1/1 (Leucanthemum vulgare / Leucanthemum vulgare); plant share 0.8928/0.8804
+  safe safe safe_Leucanthemum_vulgare_319319567.jpg (Leucanthemum vulgare): reticle/full fixed 7 1345/1277 (Solanum carolinense / Solanum carolinense); rule A 1/1 (Leucanthemum vulgare / Leucanthemum vulgare); rule B 1/1 (Leucanthemum vulgare / Leucanthemum vulgare); plant share 0.9131/0.8882
+
+## Gate table: warned or caught photos per rule and k
+
+set                                  rule     k=1       k=2       k=3       k=4       k=5     
+Day-1 hazards caught                 fixed 7  43/52     44/52     45/52     46/52     48/52   
+Day-1 hazards caught                 rule A   43/52     45/52     46/52     47/52     49/52   
+Day-1 hazards caught                 rule B   43/52     44/52     45/52     46/52     48/52   
+Day-1 safe warned                    fixed 7  1/253     1/253     1/253     1/253     1/253   
+Day-1 safe warned                    rule A   6/253     11/253    17/253    22/253    27/253  
+Day-1 safe warned                    rule B   2/253     5/253     7/253     8/253     9/253   
+S50 safe warned                      fixed 7  0/50      0/50      0/50      0/50      0/50    
+S50 safe warned                      rule A   1/50      2/50      4/50      5/50      6/50    
+S50 safe warned                      rule B   0/50      1/50      2/50      2/50      3/50    
+S51 safe warned                      fixed 7  1/57      1/57      1/57      1/57      1/57    
+S51 safe warned                      rule A   2/57      4/57      6/57      8/57      10/57   
+S51 safe warned                      rule B   2/57      4/57      4/57      6/57      6/57    
+new hazards caught                   fixed 7  0/52      0/52      0/52      0/52      0/52    
+new hazards caught                   rule A   34/52     42/52     43/52     44/52     45/52   
+new hazards caught                   rule B   29/52     34/52     36/52     38/52     41/52   
+new safe warned                      fixed 7  0/30      0/30      0/30      0/30      0/30    
+new safe warned                      rule A   3/30      5/30      6/30      7/30      10/30   
+new safe warned                      rule B   2/30      3/30      4/30      4/30      5/30    
+new safe warned, unflagged species   fixed 7  0/28      0/28      0/28      0/28      0/28    
+new safe warned, unflagged species   rule A   1/28      3/28      4/28      5/28      8/28    
+new safe warned, unflagged species   rule B   0/28      1/28      2/28      2/28      3/28    

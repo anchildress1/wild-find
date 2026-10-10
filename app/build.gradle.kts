@@ -50,6 +50,16 @@ android {
         compose = true
     }
 
+    splits {
+        abi {
+            // A universal APK was 253 MB, 78 MB of it ONNX Runtime for emulators; `make release` builds one per phone CPU.
+            isEnable = providers.gradleProperty("abiSplits").orNull == "true"
+            reset()
+            include("arm64-v8a", "armeabi-v7a")
+            isUniversalApk = false
+        }
+    }
+
     androidResources {
         // Stored, not deflated, so BundledAssets can memory-map the models instead of inflating them onto the heap.
         noCompress += "onnx"

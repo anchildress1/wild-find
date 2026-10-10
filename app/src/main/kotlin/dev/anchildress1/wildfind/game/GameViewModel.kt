@@ -15,6 +15,7 @@ import dev.anchildress1.wildfind.core.game.GameRules
 import dev.anchildress1.wildfind.core.game.GameState
 import dev.anchildress1.wildfind.core.game.Outcome
 import dev.anchildress1.wildfind.core.game.Screen
+import dev.anchildress1.wildfind.core.hunt.ActiveHunt
 import dev.anchildress1.wildfind.core.hunt.LocalListSource
 import dev.anchildress1.wildfind.core.hunt.LocalSpecies
 import dev.anchildress1.wildfind.core.inat.InatLocale
@@ -101,7 +102,7 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
 
             Command.ClearHunt -> graph.write { clearHunt() }
 
-            is Command.UseVerifier -> useVerifier(command.local)
+            is Command.UseVerifier -> useVerifier(command.hunt)
 
             Command.CancelCapture -> verifier?.cancel()
 
@@ -136,8 +137,8 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
         }
     }
 
-    private fun useVerifier(local: Set<Int>?) {
-        verifier = local?.let { checkNotNull(models).verifier(it) }
+    private fun useVerifier(hunt: ActiveHunt?) {
+        verifier = hunt?.let { checkNotNull(models).verifier(it.local, it.region) }
     }
 
     private fun locateMap(map: Screen.Map) {

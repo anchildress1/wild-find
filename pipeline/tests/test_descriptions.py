@@ -6,7 +6,7 @@ from wild_find_pipeline import descriptions as d
 def test_every_plant_type_gets_a_generic_sentence_with_the_right_article():
     assert d.describe("tree") == {"description": "A tree."}
     assert d.describe("shrub") == {"description": "A bush."}
-    assert d.describe("herb") == {"description": "A plant."}
+    assert d.describe("herb") == {"description": "An herb."}
     assert d.describe("conifer") == {"description": "An evergreen."}
     assert d.describe(None) == {"description": "A plant."}
 

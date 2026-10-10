@@ -12,7 +12,7 @@ class LocalSpeciesTest {
         SpeciesRow("Quercus nigra", "Quercus", hazard = false, toxic = false),
         SpeciesRow("Acer rubrum", "Acer", hazard = false, toxic = false),
         SpeciesRow("Ilex opaca", "Ilex", hazard = false, toxic = true),
-        SpeciesRow("Toxicodendron radicans", "Toxicodendron", hazard = true, toxic = true),
+        SpeciesRow("Toxicodendron radicans", "Toxicodendron", hazard = true, toxic = true, hazardFloor = true),
         SpeciesRow("Berberis bealei", "Berberis", hazard = false, toxic = false),
         SpeciesRow("Liquidambar styraciflua", "Liquidambar", hazard = false, toxic = false),
     )
@@ -116,6 +116,21 @@ class LocalSpeciesTest {
     }
 
     @Test
+    fun `a row held back from picks stays eligible but can't fill a genus, so the pull still widens`() {
+        val held = table.map { if (it.genus == "Liquidambar") it.copy(target = false) else it }
+        val pull = pull(
+            Sighting("Quercus nigra", "water oak", 10),
+            Sighting("Acer rubrum", "red maple", 10),
+            Sighting("Liquidambar styraciflua", "sweetgum", 10),
+        )
+        val list = LocalSpecies(held, names::get).of(pull)
+
+        assertEquals(listOf(0, 1, 5), list.eligible.map { it.row })
+        assertTrue(list.needsWiden)
+        assertFalse(local.of(pull).needsWiden)
+    }
+
+    @Test
     fun `a common name comes from the most sighted name that has a kid-sized one`() {
         val list = local.of(pull(Sighting("Berberis bealei", null, 40), Sighting("Mahonia bealei", "leatherleaf", 10)))
 
@@ -137,7 +152,16 @@ class LocalSpeciesTest {
         }
         assertThrows<IllegalArgumentException> { SpeciesRow.checked(table.filterNot { it.hazard }, table.size - 1) }
         assertThrows<IllegalArgumentException> {
-            SpeciesRow.checked(table.map { if (it.hazard) it.copy(toxic = false) else it }, table.size)
+            SpeciesRow.checked(table.map { if (it.hazard) it.copy(hazard = false, toxic = true) else it }, table.size)
+        }
+        val line = "Its oil can make skin itch."
+        val lined = table.map { if (it.hazard) it.copy(toxic = false, hazardLine = line) else it }
+        assertEquals(lined, SpeciesRow.checked(lined, table.size))
+        assertThrows<IllegalArgumentException> {
+            SpeciesRow.checked(table.map { if (it.hazard) it.copy(hazardLine = " ") else it }, table.size)
+        }
+        assertThrows<IllegalArgumentException> {
+            SpeciesRow.checked(listOf(table[0].copy(hazardLine = line)) + table.drop(1), table.size)
         }
     }
 }

@@ -1,0 +1,37 @@
+# guard boundary on TUNE 0.001; margin 0.011
+# day-5 target pass, mode tune, run 2026-10-10T17:36-04:00; arm64 macOS-26.5.2-arm64-arm-64bit-Mach-O; python 3.13.14, onnxruntime 1.30.0, numpy 2.5.3, Pillow 12.3.0
+# BioCLIP pin crazedcodernate/bioclip-2.5-mobile-fastvit@29b474ea2a5d72b4646f036ead9441e0a22a5c62; TinyCLIP pin wkcn/TinyCLIP-ViT-8M-16-Text-3M-YFCC15M@a2a8c6eaa2549ad66eb7c31b85022bf58273a26c
+#   asset 8624d44af3727b69a41dc2035c37018a30753b8d9c93ab8801a0c724dd42510f  flora_student_fp32.onnx
+#   asset bf1bdd2e939ba374498acf76162cbcc56fcc547e6e5a01aa50d5de477f6c58ed  plant_gate.onnx
+#   asset 33e8990299b4cb1450dfbebe600162e5602810dc01b3e747450af4ea66a4818a  plant_gate.json
+#   asset 1fd3cf277dddda6c4c0062b696d170e3b405487098e80dcc71138045835cc27d  species_table.npy
+#   asset 1d0269979f1e9cefa59a28af8a3aa5e0ecaad797c7c98eab855e132c567d5474  species_labels.json
+#   asset c63489be575b96a70febd147445f496a54ed6b666ff79bbf314906efd7e4d80f  labels.npy
+#   asset f6f31b2421956d8452a821ec4f8be5d0583f6ab8661a0483932d21712a3989c5  labels.json
+#   input S50: docs/results/day-3/calibration.photos.csv sha256 4451ca526b6ddbbe3540ad7089655e0ec5bbf97aac496e11070111db7908379b; embeddings .models/target-pass-embeddings/S50.npz
+#   input TB: docs/results/day-3/toxic_block_photos.csv sha256 04e160400f4c94e235dc2877d7acefd51b7febccabc54c8e11040e1a1a296432; embeddings .models/target-pass-embeddings/TB.npz
+#   hunt: docs/results/day-2/threshold_regions.csv, inat_species_oct.csv, day-3/toxicity_audit.csv
+
+| rule | tau | TUNE target pass | by set | toxic raw / after gate+row1 | headroom | worst toxic | wrong-genus | non-plant | other safe plants | extra BioCLIP/frame |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| R1h ret+full mean +0.01 | 0.0340 | 60/99 (61%) | S50 22/30; TB 38/69 | 0/194 / 0/194 | +0.0105 | Acer_rubrum_2.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+| G1 guard +0.01 | 0.0110 | 60/99 (61%) | S50 20/30; TB 40/69 | 0/194 / 0/194 | +0.0149 | Toxicodendron_radicans_0.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+| G2 guard at 0.034 | 0.0340 | 55/99 (56%) | S50 19/30; TB 36/69 | 0/194 / 0/194 | +0.0379 | Toxicodendron_radicans_0.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+# day-5 target pass, mode test, run 2026-10-10T17:36-04:00; arm64 macOS-26.5.2-arm64-arm-64bit-Mach-O; python 3.13.14, onnxruntime 1.30.0, numpy 2.5.3, Pillow 12.3.0
+# BioCLIP pin crazedcodernate/bioclip-2.5-mobile-fastvit@29b474ea2a5d72b4646f036ead9441e0a22a5c62; TinyCLIP pin wkcn/TinyCLIP-ViT-8M-16-Text-3M-YFCC15M@a2a8c6eaa2549ad66eb7c31b85022bf58273a26c
+#   asset 8624d44af3727b69a41dc2035c37018a30753b8d9c93ab8801a0c724dd42510f  flora_student_fp32.onnx
+#   asset bf1bdd2e939ba374498acf76162cbcc56fcc547e6e5a01aa50d5de477f6c58ed  plant_gate.onnx
+#   asset 33e8990299b4cb1450dfbebe600162e5602810dc01b3e747450af4ea66a4818a  plant_gate.json
+#   asset 1fd3cf277dddda6c4c0062b696d170e3b405487098e80dcc71138045835cc27d  species_table.npy
+#   asset 1d0269979f1e9cefa59a28af8a3aa5e0ecaad797c7c98eab855e132c567d5474  species_labels.json
+#   asset c63489be575b96a70febd147445f496a54ed6b666ff79bbf314906efd7e4d80f  labels.npy
+#   asset f6f31b2421956d8452a821ec4f8be5d0583f6ab8661a0483932d21712a3989c5  labels.json
+#   input S51: docs/results/day-3/holdout.photos.csv sha256 c05e62308d2d1c3cad2698a9e60b309e1b9165432583fd84ceae5fa01130de7d; embeddings .models/target-pass-embeddings/S51.npz
+#   input NEW: docs/results/day-5/target_pass/photos.csv sha256 336852545481250daf2ad696a668546016ad3e9230bff8df3995bcdea0afc5c9; embeddings .models/target-pass-embeddings/NEW.npz
+#   hunt: docs/results/day-2/threshold_regions.csv, inat_species_oct.csv, day-3/toxicity_audit.csv
+
+| rule | tau | TEST target pass | by set | toxic raw / after gate+row1 | headroom | worst toxic | wrong-genus | non-plant | other safe plants | extra BioCLIP/frame |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| R1h ret+full mean +0.01 | 0.0340 | 56/99 (57%) | NEW 39/69; S51 17/30 | 0/73 / 0/73 | +0.0028 | toxic_Gleditsia_triacanthos_406348866.jpg | 1/99 (1.0%) | 0/27 | - | 0 |
+| G1 guard +0.01 | 0.0110 | 59/99 (60%) | NEW 42/69; S51 17/30 | 2/73 / 2/73 | -0.0029 | toxic_Acer_rubrum_407100873.jpg | 2/99 (2.0%) | 0/27 | - | 0 |
+| G2 guard at 0.034 | 0.0340 | 53/99 (54%) | NEW 36/69; S51 17/30 | 0/73 / 0/73 | +0.0201 | toxic_Acer_rubrum_407100873.jpg | 1/99 (1.0%) | 0/27 | - | 0 |

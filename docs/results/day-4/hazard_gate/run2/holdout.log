@@ -1,0 +1,42 @@
+run date 2026-10-10; laptop CPU, onnxruntime 1.30.0, numpy 2.5.3, Pillow 12.3.0, python 3.13.14
+BioCLIP pin crazedcodernate/bioclip-2.5-mobile-fastvit@29b474ea2a5d72b4646f036ead9441e0a22a5c62; TinyCLIP pin wkcn/TinyCLIP-ViT-8M-16-Text-3M-YFCC15M@a2a8c6eaa2549ad66eb7c31b85022bf58273a26c
+  asset flora_student_fp32.onnx sha256 8624d44af3727b69a41dc2035c37018a30753b8d9c93ab8801a0c724dd42510f
+  asset plant_gate.onnx sha256 bf1bdd2e939ba374498acf76162cbcc56fcc547e6e5a01aa50d5de477f6c58ed
+  asset plant_gate.json sha256 33e8990299b4cb1450dfbebe600162e5602810dc01b3e747450af4ea66a4818a
+  asset species_table.npy sha256 1fd3cf277dddda6c4c0062b696d170e3b405487098e80dcc71138045835cc27d
+  asset species_labels.json sha256 047b86d6b80433e99d1f0c402cc1a0bc069e5388f126cbf29f7f0084146da442
+  asset labels.npy sha256 c63489be575b96a70febd147445f496a54ed6b666ff79bbf314906efd7e4d80f
+  asset labels.json sha256 f6f31b2421956d8452a821ec4f8be5d0583f6ab8661a0483932d21712a3989c5
+  input docs/results/day-3/holdout.photos.csv sha256 c05e62308d2d1c3cad2698a9e60b309e1b9165432583fd84ceae5fa01130de7d
+  input docs/results/day-2/threshold_regions.csv sha256 f22335869f6b2bc9c7731508a0b710129d29b977b7300f55745031e5fa15c1d9
+  input docs/results/day-2/inat_species_oct.csv sha256 9eece112c12f8d8b7e2e358805a93fcb167f8029087e88e4d0f8d569f068ab44
+focus (verify rows 3 and 5) cannot be simulated on still photos: every photo is treated as focused
+West Georgia October: 23 eligible, 282 local toxic or hazard blockers
+photos: 30 target (23 species), 15 toxic or hazard (3 hazard species), 27 non-plant
+
+S51 own-target pass (bar >= 45%): 13/30 (43%) -> MISSED
+  target lost to hazard: 6
+  target lost to not_plant: 1
+  target lost to no_match: 10
+toxic pass as any target (bar 0): 0/15 (0%) -> MET; before row 1: 0; caught by row 1: 6; hazard species warned: 3/3 (100%)
+non-plant false pass: 0/27 (0%); reticle gate rejects 27/27 (100%), full frame 27/27 (100%)
+wrong-genus false pass on target photos: 0/30 (0%)
+non-plant + wrong-genus false pass (bar <= 5%): 0/57 (0%) -> MET
+H6 hazard false alarm on target photos: 6/30 (20%); on non-plants: 0/27 (0%)
+  target target_Conoclinium_coelestinum_402497442.jpg: no_match, top1 Conoclinium coelestinum 0.6328, pool top1 Ageratum conyzoides, blocker Ageratum conyzoides gap -0.0241, shares 0.9625/0.9643, hazard ranks 50/92 (Calotropis gigantea)
+  target target_Liquidambar_styraciflua_403739349.jpg: hazard, top1 Liquidambar styraciflua 0.6048, pool top1 Liquidambar styraciflua, blocker Ricinus communis gap 0.0710, shares 0.9866/0.9910, hazard ranks 2/2 (Ricinus communis)
+  target target_Liriodendron_tulipifera_405264462.jpg: hazard, top1 Magnolia grandiflora 0.4592, pool top1 Carica papaya, blocker Carica papaya gap -0.0630, shares 0.6919/0.8129, hazard ranks 5/17 (Syngonium podophyllum)
+  target target_Erechtites_hieraciifolius_405066909.jpg: no_match, top1 Erechtites hieraciifolius 0.5332, pool top1 Erechtites hieraciifolius, blocker Brickellia eupatorioides gap 0.0176, shares 0.9727/0.9659, hazard ranks 26/44 (Arnica montana)
+  target target_Erechtites_hieraciifolius_404919483.jpg: no_match, top1 Erechtites hieraciifolius 0.4421, pool top1 Erechtites hieraciifolius, blocker Maianthemum racemosum gap 0.0018, shares 0.9280/0.9774, hazard ranks 145/61 (Toxicodendron diversilobum)
+  target target_Ampelopsis_glandulosa_404850238.jpg: hazard, top1 Ampelopsis glandulosa 0.6342, pool top1 Ampelopsis glandulosa, blocker Ipomoea pandurata gap 0.0655, shares 0.9466/0.9501, hazard ranks 3/6 (Vitis mustangensis)
+  target target_Ampelopsis_glandulosa_404581096.jpg: no_match, top1 Ampelopsis glandulosa 0.5255, pool top1 Ampelopsis glandulosa, blocker Hedera helix gap 0.0076, shares 0.9089/0.9555, hazard ranks 17/6 (Araujia sericifera)
+  target target_Diospyros_virginiana_402279427.jpg: not_plant, top1 Cercis canadensis 0.5100, pool top1 Cercis canadensis, blocker Quercus marilandica gap 0.0082, shares 0.4443/0.7972, hazard ranks 26/15 (Ficus pumila)
+  target target_Diospyros_virginiana_400803551.jpg: no_match, top1 Diospyros virginiana 0.4318, pool top1 Juglans nigra, blocker Juglans nigra gap -0.0778, shares 0.9640/0.9836, hazard ranks 28/31 (Ficus carica)
+  target target_Platanus_occidentalis_404834946.jpg: no_match, top1 Platanus occidentalis 0.4875, pool top1 Platanus occidentalis, blocker Phryma leptostachya gap 0.0227, shares 0.9675/0.9729, hazard ranks 25/16 (Toxicodendron radicans)
+  target target_Vitis_rotundifolia_402234219.jpg: no_match, top1 Magnolia grandiflora 0.5157, pool top1 Ricinus communis, blocker Ricinus communis gap -0.0134, shares 0.6818/0.6591, hazard ranks 12/11 (Plumeria rubra)
+  target target_Pueraria_montana_403875690.jpg: hazard, top1 Pueraria montana 0.6240, pool top1 Pueraria montana, blocker Wisteria sinensis gap 0.1138, shares 0.9654/0.9734, hazard ranks 7/5 (Calotropis gigantea)
+  target target_Pueraria_montana_400615536.jpg: no_match, top1 Pueraria montana 0.4325, pool top1 Conocephalum salebrosum, blocker Conocephalum salebrosum gap -0.1697, shares 0.9361/0.9215, hazard ranks 9/10 (Heracleum sosnowskyi)
+  target target_Cercis_canadensis_402371869.jpg: hazard, top1 Cercis canadensis 0.6187, pool top1 Cercis canadensis, blocker Ipomoea pandurata gap 0.0167, shares 0.9805/0.9865, hazard ranks 9/2 (Cynanchum laeve)
+  target target_Albizia_julibrissin_399602191.jpg: no_match, top1 Albizia julibrissin 0.4952, pool top1 Robinia pseudoacacia, blocker Robinia pseudoacacia gap -0.0756, shares 0.9530/0.9673, hazard ranks 33/46 (Apocynum cannabinum)
+  target target_Rhus_copallinum_405335103.jpg: hazard, top1 Rhus copallinum 0.4999, pool top1 Rhus copallinum, blocker Toxicodendron radicans gap 0.0424, shares 0.9807/0.9562, hazard ranks 3/1 (Schinus terebinthifolia)
+  target target_Sassafras_albidum_405954859.jpg: no_match, top1 Pueraria montana 0.4702, pool top1 Saururus cernuus, blocker Saururus cernuus gap -0.0808, shares 0.9471/0.9875, hazard ranks 10/12 (Calotropis gigantea)

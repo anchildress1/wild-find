@@ -1,0 +1,205 @@
+run 2026-10-09T23:15:56-04:00; Apple M4 Max, macOS 26.5.2, laptop CPU
+python 3.13.14, onnxruntime 1.30.0, numpy 2.5.3, Pillow 12.3.0
+  pin bioclip: crazedcodernate/bioclip-2.5-mobile-fastvit@29b474ea2a5d72b4646f036ead9441e0a22a5c62 flora_student_fp32.onnx sha256 8624d44af3727b69a41dc2035c37018a30753b8d9c93ab8801a0c724dd42510f
+  pin teacher: imageomics/bioclip-2.5-vith14@6e3d04e3d6522012c88181085c5ae666e14c45cd
+  pin tinyclip: wkcn/TinyCLIP-ViT-8M-16-Text-3M-YFCC15M@a2a8c6eaa2549ad66eb7c31b85022bf58273a26c model.safetensors sha256 9339ee3d736344d0ddcaa6c03edc9f89688f08caaea5401220885233da726fcc
+  pin taxa: crazedcodernate/bioclip-2.5-mobile-fastvit@29b474ea2a5d72b4646f036ead9441e0a22a5c62 taxa_table.npy sha256 75626c967a00556f09bd6534d15c9c97c71ce37b0f3ae591187ba06d53377ae2
+  pin taxa_labels: crazedcodernate/bioclip-2.5-mobile-fastvit@29b474ea2a5d72b4646f036ead9441e0a22a5c62 taxa_labels.json sha256 adb36a6af884fda71ad3d633c20ede66862b335915a282ea613604409b6d4d7f
+  asset flora_student_fp32.onnx sha256 8624d44af3727b69a41dc2035c37018a30753b8d9c93ab8801a0c724dd42510f
+  asset plant_gate.onnx sha256 18d96a53c4f40fecf32fb22461681e9b645271ee2270c2d709beabba01cac935
+  asset plant_gate.json sha256 33e8990299b4cb1450dfbebe600162e5602810dc01b3e747450af4ea66a4818a
+  asset species_table.npy sha256 1fd3cf277dddda6c4c0062b696d170e3b405487098e80dcc71138045835cc27d
+  asset species_labels.json sha256 8b2f31254e529cd75060e3cc28b46245bcd2d28eacf69053e3a87cf9ac91c650
+  asset labels.npy sha256 c63489be575b96a70febd147445f496a54ed6b666ff79bbf314906efd7e4d80f
+  asset labels.json sha256 f6f31b2421956d8452a821ec4f8be5d0583f6ab8661a0483932d21712a3989c5
+  input pipeline/data/contact_hazards.json sha256 dc31a8a174dd3f90ae10143ae02e2719e37f6362974e71d81cf34971d521efeb
+  input pipeline/data/contact_hazards_review.json sha256 59a93d8c82c897f3bc3cbc55036e60dd306b94626ed32a642a2aa7c98845da85
+  input docs/results/day-1-photos.tsv sha256 7c472ce6452c1bec02bbfd08666addf4a301f12a7362b56c02d7129b68badd00
+  input docs/results/day-3/calibration.photos.csv sha256 4451ca526b6ddbbe3540ad7089655e0ec5bbf97aac496e11070111db7908379b
+  input docs/results/day-3/holdout.photos.csv sha256 c05e62308d2d1c3cad2698a9e60b309e1b9165432583fd84ceae5fa01130de7d
+  input docs/results/day-4/hazard_gate/photos.csv sha256 6386f01c1e0de9a76e6650828364135051ac57d880bd96dd08e4623d779ab2b8
+  input docs/results/day-1/tinyclip_scores.csv sha256 b28f2bb9afad2f44183db7a5113974eeda2b4e427013578265672f9ff6579251
+  input docs/results/day-1/species_scores.csv sha256 45763b3c914a838de50508398158aed43964e7d85b23ed8b86ab564fbc74dec1
+species rows 4272; hazard rows old 7, new 147; old rows missing from new: []
+
+## Day 1 set (day1_rerun.py)
+
+Day-1 set: 52 hazard photos, 253 safe photos (fixture and label-format excluded, as Day 1)
+old-flag ranks equal to day-1/species_scores.csv best_hazard_rank: 610/610 photo-regions
+gate   flags  k   hazards caught      safe photos warned
+day1   old    1   43/52 (82.7%)       1/253 (0.4%)
+day1   old    2   44/52 (84.6%)       1/253 (0.4%)
+day1   old    3   45/52 (86.5%)       1/253 (0.4%)
+day1   old    4   46/52 (88.5%)       1/253 (0.4%)
+day1   old    5   48/52 (92.3%)       1/253 (0.4%)
+day1   new    1   43/52 (82.7%)       6/253 (2.4%)
+day1   new    2   45/52 (86.5%)       11/253 (4.3%)
+day1   new    3   46/52 (88.5%)       17/253 (6.7%)
+day1   new    4   47/52 (90.4%)       22/253 (8.7%)
+day1   new    5   49/52 (94.2%)       27/253 (10.7%)
+app    old    1   43/52 (82.7%)       1/253 (0.4%)
+app    old    2   44/52 (84.6%)       1/253 (0.4%)
+app    old    3   45/52 (86.5%)       1/253 (0.4%)
+app    old    4   46/52 (88.5%)       1/253 (0.4%)
+app    old    5   48/52 (92.3%)       1/253 (0.4%)
+app    new    1   43/52 (82.7%)       6/253 (2.4%)
+app    new    2   45/52 (86.5%)       11/253 (4.3%)
+app    new    3   46/52 (88.5%)       17/253 (6.7%)
+app    new    4   47/52 (90.4%)       22/253 (8.7%)
+app    new    5   49/52 (94.2%)       27/253 (10.7%)
+
+[day1 gate] at k=5; hazard species warning on safe photos: Trifolium hybridum 3, Plumeria rubra 2, Quercus coccinea 2, Solanum mauritianum 2, Araujia sericifera 1, Campsis radicans 1, Crinum asiaticum 1, Cynanchum laeve 1, Dirca palustris 1, Euphorbia hypericifolia 1, Ficus pumila 1, Gelsemium sempervirens 1, Mangifera indica 1, Nerium oleander 1, Parthenium hysterophorus 1, Parthenocissus quinquefolia 1, Ranunculus hispidus 1, Ricinus communis 1, Rumex obtusifolius 1, Salsola tragus 1, Schinus terebinthifolia 1, Symplocarpus foetidus 1, Syngonium podophyllum 1, Toxicodendron radicans 1, Urtica dioica 1
+  safe warned: oak_1.jpg ranks reticle/full new 1/18 (Plumeria rubra / Plumeria rubra), old 639/1337; plant day1 reticle/full 0.6994/0.7115
+  safe warned: oak_2.jpg ranks reticle/full new 3/8 (Quercus coccinea / Quercus coccinea), old 89/35; plant day1 reticle/full 0.9704/0.9835
+  safe warned: clover_1.jpg ranks reticle/full new 1/1 (Urtica dioica / Urtica dioica), old 448/390; plant day1 reticle/full 0.9878/0.9381
+  safe warned: pine_1.jpg ranks reticle/full new 2/73 (Campsis radicans / Quercus coccinea), old 17/105; plant day1 reticle/full 0.8141/0.8214
+  safe warned: dandelion_1.jpg ranks reticle/full new 26/5 (Asparagus aethiopicus / Salsola tragus), old 414/1088; plant day1 reticle/full 0.9882/0.9813
+  hazard caught: poisonivy_2.jpg ranks reticle/full new 2/8 (Scaevola taccada / Schinus terebinthifolia), old 416/47; plant day1 reticle/full 0.9609/0.9638
+  safe warned: grass_77707956.jpg ranks reticle/full new 1/4 (Toxicodendron radicans / Cynanchum laeve), old 1/108; plant day1 reticle/full 0.9606/0.9618
+  safe warned: grass_53684067.jpg ranks reticle/full new 10/3 (Euphorbia maculata / Euphorbia hypericifolia), old 192/362; plant day1 reticle/full 0.9822/0.9859
+  safe warned: grass_303516861.jpg ranks reticle/full new 2/2 (Gelsemium sempervirens / Gelsemium sempervirens), old 629/183; plant day1 reticle/full 0.9647/0.9790
+  safe warned: oak_53007204.jpg ranks reticle/full new 4/4 (Quercus coccinea / Quercus coccinea), old 134/107; plant day1 reticle/full 0.9900/0.9751
+  safe warned: oak_318311909.jpg ranks reticle/full new 5/4 (Mangifera indica / Mangifera indica), old 610/623; plant day1 reticle/full 0.7808/0.8414
+  safe warned: maple_185909345.jpg ranks reticle/full new 5/5 (Parthenocissus quinquefolia / Parthenocissus quinquefolia), old 708/524; plant day1 reticle/full 0.9843/0.9862
+  safe warned: sweetgum_267797916.jpg ranks reticle/full new 1/13 (Ricinus communis / Ricinus communis), old 270/260; plant day1 reticle/full 0.9335/0.9501
+  safe warned: sweetgum_75817784.jpg ranks reticle/full new 132/2 (Euphorbia ophthalmica / Symplocarpus foetidus), old 773/784; plant day1 reticle/full 0.9470/0.9727
+  safe warned: sweetgum_388029933.jpg ranks reticle/full new 5/11 (Schinus terebinthifolia / Ficus pumila), old 913/283; plant day1 reticle/full 0.7901/0.7052
+  safe warned: fern_322314909.jpg ranks reticle/full new 1/2 (Syngonium podophyllum / Rumex obtusifolius), old 126/236; plant day1 reticle/full 0.9726/0.9766
+  safe warned: fern_143646740.jpg ranks reticle/full new 3/13 (Parthenium hysterophorus / Clematis drummondii), old 318/236; plant day1 reticle/full 0.9711/0.9867
+  safe warned: clover_166931416.jpg ranks reticle/full new 3/2 (Trifolium hybridum / Trifolium hybridum), old 904/815; plant day1 reticle/full 0.9677/0.9721
+  safe warned: clover_295532142.jpg ranks reticle/full new 4/3 (Trifolium hybridum / Trifolium hybridum), old 621/523; plant day1 reticle/full 0.9710/0.9623
+  safe warned: clover_391225110.jpg ranks reticle/full new 5/3 (Trifolium hybridum / Trifolium hybridum), old 1427/1141; plant day1 reticle/full 0.9546/0.9568
+  safe warned: magnolia_357301974.jpg ranks reticle/full new 3/16 (Dirca palustris / Dirca palustris), old 31/57; plant day1 reticle/full 0.9533/0.9711
+  safe warned: magnolia_251177662.jpg ranks reticle/full new 4/7 (Nerium oleander / Nerium oleander), old 491/458; plant day1 reticle/full 0.9749/0.9781
+  safe warned: magnolia_371399763.jpg ranks reticle/full new 2/2 (Solanum mauritianum / Solanum mauritianum), old 105/74; plant day1 reticle/full 0.9852/0.9891
+  safe warned: magnolia_80465557.jpg ranks reticle/full new 4/4 (Solanum mauritianum / Plumeria rubra), old 12/19; plant day1 reticle/full 0.9308/0.9427
+  safe warned: violet_74595584.jpg ranks reticle/full new 1/4 (Ranunculus hispidus / Ranunculus hispidus), old 236/146; plant day1 reticle/full 0.9832/0.9725
+  safe warned: honeysuckle_3323351.jpg ranks reticle/full new 10/5 (Araujia sericifera / Araujia sericifera), old 129/104; plant day1 reticle/full 0.9700/0.9790
+  safe warned: honeysuckle_28400905.jpg ranks reticle/full new 4/6 (Crinum asiaticum / Araujia sericifera), old 1191/208; plant day1 reticle/full 0.9783/0.9782
+  hazard missed: poison_ivy_267986184.jpg ranks reticle/full new 149/70 (Nolina texana / Gelsemium sempervirens), old 370/100; plant day1 reticle/full 0.9099/0.9490
+  hazard missed: poison_sumac_396031193.jpg ranks reticle/full new 12/17 (Gelsemium sempervirens / Toxicodendron vernix), old 49/17; plant day1 reticle/full 0.9881/0.9847
+  hazard missed: poison_sumac_396810195.jpg ranks reticle/full new 15/11 (Toxicodendron vernix / Toxicodendron vernix), old 15/11; plant day1 reticle/full 0.9884/0.9891
+  safe warned: np_trampoline_189691419.jpg ranks reticle/full new 1/5 (Mangifera indica / Ficus pumila), old 858/378; plant day1 reticle/full 0.4762/0.5331
+
+[app gate] at k=5; hazard species warning on safe photos: Trifolium hybridum 3, Plumeria rubra 2, Quercus coccinea 2, Solanum mauritianum 2, Araujia sericifera 1, Campsis radicans 1, Crinum asiaticum 1, Cynanchum laeve 1, Dirca palustris 1, Euphorbia hypericifolia 1, Ficus pumila 1, Gelsemium sempervirens 1, Mangifera indica 1, Nerium oleander 1, Parthenium hysterophorus 1, Parthenocissus quinquefolia 1, Ranunculus hispidus 1, Ricinus communis 1, Rumex obtusifolius 1, Salsola tragus 1, Schinus terebinthifolia 1, Symplocarpus foetidus 1, Syngonium podophyllum 1, Toxicodendron radicans 1, Urtica dioica 1
+  safe warned: oak_1.jpg ranks reticle/full new 1/18 (Plumeria rubra / Plumeria rubra), old 639/1337; plant app reticle/full 0.6994/0.7023
+  safe warned: oak_2.jpg ranks reticle/full new 3/8 (Quercus coccinea / Quercus coccinea), old 89/35; plant app reticle/full 0.9704/0.9835
+  safe warned: clover_1.jpg ranks reticle/full new 1/1 (Urtica dioica / Urtica dioica), old 448/390; plant app reticle/full 0.9878/0.9369
+  safe warned: pine_1.jpg ranks reticle/full new 2/73 (Campsis radicans / Quercus coccinea), old 17/105; plant app reticle/full 0.8141/0.8230
+  safe warned: dandelion_1.jpg ranks reticle/full new 26/5 (Asparagus aethiopicus / Salsola tragus), old 414/1088; plant app reticle/full 0.9882/0.9827
+  hazard caught: poisonivy_2.jpg ranks reticle/full new 2/8 (Scaevola taccada / Schinus terebinthifolia), old 416/47; plant app reticle/full 0.9609/0.9620
+  safe warned: grass_77707956.jpg ranks reticle/full new 1/4 (Toxicodendron radicans / Cynanchum laeve), old 1/108; plant app reticle/full 0.9606/0.9631
+  safe warned: grass_53684067.jpg ranks reticle/full new 10/3 (Euphorbia maculata / Euphorbia hypericifolia), old 192/362; plant app reticle/full 0.9822/0.9863
+  safe warned: grass_303516861.jpg ranks reticle/full new 2/2 (Gelsemium sempervirens / Gelsemium sempervirens), old 629/183; plant app reticle/full 0.9647/0.9799
+  safe warned: oak_53007204.jpg ranks reticle/full new 4/4 (Quercus coccinea / Quercus coccinea), old 134/107; plant app reticle/full 0.9900/0.9740
+  safe warned: oak_318311909.jpg ranks reticle/full new 5/4 (Mangifera indica / Mangifera indica), old 610/623; plant app reticle/full 0.7808/0.8567
+  safe warned: maple_185909345.jpg ranks reticle/full new 5/5 (Parthenocissus quinquefolia / Parthenocissus quinquefolia), old 708/524; plant app reticle/full 0.9843/0.9859
+  safe warned: sweetgum_267797916.jpg ranks reticle/full new 1/13 (Ricinus communis / Ricinus communis), old 270/260; plant app reticle/full 0.9335/0.9421
+  safe warned: sweetgum_75817784.jpg ranks reticle/full new 132/2 (Euphorbia ophthalmica / Symplocarpus foetidus), old 773/784; plant app reticle/full 0.9470/0.9715
+  safe warned: sweetgum_388029933.jpg ranks reticle/full new 5/11 (Schinus terebinthifolia / Ficus pumila), old 913/283; plant app reticle/full 0.7901/0.7174
+  safe warned: fern_322314909.jpg ranks reticle/full new 1/2 (Syngonium podophyllum / Rumex obtusifolius), old 126/236; plant app reticle/full 0.9726/0.9772
+  safe warned: fern_143646740.jpg ranks reticle/full new 3/13 (Parthenium hysterophorus / Clematis drummondii), old 318/236; plant app reticle/full 0.9711/0.9882
+  safe warned: clover_166931416.jpg ranks reticle/full new 3/2 (Trifolium hybridum / Trifolium hybridum), old 904/815; plant app reticle/full 0.9677/0.9709
+  safe warned: clover_295532142.jpg ranks reticle/full new 4/3 (Trifolium hybridum / Trifolium hybridum), old 621/523; plant app reticle/full 0.9710/0.9653
+  safe warned: clover_391225110.jpg ranks reticle/full new 5/3 (Trifolium hybridum / Trifolium hybridum), old 1427/1141; plant app reticle/full 0.9546/0.9606
+  safe warned: magnolia_357301974.jpg ranks reticle/full new 3/16 (Dirca palustris / Dirca palustris), old 31/57; plant app reticle/full 0.9533/0.9779
+  safe warned: magnolia_251177662.jpg ranks reticle/full new 4/7 (Nerium oleander / Nerium oleander), old 491/458; plant app reticle/full 0.9749/0.9777
+  safe warned: magnolia_371399763.jpg ranks reticle/full new 2/2 (Solanum mauritianum / Solanum mauritianum), old 105/74; plant app reticle/full 0.9852/0.9900
+  safe warned: magnolia_80465557.jpg ranks reticle/full new 4/4 (Solanum mauritianum / Plumeria rubra), old 12/19; plant app reticle/full 0.9308/0.9396
+  safe warned: violet_74595584.jpg ranks reticle/full new 1/4 (Ranunculus hispidus / Ranunculus hispidus), old 236/146; plant app reticle/full 0.9832/0.9709
+  safe warned: honeysuckle_3323351.jpg ranks reticle/full new 10/5 (Araujia sericifera / Araujia sericifera), old 129/104; plant app reticle/full 0.9700/0.9796
+  safe warned: honeysuckle_28400905.jpg ranks reticle/full new 4/6 (Crinum asiaticum / Araujia sericifera), old 1191/208; plant app reticle/full 0.9783/0.9780
+  hazard missed: poison_ivy_267986184.jpg ranks reticle/full new 149/70 (Nolina texana / Gelsemium sempervirens), old 370/100; plant app reticle/full 0.9099/0.9469
+  hazard missed: poison_sumac_396031193.jpg ranks reticle/full new 12/17 (Gelsemium sempervirens / Toxicodendron vernix), old 49/17; plant app reticle/full 0.9881/0.9839
+  hazard missed: poison_sumac_396810195.jpg ranks reticle/full new 15/11 (Toxicodendron vernix / Toxicodendron vernix), old 15/11; plant app reticle/full 0.9884/0.9884
+  safe warned: np_trampoline_189691419.jpg ranks reticle/full new 1/5 (Mangifera indica / Ficus pumila), old 858/378; plant app reticle/full 0.4762/0.5523
+
+## West Georgia hunt under old and new flags
+
+West Georgia October eligible targets: old flags 23, new 23; blockers 282 -> 287
+  targets lost: none; gained: none
+  local rows that became blockers (5): Impatiens capensis, Leucanthemum vulgare, Morus rubra, Quercus coccinea, Tanacetum parthenium
+
+## S50 calibration and S51 holdout
+
+calibration.log: West Georgia October: 23 eligible, 287 local toxic or hazard blockers | row-1 hazard warning on target photos: 3/30
+holdout.log: West Georgia October: 23 eligible, 287 local toxic or hazard blockers | photos: 30 target (23 species), 15 toxic or hazard (5 hazard species), 27 non-plant | toxic pass as any target (bar 0): 0/15 (0%) -> MET; before row 1: 0; caught by row 1: 8; hazard species warned: 5/5 (100%) | H6 hazard false alarm on target photos: 10/30 (33%); on non-plants: 0/27 (0%)
+
+S50: 50 photos; old-flag k=5 warnings equal to the day-3 CSV hazard_warn on 50/50
+  safe photos warned (50): k=1 old 0 new 1; k=2 old 0 new 2; k=3 old 0 new 4; k=4 old 0 new 5; k=5 old 0 new 6
+  hazard-flagged toxic photos warned (new flags decide which are hazards) (0): k=1 old 0 new 0; k=2 old 0 new 0; k=3 old 0 new 0; k=4 old 0 new 0; k=5 old 0 new 0
+  other toxic photos warned (0): k=1 old 0 new 0; k=2 old 0 new 0; k=3 old 0 new 0; k=4 old 0 new 0; k=5 old 0 new 0
+  safe target target_Magnolia_grandiflora_396800120.jpg (Magnolia grandiflora): ranks reticle/full new 1/3 (Mangifera indica / Mangifera indica), old 787/241; plant share 0.9024/0.8941
+  safe target target_Albizia_julibrissin_401649566.jpg (Albizia julibrissin): ranks reticle/full new 2/14 (Robinia pseudoacacia / Robinia pseudoacacia), old 399/201; plant share 0.9861/0.9956
+  safe target target_Rhus_copallinum_405529666.jpg (Rhus copallinum): ranks reticle/full new 4/6 (Schinus terebinthifolia / Toxicodendron vernix), old 7/6; plant share 0.9676/0.9826
+  safe non_grass non_grass_Oxalis_stricta_rufa_406756800.jpg (Oxalis stricta rufa): ranks reticle/full new 34/5 (Centella asiatica / Ranunculus abortivus), old 591/775; plant share 0.9553/0.9727
+  safe non_grass non_grass_Quercus_alba_405748845.jpg (Quercus alba): ranks reticle/full new 3/4 (Quercus coccinea / Quercus coccinea), old 107/72; plant share 0.9937/0.9900
+  safe non_grass non_grass_Lonicera_japonica_406655855.jpg (Lonicera japonica): ranks reticle/full new 3/3 (Solanum mauritianum / Solanum mauritianum), old 203/493; plant share 0.9815/0.9649
+
+S51: 72 photos; old-flag k=5 warnings equal to the day-3 CSV hazard_warn on 72/72
+  safe photos warned (57): k=1 old 1 new 2; k=2 old 1 new 4; k=3 old 1 new 6; k=4 old 1 new 8; k=5 old 1 new 10
+  hazard-flagged toxic photos warned (new flags decide which are hazards) (5): k=1 old 3 new 5; k=2 old 3 new 5; k=3 old 4 new 5; k=4 old 4 new 5; k=5 old 4 new 5
+  other toxic photos warned (10): k=1 old 0 new 0; k=2 old 0 new 1; k=3 old 0 new 1; k=4 old 0 new 1; k=5 old 0 new 3
+  safe target target_Liquidambar_styraciflua_403739349.jpg (Liquidambar styraciflua): ranks reticle/full new 2/2 (Ricinus communis / Ricinus communis), old 164/347; plant share 0.9866/0.9910
+  safe target target_Liriodendron_tulipifera_405264462.jpg (Liriodendron tulipifera): ranks reticle/full new 5/17 (Syngonium podophyllum / Ficus pumila), old 1275/302; plant share 0.6919/0.8129
+  safe target target_Erechtites_hieraciifolius_405066909.jpg (Erechtites hieraciifolius): ranks reticle/full new 3/11 (Jacobaea vulgaris / Jacobaea vulgaris), old 1778/2071; plant share 0.9727/0.9659
+  safe target target_Ampelopsis_glandulosa_404850238.jpg (Ampelopsis glandulosa): ranks reticle/full new 3/6 (Vitis mustangensis / Vitis mustangensis), old 57/21; plant share 0.9466/0.9501
+  safe target target_Ampelopsis_glandulosa_404581096.jpg (Ampelopsis glandulosa): ranks reticle/full new 4/6 (Hedera helix / Ficus pumila), old 61/201; plant share 0.9089/0.9555
+  safe target target_Platanus_occidentalis_404834946.jpg (Platanus occidentalis): ranks reticle/full new 9/4 (Morus rubra / Morus rubra), old 25/62; plant share 0.9675/0.9729
+  safe target target_Pueraria_montana_403875690.jpg (Pueraria montana): ranks reticle/full new 7/5 (Calotropis gigantea / Calotropis gigantea), old 297/483; plant share 0.9654/0.9734
+  safe target target_Cercis_canadensis_402371869.jpg (Cercis canadensis): ranks reticle/full new 9/2 (Cynanchum laeve / Cynanchum laeve), old 255/434; plant share 0.9805/0.9865
+  safe target target_Albizia_julibrissin_399602191.jpg (Albizia julibrissin): ranks reticle/full new 1/13 (Robinia pseudoacacia / Robinia pseudoacacia), old 150/127; plant share 0.9530/0.9673
+  safe target target_Rhus_copallinum_405335103.jpg (Rhus copallinum): ranks reticle/full new 3/1 (Schinus terebinthifolia / Toxicodendron vernix), old 4/1; plant share 0.9807/0.9562
+
+## New contact-hazard set (photos.csv)
+
+52 hazard photos (44 of species on the shipped list), 30 safe photos
+hazard caught, all 52 (52): k=1 old 0 new 34; k=2 old 0 new 42; k=3 old 0 new 43; k=4 old 0 new 44; k=5 old 0 new 45
+hazard caught, shipped-list species only (44): k=1 old 0 new 34; k=2 old 0 new 39; k=3 old 0 new 40; k=4 old 0 new 41; k=5 old 0 new 41
+safe photos warned (30): k=1 old 0 new 3; k=2 old 0 new 5; k=3 old 0 new 6; k=4 old 0 new 7; k=5 old 0 new 10
+per species, new flags, caught at k=3/4/5:
+  hazard Urtica dioica (5): 5/5/5
+  hazard Urtica urens (4): 4/4/4
+  hazard Laportea canadensis (4): 4/4/4
+  hazard Heracleum mantegazzianum (5): 4/4/4
+  hazard Heracleum sosnowskyi (5): 5/5/5
+  hazard Heracleum sphondylium (4): 3/4/4
+  hazard Heracleum maximum (4): 4/4/4
+  hazard Pastinaca sativa (5): 4/4/4
+  hazard Euphorbia cyparissias (4): 4/4/4
+  hazard Euphorbia virgata (4, off list): 3/3/3
+  hazard Chelidonium majus (4, off list): 0/0/1
+  hazard Ficus carica (4): 3/3/3
+  safe Lamium album (2): 1/1/1
+  safe Lamium purpureum (2): 0/0/0
+  safe Lamium maculatum (2): 0/1/1
+  safe Galeopsis tetrahit (2): 0/0/0
+  safe Stachys sylvatica (2): 0/0/0
+  safe Ballota nigra (2): 0/0/0
+  safe Mentha longifolia (2): 0/0/0
+  safe Melissa officinalis (2): 0/0/0
+  safe Filipendula ulmaria (2): 0/0/0
+  safe Carum carvi (2): 1/1/2
+  safe Astrantia major (2): 0/0/0
+  safe Angelica atropurpurea (2): 0/0/2
+  safe Smyrnium olusatrum (2): 2/2/2
+  safe Geranium robertianum (2): 0/0/0
+  safe Leucanthemum vulgare (2): 2/2/2
+hazard photos missed at k=5 and safe photos warned at k=5:
+  hazard hazard hazard_Heracleum_mantegazzianum_394666960.jpg (Heracleum mantegazzianum): ranks reticle/full new 27/8 (Heracleum mantegazzianum / Heracleum mantegazzianum), old 161/47; plant share 0.9780/0.9825
+  hazard hazard hazard_Pastinaca_sativa_406497686.jpg (Pastinaca sativa): ranks reticle/full new 13/11 (Pastinaca sativa / Heracleum sphondylium), old 1732/1194; plant share 0.9680/0.9872
+  hazard hazard hazard_Euphorbia_virgata_402628874.jpg (Euphorbia virgata): ranks reticle/full new 66/11 (Aloe vera / Daphne gnidium), old 1814/701; plant share 0.9725/0.9774
+  hazard hazard hazard_Chelidonium_majus_407057708.jpg (Chelidonium majus): ranks reticle/full new 11/14 (Fumaria officinalis / Ranunculus repens), old 596/396; plant share 0.9598/0.9460
+  hazard hazard hazard_Chelidonium_majus_360646683.jpg (Chelidonium majus): ranks reticle/full new 7/10 (Cnidoscolus texanus / Ranunculus repens), old 23/274; plant share 0.9815/0.9765
+  hazard hazard hazard_Chelidonium_majus_403405927.jpg (Chelidonium majus): ranks reticle/full new 29/31 (Heracleum maximum / Heracleum maximum), old 33/33; plant share 0.9776/0.9793
+  hazard hazard hazard_Ficus_carica_312884329.jpg (Ficus carica): ranks reticle/full new 50/13 (Clematis paniculata / Araujia sericifera), old 1614/1270; plant share 0.7540/0.8317
+  safe safe safe_Lamium_album_406332622.jpg (Lamium album): ranks reticle/full new 3/5 (Urtica dioica / Urtica dioica), old 450/651; plant share 0.9652/0.9684
+  safe safe safe_Lamium_maculatum_35490267.jpg (Lamium maculatum): ranks reticle/full new 26/4 (Urtica dioica / Urtica dioica), old 265/909; plant share 0.9373/0.9737
+  safe safe safe_Carum_carvi_354310919.jpg (Carum carvi): ranks reticle/full new 4/2 (Conium maculatum / Conium maculatum), old 919/1268; plant share 0.9463/0.9730
+  safe safe safe_Carum_carvi_291827465.jpg (Carum carvi): ranks reticle/full new 5/7 (Daucus carota / Daucus carota), old 158/425; plant share 0.9562/0.9376
+  safe safe safe_Angelica_atropurpurea_370753382.jpg (Angelica atropurpurea): ranks reticle/full new 6/5 (Heracleum sphondylium / Heracleum sphondylium), old 1167/896; plant share 0.9736/0.9814
+  safe safe safe_Angelica_atropurpurea_362572431.jpg (Angelica atropurpurea): ranks reticle/full new 8/5 (Heracleum mantegazzianum / Heracleum maximum), old 109/402; plant share 0.9714/0.9739
+  safe safe safe_Smyrnium_olusatrum_405866823.jpg (Smyrnium olusatrum): ranks reticle/full new 2/4 (Conium maculatum / Conium maculatum), old 1167/1440; plant share 0.9038/0.9112
+  safe safe safe_Smyrnium_olusatrum_5218204.jpg (Smyrnium olusatrum): ranks reticle/full new 1/4 (Heracleum maximum / Conium maculatum), old 545/177; plant share 0.9621/0.9665
+  safe safe safe_Leucanthemum_vulgare_394789161.jpg (Leucanthemum vulgare): ranks reticle/full new 1/1 (Leucanthemum vulgare / Leucanthemum vulgare), old 1248/1202; plant share 0.8928/0.8804
+  safe safe safe_Leucanthemum_vulgare_319319567.jpg (Leucanthemum vulgare): ranks reticle/full new 1/1 (Leucanthemum vulgare / Leucanthemum vulgare), old 1345/1277; plant share 0.9131/0.8882

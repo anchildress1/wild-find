@@ -7,6 +7,11 @@ from wild_find_pipeline import hints as h
 ARTICLE = "It grows in moist woods. It also turns up along fence lines. Birds eat the fruit."
 
 
+@pytest.fixture(autouse=True)
+def no_contact_list(monkeypatch):
+    monkeypatch.setattr(h, "listed", lambda: {})
+
+
 def test_a_quote_must_appear_in_the_article_however_it_wraps():
     assert h.issues("place", "Look in woods.", "It grows in  moist\nwoods.", ARTICLE, []) == []
     assert "evidence not in article" in h.issues("place", "Look in woods.", "It grows in dry woods.", ARTICLE, [])
@@ -90,7 +95,7 @@ def test_rank_all_scores_only_clean_picked_hints():
     species = {
         "A a": {
             "hints": [
-                {"aspect": "place", "text": "Woods.", "evidence": "q", "source": "model", "issues": []},
+                {"aspect": "place", "text": "Shady woods.", "evidence": "q", "source": "model", "issues": []},
                 {"aspect": "place", "text": "Water.", "evidence": "q", "source": "model", "issues": ["water"]},
             ]
         }
@@ -127,7 +132,7 @@ def _ollama(monkeypatch, content: str, reason: str = "stop", prompt_tokens: int 
         sent.append(json.loads(request.data))
         return _Reply({"message": {"content": content}, "done_reason": reason, "prompt_eval_count": prompt_tokens})
 
-    monkeypatch.setattr(h.urllib.request, "urlopen", urlopen)
+    monkeypatch.setattr(h.gemma.urllib.request, "urlopen", urlopen)
     return sent
 
 
@@ -213,7 +218,7 @@ def test_candidate_calls_a_model_hint_article_backed_and_everything_else_usda_ba
     assert h.candidate(trait) == {"aspect": "season", "text": "y", "support": "usda", "bucket": "fall"}
 
 
-def test_playable_skips_toxic_and_hazard_rows_and_sorts(tmp_path, monkeypatch):
+def test_playable_skips_toxic_hazard_and_contact_list_rows_and_sorts(tmp_path, monkeypatch):
     flags = tmp_path / "toxicity.json"
     flags.write_text(
         json.dumps(
@@ -223,11 +228,13 @@ def test_playable_skips_toxic_and_hazard_rows_and_sorts(tmp_path, monkeypatch):
                     "Abies alba": {"toxic": False},
                     "Conium maculatum": {"toxic": True},
                     "Toxicodendron radicans": {"toxic": False},
+                    "Urtica dioica": {"toxic": False},
                 }
             }
         )
     )
     monkeypatch.setattr(h, "TOXICITY", flags)
+    monkeypatch.setattr(h, "listed", lambda: {"Urtica dioica": "Its hairs sting skin."})
 
     assert h.playable() == ["Abies alba", "Quercus nigra"]
 
@@ -244,7 +251,7 @@ def test_recheck_flags_stored_hints_that_now_fail_and_reranks_without_the_model(
     entry = {
         "hints": [
             {"aspect": "place", "text": "Look on rocky cliffs.", "evidence": "q", "source": "model", "issues": []},
-            {"aspect": "place", "text": "Look in woods.", "evidence": "q", "source": "model", "issues": []},
+            {"aspect": "place", "text": "Look in shady woods.", "evidence": "q", "source": "model", "issues": []},
             {"aspect": "size", "text": "It is a tall tree.", "source": "trait", "issues": [], "bucket": "big"},
         ]
     }
@@ -262,8 +269,8 @@ def test_recheck_flags_stored_hints_that_now_fail_and_reranks_without_the_model(
 
 def test_recheck_flags_a_repeated_hint_but_keeps_the_first_and_refuses_an_unfinished_file(tmp_path, monkeypatch):
     twice = [
-        {"aspect": "place", "text": "Look in woods.", "evidence": "a", "source": "model", "issues": []},
-        {"aspect": "ground", "text": "look in woods.", "evidence": "b", "source": "model", "issues": []},
+        {"aspect": "place", "text": "Look in shady woods.", "evidence": "a", "source": "model", "issues": []},
+        {"aspect": "ground", "text": "look in shady woods.", "evidence": "b", "source": "model", "issues": []},
     ]
     path = _stored(tmp_path, monkeypatch, {"A a": {"hints": twice}}, done=True)
 

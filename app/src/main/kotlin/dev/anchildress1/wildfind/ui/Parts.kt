@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -31,7 +32,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -57,43 +57,37 @@ val CardShape = RoundedCornerShape(20.dp)
  * A screen on Ground: [content] scrolls, so every layout holds at 200% font scale, and [bottom] stays pinned.
  *
  * @param top a fixed row above the scrolling content
- * @param centered centers [content] vertically when it is shorter than the screen; it still scrolls when taller
+ * @param arrangement lays out [content] in at least the screen's height; it still scrolls when taller
+ * @param background drawn full-bleed over Ground, under everything else
  */
 @Composable
 fun Page(
-    modifier: Modifier = Modifier,
     top: @Composable () -> Unit = {},
     bottom: @Composable ColumnScope.() -> Unit = {},
-    centered: Boolean = false,
+    arrangement: Arrangement.Vertical = Arrangement.spacedBy(16.dp),
+    background: @Composable BoxScope.() -> Unit = {},
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    Column(
-        modifier.fillMaxSize().background(Palette.Ground).safeDrawingPadding().padding(horizontal = 20.dp),
-    ) {
-        top()
-        if (centered) {
+    Box(Modifier.fillMaxSize().background(Palette.Ground)) {
+        background()
+        Column(Modifier.fillMaxSize().safeDrawingPadding().padding(horizontal = 20.dp)) {
+            top()
             BoxWithConstraints(Modifier.weight(1f).fillMaxWidth()) {
-                // Scrolled content has no height limit to center in, so it gets at least the viewport's height.
+                // Scrolled content has no height limit to arrange in, so it gets at least the viewport's height.
                 val viewport = maxHeight
                 Column(
                     Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).heightIn(min = viewport)
                         .padding(vertical = 12.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
+                    verticalArrangement = arrangement,
                     content = content,
                 )
             }
-        } else {
             Column(
-                Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).padding(vertical = 12.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                content = content,
+                Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                content = bottom,
             )
         }
-        Column(
-            Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            content = bottom,
-        )
     }
 }
 
@@ -183,14 +177,14 @@ fun PaperCard(modifier: Modifier = Modifier, content: @Composable ColumnScope.()
 }
 
 /**
- * A plant type's picture standing on its square's bottom edge, with no box around it; no type leaves the square
- * empty (spec: name only).
+ * A plant type's picture standing on its square's bottom edge, with no box around it; no type shows the untyped
+ * picture.
  *
  * @param size the square's side
  */
 @Composable
 fun TypeTile(type: PlantType?, size: Dp, modifier: Modifier = Modifier) {
-    Box(modifier.size(size)) { type?.let { PlantArt(it, Modifier.size(size)) } }
+    Box(modifier.size(size)) { PlantArt(type, Modifier.size(size)) }
 }
 
 /** A find star, the painted art from `assets/star.webp`. */
@@ -201,7 +195,7 @@ fun Star(size: Dp, modifier: Modifier = Modifier) {
 }
 
 /**
- * The line that tells a kid what to look for: the USDA description, else the plant type in sentence case ("A tree");
+ * The line that tells a kid what to look for: the build's description, else the plant type in sentence case ("A tree");
  * nothing when the plant has neither.
  */
 @Composable

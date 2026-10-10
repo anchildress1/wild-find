@@ -1,0 +1,1893 @@
+{
+ "Abies concolor": {
+  "article": "Abies concolor",
+  "revid": 1370071448,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in old growth forests.",
+    "evidence": "White fir and yellow pine (ponderosa pine/Jeffrey pine) have co-existed for millennia in old growth forests throughout their range.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "light",
+    "text": "The tree can grow in shade.",
+    "evidence": "Like grand fir, white fir is more shade tolerant than Douglas fir, but less so than western hemlock and western redcedar.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "ground",
+    "text": "Look on ground that drains well, not soggy.",
+    "evidence": "USDA AnaerobicSoilTolerance 260413007 (Abies concolor)",
+    "bucket": "dry",
+    "source": "usda",
+    "issues": [],
+    "score": 2.25
+   },
+   {
+    "aspect": "size",
+    "text": "It is a tall evergreen.",
+    "evidence": "",
+    "source": "trait",
+    "issues": [],
+    "bucket": "tall",
+    "score": null
+   }
+  ]
+ },
+ "Acaena novae-zelandiae": {
+  "article": "Acaena novae-zelandiae",
+  "revid": 1367008524,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in woodlands, shrublands, or grasslands.",
+    "evidence": "It occurs within a wide range of habitats, including woodlands, shrublands and grasslands, from coastal areas to alpine areas.",
+    "source": "model",
+    "issues": [
+     "biome"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "light",
+    "text": "It likes a lot of sunlight.",
+    "evidence": "It grows in freely draining soils such as silty and sandy loams, typically on sites which receive a high amount of sunlight.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "ground",
+    "text": "Look for sandy ground that drains well.",
+    "evidence": "It grows in freely draining soils such as silty and sandy loams, typically on sites which receive a high amount of sunlight.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "edges",
+    "text": "Look near roadsides.",
+    "evidence": "It also establishes readily on disturbed sites such as roadsides.",
+    "source": "model",
+    "issues": [
+     "road",
+     "hedged"
+    ],
+    "score": null
+   }
+  ]
+ },
+ "Acourtia microcephala": {
+  "article": "Acourtia microcephala",
+  "revid": 1369804970,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in woodland areas.",
+    "evidence": "It is native to southern California and Baja California, where it grows in woodland and chaparral, especially in the coastal mountain ranges.",
+    "source": "model",
+    "issues": [
+     "generic habitat"
+    ],
+    "score": null
+   }
+  ]
+ },
+ "Alnus serrulata": {
+  "article": "Alnus serrulata",
+  "revid": 1369167692,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in swamps.",
+    "evidence": "Alnus serrulata can be found in habitats such as streambanks, riversides, and swamps.",
+    "source": "model",
+    "issues": [
+     "water"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "light",
+    "text": "It needs sun or part-sun.",
+    "evidence": "Water use is high and it requires sun or part-sun.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "ground",
+    "text": "Look for moist soil near streams, pond margins, and riversides.",
+    "evidence": "The plant prefers moist soil near streams, pond margins, and riversides and can be rooted under the water line.",
+    "source": "model",
+    "issues": [
+     "water"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "edges",
+    "text": "Look at streambanks or riversides.",
+    "evidence": "Alnus serrulata can be found in habitats such as streambanks, riversides, and swamps.",
+    "source": "model",
+    "issues": [],
+    "score": 1.0
+   }
+  ]
+ },
+ "Andropogon virginicus": {
+  "article": "Andropogon virginicus",
+  "revid": 1377210232,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in open woodlands or grasslands.",
+    "evidence": "This species often invades open woodlands, grasslands, and forests areas.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "light",
+    "text": "Look in open, sunny spots.",
+    "evidence": "USDA ShadeTolerance PATO_0002394 (Andropogon virginicus)",
+    "bucket": "sun",
+    "source": "usda",
+    "issues": [],
+    "score": 2.1
+   },
+   {
+    "aspect": "ground",
+    "text": "It can grow in dry habitats.",
+    "evidence": "Where it is invasive, it can be very common and dominates roadsides, and can also form continuous cover in boggy, mesic, and dry habitats in the USA.",
+    "source": "model",
+    "issues": [
+     "hedged"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "edges",
+    "text": "It can be found on roadsides.",
+    "evidence": "Where it is invasive, it can be very common and dominates roadsides, and can also form continuous cover in boggy, mesic, and dry habitats in the USA.",
+    "source": "model",
+    "issues": [
+     "road"
+    ],
+    "score": null
+   }
+  ]
+ },
+ "Aphyllon purpureum": {
+  "article": "Orobanche uniflora",
+  "revid": 1352663822,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in woods or thickets.",
+    "evidence": "The plant can be found in woods, thickets, and mountains as well as by stream banks, and is widespread in much of North America.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "place",
+    "text": "Search in forests.",
+    "evidence": "uniflora is largely a species that can be commonly found in forests.",
+    "source": "model",
+    "issues": [
+     "generic habitat"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "light",
+    "text": "It can be in the sunlight or shaded areas.",
+    "evidence": "The species has been found surviving in both the sunlight and shaded areas, as well as in a variety of different types of soil.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "edges",
+    "text": "Look by stream banks.",
+    "evidence": "The plant can be found in woods, thickets, and mountains as well as by stream banks, and is widespread in much of North America.",
+    "source": "model",
+    "issues": [
+     "water"
+    ],
+    "score": null
+   }
+  ]
+ },
+ "Asplenium trichomanes": {
+  "article": "Asplenium trichomanes",
+  "revid": 1323421916,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in rocky habitats.",
+    "evidence": "It is a widespread and common species, occurring almost worldwide in a variety of rocky habitats.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "light",
+    "text": "It likes full or partial shade.",
+    "evidence": "It prefers a fully or partially shaded aspect.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "ground",
+    "text": "Look on moist cliffs.",
+    "evidence": "It occurs on ledges and in crevices on moist, east-facing cliffs and occasionally on talus with similar conditions.",
+    "source": "model",
+    "issues": [
+     "height"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "nearby",
+    "text": "It grows on walls.",
+    "evidence": "It grows in rocky habitats such as cliffs, scree slopes, walls and mine waste, the type of rock used as a substrate depending on the subspecies.",
+    "source": "model",
+    "issues": [],
+    "score": 2.0
+   }
+  ]
+ },
+ "Berberis thunbergii": {
+  "article": "Berberis thunbergii",
+  "revid": 1360311190,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in a temperate forest.",
+    "evidence": "A 2023 community-level study in a temperate forest in Connecticut observed that B. thunbergii had a lower arthropods abundance and a lower protein quality of arthropod in comparison to other native woody shrub species.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "light",
+    "text": "Look in open, sunny spots.",
+    "evidence": "USDA ShadeTolerance PATO_0002394 (Berberis thunbergii)",
+    "bucket": "sun",
+    "source": "usda",
+    "issues": [],
+    "score": 2.1
+   },
+   {
+    "aspect": "ground",
+    "text": "Look on ground that drains well, not soggy.",
+    "evidence": "USDA AnaerobicSoilTolerance 260413007 (Berberis thunbergii)",
+    "bucket": "dry",
+    "source": "usda",
+    "issues": [],
+    "score": 2.25
+   },
+   {
+    "aspect": "season",
+    "text": "Look for red fruit in fall.",
+    "evidence": "",
+    "source": "trait",
+    "issues": [],
+    "bucket": "fall",
+    "score": 2.2
+   },
+   {
+    "aspect": "season",
+    "text": "Look for yellow flowers in spring.",
+    "evidence": "",
+    "source": "trait",
+    "issues": [],
+    "bucket": "spring",
+    "score": 2.2
+   }
+  ]
+ },
+ "Bidens frondosa": {
+  "article": "Bidens frondosa",
+  "revid": 1318684306,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in fields or pastures.",
+    "evidence": "It is also weedy in its native range, occurring in pastures and fields and along roadsides.",
+    "source": "model",
+    "issues": [
+     "hedged",
+     "generic habitat"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "light",
+    "text": "It grows best where there is sun.",
+    "evidence": "Bidens frondosa grows best where there is ample soil moisture and sun, especially in areas where something has disrupted the existing plant community leaving bare ground.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "ground",
+    "text": "Look in water saturated soils.",
+    "evidence": "It can survive in water saturated soils, frequently found growing at the water's edge, in drainage ditches or on flood plains.",
+    "source": "model",
+    "issues": [
+     "water"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "edges",
+    "text": "Check along roadsides.",
+    "evidence": "It is also weedy in its native range, occurring in pastures and fields and along roadsides.",
+    "source": "model",
+    "issues": [
+     "road",
+     "hedged"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "edges",
+    "text": "Look at the water's edge.",
+    "evidence": "It can survive in water saturated soils, frequently found growing at the water's edge, in drainage ditches or on flood plains.",
+    "source": "model",
+    "issues": [
+     "water"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "season",
+    "text": "Look for brown seeds in fall.",
+    "evidence": "",
+    "source": "trait",
+    "issues": [],
+    "bucket": "fall",
+    "score": 2.2
+   },
+   {
+    "aspect": "season",
+    "text": "Look for yellow flowers in summer.",
+    "evidence": "",
+    "source": "trait",
+    "issues": [],
+    "bucket": "summer",
+    "score": 2.15
+   }
+  ]
+ },
+ "Cassytha filiformis": {
+  "article": "Cassytha filiformis",
+  "revid": 1365061259,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in coastal forests.",
+    "evidence": "It is found in coastal forests of warm tropical regions worldwide including the Americas, Indomalaya, Australasia, Polynesia and tropical Africa.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   }
+  ]
+ },
+ "Castanea sativa": {
+  "article": "Sweet chestnut",
+  "revid": 1379513300,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in high forest.",
+    "evidence": "High forest: Wood and fruit production.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "ground",
+    "text": "It likes well draining soil.",
+    "evidence": "The tree favours neutral to acidic and well draining soils.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "ground",
+    "text": "It does not like wet ground.",
+    "evidence": "The tolerance to wet ground and to clay-rich soils is very low.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   }
+  ]
+ },
+ "Ceanothus perplexans": {
+  "article": "Ceanothus perplexans",
+  "revid": 1331758081,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "ground",
+    "text": "Look on dry, rocky slopes or in canyons.",
+    "evidence": "It grows in dry, rocky slopes and canyons at elevations between 300 and 2100 meters.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "ground",
+    "text": "It grows in rocky or sandy ground.",
+    "evidence": "It tolerates poor, well-drained soils including rocky or sandy substrates of a neutral to slightly alkaline pH.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   }
+  ]
+ },
+ "Conopholis americana": {
+  "article": "Conopholis americana",
+  "revid": 1374207570,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in wooded ravines.",
+    "evidence": "The plant is found growing on roots in wooded ravines in every state of the United States east of the Mississippi River.",
+    "source": "model",
+    "issues": [
+     "height"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "nearby",
+    "text": "Look near oak and beech trees.",
+    "evidence": "When blooming, it resembles a pine cone or cob of corn growing from the roots of mostly oak and beech trees.",
+    "source": "model",
+    "issues": [],
+    "score": 2.0
+   }
+  ]
+ },
+ "Corylus avellana": {
+  "article": "Corylus avellana",
+  "revid": 1341513740,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in many woodlands.",
+    "evidence": "This shrub is common in many European woodlands.",
+    "source": "model",
+    "issues": [
+     "generic habitat"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "edges",
+    "text": "It is found in hedgerows.",
+    "evidence": "It is an important component of the hedgerows that were the traditional field boundaries in lowland England.",
+    "source": "model",
+    "issues": [],
+    "score": 1.0
+   }
+  ]
+ },
+ "Cosmos sulphureus": {
+  "article": "Cosmos sulphureus",
+  "revid": 1373652998,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "light",
+    "text": "It likes full sun.",
+    "evidence": "Flowering is best in full sun, although partial shade is tolerated",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "edges",
+    "text": "Look along roadsides.",
+    "evidence": "It is especially popular in Korea and Japan, where it is often seen in mass plantings along roadsides, following an initiative pursued by the Korean-Japanese botanist Woo Jang-choon.",
+    "source": "model",
+    "issues": [
+     "road",
+     "garden care"
+    ],
+    "score": null
+   }
+  ]
+ },
+ "Dianthus barbatus": {
+  "article": "Dianthus barbatus",
+  "revid": 1370290722,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in gardens.",
+    "evidence": "It has become a popular ornamental garden plant.",
+    "source": "model",
+    "issues": [
+     "garden care"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "light",
+    "text": "It likes sun to partial shade.",
+    "evidence": "It thrives in loamy, slightly alkaline soil with sun to partial shade.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "ground",
+    "text": "It likes loamy soil.",
+    "evidence": "It thrives in loamy, slightly alkaline soil with sun to partial shade.",
+    "source": "model",
+    "issues": [
+     "unseen soil"
+    ],
+    "score": null
+   }
+  ]
+ },
+ "Elephantopus carolinianus": {
+  "article": "Elephantopus carolinianus",
+  "revid": 1316858858,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in pine forests or mixed forests.",
+    "evidence": "It grows in open or shaded pine forests and mixed forests, with generally damp to wet soil, often sandy.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "light",
+    "text": "It grows in open or shaded areas.",
+    "evidence": "It grows in open or shaded pine forests and mixed forests, with generally damp to wet soil, often sandy.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "ground",
+    "text": "Look for damp to wet, often sandy ground.",
+    "evidence": "It grows in open or shaded pine forests and mixed forests, with generally damp to wet soil, often sandy.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "season",
+    "text": "Look for purple flowers in summer.",
+    "evidence": "",
+    "source": "trait",
+    "issues": [],
+    "bucket": "summer",
+    "score": 2.15
+   }
+  ]
+ },
+ "Epigaea repens": {
+  "article": "Epigaea repens",
+  "revid": 1377892093,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in an oak-heath forest.",
+    "evidence": "It is often part of the heath complex in an oak-heath forest.",
+    "source": "model",
+    "issues": [
+     "biome"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "light",
+    "text": "Find it in shady habitats.",
+    "evidence": "The plant is a slow-growing, evergreen, prostrate to sprawling shrub that prefers moist, shady habitats and acidic (humus-rich) soil.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "ground",
+    "text": "Look for moist, sandy ground.",
+    "evidence": "It prefers sandy to peaty forest or clearings.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "ground",
+    "text": "It likes peaty ground.",
+    "evidence": "It prefers sandy to peaty forest or clearings.",
+    "source": "model",
+    "issues": [
+     "repeats an earlier quote"
+    ],
+    "score": null
+   }
+  ]
+ },
+ "Erica cinerea": {
+  "article": "Erica cinerea",
+  "revid": 1371143647,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look on moors and heathland.",
+    "evidence": "It mostly occurs on moors and heathland with relatively dry, acidic, nutrient poor soils.",
+    "source": "model",
+    "issues": [
+     "biome"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "place",
+    "text": "It grows in coastal dune heath and dune slack.",
+    "evidence": "It occurs in coastal dune heath and dune slack and occasionally in woodland.",
+    "source": "model",
+    "issues": [
+     "biome"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "light",
+    "text": "It grows well in full sun.",
+    "evidence": "It is drought-tolerant and grows well in full sun with well-drained soil.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "ground",
+    "text": "The ground is relatively dry.",
+    "evidence": "It mostly occurs on moors and heathland with relatively dry, acidic, nutrient poor soils.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   }
+  ]
+ },
+ "Erigeron canadensis": {
+  "article": "Erigeron canadensis",
+  "revid": 1374950365,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in old fields, gardens, or meadows.",
+    "evidence": "Horseweed can grow in a range of natural habitats, from sand dunes to old fields, as well as in gardens and other disturbed areas.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "light",
+    "text": "Look in open, sunny spots.",
+    "evidence": "USDA ShadeTolerance PATO_0002394 (Conyza canadensis)",
+    "bucket": "sun",
+    "source": "usda",
+    "issues": [],
+    "score": 2.1
+   },
+   {
+    "aspect": "ground",
+    "text": "It can grow in sand dunes.",
+    "evidence": "Horseweed can grow in a range of natural habitats, from sand dunes to old fields, as well as in gardens and other disturbed areas.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "edges",
+    "text": "Look in disturbed areas.",
+    "evidence": "It is an indicator for disturbance because it often colonizes disturbed areas in which it was sparse or absent prior to the disturbance.",
+    "source": "model",
+    "issues": [],
+    "score": null
+   },
+   {
+    "aspect": "size",
+    "text": "It is a tall herb.",
+    "evidence": "",
+    "source": "trait",
+    "issues": [],
+    "bucket": "tall",
+    "score": null
+   },
+   {
+    "aspect": "sign",
+    "text": "Look for white flowers.",
+    "evidence": "",
+    "source": "trait",
+    "issues": [],
+    "bucket": null,
+    "score": null
+   }
+  ]
+ },
+ "Eriophyllum lanatum": {
+  "article": "Eriophyllum lanatum",
+  "revid": 1372343804,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Search in oak woodlands.",
+    "evidence": "It can be found (for instance in California) in chaparral, oak woodland, mixed evergreen forest, and yellow pine forest and other conifer forests, grassland, and sagebrush scrub habitats.",
+    "source": "model",
+    "issues": [
+     "named region"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "light",
+    "text": "It likes full sun.",
+    "evidence": "It prefers full sun and well-drained soil, but it also grows on rocky slopes and bluffs.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "ground",
+    "text": "Look for dry, well-drained soil.",
+    "evidence": "It prefers full sun and well-drained soil, but it also grows on rocky slopes and bluffs.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   }
+  ]
+ },
+ "Eschscholzia californica": {
+  "article": "Eschscholzia californica",
+  "revid": 1377333922,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in inland regions.",
+    "evidence": "It grows in non-arid inland regions.",
+    "source": "model",
+    "issues": [
+     "evidence not in article"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "light",
+    "text": "It likes full sun.",
+    "evidence": "It is best grown as an annual, in full sun, and well-draining sandy or loam soil.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "ground",
+    "text": "It grows in sandy or loam soil.",
+    "evidence": "It is best grown as an annual, in full sun, and well-draining sandy or loam soil.",
+    "source": "model",
+    "issues": [
+     "unseen soil"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "size",
+    "text": "It is a low herb.",
+    "evidence": "",
+    "source": "trait",
+    "issues": [],
+    "bucket": "low",
+    "score": 0.783
+   },
+   {
+    "aspect": "season",
+    "text": "Look for orange flowers in spring.",
+    "evidence": "",
+    "source": "trait",
+    "issues": [],
+    "bucket": "spring",
+    "score": 2.2
+   }
+  ]
+ },
+ "Eupatorium hyssopifolium": {
+  "article": "Eupatorium hyssopifolium",
+  "revid": 1359529878,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "You can find it in fields or pastures.",
+    "evidence": "It grows in moist soils and can be found in woodlands and oak savannas, pastures, fields, roadsides, and disturbed areas, over both acidic and calcareous substrates.",
+    "source": "model",
+    "issues": [
+     "generic habitat"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "place",
+    "text": "It also grows in woodlands.",
+    "evidence": "It grows in moist soils and can be found in woodlands and oak savannas, pastures, fields, roadsides, and disturbed areas, over both acidic and calcareous substrates.",
+    "source": "model",
+    "issues": [
+     "hedged",
+     "repeats an earlier quote"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "ground",
+    "text": "It grows in moist soils.",
+    "evidence": "It grows in moist soils and can be found in woodlands and oak savannas, pastures, fields, roadsides, and disturbed areas, over both acidic and calcareous substrates.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "edges",
+    "text": "Look along roadsides.",
+    "evidence": "It grows in moist soils and can be found in woodlands and oak savannas, pastures, fields, roadsides, and disturbed areas, over both acidic and calcareous substrates.",
+    "source": "model",
+    "issues": [
+     "road"
+    ],
+    "score": null
+   }
+  ]
+ },
+ "Fraxinus nigra": {
+  "article": "Fraxinus nigra",
+  "revid": 1369922203,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in swamps.",
+    "evidence": "Black ash commonly occurs in swamps, often with the closely related green ash.",
+    "source": "model",
+    "issues": [
+     "water"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "light",
+    "text": "Look in open, sunny spots.",
+    "evidence": "USDA ShadeTolerance PATO_0002394 (Fraxinus nigra)",
+    "bucket": "sun",
+    "source": "usda",
+    "issues": [],
+    "score": 2.1
+   },
+   {
+    "aspect": "ground",
+    "text": "Look in a seasonally wet riparian habitat.",
+    "evidence": "Tree is located in a seasonally wet riparian habitat near a small stream.",
+    "source": "model",
+    "issues": [
+     "water"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "nearby",
+    "text": "Look near a small stream.",
+    "evidence": "Tree is located in a seasonally wet riparian habitat near a small stream.",
+    "source": "model",
+    "issues": [
+     "water"
+    ],
+    "score": null
+   }
+  ]
+ },
+ "Galax urceolata": {
+  "article": "Galax",
+  "revid": 1372575260,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in shaded forest places.",
+    "evidence": "It is native to the southeastern United States from Massachusetts and New York south to northern Alabama, growing mainly in the Appalachian Mountains at altitudes of up to 1,500 m, where it grows in shaded places in forests.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "light",
+    "text": "Look in shaded places.",
+    "evidence": "It is native to the southeastern United States from Massachusetts and New York south to northern Alabama, growing mainly in the Appalachian Mountains at altitudes of up to 1,500 m, where it grows in shaded places in forests.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   }
+  ]
+ },
+ "Gentiana acaulis": {
+  "article": "Gentiana acaulis",
+  "revid": 1354920909,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in mountainous regions.",
+    "evidence": "Gentiana acaulis, the stemless gentian, or trumpet gentian, is a species of flowering plant in the family Gentianaceae, native to central and southern Europe, from Spain east to the Balkans, growing especially in mountainous regions, such as the Alps and Pyrenees, at heights of .",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "light",
+    "text": "It likes full sun.",
+    "evidence": "It likes full sun, is fully hardy and flowers in late spring and summer.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   }
+  ]
+ },
+ "Geum rivale": {
+  "article": "Geum rivale",
+  "revid": 1349209796,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in damp deciduous woodland.",
+    "evidence": "Habitats include stream sides, pond edges, damp deciduous woodland and hay meadows.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "place",
+    "text": "Look in hay meadows.",
+    "evidence": "Habitats include stream sides, pond edges, damp deciduous woodland and hay meadows.",
+    "source": "model",
+    "issues": [
+     "repeats an earlier quote"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "light",
+    "text": "It likes full sun or partial shade.",
+    "evidence": "The plant is a native perennial of slow-draining or wet soils and can tolerate mildly acidic to calcareous conditions in full sun or under partial shade.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "ground",
+    "text": "It grows in wet soils.",
+    "evidence": "The plant is a native perennial of slow-draining or wet soils and can tolerate mildly acidic to calcareous conditions in full sun or under partial shade.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "edges",
+    "text": "Look at pond edges.",
+    "evidence": "Habitats include stream sides, pond edges, damp deciduous woodland and hay meadows.",
+    "source": "model",
+    "issues": [
+     "water"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "edges",
+    "text": "Look at stream sides.",
+    "evidence": "Habitats include stream sides, pond edges, damp deciduous woodland and hay meadows.",
+    "source": "model",
+    "issues": [
+     "water",
+     "repeats an earlier quote"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "season",
+    "text": "Look for purple flowers in spring.",
+    "evidence": "",
+    "source": "trait",
+    "issues": [],
+    "bucket": "spring",
+    "score": 2.2
+   }
+  ]
+ },
+ "Heterotheca villosa": {
+  "article": "Heterotheca villosa",
+  "revid": 1252742737,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in coniferous forests.",
+    "evidence": "It grows well on dry lands, but also on plains, rocky slopes and cliffs, at low elevations and in coniferous forests.",
+    "source": "model",
+    "issues": [
+     "hedged"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "light",
+    "text": "Look in open, sunny spots.",
+    "evidence": "USDA ShadeTolerance PATO_0002394 (Heterotheca villosa)",
+    "bucket": "sun",
+    "source": "usda",
+    "issues": [],
+    "score": 2.1
+   },
+   {
+    "aspect": "ground",
+    "text": "Look on dry lands.",
+    "evidence": "It grows well on dry lands, but also on plains, rocky slopes and cliffs, at low elevations and in coniferous forests.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "ground",
+    "text": "Look on rocky slopes and cliffs.",
+    "evidence": "It grows well on dry lands, but also on plains, rocky slopes and cliffs, at low elevations and in coniferous forests.",
+    "source": "model",
+    "issues": [
+     "height",
+     "hedged",
+     "repeats an earlier quote"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "season",
+    "text": "Look for yellow flowers in summer.",
+    "evidence": "",
+    "source": "trait",
+    "issues": [],
+    "bucket": "summer",
+    "score": 2.15
+   },
+   {
+    "aspect": "sign",
+    "text": "Look for gray-green leaves.",
+    "evidence": "",
+    "source": "trait",
+    "issues": [],
+    "bucket": null,
+    "score": 1.6
+   }
+  ]
+ },
+ "Ipomoea quamoclit": {
+  "article": "Ipomoea quamoclit",
+  "revid": 1370024815,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "light",
+    "text": "Look for it in full sun.",
+    "evidence": "They require full sun for good growth.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "ground",
+    "text": "Keep the ground moist.",
+    "evidence": "Seedlings must always be kept moist.",
+    "source": "model",
+    "issues": [
+     "garden care"
+    ],
+    "score": null
+   }
+  ]
+ },
+ "Lamium amplexicaule": {
+  "article": "Lamium amplexicaule",
+  "revid": 1359641636,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in gardens, fields, and meadows.",
+    "evidence": "It is found growing in open areas, gardens, fields and meadows, and widely in uncultivated areas in urban habitats.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   }
+  ]
+ },
+ "Monarda fistulosa": {
+  "article": "Monarda fistulosa",
+  "revid": 1306451047,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in dry fields, thickets, and clearings.",
+    "evidence": "Wild bergamot often grows in rich soils in dry fields, thickets, and clearings, usually on limy soil.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "ground",
+    "text": "It grows in dry, rich soil.",
+    "evidence": "Wild bergamot often grows in rich soils in dry fields, thickets, and clearings, usually on limy soil.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "season",
+    "text": "Look for red flowers in summer.",
+    "evidence": "",
+    "source": "trait",
+    "issues": [],
+    "bucket": "summer",
+    "score": 2.15
+   },
+   {
+    "aspect": "sign",
+    "text": "Look for gray-green leaves.",
+    "evidence": "",
+    "source": "trait",
+    "issues": [],
+    "bucket": null,
+    "score": 1.6
+   }
+  ]
+ },
+ "Pellaea glabella": {
+  "article": "Pellaea glabella",
+  "revid": 1323299992,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "ground",
+    "text": "Look for it on limestone rocks.",
+    "evidence": "glabella is epipetric, normally growing on well-weathered limestone, usually in cracks with little or no soil.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "ground",
+    "text": "It grows on sandstone and basalt.",
+    "evidence": "It can also be found on sandstone and basalt, probably in places where calcium is locally concentrated.",
+    "source": "model",
+    "issues": [
+     "hedged"
+    ],
+    "score": null
+   }
+  ]
+ },
+ "Pinus radiata": {
+  "article": "Pinus radiata",
+  "revid": 1375586818,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look on steep slopes.",
+    "evidence": "On Guadalupe Island, located off the mainland coast, the pines are found on the steep northern end of the island, at elevations of around , where they follow the ridgetops and steep slopes.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "ground",
+    "text": "Look on ground that drains well, not soggy.",
+    "evidence": "USDA AnaerobicSoilTolerance 260413007 (Pinus radiata)",
+    "bucket": "dry",
+    "source": "usda",
+    "issues": [],
+    "score": 2.25
+   },
+   {
+    "aspect": "nearby",
+    "text": "Look near the Guadalupe palm.",
+    "evidence": "When Franceschi visited in 1892, he noted that they extended all over the northern and northwestern part of the island, comprising a very thick forest, with some of the finest trees growing with the Guadalupe palm.",
+    "source": "model",
+    "issues": [],
+    "score": 2.0
+   },
+   {
+    "aspect": "size",
+    "text": "It is a tall evergreen.",
+    "evidence": "",
+    "source": "trait",
+    "issues": [],
+    "bucket": "tall",
+    "score": null
+   }
+  ]
+ },
+ "Pinus taeda": {
+  "article": "Pinus taeda",
+  "revid": 1375589247,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in swampy areas.",
+    "evidence": "The common name loblolly is given because the pine species is found mostly in lowlands and swampy areas.",
+    "source": "model",
+    "issues": [
+     "water"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "light",
+    "text": "Look in open, sunny spots.",
+    "evidence": "USDA ShadeTolerance PATO_0002394 (Pinus taeda)",
+    "bucket": "sun",
+    "source": "usda",
+    "issues": [],
+    "score": 2.1
+   },
+   {
+    "aspect": "ground",
+    "text": "It grows in clay soil.",
+    "evidence": "Loblolly pines grow well in acidic clay soil, which is common throughout the South, so the pines are prevalent in rural areas.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "ground",
+    "text": "Look in sandy soil.",
+    "evidence": "These are isolated populations on areas of acidic sandy soil, surrounded by alkaline clays that are poor for pine growth.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "edges",
+    "text": "Look in abandoned fields.",
+    "evidence": "Other old names, now rarely used, include oldfield pine due to its status as an early colonizer of abandoned fields; bull pine due to its size (several other yellow pines are also often so named, especially large isolated specimens); rosemary pine due to loblolly's distinctive fragrance compared to the other southern pines; and North Carolina pine.",
+    "source": "model",
+    "issues": [
+     "hedged"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "size",
+    "text": "It is a tall evergreen.",
+    "evidence": "",
+    "source": "trait",
+    "issues": [],
+    "bucket": "tall",
+    "score": null
+   }
+  ]
+ },
+ "Platanus occidentalis": {
+  "article": "Platanus occidentalis",
+  "revid": 1378901823,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in bottomland or floodplain areas.",
+    "evidence": "American sycamore is found most commonly in bottomland or floodplain areas, thriving in the wet environments provided by rivers, streams, or abundant groundwater, though it will die after being flooded for more than two weeks at a time.",
+    "source": "model",
+    "issues": [
+     "water"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "ground",
+    "text": "Look for wet environments.",
+    "evidence": "It can be found in a variety of habitats, but it prefers wetlands and riparian environments.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "size",
+    "text": "It is a tall tree.",
+    "evidence": "",
+    "source": "trait",
+    "issues": [],
+    "bucket": "tall",
+    "score": 0.717
+   },
+   {
+    "aspect": "season",
+    "text": "Look for brown seeds in fall.",
+    "evidence": "",
+    "source": "trait",
+    "issues": [],
+    "bucket": "fall",
+    "score": 2.2
+   }
+  ]
+ },
+ "Polanisia dodecandra": {
+  "article": "Polanisia dodecandra",
+  "revid": 1322369377,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "light",
+    "text": "It likes the full sun.",
+    "evidence": "It favors full sun, mesic to dry conditions, and barren, sandy or gravelly soils, even highly disturbed areas where there is little other ground vegetation.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "ground",
+    "text": "Look for dry, sandy, or gravelly ground.",
+    "evidence": "It favors full sun, mesic to dry conditions, and barren, sandy or gravelly soils, even highly disturbed areas where there is little other ground vegetation.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   }
+  ]
+ },
+ "Polygonatum multiflorum": {
+  "article": "Polygonatum multiflorum",
+  "revid": 1354932640,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "light",
+    "text": "Look in shady areas.",
+    "evidence": "It is valued in cultivation for its ability to colonise shady areas, and is suitable for a woodland style planting.",
+    "source": "model",
+    "issues": [
+     "garden care"
+    ],
+    "score": null
+   }
+  ]
+ },
+ "Proboscidea louisianica": {
+  "article": "Proboscidea louisianica",
+  "revid": 1352604869,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in pastures and cultivated fields.",
+    "evidence": "It occurs in pastures, cultivated fields, and feedlots.",
+    "source": "model",
+    "issues": [
+     "garden care"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "edges",
+    "text": "It can grow in waste places.",
+    "evidence": "The plant can be weedy, easily taking hold in disturbed habitat types and displaying a \"preference for waste places\".",
+    "source": "model",
+    "issues": [],
+    "score": 1.0
+   }
+  ]
+ },
+ "Prosopis pubescens": {
+  "article": "Strombocarpa pubescens",
+  "revid": 1354620425,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in valleys.",
+    "evidence": "It is found along streams and valleys in deserts, particularly in damp or saline soil.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "ground",
+    "text": "Look for damp or saline soil.",
+    "evidence": "It is found along streams and valleys in deserts, particularly in damp or saline soil.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "nearby",
+    "text": "It grows next to arrowweed and tamarisks.",
+    "evidence": "It grows alongside common plants of this habitat type, such as arrowweed (Pluchea sericea) and tamarisks.",
+    "source": "model",
+    "issues": [],
+    "score": 2.0
+   },
+   {
+    "aspect": "edges",
+    "text": "Find it along streams.",
+    "evidence": "It is found along streams and valleys in deserts, particularly in damp or saline soil.",
+    "source": "model",
+    "issues": [
+     "water"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "size",
+    "text": "It is a small tree.",
+    "evidence": "",
+    "source": "trait",
+    "issues": [],
+    "bucket": "small",
+    "score": null
+   },
+   {
+    "aspect": "sign",
+    "text": "Look for brown seeds.",
+    "evidence": "",
+    "source": "trait",
+    "issues": [],
+    "bucket": null,
+    "score": null
+   }
+  ]
+ },
+ "Prosopis velutina": {
+  "article": "Neltuma velutina",
+  "revid": 1347065688,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in desert grasslands.",
+    "evidence": "It grows at elevations below in desert grasslands and near washes.",
+    "source": "model",
+    "issues": [
+     "biome"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "ground",
+    "text": "It grows in a dry climate.",
+    "evidence": "It is a legume adapted to a dry, desert climate.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "nearby",
+    "text": "Look near washes.",
+    "evidence": "It grows at elevations below in desert grasslands and near washes.",
+    "source": "model",
+    "issues": [],
+    "score": 2.0
+   }
+  ]
+ },
+ "Rosa californica": {
+  "article": "Rosa californica",
+  "revid": 1367871290,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in woodlands.",
+    "evidence": "The plant is native to chaparral and woodlands and the Sierra Nevada foothills, and can survive drought, though it grows most abundantly in moist soils near water sources.",
+    "source": "model",
+    "issues": [
+     "generic habitat"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "ground",
+    "text": "It grows in moist soil near water.",
+    "evidence": "The plant is native to chaparral and woodlands and the Sierra Nevada foothills, and can survive drought, though it grows most abundantly in moist soils near water sources.",
+    "source": "model",
+    "issues": [
+     "water"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "ground",
+    "text": "It can grow in moist regions like river banks.",
+    "evidence": "While most common in moist regions like river banks, the plant can also adapt to various soil textures, develop drought resistance, and has common-pest and disease resistance.",
+    "source": "model",
+    "issues": [
+     "water"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "edges",
+    "text": "Look near river banks.",
+    "evidence": "While most common in moist regions like river banks, the plant can also adapt to various soil textures, develop drought resistance, and has common-pest and disease resistance.",
+    "source": "model",
+    "issues": [
+     "water"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "season",
+    "text": "Look for red fruit in fall.",
+    "evidence": "",
+    "source": "trait",
+    "issues": [],
+    "bucket": "fall",
+    "score": 2.2
+   },
+   {
+    "aspect": "season",
+    "text": "Look for red flowers in summer.",
+    "evidence": "",
+    "source": "trait",
+    "issues": [],
+    "bucket": "summer",
+    "score": 2.15
+   }
+  ]
+ },
+ "Scutellaria tuberosa": {
+  "article": "Scutellaria tuberosa",
+  "revid": 1297850119,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in oak woodland habitats.",
+    "evidence": "It is most commonly found in dry areas, chaparral, and oak woodland, and often appears in areas recently cleared by fire.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "ground",
+    "text": "It likes dry areas.",
+    "evidence": "It is most commonly found in dry areas, chaparral, and oak woodland, and often appears in areas recently cleared by fire.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   }
+  ]
+ },
+ "Sticherus cunninghamii": {
+  "article": "Sticherus cunninghamii",
+  "revid": 1292606677,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in shaded stream banks.",
+    "evidence": "It occurs from lowland to montane forest, usually along shaded stream banks and road cuttings where it can form the main ground cover.",
+    "source": "model",
+    "issues": [
+     "water"
+    ],
+    "score": null
+   },
+   {
+    "aspect": "light",
+    "text": "Look in the shade.",
+    "evidence": "It occurs from lowland to montane forest, usually along shaded stream banks and road cuttings where it can form the main ground cover.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "edges",
+    "text": "Look along road cuttings.",
+    "evidence": "It occurs from lowland to montane forest, usually along shaded stream banks and road cuttings where it can form the main ground cover.",
+    "source": "model",
+    "issues": [
+     "road"
+    ],
+    "score": null
+   }
+  ]
+ },
+ "Thelesperma filifolium": {
+  "article": "Thelesperma filifolium",
+  "revid": 1321738768,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look on dry hills.",
+    "evidence": "In Texas, stiff greenthread can be found growing along roadsides and on dry hills in the South Plains and Edwards Plateau regions.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "ground",
+    "text": "It grows in dry, sandy or gravelly soil.",
+    "evidence": "It prefers disturbed sites in dry, sandy or gravelly soil with a neutral to basic pH.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "ground",
+    "text": "It grows on rocky slopes.",
+    "evidence": "Stiff greenthread is found on disturbed sites on clays or sandy soils, on rocky slopes, and often on limestone, at elevations from 10 to 2200 meters, in South Dakota, Wyoming, Nebraska, Colorado, Kansas, Missouri, New Mexico, Oklahoma, Arkansas, Texas, Louisiana, Mississippi, Coahuila, Nuevo León, San Luis Potosí, and Querétaro.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "edges",
+    "text": "Look along roadsides.",
+    "evidence": "Stiff greenthread adapts to various soil conditions, including loam, clay, caliche, and roadsides.",
+    "source": "model",
+    "issues": [
+     "road"
+    ],
+    "score": null
+   }
+  ]
+ },
+ "Thunbergia grandiflora": {
+  "article": "Thunbergia grandiflora",
+  "revid": 1365726912,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in riversides or sparse timberlands.",
+    "evidence": "It is commonly established in riversides, in forests (particularly along its boundaries and disturbed areas), in sparse timberlands, and along roadsides and fence lines.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "light",
+    "text": "It likes full sun to partial shade.",
+    "evidence": "It is hardy in USDA hardiness zones 10 and 11, where it grows best in fertile, organically rich, moist but well-drained soils in full sun to partial shade.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "ground",
+    "text": "It likes moist but well-drained soil.",
+    "evidence": "It is hardy in USDA hardiness zones 10 and 11, where it grows best in fertile, organically rich, moist but well-drained soils in full sun to partial shade.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "edges",
+    "text": "Look along forest boundaries.",
+    "evidence": "It is commonly established in riversides, in forests (particularly along its boundaries and disturbed areas), in sparse timberlands, and along roadsides and fence lines.",
+    "source": "model",
+    "issues": [],
+    "score": null
+   },
+   {
+    "aspect": "edges",
+    "text": "Look along roadsides or fence lines.",
+    "evidence": "It is commonly established in riversides, in forests (particularly along its boundaries and disturbed areas), in sparse timberlands, and along roadsides and fence lines.",
+    "source": "model",
+    "issues": [
+     "road",
+     "repeats an earlier quote"
+    ],
+    "score": null
+   }
+  ]
+ },
+ "Vaccinium parvifolium": {
+  "article": "Vaccinium parvifolium",
+  "revid": 1372400632,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in shaded woodlands.",
+    "evidence": "It grows in moist, shaded woodlands.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "light",
+    "text": "Find it in the shade.",
+    "evidence": "It grows in moist, shaded woodlands.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "ground",
+    "text": "It grows in moist ground.",
+    "evidence": "It grows in moist, shaded woodlands.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "size",
+    "text": "It is a big bush.",
+    "evidence": "",
+    "source": "trait",
+    "issues": [],
+    "bucket": "big",
+    "score": null
+   },
+   {
+    "aspect": "season",
+    "text": "Look for white flowers in spring.",
+    "evidence": "",
+    "source": "trait",
+    "issues": [],
+    "bucket": "spring",
+    "score": 2.2
+   },
+   {
+    "aspect": "sign",
+    "text": "Look for red fruit.",
+    "evidence": "",
+    "source": "trait",
+    "issues": [],
+    "bucket": null,
+    "score": null
+   }
+  ]
+ },
+ "Vachellia constricta": {
+  "article": "Vachellia constricta",
+  "revid": 1318012969,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "place",
+    "text": "Look in arroyos and washes.",
+    "evidence": "In the Sonoran Desert, Vachellia constricta grows in arroyos and washes, where it blooms in late spring (April–May), with a second round of blooms in July–October.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   }
+  ]
+ },
+ "Wachendorfia paniculata": {
+  "article": "Wachendorfia paniculata",
+  "revid": 1374855575,
+  "cut_off": false,
+  "failed": null,
+  "hints": [
+   {
+    "aspect": "ground",
+    "text": "It grows in permanently moist shales.",
+    "evidence": "It grows in permanently moist shales, but also on moderately to very dry soils in fynbos on both acid and alkaline sands, and can be present in strandveld and renosterveld.",
+    "source": "model",
+    "issues": [],
+    "score": 3.0
+   },
+   {
+    "aspect": "ground",
+    "text": "It can grow in dry soil.",
+    "evidence": "It grows in permanently moist shales, but also on moderately to very dry soils in fynbos on both acid and alkaline sands, and can be present in strandveld and renosterveld.",
+    "source": "model",
+    "issues": [
+     "hedged",
+     "repeats an earlier quote"
+    ],
+    "score": null
+   }
+  ]
+ }
+}

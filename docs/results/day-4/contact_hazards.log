@@ -1,0 +1,583 @@
+# S55 contact-hazard list: make contact-hazards, 2026-10-09 (UTC start 2026-10-10T02:46:38Z, end 02:56:14Z)
+# Machine: Apple M4 Max, 36 GB, macOS (Darwin 25.5.0); Ollama 0.40.0
+# Model: gemma4:26b digest 48eb98ec778c; sampler temperature 1.0, top_p 0.95, top_k 64, seed 1; num_ctx 8192; think off
+# Input: 4,272 species-table rows (toxicity.json keys), current English Wikipedia text (title + revid per row)
+# Prefilter: sentence regex for contact terms (contact_hazards.CONTACT, or skin + sap/juice/milky); rows with none skip the model
+# Timing: ~3.5 min Wikipedia fetch, 420 s model loop (693 calls, ~0.6 s each)
+# Result: auto 146, review 23, skip 4,103 (model "no" 524, no contact sentence 3,492, no article 87); 0 replies failed
+# Auto kinds: urushiol 6, phototoxic 12, stinging 13, irritant_sap 115; 31 auto rows were not toxic-flagged (now unplayable)
+# Afterwards: --recheck (word-boundary plant-name check; counts unchanged); make assets -> 147 hazards
+#   (146 auto + fixed-only Solanum carolinense), 146 with a card line
+# Gate hazard photo species (docs/results/day-4/hazard_gate/photos.csv): 10 of 12 auto.
+#   Euphorbia virgata: skip, model "no"; its article excerpt has no skin sentence (source gap).
+#   Chelidonium majus: review, "unsure"; article cites latex enzymes, never skin harm (source gap).
+# Spine check: Opuntia microdasys slipped through as auto (glochid irritation; quote never names glochids).
+
+## raw run output
+2026-10-10T02:46:38Z
+uv --project pipeline run --group reference python -W error -m wild_find_pipeline.contact_hazards
+gemma4:26b 48eb98ec778c: 4272 rows, 0 done, 4272 to go
+prefilter: 693 of 4272 rows have a contact sentence and go to the model
+25/4272 3s
+50/4272 5s
+75/4272 7s
+100/4272 9s
+125/4272 10s
+150/4272 11s
+175/4272 14s
+200/4272 16s
+225/4272 19s
+250/4272 21s
+275/4272 25s
+300/4272 28s
+325/4272 35s
+350/4272 39s
+375/4272 42s
+400/4272 43s
+425/4272 44s
+450/4272 46s
+475/4272 48s
+500/4272 49s
+525/4272 51s
+550/4272 53s
+575/4272 54s
+600/4272 57s
+625/4272 57s
+650/4272 59s
+675/4272 59s
+700/4272 60s
+725/4272 64s
+750/4272 64s
+775/4272 65s
+800/4272 67s
+825/4272 70s
+850/4272 72s
+875/4272 73s
+900/4272 75s
+925/4272 77s
+950/4272 84s
+975/4272 86s
+1000/4272 87s
+1025/4272 89s
+1050/4272 91s
+1075/4272 94s
+1100/4272 95s
+1125/4272 96s
+1150/4272 99s
+1175/4272 102s
+1200/4272 103s
+1225/4272 105s
+1250/4272 108s
+1275/4272 110s
+1300/4272 111s
+1325/4272 111s
+1350/4272 113s
+1375/4272 114s
+1400/4272 116s
+1425/4272 117s
+1450/4272 118s
+1475/4272 119s
+1500/4272 120s
+1525/4272 126s
+1550/4272 132s
+1575/4272 133s
+1600/4272 138s
+1625/4272 140s
+1650/4272 142s
+1675/4272 144s
+1700/4272 144s
+1725/4272 145s
+1750/4272 147s
+1775/4272 150s
+1800/4272 151s
+1825/4272 157s
+1850/4272 158s
+1875/4272 159s
+1900/4272 160s
+1925/4272 163s
+1950/4272 165s
+1975/4272 168s
+2000/4272 172s
+2025/4272 174s
+2050/4272 176s
+2075/4272 179s
+2100/4272 186s
+2125/4272 188s
+2150/4272 189s
+2175/4272 191s
+2200/4272 192s
+2225/4272 193s
+2250/4272 195s
+2275/4272 196s
+2300/4272 198s
+2325/4272 201s
+2350/4272 202s
+2375/4272 205s
+2400/4272 211s
+2425/4272 213s
+2450/4272 216s
+2475/4272 218s
+2500/4272 221s
+2525/4272 223s
+2550/4272 224s
+2575/4272 225s
+2600/4272 229s
+2625/4272 229s
+2650/4272 231s
+2675/4272 235s
+2700/4272 237s
+2725/4272 238s
+2750/4272 240s
+2775/4272 246s
+2800/4272 247s
+2825/4272 249s
+2850/4272 252s
+2875/4272 259s
+2900/4272 261s
+2925/4272 261s
+2950/4272 270s
+2975/4272 278s
+3000/4272 282s
+3025/4272 282s
+3050/4272 284s
+3075/4272 285s
+3100/4272 288s
+3125/4272 288s
+3150/4272 290s
+3175/4272 293s
+3200/4272 294s
+3225/4272 295s
+3250/4272 299s
+3275/4272 304s
+3300/4272 309s
+3325/4272 310s
+3350/4272 312s
+3375/4272 316s
+3400/4272 319s
+3425/4272 321s
+3450/4272 324s
+3475/4272 327s
+3500/4272 328s
+3525/4272 332s
+3550/4272 340s
+3575/4272 341s
+3600/4272 345s
+3625/4272 347s
+3650/4272 350s
+3675/4272 354s
+3700/4272 358s
+3725/4272 362s
+3750/4272 364s
+3775/4272 366s
+3800/4272 366s
+3825/4272 368s
+3850/4272 374s
+3875/4272 377s
+3900/4272 378s
+3925/4272 380s
+3950/4272 391s
+3975/4272 394s
+4000/4272 394s
+4025/4272 396s
+4050/4272 402s
+4075/4272 405s
+4100/4272 407s
+4125/4272 407s
+4150/4272 408s
+4175/4272 408s
+4200/4272 409s
+4225/4272 416s
+4250/4272 418s
+OK: /Users/anchildress1/git_personal/wild-find/pipeline/data/contact_hazards.json: 4272 rows {'auto': 146, 'review': 23, 'skip': 4103} in 420s, 0 model replies failed: []
+exit 0
+2026-10-10T02:56:14Z
+
+## sanity listing (after --recheck)
+== AUTO
+Achillea millefolium | irritant_sap | It can cause skin rashes. | toxic=True
+Ailanthus altissima | irritant_sap | It can cause skin rashes in humans. | toxic=True
+Aloe vera | irritant_sap | It can cause a rash or an allergic reaction on skin. | toxic=True
+Anacardium occidentale | irritant_sap | The shell contains oils that irritate the skin. | toxic=True
+Anthemis cotula | irritant_sap | Its leaves can irritate skin. | toxic=True
+Apocynum cannabinum | irritant_sap | Its sap can cause skin blisters. | toxic=True
+Araujia sericifera | irritant_sap | Its sap can cause rashes on the skin. | toxic=True
+Arctium lappa | stinging | Tiny hairs can irritate skin and eyes. | toxic=True
+Armoracia rusticana | irritant_sap | It can irritate eyes and sinuses. | toxic=False
+Arnica montana | irritant_sap | It can make skin irritated. | toxic=True
+Artemisia vulgaris | irritant_sap | It may cause skin irritation. | toxic=True
+Arum italicum | irritant_sap | Its sap can irritate the skin. | toxic=True
+Arum maculatum | irritant_sap | It can make skin feel irritation and burning pain. | toxic=True
+Asparagus aethiopicus | irritant_sap | Skin contact may cause a rash. | toxic=True
+Baptisia alba | irritant_sap | It can irritate human skin. | toxic=True
+Calotropis gigantea | irritant_sap | Its milky sap can hurt the eyes. | toxic=True
+Caltha palustris | irritant_sap | Juices can cause skin to blister or inflame. | toxic=True
+Campsis radicans | irritant_sap | Its leaves can cause red and itchy skin. | toxic=True
+Carica papaya | irritant_sap | Its fluid can cause skin irritation. | toxic=True
+Centella asiatica | irritant_sap | It can cause skin irritation. | toxic=False
+Cissus trifoliata | irritant_sap | It can cause skin irritation for some people. | toxic=True
+Clematis drummondii | irritant_sap | Its sap can burn the skin. | toxic=True
+Clematis ligusticifolia | irritant_sap | It can be very irritating to skin and membranes. | toxic=True
+Clematis paniculata | irritant_sap | Leaves and sap can cause skin blisters. | toxic=False
+Clematis texensis | irritant_sap | It can cause skin irritation. | toxic=True
+Cneoridium dumosum | phototoxic | Its leaves can cause burning, blistering rashes. | toxic=False
+Cnidoscolus stimulosus | stinging | Hairs can cause a painful sting to skin. | toxic=False
+Cnidoscolus texanus | stinging | Fine hairs can cause a painful, itchy rash. | toxic=True
+Codiaeum variegatum | irritant_sap | The sap can cause burning pain, rashes, or eye problems. | toxic=True
+Conium maculatum | phototoxic | Its leaves can cause skin rashes and blisters in sunlight. | toxic=True
+Corylus cornuta | stinging | Small hairs can irritate the skin. | toxic=False
+Crassula ovata | irritant_sap | Sap or leaves can cause skin irritation. | toxic=True
+Crinum asiaticum | irritant_sap | Its sap may irritate the skin. | toxic=True
+Cucurbita foetidissima | irritant_sap | Long contact can irritate skin. | toxic=False
+Cyclachaena xanthiifolia | irritant_sap | The leaves can cause a skin rash. | toxic=False
+Cynanchum laeve | irritant_sap | The sap can irritate eyes and mucous membranes. | toxic=True
+Cypripedium reginae | irritant_sap | It can cause a rash on hands and face. | toxic=False
+Daphne gnidium | irritant_sap | The sap can cause skin inflammation. | toxic=True
+Daphne laureola | irritant_sap | The sap can burn the skin. | toxic=True
+Daphne mezereum | irritant_sap | Handling it can cause rashes. | toxic=True
+Daucus carota | phototoxic | Its leaves can irritate skin in sunlight. | toxic=True
+Dicentra cucullaria | irritant_sap | It can cause skin rashes in some people. | toxic=True
+Dioscorea communis | irritant_sap | It can cause skin irritation and blisters. | toxic=True
+Dirca palustris | irritant_sap | Bark contact can cause skin irritation. | toxic=True
+Dittrichia graveolens | irritant_sap | Its resin can cause skin rashes and inflammation. | toxic=True
+Echium plantagineum | irritant_sap | It can irritate human skin. | toxic=True
+Epipremnum aureum | irritant_sap | It can cause skin irritation. | toxic=True
+Eucnide urens | stinging | It has hairs that sting. | toxic=True
+Euphorbia amygdaloides | irritant_sap | Its milky liquid can irritate the skin. | toxic=True
+Euphorbia bicolor | irritant_sap | Its white sap can irritate skin or eyes. | toxic=True
+Euphorbia characias | irritant_sap | Sticky sap can affect the skin. | toxic=True
+Euphorbia corollata | irritant_sap | Its milky sap can irritate skin and eyes. | toxic=True
+Euphorbia cyparissias | irritant_sap | Its sap can cause skin reactions. | toxic=True
+Euphorbia heterophylla | irritant_sap | The milky latex can cause skin reactions. | toxic=True
+Euphorbia hypericifolia | irritant_sap | Its milky sap can irritate skin and eyes. | toxic=True
+Euphorbia lathyris | irritant_sap | Handling it may irritate the skin. | toxic=True
+Euphorbia maculata | irritant_sap | The sap can cause a skin rash. | toxic=True
+Euphorbia myrsinites | irritant_sap | Its milky sap can irritate skin and eyes. | toxic=True
+Euphorbia ophthalmica | irritant_sap | Its white sap can irritate skin and eyes. | toxic=True
+Euphorbia peplus | irritant_sap | The sap can hurt skin cells. | toxic=True
+Euphorbia terracina | irritant_sap | Milky sap can irritate skin and eyes. | toxic=True
+Fatsia japonica | irritant_sap | Its sap can cause skin irritation in sensitive people. | toxic=False
+Ficaria verna | irritant_sap | Crushed leaves can cause itchy rashes or blisters on skin. | toxic=True
+Ficus carica | phototoxic | It can cause skin reactions in sunlight. | toxic=True
+Ficus pumila | phototoxic | Its sap can cause skin inflammation in sunlight. | toxic=True
+Fumaria officinalis | irritant_sap | Its sap can cause eyes to tear up. | toxic=True
+Galium aparine | irritant_sap | Contact can cause skin irritation. | toxic=True
+Gelsemium sempervirens | irritant_sap | Its sap can irritate skin. | toxic=True
+Hedera helix | irritant_sap | The leaves can cause a bad skin rash. | toxic=True
+Heracleum mantegazzianum | phototoxic | Its sap can cause blisters and scars. | toxic=True
+Heracleum maximum | phototoxic | Its sap can cause blisters in sunlight. | toxic=True
+Heracleum sosnowskyi | phototoxic | Sap can cause skin burns and sensitivity. | toxic=True
+Heracleum sphondylium | phototoxic | Its sap can cause burns and rashes in sunlight. | toxic=False
+Humulus lupulus | irritant_sap | It can cause skin rashes for some people. | toxic=True
+Hypericum punctatum | phototoxic | Leaves can blister skin. | toxic=True
+Impatiens capensis | irritant_sap | Some people get a bad rash from it. | toxic=False
+Iris cristata | irritant_sap | Handling it may cause skin irritation or dermatitis. | toxic=True
+Iris lacustris | irritant_sap | Handling it can cause skin irritation. | toxic=True
+Iris sibirica | irritant_sap | Handling it may cause skin irritation. | toxic=True
+Iris versicolor | irritant_sap | Its sap can cause skin irritation. | toxic=True
+Jacobaea vulgaris | irritant_sap | It can cause a skin rash for some people. | toxic=True
+Lamprocapnos spectabilis | irritant_sap | It can cause skin irritation in some people. | toxic=True
+Lantana camara | irritant_sap | The leaves can cause skin rashes. | toxic=True
+Laportea canadensis | stinging | It can cause a painful burning sensation on skin. | toxic=True
+Leucanthemum vulgare | irritant_sap | It can cause skin irritation. | toxic=False
+Lupinus hirsutissimus | stinging | Stiff hairs sting the skin. | toxic=True
+Lysimachia arvensis | irritant_sap | Contact with leaves may cause skin rashes. | toxic=True
+Mangifera indica | urushiol | It can cause a skin rash. | toxic=True
+Moneses uniflora | irritant_sap | It can cause blisters. | toxic=False
+Monstera deliciosa | irritant_sap | Its sap can cause skin rashes. | toxic=True
+Morus rubra | irritant_sap | Some people get a skin rash from it. | toxic=False
+Nerium oleander | irritant_sap | The sap can irritate skin and eyes. | toxic=True
+Nolina texana | phototoxic | It can cause a sunburn on the skin. | toxic=True
+Oncosiphon pilulifer | irritant_sap | Contact can cause skin irritation. | toxic=False
+Opuntia microdasys | irritant_sap | It can cause skin irritation. | toxic=False
+Ornithogalum umbellatum | irritant_sap | Long contact may irritate the skin. | toxic=True
+Parthenium hysterophorus | irritant_sap | Handling it can cause skin rashes. | toxic=True
+Parthenocissus inserta | irritant_sap | Its sap can cause skin rashes. | toxic=False
+Parthenocissus quinquefolia | irritant_sap | Its sap can cause skin irritation and blisters. | toxic=True
+Pastinaca sativa | phototoxic | Its sap can cause skin blisters in sunlight. | toxic=True
+Pentaglottis sempervirens | irritant_sap | The leaves and stem can irritate skin. | toxic=True
+Perilla frutescens | irritant_sap | Handling the leaves or oil may cause skin irritation. | toxic=True
+Persicaria hydropiper | irritant_sap | Its oils can irritate the skin. | toxic=False
+Phacelia campanularia | irritant_sap | Its juice or sap may cause a skin rash. | toxic=False
+Phacelia crenulata | irritant_sap | It can cause skin inflammation. | toxic=False
+Phacelia grandiflora | irritant_sap | Oil droplets can cause a skin rash. | toxic=True
+Phacelia minor | irritant_sap | Its oil can cause a skin rash. | toxic=True
+Phacelia sericea | irritant_sap | Its hairs can irritate skin. | toxic=False
+Phytolacca americana | irritant_sap | Its sap can cause skin rashes in some people. | toxic=True
+Plumeria rubra | irritant_sap | White sap can irritate skin and mucous membranes. | toxic=True
+Pontederia crassipes | irritant_sap | It may make the skin itchy. | toxic=True
+Pulsatilla occidentalis | irritant_sap | The milky liquid can irritate the skin. | toxic=False
+Quercus coccinea | irritant_sap | It can cause eye and skin irritation. | toxic=False
+Ranunculus abortivus | irritant_sap | The leaves can cause skin to blister. | toxic=True
+Ranunculus hispidus | irritant_sap | It can cause minor skin irritation. | toxic=True
+Ranunculus repens | irritant_sap | Its sap can cause skin rashes and blisters. | toxic=True
+Ranunculus sceleratus | irritant_sap | Damaged leaves cause sores and blisters on skin. | toxic=True
+Ricinus communis | irritant_sap | The sap causes rashes on the skin. | toxic=True
+Robinia pseudoacacia | irritant_sap | Sawdust can cause a skin rash in some people. | toxic=True
+Rumex obtusifolius | irritant_sap | The leaves can cause skin irritation. | toxic=True
+Salsola tragus | irritant_sap | It can cause skin rashes. | toxic=True
+Scaevola taccada | irritant_sap | Its drops can irritate eyes. | toxic=False
+Schinus terebinthifolia | irritant_sap | Sap can cause rashes and eye swelling. | toxic=True
+Sedum acre | irritant_sap | The leaves can cause skin rashes. | toxic=True
+Solanum mauritianum | irritant_sap | Its fine hairs can irritate eyes and skin. | toxic=True
+Symplocarpus foetidus | irritant_sap | Handling the leaves can burn skin. | toxic=True
+Syngonium podophyllum | irritant_sap | Its sap can burn skin and damage eyes. | toxic=True
+Tanacetum parthenium | irritant_sap | It can cause skin rashes or swelling. | toxic=False
+Tanacetum vulgare | irritant_sap | Some parts can cause a skin rash. | toxic=True
+Thuja plicata | irritant_sap | It can cause eye irritation. | toxic=True
+Toxicodendron diversilobum | urushiol | An oil on it causes an itchy rash. | toxic=True
+Toxicodendron pubescens | urushiol | It can cause skin redness, itching, and blisters. | toxic=True
+Toxicodendron radicans | urushiol | It can cause an itchy and painful rash. | toxic=True
+Toxicodendron rydbergii | urushiol | It can cause an itchy rash. | toxic=True
+Toxicodendron vernix | urushiol | Its oil causes a rash on the skin. | toxic=True
+Tradescantia virginiana | irritant_sap | Its sap can cause itchy, red skin. | toxic=True
+Tradescantia zebrina | irritant_sap | Its watery sap can irritate skin. | toxic=False
+Trifolium hybridum | irritant_sap | It can irritate skin. | toxic=True
+Turricula parryi | irritant_sap | It can make skin very irritated. | toxic=False
+Urtica chamaedryoides | stinging | Stinging hairs cause a sting when felt. | toxic=True
+Urtica dioica | stinging | Its hairs can cause a stinging sensation. | toxic=False
+Urtica ferox | stinging | Its hairs cause painful stings. | toxic=True
+Urtica urens | stinging | It has hairs that sting the skin. | toxic=False
+Verbascum thapsus | stinging | It has hairs that can irritate skin. | toxic=True
+Vitis mustangensis | irritant_sap | Handling the fruit can irritate the skin. | toxic=True
+Wigandia urens | stinging | It has hairs that can sting the skin. | toxic=False
+== REVIEW
+Actaea racemosa | unsure | None | [] |  | The Herbal Medicinal Product Committee (HMPC) at the European Medicines Agency (EMA) has summarized the adverse drug rea
+Agave americana | unsure | None | [] |  | americana can cause severe allergic dermatitis.
+Anemonastrum canadense | unsure | None | [] |  | It is likely that most anemones contain similar caustic irritants to other members of the family Ranunculaceae.
+Asclepias asperula | unsure | None | [] |  | Milkweed plants are a major food source for Monarch and Queen butterfly caterpillars and as with other milkweed plants, 
+Bituminaria bituminosa | unsure | None | [] |  | It has several potential uses: (i) forage crop, (ii) Phytostabilization of heavy metal contaminated or degraded soils, (
+Carissa macrocarpa | unsure | None | [] |  | macrocarpa is a spiny, evergreen shrub containing latex.
+Cevallia sinuata | unsure | None | [] |  | Cevallia sinuata or stinging serpent is a species of flowering plant belonging to the family Loasaceae.
+Chelidonium majus | unsure | None | [] |  | The characteristic latex also contains proteolytic enzymes and the phytocystatin chelidostatin, a cysteine protease inhi
+Cleome rutidosperma | unsure | None | [] |  | They are also used in ethnomedicine for treating ear inflammation, convulsions, irritated skin, and malaria.
+Euphorbia hirta | unsure | None | [] |  | This erect or prostrate annual herb can grow up to long with a solid stem that is furnished with many yellow to reddish 
+Ficus petiolaris | unsure | None | [] |  | The treatment includes latex, juice or resin.
+Maclura pomifera | unsure | None | [] |  | Each small drupe is oblong, compressed, and rounded; it contains a milky latex that oozes when the fruit is damaged or c
+Mammillaria magnimamma | unsure | None | [] |  | Tubercules are four-sided, with latex and the axils have dense white wool.
+Marah fabacea | hazard | irritant_sap | ['spines only'] | Its liquid irritates eyes and its spines irritate skin. | The liquid inside the fruit is an eye irritant, and the spines on the fruit are irritating to the skin.
+Matricaria chamomilla | hazard | irritant_sap | ['line banned word'] | Touching it may cause skin irritation. | Contact dermatitis may occur when touching the plant.
+Narthecium ossifragum | unsure | None | [] |  | The plant can cause photosensitisation, a serious skin condition of sheep called alveld, "elf fire", in Norway.
+Oenothera glazioviana | unsure | None | [] |  | It is roughly hairy in texture, the hairs with reddish blistering or glandular bases.
+Pinaropappus roseus | unsure | None | [] |  | In Oaxaca and Puebla states also it is used for skin problems, especially rashes on newborn babies.
+Rhus integrifolia | unsure | None | [] |  | Allergic reactions may also result from skin contact with sap from some of the genera.
+Rhus ovata | unsure | None | [] |  | There are unconfirmed reports that Rhus ovata contains urushiol, the chemical irritant in plants such as poison ivy.
+Sideroxylon inerme | unsure | None | [] |  | It boasts leathery, spiral leaves, which, like the berries, contain milky latex.
+Trachelospermum jasminoides | unsure | None | [] |  | If cut, like most Apocynaceae, they exude a white latex, resembling sticky milk.
+Zizia aurea | hazard | phototoxic | ['evidence not in article'] | Its sap can cause skin burns in sunlight. | Care should be taken to thoroughly wash skin exposed to the sap of broken plant tissues, as subsequent exposure to the U
+== MODEL NO (count) 524
+== CHECKS
+Urtica dioica auto hazard  []
+Urtica urens auto hazard  []
+Laportea canadensis auto hazard  []
+Heracleum mantegazzianum auto hazard  []
+Heracleum sosnowskyi auto hazard  []
+Heracleum sphondylium auto hazard  []
+Heracleum maximum auto hazard  []
+Pastinaca sativa auto hazard  []
+Euphorbia cyparissias auto hazard  []
+Euphorbia virgata skip no  []
+Chelidonium majus review unsure  []
+Ficus carica auto hazard  []
+Toxicodendron diversilobum auto hazard  []
+Toxicodendron pubescens auto hazard  []
+Toxicodendron radicans auto hazard  []
+Toxicodendron rydbergii auto hazard  []
+Toxicodendron vernix auto hazard  []
+== SPINE GENERA on list
+Maclura pomifera review None Each small drupe is oblong, compressed, and rounded; it contains a milky latex that oozes when the fruit is damaged or c
+Opuntia microdasys auto irritant_sap If not removed they will cause considerable skin irritation so the plants must be treated with caution.
+Robinia pseudoacacia auto irritant_sap The sawdust and shavings from Robinia lumber can cause contact dermatitis in sensitive persons.
+
+# ===== Run 2, 2026-10-09 (UTC 2026-10-10, end 03:23:10Z): tightened prompt =====
+# Same machine, Ollama 0.40.0, gemma4:26b digest 48eb98ec778c, same sampler/num_ctx, same prefilter (693 model calls)
+# Prompt change: "hazard" only when touching or handling the living plant hurts skin or eyes in general; "no" for
+#   allergy or "some/sensitive people", occupational or processed material (sawdust, lumber, pollen, oil, extract,
+#   bulk fibers), medicinal side effects, livestock-only, root-cutting eye/sinus sting. Added a second worked
+#   example (a "no": sawdust + allergy in sensitive people). Owner veto (owner:false) now drops an auto row.
+# Timing: 529 s model loop. 0 replies failed.
+# Result: auto 90, review 15, skip 4,167; 56 rows dropped from auto vs run 1, 0 added
+# Gate hazard species: 9 of 12 auto. Heracleum sphondylium now review (unsure: "much lower concentrations");
+#   Euphorbia virgata and Chelidonium majus skip (articles never say contact hurts).
+# West Georgia (23 targets, docs/results/day-3/calibration.photos.csv): none on the list or in review.
+#   Run 1 had Quercus coccinea, Morus rubra, Campsis radicans, Robinia pseudoacacia auto; all are now "no".
+#   No Quercus, Acer, or Morus remains. Tree rows left: Ficus carica, Ficus pumila, Mangifera indica,
+#   Schinus terebinthifolia (auto); Rhus integrifolia, Rhus ovata (review).
+
+## raw run 2 output
+2026-10-10T03:11:52Z
+uv --project pipeline run --group reference python -W error -m wild_find_pipeline.contact_hazards
+gemma4:26b 48eb98ec778c: 4272 rows, 0 done, 4272 to go
+prefilter: 693 of 4272 rows have a contact sentence and go to the model
+25/4272 3s
+50/4272 5s
+75/4272 7s
+100/4272 9s
+125/4272 11s
+150/4272 12s
+175/4272 14s
+200/4272 16s
+225/4272 19s
+250/4272 21s
+275/4272 26s
+300/4272 29s
+325/4272 37s
+350/4272 40s
+375/4272 43s
+400/4272 43s
+425/4272 45s
+450/4272 46s
+475/4272 48s
+500/4272 49s
+525/4272 51s
+550/4272 53s
+575/4272 55s
+600/4272 57s
+625/4272 58s
+650/4272 59s
+675/4272 60s
+700/4272 60s
+725/4272 65s
+750/4272 65s
+775/4272 67s
+800/4272 70s
+825/4272 71s
+850/4272 74s
+875/4272 75s
+900/4272 77s
+925/4272 80s
+950/4272 86s
+975/4272 89s
+1000/4272 90s
+1025/4272 92s
+1050/4272 94s
+1075/4272 97s
+1100/4272 99s
+1125/4272 101s
+1150/4272 105s
+1175/4272 109s
+1200/4272 110s
+1225/4272 112s
+1250/4272 117s
+1275/4272 121s
+1300/4272 121s
+1325/4272 121s
+1350/4272 125s
+1375/4272 126s
+1400/4272 128s
+1425/4272 129s
+1450/4272 130s
+1475/4272 132s
+1500/4272 134s
+1525/4272 141s
+1550/4272 149s
+1575/4272 150s
+1600/4272 157s
+1625/4272 162s
+1650/4272 165s
+1675/4272 169s
+1700/4272 169s
+1725/4272 170s
+1750/4272 174s
+1775/4272 180s
+1800/4272 183s
+1825/4272 205s
+1850/4272 206s
+1875/4272 209s
+1900/4272 210s
+1925/4272 215s
+1950/4272 218s
+1975/4272 223s
+2000/4272 228s
+2025/4272 232s
+2050/4272 239s
+2075/4272 244s
+2100/4272 251s
+2125/4272 253s
+2150/4272 254s
+2175/4272 256s
+2200/4272 258s
+2225/4272 259s
+2250/4272 262s
+2275/4272 264s
+2300/4272 266s
+2325/4272 271s
+2350/4272 272s
+2375/4272 278s
+2400/4272 285s
+2425/4272 287s
+2450/4272 291s
+2475/4272 294s
+2500/4272 298s
+2525/4272 300s
+2550/4272 301s
+2575/4272 301s
+2600/4272 313s
+2625/4272 317s
+2650/4272 318s
+2675/4272 321s
+2700/4272 323s
+2725/4272 324s
+2750/4272 327s
+2775/4272 331s
+2800/4272 334s
+2825/4272 335s
+2850/4272 338s
+2875/4272 344s
+2900/4272 346s
+2925/4272 346s
+2950/4272 360s
+2975/4272 367s
+3000/4272 372s
+3025/4272 372s
+3050/4272 374s
+3075/4272 375s
+3100/4272 378s
+3125/4272 378s
+3150/4272 381s
+3175/4272 383s
+3200/4272 384s
+3225/4272 386s
+3250/4272 391s
+3275/4272 397s
+3300/4272 403s
+3325/4272 404s
+3350/4272 407s
+3375/4272 412s
+3400/4272 415s
+3425/4272 424s
+3450/4272 426s
+3475/4272 429s
+3500/4272 430s
+3525/4272 434s
+3550/4272 439s
+3575/4272 441s
+3600/4272 444s
+3625/4272 447s
+3650/4272 453s
+3675/4272 457s
+3700/4272 459s
+3725/4272 463s
+3750/4272 465s
+3775/4272 467s
+3800/4272 468s
+3825/4272 470s
+3850/4272 476s
+3875/4272 479s
+3900/4272 479s
+3925/4272 482s
+3950/4272 500s
+3975/4272 503s
+4000/4272 503s
+4025/4272 505s
+4050/4272 513s
+4075/4272 516s
+4100/4272 519s
+4125/4272 519s
+4150/4272 520s
+4175/4272 520s
+4200/4272 521s
+4225/4272 526s
+4250/4272 527s
+OK: /Users/anchildress1/git_personal/wild-find/pipeline/data/contact_hazards.json: 4272 rows {'auto': 90, 'review': 15, 'skip': 4167} in 529s, 0 model replies failed: []
+exit 0
+2026-10-10T03:23:10Z

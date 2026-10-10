@@ -14,7 +14,7 @@ sealed interface Screen {
     /**
      * The safety opener (R1).
      *
-     * @property back where Done returns on a replay; null on first launch
+     * @property back where Back returns on a replay, whose Done goes on to the grass practice; null on first launch
      */
     data class Opener(val back: Screen?) : Screen
 
@@ -103,12 +103,14 @@ data class Stop(
  * @property checking a capture's frames are being verified
  * @property matched matching frames so far in this capture, for the ring
  * @property cue the last capture's result; stays until the next one
+ * @property hazardLine the warning hazard's own kid line under a [CaptureCue.HAZARD] cue, or null for the generic card
  */
 data class CameraState(
     val ready: Boolean = false,
     val checking: Boolean = false,
     val matched: Int = 0,
     val cue: CaptureCue? = null,
+    val hazardLine: String? = null,
 )
 
 /** The grown-ups page's Cache my area button. */
@@ -219,6 +221,9 @@ sealed interface GameEvent : GameInput {
     /** Capture tapped. */
     data object Capture : GameEvent
 
+    /** The hazard card's button: the warning clears back to the live camera. */
+    data object DismissHazard : GameEvent
+
     /** Hint tapped on the camera for [row]: opens the next hint it has not shown yet, or the last when all are open. */
     data class RevealHint(val row: Int) : GameEvent
 
@@ -249,7 +254,7 @@ sealed interface GameEvent : GameInput {
     /** Grown-ups: change the hunting area on the map. */
     data object EditRegion : GameEvent
 
-    /** Grown-ups: replay the opener. */
+    /** Grown-ups: Repeat intro, the opener and then the grass practice, as on a first launch. */
     data object ReplayOpener : GameEvent
 
     /** System back. */

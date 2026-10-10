@@ -8,6 +8,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import dev.anchildress1.wildfind.R
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -22,6 +23,18 @@ class CameraTest : E2eTest() {
         tap(R.string.start_looking)
         waitForText(text(R.string.camera_find, first))
         assertTrue(has(hasText(text(R.string.camera_progress, 1, TARGETS))))
+    }
+
+    @Test
+    fun theTopBarShowsTheTargetsDescriptionUnderItsName() {
+        startHuntList()
+        val first = savedHunt().progress.targets.first()
+        val description = models().rows[first.row].description
+        assertNotNull("${models().rows[first.row].scientific} has no description", description)
+        tap(R.string.start_looking)
+        waitForText(text(R.string.camera_find, first.common))
+        // A plain text node in the merged tree is one TalkBack reads.
+        waitForText(description!!)
     }
 
     @Test

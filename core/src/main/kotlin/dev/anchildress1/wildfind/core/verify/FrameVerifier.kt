@@ -19,7 +19,7 @@ fun interface ImageEmbedder {
  * @property plantGate both TinyCLIP embeddings and gate scores
  * @property bioclip the BioCLIP embeddings, zero to two
  * @property hazard species-table ranking of each BioCLIP embedding
- * @property goal label scoring of the reticle embedding
+ * @property goal label scoring of the reticle embedding, with the full frame's when it has one
  * @property total the whole frame, including the focus lookup
  */
 data class StageTimes(
@@ -89,7 +89,7 @@ class FrameVerifier(
         val fullShare = gate.plantShare(embed(gateEncoder, fullInput, "TinyCLIP full frame"))
         val reticlePlant = PlantGate.isPlant(reticleShare)
         val gated = clock()
-        // BioCLIP runs only on regions the gate calls a plant; the full frame only feeds the hazard check.
+        // BioCLIP runs only on regions the gate calls a plant; the full frame feeds row 1 and a target's score.
         val reticleEmbedding = if (reticlePlant) embed(bioclip, reticleInput, "BioCLIP reticle") else null
         val fullPlant = PlantGate.isPlant(fullShare)
         val fullEmbedding = if (goal.checksHazards &&
@@ -102,11 +102,14 @@ class FrameVerifier(
         val embedded = clock()
         val reticleRank = reticleEmbedding?.takeIf { goal.checksHazards }?.let(hazards::rank)
         val fullRank = fullEmbedding?.let(hazards::rank)
-        val hazard = listOfNotNull(reticleRank, fullRank).any { it.warns }
+        // A warning ranking always has a rank, so the best-ranked one is the hazard that warned.
+        val warning = listOfNotNull(reticleRank, fullRank).filter { it.warns }
+            .minByOrNull { checkNotNull(it.hazardRank) }
         val ranked = clock()
-        val score = reticleEmbedding?.let(goal::score)
+        // Day 5 measured the target rule on exactly this input: a full frame only when the gate called it a plant.
+        val score = reticleEmbedding?.let { goal.score(it, fullEmbedding) }
         val scored = clock()
-        val evidence = FrameEvidence(hazard, reticlePlant, focus(), score?.met == true)
+        val evidence = FrameEvidence(warning?.hazardRow, reticlePlant, focus(), score?.met == true)
         val end = clock()
         return FrameResult(
             evidence,

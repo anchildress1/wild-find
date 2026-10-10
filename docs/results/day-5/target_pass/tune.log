@@ -1,0 +1,112 @@
+# day-5 target pass, mode tune, run 2026-10-10T08:41-04:00; arm64 macOS-26.5.2-arm64-arm-64bit-Mach-O; python 3.13.14, onnxruntime 1.30.0, numpy 2.5.3, Pillow 12.3.0
+# BioCLIP pin crazedcodernate/bioclip-2.5-mobile-fastvit@29b474ea2a5d72b4646f036ead9441e0a22a5c62; TinyCLIP pin wkcn/TinyCLIP-ViT-8M-16-Text-3M-YFCC15M@a2a8c6eaa2549ad66eb7c31b85022bf58273a26c
+#   asset 8624d44af3727b69a41dc2035c37018a30753b8d9c93ab8801a0c724dd42510f  flora_student_fp32.onnx
+#   asset bf1bdd2e939ba374498acf76162cbcc56fcc547e6e5a01aa50d5de477f6c58ed  plant_gate.onnx
+#   asset 33e8990299b4cb1450dfbebe600162e5602810dc01b3e747450af4ea66a4818a  plant_gate.json
+#   asset 1fd3cf277dddda6c4c0062b696d170e3b405487098e80dcc71138045835cc27d  species_table.npy
+#   asset 1d0269979f1e9cefa59a28af8a3aa5e0ecaad797c7c98eab855e132c567d5474  species_labels.json
+#   asset c63489be575b96a70febd147445f496a54ed6b666ff79bbf314906efd7e4d80f  labels.npy
+#   asset f6f31b2421956d8452a821ec4f8be5d0583f6ab8661a0483932d21712a3989c5  labels.json
+#   input S50: docs/results/day-3/calibration.photos.csv sha256 4451ca526b6ddbbe3540ad7089655e0ec5bbf97aac496e11070111db7908379b; embeddings .models/target-pass-embeddings/S50.npz
+#   input TB: docs/results/day-3/toxic_block_photos.csv sha256 04e160400f4c94e235dc2877d7acefd51b7febccabc54c8e11040e1a1a296432; embeddings .models/target-pass-embeddings/TB.npz
+#   hunt: docs/results/day-2/threshold_regions.csv, inat_species_oct.csv, day-3/toxicity_audit.csv
+# row 1 = rule B (shipped Oct 10); taus frozen on TUNE; toxic raw = row 4 alone, the guardrail count
+
+| rule | tau | TUNE target pass | by set | toxic raw / after gate+row1 | headroom | worst toxic | wrong-genus | non-plant | other safe plants | extra BioCLIP/frame |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| R0 baseline | 0.0480 | 50/99 (51%) | S50 17/30; TB 33/69 | 0/194 / 0/194 | +0.0003 | Toxicodendron_radicans_0.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+| R0b baseline at TUNE boundary | 0.0480 | 50/99 (51%) | S50 17/30; TB 33/69 | 0/194 / 0/194 | +0.0003 | Toxicodendron_radicans_0.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+| R1 ret+full mean | 0.0240 | 62/99 (63%) | S50 22/30; TB 40/69 | 0/194 / 0/194 | +0.0005 | Acer_rubrum_2.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+| R2 ret+full any | 0.0480 | 61/99 (62%) | S50 20/30; TB 41/69 | 0/194 / 0/194 | +0.0003 | Toxicodendron_radicans_0.jpg | 2/99 (2.0%) | - | 0/15 | 0 |
+| R3 ret+full all | 0.0010 | 54/99 (55%) | S50 17/30; TB 37/69 | 0/194 / 0/194 | +0.0415 | Berberis_bealei_2.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+| R4 ret flip mean | 0.0360 | 53/99 (54%) | S50 19/30; TB 34/69 | 0/194 / 0/194 | +0.0005 | Toxicodendron_radicans_0.jpg | 0/99 (0.0%) | - | 0/15 | +1 |
+| R5 ret+full+flips mean | 0.0350 | 58/99 (59%) | S50 20/30; TB 38/69 | 0/194 / 0/194 | +0.0001 | Acer_rubrum_2.jpg | 0/99 (0.0%) | - | 0/15 | +2 |
+| R6 multiscale 50-80 | 0.0280 | 56/99 (57%) | S50 21/30; TB 35/69 | 0/194 / 0/194 | +0.0004 | Acer_negundo_0.jpg | 2/99 (2.0%) | - | 0/15 | +3 |
+| R7 multiscale+full | 0.0230 | 60/99 (61%) | S50 21/30; TB 39/69 | 0/194 / 0/194 | +0.0007 | Acer_negundo_0.jpg | 2/99 (2.0%) | - | 0/15 | +3 |
+| R8 3-frame streak (shipped AND) | 0.0480 | 49/99 (49%) | S50 17/30; TB 32/69 | 0/194 / 0/194 | +0.0345 | Monotropa_uniflora_2.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+| R9 3-frame mean | 0.0400 | 52/99 (53%) | S50 18/30; TB 34/69 | 0/194 / 0/194 | +0.0002 | Toxicodendron_radicans_0.jpg | 0/99 (0.0%) | - | 0/15 | 0 (always 3 frames) |
+| R10 5-crop mean | 0.0250 | 55/99 (56%) | S50 19/30; TB 36/69 | 0/194 / 0/194 | +0.0004 | Toxicodendron_radicans_0.jpg | 1/99 (1.0%) | - | 0/15 | 0 (5 frames) |
+| R11 3-frame mean + full | 0.0290 | 56/99 (57%) | S50 20/30; TB 36/69 | 0/194 / 0/194 | +0.0005 | Toxicodendron_radicans_0.jpg | 1/99 (1.0%) | - | 0/15 | 0 (always 3 frames) |
+| R12 3-frame+full+flip | 0.0310 | 54/99 (55%) | S50 19/30; TB 35/69 | 0/194 / 0/194 | +0.0007 | Toxicodendron_radicans_0.jpg | 0/99 (0.0%) | - | 0/15 | +1 |
+| R13 relative gap | 0.8200 | 50/99 (51%) | S50 17/30; TB 33/69 | 0/194 / 0/194 | +0.0085 | Toxicodendron_radicans_0.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+| R14 ret+full relative | 0.4900 | 62/99 (63%) | S50 22/30; TB 40/69 | 0/194 / 0/194 | +0.0020 | Acer_rubrum_2.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+| R15 hunt competitors | 0.0480 | 50/99 (51%) | S50 17/30; TB 33/69 | 0/194 / 0/194 | +0.0003 | Toxicodendron_radicans_0.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+| R16 ret+full hunt | 0.0240 | 62/99 (63%) | S50 22/30; TB 40/69 | 0/194 / 0/194 | +0.0005 | Acer_rubrum_2.jpg | 0.2/99 (0.2%) | - | 0/15 | 0 |
+| R17 drop wrong-sense flags | 0.0480 | 50/99 (51%) | S50 17/30; TB 33/69 | 0/194 / 0/194 | +0.0003 | Toxicodendron_radicans_0.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+| R18 weak W1 -0.01 | 0.0480 | 52/99 (53%) | S50 18/30; TB 34/69 | 0/194 / 0/194 | +0.0003 | Toxicodendron_radicans_0.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+| R19 ret+full weak W1 -0.01 | 0.0240 | 62/99 (63%) | S50 22/30; TB 40/69 | 0/194 / 0/194 | +0.0005 | Acer_rubrum_2.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+| R18 weak W2 -0.01 | 0.0510 | 50/99 (51%) | S50 17/30; TB 33/69 | 0/194 / 0/194 | +0.0006 | Toxicodendron_radicans_0.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+| R19 ret+full weak W2 -0.01 | 0.0270 | 62/99 (63%) | S50 22/30; TB 40/69 | 0/194 / 0/194 | +0.0007 | Toxicodendron_radicans_0.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+| R18 weak W1 -0.02 | 0.0480 | 52/99 (53%) | S50 18/30; TB 34/69 | 0/194 / 0/194 | +0.0003 | Toxicodendron_radicans_0.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+| R19 ret+full weak W1 -0.02 | 0.0240 | 62/99 (63%) | S50 22/30; TB 40/69 | 0/194 / 0/194 | +0.0005 | Acer_rubrum_2.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+| R18 weak W2 -0.02 | 0.0510 | 53/99 (54%) | S50 18/30; TB 35/69 | 0/194 / 0/194 | +0.0006 | Toxicodendron_radicans_0.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+| R19 ret+full weak W2 -0.02 | 0.0270 | 62/99 (63%) | S50 22/30; TB 40/69 | 0/194 / 0/194 | +0.0007 | Toxicodendron_radicans_0.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+| R18 weak W1 -0.03 | 0.0480 | 53/99 (54%) | S50 18/30; TB 35/69 | 0/194 / 0/194 | +0.0003 | Toxicodendron_radicans_0.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+| R19 ret+full weak W1 -0.03 | 0.0260 | 61/99 (62%) | S50 22/30; TB 39/69 | 0/194 / 0/194 | +0.0007 | Woodwardia_areolata_1.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+| R18 weak W2 -0.03 | 0.0510 | 53/99 (54%) | S50 18/30; TB 35/69 | 0/194 / 0/194 | +0.0006 | Toxicodendron_radicans_0.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+| R19 ret+full weak W2 -0.03 | 0.0270 | 62/99 (63%) | S50 22/30; TB 40/69 | 0/194 / 0/194 | +0.0007 | Toxicodendron_radicans_0.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+| R18 weak W1 -0.048 | 0.0480 | 53/99 (54%) | S50 18/30; TB 35/69 | 0/194 / 0/194 | +0.0003 | Toxicodendron_radicans_0.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+| R19 ret+full weak W1 -0.048 | 0.0420 | 58/99 (59%) | S50 20/30; TB 38/69 | 0/194 / 0/194 | +0.0009 | Woodwardia_areolata_1.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+| R18 weak W2 -0.048 | 0.0510 | 55/99 (56%) | S50 18/30; TB 37/69 | 0/194 / 0/194 | +0.0006 | Toxicodendron_radicans_0.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+| R19 ret+full weak W2 -0.048 | 0.0440 | 58/99 (59%) | S50 20/30; TB 38/69 | 0/194 / 0/194 | +0.0007 | Woodwardia_areolata_1.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+| R20 full only | 0.0050 | 60/99 (61%) | S50 19/30; TB 41/69 | 0/194 / 0/194 | +0.0002 | Woodwardia_areolata_1.jpg | 5/99 (5.1%) | - | 0/15 | 0 |
+| R21 ret+full 1:3 | 0.0010 | 67/99 (68%) | S50 23/30; TB 44/69 | 0/194 / 0/194 | +0.0010 | Woodwardia_areolata_1.jpg | 3/99 (3.0%) | - | 0/15 | 0 |
+| R22 ret+full 3:1 | 0.0350 | 54/99 (55%) | S50 20/30; TB 34/69 | 0/194 / 0/194 | +0.0009 | Toxicodendron_radicans_0.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+| R23 ret+ret80+full | 0.0210 | 62/99 (63%) | S50 22/30; TB 40/69 | 0/194 / 0/194 | +0.0000 | Acer_rubrum_2.jpg | 1/99 (1.0%) | - | 0/15 | +1 |
+| R0h baseline +0.01 | 0.0580 | 49/99 (49%) | S50 16/30; TB 33/69 | 0/194 / 0/194 | +0.0103 | Toxicodendron_radicans_0.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+| R1h ret+full mean +0.01 | 0.0340 | 60/99 (61%) | S50 22/30; TB 38/69 | 0/194 / 0/194 | +0.0105 | Acer_rubrum_2.jpg | 0/99 (0.0%) | - | 0/15 | 0 |
+| R21h ret+full 1:3 +0.01 | 0.0110 | 66/99 (67%) | S50 23/30; TB 43/69 | 0/194 / 0/194 | +0.0110 | Woodwardia_areolata_1.jpg | 2/99 (2.0%) | - | 0/15 | 0 |
+- R0 baseline: today: reticle, margin 0.048
+- R0b baseline at TUNE boundary: today's rule, tau re-derived
+- R1 ret+full mean: full frame already embedded for row 1
+- R8 3-frame streak (shipped AND): proxy: today's 3-in-a-row on shaken frames
+- R15 hunt competitors: 3 targets + blockers; rates averaged over hunts
+- R17 drop wrong-sense flags: H11 audit unflag list; their photos still count as toxic
+- R20 full only: reticle only when TinyCLIP rejects the full frame
+- R0h baseline +0.01: 0.048 + 0.01
+- R1h ret+full mean +0.01: R1 boundary 0.024 + 0.01
+- R21h ret+full 1:3 +0.01: R21 boundary 0.001 + 0.01
+
+per-rule toxic L closest to tau (top 3) and lost targets:
+  R0 baseline tau 0.0480: Toxicodendron_radicans_0.jpg 0.0477 (Callicarpa); Monotropa_uniflora_2.jpg 0.0153 (Magnolia); Acer_negundo_0.jpg 0.0093 (Pueraria)
+  R0b baseline at TUNE boundary tau 0.0480: Toxicodendron_radicans_0.jpg 0.0477 (Callicarpa); Monotropa_uniflora_2.jpg 0.0153 (Magnolia); Acer_negundo_0.jpg 0.0093 (Pueraria)
+  R1 ret+full mean tau 0.0240: Acer_rubrum_2.jpg 0.0235 (Platanus); Toxicodendron_radicans_0.jpg 0.0204 (Callicarpa); Acer_negundo_0.jpg 0.0051 (Pueraria)
+  R2 ret+full any tau 0.0480: Toxicodendron_radicans_0.jpg 0.0477 (Callicarpa); Monotropa_uniflora_2.jpg 0.0153 (Magnolia); Acer_negundo_0.jpg 0.0093 (Pueraria)
+  R3 ret+full all tau 0.0010: Berberis_bealei_2.jpg -0.0405 (Ilex); Parthenocissus_quinquefolia_0.jpg -0.0411 (Ampelopsis); Cornus_florida_1.jpg -0.0478 (Sassafras)
+  R4 ret flip mean tau 0.0360: Toxicodendron_radicans_0.jpg 0.0355 (Callicarpa); Acer_rubrum_2.jpg 0.0249 (Platanus); Acer_negundo_0.jpg 0.0156 (Pueraria)
+  R5 ret+full+flips mean tau 0.0350: Acer_rubrum_2.jpg 0.0349 (Platanus); Toxicodendron_radicans_0.jpg 0.0208 (Callicarpa); Acer_negundo_0.jpg -0.0036 (Pueraria)
+  R6 multiscale 50-80 tau 0.0280: Acer_negundo_0.jpg 0.0276 (Pueraria); Toxicodendron_radicans_0.jpg 0.0040 (Callicarpa); Monotropa_uniflora_2.jpg -0.0004 (Magnolia)
+  R7 multiscale+full tau 0.0230: Acer_negundo_0.jpg 0.0223 (Pueraria); Toxicodendron_radicans_0.jpg 0.0089 (Callicarpa); Monotropa_uniflora_2.jpg 0.0087 (Cercis)
+  R8 3-frame streak (shipped AND) tau 0.0480: Monotropa_uniflora_2.jpg 0.0135 (Magnolia); Toxicodendron_radicans_0.jpg 0.0123 (Callicarpa); Prunus_serotina_1.jpg -0.0019 (Quercus)
+  R9 3-frame mean tau 0.0400: Toxicodendron_radicans_0.jpg 0.0398 (Callicarpa); Acer_negundo_0.jpg 0.0192 (Pueraria); Monotropa_uniflora_2.jpg 0.0181 (Magnolia)
+  R10 5-crop mean tau 0.0250: Toxicodendron_radicans_0.jpg 0.0246 (Callicarpa); Monotropa_uniflora_2.jpg 0.0181 (Magnolia); Acer_negundo_0.jpg 0.0060 (Pueraria)
+  R11 3-frame mean + full tau 0.0290: Toxicodendron_radicans_0.jpg 0.0285 (Callicarpa); Acer_negundo_0.jpg 0.0146 (Pueraria); Acer_rubrum_2.jpg 0.0134 (Platanus)
+  R12 3-frame+full+flip tau 0.0310: Toxicodendron_radicans_0.jpg 0.0303 (Callicarpa); Acer_rubrum_2.jpg 0.0188 (Platanus); Acer_negundo_0.jpg 0.0161 (Pueraria)
+  R13 relative gap tau 0.8200: Toxicodendron_radicans_0.jpg 0.8115 (Callicarpa); Monotropa_uniflora_2.jpg 0.3210 (Magnolia); Acer_negundo_0.jpg 0.1735 (Pueraria)
+  R14 ret+full relative tau 0.4900: Acer_rubrum_2.jpg 0.4880 (Platanus); Toxicodendron_radicans_0.jpg 0.3751 (Callicarpa); Acer_negundo_0.jpg 0.1079 (Pueraria)
+  R15 hunt competitors tau 0.0480: Toxicodendron_radicans_0.jpg 0.0477 (Callicarpa); Monotropa_uniflora_2.jpg 0.0153 (Magnolia); Acer_negundo_0.jpg 0.0093 (Pueraria)
+  R16 ret+full hunt tau 0.0240: Acer_rubrum_2.jpg 0.0235 (Platanus); Toxicodendron_radicans_0.jpg 0.0204 (Callicarpa); Acer_negundo_0.jpg 0.0051 (Pueraria)
+  R17 drop wrong-sense flags tau 0.0480: Toxicodendron_radicans_0.jpg 0.0477 (Callicarpa); Monotropa_uniflora_2.jpg 0.0153 (Magnolia); Berberis_bealei_2.jpg 0.0145 (Ilex)
+  R18 weak W1 -0.01 tau 0.0480: Toxicodendron_radicans_0.jpg 0.0477 (Callicarpa); Acer_negundo_0.jpg 0.0193 (Pueraria); Monotropa_uniflora_2.jpg 0.0153 (Magnolia)
+  R19 ret+full weak W1 -0.01 tau 0.0240: Acer_rubrum_2.jpg 0.0235 (Platanus); Toxicodendron_radicans_0.jpg 0.0204 (Callicarpa); Acer_negundo_0.jpg 0.0097 (Pueraria)
+  R18 weak W2 -0.01 tau 0.0510: Toxicodendron_radicans_0.jpg 0.0504 (Callicarpa); Acer_negundo_0.jpg 0.0193 (Pueraria); Monotropa_uniflora_2.jpg 0.0153 (Magnolia)
+  R19 ret+full weak W2 -0.01 tau 0.0270: Toxicodendron_radicans_0.jpg 0.0263 (Callicarpa); Acer_rubrum_2.jpg 0.0235 (Platanus); Acer_negundo_0.jpg 0.0097 (Pueraria)
+  R18 weak W1 -0.02 tau 0.0480: Toxicodendron_radicans_0.jpg 0.0477 (Callicarpa); Acer_negundo_0.jpg 0.0293 (Pueraria); Monotropa_uniflora_2.jpg 0.0153 (Magnolia)
+  R19 ret+full weak W1 -0.02 tau 0.0240: Acer_rubrum_2.jpg 0.0235 (Platanus); Toxicodendron_radicans_0.jpg 0.0204 (Callicarpa); Woodwardia_areolata_1.jpg 0.0153 (Polystichum)
+  R18 weak W2 -0.02 tau 0.0510: Toxicodendron_radicans_0.jpg 0.0504 (Callicarpa); Acer_negundo_0.jpg 0.0293 (Pueraria); Monotropa_uniflora_2.jpg 0.0153 (Magnolia)
+  R19 ret+full weak W2 -0.02 tau 0.0270: Toxicodendron_radicans_0.jpg 0.0263 (Callicarpa); Acer_rubrum_2.jpg 0.0235 (Platanus); Woodwardia_areolata_1.jpg 0.0153 (Polystichum)
+  R18 weak W1 -0.03 tau 0.0480: Toxicodendron_radicans_0.jpg 0.0477 (Callicarpa); Acer_negundo_0.jpg 0.0393 (Pueraria); Monotropa_uniflora_2.jpg 0.0153 (Magnolia)
+  R19 ret+full weak W1 -0.03 tau 0.0260: Woodwardia_areolata_1.jpg 0.0253 (Polystichum); Acer_rubrum_2.jpg 0.0235 (Platanus); Toxicodendron_radicans_0.jpg 0.0204 (Callicarpa)
+  R18 weak W2 -0.03 tau 0.0510: Toxicodendron_radicans_0.jpg 0.0504 (Callicarpa); Acer_negundo_0.jpg 0.0393 (Pueraria); Monotropa_uniflora_2.jpg 0.0153 (Magnolia)
+  R19 ret+full weak W2 -0.03 tau 0.0270: Toxicodendron_radicans_0.jpg 0.0263 (Callicarpa); Woodwardia_areolata_1.jpg 0.0253 (Polystichum); Acer_rubrum_2.jpg 0.0235 (Platanus)
+  R18 weak W1 -0.048 tau 0.0480: Toxicodendron_radicans_0.jpg 0.0477 (Callicarpa); Acer_negundo_0.jpg 0.0442 (Pueraria); Monotropa_uniflora_2.jpg 0.0153 (Magnolia)
+  R19 ret+full weak W1 -0.048 tau 0.0420: Woodwardia_areolata_1.jpg 0.0411 (Polystichum); Acer_rubrum_2.jpg 0.0235 (Platanus); Toxicodendron_radicans_0.jpg 0.0204 (Callicarpa)
+  R18 weak W2 -0.048 tau 0.0510: Toxicodendron_radicans_0.jpg 0.0504 (Callicarpa); Acer_negundo_0.jpg 0.0442 (Pueraria); Monotropa_uniflora_2.jpg 0.0153 (Magnolia)
+  R19 ret+full weak W2 -0.048 tau 0.0440: Woodwardia_areolata_1.jpg 0.0433 (Polystichum); Toxicodendron_radicans_0.jpg 0.0263 (Callicarpa); Prunus_serotina_2.jpg 0.0245 (Diospyros)
+  R20 full only tau 0.0050: Woodwardia_areolata_1.jpg 0.0048 (Polystichum); Phytolacca_americana_2.jpg 0.0012 (Callicarpa); Prunus_serotina_2.jpg -0.0112 (Diospyros)
+  R21 ret+full 1:3 tau 0.0010: Woodwardia_areolata_1.jpg 0.0000 (Polystichum); Toxicodendron_radicans_0.jpg -0.0018 (Callicarpa); Phytolacca_americana_2.jpg -0.0054 (Callicarpa)
+  R22 ret+full 3:1 tau 0.0350: Toxicodendron_radicans_0.jpg 0.0341 (Callicarpa); Acer_rubrum_2.jpg 0.0213 (Platanus); Acer_negundo_0.jpg 0.0072 (Pueraria)
+  R23 ret+ret80+full tau 0.0210: Acer_rubrum_2.jpg 0.0210 (Platanus); Toxicodendron_radicans_0.jpg 0.0128 (Callicarpa); Monotropa_uniflora_2.jpg 0.0115 (Cercis)
+  R0h baseline +0.01 tau 0.0580: Toxicodendron_radicans_0.jpg 0.0477 (Callicarpa); Monotropa_uniflora_2.jpg 0.0153 (Magnolia); Acer_negundo_0.jpg 0.0093 (Pueraria)
+  R1h ret+full mean +0.01 tau 0.0340: Acer_rubrum_2.jpg 0.0235 (Platanus); Toxicodendron_radicans_0.jpg 0.0204 (Callicarpa); Acer_negundo_0.jpg 0.0051 (Pueraria)
+  R21h ret+full 1:3 +0.01 tau 0.0110: Woodwardia_areolata_1.jpg 0.0000 (Polystichum); Toxicodendron_radicans_0.jpg -0.0018 (Callicarpa); Phytolacca_americana_2.jpg -0.0054 (Callicarpa)

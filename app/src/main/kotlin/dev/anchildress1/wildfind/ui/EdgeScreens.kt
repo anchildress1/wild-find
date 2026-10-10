@@ -6,6 +6,7 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -47,7 +48,7 @@ fun LoadingScreen() {
         animationSpec = infiniteRepeatable(tween(Motion.BIG * 2), RepeatMode.Reverse),
         label = "breath",
     )
-    Page(centered = true) {
+    Page(arrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)) {
         Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) { Briar(null, briarText(null)) }
         Text(
             stringResource(R.string.loading),
@@ -58,13 +59,17 @@ fun LoadingScreen() {
     }
 }
 
-/** No answer from iNat and nothing cached here: no hunt starts (R8). */
+/**
+ * No answer from iNat and nothing cached here: no hunt starts (R8). The area is already saved, so a grown-up can
+ * cache it from the grown-ups page once signal is back.
+ */
 @Composable
-fun NeedsSignalScreen(onRetry: () -> Unit, onArea: () -> Unit) {
+fun NeedsSignalScreen(onRetry: () -> Unit, onArea: () -> Unit, onGrownUps: () -> Unit) {
     Page(
         bottom = {
             PrimaryButton(stringResource(R.string.try_again), onRetry, icon = null)
             OutlineButton(stringResource(R.string.pick_area), onArea)
+            LinkButton(stringResource(R.string.needs_signal_grown_ups), onGrownUps, Modifier.rise(index = 1))
         },
     ) {
         TryAgainBriar()

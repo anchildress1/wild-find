@@ -12,6 +12,7 @@ import dev.anchildress1.wildfind.Models
 import dev.anchildress1.wildfind.camera.CapturedFrame
 import dev.anchildress1.wildfind.core.hunt.LocalSpecies
 import dev.anchildress1.wildfind.core.hunt.Sighting
+import dev.anchildress1.wildfind.core.region.RegionKey
 import dev.anchildress1.wildfind.core.verify.Goal
 import dev.anchildress1.wildfind.core.verify.TargetGoal
 import dev.anchildress1.wildfind.core.verify.Verdict
@@ -90,7 +91,7 @@ class GateRun(private val context: Context, models: Models, private val target: 
      * The capture loop the camera feeds, naming from the same local rows as the app's hunt so harness logs measure
      * the shipped path; focus_matched=false in the log means a frame had no reading.
      */
-    val verifier = models.verifier((local.eligible.map { it.row } + local.blockers.toList()).toSet())
+    val verifier = models.verifier((local.eligible.map { it.row } + local.blockers.toList()).toSet(), WEST_GEORGIA)
 
     /** Screen state. */
     val status: StateFlow<GateStatus> = state.asStateFlow()
@@ -142,8 +143,8 @@ class GateRun(private val context: Context, models: Models, private val target: 
         log.frame(
             frame.receivedNs, frame.sensorNs, gapMs, upright?.width, upright?.height, frame.rotation, name(verdict),
             streakFrames, result.reticleShare, result.fullShare, reticleRank?.hazardRank, fullRank?.hazardRank,
-            reticleRank?.let { species[it.topRow] }, reticleRank?.let { species[it.hazardRow] },
-            fullRank?.let { species[it.topRow] }, fullRank?.let { species[it.hazardRow] },
+            reticleRank?.let { species[it.topRow] }, reticleRank?.hazardRow?.let { species[it] },
+            fullRank?.let { species[it.topRow] }, fullRank?.hazardRow?.let { species[it] },
             result.goal?.score, result.goal?.rank,
             reading?.afState, reading?.diopters, reading?.zoomRatio, reading != null,
             ms(times.crop), ms(times.resize), ms(times.plantGate), ms(times.bioclip), ms(times.hazard), ms(times.goal),
@@ -213,6 +214,9 @@ class GateRun(private val context: Context, models: Models, private val target: 
         const val SAMPLE_MS = 2_000L
 
         private const val LOCAL_SPECIES = "local_species.tsv"
+
+        // LOCAL_SPECIES is West Georgia's pull, so harness runs check hazards as a hunt there does.
+        private val WEST_GEORGIA = RegionKey(34, -85)
         private const val NANOS_PER_MS = 1_000_000L
         private const val BYTES_PER_KB = 1024
         private const val TENTHS = 10.0
@@ -225,7 +229,7 @@ class GateRun(private val context: Context, models: Models, private val target: 
         private fun ms(nanos: Long) = nanos.toDouble() / NANOS_PER_MS
 
         private fun name(verdict: Verdict) = when (verdict) {
-            Verdict.Hazard -> "hazard"
+            is Verdict.Hazard -> "hazard"
             Verdict.NotPlant -> "not_plant"
             Verdict.TapToFocus -> "tap_to_focus"
             Verdict.WalkCloser -> "walk_closer"

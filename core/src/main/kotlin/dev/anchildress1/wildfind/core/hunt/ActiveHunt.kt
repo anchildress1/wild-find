@@ -35,7 +35,8 @@ data class ActiveHunt(
 
     private fun validPlan(table: List<SpeciesRow>): Boolean {
         val planned = progress.targets + progress.queue
-        return planned.map { it.row }.toSet() == eligible.toSet() &&
+        // Held-back rows stay eligible to compete in verify but are never planned, so the plan covers the rest.
+        return planned.map { it.row }.toSet() == eligible.filter { table[it].target }.toSet() &&
             planned.distinctBy { it.row }.size == planned.size &&
             progress.targets.size == HuntPick.TARGETS &&
             progress.targets.distinctBy { table[it.row].genus }.size == HuntPick.TARGETS

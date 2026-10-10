@@ -64,18 +64,24 @@ class GrownUpsTest : E2eTest() {
     }
 
     @Test
-    fun watchTheSafetyIntroAgainReplaysTheOpenerAndDoneReturnsToGrownUps() {
-        openGrownUps()
+    fun repeatIntroPlaysTheOpenerThenTheGrassPracticeAndKeepsTheHunt() {
+        startHuntList()
+        val names = stops().map(::stopName)
+        tap(R.string.grown_ups)
         tap(R.string.replay_opener)
         waitForText(text(R.string.rule_leave))
         assertTrue(has(hasText(text(R.string.opener_intro))))
         assertFalse("a replay says Let's go", has(hasText(text(R.string.opener_go))))
         tap(R.string.opener_done)
-        waitForText(text(R.string.privacy))
+        waitForText(text(R.string.tutorial_title))
+        tap(R.string.try_it)
+        tap(R.string.skip_practice)
+        waitForText(text(R.string.start_looking))
+        assertEquals("the hunt changed", names, stops().map(::stopName))
     }
 
     @Test
-    fun thePhonesBackKeyOnAReplayedOpenerReturnsToGrownUps() {
+    fun thePhonesBackKeyOnARepeatedIntroReturnsToGrownUps() {
         openGrownUps()
         tap(R.string.replay_opener)
         waitForText(text(R.string.opener_done))

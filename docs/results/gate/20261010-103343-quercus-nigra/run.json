@@ -1,0 +1,13 @@
+{
+ "started": "2026-10-10T10:33:43-04:00",
+ "device": "samsung SM-S928U",
+ "soc": "SM8650",
+ "android": "16",
+ "sdk": 36,
+ "app_version": "0.1.0",
+ "target": "Quercus nigra",
+ "goal": "target",
+ "requested_analysis": "1920x1440",
+ "capture_frames": 3,
+ "bioclip": "crazedcodernate\/bioclip-2.5-mobile-fastvit@29b474ea2a5d72b4646f036ead9441e0a22a5c62\/flora_student_fp32.onnx"
+}
