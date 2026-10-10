@@ -60,7 +60,7 @@ class GameRulesTest : GameFixture() {
 
         val resumed = loading.after(Outcome.SavedHunt(hunt(found = setOf(1))))
         assertEquals(Screen.Hunt, resumed.game.ui.screen)
-        assertEquals(listOf(Command.UseVerifier(setOf(0, 1, 2, 3, 4))), resumed.commands)
+        assertEquals(listOf(Command.UseVerifier(hunt(found = setOf(1)))), resumed.commands)
         assertEquals(
             listOf(
                 Stop(0, "oak", null, found = false, description = "d0", canSkip = true),
@@ -465,7 +465,7 @@ class GameRulesTest : GameFixture() {
         assertTrue(hunt.progress.tutorialPending)
         assertTrue(step.game.ui.offline)
         assertEquals(3, step.game.ui.stops.size)
-        assertEquals(listOf(Command.UseVerifier(setOf(0, 1, 2, 3, 4)), Command.SaveHunt(hunt)), step.commands)
+        assertEquals(listOf(Command.UseVerifier(hunt), Command.SaveHunt(hunt)), step.commands)
 
         val played = playing(Screen.Loading, hunt = null).after(Outcome.Pulled(home, local(targets), offline = false))
         assertEquals(Screen.Hunt, played.game.ui.screen)

@@ -110,3 +110,32 @@ Two harness runs from the S24 Ultra (SM-S928U, Android 16, app 0.1.0, target wat
 | 20261010-093416 | 2.2 min | charging the whole time | 0 | 386 MB | none | no |
 
 Neither run captured a frame, ran unplugged, or reached 20 minutes, so S05's heat and per-frame timing bar is still open. The longest heat data so far is still Day 2: severe thermal status at 36 minutes of continuous verify on the charger, and 5.5 minutes of capture-only verify on battery with no heat.
+
+## Hazard rule C: the fixed floor only inside North America (Oct 10)
+
+Question: if the always-on hazard floor (every *Toxicodendron*, pokeweed, and Carolina horsenettle) warns unseen only inside North America, and like any other hazard elsewhere (only when the region's pull names it), do the gate numbers move?
+
+- Run 2026-10-10 10:28 EDT on an Apple M4 Max (arm64), macOS 26.5.2. Python 3.13.14, onnxruntime 1.30.0, numpy 2.5.3, Pillow 12.3.0
+- Models and table: BioCLIP 2.5 Mobile fp32 (`flora_student_fp32.onnx` sha256 `8624d44a…`) and `species_labels.json` sha256 `6cb9e032…`, the current `make assets` build. Every hash is in the `gate.log` header
+- Script: `day-4/hazard_gate/gate.py`, with rule C added beside rule B in `day1_rerun.py`. Output is `day-4/hazard_gate/gate.log` plus `day1.csv`, `s50_s51.csv`, and `new_set.csv`
+- Rule C is rule B with the fixed 7 kept warning unseen only when the photo's hunt-region center sits in core `NorthAmerica`'s whole-degree box: latitude 5 to 72, longitude −170 to −50
+- Day 1, S50, and S51 score as West Georgia hunts, inside the box. Each new-set photo uses its own region key; 64 of its 82 photos are outside the box
+
+At k = 5:
+
+| Set | Rule B | Rule C |
+| --- | --- | --- |
+| Day-1 hazards caught | 48/52 | 48/52 |
+| Day-1 safe warned | 3/253 | 3/253 |
+| S50 safe warned | 1/50 | 1/50 |
+| S51 safe warned | 3/57 | 3/57 |
+| New-set hazards caught | 41/52 | 41/52 |
+| New-set safe warned | 3/30 | 3/30 |
+
+- No photo's warning changes at any k from 1 to 5. Day 1 and S50/S51 ranks are identical row for row, since every one of those hunts is inside the box
+- Three new-set photos outside the box change rank, and all three stay far past the top 5:
+  - A hogweed photo near 54°N, 3°W goes from 32, a western poison oak floor row, to 67, its own species now the best warning row
+  - A hemp-nettle photo near 48°N, 7°E goes from 109 to 221
+  - A caraway photo near 60°N, 60°E goes from 158 to 899
+- Every new-set pull names at least one listed hazard, so every photo still had a row that could warn. The case where nothing can warn (outside the box, and no listed hazard in the pull) is covered by core's unit tests, not by this set
+- Gate of record is now rule C, k = 5: Day-1 hazards 48/52 (bar ≥ 48) PASS, Day-1 safe 3/253 (bar ≤ 3) PASS

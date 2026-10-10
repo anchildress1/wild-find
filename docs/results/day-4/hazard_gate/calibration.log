@@ -1,10 +1,10 @@
 run date 2026-10-10; laptop CPU, onnxruntime 1.30.0, numpy 2.5.3, Pillow 12.3.0, python 3.13.14
 BioCLIP pin crazedcodernate/bioclip-2.5-mobile-fastvit@29b474ea2a5d72b4646f036ead9441e0a22a5c62; TinyCLIP pin wkcn/TinyCLIP-ViT-8M-16-Text-3M-YFCC15M@a2a8c6eaa2549ad66eb7c31b85022bf58273a26c
   asset flora_student_fp32.onnx sha256 8624d44af3727b69a41dc2035c37018a30753b8d9c93ab8801a0c724dd42510f
-  asset plant_gate.onnx sha256 bf1bdd2e939ba374498acf76162cbcc56fcc547e6e5a01aa50d5de477f6c58ed
+  asset plant_gate.onnx sha256 3f4c5cfe18f1dc7163fb64e3c22e7e85b407a5c7966c834d595525487def5b93
   asset plant_gate.json sha256 33e8990299b4cb1450dfbebe600162e5602810dc01b3e747450af4ea66a4818a
   asset species_table.npy sha256 1fd3cf277dddda6c4c0062b696d170e3b405487098e80dcc71138045835cc27d
-  asset species_labels.json sha256 f8f80ce09dff2a8d02337a0ca83c2ecc8636f8d6a03c2ddc7603947945ce178b
+  asset species_labels.json sha256 6cb9e032bf875038d4f92535d9c6328d58af50c1be00f420fb65f341823c28d4
   asset labels.npy sha256 c63489be575b96a70febd147445f496a54ed6b666ff79bbf314906efd7e4d80f
   asset labels.json sha256 f6f31b2421956d8452a821ec4f8be5d0583f6ab8661a0483932d21712a3989c5
   input docs/results/day-3/calibration.photos.csv sha256 4451ca526b6ddbbe3540ad7089655e0ec5bbf97aac496e11070111db7908379b

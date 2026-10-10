@@ -33,6 +33,7 @@ class FrameVerifierTest {
         BooleanArray(7) { it == 6 },
         BooleanArray(7) { it == 6 },
         BooleanArray(7) { true },
+        floorAlways = true,
     )
     private val labels = FloatMatrix(2, 2, floatArrayOf(1f, 0f, 0f, 1f))
     private val target = TargetGoal(labels, listOf("Quercus", "Acer"), 0, intArrayOf(0, 1), intArrayOf())
@@ -114,6 +115,7 @@ class FrameVerifierTest {
             booleanArrayOf(true, false, true),
             booleanArrayOf(true, false, true),
             BooleanArray(3) { true },
+            floorAlways = true,
         )
         val result = verifier({ plant }, { if (it) floatArrayOf(0.6f, 0.8f) else safe }, two)
             .analyze(frame, target) { close }

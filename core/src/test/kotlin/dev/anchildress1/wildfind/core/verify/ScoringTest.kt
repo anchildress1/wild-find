@@ -25,9 +25,9 @@ class ScoringTest {
 
     private fun everywhere(rows: Int) = BooleanArray(rows) { true }
 
-    /** A check whose every hazard is on the floor, so locality never changes which hazard warns. */
+    /** A North American check whose every hazard is on the floor, so locality never changes which hazard warns. */
     private fun fixed(table: FloatMatrix, hazard: BooleanArray, local: BooleanArray) =
-        HazardCheck(table, hazard, hazard, local)
+        HazardCheck(table, hazard, hazard, local, floorAlways = true)
 
     @Test
     fun `hazard rank counts every species scoring above the best hazard`() {
@@ -85,14 +85,10 @@ class ScoringTest {
 
     @Test
     fun `hazard check validates its table and the embedding`() {
-        assertThrows<IllegalArgumentException> { fixed(rows(1.0), booleanArrayOf(false), everywhere(1)) }
         assertThrows<IllegalArgumentException> { fixed(rows(1.0), booleanArrayOf(true, false), everywhere(2)) }
         assertThrows<IllegalArgumentException> { fixed(rows(1.0), booleanArrayOf(true), everywhere(2)) }
         assertThrows<IllegalArgumentException> {
-            HazardCheck(rows(1.0), booleanArrayOf(true), booleanArrayOf(true, false), everywhere(1))
-        }
-        assertThrows<IllegalArgumentException> {
-            HazardCheck(rows(1.0), booleanArrayOf(true), booleanArrayOf(false), everywhere(1))
+            HazardCheck(rows(1.0), booleanArrayOf(true), booleanArrayOf(true, false), everywhere(1), floorAlways = true)
         }
         assertThrows<IllegalArgumentException> {
             fixed(rows(1.0), booleanArrayOf(true), everywhere(1)).rank(floatArrayOf(1f))
@@ -100,12 +96,25 @@ class ScoringTest {
     }
 
     @Test
-    fun `a floor hazard warns where it was never seen`() {
+    fun `inside North America a floor hazard warns where it was never seen`() {
         val hazard = booleanArrayOf(false, false, true)
-        val check = HazardCheck(rows(10.0, 20.0, 30.0), hazard, hazard, BooleanArray(3))
+        val check = HazardCheck(rows(10.0, 20.0, 30.0), hazard, hazard, BooleanArray(3), floorAlways = true)
 
         assertEquals(HazardCheck.Ranking(topRow = 0, hazardRow = 2, hazardRank = 3), check.rank(east))
         assertTrue(check.rank(east).warns)
+    }
+
+    @Test
+    fun `outside North America a floor hazard warns only where the pull named it`() {
+        val table = rows(10.0, 20.0, 30.0)
+        val hazard = booleanArrayOf(false, false, true)
+
+        val unseen = HazardCheck(table, hazard, hazard, booleanArrayOf(true, true, false), floorAlways = false)
+        assertEquals(HazardCheck.Ranking(topRow = 0, hazardRow = null, hazardRank = null), unseen.rank(east))
+        assertFalse(unseen.rank(east).warns)
+        val seen = HazardCheck(table, hazard, hazard, everywhere(3), floorAlways = false)
+        assertEquals(HazardCheck.Ranking(topRow = 0, hazardRow = 2, hazardRank = 3), seen.rank(east))
+        assertTrue(seen.rank(east).warns)
     }
 
     @Test
@@ -114,10 +123,10 @@ class ScoringTest {
         val hazard = booleanArrayOf(true, false, false, true)
         val floor = booleanArrayOf(false, false, false, true)
 
-        val seen = HazardCheck(table, hazard, floor, booleanArrayOf(true, true, false, false))
+        val seen = HazardCheck(table, hazard, floor, booleanArrayOf(true, true, false, false), floorAlways = true)
         assertEquals(HazardCheck.Ranking(topRow = 0, hazardRow = 0, hazardRank = 1), seen.rank(east))
         // Unseen, row 0 still outscores the floor hazard, so it counts toward the floor hazard's rank.
-        val unseen = HazardCheck(table, hazard, floor, booleanArrayOf(false, true, false, false))
+        val unseen = HazardCheck(table, hazard, floor, booleanArrayOf(false, true, false, false), floorAlways = true)
         assertEquals(HazardCheck.Ranking(topRow = 1, hazardRow = 3, hazardRank = 4), unseen.rank(east))
         assertTrue(unseen.rank(east).warns)
     }
@@ -129,6 +138,7 @@ class ScoringTest {
             booleanArrayOf(true, false, false, false, false, true),
             booleanArrayOf(false, false, false, false, false, true),
             BooleanArray(6),
+            floorAlways = true,
         )
 
         assertEquals(6, check.rank(east).hazardRank)

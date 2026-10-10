@@ -102,7 +102,9 @@ class FrameVerifier(
         val embedded = clock()
         val reticleRank = reticleEmbedding?.takeIf { goal.checksHazards }?.let(hazards::rank)
         val fullRank = fullEmbedding?.let(hazards::rank)
-        val warning = listOfNotNull(reticleRank, fullRank).filter { it.warns }.minByOrNull { it.hazardRank }
+        // A warning ranking always has a rank, so the best-ranked one is the hazard that warned.
+        val warning = listOfNotNull(reticleRank, fullRank).filter { it.warns }
+            .minByOrNull { checkNotNull(it.hazardRank) }
         val ranked = clock()
         // Day 5 measured the target rule on exactly this input: a full frame only when the gate called it a plant.
         val score = reticleEmbedding?.let { goal.score(it, fullEmbedding) }

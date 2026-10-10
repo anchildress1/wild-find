@@ -3,6 +3,10 @@
 Run from the repo root after make assets:
     uv --project pipeline run python -I docs/results/day-4/hazard_gate/gate.py > docs/results/day-4/hazard_gate/gate.log
 
+Rule C (Oct 10) is rule B with the fixed 7 kept warning unseen only when the photo's hunt region center is inside
+core NorthAmerica's whole-degree box (lat 5 to 72, lng -170 to -50); Day 1, S50, and S51 score as West Georgia hunts,
+inside it, and each new-set photo uses its own region.
+
 Rule as core HazardCheck and FrameVerifier ship it: warn when the best hazard row ranks in the top k of the whole
 4,272-row species table (1 + rows scoring above it, ties warn) on the reticle or full-frame crop the plant gate passes.
 The rank never depends on the hunt's local rows (HazardCheck counts every row; local rows only pick the species it
@@ -74,11 +78,12 @@ SHARE = 0.005
 MIN_SIGHTINGS = 3
 MAX_NAME_WORDS = 3
 MIN_TARGETS = 3
-# Owner's decision, Oct 10: ship rule B at k = 5; the Day-1 safe bar relaxed from <= 1 to <= 3 of 253 after the
-# original bar failed under every rule and cutoff measured here.
-GATE_RULE, GATE_K = "local", 5
+# Owner's decisions, Oct 10: ship rule B at k = 5, then rule C (rule B with the fixed 7 kept unseen only inside North
+# America); the Day-1 safe bar relaxed from <= 1 to <= 3 of 253 after the original bar failed under every rule and
+# cutoff measured here.
+GATE_RULE, GATE_K = "na", 5
 CAUGHT_BAR, SAFE_BAR, ORIGINAL_SAFE_BAR = 48, 3, 1
-CANDIDATES = ("new", "local", "tri", "tri_local")
+CANDIDATES = ("new", "local", "na", "tri", "tri_local")
 MODEL_PINS = ("bioclip", "teacher", "tinyclip", "taxa", "taxa_labels")
 
 
@@ -136,14 +141,16 @@ def eligibility() -> None:
     print(f"  local rows that became blockers ({len(newly)}): {', '.join(newly) or 'none'}")
 
 
-def ranked_rows(v, manifest: list[dict], photos: Path, kind_of, local_of) -> list[dict]:
-    """app_regions for every manifest photo under every rule, rule B with `local_of(photo)`'s row mask."""
+def ranked_rows(v, manifest: list[dict], photos: Path, kind_of, local_of, na_of) -> list[dict]:
+    """app_regions for every manifest photo under every rule, rules B and C with `local_of(photo)`'s row mask and C
+    with `na_of(photo)`, whether its hunt region is in North America."""
     labels = json.loads((cal.ASSETS / "species_labels.json").read_text())
     names = [e["scientific"] for e in labels]
     out = []
     for p in manifest:
         row = {"set": p["set"], "photo": p["photo"], "species": p["species"], "kind": kind_of(p)}
-        out.append(row | d1.app_regions(v, photos / p["photo"], d1.flag_sets(labels, local_of(p)), names))
+        flags = d1.flag_sets(labels, local_of(p), na_of(p))
+        out.append(row | d1.app_regions(v, photos / p["photo"], flags, names))
     return out
 
 
@@ -186,7 +193,8 @@ def s50_s51(v, local: np.ndarray) -> list[dict]:
 
     rows = []
     for name, manifest, photos in (("S50", cal.MANIFEST, cal.PHOTOS), ("S51", hold.MANIFEST, hold.PHOTOS)):
-        part = ranked_rows(v, list(csv.DictReader(manifest.open())), photos, kind_of, lambda p: local)
+        # Scored as West Georgia hunts, inside North America, as Day 3 did.
+        part = ranked_rows(v, list(csv.DictReader(manifest.open())), photos, kind_of, lambda p: local, lambda p: True)
         rows += [{"run": name} | r for r in part]
         day3 = {
             r["photo"]: r["hazard_warn"] == "True"
@@ -303,13 +311,17 @@ def new_set(v) -> list[dict]:
     for photo, h in hunts.items():
         masks[photo] = np.zeros(len(entries), dtype=bool)
         masks[photo][list(h["rows"])] = True
-    rows = ranked_rows(v, manifest, NEW_PHOTOS, lambda p: p["set"], lambda p: masks[p["photo"]])
+    na = {photo: d1.in_north_america(*map(int, h["region"].split("_"))) for photo, h in hunts.items()}
+    rows = ranked_rows(
+        v, manifest, NEW_PHOTOS, lambda p: p["set"], lambda p: masks[p["photo"]], lambda p: na[p["photo"]]
+    )
     for r, p in zip(rows, manifest, strict=True):
         h = hunts[p["photo"]]
         r |= {"region": region[p["observation"]], "on_list": labels[r["species"]]["hazard"],
               "on_triaged_list": bool(triaged[row_of[r["species"]]]),
               "species_local": row_of[r["species"]] in h["rows"], "hunt_region": h["region"], "month": h["month"],
-              "radius_km": h["radius"], "hunt_status": h["status"], "obscured": h["obscured"]}  # fmt: skip
+              "radius_km": h["radius"], "hunt_status": h["status"], "obscured": h["obscured"],
+              "in_north_america": na[p["photo"]]}  # fmt: skip
     cal.write(OUT / "new_set.csv", rows)
     hz = [r for r in rows if r["kind"] == "hazard"]
     on = [r for r in hz if r["on_list"]]
@@ -338,7 +350,7 @@ def new_set(v) -> list[dict]:
         ks = " | ".join("/".join(str(sum(r[f"rank_{n}"] <= k for r in g)) for k in (3, 4, 5)) for n in CANDIDATES)
         off = ", off list" if g[0]["kind"] == "hazard" and not g[0]["on_list"] else ""
         print(f"  {g[0]['kind']} {species} ({len(g)}{off}, local in {sum(r['species_local'] for r in g)}): {ks}")
-    print("hazard photos missed and safe photos warned at k=5 by rule A or B:")
+    print("hazard photos missed and safe photos warned at k=5 by rule A, B, or C:")
     listing(rows, lambda r: (r["kind"] == "hazard" and not all(warns(r, n) for n in CANDIDATES))
             or (r["kind"] == "safe" and any(warns(r, n) for n in CANDIDATES)))  # fmt: skip
     return rows
@@ -394,7 +406,8 @@ def main() -> int:
     h = cal.hunt(cal.ASSETS)
     v = cal.Verifier(cal.ASSETS, h)
     wg = d1.west_georgia(h)
-    print(f"rule B local set for Day 1, S50, S51: the cached West Georgia October pull, {wg.sum()} table rows, "
+    print(f"rule B and C local set for Day 1, S50, S51 (inside North America): the cached West Georgia October pull, "
+          f"{wg.sum()} table rows, "
           f"{(wg & d1.flag_sets(json.loads((cal.ASSETS / 'species_labels.json').read_text()))['new']).sum()} of them "
           f"generated hazards")  # fmt: skip
     section("Day 1 set (day1_rerun.py)")

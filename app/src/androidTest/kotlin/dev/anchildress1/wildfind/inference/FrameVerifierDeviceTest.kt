@@ -11,6 +11,7 @@ import dev.anchildress1.wildfind.core.frame.RgbaFrame
 import dev.anchildress1.wildfind.core.frame.blue
 import dev.anchildress1.wildfind.core.frame.green
 import dev.anchildress1.wildfind.core.frame.red
+import dev.anchildress1.wildfind.core.region.RegionKey
 import dev.anchildress1.wildfind.core.verify.Focus
 import dev.anchildress1.wildfind.core.verify.FrameVerifier
 import dev.anchildress1.wildfind.core.verify.HazardCheck
@@ -53,7 +54,7 @@ class FrameVerifierDeviceTest {
                         bundled.plantGate(),
                         gate,
                         bioclip,
-                        bundled.hazardCheck(table, species, species.indices.toSet()),
+                        bundled.hazardCheck(table, species, species.indices.toSet(), WEST_GEORGIA),
                     )
                 verifier.analyze(frame, goal) { focus } // warm-up, excluded from timing
                 val runs = List(RUNS) { verifier.analyze(frame, goal) { focus } }
@@ -66,7 +67,7 @@ class FrameVerifierDeviceTest {
                 assertEquals(gateReference().getDouble("plant_share"), result.fullShare, SHARE_TOLERANCE)
                 assertTrue(result.evidence.reticlePlant)
                 assertNull(result.evidence.hazardRow)
-                assertTrue(result.fullRanking!!.hazardRank > HazardCheck.TOP_K)
+                assertTrue(checkNotNull(result.fullRanking?.hazardRank) > HazardCheck.TOP_K)
             }
         }
     }
@@ -111,6 +112,9 @@ class FrameVerifierDeviceTest {
 
     private companion object {
         const val TAG = "FrameVerifierDevice"
+
+        // The fixture frame is a West Georgia plant, so the floor warns as it does in a hunt there.
+        val WEST_GEORGIA = RegionKey(34, -85)
         const val RUNS = 5
         const val BYTES_PER_PIXEL = 4
         const val OPAQUE: Byte = -1

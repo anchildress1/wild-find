@@ -157,9 +157,9 @@ sealed interface Command {
     /**
      * Build the capture loop for a hunt, or drop it.
      *
-     * @property local the hunt's local rows, or null to drop the loop
+     * @property hunt the hunt whose local rows and region the loop checks against, or null to drop the loop
      */
-    data class UseVerifier(val local: Set<Int>?) : Command
+    data class UseVerifier(val hunt: ActiveHunt?) : Command
 
     /** Drop the running capture. */
     data object CancelCapture : Command
@@ -489,7 +489,7 @@ private class Turn(private var game: Game, private val random: Random) {
     private fun startHunt(active: ActiveHunt) {
         update { it.copy(hintsShown = emptyMap()) }
         game = game.copy(hunt = active)
-        commands += Command.UseVerifier(active.local)
+        commands += Command.UseVerifier(active)
         publish(active)
     }
 

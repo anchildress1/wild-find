@@ -50,7 +50,21 @@ SHIPPED_K = 5
 NONE = 10**9
 
 
-RULES = {"old": "fixed 7", "new": "rule A", "local": "rule B", "tri": "A triage", "tri_local": "B triage"}
+RULES = {
+    "old": "fixed 7",
+    "new": "rule A",
+    "local": "rule B",
+    "na": "rule C",
+    "tri": "A triage",
+    "tri_local": "B triage",
+}
+# core NorthAmerica: the whole-degree box where rule C keeps the fixed 7 warning unseen.
+NA_LAT, NA_LNG = (5, 72), (-170, -50)
+
+
+def in_north_america(lat: int, lng: int) -> bool:
+    """core NorthAmerica.contains on a whole-degree region center."""
+    return NA_LAT[0] <= lat <= NA_LAT[1] and NA_LNG[0] <= lng <= NA_LNG[1]
 
 
 def triaged(labels: list[dict]) -> np.ndarray:
@@ -63,20 +77,28 @@ def triaged(labels: list[dict]) -> np.ndarray:
     return np.array([verdict.get(e["scientific"], "approve" if e["hazard"] else "reject") == "approve" for e in labels])
 
 
-def flag_sets(labels: list[dict], local: np.ndarray | None = None) -> dict[str, np.ndarray]:
+def flag_sets(labels: list[dict], local: np.ndarray | None = None, in_na: bool | None = None) -> dict[str, np.ndarray]:
     """Hazard rows each rule ranks: `old` the fixed 7, `new` (rule A) the generated `hazard` column, `local` (rule B)
-    the fixed 7 plus generated hazards seen in the region's pull, when `local` (a per-row mask) is given; `tri` and
-    `tri_local` are rules A and B over the triaged list. The fixed 7 always stay listed."""
+    the fixed 7 plus generated hazards seen in the region's pull, when `local` (a per-row mask) is given; `na` (rule C,
+    shipped Oct 10) rule B with the fixed 7 kept unseen only when `in_na` says the region is in North America; `tri`
+    and `tri_local` are rules A and B over the triaged list."""
     old = np.array([is_hazard(e["scientific"]) for e in labels])
     new = np.array([e["hazard"] for e in labels])
     tri = old | triaged(labels)
     out = {"old": old, "new": new, "tri": tri}
-    return out if local is None else out | {"local": old | (new & local), "tri_local": old | (tri & local)}
+    if local is None:
+        return out
+    if in_na is None:
+        raise ValueError("rule C needs the region's North America flag")
+    return out | {"local": old | (new & local), "na": (old & in_na) | (new & local), "tri_local": old | (tri & local)}
 
 
 def best_hazard(scores: np.ndarray, flags: np.ndarray) -> tuple[int, int]:
-    """(1-based rank, row) of the best hazard row; rows tied with it rank below it, as core HazardCheck."""
+    """(1-based rank, row) of the best hazard row; rows tied with it rank below it, as core HazardCheck. With no row
+    that can warn, (NONE, -1): nothing warns."""
     rows = np.flatnonzero(flags)
+    if rows.size == 0:
+        return NONE, -1
     row = int(rows[np.argmax(scores[rows])])
     return int(1 + (scores > scores[row]).sum()), row
 
@@ -110,7 +132,7 @@ def app_regions(v, path: Path, flags: dict[str, np.ndarray], names: list[str]) -
         for name, f in flags.items():
             rank, row = best_hazard(scores, f)
             out[f"{region}_rank_{name}"] = rank
-            out[f"{region}_hazard_{name}"] = names[row]
+            out[f"{region}_hazard_{name}"] = names[row] if row >= 0 else "none"
     for name in flags:
         out[f"rank_{name}"] = warn_rank([(out[f"{r}_plant"], out[f"{r}_rank_{name}"]) for r in ("reticle", "full")])
     return out
@@ -149,7 +171,8 @@ def run(v, local: np.ndarray) -> list[dict]:
     against Day 1's own ranks."""
     labels = json.loads((cal.ASSETS / "species_labels.json").read_text())
     names = [e["scientific"] for e in labels]
-    flags = flag_sets(labels, local)
+    # Every Day-1 photo is scored as a West Georgia hunt, which is inside North America.
+    flags = flag_sets(labels, local, in_na=True)
     shares = day1_shares()
     day1_rank = {(r["photo"], r["region"]): int(r["best_hazard_rank"])
                  for r in csv.DictReader((DAY1 / "species_scores.csv").open())}  # fmt: skip
