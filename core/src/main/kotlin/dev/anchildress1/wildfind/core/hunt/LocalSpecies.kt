@@ -22,6 +22,10 @@ data class Sighting(val scientific: String, val common: String?, val count: Int)
  * @property synonyms other names GBIF gives this species, so a drifted iNat name still finds the row
  * @property description a generic kid-level sentence, the plant type in kid words, or null when the build found none
  * @property hints the build's ranked "where to look" hints, every seasonal one included; empty when it wrote none
+ * @property hazardLine a short kid line for the warning card, on hazard rows only; null when the build wrote none
+ * @property hazardFloor a fixed-floor hazard, which warns in every region; always a hazard
+ * @property target false for a row the build holds back from target picks; it stays eligible, so it still competes
+ *   in verify row 4
  */
 data class SpeciesRow(
     val scientific: String,
@@ -32,6 +36,9 @@ data class SpeciesRow(
     val synonyms: List<String> = emptyList(),
     val description: String? = null,
     val hints: List<Hint> = emptyList(),
+    val hazardLine: String? = null,
+    val hazardFloor: Boolean = false,
+    val target: Boolean = true,
 ) {
     /** Neither toxic nor a hazard, so it can be a target. */
     val playable: Boolean get() = !toxic && !hazard
@@ -49,11 +56,11 @@ data class SpeciesRow(
             rows.firstOrNull { it.genus != it.scientific.substringBefore(' ') }?.let {
                 throw IllegalArgumentException("${it.scientific} has genus ${it.genus}")
             }
-            require(rows.any { it.hazard }) { "no hazard species" }
-            // A hazard must never be a target, even if a toxicity rebuild misses it.
-            rows.firstOrNull { it.hazard && !it.toxic }?.let {
-                throw IllegalArgumentException("hazard ${it.scientific} is not toxic-flagged")
-            }
+            require(rows.any { it.hazardFloor }) { "no floor hazard species" }
+            val notHazard = rows.firstOrNull { it.hazardFloor && !it.hazard }
+            require(notHazard == null) { "floor hazard ${notHazard?.scientific} is not a hazard" }
+            val badLine = rows.firstOrNull { it.hazardLine != null && (!it.hazard || it.hazardLine.isBlank()) }
+            require(badLine == null) { "${badLine?.scientific} has a bad hazard line" }
             return rows
         }
     }
@@ -74,7 +81,8 @@ data class Eligible(val row: Int, val common: String, val count: Int)
  * @property eligible playable species, most sighted first
  * @property blockers every local toxic-flagged and hazard row, at any sighting count; never targets, but they block
  *   verify row 4
- * @property needsWiden fewer than [LocalSpecies.MIN_TARGETS] eligible genera, so the pull widens to 150 km once
+ * @property needsWiden fewer than [LocalSpecies.MIN_TARGETS] pickable eligible genera, so the pull widens to 150 km
+ *   once
  */
 data class LocalList(val eligible: List<Eligible>, val blockers: IntArray, val needsWiden: Boolean) {
     override fun equals(other: Any?): Boolean = other is LocalList &&
@@ -107,8 +115,9 @@ class LocalSpecies(private val table: List<SpeciesRow>, private val rowOf: (Stri
         }.sortedWith(compareByDescending<Eligible> { it.count }.thenBy { it.row })
         // Any sighting blocks: the floor-only blockers let 87 of 180 toxic photos pass as some target on Oct 7.
         val blockers = byRow.keys.filterNot { table[it].playable }.sorted().toIntArray()
-        // A hunt takes one target per genus, so three species of two genera still can't fill it.
-        val genera = eligible.distinctBy { table[it.row].genus }.size
+        // A hunt takes one target per genus, so three species of two genera still can't fill it; a row held back from
+        // picks can't fill a slot either.
+        val genera = eligible.filter { table[it.row].target }.distinctBy { table[it.row].genus }.size
         return LocalList(eligible, blockers, needsWiden = genera < MIN_TARGETS)
     }
 

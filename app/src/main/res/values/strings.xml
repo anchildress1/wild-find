@@ -50,6 +50,7 @@
     <string name="pick_area">Pick my area</string>
     <string name="needs_signal">This place needs signal once.</string>
     <string name="needs_signal_detail">After that, hunts here work without it.</string>
+    <string name="needs_signal_grown_ups">Grown-ups: save this area for hunts without signal</string>
     <string name="try_again">Try again</string>
     <string name="offline_banner">No signal. Using your saved hunt.</string>
     <string name="camera_needed">The game needs the camera to see the plants you find.</string>
@@ -108,6 +109,7 @@
     <string name="cue_keep">Keep looking for %s</string>
     <string name="hazard">That might be a plant we leave extra space around.</string>
     <string name="hazard_detail">Step back and look somewhere else.</string>
+    <string name="hazard_dismiss">Look somewhere else</string>
 
     <string name="found_title">Found it!</string>
     <plurals name="found_progress">
@@ -164,7 +166,7 @@
     </plurals>
     <string name="hunting_area">Hunting area</string>
     <string name="hunting_area_detail">%1$s · change it on the map</string>
-    <string name="replay_opener">Watch the safety intro again</string>
+    <string name="replay_opener">Repeat intro</string>
     <string name="made_with">Made with</string>
     <string name="credits_models">Models on this phone: BioCLIP 2.5 Mobile · TinyCLIP ViT-8M</string>
     <string name="credits_data">Data: iNaturalist · Wikipedia · USDA PLANTS · GBIF · Natural Earth</string>

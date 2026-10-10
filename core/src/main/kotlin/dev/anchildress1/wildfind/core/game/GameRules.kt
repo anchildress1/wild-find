@@ -157,9 +157,9 @@ sealed interface Command {
     /**
      * Build the capture loop for a hunt, or drop it.
      *
-     * @property local the hunt's local rows, or null to drop the loop
+     * @property hunt the hunt whose local rows and region the loop checks against, or null to drop the loop
      */
-    data class UseVerifier(val local: Set<Int>?) : Command
+    data class UseVerifier(val hunt: ActiveHunt?) : Command
 
     /** Drop the running capture. */
     data object CancelCapture : Command
@@ -246,6 +246,7 @@ private class Turn(private var game: Game, private val random: Random) {
             GameEvent.LoadHunt -> load()
             is GameEvent.OpenCamera -> openCamera(event.row)
             GameEvent.Capture -> capture(screen)
+            GameEvent.DismissHazard -> dismissHazard()
             GameEvent.Next -> next(screen)
             GameEvent.Skip -> skip(screen)
             GameEvent.ToHunt -> toHunt()
@@ -354,9 +355,20 @@ private class Turn(private var game: Game, private val random: Random) {
 
     private fun openerDone(screen: Screen) {
         val back = (screen as? Screen.Opener)?.back
-        if (back != null) return show(back)
+        if (back != null) return repeatIntro()
         save(game.flags.copy(openerSeen = true))
         resume()
+    }
+
+    // Repeat intro plays the whole first launch again: the grass practice comes next, in front of the current hunt's
+    // remaining targets, or opening the next hunt when none is running. The area, cache, and finds stay.
+    private fun repeatIntro() {
+        save(game.flags.copy(tutorialDone = false))
+        val active = game.hunt?.takeUnless { it.progress.complete } ?: return show(Screen.Start)
+        val updated = active.copy(progress = active.progress.copy(tutorialPending = true))
+        game = game.copy(hunt = updated)
+        persist(updated)
+        show(Screen.Tutorial)
     }
 
     // From the area choice, a found area starts the hunt and anything else opens the map; on the map, Locate only
@@ -477,7 +489,7 @@ private class Turn(private var game: Game, private val random: Random) {
     private fun startHunt(active: ActiveHunt) {
         update { it.copy(hintsShown = emptyMap()) }
         game = game.copy(hunt = active)
-        commands += Command.UseVerifier(active.local)
+        commands += Command.UseVerifier(active)
         publish(active)
     }
 
@@ -514,6 +526,11 @@ private class Turn(private var game: Game, private val random: Random) {
         commands += Command.Capture(camera, game.session + 1, active)
     }
 
+    private fun dismissHazard() {
+        if (ui.camera.cue != CaptureCue.HAZARD) return
+        update { it.copy(camera = it.camera.copy(cue = null, hazardLine = null)) }
+    }
+
     // A refused tap never reports, so it leaves the running session alone.
     private fun captureStarted(session: Int) {
         game = game.copy(session = session)
@@ -528,7 +545,8 @@ private class Turn(private var game: Game, private val random: Random) {
             return update { it.copy(camera = it.camera.copy(matched = verdict.frames)) }
         }
         val cue = CaptureCue.of(verdict, PlantGate.isPlant(frame.result.fullShare))
-        update { it.copy(camera = it.camera.copy(checking = false, matched = 0, cue = cue)) }
+        val line = (verdict as? Verdict.Hazard)?.let { game.rows?.get(it.row)?.hazardLine }
+        update { it.copy(camera = it.camera.copy(checking = false, matched = 0, cue = cue, hazardLine = line)) }
         when (cue) {
             CaptureCue.HAZARD -> commands += Command.Haptic(GameEffect.Reject)
             CaptureCue.FOUND -> found(frame.camera.row, frame.result.reticle)

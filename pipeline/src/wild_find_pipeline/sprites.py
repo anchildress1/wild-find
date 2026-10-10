@@ -16,6 +16,17 @@ OUT = REPO / "app/src/main/assets/briar"
 PLANTS_OUT = REPO / "app/src/main/assets/plants"
 # One painted picture per PRD plant type, named by its `type` key in species_labels.json.
 PLANT_TYPES = ("tree", "shrub", "vine", "herb", "grass", "fern", "moss", "conifer")
+# The picture for a species whose `type` is null; not a type, so no species-table row ever names it.
+UNTYPED = "plant"
+# The opener's watercolor forest. The source is 841 px wide, under a phone's 1080, so it ships at its own size;
+# quality 80 looked the same as the source side by side on Oct 10.
+BACKGROUND = "background.png"
+BACKGROUND_OUT = REPO / "app/src/main/assets/opener_background.webp"
+BACKGROUND_QUALITY = 80
+# The leafy "Wild Find" title art, shown on Start and the safety opener; it tops out near 300 dp wide, about 900 px.
+TITLE = "wild-find-title-text.png"
+TITLE_OUT = REPO / "app/src/main/assets/title.webp"
+TITLE_PX = 900
 # Adaptive launcher icon layers, 108 dp each, written per density from the 432 px (xxxhdpi) sources.
 ICON_SOURCE = SOURCE / "app_icons"
 ICON_RES = REPO / "app/src/main/res"
@@ -38,10 +49,33 @@ VIDEOS = {
 }
 # The videos render Briar on white; white touching the frame's edge is background, so white fur inside him stays.
 WHITE = 232
+# White that the legs, arms, or leaves close off is still background, but so are Briar's eye whites and fur highlights.
+# Oct 10, every frame of all five videos: closed-off white that borders green leaves occurs only in the warning clip's
+# leaf band, never next to an eye or fur; and the flattest, brightest closed-off white (mean min channel 246.9-251,
+# spread 3.6 or less) is background too, while the closest eye white measured 245.8 and 3.6. Below POCKET_PX,
+# compression noise decides it, so a speck stays.
+POCKET_MIN = 246.5
+POCKET_SPREAD = 3.6
+POCKET_PX = 50
+# Share of a closed-off region's rim within LEAF_REACH px of leaf green that marks it as a gap between leaves.
+LEAF_RIM = 0.05
+LEAF_REACH = 3
+LEAF_MARGIN = 12
+# Leaves are big green patches; green glints in Briar's eyes are small, and the closed-off white beside them is an eye.
+LEAF_PX = 400
+# The leaves cast a warm, soft shadow on the white floor, too warm for the grey shadow rule; near leaves, pale
+# pixels this even that touch the background go with it.
+LEAF_SHADOW_SPREAD = 45
 # Cast shadows are pale neutral grey; grey this light and this even, touching the background, goes with it. Fur and
 # leaves are warmer or darker, so they stay.
 SHADOW_MIN = 150
 SHADOW_SPREAD = 18
+# Floor band: from this share of the frame's height down, pale pixels this light and even are floor, not Briar.
+FLOOR_FROM = 0.75
+FLOOR_MIN = 170
+FLOOR_SPREAD = 40
+SHADOW_FROM = 0.84
+SHADOW_FLOOR_MIN = 140
 # The background fades into Briar over this many pixels, softening the keyed edge.
 FADE_PX = 2.5
 VIDEO_QUALITY = 80
@@ -54,20 +88,44 @@ def solid_height(frame: Image.Image) -> int:
 
 
 def key_white(rgb: np.ndarray) -> np.ndarray:
-    """RGBA from one video frame: near-white connected to the frame's edge turns transparent, with any pale grey
-    shadow touching it.
+    """RGBA from one video frame: near-white connected to the frame's edge, or closed off but flat paper white or
+    hemmed in by leaves, turns transparent, with any pale grey shadow touching it.
 
     Edge pixels get their white spill divided out, so no light rim shows on a dark page.
     """
     image = rgb.astype(np.float32)
     low = image.min(axis=2)
     labels, _ = ndimage.label(low > WHITE)
+    count = int(labels.max())
     edge = np.unique(np.concatenate([labels[0], labels[-1], labels[:, 0], labels[:, -1]]))
-    white = np.isin(labels, edge[edge > 0])
-    shadow = (low > SHADOW_MIN) & (image.max(axis=2) - low < SHADOW_SPREAD)
+    ids = np.arange(1, count + 1)
+    size = ndimage.sum(np.ones_like(low), labels, ids)
+    brightness = ndimage.mean(low, labels, ids)
+    spread = ndimage.mean(image.max(axis=2) - low, labels, ids)
+    near_white = labels > 0
+    rim = near_white & ~ndimage.binary_erosion(near_white)
+    r, g, b = image[..., 0], image[..., 1], image[..., 2]
+    green = (g > r + LEAF_MARGIN) & (g > b + LEAF_MARGIN)
+    patches, _ = ndimage.label(green)
+    patch_px = np.bincount(patches.ravel())
+    green &= patch_px[patches] >= LEAF_PX
+    leaf = ndimage.binary_dilation(green, iterations=LEAF_REACH)
+    leaf_near = ndimage.binary_dilation(green, iterations=2 * LEAF_REACH) & ~green
+    leafy = ndimage.sum(rim & leaf, labels, ids) / np.maximum(ndimage.sum(rim, labels, ids), 1)
+    flat = (brightness >= POCKET_MIN) & (spread <= POCKET_SPREAD)
+    pockets = ids[(size >= POCKET_PX) & (flat | (leafy >= LEAF_RIM))]
+    white = np.isin(labels, np.concatenate([edge[edge > 0], pockets]))
+    even = image.max(axis=2) - low
+    shadow = (low > SHADOW_MIN) & ((even < SHADOW_SPREAD) | (leaf_near & (even < LEAF_SHADOW_SPREAD)))
     grown, _ = ndimage.label(white | shadow)
     touching = np.unique(grown[white])
     background = np.isin(grown, touching[touching > 0])
+    # Below Briar's knees only leaves, brown paws, and the white floor with its warm shadows show; the leaves wall
+    # off floor pockets no connectivity rule reaches, so every pale, even, non-leaf pixel there is floor.
+    row = np.arange(low.shape[0])[:, None]
+    background |= (row >= int(low.shape[0] * FLOOR_FROM)) & (low > FLOOR_MIN) & (even < FLOOR_SPREAD) & ~green
+    # Lower still, past the paws' tops, the leaves' warm shadow is the only pale thing; the paws are dark brown.
+    background |= (row >= int(low.shape[0] * SHADOW_FROM)) & (low > SHADOW_FLOOR_MIN) & ~green
     alpha = np.clip(ndimage.distance_transform_edt(~background) / FADE_PX, 0, 1)[..., None]
     color = np.where(alpha > 0, (image - (1 - alpha) * 255) / np.maximum(alpha, 1e-3), 0)
     return np.dstack([np.clip(color, 0, 255), alpha[..., 0] * 255]).astype(np.uint8)
@@ -99,6 +157,15 @@ def video_frames(path: Path, first: int, end: int) -> tuple[list[np.ndarray], fl
     return frames[first:end], rate
 
 
+def trimmed(source: Image.Image) -> Image.Image:
+    """The picture as RGBA cropped to its visible pixels, ignoring glow fainter than ALPHA_FLOOR."""
+    rgba = source.convert("RGBA")
+    box = rgba.getchannel("A").point(lambda a: 255 if a >= ALPHA_FLOOR else 0).getbbox()
+    if box is None:
+        raise ValueError("the picture is empty")
+    return rgba.crop(box)
+
+
 def plant_art(source: Image.Image) -> Image.Image:
     """One plant-type picture on a PLANT_PX square, trimmed to the plant and standing on the bottom edge.
 
@@ -120,7 +187,7 @@ def plant_art(source: Image.Image) -> Image.Image:
 
 
 def main() -> int:
-    """Write <state>.webp and <state>.json for every Briar video, and one WebP per plant."""
+    """Write each Briar clip with its JSON, one WebP per plant, the opener background, and the title."""
     OUT.mkdir(parents=True, exist_ok=True)
     PLANTS_OUT.mkdir(parents=True, exist_ok=True)
     for layer in ICON_LAYERS:
@@ -137,7 +204,14 @@ def main() -> int:
     square.alpha_composite(star, ((side - star.width) // 2, (side - star.height) // 2))
     square.resize((STAR_PX, STAR_PX), Image.Resampling.LANCZOS).save(OUT.parent / "star.webp", quality=90, method=6)
     print(f"OK: star {STAR_PX}x{STAR_PX}")
-    for kind in PLANT_TYPES:
+    background = Image.open(SOURCE / BACKGROUND).convert("RGB")
+    background.save(BACKGROUND_OUT, quality=BACKGROUND_QUALITY, method=6)
+    print(f"OK: opener background {background.width}x{background.height}, {BACKGROUND_OUT.stat().st_size} bytes")
+    title = trimmed(Image.open(SOURCE / TITLE))
+    title = title.resize((TITLE_PX, round(title.height * TITLE_PX / title.width)), Image.Resampling.LANCZOS)
+    title.save(TITLE_OUT, quality=90, method=6)
+    print(f"OK: title {title.width}x{title.height}, {TITLE_OUT.stat().st_size} bytes")
+    for kind in (*PLANT_TYPES, UNTYPED):
         plant_art(Image.open(SOURCE / f"{kind}.png")).save(PLANTS_OUT / f"{kind}.webp", quality=90, method=6)
         print(f"OK: plant {kind} {PLANT_PX}x{PLANT_PX}")
     for name, (file, first, end) in VIDEOS.items():

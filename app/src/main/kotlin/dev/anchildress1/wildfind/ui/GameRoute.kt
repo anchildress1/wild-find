@@ -116,7 +116,11 @@ private fun ScreenFor(screen: Screen, state: GameState, vm: GameViewModel) {
 
         Screen.Loading -> LoadingScreen()
 
-        Screen.NeedsSignal -> NeedsSignalScreen({ on(GameEvent.LoadHunt) }, { on(GameEvent.ChangeRegion) })
+        Screen.NeedsSignal -> NeedsSignalScreen(
+            { on(GameEvent.LoadHunt) },
+            { on(GameEvent.ChangeRegion) },
+            { on(GameEvent.OpenGrownUps) },
+        )
 
         Screen.NotEnough -> NotEnoughScreen { on(GameEvent.ChangeRegion) }
 
@@ -142,6 +146,7 @@ private fun ScreenFor(screen: Screen, state: GameState, vm: GameViewModel) {
             onSkip = { on(GameEvent.Skip) },
             onHint = { screen.row?.let { on(GameEvent.RevealHint(it)) } },
             onBack = { on(GameEvent.Back) },
+            onDismissHazard = { on(GameEvent.DismissHazard) },
         )
 
         is Screen.Found -> FoundScreen(

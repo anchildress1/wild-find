@@ -31,7 +31,9 @@ class FrameVerifierTest {
     private val hazards = HazardCheck(
         FloatMatrix(7, 2, FloatArray(14) { if (it < 12) (1 - it % 2).toFloat() else (it - 12).toFloat() }),
         BooleanArray(7) { it == 6 },
+        BooleanArray(7) { it == 6 },
         BooleanArray(7) { true },
+        floorAlways = true,
     )
     private val labels = FloatMatrix(2, 2, floatArrayOf(1f, 0f, 0f, 1f))
     private val target = TargetGoal(labels, listOf("Quercus", "Acer"), 0, intArrayOf(0, 1), intArrayOf())
@@ -45,7 +47,11 @@ class FrameVerifierTest {
     private val calls = mutableListOf<String>()
 
     /** A verifier whose fakes answer per crop: [gateOut] and [bioclipOut] get true for the reticle crop. */
-    private fun verifier(gateOut: (Boolean) -> FloatArray, bioclipOut: (Boolean) -> FloatArray) = FrameVerifier(
+    private fun verifier(
+        gateOut: (Boolean) -> FloatArray,
+        bioclipOut: (Boolean) -> FloatArray,
+        hazards: HazardCheck = this.hazards,
+    ) = FrameVerifier(
         gate,
         { p -> gateOut(p.isReticle()).also { calls += "gate:${region(p)}" } },
         { p -> bioclipOut(p.isReticle()).also { calls += "bioclip:${region(p)}" } },
@@ -54,11 +60,14 @@ class FrameVerifierTest {
     )
 
     @Test
-    fun `plants in both regions run BioCLIP on each and score the goal on the reticle`() {
+    fun `plants in both regions run BioCLIP on each and score the goal on both`() {
         val result = verifier({ plant }, { safe }).analyze(frame, target) { close }
 
         assertEquals(listOf("gate:reticle", "gate:full", "bioclip:reticle", "bioclip:full"), calls)
-        assertEquals(FrameEvidence(hazard = false, reticlePlant = true, focus = close, goalMet = true), result.evidence)
+        assertEquals(
+            FrameEvidence(hazardRow = null, reticlePlant = true, focus = close, goalMet = true),
+            result.evidence,
+        )
         assertEquals(7, result.reticleRanking?.hazardRank)
         assertEquals(7, result.fullRanking?.hazardRank)
         assertEquals(1, result.goal?.rank)
@@ -69,7 +78,7 @@ class FrameVerifierTest {
         val result = verifier({ if (it) plant else notPlant }, { hazard }).analyze(frame, target) { close }
 
         assertEquals(listOf("gate:reticle", "gate:full", "bioclip:reticle"), calls)
-        assertTrue(result.evidence.hazard)
+        assertEquals(6, result.evidence.hazardRow)
         assertEquals(1, result.reticleRanking?.hazardRank)
         assertNull(result.fullRanking)
         assertTrue(PlantGate.isPlant(result.reticleShare))
@@ -81,7 +90,7 @@ class FrameVerifierTest {
         val result = verifier({ if (it) notPlant else plant }, { hazard }).analyze(frame, target) { close }
 
         assertEquals(listOf("gate:reticle", "gate:full", "bioclip:full"), calls)
-        assertTrue(result.evidence.hazard)
+        assertEquals(6, result.evidence.hazardRow)
         assertFalse(result.evidence.reticlePlant)
         assertNull(result.reticleRanking)
         assertEquals(1, result.fullRanking?.hazardRank)
@@ -92,9 +101,39 @@ class FrameVerifierTest {
     fun `a hazard in either plant region warns while the other looks safe`() {
         val result = verifier({ plant }, { if (it) safe else hazard }).analyze(frame, target) { close }
 
-        assertTrue(result.evidence.hazard)
+        assertEquals(6, result.evidence.hazardRow)
         assertEquals(7, result.reticleRanking?.hazardRank)
         assertEquals(1, result.fullRanking?.hazardRank)
+    }
+
+    @Test
+    fun `when both regions warn, the better-ranked hazard is the one reported`() {
+        // Hazards along x and y with a safe species between: the reticle ranks the y hazard 2nd, the full frame
+        // ranks the x hazard 1st.
+        val two = HazardCheck(
+            FloatMatrix(3, 2, floatArrayOf(1f, 0f, 0.8f, 0.6f, 0f, 1f)),
+            booleanArrayOf(true, false, true),
+            booleanArrayOf(true, false, true),
+            BooleanArray(3) { true },
+            floorAlways = true,
+        )
+        val result = verifier({ plant }, { if (it) floatArrayOf(0.6f, 0.8f) else safe }, two)
+            .analyze(frame, target) { close }
+
+        assertEquals(2, result.reticleRanking?.hazardRow)
+        assertEquals(2, result.reticleRanking?.hazardRank)
+        assertEquals(1, result.fullRanking?.hazardRank)
+        assertEquals(0, result.evidence.hazardRow)
+    }
+
+    @Test
+    fun `a target scores on both regions when the full frame is a plant, and on the reticle alone when it isn't`() {
+        // The reticle reads the target, the full frame the rival genus: the mean ties them, so no pass.
+        val both = verifier({ plant }, { if (it) safe else hazard }).analyze(frame, target) { close }
+        assertEquals(GoalScore(false, 0.5, 1), both.goal)
+
+        val reticleOnly = verifier({ if (it) plant else notPlant }, { safe }).analyze(frame, target) { close }
+        assertEquals(GoalScore(true, 1.0, 1), reticleOnly.goal)
     }
 
     @Test
@@ -103,7 +142,7 @@ class FrameVerifierTest {
 
         assertEquals(listOf("gate:reticle", "gate:full"), calls)
         assertEquals(
-            FrameEvidence(hazard = false, reticlePlant = false, focus = null, goalMet = false),
+            FrameEvidence(hazardRow = null, reticlePlant = false, focus = null, goalMet = false),
             result.evidence,
         )
     }
@@ -114,7 +153,7 @@ class FrameVerifierTest {
         val result = verifier({ plant }, { hazard }).analyze(frame, tutorial) { close }
 
         assertEquals(listOf("gate:reticle", "gate:full", "bioclip:reticle"), calls)
-        assertFalse(result.evidence.hazard)
+        assertNull(result.evidence.hazardRow)
         assertNull(result.reticleRanking)
         assertNull(result.fullRanking)
         assertTrue(result.evidence.goalMet)

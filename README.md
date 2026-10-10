@@ -1,6 +1,18 @@
+<div align="center">
+
 # 🌿 wild-find
 
+[![CI](https://img.shields.io/github/actions/workflow/status/anchildress1/wild-find/ci.yml?branch=main&label=CI)](https://github.com/anchildress1/wild-find/actions/workflows/ci.yml)
+[![Pipeline](https://img.shields.io/github/actions/workflow/status/anchildress1/wild-find/pipeline.yml?branch=main&label=pipeline)](https://github.com/anchildress1/wild-find/actions/workflows/pipeline.yml)
+[![CodeQL](https://img.shields.io/github/actions/workflow/status/anchildress1/wild-find/codeql.yml?branch=main&label=CodeQL)](https://github.com/anchildress1/wild-find/actions/workflows/codeql.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-2f5d3a)](LICENSE)
+[![Android 11+](https://img.shields.io/badge/Android-11%2B-3ddc84?logo=android&logoColor=white)](docs/PRD.md)
+
 wild-find sends kids 8 and up outside to find and photograph plants that grow near them. Open-weight models on the phone check each photo. No photo ever leaves the device.
+
+<img src="https://repository-images.githubusercontent.com/1406615924/6bd7eb42-d008-4341-bf42-08963b687ac1" alt="Briar, a big-eared squirrel mascot, waves from a mossy rock in a sunlit forest beside the words &quot;Side quests grow on trees.&quot; and &quot;DEV Challenge, Hacktoberfest 2026&quot;" width="800">
+
+</div>
 
 **Look. Photograph. Leave it where it grows.**
 
@@ -18,7 +30,6 @@ You need SDKMAN!, the Android SDK, uv, lefthook, ktlint, detekt, actionlint, and
 
 ```sh
 sdk env install
-cp .env.example .env   # local overrides; never committed
 make setup
 make assets   # bundled models and tables; every APK build needs them (first run pulls about 160 MB of pinned files)
 make ai-checks
@@ -53,7 +64,7 @@ Without `keystore.properties`, the release APK builds unsigned.
 
 - **Models on the phone:** BioCLIP 2.5 Mobile and TinyCLIP ViT-8M/16
 - **Data:** iNaturalist, Wikipedia, USDA PLANTS, GBIF, and Natural Earth
-- **Build-time only:** BioCLIP 2.5 writes the tutorial label vectors on a laptop with OpenCLIP; neither runs in the app
+- **Build-time only:** BioCLIP 2.5 writes the tutorial label vectors on a laptop with OpenCLIP, and Gemma 4 (26b, through Ollama) writes the hints and the contact-hazard list from Wikipedia; none of them runs in the app
 
 ## License
 

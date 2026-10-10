@@ -1,21 +1,10 @@
-.PHONY: setup build install device-test e2e assets sprites toxicity synonyms plant-types descriptions hints hazard-vectors labels crop-reference gate-harness gate-pull reference test pipeline-test lint ktlint detekt android-lint pipeline-lint actionlint secret-scan ai-checks clean
+.PHONY: setup build install release device-test e2e assets sprites toxicity synonyms plant-types descriptions hints contact-hazards hazard-vectors labels crop-reference gate-harness gate-pull reference test pipeline-test lint ktlint detekt android-lint pipeline-lint actionlint secret-scan ai-checks clean
 
 SHELL := /bin/bash
 
-# Values already in the shell environment win over .env, as with any dotenv loader.
-SHELL_ANDROID_SERIAL := $(ANDROID_SERIAL)
-SHELL_WILDFIND_PACKAGE := $(WILDFIND_PACKAGE)
--include .env
-ANDROID_SERIAL := $(or $(SHELL_ANDROID_SERIAL),$(ANDROID_SERIAL))
-WILDFIND_PACKAGE := $(or $(SHELL_WILDFIND_PACKAGE),$(WILDFIND_PACKAGE),dev.anchildress1.wildfind.debug)
+# App id the device-test, gate-harness, and gate-pull targets use; adb reads ANDROID_SERIAL from the shell.
+WILDFIND_PACKAGE ?= dev.anchildress1.wildfind.debug
 export WILDFIND_PACKAGE
-# adb treats an empty ANDROID_SERIAL as a device named ""; export it only when set.
-ifneq ($(strip $(ANDROID_SERIAL)),)
-export ANDROID_SERIAL
-else
-# make re-exports inherited variables, so an empty one must be dropped explicitly.
-unexport ANDROID_SERIAL
-endif
 
 # Pin JAVA_HOME to the .sdkmanrc JDK; empty in CI where setup-java already exports it.
 SDKMAN_JAVA := $(HOME)/.sdkman/candidates/java/$(shell sed -n 's/^java=//p' .sdkmanrc)
@@ -42,6 +31,10 @@ install: build
 device-test: install
 	adb install -r -d -t app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
 	@adb shell am instrument -w -e notPackage dev.anchildress1.wildfind.e2e $(WILDFIND_PACKAGE).test/androidx.test.runner.AndroidJUnitRunner | tee /dev/stderr | grep -qE '^OK \([1-9][0-9]* tests?\)'
+
+# S53: one signed release APK per phone CPU (arm64-v8a, armeabi-v7a); signing needs keystore.properties.
+release:
+	$(GRADLE) -PabiSplits=true :app:assembleRelease
 
 # End-to-end UI tests only (the e2e package) on the phone; they need signal, since each hunt makes one iNat pull.
 e2e:
@@ -92,6 +85,12 @@ descriptions:
 # Ollama, about 90 minutes; resumes from a partial file, and CI never runs it.
 hints:
 	$(UV) run --group reference python -W error -m wild_find_pipeline.hints
+
+# Rebuilds the committed pipeline/data/contact_hazards.json and refreshes contact_hazards_review.json: local Gemma 4 26b
+# through Ollama on each row with a contact sentence in its Wikipedia article; resumes from a partial file, and CI never
+# runs it.
+contact-hazards:
+	$(UV) run --group reference python -W error -m wild_find_pipeline.contact_hazards
 
 # Rebuilds the committed hazard_vectors.json; pulls the 3.9 GB BioCLIP teacher (as does reference), so CI runs neither.
 hazard-vectors:

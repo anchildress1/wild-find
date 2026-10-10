@@ -1,0 +1,10 @@
+run 20261010-093416-quercus-nigra: samsung SM-S928U (SM8650), Android 16, app 0.1.0
+goal target Quercus nigra, requested analysis 1920x1440, timestamp_source 1
+WARNING: no stop event; the run ended without a clean close (crash, kill, or still running)
+frames: none
+system: 2.2 min sampled, charging 65 of 65 samples
+PSS MB: start 386, max 386, end 378
+thermal status max none
+thermal headroom: first 0.73 at 0.0 min, max 0.81, end 0.81; 0 of 65 samples NaN
+battery temp C: start 35.8, max 37.1, end 37.1
+battery %: 100 to 100 (0 %/h)

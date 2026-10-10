@@ -3,10 +3,11 @@ package dev.anchildress1.wildfind.core.verify
 import dev.anchildress1.wildfind.core.tensor.FloatMatrix
 
 /**
- * How one frame's reticle embedding scored against a goal.
+ * How one frame scored against a goal.
  *
  * @property met true when the frame meets the goal on its own; verify still needs 3 such frames in a row
- * @property score the goal label's cosine score
+ * @property score the goal label's score: its cosine, or for a target with a full-frame plant, the mean of its
+ *   reticle and full-frame cosines
  * @property rank the goal label's 1-based rank among the scored labels
  */
 data class GoalScore(val met: Boolean, val score: Double, val rank: Int)
@@ -16,17 +17,22 @@ sealed interface Goal {
     /** False for the grass tutorial, which skips verify row 1 (R3). */
     val checksHazards: Boolean
 
-    /** Scores a unit reticle [embedding]. */
-    fun score(embedding: FloatArray): GoalScore
+    /**
+     * Scores a unit [reticle] embedding, with the [full] frame's when the plant gate called the full frame a plant.
+     */
+    fun score(reticle: FloatArray, full: FloatArray? = null): GoalScore
 }
 
 /**
  * PRD verify row 4: the best-scoring row among the hunt's [eligible] species shares the target's genus, so a
- * look-alike in the genus passes, and beats every local toxic or hazard row in [blockers] by at least [MARGIN].
+ * look-alike in the genus passes, and beats every local toxic or hazard row in [blockers] by at least the margin.
+ *
+ * With a full-frame plant, each row scores the mean of its reticle and full-frame cosines and the margin is
+ * [FULL_MARGIN]; without one, the reticle scores alone against [MARGIN].
  *
  * Scored against the hunt's own rows, never the whole table: on Day 1 the right genus led the whole table on only 60%
- * of crops. Blockers are never targets; a frame one leads, or comes within [MARGIN] of, never passes, even inside the
- * target's genus.
+ * of crops. Blockers are never targets; a frame one leads, or comes within the margin of, never passes, even inside
+ * the target's genus.
  *
  * @param table `species_table.npy`
  * @param genus each table row's genus
@@ -55,24 +61,37 @@ class TargetGoal(
 
     override val checksHazards = true
 
-    override fun score(embedding: FloatArray): GoalScore {
-        val scores = eligible.map { table.dot(it, embedding) }
+    override fun score(reticle: FloatArray, full: FloatArray?): GoalScore {
+        fun s(row: Int) = if (full == null) {
+            table.dot(row, reticle)
+        } else {
+            (table.dot(row, reticle) + table.dot(row, full)) / 2
+        }
+        val margin = if (full == null) MARGIN else FULL_MARGIN
+        val scores = eligible.map(::s)
         val best = scores.max()
         val top = eligible[scores.indexOf(best)]
-        val blocker = blockers.maxOfOrNull { table.dot(it, embedding) } ?: Double.NEGATIVE_INFINITY
-        val score = table.dot(target, embedding)
+        val blocker = blockers.maxOfOrNull(::s) ?: Double.NEGATIVE_INFINITY
+        val score = s(target)
         // A tie for top-1 is no pass, whichever rows tie.
-        val met = scores.count { it == best } == 1 && genus[top] == genus[target] && best - blocker >= MARGIN
+        val met = scores.count { it == best } == 1 && genus[top] == genus[target] && best - blocker >= margin
         return GoalScore(met, score, 1 + scores.count { it > score })
     }
 
-    /** Row 4 constants measured Oct 7 (`docs/results/day-2/toxic_block.log`). */
+    /** Row 4 constants (`docs/results/day-2/toxic_block.log`, `docs/results/day-5.md`). */
     companion object {
         /**
-         * How far the top species must lead the best blocker: the smallest round margin that let 0 of 180 local toxic
-         * photos pass (a poison ivy photo read as beautyberry won by 0.0477), keeping 34 of 69 real finds.
+         * The reticle-only margin, for a frame whose full frame isn't a plant: the smallest round margin that let 0 of
+         * 180 local toxic photos pass on Oct 7 (a poison ivy photo read as beautyberry won by 0.0477). Day 5 kept it
+         * so that case stays exactly as strict.
          */
         const val MARGIN = 0.048
+
+        /**
+         * The margin on the reticle and full-frame mean (day-5 rule R1h): the 0.024 tune boundary plus 0.01 headroom.
+         * It let 0 of 267 toxic photos pass and raised target passes from 97 to 116 of 198.
+         */
+        const val FULL_MARGIN = 0.034
     }
 }
 
@@ -91,10 +110,11 @@ class TutorialGoal(private val labels: FloatMatrix, private val grass: Int, priv
 
     override val checksHazards = false
 
-    override fun score(embedding: FloatArray): GoalScore {
-        val score = labels.dot(grass, embedding)
+    // The tutorial was measured on the reticle alone, so the full frame plays no part.
+    override fun score(reticle: FloatArray, full: FloatArray?): GoalScore {
+        val score = labels.dot(grass, reticle)
         // A label tied with grass doesn't push it down a rank.
-        val rank = 1 + tutorial.count { labels.dot(it, embedding) > score }
+        val rank = 1 + tutorial.count { labels.dot(it, reticle) > score }
         return GoalScore(rank <= TOP_K, score, rank)
     }
 

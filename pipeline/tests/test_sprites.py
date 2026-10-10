@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from PIL import Image
 
-from wild_find_pipeline.sprites import PLANT_PX, clip, key_white, plant_art
+from wild_find_pipeline.sprites import PLANT_PX, PLANT_TYPES, UNTYPED, clip, key_white, plant_art, trimmed
 
 
 def test_plant_art_trims_the_margin_and_stands_the_plant_on_the_bottom_edge():
@@ -33,6 +33,32 @@ def test_key_white_drops_edge_white_and_keeps_white_inside_briar():
     assert alpha[0, 0] == 0
     assert alpha[20, 20] == 255
     assert alpha[15, 15] == 255
+
+
+def test_key_white_drops_paper_white_that_briar_encloses_but_keeps_eye_whites_and_fur_highlights():
+    frame = np.full((60, 60, 3), 255, np.uint8)
+    frame[5:55, 5:55] = (120, 80, 50)  # Briar
+    frame[10:20, 10:20] = 252  # background seen between his legs: bright, flat, neutral
+    frame[30:40, 10:20] = 243  # an eye white: a shade darker
+    frame[30:40, 30:40] = (250, 242, 236)  # a cream fur highlight: warm
+
+    alpha = key_white(frame)[..., 3]
+
+    assert alpha[15, 15] == 0
+    assert alpha[35, 15] == 255
+    assert alpha[35, 35] == 255
+
+
+def test_key_white_keeps_a_tiny_white_speck():
+    frame = np.full((40, 40, 3), 255, np.uint8)
+    frame[5:35, 5:35] = (120, 80, 50)
+    frame[18:22, 18:22] = 255  # 16 px, under POCKET_PX: a catchlight, not a gap
+
+    assert key_white(frame)[20, 20, 3] == 255
+
+
+def test_untyped_picture_is_not_a_plant_type():
+    assert UNTYPED not in PLANT_TYPES
 
 
 def test_key_white_drops_a_grey_shadow_touching_the_background():
@@ -76,3 +102,29 @@ def test_clip_crops_every_frame_to_one_box_and_takes_the_figure_height_from_the_
 def test_clip_rejects_a_video_with_no_briar():
     with pytest.raises(ValueError, match="all background"):
         clip([np.full((10, 10, 3), 255, np.uint8)])
+
+
+def test_key_white_drops_floor_white_and_warm_shadow_the_leaves_wall_off_but_keeps_the_paws():
+    frame = np.full((100, 100, 3), 255, np.uint8)
+    frame[10:90, 10:90] = (60, 140, 50)  # a wall of leaves down to the floor
+    frame[78:84, 30:40] = 250  # floor white closed off by the leaves, below the knees
+    frame[86:89, 50:60] = (205, 185, 160)  # the leaves' warm shadow, past the paws' tops
+    frame[80:88, 70:80] = (110, 70, 55)  # a brown paw
+    frame[40:46, 30:40] = (240, 225, 210)  # cream fur higher up, above the floor band
+
+    alpha = key_white(frame)[..., 3]
+
+    assert alpha[81, 35] == 0
+    assert alpha[87, 55] == 0
+    assert alpha[84, 75] == 255
+    assert alpha[43, 35] == 255
+
+
+def test_trimmed_crops_to_the_visible_pixels_and_rejects_an_empty_picture():
+    picture = Image.new("RGBA", (50, 40))
+    picture.paste((40, 90, 30, 255), (10, 5, 30, 25))
+    picture.putpixel((45, 35), (255, 255, 255, 4))  # faint glow, under ALPHA_FLOOR
+
+    assert trimmed(picture).size == (20, 20)
+    with pytest.raises(ValueError, match="empty"):
+        trimmed(Image.new("RGBA", (10, 10)))

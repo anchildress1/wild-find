@@ -6,6 +6,8 @@ import dev.anchildress1.wildfind.core.hunt.Hint
 import dev.anchildress1.wildfind.core.hunt.PlantType
 import dev.anchildress1.wildfind.core.hunt.Season
 import dev.anchildress1.wildfind.core.hunt.SpeciesRow
+import dev.anchildress1.wildfind.core.region.NorthAmerica
+import dev.anchildress1.wildfind.core.region.RegionKey
 import dev.anchildress1.wildfind.core.tensor.FloatMatrix
 import dev.anchildress1.wildfind.core.tensor.Npy
 import dev.anchildress1.wildfind.core.verify.HazardCheck
@@ -66,6 +68,9 @@ class BundledAssets(private val assets: AssetManager) {
                             }
                         }
                     } ?: emptyList(),
+                    if (it.isNull("hazard_line")) null else it.getString("hazard_line"),
+                    it.optBoolean("hazard_floor"),
+                    it.optBoolean("target", true),
                 )
             }
         }
@@ -75,12 +80,18 @@ class BundledAssets(private val assets: AssetManager) {
     /** The cache's table version: the first 12 hex digits of `species_labels.json`'s SHA-256. */
     fun tableVersion(): String = CacheKey.tableVersion(bytes(SPECIES_LABELS))
 
-    /** Verify row 1's hazard rule over [table], naming only the hunt's [localRows] as what the camera sees. */
-    fun hazardCheck(table: FloatMatrix, labels: List<SpeciesRow>, localRows: Set<Int>): HazardCheck = HazardCheck(
-        table,
-        labels.map { it.hazard }.toBooleanArray(),
-        BooleanArray(labels.size) { it in localRows },
-    )
+    /**
+     * Verify row 1's hazard rule over [table] for a hunt in [region]; [localRows] are what it names and which hazards
+     * warn, plus the fixed floor inside North America.
+     */
+    fun hazardCheck(table: FloatMatrix, labels: List<SpeciesRow>, localRows: Set<Int>, region: RegionKey): HazardCheck =
+        HazardCheck(
+            table,
+            labels.map { it.hazard }.toBooleanArray(),
+            labels.map { it.hazardFloor }.toBooleanArray(),
+            BooleanArray(labels.size) { it in localRows },
+            NorthAmerica.contains(region),
+        )
 
     /** Tutorial text vectors from `labels.npy`, named by `labels.json`. */
     fun labels(): LabelSet {

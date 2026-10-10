@@ -2,6 +2,8 @@ package dev.anchildress1.wildfind
 
 import dev.anchildress1.wildfind.camera.CaptureVerifier
 import dev.anchildress1.wildfind.core.hunt.NameIndex
+import dev.anchildress1.wildfind.core.region.NorthAmerica
+import dev.anchildress1.wildfind.core.region.RegionKey
 import dev.anchildress1.wildfind.core.verify.FrameVerifier
 import dev.anchildress1.wildfind.core.verify.HazardCheck
 import dev.anchildress1.wildfind.inference.BundledAssets
@@ -35,9 +37,18 @@ class Models(assets: BundledAssets) {
     private val gateEncoder = ImageEncoder(assets.plantGateModel())
     private val bioclip = ImageEncoder(assets.bioclipModel())
     private val hazard = rows.map { it.hazard }.toBooleanArray()
+    private val floor = rows.map { it.hazardFloor }.toBooleanArray()
 
-    /** A capture loop for one hunt, naming only its [local] rows as what the camera sees. */
-    fun verifier(local: Set<Int>): CaptureVerifier = CaptureVerifier(
-        FrameVerifier(gate, gateEncoder, bioclip, HazardCheck(table, hazard, BooleanArray(rows.size) { it in local })),
+    /**
+     * A capture loop for one hunt in [region]: only its [local] rows are named, and a hazard warns when it is local, or
+     * on the fixed floor inside North America.
+     */
+    fun verifier(local: Set<Int>, region: RegionKey): CaptureVerifier = CaptureVerifier(
+        FrameVerifier(
+            gate,
+            gateEncoder,
+            bioclip,
+            HazardCheck(table, hazard, floor, BooleanArray(rows.size) { it in local }, NorthAmerica.contains(region)),
+        ),
     )
 }

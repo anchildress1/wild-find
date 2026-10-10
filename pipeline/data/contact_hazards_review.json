@@ -1,0 +1,122 @@
+{
+  "Anacardium occidentale": {
+    "triage": "reject",
+    "note": "quoted sentence not in article; shell resin, processed nut",
+    "owner": false
+  },
+  "Anemonastrum canadense": {
+    "triage": "reject",
+    "note": "speculative ('likely'), family-level",
+    "owner": false
+  },
+  "Anthemis cotula": {
+    "triage": "reject",
+    "note": "auto row, veto proposed: vague irritation",
+    "owner": false
+  },
+  "Arctium lappa": {
+    "triage": "reject",
+    "note": "auto row, veto proposed: burr fibers, a nuisance not a hazard",
+    "owner": false
+  },
+  "Asparagus aethiopicus": {
+    "triage": "reject",
+    "note": "auto row, veto proposed: vague irritation",
+    "owner": false
+  },
+  "Centella asiatica": {
+    "triage": "reject",
+    "note": "auto row, veto proposed: vague irritation",
+    "owner": false
+  },
+  "Crinum asiaticum": {
+    "triage": "reject",
+    "note": "'some reports' only",
+    "owner": false
+  },
+  "Cucurbita foetidissima": {
+    "triage": "reject",
+    "note": "auto row, veto proposed: needs long contact",
+    "owner": false
+  },
+  "Dirca palustris": {
+    "triage": "reject",
+    "note": "'some people' reaction",
+    "owner": false
+  },
+  "Echium plantagineum": {
+    "triage": "reject",
+    "note": "auto row, veto proposed: vague irritation",
+    "owner": false
+  },
+  "Heracleum sphondylium": {
+    "triage": "approve",
+    "note": "same phototoxic compounds as giant hogweed, lower dose; known to burn skin in sunlight",
+    "owner": true
+  },
+  "Iris cristata": {
+    "triage": "reject",
+    "note": "irritation or allergy on handling, mild",
+    "owner": false
+  },
+  "Iris lacustris": {
+    "triage": "reject",
+    "note": "irritation or allergy on handling, mild",
+    "owner": false
+  },
+  "Iris sibirica": {
+    "triage": "reject",
+    "note": "irritation or allergy on handling, mild",
+    "owner": false
+  },
+  "Mangifera indica": {
+    "triage": "reject",
+    "note": "auto row, veto proposed: allergenic urushiol in fruit peel: the allergy case",
+    "owner": false
+  },
+  "Marah fabacea": {
+    "triage": "approve",
+    "note": "cited: fruit liquid is an eye irritant; the line mentions spines, so ship without a line (generic card)",
+    "owner": true
+  },
+  "Oenothera glazioviana": {
+    "triage": "reject",
+    "note": "describes hair bases, not harm",
+    "owner": false
+  },
+  "Ornithogalum umbellatum": {
+    "triage": "reject",
+    "note": "auto row, veto proposed: needs long contact",
+    "owner": false
+  },
+  "Rhus integrifolia": {
+    "triage": "reject",
+    "note": "genus-level 'some of the genera'",
+    "owner": false
+  },
+  "Rhus ovata": {
+    "triage": "reject",
+    "note": "unconfirmed report",
+    "owner": false
+  },
+  "Scaevola taccada": {
+    "triage": "reject",
+    "note": "medicinal use, not a hazard",
+    "owner": false
+  },
+  "Trachelospermum jasminoides": {
+    "triage": "reject",
+    "note": "latex mentioned; no harm cited",
+    "owner": false
+  },
+  "Trifolium hybridum": {
+    "triage": "reject",
+    "note": "auto row, veto proposed: lawn clover; mild 'if handled' irritation, false-warning risk",
+    "owner": false
+  },
+  "Zizia aurea": {
+    "triage": "reject",
+    "note": "quoted sentence is not in the article (uncited)",
+    "owner": false
+  }
+}

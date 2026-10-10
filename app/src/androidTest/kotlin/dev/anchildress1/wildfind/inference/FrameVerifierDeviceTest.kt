@@ -11,13 +11,14 @@ import dev.anchildress1.wildfind.core.frame.RgbaFrame
 import dev.anchildress1.wildfind.core.frame.blue
 import dev.anchildress1.wildfind.core.frame.green
 import dev.anchildress1.wildfind.core.frame.red
+import dev.anchildress1.wildfind.core.region.RegionKey
 import dev.anchildress1.wildfind.core.verify.Focus
 import dev.anchildress1.wildfind.core.verify.FrameVerifier
 import dev.anchildress1.wildfind.core.verify.HazardCheck
 import dev.anchildress1.wildfind.core.verify.TargetGoal
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -53,7 +54,7 @@ class FrameVerifierDeviceTest {
                         bundled.plantGate(),
                         gate,
                         bioclip,
-                        bundled.hazardCheck(table, species, species.indices.toSet()),
+                        bundled.hazardCheck(table, species, species.indices.toSet(), WEST_GEORGIA),
                     )
                 verifier.analyze(frame, goal) { focus } // warm-up, excluded from timing
                 val runs = List(RUNS) { verifier.analyze(frame, goal) { focus } }
@@ -65,8 +66,8 @@ class FrameVerifierDeviceTest {
                 // A 224-square fixture: the full-frame crop resizes to itself, so the laptop share must hold.
                 assertEquals(gateReference().getDouble("plant_share"), result.fullShare, SHARE_TOLERANCE)
                 assertTrue(result.evidence.reticlePlant)
-                assertFalse(result.evidence.hazard)
-                assertTrue(result.fullRanking!!.hazardRank > HazardCheck.TOP_K)
+                assertNull(result.evidence.hazardRow)
+                assertTrue(checkNotNull(result.fullRanking?.hazardRank) > HazardCheck.TOP_K)
             }
         }
     }
@@ -111,6 +112,9 @@ class FrameVerifierDeviceTest {
 
     private companion object {
         const val TAG = "FrameVerifierDevice"
+
+        // The fixture frame is a West Georgia plant, so the floor warns as it does in a hunt there.
+        val WEST_GEORGIA = RegionKey(34, -85)
         const val RUNS = 5
         const val BYTES_PER_PIXEL = 4
         const val OPAQUE: Byte = -1

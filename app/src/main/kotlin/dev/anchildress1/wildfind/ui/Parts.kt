@@ -183,14 +183,14 @@ fun PaperCard(modifier: Modifier = Modifier, content: @Composable ColumnScope.()
 }
 
 /**
- * A plant type's picture standing on its square's bottom edge, with no box around it; no type leaves the square
- * empty (spec: name only).
+ * A plant type's picture standing on its square's bottom edge, with no box around it; no type shows the untyped
+ * picture.
  *
  * @param size the square's side
  */
 @Composable
 fun TypeTile(type: PlantType?, size: Dp, modifier: Modifier = Modifier) {
-    Box(modifier.size(size)) { type?.let { PlantArt(it, Modifier.size(size)) } }
+    Box(modifier.size(size)) { PlantArt(type, Modifier.size(size)) }
 }
 
 /** A find star, the painted art from `assets/star.webp`. */
@@ -201,7 +201,7 @@ fun Star(size: Dp, modifier: Modifier = Modifier) {
 }
 
 /**
- * The line that tells a kid what to look for: the USDA description, else the plant type in sentence case ("A tree");
+ * The line that tells a kid what to look for: the build's description, else the plant type in sentence case ("A tree");
  * nothing when the plant has neither.
  */
 @Composable

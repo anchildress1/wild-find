@@ -5,17 +5,18 @@ Writes the committed pipeline/data/descriptions.json, one entry per row of the c
 """
 
 import json
+import re
 import sys
 from datetime import date
 
 from wild_find_pipeline.paths import DESCRIPTIONS, PLANT_TYPES
 
-# What a kid calls each plant type; "herb" means nothing to an 8-year-old.
+# What an 8-year-old with a parent calls each plant type; the parent can explain "herb".
 NOUNS = {
     "tree": "tree",
     "shrub": "bush",
     "vine": "vine",
-    "herb": "plant",
+    "herb": "herb",
     "grass": "grass",
     "fern": "fern",
     "moss": "moss",
@@ -24,11 +25,14 @@ NOUNS = {
 }
 # Copy rule for every kid-facing string; a generated sentence that hits one fails the build.
 BANNED = ("safe", "harmless", "not poisonous", "okay to touch", "ok to touch")
+# Model-written kid copy never tells a kid to put a plant in their mouth or hands.
+ACTIONS = re.compile(r"\b(?:eat|eating|eaten|touch|touching|pick|picking|taste|tasting)\b", re.I)
 
 
 def article(word: str) -> str:
     """'An' before a vowel sound, else 'A'."""
-    return "An" if word[0] in "aeiou" else "A"
+    # American English drops the h in "herb".
+    return "An" if word[0] in "aeiou" or word == "herb" else "A"
 
 
 def describe(kind: str | None) -> dict:
