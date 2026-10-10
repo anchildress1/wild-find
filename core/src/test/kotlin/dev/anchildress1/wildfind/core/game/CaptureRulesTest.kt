@@ -61,6 +61,51 @@ class CaptureRulesTest : GameFixture() {
     }
 
     @Test
+    fun `camera timeout clears Checking and rejects the late successful frame`() {
+        val camera = Screen.Camera(0)
+        val checking = playing(camera).after(Outcome.CaptureStarted(1)).game
+            .after(frame(camera, 1, Verdict.Matching(2))).game
+
+        val failed = checking.after(Outcome.CaptureFailed(1))
+
+        assertFalse(failed.game.ui.camera.checking)
+        assertTrue(failed.game.ui.camera.failed)
+        assertNull(failed.game.ui.camera.cue)
+        assertEquals(0, failed.game.ui.camera.matched)
+        assertEquals(listOf(Command.CancelCapture), failed.commands)
+        assertEquals(failed.game, failed.game.after(frame(camera, 1, Verdict.Found)).game)
+        assertEquals(
+            listOf(Command.Capture(camera, 3, failed.game.hunt!!)),
+            failed.game.after(GameEvent.Capture).commands,
+        )
+    }
+
+    @Test
+    fun `a failed capture preserves the hazard warning until an actual nonhazard result`() {
+        val camera = Screen.Camera(0)
+        val warned = playing(camera).after(frame(camera, 0, Verdict.Hazard(4))).game
+        val checking = warned.after(Outcome.CaptureStarted(1)).game
+
+        val failed = checking.after(Outcome.CaptureFailed(1)).game
+
+        assertTrue(failed.ui.camera.failed)
+        assertEquals(CaptureCue.HAZARD, failed.ui.camera.cue)
+        assertEquals(warned.ui.camera.hazardLine, failed.ui.camera.hazardLine)
+        val retried = failed.after(Outcome.CaptureStarted(3)).game
+        assertFalse(retried.ui.camera.failed)
+        assertEquals(CaptureCue.HAZARD, retried.ui.camera.cue)
+        assertEquals(CaptureCue.POINT_AT_PLANT, retried.after(frame(camera, 3, Verdict.NotPlant)).game.ui.camera.cue)
+    }
+
+    @Test
+    fun `an old camera failure leaves the next capture and completed result alone`() {
+        val checking = playing(Screen.Camera(0)).after(Outcome.CaptureStarted(2)).game
+        assertEquals(checking, checking.after(Outcome.CaptureFailed(1)).game)
+        val finished = checking.after(frame(Screen.Camera(0), 2, Verdict.NotPlant)).game
+        assertEquals(finished, finished.after(Outcome.CaptureFailed(2)).game)
+    }
+
+    @Test
     fun `Capture needs the camera, a hunt, and the models`() {
         listOf(
             playing(Screen.Hunt),

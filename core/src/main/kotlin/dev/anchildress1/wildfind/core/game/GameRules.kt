@@ -114,6 +114,13 @@ sealed interface Outcome : GameInput {
     data class CaptureStarted(val session: Int) : Outcome
 
     /**
+     * A camera or inference failure ends only the capture that requested it.
+     *
+     * @property session the capture that failed
+     */
+    data class CaptureFailed(val session: Int) : Outcome
+
+    /**
      * One verified frame of a capture.
      *
      * @property camera the camera screen the capture started on
@@ -283,6 +290,8 @@ private class Turn(private var game: Game, private val random: Random) {
             is Outcome.MapLocated -> focusMap(outcome.map, outcome.region)
 
             is Outcome.CaptureStarted -> captureStarted(outcome.session)
+
+            is Outcome.CaptureFailed -> captureFailed(outcome.session)
 
             is Outcome.Frame -> captured(outcome)
         }
@@ -535,7 +544,14 @@ private class Turn(private var game: Game, private val random: Random) {
     // A refused tap never reports, so it leaves the running session alone.
     private fun captureStarted(session: Int) {
         game = game.copy(session = session)
-        update { it.copy(camera = it.camera.copy(checking = true, matched = 0)) }
+        update { it.copy(camera = it.camera.copy(checking = true, matched = 0, failed = false)) }
+    }
+
+    private fun captureFailed(session: Int) {
+        if (session != game.session || !ui.camera.checking) return
+        game = game.copy(session = game.session + 1)
+        update { it.copy(camera = it.camera.copy(checking = false, matched = 0, failed = true)) }
+        commands += Command.CancelCapture
     }
 
     private fun captured(frame: Outcome.Frame) {
@@ -547,7 +563,11 @@ private class Turn(private var game: Game, private val random: Random) {
         }
         val cue = CaptureCue.of(verdict, PlantGate.isPlant(frame.result.fullShare))
         val line = (verdict as? Verdict.Hazard)?.let { game.rows?.get(it.row)?.hazardLine }
-        update { it.copy(camera = it.camera.copy(checking = false, matched = 0, cue = cue, hazardLine = line)) }
+        update {
+            it.copy(
+                camera = it.camera.copy(checking = false, matched = 0, failed = false, cue = cue, hazardLine = line),
+            )
+        }
         when (cue) {
             CaptureCue.HAZARD -> commands += Command.Haptic(GameEffect.Reject)
             CaptureCue.FOUND -> found(frame.camera.row, frame.result.reticle)

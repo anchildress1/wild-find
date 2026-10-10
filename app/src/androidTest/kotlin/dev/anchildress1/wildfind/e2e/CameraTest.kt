@@ -2,6 +2,7 @@ package dev.anchildress1.wildfind.e2e
 
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isEnabled
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -55,6 +56,27 @@ class CameraTest : E2eTest() {
     }
 
     @Test
+    fun focusAndZoomHaveNamedActionsAndHintsKeepTheCameraViewportAndZoom() {
+        startHuntList()
+        tap(R.string.start_looking)
+        waitFor(hasText(text(R.string.zoom_in)) and hasClickAction() and isEnabled(), timeoutMs = NETWORK_TIMEOUT)
+        assertTrue(has(hasText(text(R.string.focus_circle)) and hasClickAction() and isEnabled()))
+        tap(R.string.focus_circle)
+        tap(R.string.zoom_in)
+        waitFor(hasText(text(R.string.zoom_out)) and isEnabled())
+        val before = nodes(hasTestTag("camera_viewport")).single().boundsInRoot
+        val zoomBefore = nodes(hasText("×", substring = true)).map { it.config.toString() }
+
+        tap(R.string.hint)
+        waitForText(text(R.string.keep_looking))
+        assertEquals(before, nodes(hasTestTag("camera_viewport")).single().boundsInRoot)
+        tap(R.string.keep_looking)
+        waitForText(text(R.string.capture))
+        assertEquals(before, nodes(hasTestTag("camera_viewport")).single().boundsInRoot)
+        assertEquals(zoomBefore, nodes(hasText("×", substring = true)).map { it.config.toString() })
+    }
+
+    @Test
     fun backToYourHuntReturnsToTheHuntList() {
         startHuntList()
         tap(R.string.start_looking)
@@ -85,6 +107,7 @@ class CameraTest : E2eTest() {
                 has(hasText(text(R.string.camera_find, "").trimEnd(), substring = true))
         }
         assertTrue(has(hasText(text(R.string.camera_progress, 1, TARGETS))))
+        waitFor(hasText(text(R.string.capture)) and hasClickAction() and isEnabled(), timeoutMs = NETWORK_TIMEOUT)
         tap(R.string.back_to_hunt)
         waitForText(text(R.string.start_looking))
         val after = stops().map(::stopName)
