@@ -294,6 +294,27 @@ def test_main_resumes_from_a_partial_file_and_finishes_with_ranked_hints(tmp_pat
     assert "0 model replies failed" in capsys.readouterr().out
 
 
+def test_main_rebuilds_a_finished_file_from_scratch(tmp_path, monkeypatch):
+    flags = tmp_path / "toxicity.json"
+    flags.write_text(json.dumps({"species": {"A a": {"toxic": False}}}))
+    types, synonyms = tmp_path / "types.json", tmp_path / "synonyms.json"
+    types.write_text(json.dumps({"species": {"A a": {"type": "tree"}}}))
+    synonyms.write_text(json.dumps({"species": {"A a": []}}))
+    old = {"article": "old", "revid": 1, "cut_off": False, "failed": None, "hints": []}
+    path = _stored(tmp_path, monkeypatch, {"A a": old}, done=True)
+    for name, value in (("TOXICITY", flags), ("PLANT_TYPES", types), ("SYNONYMS", synonyms)):
+        monkeypatch.setattr(h, name, value)
+    monkeypatch.setattr(h, "articles", lambda names: {n: PAGE for n in names})
+    monkeypatch.setattr(h.usda, "archive", lambda: b"")
+    monkeypatch.setattr(h, "usda_traits", lambda archive, wanted: {})
+    monkeypatch.setattr(h, "chat", lambda user: {"text": _reply(), "cut_off": False})
+    monkeypatch.setattr(h.sys, "argv", ["hints"])
+
+    assert h.main() == 0
+
+    assert json.loads(path.read_text())["species"]["A a"]["article"] == "Water oak"
+
+
 def test_main_with_recheck_only_reapplies_the_checks(tmp_path, monkeypatch):
     _stored(tmp_path, monkeypatch, {"A a": {"hints": []}})
     monkeypatch.setattr(h.sys, "argv", ["hints", "--recheck"])

@@ -5,7 +5,8 @@ quotes, banned words, the plant's name, long hints, hints that send a kid to wat
 only a country or region. A clear USDA shade or wet-soil rating fills a light or ground kind the model left empty, and
 hint_traits adds size, season, and sign hints. hint_rank then picks the best three plus every season hint.
 
-Writes pipeline/data/hints.json; the run resumes from it, so an interrupted run loses at most one checkpoint.
+Writes pipeline/data/hints.json. An interrupted run resumes from its unfinished file and loses at most one checkpoint;
+a finished file is rebuilt from scratch.
 """
 
 import json
@@ -354,11 +355,14 @@ def recheck() -> int:
 
 
 def main() -> int:
-    """Write hints.json for every playable row, resuming from a partial file; `--recheck` only re-applies checks."""
+    """Write hints.json for every playable row, resuming an unfinished file; `--recheck` only re-applies checks."""
     if "--recheck" in sys.argv:
         return recheck()
     rows = playable()
-    species = json.loads(HINTS.read_text())["species"] if HINTS.exists() else {}
+    # Only an unfinished checkpoint resumes. A finished file is rebuilt from scratch, so a changed prompt, model,
+    # source, or trait rule shows up in the output instead of being reused under a fresh build date.
+    previous = json.loads(HINTS.read_text()) if HINTS.exists() else {"done": True, "species": {}}
+    species = {} if previous["done"] else previous["species"]
     todo = [r for r in rows if r not in species]
     print(f"{len(rows)} playable rows, {len(species)} done, {len(todo)} to go", flush=True)
     pages = articles(todo)
