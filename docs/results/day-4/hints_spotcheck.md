@@ -142,7 +142,7 @@ Put `y`, `n`, or `over` (the hint claims more than the sentence) after **Verdict
 - **Hint:** Keep the soil moist.
 - **Quote:** Seedlings must always be kept moist.
 - **Article:** https://en.wikipedia.org/wiki/Ipomoea_quamoclit
-- **Verdict:** Fix
+- **Verdict:** o
 
 ## 21. *Erigeron canadensis* (place, model)
 
@@ -226,14 +226,14 @@ Put `y`, `n`, or `over` (the hint claims more than the sentence) after **Verdict
 - **Hint:** Look in chaparral or oak woodland.
 - **Quote:** It can be found (for instance in California) in chaparral, oak woodland, mixed evergreen forest, and yellow pine forest and other conifer forests, grassland, and sagebrush scrub habitats.
 - **Article:** https://en.wikipedia.org/wiki/Eriophyllum_lanatum
-- **Verdict:** Fix
+- **Verdict:** n
 
 ## 33. *Elephantopus carolinianus* (ground, model)
 
 - **Hint:** The soil is often sandy.
 - **Quote:** It grows in open or shaded pine forests and mixed forests, with generally damp to wet soil, often sandy.
 - **Article:** https://en.wikipedia.org/wiki/Elephantopus_carolinianus
-- **Verdict:** Fix
+- **Verdict:** n
 
 ## 34. *Corylus avellana* (nearby, model)
 
@@ -275,7 +275,7 @@ Put `y`, `n`, or `over` (the hint claims more than the sentence) after **Verdict
 - **Hint:** It can grow in deep soils.
 - **Quote:** A sycamore can grow to massive proportions, typically reaching up to high and in diameter when grown in deep soils.
 - **Article:** https://en.wikipedia.org/wiki/Platanus_occidentalis
-- **Verdict:** Fix
+- **Verdict:** n
 
 ## 40. *Abies concolor* (place, model)
 
@@ -324,7 +324,7 @@ Put `y`, `n`, or `over` (the hint claims more than the sentence) after **Verdict
 - **Hint:** It likes productive, acidic, permeable soils.
 - **Quote:** It thrives in tropical, subtropical and even warmer temperate regions, preferring frostless areas with productive, acidic, permeable soils.
 - **Article:** https://en.wikipedia.org/wiki/Thunbergia_grandiflora
-- **Verdict:** Fix
+- **Verdict:** n
 
 ## 47. *Polanisia dodecandra* (ground, model)
 
@@ -345,11 +345,11 @@ Put `y`, `n`, or `over` (the hint claims more than the sentence) after **Verdict
 - **Hint:** You might find it in fynbos.
 - **Quote:** It grows in permanently moist shales, but also on moderately to very dry soils in fynbos on both acid and alkaline sands, and can be present in strandveld and renosterveld.
 - **Article:** https://en.wikipedia.org/wiki/Wachendorfia_paniculata
-- **Verdict:** Fix
+- **Verdict:** n
 
 ## 50. *Sticherus cunninghamii* (place, model)
 
 - **Hint:** Look in lowland to montane forest.
 - **Quote:** It occurs from lowland to montane forest, usually along shaded stream banks and road cuttings where it can form the main ground cover.
 - **Article:** https://en.wikipedia.org/wiki/Sticherus_cunninghamii
-- **Verdict:** Fix
+- **Verdict:** n

@@ -154,7 +154,7 @@ Question: can a local Gemma 4 write "where to look" hints that stay true to the 
 
 Question: does the hazard warning still meet the Day-1 bars (at least 48 of 52 hazards caught, at most 1 in 250 safe photos warned) once the 7 fixed hazards grow into a contact-hazard list? Two lists were measured.
 
-**Gate of record: run 2, rule B, top 5, as-shipped list.**
+**Gate of record: run 3, rule B, top 5, the final list** (Oct 10, after review: 85 hazard rows, 83 contact hazards plus the floor's 2 not on the list; `species_labels.json` sha256 f8f80ce0…; run 2's files are in `hazard_gate/run2/`).
 
 | Set | Result | Bar | Verdict |
 | --- | --- | --- | --- |
@@ -162,7 +162,7 @@ Question: does the hazard warning still meet the Day-1 bars (at least 48 of 52 h
 | Day 1, safe photos warned | 3/253 | ≤ 3/253 | Pass on the relaxed bar |
 | S50, safe photos warned | 1/50 | recorded | — |
 | S51, safe photos warned | 3/57 | recorded | — |
-| New set, hazards caught | 39/52 | recorded | — |
+| New set, hazards caught | 41/52 (run 2: 39/52) | recorded | — |
 | New set, safe photos warned | 3/30 | recorded | — |
 
 The original bar of at most 1 in 250 failed under every rule and cutoff measured here. On Oct 10 the owner chose rule B at top 5 and relaxed the Day-1 safe bar to at most 3 of 253.

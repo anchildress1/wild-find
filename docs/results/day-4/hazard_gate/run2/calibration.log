@@ -4,7 +4,7 @@ BioCLIP pin crazedcodernate/bioclip-2.5-mobile-fastvit@29b474ea2a5d72b4646f036ea
   asset plant_gate.onnx sha256 bf1bdd2e939ba374498acf76162cbcc56fcc547e6e5a01aa50d5de477f6c58ed
   asset plant_gate.json sha256 33e8990299b4cb1450dfbebe600162e5602810dc01b3e747450af4ea66a4818a
   asset species_table.npy sha256 1fd3cf277dddda6c4c0062b696d170e3b405487098e80dcc71138045835cc27d
-  asset species_labels.json sha256 f8f80ce09dff2a8d02337a0ca83c2ecc8636f8d6a03c2ddc7603947945ce178b
+  asset species_labels.json sha256 047b86d6b80433e99d1f0c402cc1a0bc069e5388f126cbf29f7f0084146da442
   asset labels.npy sha256 c63489be575b96a70febd147445f496a54ed6b666ff79bbf314906efd7e4d80f
   asset labels.json sha256 f6f31b2421956d8452a821ec4f8be5d0583f6ab8661a0483932d21712a3989c5
   input docs/results/day-3/calibration.photos.csv sha256 4451ca526b6ddbbe3540ad7089655e0ec5bbf97aac496e11070111db7908379b
@@ -29,11 +29,11 @@ top-1 score min/q1/median/q3/max:
 gap to best blocker min/q1/median/q3/max:
   right genus: -0.061 / 0.035 / 0.090 / 0.145 / 0.231
   wrong genus: -0.088 / -0.046 / -0.030 / -0.020 / 0.002
-  miss target_Liquidambar_styraciflua_405042376.jpg: no_match, top1 Liquidambar styraciflua 0.5197, pool top1 Smallanthus uvedalia, blocker Smallanthus uvedalia gap -0.0272, reticle share 0.9716, hazard ranks 37/9 (Cnidoscolus texanus)
+  miss target_Liquidambar_styraciflua_405042376.jpg: no_match, top1 Liquidambar styraciflua 0.5197, pool top1 Smallanthus uvedalia, blocker Smallanthus uvedalia gap -0.0272, reticle share 0.9716, hazard ranks 32/9 (Arctium lappa)
   miss target_Liquidambar_styraciflua_404493614.jpg: no_match, top1 Cercis canadensis 0.5108, pool top1 Cercis canadensis, blocker Celastrus orbiculatus gap 0.0022, reticle share 0.9383, hazard ranks 229/179 (Toxicodendron vernix)
-  miss target_Magnolia_grandiflora_396800120.jpg: hazard, top1 Magnolia grandiflora 0.5217, pool top1 Photinia serratifolia, blocker Photinia serratifolia gap -0.0437, reticle share 0.9024, hazard ranks 5/25 (Nerium oleander)
+  miss target_Magnolia_grandiflora_396800120.jpg: hazard, top1 Magnolia grandiflora 0.5217, pool top1 Photinia serratifolia, blocker Photinia serratifolia gap -0.0437, reticle share 0.9024, hazard ranks 1/3 (Mangifera indica)
   miss target_Liriodendron_tulipifera_405512381.jpg: no_match, top1 Platanus occidentalis 0.4629, pool top1 Triadica sebifera, blocker Triadica sebifera gap -0.0279, reticle share 0.9566, hazard ranks 81/198 (Ficus carica)
-  miss target_Liriodendron_tulipifera_405264498.jpg: no_match, top1 Cercis canadensis 0.5255, pool top1 Menispermum canadense, blocker Menispermum canadense gap -0.0320, reticle share 0.9722, hazard ranks 66/110 (Cynanchum laeve)
+  miss target_Liriodendron_tulipifera_405264498.jpg: no_match, top1 Cercis canadensis 0.5255, pool top1 Menispermum canadense, blocker Menispermum canadense gap -0.0320, reticle share 0.9722, hazard ranks 66/109 (Cynanchum laeve)
   miss target_Fagus_grandifolia_405501294.jpg: no_match, top1 Phyllanthus urinaria 0.3937, pool top1 Xanthium orientale, blocker Xanthium orientale gap -0.0880, reticle share 0.9552, hazard ranks 86/33 (Moneses uniflora)
   miss target_Erechtites_hieraciifolius_405067001.jpg: no_match, top1 Erechtites hieraciifolius 0.4790, pool top1 Liatris aspera, blocker Liatris aspera gap -0.0497, reticle share 0.8645, hazard ranks 23/247 (Euphorbia bicolor)
   miss target_Diospyros_virginiana_403124444.jpg: no_match, top1 Diospyros virginiana 0.5610, pool top1 Diospyros virginiana, blocker Asimina triloba gap 0.0332, reticle share 0.9903, hazard ranks 34/26 (Toxicodendron vernix)

@@ -4,7 +4,7 @@ BioCLIP pin crazedcodernate/bioclip-2.5-mobile-fastvit@29b474ea2a5d72b4646f036ea
   asset plant_gate.onnx sha256 bf1bdd2e939ba374498acf76162cbcc56fcc547e6e5a01aa50d5de477f6c58ed
   asset plant_gate.json sha256 33e8990299b4cb1450dfbebe600162e5602810dc01b3e747450af4ea66a4818a
   asset species_table.npy sha256 1fd3cf277dddda6c4c0062b696d170e3b405487098e80dcc71138045835cc27d
-  asset species_labels.json sha256 f8f80ce09dff2a8d02337a0ca83c2ecc8636f8d6a03c2ddc7603947945ce178b
+  asset species_labels.json sha256 047b86d6b80433e99d1f0c402cc1a0bc069e5388f126cbf29f7f0084146da442
   asset labels.npy sha256 c63489be575b96a70febd147445f496a54ed6b666ff79bbf314906efd7e4d80f
   asset labels.json sha256 f6f31b2421956d8452a821ec4f8be5d0583f6ab8661a0483932d21712a3989c5
   input docs/results/day-3/holdout.photos.csv sha256 c05e62308d2d1c3cad2698a9e60b309e1b9165432583fd84ceae5fa01130de7d
@@ -30,10 +30,10 @@ H6 hazard false alarm on target photos: 6/30 (20%); on non-plants: 0/27 (0%)
   target target_Erechtites_hieraciifolius_404919483.jpg: no_match, top1 Erechtites hieraciifolius 0.4421, pool top1 Erechtites hieraciifolius, blocker Maianthemum racemosum gap 0.0018, shares 0.9280/0.9774, hazard ranks 145/61 (Toxicodendron diversilobum)
   target target_Ampelopsis_glandulosa_404850238.jpg: hazard, top1 Ampelopsis glandulosa 0.6342, pool top1 Ampelopsis glandulosa, blocker Ipomoea pandurata gap 0.0655, shares 0.9466/0.9501, hazard ranks 3/6 (Vitis mustangensis)
   target target_Ampelopsis_glandulosa_404581096.jpg: no_match, top1 Ampelopsis glandulosa 0.5255, pool top1 Ampelopsis glandulosa, blocker Hedera helix gap 0.0076, shares 0.9089/0.9555, hazard ranks 17/6 (Araujia sericifera)
-  target target_Diospyros_virginiana_402279427.jpg: not_plant, top1 Cercis canadensis 0.5100, pool top1 Cercis canadensis, blocker Quercus marilandica gap 0.0082, shares 0.4443/0.7972, hazard ranks 26/29 (Ficus pumila)
+  target target_Diospyros_virginiana_402279427.jpg: not_plant, top1 Cercis canadensis 0.5100, pool top1 Cercis canadensis, blocker Quercus marilandica gap 0.0082, shares 0.4443/0.7972, hazard ranks 26/15 (Ficus pumila)
   target target_Diospyros_virginiana_400803551.jpg: no_match, top1 Diospyros virginiana 0.4318, pool top1 Juglans nigra, blocker Juglans nigra gap -0.0778, shares 0.9640/0.9836, hazard ranks 28/31 (Ficus carica)
   target target_Platanus_occidentalis_404834946.jpg: no_match, top1 Platanus occidentalis 0.4875, pool top1 Platanus occidentalis, blocker Phryma leptostachya gap 0.0227, shares 0.9675/0.9729, hazard ranks 25/16 (Toxicodendron radicans)
-  target target_Vitis_rotundifolia_402234219.jpg: no_match, top1 Magnolia grandiflora 0.5157, pool top1 Ricinus communis, blocker Ricinus communis gap -0.0134, shares 0.6818/0.6591, hazard ranks 12/18 (Plumeria rubra)
+  target target_Vitis_rotundifolia_402234219.jpg: no_match, top1 Magnolia grandiflora 0.5157, pool top1 Ricinus communis, blocker Ricinus communis gap -0.0134, shares 0.6818/0.6591, hazard ranks 12/11 (Plumeria rubra)
   target target_Pueraria_montana_403875690.jpg: hazard, top1 Pueraria montana 0.6240, pool top1 Pueraria montana, blocker Wisteria sinensis gap 0.1138, shares 0.9654/0.9734, hazard ranks 7/5 (Calotropis gigantea)
   target target_Pueraria_montana_400615536.jpg: no_match, top1 Pueraria montana 0.4325, pool top1 Conocephalum salebrosum, blocker Conocephalum salebrosum gap -0.1697, shares 0.9361/0.9215, hazard ranks 9/10 (Heracleum sosnowskyi)
   target target_Cercis_canadensis_402371869.jpg: hazard, top1 Cercis canadensis 0.6187, pool top1 Cercis canadensis, blocker Ipomoea pandurata gap 0.0167, shares 0.9805/0.9865, hazard ranks 9/2 (Cynanchum laeve)
