@@ -53,7 +53,9 @@ class CameraTest : E2eTest() {
     fun thePhonesBackKeyOnTheCameraReturnsToTheHuntList() {
         startHuntList()
         tap(R.string.start_looking)
-        waitForText(text(R.string.capture))
+        // Capture shows while the camera is still starting; back sent then can land before the screen is settled.
+        waitFor(hasText(text(R.string.capture)) and hasClickAction() and isEnabled(), timeoutMs = NETWORK_TIMEOUT)
+        compose.waitForIdle()
         pressBack()
         waitForText(text(R.string.start_looking))
     }

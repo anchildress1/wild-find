@@ -42,3 +42,9 @@ dev.anchildress1.wildfind.e2e.ScreenRulesTest:..
 dev.anchildress1.wildfind.e2e.WinPageTest:..
 Time: 333.077
 OK (50 tests)
+
+# 2026-10-09 night, S24 Ultra, debug, branch at b0b7a34 plus the CameraTest back-key hardening
+## make e2e x3 after waiting for an enabled Capture and an idle UI before the back key (before: failed in 2 of 4 full runs)
+run 1: OK (50 tests)
+run 2: OK (50 tests)
+run 3: OK (50 tests)
