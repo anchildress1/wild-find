@@ -15,10 +15,11 @@ from wild_find_pipeline.assets import (
     with_hints,
     with_plant_types,
     with_synonyms,
+    with_targets,
     with_toxicity,
 )
 from wild_find_pipeline.labels import HAZARDS, embedding_versions, is_hazard, lacking_hazards, table_rows
-from wild_find_pipeline.paths import pin
+from wild_find_pipeline.paths import NO_TARGET, pin
 
 
 def test_plant_share_sums_the_scaled_softmax_of_plant_labels():
@@ -393,3 +394,30 @@ def test_with_hints_refuses_a_season_the_app_does_not_know():
 
     with pytest.raises(ValueError, match="monsoon"):
         with_hints([row], {"done": True, "species": {"Quercus nigra": {"hints": [odd]}}})
+
+
+def test_with_targets_holds_back_only_the_listed_rows():
+    labels = [{"scientific": "Liquidambar styraciflua"}, {"scientific": "Quercus nigra"}]
+    data = {"species": {"Liquidambar styraciflua": "sweetgum: 0 of 4 TEST photos pass"}}
+
+    assert with_targets(labels, data) == [
+        {"scientific": "Liquidambar styraciflua", "target": False},
+        {"scientific": "Quercus nigra", "target": True},
+    ]
+
+
+def test_with_targets_refuses_a_name_the_table_lacks():
+    with pytest.raises(ValueError, match="Liquidambar styracifluaa"):
+        with_targets([{"scientific": "Quercus nigra"}], {"species": {"Liquidambar styracifluaa": "typo"}})
+
+
+def test_the_committed_no_target_list_gives_each_row_a_reason():
+    data = json.loads(NO_TARGET.read_text())
+
+    assert set(data["species"]) == {
+        "Diospyros virginiana",
+        "Liquidambar styraciflua",
+        "Liriodendron tulipifera",
+        "Rhus copallinum",
+    }
+    assert all("test.csv" in reason for reason in data["species"].values())

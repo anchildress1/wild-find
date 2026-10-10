@@ -7,7 +7,7 @@ import kotlin.random.Random
  *
  * @property tutorial true when the grass tutorial opens the hunt
  * @property targets up to [HuntPick.TARGETS] species, never two from one genus; fewer means the coverage message
- * @property queue every other eligible species, shuffled; a skip swaps the next one in
+ * @property queue every other pickable eligible species, shuffled; a skip swaps the next one in
  */
 data class Hunt(val tutorial: Boolean, val targets: List<Eligible>, val queue: List<Eligible> = emptyList())
 
@@ -15,7 +15,8 @@ data class Hunt(val tutorial: Boolean, val targets: List<Eligible>, val queue: L
  * Picks a hunt's targets by sighting-weighted random from the local list. Plants found in an earlier hunt come last,
  * so they appear only when too few others remain to fill the hunt; within each group species with hints come first,
  * since a kid finds a plant faster when told where to look. Eligibility never depends on either: hints exist only
- * for rows with a sourced article or USDA trait, and a hard filter would empty hunts in small areas.
+ * for rows with a sourced article or USDA trait, and a hard filter would empty hunts in small areas. Rows the build
+ * marks not [SpeciesRow.target] are never picked or queued: BioCLIP confirmed none of their fresh photos on Day 5.
  *
  * @param table every species-table row, for each target's genus, name, and hints
  * @param random the draw; seeded in tests
@@ -27,7 +28,8 @@ class HuntPick(private val table: List<SpeciesRow>, private val random: Random =
      * then found hinted, then found plain; the skip queue lists the rest in the same order, each group shuffled.
      */
     fun next(local: LocalList, tutorialDone: Boolean, found: Set<String> = emptySet()): Hunt {
-        val (seen, fresh) = local.eligible.partition { table[it.row].scientific in found }
+        val pickable = local.eligible.filter { table[it.row].target }
+        val (seen, fresh) = pickable.partition { table[it.row].scientific in found }
         val groups = fresh.partition(::hinted).toList() + seen.partition(::hinted).toList()
         val targets = mutableListOf<Eligible>()
         groups.forEach { fill(targets, it) }

@@ -45,6 +45,13 @@ class SpeciesTableTest {
     }
 
     @Test
+    fun onlyTheRowsDay5CouldNotConfirmAreHeldBackFromTargets() {
+        val held = bundled.speciesLabels(bundled.speciesTable()).filterNot { it.target }.map { it.scientific }.toSet()
+
+        assertEquals(NO_TARGET, held)
+    }
+
+    @Test
     fun shippedHazardLinesAreShortAndKeepTheKidCopyRules() {
         val lines = bundled.speciesLabels(bundled.speciesTable()).mapNotNull { it.hazardLine }
 
@@ -55,6 +62,12 @@ class SpeciesTableTest {
     private companion object {
         const val MAX_LINE_WORDS = 12
         val FIXED_FLOOR = setOf("Phytolacca americana", "Solanum carolinense")
+        val NO_TARGET = setOf(
+            "Diospyros virginiana",
+            "Liquidambar styraciflua",
+            "Liriodendron tulipifera",
+            "Rhus copallinum",
+        )
         const val MIN_HINTED_ROWS = 1000
         const val MAX_HINTS_PER_ROW = 8
         const val EMBEDDING_SIZE = 1024

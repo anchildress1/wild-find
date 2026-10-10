@@ -116,6 +116,21 @@ class LocalSpeciesTest {
     }
 
     @Test
+    fun `a row held back from picks stays eligible but can't fill a genus, so the pull still widens`() {
+        val held = table.map { if (it.genus == "Liquidambar") it.copy(target = false) else it }
+        val pull = pull(
+            Sighting("Quercus nigra", "water oak", 10),
+            Sighting("Acer rubrum", "red maple", 10),
+            Sighting("Liquidambar styraciflua", "sweetgum", 10),
+        )
+        val list = LocalSpecies(held, names::get).of(pull)
+
+        assertEquals(listOf(0, 1, 5), list.eligible.map { it.row })
+        assertTrue(list.needsWiden)
+        assertFalse(local.of(pull).needsWiden)
+    }
+
+    @Test
     fun `a common name comes from the most sighted name that has a kid-sized one`() {
         val list = local.of(pull(Sighting("Berberis bealei", null, 40), Sighting("Mahonia bealei", "leatherleaf", 10)))
 

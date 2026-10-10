@@ -4,9 +4,9 @@ Writes into the gitignored app/generated/assets. Needs no BioCLIP teacher: appen
 committed hazard_vectors.json (make hazard-vectors), toxicity flags from toxicity.json (make toxicity), name
 aliases from synonyms.json (make synonyms), plant types from plant_types.json (make plant-types), and kid-level
 descriptions from descriptions.json (make descriptions), contact hazards and their card lines from
-contact_hazards.json and its review file (make contact-hazards), and "where to look" hints from hints.json (make hints),
-so CI can run it. Also checks the committed labels.npy and labels.json (make labels) against the current label lists
-and pins.
+contact_hazards.json and its review file (make contact-hazards), "where to look" hints from hints.json (make hints),
+and the hand-kept no-target rows from no_target.json, so CI can run it. Also checks the committed labels.npy and
+labels.json (make labels) against the current label lists and pins.
 """
 
 import hashlib
@@ -43,6 +43,7 @@ from wild_find_pipeline.paths import (
     LABELS_DIR,
     MANIFEST,
     MODEL_CACHE,
+    NO_TARGET,
     PLANT_TYPES,
     REPO,
     SYNONYMS,
@@ -130,6 +131,17 @@ def with_plant_types(labels: list[dict], types: dict[str, dict]) -> list[dict]:
 def with_descriptions(labels: list[dict], found: dict[str, dict]) -> list[dict]:
     """Add each row's committed kid-level description, or None; raises when a row has no entry."""
     return merged(labels, found, DESCRIPTIONS, "descriptions", lambda _, entry: {"description": entry["description"]})
+
+
+def with_targets(labels: list[dict], data: dict) -> list[dict]:
+    """Add each row's `target` flag: false for the rows no_target.json lists, true for the rest.
+
+    Raises when the file names a species the table lacks, so a typo can't leave a row pickable unnoticed.
+    """
+    names = {entry["scientific"] for entry in labels}
+    if unknown := sorted(set(data["species"]) - names):
+        raise ValueError(f"{NO_TARGET.name} names {unknown}, not in the species table")
+    return [{**entry, "target": entry["scientific"] not in data["species"]} for entry in labels]
 
 
 def with_hints(labels: list[dict], data: dict) -> list[dict]:
@@ -252,6 +264,7 @@ INPUTS = (
     HINTS,
     CONTACT_HAZARDS,
     CONTACT_REVIEW,
+    NO_TARGET,
     REPO / "pipeline/uv.lock",
     LABELS_DIR / "labels.json",
     LABELS_DIR / "labels.npy",
@@ -307,6 +320,7 @@ def main() -> int:
         labels = with_plant_types(labels, json.loads(PLANT_TYPES.read_text())["species"])
         labels = with_descriptions(labels, json.loads(DESCRIPTIONS.read_text())["species"])
         labels = with_hints(labels, json.loads(HINTS.read_text()))
+        labels = with_targets(labels, json.loads(NO_TARGET.read_text()))
         np.save(staging / "species_table.npy", table)
         (staging / "species_labels.json").write_text(json.dumps(labels, indent=1) + "\n")
 
@@ -327,9 +341,10 @@ def main() -> int:
     hazards = sum(entry["hazard"] for entry in labels)
     lines = sum(entry["hazard_line"] is not None for entry in labels)
     toxic = sum(entry["toxic"] for entry in labels)
+    held = sum(not entry["target"] for entry in labels)
     print(
         f"OK: {GENERATED_ASSETS}: {len(labels)} species ({hazards} hazards, {lines} with a card line, {toxic} toxic, "
-        f"appended {list(extra)}), "
+        f"{held} never targets, appended {list(extra)}), "
         f"scale {scale:.4f}, map {map_bytes} bytes, places {place_bytes} bytes"
     )
     return 0

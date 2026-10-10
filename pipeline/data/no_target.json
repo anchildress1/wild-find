@@ -1,0 +1,10 @@
+{
+ "rule": "Species-table rows the hunt never picks as a target, because BioCLIP confirmed none of their fresh photos under any day-5 rule; they stay eligible, so they still compete in verify row 4 and still block as before. Edit by hand; each value says why.",
+ "source": "docs/results/day-5/target_pass/test.csv",
+ "species": {
+  "Diospyros virginiana": "persimmon: 0 of 5 TEST photos pass under R0, R1, or R1h (day-5/target_pass/test.csv)",
+  "Liquidambar styraciflua": "sweetgum: 0 of 4 TEST photos pass under R0, R1, or R1h (day-5/target_pass/test.csv)",
+  "Liriodendron tulipifera": "tulip tree: 0 of 4 TEST photos pass under R0, R1, or R1h (day-5/target_pass/test.csv)",
+  "Rhus copallinum": "winged sumac: 0 of 4 TEST photos pass under R0, R1, or R1h (day-5/target_pass/test.csv)"
+ }
+}

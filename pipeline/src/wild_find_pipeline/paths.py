@@ -31,6 +31,8 @@ HINTS = REPO / "pipeline/data/hints.json"
 CONTACT_HAZARDS = REPO / "pipeline/data/contact_hazards.json"
 # Hand decisions on the contact-hazard rows the checks could not clear; only owner-approved rows ship.
 CONTACT_REVIEW = REPO / "pipeline/data/contact_hazards_review.json"
+# Hand-kept rows the hunt never picks as a target, each with its measured reason (day-5 target pass study).
+NO_TARGET = REPO / "pipeline/data/no_target.json"
 
 
 def pin(model: str, manifest: Path = MANIFEST) -> dict[str, str]:
