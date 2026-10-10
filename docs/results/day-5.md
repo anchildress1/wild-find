@@ -99,3 +99,14 @@ Phone cost counts extra BioCLIP passes per frame over today's 2 (reticle, plus t
 - The headroom that remains is thin and set by one flagged legume. Leaving honey locust aside, R1h's TEST headroom is +0.020 (red maple)
 - Picking among 3 finalists on TEST is a mild selection effect. The other 2 failed outright, so the pick is conservative. A fresh look-alike set before release would confirm the 0
 - When the gate rejects the full frame, there is no full-frame embedding, so the reticle is scored alone. That happened on 3 plant photos (all toxic, led by blockers by 0.06 to 0.09) and on no target photo. Port it with today's 0.048 so the case stays exactly as strict as now; no measured number changes
+
+## S05 gate-harness runs pulled Oct 10
+
+Two harness runs from the S24 Ultra (SM-S928U, Android 16, app 0.1.0, target water oak), pulled with `make gate-pull` into `docs/results/gate/`:
+
+| Run | Length | Power | Frames verified | Peak memory | Thermal status | Clean stop |
+| --- | --- | --- | --- | --- | --- | --- |
+| 20261008-151148 | 2.4 min | charging the whole time | 0 | 591 MB | none | no |
+| 20261010-093416 | 2.2 min | charging the whole time | 0 | 386 MB | none | no |
+
+Neither run captured a frame, ran unplugged, or reached 20 minutes, so S05's heat and per-frame timing bar is still open. The longest heat data so far is still Day 2: severe thermal status at 36 minutes of continuous verify on the charger, and 5.5 minutes of capture-only verify on battery with no heat.
