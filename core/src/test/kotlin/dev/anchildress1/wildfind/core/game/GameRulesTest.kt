@@ -127,6 +127,15 @@ class GameRulesTest {
     }
 
     @Test
+    fun `a plant without hints opens none, and Hint before the table loads is harmless`() {
+        val bare = Game(GameState(screen = Screen.Camera(0)), flags(), hunt(), rows)
+        assertEquals(mapOf(0 to 0), bare.after(GameEvent.RevealHint(0)).game.ui.hintsShown)
+
+        val loading = Game(GameState(screen = Screen.Camera(0)), flags(), null, null)
+        assertEquals(mapOf(0 to 0), loading.after(GameEvent.RevealHint(0)).game.ui.hintsShown)
+    }
+
+    @Test
     fun `Cache my area starts one run for the hunting area and reports its months`() {
         val grownUps = playing(Screen.GrownUps(from = Screen.Hunt))
 

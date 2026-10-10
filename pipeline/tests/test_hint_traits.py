@@ -140,3 +140,43 @@ def test_no_generated_hint_ever_uses_a_banned_kid_word():
         traits = {t.FLOWER_COLOR: [flower], t.FRUIT_COLOR: [fruit], SHOWY: showy, t.HEIGHT: ["0.5"], **SPAN}
         for text in texts(kind, traits).values():
             assert not any(word in text.lower() for word in BANNED), text
+
+
+def test_usda_traits_reads_the_trait_rows_by_binomial_and_prefers_the_species_row():
+    import io
+    import tarfile
+
+    def tab(rows):
+        return ("\n".join("\t".join(r) for r in rows) + "\n").encode()
+
+    files = {
+        "measurement_or_fact_specific.tab": tab(
+            [
+                ["occurrenceID", "measurementType", "measurementValue"],
+                ["O1", f"http://x/{t.HEIGHT}", "80"],
+                ["O2", f"http://x/{t.FLOWER_COLOR}", "http://x/PATO_0000322"],
+                ["O3", "http://x/Other", "ignored"],
+                ["O4", f"http://x/{t.HEIGHT}", "5"],
+            ]
+        ),
+        "occurrence_specific.tab": tab(
+            [["occurrenceID", "taxonID"], ["O1", "T1"], ["O2", "T1"], ["O3", "T1"], ["O4", "T2"]]
+        ),
+        "taxon.tab": tab(
+            [
+                ["taxonID", "scientificName", "taxonRank"],
+                ["T1", "Quercus nigra L.", "species"],
+                ["T2", "Quercus nigra L. var. x", "variety"],
+            ]
+        ),
+    }
+    buffer = io.BytesIO()
+    with tarfile.open(fileobj=buffer, mode="w:gz") as tar:
+        for name, data in files.items():
+            info = tarfile.TarInfo(f"./{name}")
+            info.size = len(data)
+            tar.addfile(info, io.BytesIO(data))
+
+    found = t.usda_traits(buffer.getvalue())
+
+    assert found == {"Quercus nigra": {t.HEIGHT: ["80"], t.FLOWER_COLOR: ["PATO_0000322"]}}
