@@ -32,7 +32,7 @@ RULE = {
     39: "unseen soil",
     42: "biome",
     46: "unseen soil",
-    49: "hedged",
+    49: "biome",
     50: "biome",
 }
 SPOTCHECK = [
@@ -77,9 +77,11 @@ def test_care_quotes_fail_unless_the_plant_escaped_cultivation():
 
 
 def test_a_hedge_fails_only_when_the_hint_comes_after_it():
-    quote = "It grows on dry slopes, but also in shady ravines."
+    quote = "It grows on dry slopes, but occasionally in shady ravines."
     assert h.hedged("Look on dry slopes.", quote) is False
     assert h.hedged("Look in shady spots.", quote) is True
+    # "Also" names a second main habitat, not a rare one.
+    assert h.hedged("Look along fence lines.", "It grows in woods and also along fence lines.") is False
     assert h.hedged("It sometimes grows in shade.", "It grows in shade.") is True
 
 
@@ -119,7 +121,8 @@ def _model(text, issues=()):
 
 
 def test_flag_generic_cuts_habitats_shared_past_the_share_and_reapplies_cleanly():
-    species = {f"R {i}": {"hints": [_model("Look in woods.")]} for i in range(3)}
+    # Each R row has a narrower place hint too, so its generic one isn't the last-resort fallback.
+    species = {f"R {i}": {"hints": [_model("Look in woods."), _model("Look in damp hollows.")]} for i in range(3)}
     species["R 3"] = {"hints": [_model("Look in meadows.")], "article": None}
     species.update({f"S {i}": {"hints": [_model("Look in damp spots.")]} for i in range(6)})
 
@@ -133,3 +136,13 @@ def test_flag_generic_cuts_habitats_shared_past_the_share_and_reapplies_cleanly(
     species.update({f"T {i}": {"hints": [_model("Look in damp spots.")]} for i in range(4)})
     h.flag_generic(species)
     assert species["R 0"]["hints"][0]["issues"] == []
+
+
+def test_a_generic_place_hint_ships_when_the_plant_has_no_other_place_hint():
+    species = {f"R {i}": {"hints": [_model("Look in woods.")]} for i in range(5)}
+    species["R 0"]["hints"].append(_model("Look in damp hollows."))
+
+    h.flag_generic(species)
+
+    assert species["R 0"]["hints"][0]["issues"] == [h.GENERIC]
+    assert species["R 1"]["hints"][0]["issues"] == []

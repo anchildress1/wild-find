@@ -16,3 +16,17 @@ Coverage, hints with no failed check per playable plant:
 | Oct 10 | 2093 | 884 (42%) | 1800 (86%) | 293 (14%) | 4864 |
 
 The stricter rules cost coverage: 121 more plants have no hint, and fewer have three. Fresh 50 for the owner: hints_spotcheck.md (seed 72, none of the earlier 50 plants).
+
+## Coverage fix, same day
+The owner rejected the first coverage numbers. Three changes, then `--recheck` and `--refill`:
+- "also" no longer counts as a hedge (it cost 194 hints; "also grows in" names a second main habitat)
+- a generic habitat ("Look in woods") ships when it is the plant's only place hint, ranked last
+- `--refill` re-asked Gemma for the 164 plants with no model hint, with the prompt told to skip only when no sentence helps; 6 got a clean hint, the rest have articles with nothing a kid can use
+
+| Run | Plants | 3 or more | 1 or more | none | clean hints |
+| --- | --- | --- | --- | --- | --- |
+| Oct 9 | 2111 | 1206 (57%) | 1939 (92%) | 172 (8%) | 6361 |
+| Oct 10, first | 2093 | 884 (42%) | 1800 (86%) | 293 (14%) | 4864 |
+| Oct 10, after the fix | 2093 | 958 (46%) | 1849 (88%) | 244 (12%) | 5200 |
+
+Of the 244 plants with no hint, 131 have no model hint at all (the article gives nothing usable). The biggest single checks left are the Oct 9 safety ones: water drops 606 hints alone, road 219. The S72 rules still cost garden care 191 and biome 130. The fresh 50 was redrawn from this version.

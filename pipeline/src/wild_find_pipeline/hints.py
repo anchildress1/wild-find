@@ -69,9 +69,10 @@ CARE = re.compile(
     re.I,
 )
 ESCAPED = re.compile(r"\b(?:escap\w*|naturali[sz]\w*)\b", re.I)
-# A habitat the quote calls rare: "occasionally in woodland" is not where to look first.
+# A habitat the quote calls rare: "occasionally in woodland" is not where to look first. "Also grows in" usually names
+# a second main habitat, so it passes: rejecting it cost 194 hints on Oct 10.
 HEDGE = re.compile(
-    r"\b(?:occasionally|rarely|sometimes|also|infrequently|seldom|sporadically|less (?:commonly|often|frequently))\b",
+    r"\b(?:occasionally|rarely|sometimes|infrequently|seldom|sporadically|less (?:commonly|often|frequently))\b",
     re.I,
 )
 # Biome words a kid can't match to the spot they stand in.
@@ -159,7 +160,7 @@ Tell a child, age 8, where to look outdoors to find a plant. Give hints in five 
   edge, a fence line. Never use a biome word (chaparral, fynbos, montane, lowland, desert, savanna, heath, scrub).
 - A habitat that fits almost any plant (woodland, forest, field, pasture, grassland) is worth a hint only with what
   the sentence says to narrow it ("damp woods", "oak woods", "old growth forests", "forest edges").
-- Use the main habitat. Skip anything the sentence says happens occasionally, rarely, sometimes, or also, and skip
+- Use the main habitat. Skip anything the sentence says happens occasionally, rarely, or sometimes, and skip
   a habitat the sentence gives only "for instance in" one named region. A sentence that names the plant's range
   can still give a hint; leave the range out of it.
 - Ground is only what a child can see or feel: wet or dry, sand, gravel, or rock. Never soil chemistry or depth
@@ -172,7 +173,8 @@ Tell a child, age 8, where to look outdoors to find a plant. Give hints in five 
 
 # Source
 You get sentences from the plant's Wikipedia article. Use only what they say. Give a second hint for a kind only when
-a different sentence says something different; otherwise give one, or none. Never add anything from memory.
+a different sentence says something different; otherwise give one. Give none only when no sentence says anything a
+child could use. Never add anything from memory.
 
 # Output
 JSON with the five kinds. Each is a list of up to two objects with "hint" (your sentence) and "evidence" (one
@@ -461,6 +463,12 @@ def flag_generic(species: dict[str, dict]) -> dict[str, float]:
             hint["issues"] = [i for i in hint["issues"] if i != GENERIC]
             if (groups := habitats(hint["text"])) is not None and groups <= generic:
                 hint["issues"].append(GENERIC)
+        # A generic habitat beats no place hint at all; it still ranks last, since its bucket is common.
+        places = [h for h in entry["hints"] if h["source"] == "model" and h["aspect"] == "place"]
+        if not any(not h["issues"] for h in places):
+            fallback = next((h for h in places if h["issues"] == [GENERIC]), None)
+            if fallback is not None:
+                fallback["issues"] = []
     return found
 
 
@@ -510,6 +518,33 @@ def save(species: dict, done: bool) -> None:
     )
 
 
+TEXT_CHECKS = frozenset(
+    {"banned word", "too long", "water", "road", "height", "region", "biome", "named region", "unseen soil",
+     "drops the wet", "garden care", "hedged"}
+)  # fmt: skip
+
+
+def refill() -> int:
+    """Ask the model again for every row it gave no hint, keeping every other row as stored; then re-rank."""
+    data = json.loads(HINTS.read_text())
+    if not data["done"]:
+        raise ValueError(f"{HINTS.name} is an unfinished checkpoint; finish make hints before --refill")
+    species = data["species"]
+    todo = [r for r, e in species.items() if not any(h["source"] == "model" for h in e["hints"])]
+    print(f"{len(todo)} rows without a model hint", flush=True)
+    pages = articles(todo)
+    facts = usda_traits(usda.archive(), TRAITS + USDA_TRAITS)
+    kinds = json.loads(PLANT_TYPES.read_text())["species"]
+    aliases = json.loads(SYNONYMS.read_text())["species"]
+    for row in todo:
+        species[row] = hints_for(row, pages[row], aliases.get(row, []), kinds.get(row, {}).get("type"), facts)
+    found = rank_all(species)
+    save(species, done=True)
+    filled = sum(any(h["source"] == "model" and not h["issues"] for h in species[r]["hints"]) for r in todo)
+    print(f"OK: {HINTS}: {filled} of {len(todo)} refilled rows got a clean hint; habitats {shares_text(found)}")
+    return 0
+
+
 def recheck() -> int:
     """Re-apply the text, duplicate, and generic-habitat checks to the stored model hints and re-rank; no model.
 
@@ -525,10 +560,11 @@ def recheck() -> int:
         for hint in entry["hints"]:
             if hint["source"] != "model":
                 continue
-            for name in text_issues(hint["aspect"], hint["text"], hint["evidence"]):
-                if name not in hint["issues"]:
-                    hint["issues"].append(name)
-                    added += 1
+            # Text checks are recomputed, not only added, so a loosened rule clears its old flags.
+            kept = [i for i in hint["issues"] if i not in TEXT_CHECKS]
+            fresh = text_issues(hint["aspect"], hint["text"], hint["evidence"])
+            added += len(set(fresh) - set(hint["issues"]))
+            hint["issues"] = kept + fresh
             key = hint["text"].casefold()
             if key in said and "repeats an earlier hint" not in hint["issues"]:
                 hint["issues"].append("repeats an earlier hint")
@@ -542,9 +578,11 @@ def recheck() -> int:
 
 
 def main() -> int:
-    """Write hints.json for every playable row, resuming an unfinished file; `--recheck` only re-applies checks."""
+    """Write hints.json for every playable row, resuming an unfinished file; `--recheck` and `--refill` patch it."""
     if "--recheck" in sys.argv:
         return recheck()
+    if "--refill" in sys.argv:
+        return refill()
     rows = playable()
     # Only an unfinished checkpoint resumes. A finished file is rebuilt from scratch, so a changed prompt, model,
     # source, or trait rule shows up in the output instead of being reused under a fresh build date.

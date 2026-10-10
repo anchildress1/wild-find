@@ -1,355 +1,355 @@
 # 🌿 S72 hints spot-check
 
-50 of 3250 picked Gemma hints, drawn with seed 72, none from the S56 draw's plants.
+50 of 3503 picked Gemma hints, drawn with seed 72, none from the S56 draw's plants.
 Grade one thing: does the quoted sentence say what the hint says?
 Put `y`, `n`, or `over` (the hint claims more than the sentence) after **Verdict:**.
 
-## 1. *Asclepias purpurascens* (light, model)
+## 1. *Artocarpus heterophyllus* (place, model)
 
-- **Hint:** Look in some shade.
-- **Quote:** Unlike common milkweed, purple milkweed prefers some shade and is considered a plant of partial shade.
-- **Article:** https://en.wikipedia.org/wiki/Asclepias_purpurascens
+- **Hint:** Look in tropical rainforests.
+- **Quote:** The jackfruit tree grows in a variety of habitats ranging from tropical rainforest to lowland and dry forests.
+- **Article:** https://en.wikipedia.org/wiki/Jackfruit
 - **Verdict:**
 
-## 2. *Vitis aestivalis* (nearby, model)
+## 2. *Tilia cordata* (place, model)
 
-- **Hint:** It grows high on trees.
-- **Quote:** It is a vigorous vine, growing to or more high on trees.
-- **Article:** https://en.wikipedia.org/wiki/Vitis_aestivalis
+- **Hint:** Look in ancient woodland.
+- **Quote:** In Britain Tilia cordata, traditionally called pry, is considered an indicator of ancient woodland, and is becoming increasingly rare.
+- **Article:** https://en.wikipedia.org/wiki/Tilia_cordata
 - **Verdict:**
 
-## 3. *Psidium guajava* (light, model)
+## 3. *Pittosporum tenuifolium* (place, model)
 
-- **Hint:** It grows well under sun.
-- **Quote:** It is a perennial tree that grows well under sun or warm temperatures.
-- **Article:** https://en.wikipedia.org/wiki/Psidium_guajava
+- **Hint:** Look in coastal forest areas.
+- **Quote:** is found growing wild in coastal and lower mountain forest areas up to an altitude of 900 m.
+- **Article:** https://en.wikipedia.org/wiki/Pittosporum_tenuifolium
 - **Verdict:**
 
-## 4. *Trillium ovatum* (nearby, model)
+## 4. *Silene nutans* (ground, model)
 
-- **Hint:** Look near alder thickets and shrubs.
-- **Quote:** It is often found growing in coniferous and mixed coniferous-deciduous forests, in and around alder thickets and shrubs.
-- **Article:** https://en.wikipedia.org/wiki/Trillium_ovatum
-- **Verdict:**
-
-## 5. *Clitoria mariana* (ground, model)
-
-- **Hint:** It grows in dry to moist sand.
-- **Quote:** It ranges from dry to moist sand soils.
-- **Article:** https://en.wikipedia.org/wiki/Clitoria_mariana
-- **Verdict:**
-
-## 6. *Halosaccion glandiforme* (place, model)
-
-- **Hint:** Look in the intertidal zone.
-- **Quote:** This is a shallow water species growing in the low to middle intertidal zone.
-- **Article:** https://en.wikipedia.org/wiki/Halosaccion_glandiforme
-- **Verdict:**
-
-## 7. *Spiraea douglasii* (ground, model)
-
-- **Hint:** It grows on gravelly ground.
-- **Quote:** It tolerates a variety of soil types as well as gravelly substrates.
-- **Article:** https://en.wikipedia.org/wiki/Spiraea_douglasii
-- **Verdict:**
-
-## 8. *Pinus monticola* (place, model)
-
-- **Hint:** Look in forests with fir and hemlock.
-- **Quote:** The tree often occurs in forests with fir and hemlock species, especially those which are tolerant of shade.
-- **Article:** https://en.wikipedia.org/wiki/Western_white_pine
-- **Verdict:**
-
-## 9. *Reynoutria sachalinensis* (nearby, model)
-
-- **Hint:** It grows in botanic gardens.
-- **Quote:** It was introduced to Europe and grown in many botanic gardens.
-- **Article:** https://en.wikipedia.org/wiki/Reynoutria_sachalinensis
-- **Verdict:**
-
-## 10. *Imperata cylindrica* (ground, model)
-
-- **Hint:** It grows in wet or dry lands.
-- **Quote:** It grows on wet lands, dry lands, areas of high salinity, organic soils, clay soils, and sandy soils of pH from 4.
-- **Article:** https://en.wikipedia.org/wiki/Imperata_cylindrica
-- **Verdict:**
-
-## 11. *Ficus aurea* (nearby, model)
-
-- **Hint:** It grows on a host tree.
-- **Quote:** As a hemiepiphyte it germinates in the canopy of a host tree and begins life as an epiphyte before growing roots down to the ground.
-- **Article:** https://en.wikipedia.org/wiki/Ficus_aurea
-- **Verdict:**
-
-## 12. *Trillium undulatum* (nearby, model)
-
-- **Hint:** Find it near red maple trees.
-- **Quote:** undulatum demands strongly acidic, humus-rich soils and tends to be found in the shade of acid-loving trees such as eastern white pine, red maple, red spruce and balsam fir.
-- **Article:** https://en.wikipedia.org/wiki/Trillium_undulatum
-- **Verdict:**
-
-## 13. *Teucrium scorodonia* (ground, model)
-
-- **Hint:** It likes sandy ground.
-- **Quote:** These plants prefer sandy soils in woodland and acid heaths, at an altitude of above sea level.
-- **Article:** https://en.wikipedia.org/wiki/Teucrium_scorodonia
-- **Verdict:**
-
-## 14. *Silene nutans* (place, model)
-
-- **Hint:** Look in open grasslands.
+- **Hint:** Look on rock outcrops.
 - **Quote:** At the periphery of its distribution, it has a patchy distribution in xeric habitats, such as open grasslands and on rock outcrops at forest margins, on both acidic and alkaline substrates (pH 3.
 - **Article:** https://en.wikipedia.org/wiki/Silene_nutans
 - **Verdict:**
 
-## 15. *Pueraria montana* (edges, model)
+## 5. *Cirsium altissimum* (place, model)
 
-- **Hint:** It likes to grow in edge habitats.
-- **Quote:** Although kudzu prefers forest regrowth and edge habitats with high sun exposure, the plant can survive in full sun or partial shade.
-- **Article:** https://en.wikipedia.org/wiki/Pueraria_montana
+- **Hint:** Look in prairies or open woodlands.
+- **Quote:** The species grows in prairies, open woodlands, and disturbed sites.
+- **Article:** https://en.wikipedia.org/wiki/Cirsium_altissimum
 - **Verdict:**
 
-## 16. *Capparis zoharyi* (nearby, model)
+## 6. *Galactites tomentosus* (ground, model)
 
-- **Hint:** Look near building walls.
-- **Quote:** This species grows on slopes, embankments, building walls and roadsides.
-- **Article:** https://en.wikipedia.org/wiki/Capparis_zoharyi
+- **Hint:** It grows on barren grounds.
+- **Quote:** This plant prefers sunny places and usually grows on the uncultivated or barren grounds, waste places, well-drained soils, pastures and roadsides.
+- **Article:** https://en.wikipedia.org/wiki/Galactites_tomentosus
 - **Verdict:**
 
-## 17. *Stachys sylvatica* (nearby, model)
+## 7. *Ruellia strepens* (light, model)
 
-- **Hint:** Look in hedgerows.
-- **Quote:** It grows in dappled shade at the edge of woods, in hedgerows and on rough ground.
-- **Article:** https://en.wikipedia.org/wiki/Stachys_sylvatica
+- **Hint:** It can grow in nearly full shade.
+- **Quote:** In the garden it is hardy to USDA zone 5, and can tolerate nearly full shade.
+- **Article:** https://en.wikipedia.org/wiki/Ruellia_strepens
 - **Verdict:**
 
-## 18. *Sorghastrum nutans* (light, model)
+## 8. *Passiflora edulis* (place, model)
 
-- **Hint:** It does not like shade.
-- **Quote:** It is intolerant to shade.
-- **Article:** https://en.wikipedia.org/wiki/Sorghastrum_nutans
+- **Hint:** Look in forests.
+- **Quote:** In India, the government of Andhra Pradesh started growing passion fruit vines in the Chintapalli (Vizag) forests to make fruit available within the region.
+- **Article:** https://en.wikipedia.org/wiki/Passiflora_edulis
 - **Verdict:**
 
-## 19. *Hakea sericea* (light, model)
+## 9. *Populus alba* (light, model)
+
+- **Hint:** It needs lots of light.
+- **Quote:** White poplar requires abundant light and ample moisture, and stands up well to flood water and slightly acidic soils.
+- **Article:** https://en.wikipedia.org/wiki/Populus_alba
+- **Verdict:**
+
+## 10. *Heliopsis helianthoides* (light, model)
 
 - **Hint:** It grows in full sun.
-- **Quote:** A frost tolerant species, grows in well-drained soil and full sun.
-- **Article:** https://en.wikipedia.org/wiki/Hakea_sericea
+- **Quote:** It is a popular garden plant for moist, fertile soil in full sun.
+- **Article:** https://en.wikipedia.org/wiki/Heliopsis_helianthoides
 - **Verdict:**
 
-## 20. *Dactylorhiza viridis* (ground, model)
+## 11. *Erigeron philadelphicus* (ground, model)
 
-- **Hint:** It grows in moist, rich soil.
-- **Quote:** It is typically found growing in moist, rich soil in wet meadows, moist or wet deciduous woods and thickets, and is frequently found on steep slopes.
-- **Article:** https://en.wikipedia.org/wiki/Dactylorhiza_viridis
+- **Hint:** It likes moisture.
+- **Quote:** It benefits from moisture and some shade, as well as disturbances.
+- **Article:** https://en.wikipedia.org/wiki/Erigeron_philadelphicus
 - **Verdict:**
 
-## 21. *Itea virginica* (place, model)
+## 12. *Silene uniflora* (place, model)
 
-- **Hint:** Look in low-lying woods.
-- **Quote:** Itea virginica, commonly known as Virginia willow or Virginia sweetspire, is a small North American flowering shrub that grows in low-lying woods and wetland margins.
-- **Article:** https://en.wikipedia.org/wiki/Itea_virginica
+- **Hint:** Look along the coasts.
+- **Quote:** Silene uniflora is a maritime species growing in many European countries, but almost entirely along the coasts bordering the Atlantic Ocean and Baltic Sea.
+- **Article:** https://en.wikipedia.org/wiki/Silene_uniflora
 - **Verdict:**
 
-## 22. *Cassia fistula* (light, model)
+## 13. *Schefflera actinophylla* (place, model)
+
+- **Hint:** Look in rainforests.
+- **Quote:** It is native to tropical rainforests and gallery forests in northern and northeastern Queensland coasts and the Northern Territory of Australia, as well as New Guinea and Java.
+- **Article:** https://en.wikipedia.org/wiki/Heptapleurum_actinophyllum
+- **Verdict:**
+
+## 14. *Rosa multiflora* (place, model)
+
+- **Hint:** Look in forest understories or thickets.
+- **Quote:** It was introduced to North America, where it is an invasive species, forming extensive, impenetrable stands within forest understories, thickets, borders, and lowlands.
+- **Article:** https://en.wikipedia.org/wiki/Rosa_multiflora
+- **Verdict:**
+
+## 15. *Plantago major* (place, model)
+
+- **Hint:** Look in lawns and fields.
+- **Quote:** Plantago major grows in lawns and fields, along roadsides, and in other areas that have been disturbed by humans.
+- **Article:** https://en.wikipedia.org/wiki/Plantago_major
+- **Verdict:**
+
+## 16. *Calluna vulgaris* (place, model)
+
+- **Hint:** Look in pine and oak woodland.
+- **Quote:** It is the dominant plant in most heathland and moorland in Europe, and in some bog vegetation and acidic pine and oak woodland.
+- **Article:** https://en.wikipedia.org/wiki/Calluna
+- **Verdict:**
+
+## 17. *Salix cinerea* (place, model)
+
+- **Hint:** Look near forest edges.
+- **Quote:** Grey willow grows in wetlands, moist depressions, ditches, embankments, banks of stagnant or slow-moving water bodies, and forest edges, where it encounters low-lying damp situations with waterlogged and nutrient-poor soils.
+- **Article:** https://en.wikipedia.org/wiki/Salix_cinerea
+- **Verdict:**
+
+## 18. *Rubus schmidelioides* (ground, model)
+
+- **Hint:** It grows in rocky sites.
+- **Quote:** subpauperatus, can be found in open scrublands or exposed rocky sites.
+- **Article:** https://en.wikipedia.org/wiki/Rubus_schmidelioides
+- **Verdict:**
+
+## 19. *Gaillardia pulchella* (ground, model)
+
+- **Hint:** Look for sandy soil.
+- **Quote:** It is common along the roads and prefers sandy soils.
+- **Article:** https://en.wikipedia.org/wiki/Gaillardia_pulchella
+- **Verdict:**
+
+## 20. *Cryptogramma acrostichoides* (ground, model)
+
+- **Hint:** It grows in the cracks of rocks.
+- **Quote:** It is known by the common names American parsley fern and American rockbrake and is native to most of western North America, where it grows in the cracks of rocks in many types of sunny mountainous habitat.
+- **Article:** https://en.wikipedia.org/wiki/Cryptogramma_acrostichoides
+- **Verdict:**
+
+## 21. *Himantoglossum hircinum* (place, model)
+
+- **Hint:** Look in open woods.
+- **Quote:** This orchid grows in dry meadows, rocky areas, and open woods.
+- **Article:** https://en.wikipedia.org/wiki/Himantoglossum_hircinum
+- **Verdict:**
+
+## 22. *Carex pumila* (place, model)
+
+- **Hint:** Look in dune areas.
+- **Quote:** Mostly found along the coast in dune areas but occasionally around the sandy margins of coastal rivers and estuaries.
+- **Article:** https://en.wikipedia.org/wiki/Carex_pumila
+- **Verdict:**
+
+## 23. *Prunus americana* (ground, model)
+
+- **Hint:** Look in coarse or medium soils.
+- **Quote:** The plant is adapted to coarse- and medium-textured soils, but not to fine soils (silt or clay).
+- **Article:** https://en.wikipedia.org/wiki/Prunus_americana
+- **Verdict:**
+
+## 24. *Agrimonia parviflora* (light, model)
+
+- **Hint:** It likes full sunlight.
+- **Quote:** Harvestlice prefers full sunlight and can grow in most soils, including sandy and silty.
+- **Article:** https://en.wikipedia.org/wiki/Agrimonia_parviflora
+- **Verdict:**
+
+## 25. *Rubus flagellaris* (ground, model)
+
+- **Hint:** It grows on dry soils.
+- **Quote:** Rubus flagellaris grows on dry soils, bogs, soft soils and wooded soils.
+- **Article:** https://en.wikipedia.org/wiki/Rubus_flagellaris
+- **Verdict:**
+
+## 26. *Ulmus glabra* (ground, model)
+
+- **Hint:** It likes moist soils.
+- **Quote:** A large deciduous tree, it is essentially a montane species, growing at altitudes up to , preferring sites with moist soils and high humidity.
+- **Article:** https://en.wikipedia.org/wiki/Ulmus_glabra
+- **Verdict:**
+
+## 27. *Cornus sanguinea* (place, model)
+
+- **Hint:** Look in prickly woodland fringes.
+- **Quote:** It grows in the margins of forests or unforested areas as woods in regeneration, prickly woodland fringes, with other thorny shrub species (for example, Clematis vitalba, Crataegus monogyna, Malus sylvestris, Prunus spinosa, Rubus idaeus or Rubus ulmifolius).
+- **Article:** https://en.wikipedia.org/wiki/Cornus_sanguinea
+- **Verdict:**
+
+## 28. *Lupinus succulentus* (ground, model)
+
+- **Hint:** It likes moist clay or heavy soils.
+- **Quote:** Prefers moist clay or heavy soils in full sun.
+- **Article:** https://en.wikipedia.org/wiki/Lupinus_succulentus
+- **Verdict:**
+
+## 29. *Ulmus parvifolia* (light, model)
+
+- **Hint:** It can grow in many light conditions.
+- **Quote:** Owing to its versatility and ability to tolerate a wide range of temperatures, light, and humidity conditions, the Chinese elm is a popular choice as a bonsai species.
+- **Article:** https://en.wikipedia.org/wiki/Ulmus_parvifolia
+- **Verdict:**
+
+## 30. *Acer platanoides* (light, model)
+
+- **Hint:** It can grow in low light.
+- **Quote:** The tree is also capable of growing in low lighting conditions within a forest canopy, leafs out earlier than most North American maple species, and its growing season tends to run longer as the lighting conditions of the United States (see above) result in fall dormancy occurring later than it does in the higher latitude of Europe.
+- **Article:** https://en.wikipedia.org/wiki/Acer_platanoides
+- **Verdict:**
+
+## 31. *Lithospermum canescens* (ground, model)
+
+- **Hint:** It grows in dry to moderately moist soil.
+- **Quote:** The plant commonly grows in dry to moderately moist soils, in prairies, woodlands, and the edges of roads.
+- **Article:** https://en.wikipedia.org/wiki/Lithospermum_canescens
+- **Verdict:**
+
+## 32. *Arnoglossum plantagineum* (ground, model)
+
+- **Hint:** The ground is moist to wet.
+- **Quote:** Arnoglossum plantagineum grows in sunny areas with moist to wet soils in wet and mesic prairie, fens, and sedge meadows, and seems to have little tolerance for disturbed habitats such as those grazed by cattle, sprayed with herbicides, or those subject repeated haying.
+- **Article:** https://en.wikipedia.org/wiki/Arnoglossum_plantagineum
+- **Verdict:**
+
+## 33. *Telmatoblechnum serrulatum* (ground, model)
+
+- **Hint:** Look in wet prairies.
+- **Quote:** It can also be found wet prairies, moist pine woods, and sometimes in forests Specifically, in Florida the recorded habitat for this fern is moist and shady places.
+- **Article:** https://en.wikipedia.org/wiki/Telmatoblechnum_serrulatum
+- **Verdict:**
+
+## 34. *Enterolobium cyclocarpum* (nearby, model)
+
+- **Hint:** It can be near coffee plantations.
+- **Quote:** It is widely grown as a shade tree to shelter coffee plantations and for shade and forage for cattle; it also improves soil fertility by nitrogen fixation.
+- **Article:** https://en.wikipedia.org/wiki/Enterolobium_cyclocarpum
+- **Verdict:**
+
+## 35. *Astragalus cicer* (place, model)
+
+- **Hint:** Look in the fringes of forests or meadows.
+- **Quote:** In general, cicer milkvetch can be seen to grow in the fringes of forests, meadows, and alongside streams; however, it has also been reported that the plant proliferates along roadsides.
+- **Article:** https://en.wikipedia.org/wiki/Astragalus_cicer
+- **Verdict:**
+
+## 36. *Neolloydia conoidea* (nearby, model)
+
+- **Hint:** It grows among Echinocereus longisetus.
+- **Quote:** The plants are found growing among Echinocereus longisetus subsp.
+- **Article:** https://en.wikipedia.org/wiki/Neolloydia_conoidea
+- **Verdict:**
+
+## 37. *Eucalyptus camaldulensis* (ground, model)
+
+- **Hint:** It likes clay soil.
+- **Quote:** River red gum prefers soils with clay content.
+- **Article:** https://en.wikipedia.org/wiki/Eucalyptus_camaldulensis
+- **Verdict:**
+
+## 38. *Selaginella lepidophylla* (light, model)
+
+- **Hint:** It grows in full sun.
+- **Quote:** Selaginella lepidophylla grows in dry, sandy soils in full sun.
+- **Article:** https://en.wikipedia.org/wiki/Selaginella_lepidophylla
+- **Verdict:**
+
+## 39. *Adansonia digitata* (place, model)
+
+- **Hint:** Look in woodlands.
+- **Quote:** In Angola and Namibia, the baobabs grow in woodlands, and in coastal regions, in addition to savannas.
+- **Article:** https://en.wikipedia.org/wiki/Adansonia_digitata
+- **Verdict:**
+
+## 40. *Knightia excelsa* (place, model)
+
+- **Hint:** Look in valley forests.
+- **Quote:** Knightia excelsa, commonly known as rewarewa (from Māori), is an evergreen tree endemic to the low elevation and valley forests of New Zealand.
+- **Article:** https://en.wikipedia.org/wiki/Knightia_excelsa
+- **Verdict:**
+
+## 41. *Dendrolycopodium hickeyi* (place, model)
+
+- **Hint:** Look in conifer forests.
+- **Quote:** It can be found in dry or mesic conifer forests, as well as forest openings, and prefers sandy soil shaded light conditions.
+- **Article:** https://en.wikipedia.org/wiki/Dendrolycopodium_hickeyi
+- **Verdict:**
+
+## 42. *Dodonaea viscosa* (light, model)
 
 - **Hint:** It grows best in full sun.
-- **Quote:** Growth for this tree is best in full sun on well-drained soil; it is relatively drought-tolerant and slightly salt-tolerant.
-- **Article:** https://en.wikipedia.org/wiki/Cassia_fistula
+- **Quote:** Due to it being frost sensitive, it grows best under shelter in well-drained, moist soil with full sun.
+- **Article:** https://en.wikipedia.org/wiki/Dodonaea_viscosa
 - **Verdict:**
 
-## 23. *Ripogonum scandens* (light, model)
+## 43. *Garrya elliptica* (place, model)
 
-- **Hint:** It grows in sunny and shady areas.
-- **Quote:** scandens grows in both sunny and shady areas.
-- **Article:** https://en.wikipedia.org/wiki/Ripogonum_scandens
+- **Hint:** Look in coastal evergreen forests.
+- **Quote:** Garrya elliptica is found in several plant communities, principally in drier coastal California and southern Oregon no more than 20 miles from the Pacific Ocean; the main associations are coastal sage and chaparral ecoregion, Northern coastal scrub, Mixed evergreen coastal forest and Northern coastal sage scrub.
+- **Article:** https://en.wikipedia.org/wiki/Garrya_elliptica
 - **Verdict:**
 
-## 24. *Ajuga reptans* (place, model)
+## 44. *Hamatocactus hamatacanthus* (ground, model)
 
-- **Hint:** Look in garden areas.
-- **Quote:** Its rapid spread through both seeds and underground rhizomes can lead to significant reductions in local biodiversity, particularly in woodland and garden areas.
-- **Article:** https://en.wikipedia.org/wiki/Ajuga_reptans
+- **Hint:** Look in limestone crevices.
+- **Quote:** Ferocactus hamatacanthus is widespread in the Chihuahuan Desert of north-western Mexico in the states of Chihuahua, Coahuila, Durango, Nuevo León, and San Luis Potosi; and in New Mexico, and south-western Texas near El Paso growing in limestone crevices at elevations of 700 to 200 meters.
+- **Article:** https://en.wikipedia.org/wiki/Ferocactus_hamatacanthus
 - **Verdict:**
 
-## 25. *Solidago multiradiata* (place, model)
+## 45. *Cornus drummondii* (light, model)
 
-- **Hint:** Look in mountain meadows.
-- **Quote:** Its habitat includes tundra and mountain meadows.
-- **Article:** https://en.wikipedia.org/wiki/Solidago_multiradiata
+- **Hint:** It grows in shade or partial shade.
+- **Quote:** It can grow to a height of with a spread of .
+- **Article:** https://en.wikipedia.org/wiki/Cornus_drummondii
 - **Verdict:**
 
-## 26. *Cylindropuntia echinocarpa* (place, model)
+## 46. *Helianthus petiolaris* (ground, model)
 
-- **Hint:** Look in forestland.
-- **Quote:** Cylindropuntia echinocarpa is native to the Southwestern United States and Northwestern Mexico in the states of Baja California and Sonora, where it can be found the Sonoran Desert, the Mojave Desert, and Colorado Desert in California, Nevada, Utah, and Arizona in semi-desert, grassland and forestland at altitudes of 50 to 1700 meters.
-- **Article:** https://en.wikipedia.org/wiki/Cylindropuntia_echinocarpa
+- **Hint:** It can be in heavy clay soil.
+- **Quote:** They can also be found in heavy clay soil and in dry prairies.
+- **Article:** https://en.wikipedia.org/wiki/Helianthus_petiolaris
 - **Verdict:**
 
-## 27. *Mirabilis nyctaginea* (edges, model)
+## 47. *Zanthoxylum americanum* (light, model)
 
-- **Hint:** Look in disturbed habitats.
-- **Quote:** Its exact native range is obscure, and it is often weedy throughout its range, spreading into disturbed habitat easily.
-- **Article:** https://en.wikipedia.org/wiki/Mirabilis_nyctaginea
+- **Hint:** Find it in shaded dense areas.
+- **Quote:** In shaded dense areas, the ground is sparsely inhabited with vegetation but covered with dense leaf litter.
+- **Article:** https://en.wikipedia.org/wiki/Zanthoxylum_americanum
 - **Verdict:**
 
-## 28. *Acer saccharum* (light, model)
+## 48. *Mimosa nuttallii* (ground, model)
 
-- **Hint:** It can grow in the shade.
-- **Quote:** Acer saccharum is among the most shade tolerant of large deciduous trees, and very old trees in second-growth settings can grow large even in the understory for many years.
-- **Article:** https://en.wikipedia.org/wiki/Acer_saccharum
+- **Hint:** It grows in sandy or silty soil.
+- **Quote:** Habitat includes disturbed areas of sandy or silty soils, roadsides, grasslands, prairies and forest margins.
+- **Article:** https://en.wikipedia.org/wiki/Mimosa_nuttallii
 - **Verdict:**
 
-## 29. *Mertensia ciliata* (ground, model)
+## 49. *Prunus fasciculata* (ground, model)
 
-- **Hint:** It grows in moist habitat.
-- **Quote:** It often grows in moist habitat, such as subalpine meadows and creeksides.
-- **Article:** https://en.wikipedia.org/wiki/Mertensia_ciliata
+- **Hint:** It grows on dry slopes and in washes.
+- **Quote:** It prefers sandy or rocky soil on dry slopes and washes, usually below elevation.
+- **Article:** https://en.wikipedia.org/wiki/Prunus_fasciculata
 - **Verdict:**
 
-## 30. *Aruncus dioicus* (ground, model)
+## 50. *Dactylorhiza incarnata* (place, model)
 
-- **Hint:** It likes moist ground.
-- **Quote:** This plant can be found in moist woodland, often at higher altitudes, throughout temperate areas of Europe, Asia, and eastern and western North America.
-- **Article:** https://en.wikipedia.org/wiki/Aruncus_dioicus
-- **Verdict:**
-
-## 31. *Viburnum tinus* (ground, model)
-
-- **Hint:** It likes moist areas.
-- **Quote:** Native to the Mediterranean region, Viburnum tinus prefers shady, moist areas.
-- **Article:** https://en.wikipedia.org/wiki/Viburnum_tinus
-- **Verdict:**
-
-## 32. *Escobaria vivipara* (ground, model)
-
-- **Hint:** It grows in granite crevices and outcroppings.
-- **Quote:** In the US state of Minnesota, it is listed as a threatened species and is at the most easterly extent of its natural range; it is rare in the state and found in a narrow section of the western part of the state, where it is found growing in crevices and outcroppings of granite.
-- **Article:** https://en.wikipedia.org/wiki/Pelecyphora_vivipara
-- **Verdict:**
-
-## 33. *Baccharis sarothroides* (ground, model)
-
-- **Hint:** Look in gravelly dry soils.
-- **Quote:** Native to the Sonoran Desert of northwestern Mexico (Baja California, Baja California Sur, Sinaloa, Sonora) and the Southwestern United States (southern California, Arizona, New Mexico, western Texas), it is common in gravelly dry soils and disturbed areas.
-- **Article:** https://en.wikipedia.org/wiki/Baccharis_sarothroides
-- **Verdict:**
-
-## 34. *Paspalum notatum* (ground, model)
-
-- **Hint:** It likes sandy soils.
-- **Quote:** It prefers sandy soils and is tolerant of shade.
-- **Article:** https://en.wikipedia.org/wiki/Paspalum_notatum
-- **Verdict:**
-
-## 35. *Gaillardia aristata* (place, model)
-
-- **Hint:** Look in prairies or sagebrush grasslands.
-- **Quote:** aristata grows in many habitats, including prairies, sagebrush grasslands, and coniferous forests.
-- **Article:** https://en.wikipedia.org/wiki/Gaillardia_aristata
-- **Verdict:**
-
-## 36. *Tillandsia recurvata* (light, model)
-
-- **Hint:** Look in low light.
-- **Quote:** It grows well in areas with low light, little airflow, and high humidity, which is commonly provided by southern shade trees, often the southern live oak (Quercus virginiana).
-- **Article:** https://en.wikipedia.org/wiki/Tillandsia_recurvata
-- **Verdict:**
-
-## 37. *Adenostoma fasciculatum* (light, model)
-
-- **Hint:** The seeds do not like shade.
-- **Quote:** The seeds are shade intolerant, only emerging where there are openings in the canopy.
-- **Article:** https://en.wikipedia.org/wiki/Adenostoma_fasciculatum
-- **Verdict:**
-
-## 38. *Lobelia angulata* (ground, model)
-
-- **Hint:** Find it in damp habitats.
-- **Quote:** Lobelia angulata is widespread and common in damp habitats throughout much of the North, South and Stewart Islands.
-- **Article:** https://en.wikipedia.org/wiki/Lobelia_angulata
-- **Verdict:**
-
-## 39. *Drosera capillaris* (ground, model)
-
-- **Hint:** It grows in sandy and wet ground.
-- **Quote:** These habitats are highly acidic, sandy, and nutrient deficient, incentivizing carnivory.
-- **Article:** https://en.wikipedia.org/wiki/Drosera_capillaris
-- **Verdict:**
-
-## 40. *Elymus elymoides* (place, model)
-
-- **Hint:** Look in valley grasslands.
-- **Quote:** The species is native to most of North America west of the Mississippi River and occurs in a number of ecosystems, from the alpine zone to desert sage scrub to valley grassland.
-- **Article:** https://en.wikipedia.org/wiki/Elymus_elymoides
-- **Verdict:**
-
-## 41. *Helianthus debilis* (ground, model)
-
-- **Hint:** It grows in sand.
-- **Quote:** It is highly drought-tolerant and it will grow in low-nutrient and poor soils, such as alkaline and acidic soils and sand.
-- **Article:** https://en.wikipedia.org/wiki/Helianthus_debilis
-- **Verdict:**
-
-## 42. *Ilex cornuta* (light, model)
-
-- **Hint:** It grows in sun or shade.
-- **Quote:** Ilex cornuta and its cultivars will tolerate a wide variety of soils and will grow in sun or shade.
-- **Article:** https://en.wikipedia.org/wiki/Ilex_cornuta
-- **Verdict:**
-
-## 43. *Cyclamen hederifolium* (place, model)
-
-- **Hint:** Look in woodland or rocky areas.
-- **Quote:** Cyclamen hederifolium, sowbread, or ivy-leaved cyclamen, is a species of flowering plant in the family Primulaceae, native to woodland, shrubland, and rocky areas at altitudes of up to 1,200 metres in the Mediterranean region from southern France to western Turkey and on Mediterranean islands.
-- **Article:** https://en.wikipedia.org/wiki/Cyclamen_hederifolium
-- **Verdict:**
-
-## 44. *Impatiens walleriana* (place, model)
-
-- **Hint:** Look in parks and gardens.
-- **Quote:** Impatiens is one of the most popular of all bedding plants for parks and gardens worldwide, typically grown in containers but also in bedding schemes.
-- **Article:** https://en.wikipedia.org/wiki/Impatiens_walleriana
-- **Verdict:**
-
-## 45. *Orchis mascula* (light, model)
-
-- **Hint:** It grows in full sun or shady areas.
-- **Quote:** It grows in a variety of habitats, from meadows to mountain pastures and woods, in full sun or shady areas, from sea level to 2,500 metres (8,000 ft) altitude.
-- **Article:** https://en.wikipedia.org/wiki/Orchis_mascula
-- **Verdict:**
-
-## 46. *Rosa acicularis* (place, model)
-
-- **Hint:** Look in thickets or on wooded hillsides.
-- **Quote:** Its native habitats include thickets, stream banks, rocky bluffs, and wooded hillsides.
-- **Article:** https://en.wikipedia.org/wiki/Rosa_acicularis
-- **Verdict:**
-
-## 47. *Dittrichia viscosa* (ground, model)
-
-- **Hint:** Look in dry riverbeds.
-- **Quote:** Originally, the species was found mainly in dry riverbeds and abandoned fields up to a 1500 m (5000 feet) elevation.
-- **Article:** https://en.wikipedia.org/wiki/Dittrichia_viscosa
-- **Verdict:**
-
-## 48. *Hesperoyucca whipplei* (ground, model)
-
-- **Hint:** It grows on rocky slopes and washes.
-- **Quote:** Yucca whipplei grows on the rocky slopes and washes of the chaparral area of the transverse mountains of Southern California up to approximately above mean sea level.
-- **Article:** https://en.wikipedia.org/wiki/Hesperoyucca_whipplei
-- **Verdict:**
-
-## 49. *Pseudotsuga menziesii* (light, model)
-
-- **Hint:** It does not like deep shade.
-- **Quote:** As it is only moderately shade tolerant, undisturbed Douglas-fir stands in humid areas will eventually give way to later successional, more shade-tolerant associates such as the western redcedar and western hemlock—though this process may take a thousand years or more.
-- **Article:** https://en.wikipedia.org/wiki/Douglas_fir
-- **Verdict:**
-
-## 50. *Panax trifolius* (place, model)
-
-- **Hint:** Look in woodlands or damp clearings.
-- **Quote:** It can be found in woodlands or damp clearings in eastern deciduous forests of North America.
-- **Article:** https://en.wikipedia.org/wiki/Panax_trifolius
+- **Hint:** Look in wet meadows.
+- **Quote:** Dactylorhiza incarnata, the early marsh-orchid, is a perennial, temperate-climate species of orchid generally found growing in wet meadows, and generally on base-rich soils, up to about 2100m asl.
+- **Article:** https://en.wikipedia.org/wiki/Dactylorhiza_incarnata
 - **Verdict:**
