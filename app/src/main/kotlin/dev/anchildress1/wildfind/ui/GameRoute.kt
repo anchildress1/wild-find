@@ -30,11 +30,13 @@ import dev.anchildress1.wildfind.core.game.GameEvent
 import dev.anchildress1.wildfind.core.game.GameState
 import dev.anchildress1.wildfind.core.game.Screen
 import dev.anchildress1.wildfind.core.hunt.PlantType
+import dev.anchildress1.wildfind.core.hunt.forMonth
 import dev.anchildress1.wildfind.core.map.Places
 import dev.anchildress1.wildfind.core.map.WorldMap
 import dev.anchildress1.wildfind.game.GameViewModel
 import dev.anchildress1.wildfind.ui.theme.LocalReducedMotion
 import dev.anchildress1.wildfind.ui.theme.Motion
+import java.time.LocalDate
 
 private val factory = viewModelFactory {
     initializer { GameViewModel((this[APPLICATION_KEY] as WildFindApp).graph) }
@@ -138,6 +140,7 @@ private fun ScreenFor(screen: Screen, state: GameState, vm: GameViewModel) {
             vm.analysis,
             onCapture = { on(GameEvent.Capture) },
             onSkip = { on(GameEvent.Skip) },
+            onHint = { screen.row?.let { on(GameEvent.RevealHint(it)) } },
             onBack = { on(GameEvent.Back) },
         )
 
@@ -152,9 +155,11 @@ private fun ScreenFor(screen: Screen, state: GameState, vm: GameViewModel) {
 
         is Screen.GrownUps -> GrownUpsScreen(
             state.regionLabel,
+            state.areaCache,
             onBack = { on(GameEvent.Back) },
             onArea = { on(GameEvent.EditRegion) },
             onReplay = { on(GameEvent.ReplayOpener) },
+            onCache = { on(GameEvent.CacheArea) },
         )
     }
 }
@@ -188,6 +193,8 @@ private fun cameraTarget(row: Int?, state: GameState): CameraTarget {
         state.stops.size,
         stop.description,
         stop.canSkip,
+        stop.hints.forMonth(LocalDate.now().monthValue, northern = (state.region?.lat ?: 0) >= 0),
+        state.hintsShown[row] ?: 0,
     )
 }
 

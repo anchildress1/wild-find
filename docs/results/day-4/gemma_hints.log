@@ -1,0 +1,718 @@
+# 2026-10-09 15:02 EDT, Apple M4 Max, macOS-26.5.2-arm64-arm-64bit-Mach-O, Ollama at http://localhost:11434, models gemma4:12b @ c7597fc90b86, gemma4:26b @ 48eb98ec778c, temperature 1.0, top_p 0.95, top_k 64, seed 1, num_ctx 8192
+# Wikipedia revisions: Conoclinium coelestinum 1368583758, Callicarpa americana 1375086217, Liquidambar styraciflua 1376158564, Magnolia grandiflora 1377878923, Liriodendron tulipifera 1371824047, Polystichum acrostichoides 1327494907, Fagus grandifolia 1376510144, Erechtites hieraciifolius 1368440496, Ampelopsis glandulosa 1369470767, Diospyros virginiana 1379002754, Platanus occidentalis 1378901823, Vitis rotundifolia 1368871184, Pueraria montana 1360603932, Cercis canadensis 1374220375, Quercus nigra 1363279434, Albizia julibrissin 1369296368, Chimaphila maculata 1374761023, Rhus copallinum 1374481064, Solidago altissima 1370399342, Ilex cornuta 1311722172
+# No article: none
+gemma4:12b name_only Conoclinium coelestinum (blue mistflower):
+    place  Look in open fields and big meadows.
+    light  It loves soaking up the full sun.
+    ground It grows best in dry, sandy soil.
+    nearby It grows near old fences and trails.
+    edges  Look at the edge of a field.
+    range  It is common in the southern part of the country.
+gemma4:12b name_only Callicarpa americana (American beautyberry):
+    place  Look in woods or open fields.
+    light  It likes full sun or light shade.
+    ground It grows well in dry soil.
+    nearby It grows near trees and thick bushes.
+    edges  Look along the edge of a field.
+    range  It grows in many parts of the country.
+gemma4:12b name_only Liquidambar styraciflua (American sweetgum):
+    place  Look in deep woods or forests.
+    light  It likes growing in shady spots.
+    ground It likes soil that holds some moisture.
+    nearby It grows near other big trees.
+    edges  Look along the edge of the woods.
+    range  It grows in the eastern part of the country.
+gemma4:12b name_only Magnolia grandiflora (southern magnolia):
+    place  Look in large yards and gardens.
+    light  It loves full, bright sun.
+    ground It grows in rich, moist soil.
+    nearby It grows near big houses and paths.
+    edges  Look at the edge of a garden.
+    range  It grows in the southern part of the country.
+gemma4:12b name_only Liriodendron tulipifera (American tuliptree):
+    place  Look in woods or large parks.
+    light  It likes a spot with some shade.
+    ground It grows in moist, rich soil.
+    nearby It grows near other big trees.
+    edges  Look at the edge of a forest.
+    range  It grows in the Eastern United States.
+gemma4:12b name_only Polystichum acrostichoides (Christmas fern):
+    place  Look in the woods and deep forests.
+    light  It grows in shady spots with low light.
+    ground It likes damp ground and rich soil.
+    nearby It grows near tall trees.
+    edges  Look along the edge of a forest path.
+    range  It is common in the eastern United States.
+gemma4:12b name_only Fagus grandifolia (American beech):
+    place  Look in big woods or forest areas.
+    light  It grows well in partial shade.
+    ground It likes moist soil that is rich and thick.
+    nearby Look near other tall trees and bushes.
+    edges  Look along the edges of deep forest trails.
+    range  It grows in the eastern part of the country.
+gemma4:12b name_only Erechtites hieraciifolius (American burnweed):
+    place  Look in overgrown fields and on roadsides.
+    light  It likes areas with partial shade.
+    ground It grows in soil that stays moist.
+    nearby Look near fences and old walls.
+    edges  Look at the edge of a ditch.
+    range  It grows in many parts of the country.
+gemma4:12b name_only Ampelopsis glandulosa (Porcelain Berry):
+    place  Look in woods or near forest edges.
+    light  It grows in part shade or deep shade.
+    ground It likes soil that is moist and rich.
+    nearby It grows near big trees and bushes.
+    edges  Look along the edges of thick forests.
+    range  It grows in the eastern part of the country.
+gemma4:12b name_only Diospyros virginiana (American persimmon):
+    place  Look in woods or open fields.
+    light  It grows in full sun or partial shade.
+    ground It likes dry ground and dirt.
+    nearby It grows near other trees and bushes.
+    edges  Look along the edges of old fields.
+    range  It grows in the eastern part of the country.
+gemma4:12b name_only Platanus occidentalis (American sycamore):
+    place  Look near river banks and in wet woods.
+    light  It grows in full sun.
+    ground It likes wet soil near water.
+    nearby It grows near creeks and streams.
+    edges  Look along the muddy edge of a river.
+    range  It grows in the eastern United States.
+gemma4:12b name_only Vitis rotundifolia (muscadine):
+    place  Look in woods or along river banks.
+    light  It grows in parts with some shade.
+    ground It likes damp soil near water.
+    nearby It grows near creeks and old trees.
+    edges  Look along the sides of small streams.
+    range  It grows in the rest of the country.
+gemma4:12b name_only Pueraria montana (kudzu):
+    place  Look in woods or along forest edges.
+    light  It likes part sun and some shade.
+    ground It grows well in dirt and near trees.
+    nearby It grows near trees and large bushes.
+    edges  Look along the edge of a forest trail.
+    range  It is found in many parts of the country.
+gemma4:12b name_only Cercis canadensis (eastern redbud):
+    place  Look in parks or gardens.
+    light  It likes full sun.
+    ground It grows in rich, moist soil.
+    nearby It grows near benches and paths.
+    edges  Look at the edge of a garden.
+    range  It grows mostly in the eastern United States.
+gemma4:12b name_only Quercus nigra (water oak):
+    place  Look in woods or open forests.
+    light  It grows best in full sun.
+    ground It likes dry ground and rich soil.
+    nearby It grows near other big trees.
+    edges  Look along the edge of a forest.
+    range  It grows in the eastern United States.
+gemma4:12b name_only Albizia julibrissin (Persian silk tree):
+    place  Look in parks, gardens, or big yards.
+    light  It loves to sit in the full sun.
+    ground It grows well in most kinds of soil.
+    nearby It grows near houses and fences.
+    edges  Look along the edge of a driveway.
+    range  It grows in the southern parts of the country.
+gemma4:12b name_only Chimaphila maculata (striped wintergreen):
+    place  Look in the woods on the forest floor.
+    light  It likes deep shade under the trees.
+    ground It grows in damp, mossy soil.
+    nearby It grows near pine trees and ferns.
+    edges  Look along the edges of forest trails.
+    range  It is found in the northern part of the country.
+gemma4:12b name_only Rhus copallinum (shining sumac):
+    place  Look in woods or near open fields.
+    light  It likes areas with full sun.
+    ground It grows in dry soil on hills.
+    nearby It grows near trees and roads.
+    edges  Look at the edge of a field.
+    range  It grows in the southeastern United States.
+gemma4:12b name_only Solidago altissima (tall goldenrod):
+    place  Look in fields, meadows, and open woods.
+    light  It loves full, bright sun.
+    ground It grows well in dry soil.
+    nearby It grows near open fields and fields of tall grass.
+    edges  Look along the edges of fields and roads.
+    range  It is found in many parts of the country.
+gemma4:12b name_only Ilex cornuta (Chinese holly):
+    place  Look in wooded areas and open fields.
+    light  It likes full sun and warm air.
+    ground It grows in dry soil.
+    nearby Look for it near brush and shrubs.
+    edges  Look along the edges of open fields.
+    range  It grows in the southwestern part of the country.
+gemma4:12b grounded Conoclinium coelestinum (blue mistflower):
+    place  Look for it in wood edges, sandy woodlands, or stream banks.
+    light  It likes many types of light from shade to full sun.
+    ground This plant likes wet soils.
+    nearby It can be found near stream banks.
+    edges  It grows at the edges of woods.
+    range  It grows in eastern and central North America.
+    pick 3.0   place  Look for it in wood edges, sandy woodlands, or stream banks.
+    pick 3.0   ground This plant likes wet soils.
+    pick 3.0   light  It likes many types of light from shade to full sun.
+    pick 2.04  season Look for blue flowers in summer.
+gemma4:12b grounded Callicarpa americana (American beautyberry):
+    place  You can find this shrub in gardens and yards.
+    light  (abstained)
+    ground You can scatter seeds on bare ground.
+    nearby (abstained)
+    edges  (abstained)
+    range  This plant grows in the Southern United States.
+    pick 3.0   place  You can find this shrub in gardens and yards.
+    pick 3.0   ground You can scatter seeds on bare ground.
+    pick 1.0   range  This plant grows in the Southern United States.
+    pick 2.04  season Look for blue flowers in summer.
+    pick 1.32  season Look for purple fruit in fall.
+gemma4:12b grounded Liquidambar styraciflua (American sweetgum):
+    place  You can find this tree in forests or as a garden tree.
+    light  This tree does not like to grow in shady areas.
+    ground It grows best in moist, acidic soil.
+    nearby It often grows with willow oak and sweetbay magnolia.
+    edges  Look for it in the lowlands.
+    range  It lives in the southeastern United States and parts of Mexico.
+    pick 3.0   place  You can find this tree in forests or as a garden tree.
+    pick 3.0   ground It grows best in moist, acidic soil.
+    pick 3.0   light  This tree does not like to grow in shady areas.
+    pick 1.32  season Look for brown seeds in fall.
+gemma4:12b grounded Magnolia grandiflora (southern magnolia):
+    place  You can find this in a forest.  [evidence not in article]
+    light  It likes places that are shady.
+    ground It grows in soil that drains well.
+    nearby It grows near water and swamp areas.
+    edges  It grows on the edges of water.
+    range  It is common in the Southern United States.
+    pick 3.0   ground It grows in soil that drains well.
+    pick 3.0   light  It likes places that are shady.
+    pick 2.0   nearby It grows near water and swamp areas.
+    pick 1.92  season Look for white flowers in spring.
+gemma4:12b grounded Liriodendron tulipifera (American tuliptree):
+    place  You can find it in forests of the eastern United States.
+    light  This plant does not like growing in the shade.
+    ground It likes to grow in moist and rich soil.
+    nearby It grows in forests with other types of trees.
+    edges  It grows in gaps in older forests.
+    range  It lives in the eastern part of North America.
+    pick 3.0   place  You can find it in forests of the eastern United States.
+    pick 3.0   ground It likes to grow in moist and rich soil.
+    pick 3.0   light  This plant does not like growing in the shade.
+    pick 1.92  season Look for yellow flowers in spring.
+gemma4:12b grounded Polystichum acrostichoides (Christmas fern):
+    place  You can find it in woodlands and near stream banks.
+    light  Look for it in shady places.
+    ground It likes to grow in moist soil.
+    nearby It grows on rocky slopes.
+    edges  Look for it on steep slopes.
+    range  It lives in eastern North America.
+    pick 3.0   place  You can find it in woodlands and near stream banks.
+    pick 3.0   ground It likes to grow in moist soil.
+    pick 3.0   light  Look for it in shady places.
+gemma4:12b grounded Fagus grandifolia (American beech):
+    place  You can find this tree in the forest.
+    light  This tree grows well in the shade.
+    ground It likes spots that are well-watered and well-drained.
+    nearby It grows near sugar maple, yellow birch, and eastern hemlock.
+    edges  null  [evidence not in article]
+    range  It grows in eastern North America.
+    pick 3.0   place  You can find this tree in the forest.
+    pick 3.0   ground It likes spots that are well-watered and well-drained.
+    pick 3.0   light  This tree grows well in the shade.
+    pick 1.32  season Look for bright leaves in fall.
+gemma4:12b grounded Erechtites hieraciifolius (American burnweed):
+    place  You can find it in many types of habitats.
+    light  (abstained)
+    ground It likes moist sites but can grow in gravelly soil.
+    nearby It grows well in urban areas and around humans.
+    edges  It grows in areas with big changes like bulldozing.
+    range  This plant is native to the Americas.
+    pick 3.0   place  You can find it in many types of habitats.
+    pick 3.0   ground It likes moist sites but can grow in gravelly soil.
+    pick 2.0   nearby It grows well in urban areas and around humans.
+gemma4:12b grounded Ampelopsis glandulosa (Porcelain Berry):
+    place  Look in forest edges, pond margins, and stream banks.
+    light  Find it where there is full sunlight to partial shade.
+    ground It does not grow in permanently wet soils.
+    nearby Look for it in thickets.
+    edges  Look at roadsides and old fields.
+    range  It grows from Wisconsin to the Atlantic coastline.
+    pick 3.0   place  Look in forest edges, pond margins, and stream banks.
+    pick 3.0   ground It does not grow in permanently wet soils.
+    pick 3.0   light  Find it where there is full sunlight to partial shade.
+gemma4:12b grounded Diospyros virginiana (American persimmon):
+    place  This plant mostly grows in the wild.
+    light  It likes light and grows in sandy, well-drained soil.
+    ground It grows in sandy soil or in southern bottom lands.
+    nearby (abstained)
+    edges  (abstained)
+    range  It grows in the South Atlantic and Gulf states.
+    pick 3.0   place  This plant mostly grows in the wild.
+    pick 3.0   ground It grows in sandy soil or in southern bottom lands.
+    pick 3.0   light  It likes light and grows in sandy, well-drained soil.
+    pick 1.32  season Look for orange fruit in fall.
+gemma4:12b grounded Platanus occidentalis (American sycamore):
+    place  Look for it in wet areas near water.
+    light  (abstained)
+    ground It likes wet ground near rivers and streams.
+    nearby You can find it near a river or stream.
+    edges  (abstained)
+    range  It grows in the eastern and central United States.
+    pick 3.0   place  Look for it in wet areas near water.
+    pick 3.0   ground It likes wet ground near rivers and streams.
+    pick 2.0   nearby You can find it near a river or stream.
+    pick 1.32  season Look for brown seeds in fall.
+gemma4:12b grounded Vitis rotundifolia (muscadine):
+    place  You can find this plant in the southeastern United States.
+    light  (abstained)
+    ground It grows in well-drained bottom lands.
+    nearby (abstained)
+    edges  (abstained)
+    range  It grows from Florida to the New Jersey coast.
+    pick 3.0   place  You can find this plant in the southeastern United States.
+    pick 3.0   ground It grows in well-drained bottom lands.
+    pick 1.0   range  It grows from Florida to the New Jersey coast.
+    pick 1.92  season Look for white flowers in spring.
+    pick 1.32  season Look for purple fruit in fall.
+gemma4:12b grounded Pueraria montana (kudzu):
+    place  You can find it in forest regrowth.
+    light  It likes high sun but can live in partial shade.
+    ground It can grow in poor soils.
+    nearby It grows on trees and walls.
+    edges  It likes edge habitats.
+    range  It is found in places like China and Japan.
+    pick 3.0   place  You can find it in forest regrowth.
+    pick 3.0   ground It can grow in poor soils.
+    pick 3.0   light  It likes high sun but can live in partial shade.
+gemma4:12b grounded Cercis canadensis (eastern redbud):
+    place  You can find it in forests and hedgerows.
+    light  It can grow in shade, like under trees. (USDA)
+    ground Look on ground that drains well, not soggy. (USDA)
+    nearby (abstained)
+    edges  (abstained)
+    range  It grows from Michigan south to central Mexico.
+    pick 3.0   place  You can find it in forests and hedgerows.
+    pick 2.28  ground Look on ground that drains well, not soggy.
+    pick 2.28  light  It can grow in shade, like under trees.
+    pick 1.92  season Look for purple flowers in spring.
+gemma4:12b grounded Quercus nigra (water oak):
+    place  Look for it in lowlands and near stream banks.
+    light  It does not like any shade at all.
+    ground It grows in sandy soils and red clays.
+    nearby You can find it near ponds and streams.
+    edges  It grows in old fields and near swamp borders.
+    range  It grows in the eastern and south-central United States.
+    pick 3.0   place  Look for it in lowlands and near stream banks.
+    pick 3.0   ground It grows in sandy soils and red clays.
+    pick 3.0   light  It does not like any shade at all.
+gemma4:12b grounded Albizia julibrissin (Persian silk tree):
+    place  You can find this tree in parks and gardens.
+    light  It likes to grow in full sun.
+    ground It grows in dry plains and sandy valleys.
+    nearby (abstained)
+    edges  (abstained)
+    range  This tree comes from southwestern and eastern Asia.
+    pick 3.0   place  You can find this tree in parks and gardens.
+    pick 3.0   ground It grows in dry plains and sandy valleys.
+    pick 3.0   light  It likes to grow in full sun.
+    pick 2.04  season Look for white flowers in summer.
+    pick 1.32  season Look for brown seeds in fall.
+gemma4:12b grounded Chimaphila maculata (striped wintergreen):
+    place  You can find it in forests and woodlands.
+    light  This plant likes to grow in the shade.
+    ground It grows well in acidic soil.
+    nearby (abstained)
+    edges  (abstained)
+    range  It grows in eastern North America and Central America.  [evidence not in article]
+    pick 3.0   place  You can find it in forests and woodlands.
+    pick 3.0   ground It grows well in acidic soil.
+    pick 3.0   light  This plant likes to grow in the shade.
+gemma4:12b grounded Rhus copallinum (shining sumac):
+    place  You can find this plant in many different types of woods.
+    light  It likes to grow in full sun or part shade.
+    ground It grows best in well-drained soil.
+    nearby It grows near pines and other hard woods.
+    edges  It grows well in places that people have disturbed.
+    range  This plant grows in the eastern part of North America.
+    pick 3.0   place  You can find this plant in many different types of woods.
+    pick 3.0   ground It grows best in well-drained soil.
+    pick 3.0   light  It likes to grow in full sun or part shade.
+    pick 1.32  season Look for brown seeds in fall.
+gemma4:12b grounded Solidago altissima (tall goldenrod):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  It grows well in places where people have changed the land.
+    range  It grows in much of Canada, the United States, and northern Mexico.
+    pick 1.0   edges  It grows well in places where people have changed the land.
+    pick 1.0   range  It grows in much of Canada, the United States, and northern Mexico.
+gemma4:12b grounded Ilex cornuta (Chinese holly):
+    place  Look for this plant along mountain ridges.
+    light  This plant can grow in sun or shade.
+    ground It grows in most soils except those that do not drain well.
+    nearby (abstained)
+    edges  (abstained)
+    range  It is found in the eastern United States.
+    pick 3.0   place  Look for this plant along mountain ridges.
+    pick 3.0   ground It grows in most soils except those that do not drain well.
+    pick 3.0   light  This plant can grow in sun or shade.
+    pick 1.32  season Look for red fruit in fall.
+gemma4:26b name_only Conoclinium coelestinum (blue mistflower):
+    place  Look in shady woods or near streams.
+    light  It loves to grow in the shade.
+    ground It likes ground that stays cool and moist.
+    nearby It grows near big trees and bushes.
+    edges  Look where the woods meet a field.
+    range  It is common in many parts of the country.
+gemma4:26b name_only Callicarpa americana (American beautyberry):
+    place  Look for it in the woods or thick bushes.
+    light  It likes spots with lots of sun or light shade.
+    ground It grows well in moist, rich soil.
+    nearby It often grows near large trees.
+    edges  Look along the edges of forest trails.
+    range  It is found in many southern states.
+gemma4:26b name_only Liquidambar styraciflua (American sweetgum):
+    place  Look for it in forests or near water.
+    light  It likes plenty of sunshine.
+    ground It loves damp, rich soil.
+    nearby It grows near big rivers and streams.
+    edges  You might find it along a muddy bank.
+    range  It grows in the southern part of the country.
+gemma4:26b name_only Magnolia grandiflora (southern magnolia):
+    place  Look for this in many gardens and woods.
+    light  It loves bright sun and warm air.
+    ground It likes soil that stays moist but drains well.
+    nearby It often grows near other big trees.
+    edges  Look near the edge of a forest or park.
+    range  It grows mostly in the warm southern states.
+gemma4:26b name_only Liriodendron tulipifera (American tuliptree):
+    place  Look in large woods or big parks.
+    light  It loves to grow in bright sunlight.
+    ground It likes deep, moist soil.
+    nearby It grows near other tall trees.
+    edges  Look along the edge of a forest trail.
+    range  It grows in the eastern part of the country.
+gemma4:26b name_only Polystichum acrostichoides (Christmas fern):
+    place  Search in the shady woods.
+    light  It likes deep shade under trees.
+    ground It grows in moist, rich soil.
+    nearby It grows near tall trees.
+    edges  Look along the edge of a trail.
+    range  It grows in many parts of the country.
+gemma4:26b name_only Fagus grandifolia (American beech):
+    place  Look in the deep woods or thick forests.
+    light  It grows best in shade or partial sun.
+    ground It likes moist soil that stays cool.
+    nearby It often grows under a tall canopy.
+    edges  Look for it along the edge of a trail.
+    range  It is common in the eastern part of the country.
+gemma4:26b name_only Erechtites hieraciifolius (American burnweed):
+    place  Look in empty lots, fields, and roadsides.
+    light  It loves to grow in bright sun.
+    ground It grows in dry or disturbed soil.
+    nearby It often grows near old buildings or walls.
+    edges  Look for it along the edges of trails.
+    range  It can be found all across the country.
+gemma4:26b name_only Ampelopsis glandulosa (Porcelain Berry):
+    place  Look for this in the woods or near old fences.
+    light  It likes to grow in partial shade.
+    ground It grows well in moist soil.
+    nearby It often climbs up tall trees or bushes.
+    edges  Check the edge of a forest or a trail.
+    range  It grows in many parts of North America.
+gemma4:26b name_only Diospyros virginiana (American persimmon):
+    place  Look in the woods or near open fields.
+    light  It likes lots of sunlight to grow tall.
+    ground It loves moist soil that stays wet.
+    nearby You might find it near a stream bank.
+    edges  Look where the woods meet a sunny field.
+    range  It grows in many parts of the country.
+gemma4:26b name_only Platanus occidentalis (American sycamore):
+    place  Look in forests or near moving water.
+    light  It grows best in lots of sunlight.
+    ground It likes soil that is very wet.
+    nearby It grows near streams and big rivers.
+    edges  Look along the bank of a creek.
+    range  It is found across much of the country.
+gemma4:26b name_only Vitis rotundifolia (muscadine):
+    place  Look in woods or near old fences.
+    light  It loves the bright sun.
+    ground It likes soil that is not too wet.
+    nearby Look for it climbing up tall trees.
+    edges  Find it growing along the edge of a trail.
+    range  It grows well in the southern part of the country.
+gemma4:26b name_only Pueraria montana (kudzu):
+    place  Search in woods or near forest edges.
+    light  It grows in sunny or shady spots.
+    ground It likes ground that is moist.
+    nearby It climbs up trees and large bushes.
+    edges  Look for it on trail edges and fences.
+    range  It is found in many parts of the country.
+gemma4:26b name_only Cercis canadensis (eastern redbud):
+    place  Look in the woods or near forest edges.
+    light  It loves sunlight but can grow in shade.
+    ground It likes soil that stays moist but not soggy.
+    nearby Look near big trees and leafy bushes.
+    edges  Check the edges of a walking trail.
+    range  It grows in many parts of North America.
+gemma4:26b name_only Quercus nigra (water oak):
+    place  Look near rivers or in swampy woods.
+    light  It likes lots of bright sun.
+    ground It loves very wet and muddy soil.
+    nearby Look near the edges of a creek.
+    edges  Find it where a forest meets water.
+    range  It grows in the southern parts of the country.
+gemma4:26b name_only Albizia julibrissin (Persian silk tree):
+    place  Look in open fields and park areas.
+    light  It loves to sit in the bright sun.
+    ground It grows well in well-drained soil.
+    nearby You might find it near walking paths.
+    edges  Look near the edges of shady woods.
+    range  It grows in many warm parts of the country.
+gemma4:26b name_only Chimaphila maculata (striped wintergreen):
+    place  Look deep inside a shady forest.
+    light  It loves the deep shade under tall trees.
+    ground It grows in soil covered with pine needles.
+    nearby It grows near many evergreen trees.
+    edges  Look along the edges of quiet forest trails.
+    range  It grows in many parts of the north.
+gemma4:26b name_only Rhus copallinum (shining sumac):
+    place  Look near a cool, flowing stream.
+    light  It loves to grow in the deep shade.
+    ground It likes moist soil near the water.
+    nearby Find it near large trees and rocks.
+    edges  Look where the woods meet a creek.
+    range  It grows in many parts of the country.
+gemma4:26b name_only Solidago altissima (tall goldenrod):
+    place  Look in fields and along old roadsides.
+    light  It loves to sit in the bright sun.
+    ground It grows well in many types of soil.
+    nearby It grows near tall weeds and bushes.
+    edges  Search along the edge of a forest trail.
+    range  You can find it all across the country.
+gemma4:26b name_only Ilex cornuta (Chinese holly):
+    place  Look for this in woods or gardens.
+    light  It loves to grow in the shade.
+    ground It likes soil that stays moist.
+    nearby You might find it near big trees.
+    edges  Look near the edge of a forest.
+    range  It is found in the southern states.
+gemma4:26b grounded Conoclinium coelestinum (blue mistflower):
+    place  You might see it in woods or by a stream.
+    light  It likes both bright sun and shady spots.
+    ground Look for it in wet soil.
+    nearby (abstained)
+    edges  Look for it where the woods end.
+    range  It grows in many parts of North America.
+    pick 3.0   place  You might see it in woods or by a stream.
+    pick 3.0   ground Look for it in wet soil.
+    pick 3.0   light  It likes both bright sun and shady spots.
+    pick 2.04  season Look for blue flowers in summer.
+gemma4:26b grounded Callicarpa americana (American beautyberry):
+    place  You can find it in open areas like gardens and yards.
+    light  (abstained)
+    ground Look on ground that drains well, not soggy. (USDA)
+    nearby (abstained)
+    edges  (abstained)
+    range  It is common in the Southern United States.
+    pick 3.0   place  You can find it in open areas like gardens and yards.
+    pick 2.16  ground Look on ground that drains well, not soggy.
+    pick 1.0   range  It is common in the Southern United States.
+    pick 2.04  season Look for blue flowers in summer.
+    pick 1.32  season Look for purple fruit in fall.
+gemma4:26b grounded Liquidambar styraciflua (American sweetgum):
+    place  You can find it growing in forests.
+    light  This plant does not like to grow in the shade.
+    ground It likes to grow in wet soil.
+    nearby Look for it near willow oaks and magnolia trees.
+    edges  (abstained)
+    range  It grows in many parts of the eastern United States.
+    pick 3.0   place  You can find it growing in forests.
+    pick 3.0   ground It likes to grow in wet soil.
+    pick 3.0   light  This plant does not like to grow in the shade.
+    pick 1.32  season Look for brown seeds in fall.
+gemma4:26b grounded Magnolia grandiflora (southern magnolia):
+    place  Look for it in forests or near swamps.
+    light  It likes to grow in shady areas.
+    ground The soil it likes should drain water well.
+    nearby It grows near sweetgum and water oak trees.
+    edges  You can find it at the edge of the water.
+    range  It is common in the Southeastern United States.
+    pick 3.0   place  Look for it in forests or near swamps.
+    pick 3.0   ground The soil it likes should drain water well.
+    pick 3.0   light  It likes to grow in shady areas.
+    pick 1.92  season Look for white flowers in spring.
+gemma4:26b grounded Liriodendron tulipifera (American tuliptree):
+    place  You can find this tree in a forest.
+    light  This tree does not like too much shade.
+    ground It likes to grow in wet and rich soil.
+    nearby (abstained)
+    edges  Look for gaps in the forest to find it.
+    range  It grows in the eastern part of North America.
+    pick 3.0   place  You can find this tree in a forest.
+    pick 3.0   ground It likes to grow in wet and rich soil.
+    pick 3.0   light  This tree does not like too much shade.
+    pick 1.92  season Look for yellow flowers in spring.
+gemma4:26b grounded Polystichum acrostichoides (Christmas fern):
+    place  Look for it in the woods or by a stream.
+    light  It likes to grow in shady places.
+    ground Find it in moist areas.
+    nearby It can grow on rocky slopes.
+    edges  (abstained)
+    range  It lives in the eastern part of North America.
+    pick 3.0   place  Look for it in the woods or by a stream.
+    pick 3.0   ground Find it in moist areas.
+    pick 3.0   light  It likes to grow in shady places.
+gemma4:26b grounded Fagus grandifolia (American beech):
+    place  Look for this in a forest.
+    light  It can grow in the shade.
+    ground Find it in wet but well-drained soil.
+    nearby It often grows near sugar maple trees.
+    edges  (abstained)
+    range  It lives in the eastern part of North America.
+    pick 3.0   place  Look for this in a forest.
+    pick 3.0   ground Find it in wet but well-drained soil.
+    pick 3.0   light  It can grow in the shade.
+    pick 1.32  season Look for bright leaves in fall.
+gemma4:26b grounded Erechtites hieraciifolius (American burnweed):
+    place  Look for this plant in places where the ground was moved.
+    light  (abstained)
+    ground It likes to grow in places that are a little bit wet.
+    nearby You might find it near a spot where a tree fell over.
+    edges  It grows well in cities where many people live.
+    range  This plant is native to many parts of the Americas.
+    pick 3.0   place  Look for this plant in places where the ground was moved.
+    pick 3.0   ground It likes to grow in places that are a little bit wet.
+    pick 2.0   nearby You might find it near a spot where a tree fell over.
+gemma4:26b grounded Ampelopsis glandulosa (Porcelain Berry):
+    place  Look for it near a stream bank or in a thicket.
+    light  It likes to grow in full sunlight or some shade.
+    ground It does not grow in soil that stays wet.
+    nearby It can climb up over larger plants and trees.
+    edges  You might find it at the edge of a forest.
+    range  It grows in many parts of the United States.
+    pick 3.0   place  Look for it near a stream bank or in a thicket.
+    pick 3.0   ground It does not grow in soil that stays wet.
+    pick 3.0   light  It likes to grow in full sunlight or some shade.
+gemma4:26b grounded Diospyros virginiana (American persimmon):
+    place  (abstained)
+    light  It can grow in shade, like under trees. (USDA)
+    ground It likes sandy soil that drains well.
+    nearby (abstained)
+    edges  (abstained)
+    range  You can find it in the South Atlantic and Gulf states.
+    pick 3.0   ground It likes sandy soil that drains well.
+    pick 2.16  light  It can grow in shade, like under trees.
+    pick 1.0   range  You can find it in the South Atlantic and Gulf states.
+    pick 1.32  season Look for orange fruit in fall.
+gemma4:26b grounded Platanus occidentalis (American sycamore):
+    place  You can find it in wet areas like a stream bank.
+    light  (abstained)
+    ground It likes to grow in wet ground or near a river.
+    nearby Look for it growing near a river or a stream.
+    edges  (abstained)
+    range  This plant is common in the eastern United States.
+    pick 3.0   place  You can find it in wet areas like a stream bank.
+    pick 3.0   ground It likes to grow in wet ground or near a river.
+    pick 2.0   nearby Look for it growing near a river or a stream.
+    pick 1.32  season Look for brown seeds in fall.
+gemma4:26b grounded Vitis rotundifolia (muscadine):
+    place  (abstained)
+    light  (abstained)
+    ground They grow in sandy or river soils.
+    nearby (abstained)
+    edges  (abstained)
+    range  You can find them in the southeastern United States.
+    pick 3.0   ground They grow in sandy or river soils.
+    pick 1.0   range  You can find them in the southeastern United States.
+    pick 1.92  season Look for white flowers in spring.
+    pick 1.32  season Look for purple fruit in fall.
+gemma4:26b grounded Pueraria montana (kudzu):
+    place  You can find it in areas where new trees are growing.
+    light  This plant likes lots of sunlight or a little bit of shade.
+    ground (abstained)
+    nearby It can grow high up on trees or even on walls.
+    edges  Look for it in places along the edge of a forest.
+    range  It is found in many parts of Asia and also in the southern United States.
+    pick 3.0   place  You can find it in areas where new trees are growing.
+    pick 3.0   light  This plant likes lots of sunlight or a little bit of shade.
+    pick 2.0   nearby It can grow high up on trees or even on walls.
+gemma4:26b grounded Cercis canadensis (eastern redbud):
+    place  Look for this plant in mixed forests or near hedgerows.
+    light  It can grow in shade, like under trees. (USDA)
+    ground Look on ground that drains well, not soggy. (USDA)
+    nearby This plant grows as an understory tree in the woods.
+    edges  (abstained)
+    range  It grows in eastern North America.
+    pick 3.0   place  Look for this plant in mixed forests or near hedgerows.
+    pick 2.16  ground Look on ground that drains well, not soggy.
+    pick 2.16  light  It can grow in shade, like under trees.
+    pick 1.92  season Look for purple flowers in spring.
+gemma4:26b grounded Quercus nigra (water oak):
+    place  Look for it in lowlands or near stream banks.
+    light  This plant needs lots of sun and cannot handle shade.
+    ground It likes wet, swampy places or sandy soils.
+    nearby It might grow near ponds or in a forest.
+    edges  You might find it at the edge of an old field.
+    range  It grows in many states in the eastern and central United States.
+    pick 3.0   place  Look for it in lowlands or near stream banks.
+    pick 3.0   ground It likes wet, swampy places or sandy soils.
+    pick 3.0   light  This plant needs lots of sun and cannot handle shade.
+gemma4:26b grounded Albizia julibrissin (Persian silk tree):
+    place  Look for it in dry plains or sandy valleys.
+    light  This tree loves to grow in the full sun.
+    ground It grows well in dry places.
+    nearby (abstained)
+    edges  You can find it in parks or in gardens.
+    range  It comes from parts of Asia.
+    pick 3.0   place  Look for it in dry plains or sandy valleys.
+    pick 3.0   ground It grows well in dry places.
+    pick 3.0   light  This tree loves to grow in the full sun.
+    pick 2.04  season Look for white flowers in summer.
+    pick 1.32  season Look for brown seeds in fall.
+gemma4:26b grounded Chimaphila maculata (striped wintergreen):
+    place  Look for it in woods or on mountain slopes.
+    light  This plant likes to grow in the shade.
+    ground It grows in sandy soil and places that are not too wet.
+    nearby (abstained)
+    edges  (abstained)
+    range  You can find it in the eastern part of North America.
+    pick 3.0   place  Look for it in woods or on mountain slopes.
+    pick 3.0   ground It grows in sandy soil and places that are not too wet.
+    pick 3.0   light  This plant likes to grow in the shade.
+gemma4:26b grounded Rhus copallinum (shining sumac):
+    place  You can find it in many different types of ecosystems.
+    light  It likes to grow in full sun or some shade.
+    ground It grows well in soil that drains water easily.
+    nearby It grows near pine trees and other hardwood trees.
+    edges  Look near big highways where the ground has been moved.
+    range  This plant is native to the eastern part of North America.
+    pick 3.0   place  You can find it in many different types of ecosystems.
+    pick 3.0   ground It grows well in soil that drains water easily.
+    pick 3.0   light  It likes to grow in full sun or some shade.
+    pick 1.32  season Look for brown seeds in fall.
+gemma4:26b grounded Solidago altissima (tall goldenrod):
+    place  (abstained)
+    light  (abstained)
+    ground (abstained)
+    nearby (abstained)
+    edges  Look for it in places where people have changed the land.
+    range  You can find this plant in many parts of North America.
+    pick 1.0   edges  Look for it in places where people have changed the land.
+    pick 1.0   range  You can find this plant in many parts of North America.
+gemma4:26b grounded Ilex cornuta (Chinese holly):
+    place  (abstained)
+    light  You can find it in the sun or in the shade.
+    ground It likes most soils but does not like too much water.
+    nearby (abstained)
+    edges  (abstained)
+    range  It grows in parts of China, Korea, and the eastern United States.
+    pick 3.0   ground It likes most soils but does not like too much water.
+    pick 3.0   light  You can find it in the sun or in the shade.
+    pick 1.0   range  It grows in parts of China, Korea, and the eastern United States.
+    pick 1.32  season Look for red fruit in fall.
+
+gemma4:12b     name_only targets 20, with 3 ranked picks 0, hints 120/120 (0 from USDA), clean 120, fake evidence 0, prompts cut 0, median 1.9s
+gemma4:12b     grounded  targets 20, with 3 ranked picks 19, hints 97/120 (2 from USDA), clean 94, fake evidence 3, prompts cut 0, median 10.7s
+gemma4:26b     name_only targets 20, with 3 ranked picks 0, hints 120/120 (0 from USDA), clean 120, fake evidence 0, prompts cut 0, median 1.2s
+gemma4:26b     grounded  targets 20, with 3 ranked picks 19, hints 90/120 (4 from USDA), clean 90, fake evidence 0, prompts cut 0, median 4.2s
+# Grades go in gemma_hints_grades.csv: each hint judged against its article.

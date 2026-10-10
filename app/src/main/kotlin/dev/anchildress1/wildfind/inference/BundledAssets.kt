@@ -2,7 +2,9 @@ package dev.anchildress1.wildfind.inference
 
 import android.content.res.AssetManager
 import dev.anchildress1.wildfind.core.cache.CacheKey
+import dev.anchildress1.wildfind.core.hunt.Hint
 import dev.anchildress1.wildfind.core.hunt.PlantType
+import dev.anchildress1.wildfind.core.hunt.Season
 import dev.anchildress1.wildfind.core.hunt.SpeciesRow
 import dev.anchildress1.wildfind.core.tensor.FloatMatrix
 import dev.anchildress1.wildfind.core.tensor.Npy
@@ -57,6 +59,13 @@ class BundledAssets(private val assets: AssetManager) {
                     PlantType.of(if (it.isNull("type")) null else it.getString("type")),
                     it.getJSONArray("synonyms").let { names -> List(names.length(), names::getString) },
                     if (it.isNull("description")) null else it.getString("description"),
+                    it.optJSONArray("hints")?.let { hints ->
+                        List(hints.length()) { n ->
+                            hints.getJSONObject(n).let { hint ->
+                                Hint(hint.getString("text"), Season.named(hint.optString("season").ifEmpty { null }))
+                            }
+                        }
+                    } ?: emptyList(),
                 )
             }
         }

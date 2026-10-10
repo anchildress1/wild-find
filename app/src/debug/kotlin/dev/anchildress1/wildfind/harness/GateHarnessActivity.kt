@@ -18,11 +18,11 @@ import androidx.camera.core.Camera
 import dev.anchildress1.wildfind.WildFindApp
 import dev.anchildress1.wildfind.core.download.ModelPin
 import dev.anchildress1.wildfind.core.frame.Crops
+import dev.anchildress1.wildfind.core.harness.createGateDirectory
 import dev.anchildress1.wildfind.core.verify.VerifyStreak
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
-import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -83,8 +83,13 @@ class GateHarnessActivity : ComponentActivity() {
     private fun startRun() {
         val size = analysisSize
         val stamp = SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US).format(Date())
-        val dir = File(requireNotNull(getExternalFilesDir(LOG_DIR)), "$stamp-${target.lowercase().replace(' ', '-')}")
-        check(dir.mkdirs()) { "can't create $dir" }
+        val dir = try {
+            createGateDirectory(requireNotNull(getExternalFilesDir(LOG_DIR)), stamp, target)
+        } catch (e: Exception) {
+            Log.e(TAG, "can't create gate run", e)
+            finish()
+            return
+        }
         // Waiting for the app's models takes a second at launch; never on the main thread.
         thread(name = TAG) {
             val log = GateLog(dir)

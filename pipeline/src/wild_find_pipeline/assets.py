@@ -3,8 +3,8 @@
 Writes into the gitignored app/generated/assets. Needs no BioCLIP teacher: appended hazard rows come from the
 committed hazard_vectors.json (make hazard-vectors), toxicity flags from toxicity.json (make toxicity), name
 aliases from synonyms.json (make synonyms), plant types from plant_types.json (make plant-types), and kid-level
-descriptions from descriptions.json (make descriptions), so CI can
-run it. Also checks the committed labels.npy and labels.json (make labels) against the current label lists and pins.
+descriptions from descriptions.json (make descriptions), and "where to look" hints from hints.json (make hints), so CI
+can run it. Also checks the committed labels.npy and labels.json (make labels) against the current label lists and pins.
 """
 
 import hashlib
@@ -20,6 +20,7 @@ from typing import Any
 import numpy as np
 
 from wild_find_pipeline import label_vectors, places, world_map
+from wild_find_pipeline.hint_traits import YEAR
 from wild_find_pipeline.labels import (
     GATE_OTHER,
     GATE_PLANT,
@@ -34,6 +35,7 @@ from wild_find_pipeline.paths import (
     GENERATED_ASSETS,
     GENERATED_STAMP,
     HAZARD_VECTORS,
+    HINTS,
     LABELS_DIR,
     MANIFEST,
     MODEL_CACHE,
@@ -106,6 +108,32 @@ def with_plant_types(labels: list[dict], types: dict[str, dict]) -> list[dict]:
 def with_descriptions(labels: list[dict], found: dict[str, dict]) -> list[dict]:
     """Add each row's committed kid-level description, or None; raises when a row has no entry."""
     return merged(labels, found, DESCRIPTIONS, "descriptions", lambda _, entry: {"description": entry["description"]})
+
+
+def with_hints(labels: list[dict], data: dict) -> list[dict]:
+    """Add each row's shipped hints: the picked ones that failed no check, best first, `season` only on season hints.
+
+    Toxic and hazard rows get none. Raises when the file is a partial checkpoint, when a playable row has no entry, or
+    when a season hint carries a name the app does not know.
+    """
+    if not data["done"]:
+        raise ValueError(f"{HINTS.name} is a partial checkpoint; run make hints to finish it")
+    found = data["species"]
+    playable = [e["scientific"] for e in labels if not e["toxic"] and not e["hazard"]]
+    if missing := [row for row in playable if row not in found]:
+        raise ValueError(f"{HINTS.name} lacks {len(missing)} playable species, e.g. {missing[:3]}; run make hints")
+    out = []
+    for entry in labels:
+        picked = [h for h in found.get(entry["scientific"], {}).get("hints", []) if h.get("score") and not h["issues"]]
+        bad = [h["bucket"] for h in picked if h["aspect"] == "season" and h["bucket"] not in YEAR]
+        if bad:
+            raise ValueError(f"{entry['scientific']} has season hints named {bad}, not one of {YEAR}")
+        shipped = [
+            {"text": h["text"], **({"season": h["bucket"]} if h["aspect"] == "season" else {})}
+            for h in sorted(picked, key=lambda h: -h["score"])
+        ]
+        out.append({**entry, "hints": shipped})
+    return out
 
 
 def tinyclip_dir() -> Path:
@@ -195,6 +223,7 @@ INPUTS = (
     SYNONYMS,
     PLANT_TYPES,
     DESCRIPTIONS,
+    HINTS,
     REPO / "pipeline/uv.lock",
     LABELS_DIR / "labels.json",
     LABELS_DIR / "labels.npy",
@@ -238,6 +267,7 @@ def main() -> int:
         labels = with_synonyms(labels, json.loads(SYNONYMS.read_text())["species"])
         labels = with_plant_types(labels, json.loads(PLANT_TYPES.read_text())["species"])
         labels = with_descriptions(labels, json.loads(DESCRIPTIONS.read_text())["species"])
+        labels = with_hints(labels, json.loads(HINTS.read_text()))
         np.save(staging / "species_table.npy", table)
         (staging / "species_labels.json").write_text(json.dumps(labels, indent=1) + "\n")
 

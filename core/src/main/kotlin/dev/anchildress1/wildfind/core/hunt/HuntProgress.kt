@@ -3,18 +3,21 @@ package dev.anchildress1.wildfind.core.hunt
 import dev.anchildress1.wildfind.core.region.RegionKey
 
 /**
- * The fixed app flags that outlive a hunt (H2); nothing else persists beyond the current hunt.
+ * The fixed app flags that outlive a hunt (H2), plus the names of plants already found; nothing else persists beyond
+ * the current hunt.
  *
  * @property openerSeen the safety opener (R1) has played once; it stays replayable from the menu
  * @property tutorialDone the grass tutorial (R3) passed, so it never repeats
  * @property region the hunting area, from the rough location or the manual pick; changed from the grown-ups page
  * @property locationDenied rough location was denied, so it is never asked for again
+ * @property foundSpecies scientific names of plants found in earlier hunts, so the next hunt picks others first
  */
 data class AppFlags(
     val openerSeen: Boolean = false,
     val tutorialDone: Boolean = false,
     val region: RegionKey? = null,
     val locationDenied: Boolean = false,
+    val foundSpecies: Set<String> = emptySet(),
 )
 
 /**

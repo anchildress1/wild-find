@@ -1,0 +1,180 @@
+# 2026-10-09 16:45 EDT, Apple M4 Max, macOS-26.5.2-arm64-arm-64bit-Mach-O, Ollama at http://localhost:11434, model gemma4:26b @ 48eb98ec778c, temperature 1.0, top_p 0.95, top_k 64, seed 1, num_ctx 8192, up to 2 per aspect
+# Wikipedia revisions: Conoclinium coelestinum 1368583758, Callicarpa americana 1375086217, Liquidambar styraciflua 1376158564, Magnolia grandiflora 1377878923, Liriodendron tulipifera 1371824047, Polystichum acrostichoides 1327494907, Fagus grandifolia 1376510144, Erechtites hieraciifolius 1368440496, Ampelopsis glandulosa 1369470767, Diospyros virginiana 1379002754, Platanus occidentalis 1378901823, Vitis rotundifolia 1368871184, Pueraria montana 1360603932, Cercis canadensis 1374220375, Quercus nigra 1363279434, Albizia julibrissin 1369296368, Chimaphila maculata 1374761023, Rhus copallinum 1374481064, Solidago altissima 1370399342, Ilex cornuta 1311722172
+# No article: none
+gemma4:26b Conoclinium coelestinum (blue mistflower):
+    place  1 Look in wood edges or clearings.
+    place  2 Look in wet meadows or stream banks.  [water; repeats an earlier quote]
+    light  1 It grows in shade or full sun.
+    ground 1 It likes moist soils.
+    ground 2 It can grow in wet soils.
+    pick 3.0   place  Look in wood edges or clearings.
+    pick 3.0   ground It likes moist soils.
+    pick 3.0   ground It can grow in wet soils.
+    pick 2.04  season Look for blue flowers in summer.
+gemma4:26b Callicarpa americana (American beautyberry):
+    place  1 Look in gardens and yards.
+    ground 1 Look on ground that drains well, not soggy. (USDA)
+    pick 3.0   place  Look in gardens and yards.
+    pick 2.16  ground Look on ground that drains well, not soggy.
+    pick 2.04  season Look for blue flowers in summer.
+    pick 1.32  season Look for purple fruit in fall.
+gemma4:26b Liquidambar styraciflua (American sweetgum):
+    place  1 You can find it in the forest.
+    light  1 It does not grow well in shady areas.
+    ground 1 It likes moist, acidic loam or clay soil.
+    nearby 1 It grows with willow oak and sweetbay magnolia.
+    pick 3.0   place  You can find it in the forest.
+    pick 3.0   ground It likes moist, acidic loam or clay soil.
+    pick 3.0   light  It does not grow well in shady areas.
+    pick 1.32  season Look for brown seeds in fall.
+gemma4:26b Magnolia grandiflora (southern magnolia):
+    place  1 Look in subtropical forests.
+    light  1 It can be found in shady areas.
+    ground 1 It likes soils that drain well.
+    nearby 1 It grows near sweetgum trees.
+    nearby 2 It grows near live oaks.
+    edges  1 Look on the edges of water or swamps.  [water]
+    pick 3.0   place  Look in subtropical forests.
+    pick 3.0   ground It likes soils that drain well.
+    pick 3.0   light  It can be found in shady areas.
+    pick 1.92  season Look for white flowers in spring.
+gemma4:26b Liriodendron tulipifera (American tuliptree):
+    place  1 Look in temperate deciduous forests.
+    light  1 It does not like shade.
+    ground 1 It likes deep, rich, and moist soil.
+    ground 2 It likes moist, well-drained soils.
+    nearby 1 You can find it in streets, parks, and large gardens.  [road]
+    pick 3.0   place  Look in temperate deciduous forests.
+    pick 3.0   ground It likes deep, rich, and moist soil.
+    pick 3.0   ground It likes moist, well-drained soils.
+    pick 1.92  season Look for yellow flowers in spring.
+gemma4:26b Polystichum acrostichoides (Christmas fern):
+    place  1 Look in woodlands, stream banks, or on rocky slopes.  [water]
+    light  1 It lives in shady habitats.
+    ground 1 It likes moist habitats.
+    pick 3.0   ground It likes moist habitats.
+    pick 3.0   light  It lives in shady habitats.
+gemma4:26b Fagus grandifolia (American beech):
+    place  1 You can find it in forests.
+    light  1 It can grow in the shade.
+    ground 1 Look on moist, well-drained slopes.
+    ground 2 It likes a well-watered spot.
+    nearby 1 It grows near sugar maples.
+    pick 3.0   place  You can find it in forests.
+    pick 3.0   ground Look on moist, well-drained slopes.
+    pick 3.0   ground It likes a well-watered spot.
+    pick 1.32  season Look for bright leaves in fall.
+gemma4:26b Erechtites hieraciifolius (American burnweed):
+    place  1 It grows well in urban areas.
+    ground 1 It prefers moist sites.
+    ground 2 It can handle gravelly soil.  [repeats an earlier quote]
+    nearby 1 Look near a tree tip-up mound.
+    edges  1 Look where there is disturbed soil.
+    pick 3.0   place  It grows well in urban areas.
+    pick 3.0   ground It prefers moist sites.
+    pick 2.0   nearby Look near a tree tip-up mound.
+gemma4:26b Ampelopsis glandulosa (Porcelain Berry):
+    place  1 Look in old fields or near roadsides.  [road]
+    place  2 Look near thickets or stream banks.  [water]
+    light  1 It likes full sunlight to partial shade.
+    light  2 It does not grow in heavily shaded areas.
+    ground 1 It does not grow in permanently wet soils.
+    nearby 1 It can climb over larger plants.
+    edges  1 Look at forest edges.
+    pick 3.0   ground It does not grow in permanently wet soils.
+    pick 3.0   light  It likes full sunlight to partial shade.
+    pick 3.0   light  It does not grow in heavily shaded areas.
+gemma4:26b Diospyros virginiana (American persimmon):
+    place  1 The tree grows in the wild.
+    light  1 It can grow in shade, like under trees. (USDA)
+    ground 1 Look in sandy, well-drained soil.
+    ground 2 It grows in rich southern bottom lands.  [repeats an earlier quote]
+    pick 3.0   place  The tree grows in the wild.
+    pick 3.0   ground Look in sandy, well-drained soil.
+    pick 2.16  light  It can grow in shade, like under trees.
+    pick 1.32  season Look for orange fruit in fall.
+gemma4:26b Platanus occidentalis (American sycamore):
+    place  1 It lives in many kinds of habitats.
+    ground 1 It likes wetlands and riparian areas.  [water]
+    ground 2 It grows well in wet environments.
+    pick 3.0   place  It lives in many kinds of habitats.
+    pick 3.0   ground It grows well in wet environments.
+    pick 0.56  size   It is a tall tree.
+    pick 1.32  season Look for brown seeds in fall.
+gemma4:26b Vitis rotundifolia (muscadine):
+    ground 1 It grows in sandy or alluvial soil.
+    ground 2 Look in well-drained bottom lands.
+    pick 3.0   ground It grows in sandy or alluvial soil.
+    pick 3.0   ground Look in well-drained bottom lands.
+    pick 1.92  season Look for white flowers in spring.
+    pick 1.32  season Look for purple fruit in fall.
+gemma4:26b Pueraria montana (kudzu):
+    place  1 Look in forest regrowth.
+    light  1 It likes high sun exposure.
+    light  2 It can live in full sun or partial shade.  [repeats an earlier quote]
+    ground 1 It can grow in poor soils.
+    nearby 1 It grows on trees, cliffs, or walls.
+    edges  1 Look in edge habitats.
+    pick 3.0   place  Look in forest regrowth.
+    pick 3.0   ground It can grow in poor soils.
+    pick 3.0   light  It likes high sun exposure.
+gemma4:26b Cercis canadensis (eastern redbud):
+    place  1 Find it in parks and gardens.
+    place  2 Look in mixed forests and hedgerows.
+    light  1 It can grow in shade, like under trees. (USDA)
+    ground 1 Look on ground that drains well, not soggy. (USDA)
+    pick 3.0   place  Find it in parks and gardens.
+    pick 3.0   place  Look in mixed forests and hedgerows.
+    pick 2.16  ground Look on ground that drains well, not soggy.
+    pick 1.92  season Look for purple flowers in spring.
+gemma4:26b Quercus nigra (water oak):
+    place  1 You can find it in lowlands.
+    place  2 Look in old fields.
+    light  1 It does not like even light shade.
+    ground 1 It lives in wet, swampy areas.  [water]
+    ground 2 It can grow in sandy soils or red clays.
+    nearby 1 It grows near ponds and stream banks.  [water]
+    pick 3.0   place  You can find it in lowlands.
+    pick 3.0   place  Look in old fields.
+    pick 3.0   ground It can grow in sandy soils or red clays.
+gemma4:26b Albizia julibrissin (Persian silk tree):
+    place  1 You can find it in parks and gardens.
+    place  2 Look in dry plains or sandy valleys.
+    light  1 It can thrive in full sun.
+    ground 1 It grows in dry plains and sandy valleys.
+    pick 3.0   place  You can find it in parks and gardens.
+    pick 3.0   place  Look in dry plains or sandy valleys.
+    pick 3.0   ground It grows in dry plains and sandy valleys.
+    pick 2.04  season Look for white flowers in summer.
+    pick 1.32  season Look for brown seeds in fall.
+gemma4:26b Chimaphila maculata (striped wintergreen):
+    place  1 Search in woodlands or oak-pine woods.
+    light  1 Look in the shade.
+    ground 1 Look in sandy habitats.
+    pick 3.0   place  Search in woodlands or oak-pine woods.
+    pick 3.0   ground Look in sandy habitats.
+    pick 3.0   light  Look in the shade.
+gemma4:26b Rhus copallinum (shining sumac):
+    place  1 Look in maritime forests or coastal grasslands.
+    light  1 It grows in full sun or part shade.
+    ground 1 It likes well-drained soils.
+    edges  1 You might see it along interstate highways.  [road]
+    pick 3.0   place  Look in maritime forests or coastal grasslands.
+    pick 3.0   ground It likes well-drained soils.
+    pick 3.0   light  It grows in full sun or part shade.
+    pick 1.32  season Look for brown seeds in fall.
+gemma4:26b Solidago altissima (tall goldenrod):
+    edges  1 Look where humans have disturbed the land.
+    pick 1.0   edges  Look where humans have disturbed the land.
+gemma4:26b Ilex cornuta (Chinese holly):
+    place  1 Look along mountain ridges.
+    light  1 It grows in sun or shade.
+    light  2 It can grow in full sun.
+    ground 1 It does not like poorly drained soil.
+    pick 3.0   place  Look along mountain ridges.
+    pick 3.0   ground It does not like poorly drained soil.
+    pick 3.0   light  It grows in sun or shade.
+    pick 1.32  season Look for red fruit in fall.
+
+gemma4:26b targets 20, hints 79 written, 66 clean, flagged repeats an earlier quote 4, road 3, water 7, plants with 3+ clean hints 15, with none 0, median 2.4s
+# Grades go in gemma_hints_3_grades.csv: each hint judged against its quoted sentence.

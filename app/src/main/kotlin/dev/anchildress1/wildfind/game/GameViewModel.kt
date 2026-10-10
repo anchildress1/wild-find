@@ -49,6 +49,7 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
     private var models: Models? = null
     private val retry = RetryWindow(SystemClock::elapsedRealtime)
     private var loading: Job? = null
+    private val areaRun = AreaRun()
 
     /** Screen state. */
     val ui: StateFlow<GameState> = state.asStateFlow()
@@ -114,6 +115,16 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
             }
 
             is Command.Pull -> pull(command.region)
+
+            is Command.CacheArea, Command.CancelCacheArea ->
+                areaRun.on(command, viewModelScope) { region ->
+                    runAreaCache({ onMonth -> cacheArea(graph, models(), region, retry, onMonth) }) { done, finished ->
+                        // On Main and awaited in turn, so the final report cannot be overtaken by an earlier one.
+                        withContext(Dispatchers.Main.immediate) {
+                            dispatch(Outcome.AreaReport(region, done, finished))
+                        }
+                    }
+                }
 
             is Command.Locate -> viewModelScope.launch {
                 dispatch(Outcome.Located(command.from, graph.location.region()))

@@ -1,6 +1,7 @@
 package dev.anchildress1.wildfind.core.game
 
 import dev.anchildress1.wildfind.core.frame.Pixels
+import dev.anchildress1.wildfind.core.hunt.Hint
 import dev.anchildress1.wildfind.core.hunt.PlantType
 import dev.anchildress1.wildfind.core.region.RegionKey
 import dev.anchildress1.wildfind.core.verify.CaptureCue
@@ -83,6 +84,7 @@ sealed interface Screen {
  * @property description what to look for, from USDA traits, or null to show the type alone
  * @property found already found this hunt
  * @property canSkip a skip would swap in another plant; false once the queue holds none that fits
+ * @property hints the build's ranked hints for this plant, season ones included; the screen orders them by month
  */
 data class Stop(
     val row: Int,
@@ -91,6 +93,7 @@ data class Stop(
     val found: Boolean,
     val description: String? = null,
     val canSkip: Boolean = false,
+    val hints: List<Hint> = emptyList(),
 )
 
 /**
@@ -108,6 +111,31 @@ data class CameraState(
     val cue: CaptureCue? = null,
 )
 
+/** The grown-ups page's Cache my area button. */
+sealed interface AreaCache {
+    /** Nothing running or reported. */
+    data object Idle : AreaCache
+
+    /**
+     * Pulling month [done] + 1 of [total].
+     *
+     * @property done months saved so far
+     * @property total months to save
+     */
+    data class Running(val done: Int, val total: Int) : AreaCache
+
+    /** Every month is saved on the phone. */
+    data object Done : AreaCache
+
+    /**
+     * iNat or the signal gave out.
+     *
+     * @property done months that did get saved
+     * @property total months asked for
+     */
+    data class Stopped(val done: Int, val total: Int) : AreaCache
+}
+
 /**
  * Everything the UI renders.
  *
@@ -121,6 +149,8 @@ data class CameraState(
  * @property mapFocus where the map's Locate button found the rough location
  * @property camera the camera screen's state
  * @property crop the last find's reticle crop, in memory only
+ * @property areaCache the Cache my area button's progress
+ * @property hintsShown how many hints the kid has opened per target row this hunt, so the Hint button shows the next
  */
 data class GameState(
     val screen: Screen = Screen.Starting,
@@ -133,6 +163,8 @@ data class GameState(
     val mapFocus: MapFocus? = null,
     val camera: CameraState = CameraState(),
     val crop: Pixels? = null,
+    val hintsShown: Map<Int, Int> = emptyMap(),
+    val areaCache: AreaCache = AreaCache.Idle,
 ) {
     /** One star per find. */
     val stars: Int get() = stops.count { it.found }
@@ -187,6 +219,9 @@ sealed interface GameEvent : GameInput {
     /** Capture tapped. */
     data object Capture : GameEvent
 
+    /** Hint tapped on the camera for [row]: opens the next hint it has not shown yet, or the last when all are open. */
+    data class RevealHint(val row: Int) : GameEvent
+
     /** Swap the camera's target for the next species in the hunt's queue, or move past the grass tutorial. */
     data object Skip : GameEvent
 
@@ -207,6 +242,9 @@ sealed interface GameEvent : GameInput {
 
     /** Open the grown-ups page. */
     data object OpenGrownUps : GameEvent
+
+    /** Grown-ups: save every month of the hunting area on the phone for play without signal. */
+    data object CacheArea : GameEvent
 
     /** Grown-ups: change the hunting area on the map. */
     data object EditRegion : GameEvent

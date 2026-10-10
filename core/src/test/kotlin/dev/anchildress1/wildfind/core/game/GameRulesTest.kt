@@ -4,9 +4,11 @@ import dev.anchildress1.wildfind.core.frame.Pixels
 import dev.anchildress1.wildfind.core.hunt.ActiveHunt
 import dev.anchildress1.wildfind.core.hunt.AppFlags
 import dev.anchildress1.wildfind.core.hunt.Eligible
+import dev.anchildress1.wildfind.core.hunt.Hint
 import dev.anchildress1.wildfind.core.hunt.HuntProgress
 import dev.anchildress1.wildfind.core.hunt.LocalList
 import dev.anchildress1.wildfind.core.hunt.LocalListResult
+import dev.anchildress1.wildfind.core.hunt.Season
 import dev.anchildress1.wildfind.core.hunt.SpeciesRow
 import dev.anchildress1.wildfind.core.map.Places
 import dev.anchildress1.wildfind.core.region.RegionKey
@@ -110,6 +112,87 @@ class GameRulesTest {
             ),
             resumed.game.ui.stops,
         )
+    }
+
+    @Test
+    fun `a target's stop carries its species' hints`() {
+        val hint = Hint("Look in woods.", Season.FALL)
+        val hinted = rows.mapIndexed { row, species -> if (row == 0) species.copy(hints = listOf(hint)) else species }
+        val loading = Game(flags = flags()).after(Outcome.ModelsReady(hinted)).game
+
+        val stops = loading.after(Outcome.SavedHunt(hunt())).game.ui.stops
+
+        assertEquals(listOf(hint), stops[0].hints)
+        assertEquals(emptyList<Hint>(), stops[1].hints)
+    }
+
+    @Test
+    fun `a plant without hints opens none, and Hint before the table loads is harmless`() {
+        val bare = Game(GameState(screen = Screen.Camera(0)), flags(), hunt(), rows)
+        assertEquals(mapOf(0 to 0), bare.after(GameEvent.RevealHint(0)).game.ui.hintsShown)
+
+        val loading = Game(GameState(screen = Screen.Camera(0)), flags(), null, null)
+        assertEquals(mapOf(0 to 0), loading.after(GameEvent.RevealHint(0)).game.ui.hintsShown)
+    }
+
+    @Test
+    fun `Cache my area starts one run for the hunting area and reports its months`() {
+        val grownUps = playing(Screen.GrownUps(from = Screen.Hunt))
+
+        val started = grownUps.after(GameEvent.CacheArea)
+        assertEquals(AreaCache.Running(0, 12), started.game.ui.areaCache)
+        assertEquals(listOf(Command.CacheArea(home)), started.commands)
+
+        val twice = started.game.after(GameEvent.CacheArea)
+        assertEquals(emptyList<Command>(), twice.commands)
+
+        assertEquals(
+            AreaCache.Running(4, 12),
+            started.game.after(Outcome.AreaReport(home, 4, finished = false)).game.ui.areaCache,
+        )
+        assertEquals(
+            AreaCache.Done,
+            started.game.after(Outcome.AreaReport(home, 12, finished = true)).game.ui.areaCache,
+        )
+        assertEquals(
+            AreaCache.Stopped(5, 12),
+            started.game.after(Outcome.AreaReport(home, 5, finished = true)).game.ui.areaCache,
+        )
+    }
+
+    @Test
+    fun `a run for an area that is no longer the hunting area is ignored`() {
+        val running = playing(Screen.GrownUps(from = Screen.Hunt)).after(GameEvent.CacheArea).game
+
+        val stale = running.after(
+            Outcome.AreaReport(away, 7, finished = false),
+            Outcome.AreaReport(away, 12, finished = true),
+        ).game
+
+        assertEquals(AreaCache.Running(0, 12), stale.ui.areaCache)
+    }
+
+    @Test
+    fun `changing the hunting area stops a run and clears the card, but leaves a finished report alone`() {
+        val running = playing(Screen.GrownUps(from = Screen.Hunt)).after(GameEvent.CacheArea).game
+        val moved = running.after(GameEvent.PickRegion(away))
+
+        assertEquals(AreaCache.Idle, moved.game.ui.areaCache)
+        assertTrue(Command.CancelCacheArea in moved.commands)
+
+        val finished = running.after(Outcome.AreaReport(home, 12, finished = true)).game
+        val after = finished.after(GameEvent.PickRegion(away))
+        assertEquals(AreaCache.Idle, after.game.ui.areaCache)
+        assertFalse(Command.CancelCacheArea in after.commands)
+    }
+
+    @Test
+    fun `Cache my area needs a hunting area, and reopening the page clears an old report`() {
+        val noArea = Game(GameState(screen = Screen.GrownUps(from = Screen.Hunt)), flags(region = null), null, rows)
+        assertEquals(emptyList<Command>(), noArea.after(GameEvent.CacheArea).commands)
+
+        val done = playing(Screen.Hunt).after(Outcome.AreaReport(home, 12, finished = true)).game
+        assertEquals(AreaCache.Idle, done.after(GameEvent.OpenGrownUps).game.ui.areaCache)
     }
 
     @Test
@@ -462,10 +545,50 @@ class GameRulesTest {
         assertEquals(setOf(1), hunt.progress.found)
         assertEquals(1, step.game.ui.stars)
         assertSame(crop, step.game.ui.crop)
+        assertEquals(setOf("Acer s1"), step.game.flags.foundSpecies)
         assertEquals(
-            listOf(Command.SaveHunt(hunt), Command.Haptic(GameEffect.Confirm), Command.CancelCapture),
+            listOf(
+                Command.SaveHunt(hunt),
+                Command.SaveFlags(step.game.flags),
+                Command.Haptic(GameEffect.Confirm),
+                Command.CancelCapture,
+            ),
             step.commands,
         )
+    }
+
+    @Test
+    fun `the next hunt leaves out plants found before while others fill it`() {
+        val foundBefore = flags().copy(foundSpecies = setOf("Quercus s0", "Acer s1"))
+        val loading = playing(Screen.Loading, hunt = null, flags = foundBefore)
+        val pull = local(targets + queue)
+
+        val rows = loading.after(Outcome.Pulled(home, pull, offline = false)).game.hunt!!.progress.targets.map {
+            it.row
+        }
+
+        assertEquals(setOf(2, 3, 4), rows.toSet())
+    }
+
+    @Test
+    fun `each Hint tap opens one more hint, capped at what the plant has, and a new hunt starts over`() {
+        val hinted = rows.mapIndexed { row, species ->
+            species.copy(hints = List(if (row == 0) 5 else 1) { Hint("Look $it.") })
+        }
+        val start = Game(GameState(screen = Screen.Camera(0)), flags(), hunt(), hinted)
+
+        val tapped = start.after(
+            *Array(4) {
+                GameEvent.RevealHint(0)
+            },
+            GameEvent.RevealHint(1),
+            GameEvent.RevealHint(1),
+        )
+
+        assertEquals(mapOf(0 to 3, 1 to 1), tapped.game.ui.hintsShown)
+        val again = tapped.game.copy(ui = tapped.game.ui.copy(screen = Screen.Loading))
+            .after(Outcome.Pulled(home, local(targets + queue), offline = false))
+        assertEquals(emptyMap<Int, Int>(), again.game.ui.hintsShown)
     }
 
     @Test

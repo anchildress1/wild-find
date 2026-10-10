@@ -11,6 +11,7 @@ from wild_find_pipeline.assets import (
     plant_share,
     species_table,
     with_descriptions,
+    with_hints,
     with_plant_types,
     with_synonyms,
     with_toxicity,
@@ -290,3 +291,56 @@ def test_with_descriptions_adds_each_rows_sentence_or_none():
 def test_with_descriptions_rejects_a_row_without_an_entry():
     with pytest.raises(ValueError, match="run make descriptions"):
         with_descriptions([{"scientific": "Quercus nigra"}], {})
+
+
+def test_with_hints_ships_only_picked_clean_hints_best_first_and_names_the_season():
+    entry = {
+        "hints": [
+            {"aspect": "ground", "text": "It likes moist soil.", "issues": [], "score": 3.0},
+            {"aspect": "place", "text": "Look in woods.", "issues": [], "score": 3.0},
+            {"aspect": "season", "text": "Look for red fruit in fall.", "issues": [], "score": 1.3, "bucket": "fall"},
+            {"aspect": "place", "text": "Look near streams.", "issues": ["water"], "score": None},
+            {"aspect": "light", "text": "It likes sun.", "issues": [], "score": None},
+        ]
+    }
+
+    label = {"scientific": "Quercus nigra", "toxic": False, "hazard": False}
+    shipped = with_hints([label], {"done": True, "species": {"Quercus nigra": entry}})
+
+    assert shipped == [
+        {
+            **label,
+            "hints": [
+                {"text": "It likes moist soil."},
+                {"text": "Look in woods."},
+                {"text": "Look for red fruit in fall.", "season": "fall"},
+            ],
+        }
+    ]
+
+
+def test_with_hints_gives_toxic_and_hazard_rows_none_and_refuses_a_checkpoint():
+    toxic = {"scientific": "Conium maculatum", "toxic": True, "hazard": False}
+    hazard = {"scientific": "Toxicodendron radicans", "toxic": True, "hazard": True}
+
+    assert with_hints([toxic, hazard], {"done": True, "species": {}}) == [
+        {**toxic, "hints": []},
+        {**hazard, "hints": []},
+    ]
+    with pytest.raises(ValueError, match="make hints"):
+        with_hints([], {"done": False, "species": {}})
+
+
+def test_with_hints_refuses_a_playable_row_the_file_lacks():
+    row = {"scientific": "Quercus nigra", "toxic": False, "hazard": False}
+
+    with pytest.raises(ValueError, match=r"lacks 1 playable species, e\.g\. \['Quercus nigra'\]"):
+        with_hints([row], {"done": True, "species": {}})
+
+
+def test_with_hints_refuses_a_season_the_app_does_not_know():
+    row = {"scientific": "Quercus nigra", "toxic": False, "hazard": False}
+    odd = {"aspect": "season", "text": "x", "issues": [], "score": 1.0, "bucket": "monsoon"}
+
+    with pytest.raises(ValueError, match="monsoon"):
+        with_hints([row], {"done": True, "species": {"Quercus nigra": {"hints": [odd]}}})

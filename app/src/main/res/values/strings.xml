@@ -92,6 +92,11 @@
     <string name="camera_progress">%1$d of %2$d</string>
     <string name="back_to_hunt">Back to your hunt</string>
     <string name="capture">Capture</string>
+    <string name="hint">Hint</string>
+    <string name="hint_n_of">Hint %1$d of %2$d</string>
+    <string name="hint_earlier">%1$d · %2$s</string>
+    <string name="hint_next">Hint %1$d</string>
+    <string name="keep_looking">Keep looking</string>
     <string name="skip_target">Can\'t find it? Try another plant</string>
     <string name="skip_practice">Skip practice</string>
     <string name="checking">Checking…</string>
@@ -131,10 +136,6 @@
         <item quantity="one">%1$d of %2$d plant found.</item>
         <item quantity="other">%1$d of %2$d plants found.</item>
     </plurals>
-    <plurals name="stars">
-        <item quantity="one">%d star</item>
-        <item quantity="other">%d stars</item>
-    </plurals>
     <string name="found_label">Found</string>
     <string name="still_out">Still out there</string>
     <string name="hunt_again">Hunt again</string>
@@ -146,6 +147,21 @@
     <string name="privacy_photos">Photos never leave this phone</string>
     <string name="privacy_location">Approximate location only, rounded to whole degrees; iNaturalist gets the region center</string>
     <string name="privacy_network">Talks only to iNaturalist, to see which plants grow nearby. Nothing downloads after install</string>
+    <string name="inat_title">iNaturalist and kids</string>
+    <string name="inat_asks">Each hunt, and Cache my area, asks iNaturalist which plants grow nearby</string>
+    <string name="inat_ip">iNaturalist sees this phone\'s IP address, like any website</string>
+    <string name="inat_terms">iNaturalist\'s terms are for ages 13 and up, or younger with a parent\'s permission</string>
+    <string name="inat_account">Wild Find has no iNaturalist account and posts nothing there</string>
+    <string name="inat_nothing">No photos, names, or exact location go with the request</string>
+    <string name="cache_title">Play without signal</string>
+    <string name="cache_how">Going somewhere with no signal? While you are online, tap Cache my area. Wild Find asks iNaturalist about all 12 months for your hunting area and keeps the answers on this phone, so hunts there work all year. It takes about a minute. To save a different place, change the hunting area on the map first.</string>
+    <string name="cache_button">Cache my area</string>
+    <string name="cache_running">Saving month %1$d of %2$d</string>
+    <string name="cache_done">All 12 months are saved for %1$s</string>
+    <plurals name="cache_stopped">
+        <item quantity="one">Saved %1$d of %2$d months, then iNaturalist did not answer. Check your signal and try again.</item>
+        <item quantity="other">Saved %1$d of %2$d months, then iNaturalist did not answer. Check your signal and try again.</item>
+    </plurals>
     <string name="hunting_area">Hunting area</string>
     <string name="hunting_area_detail">%1$s · change it on the map</string>
     <string name="replay_opener">Watch the safety intro again</string>

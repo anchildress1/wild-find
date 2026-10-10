@@ -26,11 +26,28 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import dev.anchildress1.wildfind.R
+import dev.anchildress1.wildfind.core.game.AreaCache
 import dev.anchildress1.wildfind.ui.theme.Palette
 
-/** Privacy facts, the hunting area, the opener replay (R1), and credits. */
+private val INAT_FACTS = listOf(
+    R.string.inat_asks,
+    R.string.inat_ip,
+    R.string.inat_terms,
+    R.string.inat_account,
+    R.string.inat_nothing,
+)
+
+/** Privacy facts, the iNaturalist disclosure, the hunting area, the opener replay (R1), and credits. */
 @Composable
-fun GrownUpsScreen(area: String?, onBack: () -> Unit, onArea: () -> Unit, onReplay: () -> Unit) {
+@Suppress("LongParameterList")
+fun GrownUpsScreen(
+    area: String?,
+    cache: AreaCache,
+    onBack: () -> Unit,
+    onArea: () -> Unit,
+    onReplay: () -> Unit,
+    onCache: () -> Unit,
+) {
     val context = LocalContext.current
     val version =
         remember(context) { context.packageManager.getPackageInfo(context.packageName, 0).versionName.orEmpty() }
@@ -61,8 +78,10 @@ fun GrownUpsScreen(area: String?, onBack: () -> Unit, onArea: () -> Unit, onRepl
             Fact(R.string.privacy_location)
             Fact(R.string.privacy_network)
         }
+        INaturalistCard(Modifier.rise(index = 1))
+        CacheAreaCard(cache, area ?: stringResource(R.string.region_near_you), onCache, Modifier.rise(index = 2))
         Column(
-            Modifier.rise(index = 1).fillMaxWidth().clip(CardShape).background(Palette.Paper)
+            Modifier.rise(index = 3).fillMaxWidth().clip(CardShape).background(Palette.Paper)
                 .border(1.5.dp, Palette.Line, CardShape),
         ) {
             Link(
@@ -74,7 +93,7 @@ fun GrownUpsScreen(area: String?, onBack: () -> Unit, onArea: () -> Unit, onRepl
             Box(Modifier.fillMaxWidth().height(1.5.dp).background(Palette.Line))
             Link(WildIcons.Replay, stringResource(R.string.replay_opener), null, onReplay)
         }
-        Column(Modifier.rise(index = 2), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Column(Modifier.rise(index = 4), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(stringResource(R.string.made_with), style = MaterialTheme.typography.titleLarge)
             Text(stringResource(R.string.credits_models), style = MaterialTheme.typography.bodyMedium)
             Text(stringResource(R.string.credits_data), style = MaterialTheme.typography.bodyMedium)
@@ -85,6 +104,14 @@ fun GrownUpsScreen(area: String?, onBack: () -> Unit, onArea: () -> Unit, onRepl
                 color = Palette.Ink2,
             )
         }
+    }
+}
+
+@Composable
+private fun INaturalistCard(modifier: Modifier) {
+    PaperCard(modifier) {
+        Text(stringResource(R.string.inat_title), style = MaterialTheme.typography.titleSmall)
+        INAT_FACTS.forEach { Fact(it) }
     }
 }
 

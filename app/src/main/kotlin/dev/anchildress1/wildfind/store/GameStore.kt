@@ -29,6 +29,8 @@ class GameStore(private val dir: File) {
             it.getBoolean("tutorial_done"),
             if (it.isNull("region")) null else region(it.getString("region")),
             it.getBoolean("location_denied"),
+            it.optJSONArray("found_species")?.let { names -> List(names.length(), names::getString).toSet() }
+                ?: emptySet(),
         )
     } ?: AppFlags()
 
@@ -39,7 +41,8 @@ class GameStore(private val dir: File) {
             .put("opener_seen", flags.openerSeen)
             .put("tutorial_done", flags.tutorialDone)
             .put("region", flags.region?.toString() ?: JSONObject.NULL)
-            .put("location_denied", flags.locationDenied),
+            .put("location_denied", flags.locationDenied)
+            .put("found_species", JSONArray(flags.foundSpecies.sorted())),
     )
 
     /** The hunt saved under [tableVersion], or null: another table build moved its rows. */

@@ -12,29 +12,29 @@ import kotlin.random.Random
 data class Hunt(val tutorial: Boolean, val targets: List<Eligible>, val queue: List<Eligible> = emptyList())
 
 /**
- * Picks a hunt's targets by sighting-weighted random from the local list, species with a description first: a kid
- * finds a plant faster when told what to look for. Eligibility never depends on it, since USDA describes only US
- * species and a hard filter would empty hunts elsewhere.
+ * Picks a hunt's targets by sighting-weighted random from the local list. Plants found in an earlier hunt come last,
+ * so they appear only when too few others remain to fill the hunt; within each group species with hints come first,
+ * since a kid finds a plant faster when told where to look. Eligibility never depends on either: hints exist only
+ * for rows with a sourced article or USDA trait, and a hard filter would empty hunts in small areas.
  *
- * @param table every species-table row, for each target's genus and description
+ * @param table every species-table row, for each target's genus, name, and hints
  * @param random the draw; seeded in tests
  */
 class HuntPick(private val table: List<SpeciesRow>, private val random: Random = Random.Default) {
     /**
-     * A hunt from [local]; [tutorialDone] false opens it with the grass tutorial. Targets come from described species
-     * until those run out, then from the rest; the skip queue likewise lists described species first, each group
-     * shuffled.
+     * A hunt from [local]; [tutorialDone] false opens it with the grass tutorial. [found] holds the scientific names
+     * of plants found before. Targets come from unfound hinted species until those run out, then unfound plain ones,
+     * then found hinted, then found plain; the skip queue lists the rest in the same order, each group shuffled.
      */
-    fun next(local: LocalList, tutorialDone: Boolean): Hunt {
-        val (described, plain) = local.eligible.partition(::described)
+    fun next(local: LocalList, tutorialDone: Boolean, found: Set<String> = emptySet()): Hunt {
+        val (seen, fresh) = local.eligible.partition { table[it.row].scientific in found }
+        val groups = fresh.partition(::hinted).toList() + seen.partition(::hinted).toList()
         val targets = mutableListOf<Eligible>()
-        fill(targets, described)
-        fill(targets, plain)
-        val (later, last) = (local.eligible - targets.toSet()).partition(::described)
-        return Hunt(!tutorialDone, targets, later.shuffled(random) + last.shuffled(random))
+        groups.forEach { fill(targets, it) }
+        return Hunt(!tutorialDone, targets, groups.flatMap { (it - targets.toSet()).shuffled(random) })
     }
 
-    private fun described(species: Eligible) = table[species.row].description != null
+    private fun hinted(species: Eligible) = table[species.row].hints.isNotEmpty()
 
     // Adds weighted draws from [from] until the hunt is full, never repeating a genus already in it.
     private fun fill(targets: MutableList<Eligible>, from: List<Eligible>) {

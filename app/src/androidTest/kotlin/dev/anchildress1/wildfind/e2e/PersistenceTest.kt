@@ -53,7 +53,7 @@ class PersistenceTest : E2eTest() {
         val names = stops().map(::stopName)
         tap(R.string.finish_hunt)
         waitForText(text(R.string.complete_title))
-        assertTrue(has(hasContentDescription(plural(R.plurals.stars, 0, 0))))
+        assertFalse("a star shows with none earned", has(hasContentDescription(text(R.string.one_star))))
         assertTrue(has(hasText(plural(R.plurals.complete_partial, TARGETS, 0, TARGETS))))
         names.forEach { assertTrue("$it isn't listed", has(hasText(it))) }
         assertEquals(TARGETS, nodes(hasText(text(R.string.still_out))).size)

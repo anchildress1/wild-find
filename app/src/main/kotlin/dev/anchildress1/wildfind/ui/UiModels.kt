@@ -1,5 +1,6 @@
 package dev.anchildress1.wildfind.ui
 
+import dev.anchildress1.wildfind.core.hunt.Hint
 import dev.anchildress1.wildfind.core.hunt.PlantType
 
 /**
@@ -12,6 +13,8 @@ import dev.anchildress1.wildfind.core.hunt.PlantType
  * @property number which find this is, 1-based; 0 for the tutorial
  * @property total the hunt's target count
  * @property canSkip Skip has a plant to swap in, so its button is enabled; the tutorial can always skip
+ * @property hints up to three hints in the order to show them, this month's season ones first; none hides the button
+ * @property hintsShown how many of [hints] the kid has opened so far this hunt; the Hint button opens the next one
  */
 data class CameraTarget(
     val row: Int?,
@@ -21,6 +24,8 @@ data class CameraTarget(
     val total: Int,
     val description: String? = null,
     val canSkip: Boolean = true,
+    val hints: List<Hint> = emptyList(),
+    val hintsShown: Int = 0,
 )
 
 /**
