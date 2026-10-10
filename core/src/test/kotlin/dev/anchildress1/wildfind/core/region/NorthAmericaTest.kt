@@ -27,4 +27,11 @@ class NorthAmericaTest {
         assertFalse(NorthAmerica.contains(RegionKey(42, 45)))
         assertFalse(NorthAmerica.contains(RegionKey(51, 0)))
     }
+
+    @Test
+    fun `the box takes in Maui and Cartagena and leaves out Adak`() {
+        assertTrue(NorthAmerica.contains(RegionKey(20, -156)))
+        assertTrue(NorthAmerica.contains(RegionKey(10, -75)))
+        assertFalse(NorthAmerica.contains(RegionKey(52, -177)))
+    }
 }

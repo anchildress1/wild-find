@@ -23,7 +23,8 @@ data class Sighting(val scientific: String, val common: String?, val count: Int)
  * @property description a generic kid-level sentence, the plant type in kid words, or null when the build found none
  * @property hints the build's ranked "where to look" hints, every seasonal one included; empty when it wrote none
  * @property hazardLine a short kid line for the warning card, on hazard rows only; null when the build wrote none
- * @property hazardFloor a fixed-floor hazard, which warns in every region; always a hazard
+ * @property hazardFloor a fixed-floor hazard, which warns unseen inside North America and elsewhere only where the
+ *   region's pull names it; always a hazard
  * @property target false for a row the build holds back from target picks; it stays eligible, so it still competes
  *   in verify row 4
  */

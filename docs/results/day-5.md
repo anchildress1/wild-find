@@ -148,3 +148,15 @@ Two more S24 runs pulled later on Oct 10:
 | 20261010-103343 | 8.1 min | charging 217 of 239 samples | 0 | 7.3 min | critical from the first sample | 49.8 to 50.7 °C |
 
 Neither run logged a Capture tap, and in both the camera paused partway through (the app left the foreground or the screen locked), so they record heat with the camera off rather than verify cost. The 10:33 run started with the battery already near 50 °C. S05 stays open.
+
+## Self-review fix: a toxic plant filling only the circle (Oct 10)
+
+The PR self-review found that R1h averages every row, blockers included, so a toxic plant that fills only the reticle is diluted by a full frame of the target's genus, and the margin dropped from 0.048 to 0.034 on top of that. The fix keeps the target on the mean but scores each blocker on the larger of its mean and its reticle cosine (`target_pass/blocker_guard.py`, `blocker_guard.log`, same embeddings and splits as above).
+
+| Rule | Margin | TUNE targets | TUNE toxic (headroom) | TEST targets | TEST toxic (headroom) | Wrong genus (TEST) |
+| --- | --- | --- | --- | --- | --- | --- |
+| R1h | 0.034 | 60/99 | 0/194 (+0.0105) | 56/99 | 0/73 (+0.0028) | 1/99 |
+| Guard, margin retuned | 0.011 | 60/99 | 0/194 (+0.0149) | 59/99 | **2/73 (−0.0029)** | 2/99 |
+| **Guard at 0.034 (shipped)** | 0.034 | 55/99 | 0/194 (+0.0379) | 53/99 | 0/73 (+0.0201) | 1/99 |
+
+Retuning lets the guard's own boundary pull the margin down to 0.011, and 2 fresh toxic photos pass, so the margin stays at R1h's 0.034. The guard there costs 8 finds across both splits (116 to 108 of 198, still up from 97) and widens the closest toxic call from 0.0028 to 0.0201 under the margin. TEST was scored a second time here, so it carries the same small selection effect as the first study.

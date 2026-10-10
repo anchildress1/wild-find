@@ -1,8 +1,9 @@
 package dev.anchildress1.wildfind.core.region
 
 /**
- * Where the fixed hazard floor warns unseen: a whole-degree box from Alaska through Panama and the Caribbean, which
- * leaves out eastern Greenland and all of Europe.
+ * Where the fixed hazard floor warns unseen: a whole-degree box from mainland Alaska through Panama and the Caribbean.
+ * The box also takes in Hawaii and northern Colombia, Venezuela, and the Guianas, and leaves out the western Aleutians,
+ * eastern Greenland, and all of Europe.
  *
  * The floor's species (every Toxicodendron, pokeweed, Carolina horsenettle) are North American, and here they must
  * warn even when the pull misses them: iNat's one-month West Georgia pull names neither Atlantic poison oak nor poison

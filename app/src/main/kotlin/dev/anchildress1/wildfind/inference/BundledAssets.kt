@@ -6,7 +6,6 @@ import dev.anchildress1.wildfind.core.hunt.Hint
 import dev.anchildress1.wildfind.core.hunt.PlantType
 import dev.anchildress1.wildfind.core.hunt.Season
 import dev.anchildress1.wildfind.core.hunt.SpeciesRow
-import dev.anchildress1.wildfind.core.region.NorthAmerica
 import dev.anchildress1.wildfind.core.region.RegionKey
 import dev.anchildress1.wildfind.core.tensor.FloatMatrix
 import dev.anchildress1.wildfind.core.tensor.Npy
@@ -90,7 +89,7 @@ class BundledAssets(private val assets: AssetManager) {
             labels.map { it.hazard }.toBooleanArray(),
             labels.map { it.hazardFloor }.toBooleanArray(),
             BooleanArray(labels.size) { it in localRows },
-            NorthAmerica.contains(region),
+            region,
         )
 
     /** Tutorial text vectors from `labels.npy`, named by `labels.json`. */

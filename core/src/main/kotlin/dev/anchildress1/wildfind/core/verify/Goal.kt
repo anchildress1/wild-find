@@ -71,7 +71,11 @@ class TargetGoal(
         val scores = eligible.map(::s)
         val best = scores.max()
         val top = eligible[scores.indexOf(best)]
-        val blocker = blockers.maxOfOrNull(::s) ?: Double.NEGATIVE_INFINITY
+
+        // A toxic plant that fills only the circle must not be diluted by the full frame, so a blocker scores the
+        // larger of its mean and its reticle cosine.
+        fun guard(row: Int) = if (full == null) s(row) else maxOf(s(row), table.dot(row, reticle))
+        val blocker = blockers.maxOfOrNull(::guard) ?: Double.NEGATIVE_INFINITY
         val score = s(target)
         // A tie for top-1 is no pass, whichever rows tie.
         val met = scores.count { it == best } == 1 && genus[top] == genus[target] && best - blocker >= margin
@@ -89,7 +93,8 @@ class TargetGoal(
 
         /**
          * The margin on the reticle and full-frame mean (day-5 rule R1h): the 0.024 tune boundary plus 0.01 headroom.
-         * It let 0 of 267 toxic photos pass and raised target passes from 97 to 116 of 198.
+         * With blockers floored at their reticle cosine it lets 0 of 267 toxic photos pass, with the closest toxic
+         * photo 0.020 under the margin, and raises target passes from 97 to 108 of 198 (`blocker_guard.log`).
          */
         const val FULL_MARGIN = 0.034
     }

@@ -1,5 +1,7 @@
 package dev.anchildress1.wildfind.core.verify
 
+import dev.anchildress1.wildfind.core.region.NorthAmerica
+import dev.anchildress1.wildfind.core.region.RegionKey
 import dev.anchildress1.wildfind.core.tensor.FloatMatrix
 
 /**
@@ -9,23 +11,23 @@ import dev.anchildress1.wildfind.core.tensor.FloatMatrix
  * up and warn on ordinary plants. Only the reported top species is limited to [local] rows, so a plant from another
  * continent isn't named as what the kid sees.
  *
- * A hazard warns when it is seen near the player, or when it is on the fixed floor and [floorAlways] holds (rule C,
- * the floor unseen only inside [dev.anchildress1.wildfind.core.region.NorthAmerica]); any other hazard ranks as an
- * ordinary species. Listing every contact hazard warned on 18 of 253 safe Day-1 photos, rule B on 3
- * (`docs/results/day-4/hazard_gate/gate.log`). Where no hazard can warn, nothing does.
+ * A hazard warns when it is seen near the player, or when it is on the fixed floor and [region] is inside
+ * [NorthAmerica] (rule C, the floor unseen only there); any other hazard ranks as an ordinary species. Listing every
+ * contact hazard warned on 18 of 253 safe Day-1 photos, rule B on 3 (`docs/results/day-4/hazard_gate/gate.log`).
+ * Where no hazard can warn, nothing does.
  *
  * @param table one unit text vector per species
  * @param hazard true for each hazard species row, floor and contact list
  * @param floor true for each fixed-floor hazard row
  * @param local true for each species seen near the player
- * @param floorAlways true where a floor hazard warns even when the player's pull never named it
+ * @param region the hunt's region; inside [NorthAmerica] a floor hazard warns even when the pull never named it
  */
 class HazardCheck(
     private val table: FloatMatrix,
     hazard: BooleanArray,
     floor: BooleanArray,
     local: BooleanArray,
-    floorAlways: Boolean,
+    region: RegionKey,
 ) {
     init {
         require(hazard.size == table.rows) { "${hazard.size} hazard flags for ${table.rows} rows" }
@@ -35,7 +37,9 @@ class HazardCheck(
 
     // After the size checks, so a short flag array fails them instead of indexing past its end. With no local row,
     // the top species falls back to the whole table rather than naming nothing.
-    private val warning = BooleanArray(table.rows) { (floor[it] && floorAlways) || (hazard[it] && local[it]) }
+    private val warningRows: IntArray = NorthAmerica.contains(region).let { floorAlways ->
+        (0 until table.rows).filter { (floor[it] && floorAlways) || (hazard[it] && local[it]) }.toIntArray()
+    }
     private val named: List<Int> = (0 until table.rows).filter { local[it] }.ifEmpty { (0 until table.rows).toList() }
 
     /**
@@ -54,7 +58,7 @@ class HazardCheck(
     /** Ranks [embedding]: the best warning hazard against every row, the top species among the local rows. */
     fun rank(embedding: FloatArray): Ranking {
         val scores = DoubleArray(table.rows) { table.dot(it, embedding) }
-        val hazardRow = scores.indices.filter { warning[it] }.maxByOrNull { scores[it] }
+        val hazardRow = warningRows.maxByOrNull { scores[it] }
         val topRow = named.maxBy { scores[it] }
         val rank = hazardRow?.let { row -> 1 + scores.count { it > scores[row] } }
         return Ranking(topRow, hazardRow, rank)

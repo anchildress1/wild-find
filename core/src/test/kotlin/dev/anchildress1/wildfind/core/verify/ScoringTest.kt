@@ -1,5 +1,6 @@
 package dev.anchildress1.wildfind.core.verify
 
+import dev.anchildress1.wildfind.core.region.RegionKey
 import dev.anchildress1.wildfind.core.tensor.FloatMatrix
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -25,9 +26,12 @@ class ScoringTest {
 
     private fun everywhere(rows: Int) = BooleanArray(rows) { true }
 
+    private val westGeorgia = RegionKey(34, -85)
+    private val london = RegionKey(51, 0)
+
     /** A North American check whose every hazard is on the floor, so locality never changes which hazard warns. */
     private fun fixed(table: FloatMatrix, hazard: BooleanArray, local: BooleanArray) =
-        HazardCheck(table, hazard, hazard, local, floorAlways = true)
+        HazardCheck(table, hazard, hazard, local, region = westGeorgia)
 
     @Test
     fun `hazard rank counts every species scoring above the best hazard`() {
@@ -88,7 +92,13 @@ class ScoringTest {
         assertThrows<IllegalArgumentException> { fixed(rows(1.0), booleanArrayOf(true, false), everywhere(2)) }
         assertThrows<IllegalArgumentException> { fixed(rows(1.0), booleanArrayOf(true), everywhere(2)) }
         assertThrows<IllegalArgumentException> {
-            HazardCheck(rows(1.0), booleanArrayOf(true), booleanArrayOf(true, false), everywhere(1), floorAlways = true)
+            HazardCheck(
+                rows(1.0),
+                booleanArrayOf(true),
+                booleanArrayOf(true, false),
+                everywhere(1),
+                region = westGeorgia,
+            )
         }
         assertThrows<IllegalArgumentException> {
             fixed(rows(1.0), booleanArrayOf(true), everywhere(1)).rank(floatArrayOf(1f))
@@ -98,7 +108,7 @@ class ScoringTest {
     @Test
     fun `inside North America a floor hazard warns where it was never seen`() {
         val hazard = booleanArrayOf(false, false, true)
-        val check = HazardCheck(rows(10.0, 20.0, 30.0), hazard, hazard, BooleanArray(3), floorAlways = true)
+        val check = HazardCheck(rows(10.0, 20.0, 30.0), hazard, hazard, BooleanArray(3), region = westGeorgia)
 
         assertEquals(HazardCheck.Ranking(topRow = 0, hazardRow = 2, hazardRank = 3), check.rank(east))
         assertTrue(check.rank(east).warns)
@@ -109,10 +119,10 @@ class ScoringTest {
         val table = rows(10.0, 20.0, 30.0)
         val hazard = booleanArrayOf(false, false, true)
 
-        val unseen = HazardCheck(table, hazard, hazard, booleanArrayOf(true, true, false), floorAlways = false)
+        val unseen = HazardCheck(table, hazard, hazard, booleanArrayOf(true, true, false), region = london)
         assertEquals(HazardCheck.Ranking(topRow = 0, hazardRow = null, hazardRank = null), unseen.rank(east))
         assertFalse(unseen.rank(east).warns)
-        val seen = HazardCheck(table, hazard, hazard, everywhere(3), floorAlways = false)
+        val seen = HazardCheck(table, hazard, hazard, everywhere(3), region = london)
         assertEquals(HazardCheck.Ranking(topRow = 0, hazardRow = 2, hazardRank = 3), seen.rank(east))
         assertTrue(seen.rank(east).warns)
     }
@@ -123,10 +133,10 @@ class ScoringTest {
         val hazard = booleanArrayOf(true, false, false, true)
         val floor = booleanArrayOf(false, false, false, true)
 
-        val seen = HazardCheck(table, hazard, floor, booleanArrayOf(true, true, false, false), floorAlways = true)
+        val seen = HazardCheck(table, hazard, floor, booleanArrayOf(true, true, false, false), region = westGeorgia)
         assertEquals(HazardCheck.Ranking(topRow = 0, hazardRow = 0, hazardRank = 1), seen.rank(east))
         // Unseen, row 0 still outscores the floor hazard, so it counts toward the floor hazard's rank.
-        val unseen = HazardCheck(table, hazard, floor, booleanArrayOf(false, true, false, false), floorAlways = true)
+        val unseen = HazardCheck(table, hazard, floor, booleanArrayOf(false, true, false, false), region = westGeorgia)
         assertEquals(HazardCheck.Ranking(topRow = 1, hazardRow = 3, hazardRank = 4), unseen.rank(east))
         assertTrue(unseen.rank(east).warns)
     }
@@ -138,7 +148,7 @@ class ScoringTest {
             booleanArrayOf(true, false, false, false, false, true),
             booleanArrayOf(false, false, false, false, false, true),
             BooleanArray(6),
-            floorAlways = true,
+            region = westGeorgia,
         )
 
         assertEquals(6, check.rank(east).hazardRank)
@@ -246,6 +256,15 @@ class ScoringTest {
         assertFalse(target(10.0, 40.0, 50.0, 15.0, 80.0, blockers = blockers).score(east, full).met)
         // At 30 degrees the blocker's mean falls 0.059 behind, past the margin.
         assertTrue(target(10.0, 40.0, 50.0, 30.0, 80.0, blockers = blockers).score(east, full).met)
+    }
+
+    @Test
+    fun `a toxic blocker filling only the reticle isn't diluted by the full frame`() {
+        // The blocker at 5 degrees fills the circle; the full frame at 50 degrees sits on the oak's side. The means
+        // put the oak 0.051 ahead, past the margin, but the blocker's reticle cosine of 0.996 still leads.
+        val goal = target(20.0, 40.0, 50.0, 5.0, 80.0, blockers = intArrayOf(3, 4))
+
+        assertFalse(goal.score(east, toward(50.0)).met)
     }
 
     @Test

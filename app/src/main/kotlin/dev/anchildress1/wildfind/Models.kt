@@ -2,10 +2,8 @@ package dev.anchildress1.wildfind
 
 import dev.anchildress1.wildfind.camera.CaptureVerifier
 import dev.anchildress1.wildfind.core.hunt.NameIndex
-import dev.anchildress1.wildfind.core.region.NorthAmerica
 import dev.anchildress1.wildfind.core.region.RegionKey
 import dev.anchildress1.wildfind.core.verify.FrameVerifier
-import dev.anchildress1.wildfind.core.verify.HazardCheck
 import dev.anchildress1.wildfind.inference.BundledAssets
 import dev.anchildress1.wildfind.inference.ImageEncoder
 
@@ -14,7 +12,7 @@ import dev.anchildress1.wildfind.inference.ImageEncoder
  *
  * @param assets the bundled files
  */
-class Models(assets: BundledAssets) {
+class Models(private val assets: BundledAssets) {
     /** BioCLIP species table. */
     val table = assets.speciesTable()
 
@@ -36,8 +34,6 @@ class Models(assets: BundledAssets) {
     private val gate = assets.plantGate()
     private val gateEncoder = ImageEncoder(assets.plantGateModel())
     private val bioclip = ImageEncoder(assets.bioclipModel())
-    private val hazard = rows.map { it.hazard }.toBooleanArray()
-    private val floor = rows.map { it.hazardFloor }.toBooleanArray()
 
     /**
      * A capture loop for one hunt in [region]: only its [local] rows are named, and a hazard warns when it is local, or
@@ -48,7 +44,7 @@ class Models(assets: BundledAssets) {
             gate,
             gateEncoder,
             bioclip,
-            HazardCheck(table, hazard, floor, BooleanArray(rows.size) { it in local }, NorthAmerica.contains(region)),
+            assets.hazardCheck(table, rows, local, region),
         ),
     )
 }
