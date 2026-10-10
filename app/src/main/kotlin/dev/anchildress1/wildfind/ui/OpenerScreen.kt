@@ -48,37 +48,20 @@ import dev.anchildress1.wildfind.ui.theme.Palette
 /** R1: the leave-it rule before anything else, Briar standing in the forest above its three steps. */
 @Composable
 fun OpenerScreen(replay: Boolean, onDone: () -> Unit) {
-    Box(Modifier.fillMaxSize().background(Palette.Ground)) {
-        // Ground shows until the painting decodes, so the page never flashes dark.
-        assetImage(BACKGROUND)?.let {
-            Image(it, contentDescription = null, Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
-        }
-        Column(Modifier.fillMaxSize().safeDrawingPadding().padding(horizontal = 20.dp)) {
-            // The page's own Column, with the title at the top and Briar and the steps low, on the painting's ground;
-            // it all scrolls together when 200% font or a short screen makes it taller than the viewport.
-            BoxWithConstraints(Modifier.weight(1f).fillMaxWidth()) {
-                val viewport = maxHeight
-                Column(
-                    Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).heightIn(min = viewport)
-                        .padding(vertical = 12.dp),
-                    verticalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    TitleArt(Modifier.fillMaxWidth(TITLE_WIDTH).align(Alignment.CenterHorizontally).rise(index = 0))
-                    Column(Modifier.padding(top = 12.dp)) {
-                        Briar(
-                            BriarState.OPENER,
-                            briarText(BriarState.OPENER),
-                            Modifier.rise(index = 1).align(Alignment.CenterHorizontally).zIndex(1f),
-                        )
-                        RulePanel(Modifier.overlapUp(BRIAR_OVERLAP))
-                    }
-                }
-            }
-            Column(Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 16.dp)) {
-                PrimaryButton(stringResource(if (replay) R.string.opener_done else R.string.opener_go), onDone)
-            }
-        }
-    }
+    ForestPage(
+        bottom = { PrimaryButton(stringResource(if (replay) R.string.opener_done else R.string.opener_go), onDone) },
+        upper = {
+            TitleArt(Modifier.fillMaxWidth(TITLE_WIDTH).align(Alignment.CenterHorizontally).rise(index = 0))
+        },
+        lower = {
+            Briar(
+                BriarState.OPENER,
+                briarText(BriarState.OPENER),
+                Modifier.rise(index = 1).align(Alignment.CenterHorizontally).zIndex(1f),
+            )
+            RulePanel(Modifier.overlapUp(BRIAR_OVERLAP))
+        },
+    )
 }
 
 @Composable
@@ -138,8 +121,6 @@ private fun Modifier.overlapUp(by: Dp) = layout { measurable, constraints ->
     val shift = by.roundToPx()
     layout(placeable.width, (placeable.height - shift).coerceAtLeast(0)) { placeable.place(0, -shift) }
 }
-
-private const val BACKGROUND = "opener_background.webp"
 
 // Measured on opener_background.webp: Paper at this alpha holds Ink at 6.96:1 even over pure black, the darkest pixel
 // under the panel.

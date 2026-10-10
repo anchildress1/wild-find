@@ -98,7 +98,7 @@ From the owner's play on the S24, debug and release.
 - [x] **S63 Offline area pick** (app) — picking an area with no signal already saved it, but the no-signal page had no way to Grown-ups, so Cache my area was out of reach. The page now links there. Covered by a core test; the phone tests can't turn signal off.
 - [x] **S64 Dismiss the hazard card** (core + app) — a "Look somewhere else" button closes the warning. The card never closes on its own. Passed the phone tests Oct 10.
 - [x] **S65 Untyped plant picture** (pipeline + app) — 728 species with no known type showed no picture; they now show the owner's plant picture on the hunt list, camera bar, and win page. Herbs now say "An herb." and keep the herb picture, since a parent can explain the word. Passed the phone tests Oct 10.
-- [x] **S66 Opener background** (pipeline + app) — the owner's watercolor forest fills the safety opener, with the text on a light panel so it stays readable. The owner checked it on the phone Oct 10.
+- [x] **S66 Opener background** (pipeline + app) — the owner's watercolor forest fills the safety opener and, from Oct 10, the Ready to hunt home screen, with the text on a light panel so it stays readable. The owner checked it on the phone Oct 10.
 - [x] **S67 Clean Briar's white** (pipeline) — the warning animation showed white along the bottom, trapped between the leaves. It's gone now, and Briar's white fur stays. The owner checked it on the phone Oct 10.
 
 - [ ] **S68 Better target matching** (core) — a capture now checks the whole picture as well as the circle, so more real targets pass: 116 of 198 test photos, up from 97, and still no toxic plant passes (0 of 267). It costs the phone nothing extra (`docs/results/day-5.md`). Ticks after the S05 run on the phone.
