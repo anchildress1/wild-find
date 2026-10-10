@@ -8,6 +8,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import dev.anchildress1.wildfind.R
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import org.junit.Assume.assumeTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -33,6 +34,17 @@ class HintSheetTest : E2eTest() {
         tap(R.string.keep_looking)
         waitForText(text(R.string.capture))
         assertTrue(has(hasText(text(R.string.hint))))
+    }
+
+    @Test
+    fun hintAgainAfterKeepLookingOpensTheNextHintAndKeepsTheFirstInView() {
+        openFirstHint()
+        assumeTrue("this plant has one hint", has(hasText(text(R.string.hint_next, 2))))
+        tap(R.string.keep_looking)
+        waitForText(text(R.string.capture))
+        tap(R.string.hint)
+        waitFor(hasText(headerAt(2), substring = true))
+        assertTrue("hint 1 is gone", has(hasText(text(R.string.hint_earlier, 1, ""), substring = true)))
     }
 
     @Test

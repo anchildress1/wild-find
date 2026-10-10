@@ -37,7 +37,6 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -80,6 +79,7 @@ fun CameraScreen(
     executor: Executor,
     onCapture: () -> Unit,
     onSkip: () -> Unit,
+    onHint: () -> Unit,
     onBack: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -87,8 +87,8 @@ fun CameraScreen(
         mutableStateOf(context.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)
     }
     var denied by remember { mutableStateOf(false) }
-    // 0 shows the camera panel; n shows hint n. A new target starts on the camera panel.
-    var hintAt by rememberSaveable(target.row) { mutableIntStateOf(0) }
+    // Whether the hint sheet is open; how many hints are open is the game's, so Keep looking then Hint shows the next.
+    var sheet by rememberSaveable(target.row) { mutableStateOf(false) }
     val ask = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
         granted = it
         denied = !it
@@ -112,12 +112,12 @@ fun CameraScreen(
             Feedback(target, camera, Modifier.align(Alignment.BottomCenter))
         }
         AnimatedContent(
-            hintAt,
+            sheet && target.hintsShown > 0,
             transitionSpec = { fadeIn(tween(Motion.QUICK)) togetherWith fadeOut(tween(Motion.QUICK)) },
             label = "panel",
-        ) { shown ->
-            if (shown > 0) {
-                HintPanel(target.hints, shown, onNext = { hintAt = shown + 1 }, onKeepLooking = { hintAt = 0 })
+        ) { open ->
+            if (open) {
+                HintPanel(target.hints, target.hintsShown, onNext = onHint, onKeepLooking = { sheet = false })
             } else {
                 BottomPanel(
                     camera,
@@ -127,7 +127,10 @@ fun CameraScreen(
                     hasHint = target.hints.isNotEmpty(),
                     onCapture,
                     onSkip,
-                    onHint = { hintAt = 1 },
+                    onHint = {
+                        onHint()
+                        sheet = true
+                    },
                 )
             }
         }

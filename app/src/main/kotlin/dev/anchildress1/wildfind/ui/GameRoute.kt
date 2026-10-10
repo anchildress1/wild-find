@@ -140,6 +140,7 @@ private fun ScreenFor(screen: Screen, state: GameState, vm: GameViewModel) {
             vm.analysis,
             onCapture = { on(GameEvent.Capture) },
             onSkip = { on(GameEvent.Skip) },
+            onHint = { screen.row?.let { on(GameEvent.RevealHint(it)) } },
             onBack = { on(GameEvent.Back) },
         )
 
@@ -191,6 +192,7 @@ private fun cameraTarget(row: Int?, state: GameState): CameraTarget {
         stop.description,
         stop.canSkip,
         stop.hints.forMonth(LocalDate.now().monthValue),
+        state.hintsShown[row] ?: 0,
     )
 }
 
