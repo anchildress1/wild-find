@@ -102,11 +102,11 @@ class FrameVerifier(
         val embedded = clock()
         val reticleRank = reticleEmbedding?.takeIf { goal.checksHazards }?.let(hazards::rank)
         val fullRank = fullEmbedding?.let(hazards::rank)
-        val hazard = listOfNotNull(reticleRank, fullRank).any { it.warns }
+        val warning = listOfNotNull(reticleRank, fullRank).filter { it.warns }.minByOrNull { it.hazardRank }
         val ranked = clock()
         val score = reticleEmbedding?.let(goal::score)
         val scored = clock()
-        val evidence = FrameEvidence(hazard, reticlePlant, focus(), score?.met == true)
+        val evidence = FrameEvidence(warning?.hazardRow, reticlePlant, focus(), score?.met == true)
         val end = clock()
         return FrameResult(
             evidence,

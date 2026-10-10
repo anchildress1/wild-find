@@ -35,9 +35,15 @@ class Models(assets: BundledAssets) {
     private val gateEncoder = ImageEncoder(assets.plantGateModel())
     private val bioclip = ImageEncoder(assets.bioclipModel())
     private val hazard = rows.map { it.hazard }.toBooleanArray()
+    private val floor = rows.map { it.hazardFloor }.toBooleanArray()
 
-    /** A capture loop for one hunt, naming only its [local] rows as what the camera sees. */
+    /** A capture loop for one hunt: only its [local] rows are named, and only local contact hazards warn. */
     fun verifier(local: Set<Int>): CaptureVerifier = CaptureVerifier(
-        FrameVerifier(gate, gateEncoder, bioclip, HazardCheck(table, hazard, BooleanArray(rows.size) { it in local })),
+        FrameVerifier(
+            gate,
+            gateEncoder,
+            bioclip,
+            HazardCheck(table, hazard, floor, BooleanArray(rows.size) { it in local }),
+        ),
     )
 }

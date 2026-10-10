@@ -13,11 +13,12 @@ import json
 import re
 import sys
 import time
-import urllib.request
 from datetime import date
 
-from wild_find_pipeline import usda
-from wild_find_pipeline.descriptions import BANNED
+from wild_find_pipeline import gemma, usda
+from wild_find_pipeline.contact_hazards import listed
+from wild_find_pipeline.descriptions import ACTIONS, BANNED
+from wild_find_pipeline.gemma import MODEL, NUM_CTX, SAMPLER, squash
 from wild_find_pipeline.hint_rank import rank, shares
 from wild_find_pipeline.hint_traits import TRAITS, usda_traits
 from wild_find_pipeline.hint_traits import candidates as trait_hints
@@ -25,12 +26,6 @@ from wild_find_pipeline.labels import is_hazard
 from wild_find_pipeline.paths import HINTS, PLANT_TYPES, SYNONYMS, TOXICITY
 from wild_find_pipeline.toxicity import SENTENCE, articles
 
-BASE_URL = "http://localhost:11434"
-MODEL = "gemma4:26b"
-# Gemma 4's recommended sampler. Ollama's default context is small and silently cuts a longer prompt, so the run
-# sets it and checks the prompt fit.
-SAMPLER = {"temperature": 1.0, "top_p": 0.95, "top_k": 64, "seed": 1}
-NUM_CTX = 8192
 MAX_NEW_TOKENS = 700
 ASPECTS = ("place", "light", "ground", "nearby", "edges")
 PER_ASPECT = 2
@@ -61,7 +56,6 @@ REGION = re.compile(
     r"eastern|western|northern|southern|asia|europe|china|japan|korea|africa|world)\b",
     re.I,
 )
-ACTIONS = re.compile(r"\b(?:eat|eating|eaten|touch|touching|pick|picking|taste|tasting)\b", re.I)
 # USDA ratings fill a kind the article left empty. The value codes were decoded on Oct 9 from species with known
 # answers, because the ontology lookup was unreachable: shade high = Cornus florida, low = Pinus taeda and Salix nigra;
 # wet soil high = Typha latifolia and Taxodium distichum, none = Taraxacum officinale. Only those clear ends are used,
@@ -161,11 +155,6 @@ def excerpt(text: str) -> str:
     return "\n".join(lead + [s for s in rest if SETTING.search(s)][:MAX_EXCERPT_SENTENCES])
 
 
-def squash(text: str) -> str:
-    """Whitespace-collapsed, case-folded text, so a quote matches however the article wrapped its lines."""
-    return " ".join(text.split()).casefold()
-
-
 def issues(aspect: str, hint: str, evidence: str, article: str, names: list[str]) -> list[str]:
     """Every automatic check a model hint fails; empty when it passes."""
     found = []
@@ -208,30 +197,8 @@ def parse(text: str) -> dict[str, list[tuple[str, str]]]:
 
 
 def chat(user: str) -> dict:
-    """One Ollama chat turn (native API, so num_ctx is honored); raises on a reply that is cut short or empty."""
-    messages = [
-        {"role": "system", "content": SYSTEM},
-        {"role": "user", "content": SHOT[0]},
-        {"role": "assistant", "content": SHOT[1]},
-        {"role": "user", "content": user},
-    ]
-    body = {
-        "model": MODEL,
-        "messages": messages,
-        "stream": False,
-        # Gemma 4 thinks by default and the thinking spent the whole reply budget on Oct 9; this is a quote lookup.
-        "think": False,
-        "format": SCHEMA,
-        "options": {**SAMPLER, "num_ctx": NUM_CTX, "num_predict": MAX_NEW_TOKENS},
-    }
-    request = urllib.request.Request(
-        f"{BASE_URL}/api/chat", json.dumps(body).encode(), {"Content-Type": "application/json"}
-    )
-    with urllib.request.urlopen(request, timeout=900) as response:
-        reply = json.load(response)
-    if reply.get("done_reason") != "stop" or not reply["message"]["content"].strip():
-        raise ValueError(f"{MODEL}: reply ended {reply.get('done_reason')!r} with no usable content")
-    return {"text": reply["message"]["content"], "cut_off": reply.get("prompt_eval_count", 0) >= NUM_CTX - 8}
+    """One hints turn to the local Gemma; raises on a reply that is cut short or empty."""
+    return gemma.chat(SYSTEM, (SHOT,), SCHEMA, user, MAX_NEW_TOKENS)
 
 
 def usda_fill(aspect: str, names: list[str], facts: dict[str, dict[str, list[str]]]) -> dict | None:
@@ -317,9 +284,10 @@ def rank_all(species: dict[str, dict]) -> None:
 
 
 def playable() -> list[str]:
-    """Every species-table row that can be a target: not toxic-flagged and not a hazard species."""
+    """Every species-table row that can be a target: not toxic-flagged, not a hazard, not on the contact list."""
     flags = json.loads(TOXICITY.read_text())["species"]
-    return sorted(r for r, f in flags.items() if not f["toxic"] and not is_hazard(r))
+    contact = listed()
+    return sorted(r for r, f in flags.items() if not f["toxic"] and not is_hazard(r) and r not in contact)
 
 
 def save(species: dict, done: bool) -> None:

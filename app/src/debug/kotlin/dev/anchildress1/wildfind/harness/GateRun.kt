@@ -225,7 +225,7 @@ class GateRun(private val context: Context, models: Models, private val target: 
         private fun ms(nanos: Long) = nanos.toDouble() / NANOS_PER_MS
 
         private fun name(verdict: Verdict) = when (verdict) {
-            Verdict.Hazard -> "hazard"
+            is Verdict.Hazard -> "hazard"
             Verdict.NotPlant -> "not_plant"
             Verdict.TapToFocus -> "tap_to_focus"
             Verdict.WalkCloser -> "walk_closer"

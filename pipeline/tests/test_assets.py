@@ -10,6 +10,7 @@ from wild_find_pipeline import assets, labels, paths
 from wild_find_pipeline.assets import (
     plant_share,
     species_table,
+    with_contact_hazards,
     with_descriptions,
     with_hints,
     with_plant_types,
@@ -238,11 +239,52 @@ def test_with_toxicity_rejects_a_row_without_a_flag():
         with_toxicity([{"scientific": "Quercus nigra", "hazard": False}], {})
 
 
-def test_with_toxicity_rejects_a_hazard_that_is_not_flagged():
-    labels = [{"scientific": "Toxicodendron radicans", "hazard": True}]
+def test_with_toxicity_takes_a_hazard_that_is_not_flagged():
+    labels = [{"scientific": "Urtica dioica", "hazard": True}]
 
-    with pytest.raises(ValueError, match=r"hazards \['Toxicodendron radicans'\] unflagged"):
-        with_toxicity(labels, {"Toxicodendron radicans": {"toxic": False}})
+    assert with_toxicity(labels, {"Urtica dioica": {"toxic": False}})[0]["toxic"] is False
+
+
+def _contact(status: str, line: str = "", issues: tuple[str, ...] = ()) -> dict:
+    return {"status": status, "line": line, "issues": list(issues)}
+
+
+def test_with_contact_hazards_unions_the_fixed_rule_with_the_shipped_list_and_adds_clean_lines():
+    labels = [
+        {"scientific": name, "hazard": is_hazard(name)}
+        for name in ("Toxicodendron radicans", "Solanum carolinense", "Urtica dioica", "Rubus idaeus", "Rosa canina")
+    ]
+    data = {
+        "done": True,
+        "species": {
+            "Toxicodendron radicans": _contact("auto", "It gives skin an itchy rash."),
+            "Solanum carolinense": _contact("skip"),
+            "Urtica dioica": _contact("review", "Its hairs sting skin and eat it.", ("line banned word",)),
+            "Rubus idaeus": _contact("review", "Its thorns scratch.", ("spines only",)),
+            "Rosa canina": _contact("skip"),
+        },
+    }
+    review = {"Urtica dioica": {"triage": "approve", "note": "", "owner": True}, "Rubus idaeus": {"owner": None}}
+
+    shipped = with_contact_hazards(labels, data, review)
+
+    assert [(e["scientific"], e["hazard"], e["hazard_floor"], e["hazard_line"]) for e in shipped] == [
+        ("Toxicodendron radicans", True, True, "It gives skin an itchy rash."),
+        ("Solanum carolinense", True, True, None),
+        ("Urtica dioica", True, False, None),
+        ("Rubus idaeus", False, False, None),
+        ("Rosa canina", False, False, None),
+    ]
+    assert all(e["hazard"] for e in shipped if e["hazard_floor"])
+
+
+def test_with_contact_hazards_refuses_a_checkpoint_or_a_missing_row():
+    labels = [{"scientific": "Quercus nigra", "hazard": False}]
+
+    with pytest.raises(ValueError, match="make contact-hazards"):
+        with_contact_hazards(labels, {"done": False, "species": {}}, {})
+    with pytest.raises(ValueError, match=r"lacks 1 species.*make contact-hazards"):
+        with_contact_hazards(labels, {"done": True, "species": {}}, {})
 
 
 def test_with_synonyms_adds_each_rows_aliases():
@@ -329,6 +371,13 @@ def test_with_hints_gives_toxic_and_hazard_rows_none_and_refuses_a_checkpoint():
     ]
     with pytest.raises(ValueError, match="make hints"):
         with_hints([], {"done": False, "species": {}})
+
+
+def test_with_hints_drops_stored_hints_from_a_row_now_on_the_contact_list():
+    nettle = {"scientific": "Urtica dioica", "toxic": False, "hazard": True}
+    stored = {"hints": [{"aspect": "place", "text": "Look in woods.", "issues": [], "score": 3.0}]}
+
+    assert with_hints([nettle], {"done": True, "species": {"Urtica dioica": stored}}) == [{**nettle, "hints": []}]
 
 
 def test_with_hints_refuses_a_playable_row_the_file_lacks():

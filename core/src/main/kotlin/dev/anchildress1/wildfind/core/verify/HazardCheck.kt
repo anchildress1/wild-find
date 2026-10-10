@@ -9,26 +9,33 @@ import dev.anchildress1.wildfind.core.tensor.FloatMatrix
  * up and warn on ordinary plants. Only the reported top species is limited to [local] rows, so a plant from another
  * continent isn't named as what the kid sees.
  *
+ * A hazard warns when it is on the fixed floor or seen near the player (rule B); a contact hazard from elsewhere
+ * ranks as an ordinary species. Listing every contact hazard warned on 18 of 253 safe Day-1 photos, rule B on 3
+ * (`docs/results/day-4/hazard_gate/gate.log`).
+ *
  * @param table one unit text vector per species
- * @param hazard true for each PRD hazard species row
+ * @param hazard true for each hazard species row, floor and contact list
+ * @param floor true for each fixed-floor hazard row, which warns anywhere
  * @param local true for each species seen near the player
  */
-class HazardCheck(private val table: FloatMatrix, private val hazard: BooleanArray, local: BooleanArray) {
+class HazardCheck(private val table: FloatMatrix, hazard: BooleanArray, floor: BooleanArray, local: BooleanArray) {
     init {
         require(hazard.size == table.rows) { "${hazard.size} hazard flags for ${table.rows} rows" }
+        require(floor.size == table.rows) { "${floor.size} floor flags for ${table.rows} rows" }
         require(local.size == table.rows) { "${local.size} local flags for ${table.rows} rows" }
-        require(hazard.any { it }) { "no hazard species in the table" }
+        require(floor.any { it }) { "no floor hazard species in the table" }
     }
 
     // After the size checks, so a short flag array fails them instead of indexing past its end. With no local row,
     // the top species falls back to the whole table rather than naming nothing.
+    private val warning = BooleanArray(table.rows) { floor[it] || (hazard[it] && local[it]) }
     private val named: List<Int> = (0 until table.rows).filter { local[it] }.ifEmpty { (0 until table.rows).toList() }
 
     /**
      * One region's embedding ranked against every row.
      *
      * @property topRow the best-scoring local species row
-     * @property hazardRow the best-scoring hazard species row
+     * @property hazardRow the best-scoring hazard row that can warn here: a floor row, or a local contact hazard
      * @property hazardRank 1-based rank of [hazardRow]; a safe species tied with it ranks below it, so ties warn
      */
     data class Ranking(val topRow: Int, val hazardRow: Int, val hazardRank: Int) {
@@ -36,12 +43,12 @@ class HazardCheck(private val table: FloatMatrix, private val hazard: BooleanArr
         val warns: Boolean get() = hazardRank <= TOP_K
     }
 
-    /** Ranks [embedding]: the hazard against every row, the top species among the local rows. */
+    /** Ranks [embedding]: the best warning hazard against every row, the top species among the local rows. */
     fun rank(embedding: FloatArray): Ranking {
         val scores = DoubleArray(table.rows) { table.dot(it, embedding) }
         var hazardRow = -1
         for (row in scores.indices) {
-            if (hazard[row] && (hazardRow < 0 || scores[row] > scores[hazardRow])) hazardRow = row
+            if (warning[row] && (hazardRow < 0 || scores[row] > scores[hazardRow])) hazardRow = row
         }
         val topRow = named.maxBy { scores[it] }
         val best = scores[hazardRow]

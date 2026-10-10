@@ -17,7 +17,7 @@ import dev.anchildress1.wildfind.core.verify.HazardCheck
 import dev.anchildress1.wildfind.core.verify.TargetGoal
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -65,7 +65,7 @@ class FrameVerifierDeviceTest {
                 // A 224-square fixture: the full-frame crop resizes to itself, so the laptop share must hold.
                 assertEquals(gateReference().getDouble("plant_share"), result.fullShare, SHARE_TOLERANCE)
                 assertTrue(result.evidence.reticlePlant)
-                assertFalse(result.evidence.hazard)
+                assertNull(result.evidence.hazardRow)
                 assertTrue(result.fullRanking!!.hazardRank > HazardCheck.TOP_K)
             }
         }

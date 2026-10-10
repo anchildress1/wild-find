@@ -21,10 +21,14 @@ class ScoringTest {
 
     private fun everywhere(rows: Int) = BooleanArray(rows) { true }
 
+    /** A check whose every hazard is on the floor, so locality never changes which hazard warns. */
+    private fun fixed(table: FloatMatrix, hazard: BooleanArray, local: BooleanArray) =
+        HazardCheck(table, hazard, hazard, local)
+
     @Test
     fun `hazard rank counts every species scoring above the best hazard`() {
         val table = rows(10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0)
-        val check = HazardCheck(table, booleanArrayOf(false, false, true, false, false, true, false), everywhere(7))
+        val check = fixed(table, booleanArrayOf(false, false, true, false, false, true, false), everywhere(7))
 
         assertEquals(3, check.rank(east).hazardRank)
         assertTrue(check.rank(east).warns)
@@ -32,14 +36,14 @@ class ScoringTest {
 
     @Test
     fun `ranking names the top species and the best hazard rows`() {
-        val check = HazardCheck(rows(30.0, 10.0, 20.0, 40.0), booleanArrayOf(false, false, false, true), everywhere(4))
+        val check = fixed(rows(30.0, 10.0, 20.0, 40.0), booleanArrayOf(false, false, false, true), everywhere(4))
 
         assertEquals(HazardCheck.Ranking(topRow = 1, hazardRow = 3, hazardRank = 4), check.rank(east))
     }
 
     @Test
     fun `the top species is local, but the hazard rank still counts every row`() {
-        val check = HazardCheck(
+        val check = fixed(
             rows(5.0, 10.0, 20.0, 30.0),
             booleanArrayOf(false, false, false, true),
             booleanArrayOf(false, true, false, false),
@@ -50,7 +54,7 @@ class ScoringTest {
 
     @Test
     fun `with no local row the top species falls back to the whole table`() {
-        val check = HazardCheck(rows(5.0, 10.0, 30.0), booleanArrayOf(false, false, true), BooleanArray(3))
+        val check = fixed(rows(5.0, 10.0, 30.0), booleanArrayOf(false, false, true), BooleanArray(3))
 
         assertEquals(HazardCheck.Ranking(topRow = 0, hazardRow = 2, hazardRank = 3), check.rank(east))
     }
@@ -58,7 +62,7 @@ class ScoringTest {
     @Test
     fun `a hazard below the top five does not warn`() {
         val check =
-            HazardCheck(
+            fixed(
                 rows(1.0, 2.0, 3.0, 4.0, 5.0, 6.0),
                 booleanArrayOf(false, false, false, false, false, true),
                 everywhere(6),
@@ -70,19 +74,61 @@ class ScoringTest {
 
     @Test
     fun `a safe species tied with the hazard does not push it down`() {
-        val check = HazardCheck(rows(10.0, 10.0), booleanArrayOf(false, true), everywhere(2))
+        val check = fixed(rows(10.0, 10.0), booleanArrayOf(false, true), everywhere(2))
 
         assertEquals(1, check.rank(east).hazardRank)
     }
 
     @Test
     fun `hazard check validates its table and the embedding`() {
-        assertThrows<IllegalArgumentException> { HazardCheck(rows(1.0), booleanArrayOf(false), everywhere(1)) }
-        assertThrows<IllegalArgumentException> { HazardCheck(rows(1.0), booleanArrayOf(true, false), everywhere(2)) }
-        assertThrows<IllegalArgumentException> { HazardCheck(rows(1.0), booleanArrayOf(true), everywhere(2)) }
+        assertThrows<IllegalArgumentException> { fixed(rows(1.0), booleanArrayOf(false), everywhere(1)) }
+        assertThrows<IllegalArgumentException> { fixed(rows(1.0), booleanArrayOf(true, false), everywhere(2)) }
+        assertThrows<IllegalArgumentException> { fixed(rows(1.0), booleanArrayOf(true), everywhere(2)) }
         assertThrows<IllegalArgumentException> {
-            HazardCheck(rows(1.0), booleanArrayOf(true), everywhere(1)).rank(floatArrayOf(1f))
+            HazardCheck(rows(1.0), booleanArrayOf(true), booleanArrayOf(true, false), everywhere(1))
         }
+        assertThrows<IllegalArgumentException> {
+            HazardCheck(rows(1.0), booleanArrayOf(true), booleanArrayOf(false), everywhere(1))
+        }
+        assertThrows<IllegalArgumentException> {
+            fixed(rows(1.0), booleanArrayOf(true), everywhere(1)).rank(floatArrayOf(1f))
+        }
+    }
+
+    @Test
+    fun `a floor hazard warns where it was never seen`() {
+        val hazard = booleanArrayOf(false, false, true)
+        val check = HazardCheck(rows(10.0, 20.0, 30.0), hazard, hazard, BooleanArray(3))
+
+        assertEquals(HazardCheck.Ranking(topRow = 0, hazardRow = 2, hazardRank = 3), check.rank(east))
+        assertTrue(check.rank(east).warns)
+    }
+
+    @Test
+    fun `a contact hazard warns only where it was seen, and elsewhere ranks as an ordinary species`() {
+        val table = rows(10.0, 20.0, 30.0, 40.0)
+        val hazard = booleanArrayOf(true, false, false, true)
+        val floor = booleanArrayOf(false, false, false, true)
+
+        val seen = HazardCheck(table, hazard, floor, booleanArrayOf(true, true, false, false))
+        assertEquals(HazardCheck.Ranking(topRow = 0, hazardRow = 0, hazardRank = 1), seen.rank(east))
+        // Unseen, row 0 still outscores the floor hazard, so it counts toward the floor hazard's rank.
+        val unseen = HazardCheck(table, hazard, floor, booleanArrayOf(false, true, false, false))
+        assertEquals(HazardCheck.Ranking(topRow = 1, hazardRow = 3, hazardRank = 4), unseen.rank(east))
+        assertTrue(unseen.rank(east).warns)
+    }
+
+    @Test
+    fun `an unseen contact hazard in the top five does not warn`() {
+        val check = HazardCheck(
+            rows(1.0, 2.0, 3.0, 4.0, 5.0, 6.0),
+            booleanArrayOf(true, false, false, false, false, true),
+            booleanArrayOf(false, false, false, false, false, true),
+            BooleanArray(6),
+        )
+
+        assertEquals(6, check.rank(east).hazardRank)
+        assertFalse(check.rank(east).warns)
     }
 
     // Rows 0-1 are oaks, 2 a maple, 3 a toxic oak, 4 a toxic holly; an embedding at 0 degrees ranks lower angles first.

@@ -66,6 +66,8 @@ class BundledAssets(private val assets: AssetManager) {
                             }
                         }
                     } ?: emptyList(),
+                    it.optString("hazard_line").ifEmpty { null },
+                    it.optBoolean("hazard_floor"),
                 )
             }
         }
@@ -75,10 +77,11 @@ class BundledAssets(private val assets: AssetManager) {
     /** The cache's table version: the first 12 hex digits of `species_labels.json`'s SHA-256. */
     fun tableVersion(): String = CacheKey.tableVersion(bytes(SPECIES_LABELS))
 
-    /** Verify row 1's hazard rule over [table], naming only the hunt's [localRows] as what the camera sees. */
+    /** Verify row 1's hazard rule over [table]; [localRows] are what it names and which contact hazards warn. */
     fun hazardCheck(table: FloatMatrix, labels: List<SpeciesRow>, localRows: Set<Int>): HazardCheck = HazardCheck(
         table,
         labels.map { it.hazard }.toBooleanArray(),
+        labels.map { it.hazardFloor }.toBooleanArray(),
         BooleanArray(labels.size) { it in localRows },
     )
 

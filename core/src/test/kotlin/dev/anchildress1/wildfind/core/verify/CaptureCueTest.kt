@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 class CaptureCueTest {
     @Test
     fun `each final verdict maps to one cue, and a running streak to none`() {
-        assertEquals(CaptureCue.HAZARD, CaptureCue.of(Verdict.Hazard, fullFramePlant = true))
+        assertEquals(CaptureCue.HAZARD, CaptureCue.of(Verdict.Hazard(0), fullFramePlant = true))
         assertEquals(CaptureCue.TAP_TO_FOCUS, CaptureCue.of(Verdict.TapToFocus, fullFramePlant = true))
         assertEquals(CaptureCue.FOUND, CaptureCue.of(Verdict.Found, fullFramePlant = true))
         assertEquals(CaptureCue.GET_CLOSER, CaptureCue.of(Verdict.WalkCloser, fullFramePlant = true))

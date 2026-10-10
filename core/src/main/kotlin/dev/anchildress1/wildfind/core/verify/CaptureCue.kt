@@ -28,7 +28,7 @@ enum class CaptureCue {
     companion object {
         /** The cue for a capture's final [verdict]; null while the streak is still matching. */
         fun of(verdict: Verdict, fullFramePlant: Boolean): CaptureCue? = when (verdict) {
-            Verdict.Hazard -> HAZARD
+            is Verdict.Hazard -> HAZARD
             Verdict.NotPlant -> if (fullFramePlant) PUT_IN_CIRCLE else POINT_AT_PLANT
             Verdict.TapToFocus -> TAP_TO_FOCUS
             Verdict.Found -> FOUND

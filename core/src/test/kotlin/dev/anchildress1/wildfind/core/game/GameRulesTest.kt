@@ -56,7 +56,7 @@ class GameRulesTest {
         camera,
         session,
         FrameResult(
-            FrameEvidence(hazard = false, reticlePlant = true, focus = null, goalMet = false),
+            FrameEvidence(hazardRow = null, reticlePlant = true, focus = null, goalMet = false),
             crop,
             reticleShare = 0.9,
             fullShare = fullShare,
@@ -528,11 +528,22 @@ class GameRulesTest {
     @Test
     fun `a hazard capture buzzes once and stays on the camera`() {
         val camera = Screen.Camera(0)
-        val step = playing(camera).after(frame(camera, 0, Verdict.Hazard))
+        val step = playing(camera).after(frame(camera, 0, Verdict.Hazard(4)))
 
         assertEquals(camera, step.game.ui.screen)
-        assertEquals(CaptureCue.HAZARD, step.game.ui.camera.cue)
+        assertEquals(CameraState(cue = CaptureCue.HAZARD, hazardLine = null), step.game.ui.camera)
         assertEquals(listOf(Command.Haptic(GameEffect.Reject)), step.commands)
+    }
+
+    @Test
+    fun `a hazard with its own line shows it until the next capture's cue`() {
+        val camera = Screen.Camera(0)
+        val line = "Its sap can make skin blister in sunlight."
+        val lined = rows.dropLast(1) + rows.last().copy(hazard = true, hazardLine = line)
+        val warned = playing(camera).copy(rows = lined).after(frame(camera, 0, Verdict.Hazard(4)))
+
+        assertEquals(line, warned.game.ui.camera.hazardLine)
+        assertNull(warned.game.after(frame(camera, 0, Verdict.NotPlant)).game.ui.camera.hazardLine)
     }
 
     @Test

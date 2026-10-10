@@ -22,6 +22,8 @@ data class Sighting(val scientific: String, val common: String?, val count: Int)
  * @property synonyms other names GBIF gives this species, so a drifted iNat name still finds the row
  * @property description a generic kid-level sentence, the plant type in kid words, or null when the build found none
  * @property hints the build's ranked "where to look" hints, every seasonal one included; empty when it wrote none
+ * @property hazardLine a short kid line for the warning card, on hazard rows only; null when the build wrote none
+ * @property hazardFloor a fixed-floor hazard, which warns in every region; always a hazard
  */
 data class SpeciesRow(
     val scientific: String,
@@ -32,6 +34,8 @@ data class SpeciesRow(
     val synonyms: List<String> = emptyList(),
     val description: String? = null,
     val hints: List<Hint> = emptyList(),
+    val hazardLine: String? = null,
+    val hazardFloor: Boolean = false,
 ) {
     /** Neither toxic nor a hazard, so it can be a target. */
     val playable: Boolean get() = !toxic && !hazard
@@ -49,11 +53,11 @@ data class SpeciesRow(
             rows.firstOrNull { it.genus != it.scientific.substringBefore(' ') }?.let {
                 throw IllegalArgumentException("${it.scientific} has genus ${it.genus}")
             }
-            require(rows.any { it.hazard }) { "no hazard species" }
-            // A hazard must never be a target, even if a toxicity rebuild misses it.
-            rows.firstOrNull { it.hazard && !it.toxic }?.let {
-                throw IllegalArgumentException("hazard ${it.scientific} is not toxic-flagged")
-            }
+            require(rows.any { it.hazardFloor }) { "no floor hazard species" }
+            val notHazard = rows.firstOrNull { it.hazardFloor && !it.hazard }
+            require(notHazard == null) { "floor hazard ${notHazard?.scientific} is not a hazard" }
+            val badLine = rows.firstOrNull { it.hazardLine != null && (!it.hazard || it.hazardLine.isBlank()) }
+            require(badLine == null) { "${badLine?.scientific} has a bad hazard line" }
             return rows
         }
     }

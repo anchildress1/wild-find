@@ -3,8 +3,10 @@
 Writes into the gitignored app/generated/assets. Needs no BioCLIP teacher: appended hazard rows come from the
 committed hazard_vectors.json (make hazard-vectors), toxicity flags from toxicity.json (make toxicity), name
 aliases from synonyms.json (make synonyms), plant types from plant_types.json (make plant-types), and kid-level
-descriptions from descriptions.json (make descriptions), and "where to look" hints from hints.json (make hints), so CI
-can run it. Also checks the committed labels.npy and labels.json (make labels) against the current label lists and pins.
+descriptions from descriptions.json (make descriptions), contact hazards and their card lines from
+contact_hazards.json and its review file (make contact-hazards), and "where to look" hints from hints.json (make hints),
+so CI can run it. Also checks the committed labels.npy and labels.json (make labels) against the current label lists
+and pins.
 """
 
 import hashlib
@@ -19,7 +21,7 @@ from typing import Any
 
 import numpy as np
 
-from wild_find_pipeline import label_vectors, places, world_map
+from wild_find_pipeline import contact_hazards, label_vectors, places, world_map
 from wild_find_pipeline.hint_traits import YEAR
 from wild_find_pipeline.labels import (
     GATE_OTHER,
@@ -31,6 +33,8 @@ from wild_find_pipeline.labels import (
     taxa_names,
 )
 from wild_find_pipeline.paths import (
+    CONTACT_HAZARDS,
+    CONTACT_REVIEW,
     DESCRIPTIONS,
     GENERATED_ASSETS,
     GENERATED_STAMP,
@@ -81,18 +85,36 @@ def merged(labels: list[dict], found: dict, source: Path, step: str, add: Callab
 
 
 def with_toxicity(labels: list[dict], flags: dict[str, dict]) -> list[dict]:
-    """Add each row's genus and committed toxicity flag; raises when a row has no flag or a hazard isn't toxic."""
-    out = merged(
+    """Add each row's genus and committed toxicity flag; raises when a row has no flag."""
+    return merged(
         labels,
         flags,
         TOXICITY,
         "toxicity",
         lambda entry, found: {"genus": entry["scientific"].split()[0], "toxic": found["toxic"]},
     )
-    # The app refuses a species table with an unflagged hazard at load, so fail here instead of on the phone.
-    if unflagged := [entry["scientific"] for entry in out if entry["hazard"] and not entry["toxic"]]:
-        raise ValueError(f"{TOXICITY.name} leaves hazards {unflagged} unflagged; run make toxicity")
-    return out
+
+
+def with_contact_hazards(labels: list[dict], data: dict, review: dict) -> list[dict]:
+    """Mark shipped contact-hazard rows as hazards, flag the fixed-rule ones as the floor, and add each card line.
+
+    `hazard_floor` rows warn everywhere; other hazards warn only where the region's sightings include them. A row with
+    no card line gets None, and the card falls back to generic text.
+
+    Raises when the file is a partial checkpoint or lacks a row.
+    """
+    shipped = contact_hazards.listed(data, review)
+    return merged(
+        labels,
+        data["species"],
+        CONTACT_HAZARDS,
+        "contact-hazards",
+        lambda entry, _: {
+            "hazard": entry["hazard"] or entry["scientific"] in shipped,
+            "hazard_floor": is_hazard(entry["scientific"]),
+            "hazard_line": shipped.get(entry["scientific"]),
+        },
+    )
 
 
 def with_synonyms(labels: list[dict], aliases: dict[str, list[str]]) -> list[dict]:
@@ -113,8 +135,9 @@ def with_descriptions(labels: list[dict], found: dict[str, dict]) -> list[dict]:
 def with_hints(labels: list[dict], data: dict) -> list[dict]:
     """Add each row's shipped hints: the picked ones that failed no check, best first, `season` only on season hints.
 
-    Toxic and hazard rows get none. Raises when the file is a partial checkpoint, when a playable row has no entry, or
-    when a season hint carries a name the app does not know.
+    Toxic and hazard rows get none, even when the file holds hints from before a row joined the contact list. Raises
+    when the file is a partial checkpoint, when a playable row has no entry, or when a season hint carries a name the
+    app does not know.
     """
     if not data["done"]:
         raise ValueError(f"{HINTS.name} is a partial checkpoint; run make hints to finish it")
@@ -124,7 +147,10 @@ def with_hints(labels: list[dict], data: dict) -> list[dict]:
         raise ValueError(f"{HINTS.name} lacks {len(missing)} playable species, e.g. {missing[:3]}; run make hints")
     out = []
     for entry in labels:
-        picked = [h for h in found.get(entry["scientific"], {}).get("hints", []) if h.get("score") and not h["issues"]]
+        if entry["toxic"] or entry["hazard"]:
+            out.append({**entry, "hints": []})
+            continue
+        picked = [h for h in found[entry["scientific"]]["hints"] if h.get("score") and not h["issues"]]
         bad = [h["bucket"] for h in picked if h["aspect"] == "season" and h["bucket"] not in YEAR]
         if bad:
             raise ValueError(f"{entry['scientific']} has season hints named {bad}, not one of {YEAR}")
@@ -224,12 +250,22 @@ INPUTS = (
     PLANT_TYPES,
     DESCRIPTIONS,
     HINTS,
+    CONTACT_HAZARDS,
+    CONTACT_REVIEW,
     REPO / "pipeline/uv.lock",
     LABELS_DIR / "labels.json",
     LABELS_DIR / "labels.npy",
     *(
         REPO / "pipeline/src/wild_find_pipeline" / name
-        for name in ("assets.py", "labels.py", "label_vectors.py", "paths.py", "places.py", "world_map.py")
+        for name in (
+            "assets.py",
+            "contact_hazards.py",
+            "labels.py",
+            "label_vectors.py",
+            "paths.py",
+            "places.py",
+            "world_map.py",
+        )
     ),
 )
 
@@ -263,6 +299,9 @@ def main() -> int:
         names = taxa_names()
         extra = hazard_vectors(names)
         table, labels = species_table(np.load(ensure_artifact("taxa")), names, extra)
+        labels = with_contact_hazards(
+            labels, json.loads(CONTACT_HAZARDS.read_text()), json.loads(CONTACT_REVIEW.read_text())
+        )
         labels = with_toxicity(labels, json.loads(TOXICITY.read_text())["species"])
         labels = with_synonyms(labels, json.loads(SYNONYMS.read_text())["species"])
         labels = with_plant_types(labels, json.loads(PLANT_TYPES.read_text())["species"])
@@ -286,9 +325,11 @@ def main() -> int:
 
         publish(staging)
     hazards = sum(entry["hazard"] for entry in labels)
+    lines = sum(entry["hazard_line"] is not None for entry in labels)
     toxic = sum(entry["toxic"] for entry in labels)
     print(
-        f"OK: {GENERATED_ASSETS}: {len(labels)} species ({hazards} hazards, {toxic} toxic, appended {list(extra)}), "
+        f"OK: {GENERATED_ASSETS}: {len(labels)} species ({hazards} hazards, {lines} with a card line, {toxic} toxic, "
+        f"appended {list(extra)}), "
         f"scale {scale:.4f}, map {map_bytes} bytes, places {place_bytes} bytes"
     )
     return 0

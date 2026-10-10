@@ -5,6 +5,7 @@ Writes the committed pipeline/data/descriptions.json, one entry per row of the c
 """
 
 import json
+import re
 import sys
 from datetime import date
 
@@ -24,6 +25,8 @@ NOUNS = {
 }
 # Copy rule for every kid-facing string; a generated sentence that hits one fails the build.
 BANNED = ("safe", "harmless", "not poisonous", "okay to touch", "ok to touch")
+# Model-written kid copy never tells a kid to put a plant in their mouth or hands.
+ACTIONS = re.compile(r"\b(?:eat|eating|eaten|touch|touching|pick|picking|taste|tasting)\b", re.I)
 
 
 def article(word: str) -> str:

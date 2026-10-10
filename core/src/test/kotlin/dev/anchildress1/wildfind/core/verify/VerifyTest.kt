@@ -11,7 +11,7 @@ import org.junit.jupiter.params.provider.CsvSource
 
 class VerifyTest {
     private val close = Focus(Focus.AF_PASSIVE_FOCUSED, 4f, 1f)
-    private val match = FrameEvidence(hazard = false, reticlePlant = true, focus = close, goalMet = true)
+    private val match = FrameEvidence(hazardRow = null, reticlePlant = true, focus = close, goalMet = true)
 
     @ParameterizedTest(name = "af={0} diopters={1} zoom={2}")
     @CsvSource(
@@ -61,7 +61,7 @@ class VerifyTest {
         val unfocused = Focus(1, 4f, 1f)
         fun verdict(e: FrameEvidence) = VerifyStreak().next(e)
 
-        assertEquals(Verdict.Hazard, verdict(match.copy(hazard = true, reticlePlant = false, focus = null)))
+        assertEquals(Verdict.Hazard(3), verdict(match.copy(hazardRow = 3, reticlePlant = false, focus = null)))
         assertEquals(Verdict.NotPlant, verdict(match.copy(reticlePlant = false, focus = null)))
         assertEquals(Verdict.TapToFocus, verdict(match.copy(focus = null)))
         assertEquals(Verdict.TapToFocus, verdict(match.copy(focus = unfocused)))

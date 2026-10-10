@@ -10,7 +10,7 @@ import org.junit.runner.RunWith
 import kotlin.math.abs
 import kotlin.math.sqrt
 
-/** S08b: the bundled species table loads from the APK, lines up with its labels, and flags every hazard. */
+/** S08b: the bundled species table loads from the APK, lines up with its labels, and flags the fixed hazard floor. */
 @RunWith(AndroidJUnit4::class)
 class SpeciesTableTest {
     private val bundled = BundledAssets(InstrumentationRegistry.getInstrumentation().targetContext.assets)
@@ -23,11 +23,10 @@ class SpeciesTableTest {
         assertEquals(labels.size, table.rows)
         assertEquals(EMBEDDING_SIZE, table.cols)
         // Atlantic poison oak is missing upstream; make assets appends it.
-        val hazards = labels.filter { it.hazard }.map { it.scientific }
-        assertTrue("Toxicodendron pubescens" in hazards)
-        assertTrue("Phytolacca americana" in hazards)
-        assertTrue("Solanum carolinense" in hazards)
-        assertTrue(hazards.all { it.startsWith("Toxicodendron ") || it in OTHER_HAZARDS })
+        val floor = labels.filter { it.hazardFloor }.map { it.scientific }.toSet()
+        val fixed = labels.filter { it.genus == "Toxicodendron" }.map { it.scientific }.toSet() + FIXED_FLOOR
+        assertTrue("Toxicodendron pubescens" in floor)
+        assertEquals(fixed, floor)
         val lastRow = table.data.copyOfRange((table.rows - 1) * table.cols, table.rows * table.cols)
         assertTrue("appended row is not a unit vector", abs(sqrt(table.dot(table.rows - 1, lastRow)) - 1.0) < 1e-3)
     }
@@ -45,10 +44,19 @@ class SpeciesTableTest {
         assertEquals(emptyList<String>(), banned)
     }
 
+    @Test
+    fun shippedHazardLinesAreShortAndKeepTheKidCopyRules() {
+        val lines = bundled.speciesLabels(bundled.speciesTable()).mapNotNull { it.hazardLine }
+
+        assertEquals(emptyList<String>(), lines.filter { BANNED_COPY.containsMatchIn(it) })
+        assertEquals(emptyList<String>(), lines.filter { it.trim().split(Regex("\\s+")).size > MAX_LINE_WORDS })
+    }
+
     private companion object {
+        const val MAX_LINE_WORDS = 12
+        val FIXED_FLOOR = setOf("Phytolacca americana", "Solanum carolinense")
         const val MIN_HINTED_ROWS = 1000
         const val MAX_HINTS_PER_ROW = 8
         const val EMBEDDING_SIZE = 1024
-        val OTHER_HAZARDS = setOf("Phytolacca americana", "Solanum carolinense")
     }
 }

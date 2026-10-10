@@ -528,7 +528,8 @@ private class Turn(private var game: Game, private val random: Random) {
             return update { it.copy(camera = it.camera.copy(matched = verdict.frames)) }
         }
         val cue = CaptureCue.of(verdict, PlantGate.isPlant(frame.result.fullShare))
-        update { it.copy(camera = it.camera.copy(checking = false, matched = 0, cue = cue)) }
+        val line = (verdict as? Verdict.Hazard)?.let { game.rows?.get(it.row)?.hazardLine }
+        update { it.copy(camera = it.camera.copy(checking = false, matched = 0, cue = cue, hazardLine = line)) }
         when (cue) {
             CaptureCue.HAZARD -> commands += Command.Haptic(GameEffect.Reject)
             CaptureCue.FOUND -> found(frame.camera.row, frame.result.reticle)

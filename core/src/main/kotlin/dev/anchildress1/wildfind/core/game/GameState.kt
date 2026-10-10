@@ -103,12 +103,14 @@ data class Stop(
  * @property checking a capture's frames are being verified
  * @property matched matching frames so far in this capture, for the ring
  * @property cue the last capture's result; stays until the next one
+ * @property hazardLine the warning hazard's own kid line under a [CaptureCue.HAZARD] cue, or null for the generic card
  */
 data class CameraState(
     val ready: Boolean = false,
     val checking: Boolean = false,
     val matched: Int = 0,
     val cue: CaptureCue? = null,
+    val hazardLine: String? = null,
 )
 
 /** The grown-ups page's Cache my area button. */

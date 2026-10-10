@@ -207,7 +207,7 @@ private fun Feedback(target: CameraTarget, camera: CameraState, modifier: Modifi
             camera.cue == CaptureCue.HAZARD,
             enter = fadeIn(tween(Motion.QUICK)) + slideInVertically(tween(Motion.MOVE)) { it / 2 },
             exit = fadeOut(tween(Motion.QUICK)),
-        ) { HazardCard() }
+        ) { HazardCard(camera.hazardLine) }
         AnimatedContent(
             camera.cue.takeIf { it != CaptureCue.HAZARD && it != CaptureCue.FOUND },
             transitionSpec = { fadeIn(tween(Motion.QUICK)) togetherWith fadeOut(tween(Motion.QUICK)) },
@@ -238,7 +238,7 @@ private fun Pill(cue: CaptureCue, target: String) {
 }
 
 @Composable
-private fun HazardCard() {
+private fun HazardCard(line: String?) {
     Row(
         Modifier.fillMaxWidth().semantics { liveRegion = LiveRegionMode.Assertive }
             .background(Palette.Hazard, CardShape).padding(horizontal = 18.dp, vertical = 16.dp),
@@ -252,6 +252,7 @@ private fun HazardCard() {
                 Icon(WildIcons.Warning, contentDescription = null, Modifier.size(28.dp), tint = Color.White)
                 Text(stringResource(R.string.hazard), style = MaterialTheme.typography.titleSmall, color = Color.White)
             }
+            line?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = Color.White) }
             Text(
                 stringResource(R.string.hazard_detail),
                 style = MaterialTheme.typography.bodyMedium,

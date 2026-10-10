@@ -218,7 +218,7 @@ The core loop runs on each capture: TinyCLIP rejects non-plants, and BioCLIP che
 
 ## Build Pipeline
 
-Runs once on the laptop in Python with uv. Gemma never runs here.
+Runs once on the laptop in Python with uv. Gemma runs only in steps 7 and 8, locally through Ollama; CI never runs either.
 
 1. **Species table:** the pinned BioCLIP taxa files plus a row for each hazard species they lack, with hazard flags (species_table.npy, species_labels.json)
 2. **Toxicity flag:** `make toxicity` reads each species-table row's English Wikipedia article (redirects followed, 50 per request, reference sections and citations stripped) and USDA PLANTS' toxicity ratings, widened to every GBIF synonym of each moderate or severe species; flags per the Decisions rule; commits `pipeline/data/toxicity.json` with each flag's evidence and article revision, since CI doesn't fetch articles; `make assets` merges the flag and genus into species_labels.json. The Oct 7 build flagged 2,161 of 4,272 rows: 1,369 stubs (mostly rare species with short English articles), 685 toxicity sentences, 87 with no article, 20 from USDA alone (`docs/results/day-2/toxicity-build-4.log`); "non-toxic", "not toxic", and their "poisonous" forms never count as a claim
@@ -227,9 +227,10 @@ Runs once on the laptop in Python with uv. Gemma never runs here.
 5. **Tutorial labels:** the BioCLIP 2.5 ViT-H text encoder writes one vector per fixed tutorial label (R3; text format per hole 3) into labels.npy and labels.json
 6. **Plant gate:** TinyCLIP's image encoder exported to plant_gate.onnx, and its text encoder writes the plant-gate vectors into plant_gate.json
 7. **Hints:** `make hints` runs Gemma 4 locally through Ollama over each playable row's pinned Wikipedia revision and USDA traits, per Decisions: Hints; Claude grades a random 300 of its output against the quoted sentences into `docs/results/`; commits `pipeline/data/hints.json` with every hint's evidence, source, issues, and score; `make assets` merges the picked hints that failed no check into species_labels.json as `hints`; CI never runs either step
-8. **Output:** species_table.npy, species_labels.json, labels.npy, labels.json, plant_gate.onnx, plant_gate.json; BioCLIP Mobile ships as its pinned file
+8. **Contact hazards:** `make contact-hazards` sends each species-table row whose current Wikipedia article has a contact sentence (urushiol, phototoxic or furanocoumarin sap, stinging hairs, dermatitis, blisters, irritant sap or latex) to Gemma 4 26b through Ollama with one narrow question: does touching or handling the living plant hurt skin or eyes? Allergies "in some people", occupational or processed material (sawdust, lumber, oils), medicinal side effects, livestock-only harm, and spines answer no. Each yes quotes its sentence and writes a kid line of 12 words or fewer; a quote missing from the article, a spines-only quote, or a line that names the plant, uses a banned word, or tells the kid to touch, eat, taste, or pick fails a check. Clean yeses ship; unsure or failed rows go to `pipeline/data/contact_hazards_review.json`, where Claude triages and only the owner's `owner: true` ships a row and `owner: false` vetoes any row. Commits `pipeline/data/contact_hazards.json` with each row's quote, article revision, kind, line, and issues; `make assets` merges the list into species_labels.json. The Oct 9 build sent 693 of 4,272 rows to the model: 90 ship, 15 wait for review (`docs/results/day-4/contact_hazards.log`)
+9. **Output:** species_table.npy, species_labels.json, labels.npy, labels.json, plant_gate.onnx, plant_gate.json; BioCLIP Mobile ships as its pinned file
 
-**Hazard species:** every *Toxicodendron* species (poison ivy, poison oak, poison sumac), *Phytolacca americana* (pokeweed), and *Solanum carolinense* (Carolina horsenettle).
+**Hazard species:** the floor, which always warns: every *Toxicodendron* species (poison ivy, poison oak, poison sumac), *Phytolacca americana* (pokeweed), and *Solanum carolinense* (Carolina horsenettle); plus the contact-hazard list (step 8), which warns only where the region's iNat pull names it. A hazard needs no toxic flag; either one makes a species a blocker and never a target. The floor also stays in the fixed tutorial labels (R3).
 
 **Plant-gate prompts** (exact strings, no trailing period, as measured on Day 1): "a photo of " followed by a plant, leaves, a tree, grass, a flower, moss, a fern vs a person, a child, a screen, a phone, a road, a sidewalk, a car, a dog, a room, a building. Scores are cosine similarity times TinyCLIP's learned scale (50.0), then softmaxed; a frame is a plant when the plant labels' combined share is over 0.5. Raw cosines softmaxed without the scale give different verdicts.
 
@@ -242,7 +243,7 @@ Ten files ship in the app, nothing downloads after install, and every cache entr
 | File | Contents | Made by |
 | --- | --- | --- |
 | species\_table.npy | BioCLIP Mobile's 4,271-species text table plus a row for each hazard species it lacks (today: *Toxicodendron pubescens*); 1024-d unit vectors | Build pipeline, from the pinned taxa\_table.npy |
-| species\_labels.json | One entry per species\_table row: scientific name, genus, hazard flag, toxic flag, plant type, GBIF aliases, and kid-level description (below) | Build pipeline, from the pinned taxa\_labels.json, toxicity.json, synonyms.json, plant\_types.json, and descriptions.json |
+| species\_labels.json | One entry per species\_table row: scientific name, genus, hazard flag, floor flag (`hazard_floor`, the always-warn floor), the warning card's kid line (`hazard_line`, or null), toxic flag, plant type, GBIF aliases, and kid-level description (below) | Build pipeline, from the pinned taxa\_labels.json, toxicity.json, contact\_hazards.json, synonyms.json, plant\_types.json, and descriptions.json |
 | labels.npy | One 1024-d unit vector per fixed tutorial label (R3) | BioCLIP 2.5 ViT-H text encoder |
 | labels.json | schema\_version, the teacher pin and package versions, and a list parallel to labels.npy: scientific name and prompt per row (schema 2) | Build pipeline |
 | flora\_student\_fp32.onnx | BioCLIP 2.5 Mobile image encoder, fp32; pinned below and SHA-256 checked at build time | Build pipeline, from crazedcodernate/bioclip-2.5-mobile-fastvit @ 29b474ea2a5d72b4646f036ead9441e0a22a5c62 |
@@ -324,13 +325,13 @@ One query per hunt, requiring at most three paginated HTTP requests. month means
 
 ## Runtime Logic
 
-Verify runs when the kid taps Capture: 3 camera frames back to back, stopping at the first that breaks the streak. Each frame is rotation-normalized once. TinyCLIP checks both the reticle crop and the full frame, and every region it calls a plant is ranked against the whole species table, so a hazard warns when it ranks in BioCLIP's top 5 of about 4,272 known plants. The top-5 cutoff was measured that way on Day 1; a smaller pool would push hazards up and warn on ordinary plants. Only the species the app reports seeing is limited to local rows, so a plant from another continent isn't named. A hazard that dominates the reticle crop or the whole frame warns while a person, a screen, or a common safe plant almost never does; a small hazard off to the side of a bigger safe plant can be missed, and detection is an extra warning, never a guarantee. Then the reticle plant gate, then the target; no result ever means a plant is safe.
+Verify runs when the kid taps Capture: 3 camera frames back to back, stopping at the first that breaks the streak. Each frame is rotation-normalized once. TinyCLIP checks both the reticle crop and the full frame, and every region it calls a plant is ranked against the whole species table, so a hazard warns when it ranks in BioCLIP's top 5 of about 4,272 known plants and is on the floor or in the region's iNat pull; a contact hazard nobody has recorded nearby doesn't warn, which cut Day-1 safe photos warned from 18 to 3 of 253 (`docs/results/day-4/hazard_gate/gate.log`). The top-5 cutoff was measured that way on Day 1; a smaller pool would push hazards up and warn on ordinary plants. Only the species the app reports seeing is limited to local rows, so a plant from another continent isn't named. A hazard that dominates the reticle crop or the whole frame warns while a person, a screen, or a common safe plant almost never does; a small hazard off to the side of a bigger safe plant can be missed, and detection is an extra warning, never a guarantee. Then the reticle plant gate, then the target; no result ever means a plant is safe.
 
 **Verify, checked in order**
 
 | # | Condition | Kid sees | Star |
 | --- | --- | --- | --- |
-| 1 | In a region TinyCLIP calls a plant (the reticle crop, the full frame, or both), a hazard species ranks in the top 5 of the species table | "That might be a plant we leave extra space around." | No |
+| 1 | In a region TinyCLIP calls a plant (the reticle crop, the full frame, or both), a floor hazard or a local contact hazard ranks in the top 5 of the species table | "That might be a plant we leave extra space around.", then the hazard's kid line when it has one, then "Step back and look somewhere else." | No |
 | 2 | TinyCLIP says the reticle crop isn't a plant | "Put the plant in the circle" when it calls the full frame a plant, else "Point the camera at a plant" | No |
 | 3 | No focused reading: autofocus state is neither focused nor locked (passive focused or focused locked), or the distance is missing or negative | "Tap the plant to focus" | No |
 | 4 | The target, or a species in its genus, outscores the hunt's other locally eligible species and leads every local blocker by at least 0.048 on the reticle crop, for 3 frames in a row | Found | Yes |
@@ -346,10 +347,10 @@ pass = genus(top) == target.genus && score(top) - max(score(blocker_rows)) >= 0.
 tutorial_pass = plant_gate(reticle) && rank(grass) <= 3   // grass tutorial only (R3)
 
 hazard_warns(region) = plant_gate(region)
-       && rank(best hazard species in species_table) <= 5
+       && rank(best warning hazard in species_table) <= 5   // warning hazard: floor, or a contact hazard in the local pull
 ```
 
-**Capture** keeps the third matching frame's reticle crop, upright at analysis resolution, in memory for the Found screen. It is never written to storage or sent anywhere, and the streak starts over after it, so one target can take another capture (R12). The hazard rule needs no calibration: on Day 1 it caught 48 of 52 hazard photos (92%) and warned on 1 of 253 safe photos (0.4%); against the menu labels alone it warned on most magnolia, honeysuckle, and maple photos.
+**Capture** keeps the third matching frame's reticle crop, upright at analysis resolution, in memory for the Found screen. It is never written to storage or sent anywhere, and the streak starts over after it, so one target can take another capture (R12). The hazard rule needs no calibration: on Day 1 the 7-species floor caught 48 of 52 hazard photos (92%) and warned on 1 of 253 safe photos (0.4%); against the menu labels alone it warned on most magnolia, honeysuckle, and maple photos. With the contact-hazard list (Oct 10, `docs/results/day-4/hazard_gate/gate.log`) it still catches 48 of 52, warns on 3 of 253 safe photos, and catches 39 of 52 contact-hazard photos from Europe, Asia, Canada, and Georgia, where the floor caught none. The bar was at most 1 in 250; it failed under every rule tried, warning on 18 of 253 without the local check, so the owner set it at 3 of 253 on Oct 10.
 
 **Hunt complete**
 
@@ -384,7 +385,7 @@ Briar and the opener play finished animations packed from videos, one per state.
 
 - Animation-first interactions; illustrations, not licensed photos, in v1
 - Kid copy principle: "Look. Photograph. Leave it where it grows."
-- Hazard copy: "That might be a plant we leave extra space around."
+- Hazard copy: "That might be a plant we leave extra space around.", plus the hazard's build-time kid line when it has one
 - Never in copy: safe, not poisonous, okay to touch, harmless
 
 ## Failure Handling

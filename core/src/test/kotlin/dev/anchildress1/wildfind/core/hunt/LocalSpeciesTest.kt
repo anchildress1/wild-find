@@ -12,7 +12,7 @@ class LocalSpeciesTest {
         SpeciesRow("Quercus nigra", "Quercus", hazard = false, toxic = false),
         SpeciesRow("Acer rubrum", "Acer", hazard = false, toxic = false),
         SpeciesRow("Ilex opaca", "Ilex", hazard = false, toxic = true),
-        SpeciesRow("Toxicodendron radicans", "Toxicodendron", hazard = true, toxic = true),
+        SpeciesRow("Toxicodendron radicans", "Toxicodendron", hazard = true, toxic = true, hazardFloor = true),
         SpeciesRow("Berberis bealei", "Berberis", hazard = false, toxic = false),
         SpeciesRow("Liquidambar styraciflua", "Liquidambar", hazard = false, toxic = false),
     )
@@ -137,7 +137,16 @@ class LocalSpeciesTest {
         }
         assertThrows<IllegalArgumentException> { SpeciesRow.checked(table.filterNot { it.hazard }, table.size - 1) }
         assertThrows<IllegalArgumentException> {
-            SpeciesRow.checked(table.map { if (it.hazard) it.copy(toxic = false) else it }, table.size)
+            SpeciesRow.checked(table.map { if (it.hazard) it.copy(hazard = false, toxic = true) else it }, table.size)
+        }
+        val line = "Its oil can make skin itch."
+        val lined = table.map { if (it.hazard) it.copy(toxic = false, hazardLine = line) else it }
+        assertEquals(lined, SpeciesRow.checked(lined, table.size))
+        assertThrows<IllegalArgumentException> {
+            SpeciesRow.checked(table.map { if (it.hazard) it.copy(hazardLine = " ") else it }, table.size)
+        }
+        assertThrows<IllegalArgumentException> {
+            SpeciesRow.checked(listOf(table[0].copy(hazardLine = line)) + table.drop(1), table.size)
         }
     }
 }
