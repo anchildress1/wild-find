@@ -52,7 +52,7 @@ Without `keystore.properties`, the release APK builds unsigned.
 
 - **Models on the phone:** BioCLIP 2.5 Mobile and TinyCLIP ViT-8M/16
 - **Data:** iNaturalist, Wikipedia, USDA PLANTS, GBIF, and Natural Earth
-- **Build-time only:** BioCLIP 2.5 writes the tutorial label vectors on a laptop with OpenCLIP; neither runs in the app
+- **Build-time only:** BioCLIP 2.5 writes the tutorial label vectors on a laptop with OpenCLIP, and Gemma 4 (26b, through Ollama) writes the hints and the contact-hazard list from Wikipedia; none of them runs in the app
 
 ## License
 
