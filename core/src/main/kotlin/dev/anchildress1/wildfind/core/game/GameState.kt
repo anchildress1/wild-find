@@ -111,6 +111,31 @@ data class CameraState(
     val cue: CaptureCue? = null,
 )
 
+/** The grown-ups page's Cache my area button. */
+sealed interface AreaCache {
+    /** Nothing running or reported. */
+    data object Idle : AreaCache
+
+    /**
+     * Pulling month [done] + 1 of [total].
+     *
+     * @property done months saved so far
+     * @property total months to save
+     */
+    data class Running(val done: Int, val total: Int) : AreaCache
+
+    /** Every month is saved on the phone. */
+    data object Done : AreaCache
+
+    /**
+     * iNat or the signal gave out.
+     *
+     * @property done months that did get saved
+     * @property total months asked for
+     */
+    data class Stopped(val done: Int, val total: Int) : AreaCache
+}
+
 /**
  * Everything the UI renders.
  *
@@ -124,6 +149,7 @@ data class CameraState(
  * @property mapFocus where the map's Locate button found the rough location
  * @property camera the camera screen's state
  * @property crop the last find's reticle crop, in memory only
+ * @property areaCache the Cache my area button's progress
  * @property hintsShown how many hints the kid has opened per target row this hunt, so the Hint button shows the next
  */
 data class GameState(
@@ -138,6 +164,7 @@ data class GameState(
     val camera: CameraState = CameraState(),
     val crop: Pixels? = null,
     val hintsShown: Map<Int, Int> = emptyMap(),
+    val areaCache: AreaCache = AreaCache.Idle,
 ) {
     /** One star per find. */
     val stars: Int get() = stops.count { it.found }
@@ -215,6 +242,9 @@ sealed interface GameEvent : GameInput {
 
     /** Open the grown-ups page. */
     data object OpenGrownUps : GameEvent
+
+    /** Grown-ups: save every month of the hunting area on the phone for play without signal. */
+    data object CacheArea : GameEvent
 
     /** Grown-ups: change the hunting area on the map. */
     data object EditRegion : GameEvent

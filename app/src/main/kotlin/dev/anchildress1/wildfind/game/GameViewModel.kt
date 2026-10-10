@@ -115,6 +115,13 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
 
             is Command.Pull -> pull(command.region)
 
+            is Command.CacheArea -> viewModelScope.launch {
+                val done = cacheArea(graph, models(), command.region, retry) {
+                    viewModelScope.launch { dispatch(Outcome.AreaProgress(it)) }
+                }
+                dispatch(Outcome.AreaCached(done))
+            }
+
             is Command.Locate -> viewModelScope.launch {
                 dispatch(Outcome.Located(command.from, graph.location.region()))
             }

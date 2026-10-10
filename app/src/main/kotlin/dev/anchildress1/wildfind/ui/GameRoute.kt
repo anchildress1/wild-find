@@ -155,9 +155,11 @@ private fun ScreenFor(screen: Screen, state: GameState, vm: GameViewModel) {
 
         is Screen.GrownUps -> GrownUpsScreen(
             state.regionLabel,
+            state.areaCache,
             onBack = { on(GameEvent.Back) },
             onArea = { on(GameEvent.EditRegion) },
             onReplay = { on(GameEvent.ReplayOpener) },
+            onCache = { on(GameEvent.CacheArea) },
         )
     }
 }

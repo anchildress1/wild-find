@@ -127,6 +127,31 @@ class GameRulesTest {
     }
 
     @Test
+    fun `Cache my area starts one run for the hunting area and reports its months`() {
+        val grownUps = playing(Screen.GrownUps(from = Screen.Hunt))
+
+        val started = grownUps.after(GameEvent.CacheArea)
+        assertEquals(AreaCache.Running(0, 12), started.game.ui.areaCache)
+        assertEquals(listOf(Command.CacheArea(home)), started.commands)
+
+        val twice = started.game.after(GameEvent.CacheArea)
+        assertEquals(emptyList<Command>(), twice.commands)
+
+        assertEquals(AreaCache.Running(4, 12), started.game.after(Outcome.AreaProgress(4)).game.ui.areaCache)
+        assertEquals(AreaCache.Done, started.game.after(Outcome.AreaCached(12)).game.ui.areaCache)
+        assertEquals(AreaCache.Stopped(5, 12), started.game.after(Outcome.AreaCached(5)).game.ui.areaCache)
+    }
+
+    @Test
+    fun `Cache my area needs a hunting area, and reopening the page clears an old report`() {
+        val noArea = Game(GameState(screen = Screen.GrownUps(from = Screen.Hunt)), flags(region = null), null, rows)
+        assertEquals(emptyList<Command>(), noArea.after(GameEvent.CacheArea).commands)
+
+        val done = playing(Screen.Hunt).after(Outcome.AreaCached(12)).game
+        assertEquals(AreaCache.Idle, done.after(GameEvent.OpenGrownUps).game.ui.areaCache)
+    }
+
+    @Test
     fun `the models flip the camera ready`() {
         val step = Game().after(Outcome.ModelsReady(rows))
 

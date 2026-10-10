@@ -3,6 +3,7 @@ package dev.anchildress1.wildfind.core.game
 import dev.anchildress1.wildfind.core.frame.Pixels
 import dev.anchildress1.wildfind.core.hunt.ActiveHunt
 import dev.anchildress1.wildfind.core.hunt.AppFlags
+import dev.anchildress1.wildfind.core.hunt.AreaCacher
 import dev.anchildress1.wildfind.core.hunt.HINTS_PER_TARGET
 import dev.anchildress1.wildfind.core.hunt.HuntPick
 import dev.anchildress1.wildfind.core.hunt.LocalListResult
@@ -80,6 +81,20 @@ sealed interface Outcome : GameInput {
     data class Pulled(val region: RegionKey, val result: LocalListResult, val offline: Boolean) : Outcome
 
     /**
+     * Months saved so far by a [Command.CacheArea].
+     *
+     * @property done the count after the latest month
+     */
+    data class AreaProgress(val done: Int) : Outcome
+
+    /**
+     * A [Command.CacheArea] ended.
+     *
+     * @property done months saved, [AreaCacher.MONTHS] when it finished
+     */
+    data class AreaCached(val done: Int) : Outcome
+
+    /**
      * A [Command.Locate] fix.
      *
      * @property from the screen the kid answered on
@@ -132,6 +147,13 @@ sealed interface Command {
 
     /** Delete the saved hunt. */
     data object ClearHunt : Command
+
+    /**
+     * Pull every month for [region] into the cache, reporting [Outcome.AreaProgress] and then [Outcome.AreaCached].
+     *
+     * @property region the area to save
+     */
+    data class CacheArea(val region: RegionKey) : Command
 
     /**
      * Build the capture loop for a hunt, or drop it.
@@ -232,7 +254,8 @@ private class Turn(private var game: Game, private val random: Random) {
             is GameEvent.RevealHint -> revealHint(event.row)
             GameEvent.HuntAgain -> endHunt().also { load() }
             GameEvent.Home -> endHunt().also { show(Screen.Start) }
-            GameEvent.OpenGrownUps -> show(Screen.GrownUps(from = screen))
+            GameEvent.OpenGrownUps -> show(Screen.GrownUps(from = screen)).also { idleAreaCache() }
+            GameEvent.CacheArea -> cacheArea()
             GameEvent.EditRegion -> openMap(Screen.Map(back = screen))
             GameEvent.ReplayOpener -> show(Screen.Opener(back = screen))
             GameEvent.Back -> back(screen)
@@ -252,6 +275,20 @@ private class Turn(private var game: Game, private val random: Random) {
             is Outcome.SavedHunt -> resumed(outcome.hunt)
 
             is Outcome.Pulled -> pulled(outcome)
+
+            is Outcome.AreaProgress -> update {
+                it.copy(areaCache = AreaCache.Running(outcome.done, AreaCacher.MONTHS))
+            }
+
+            is Outcome.AreaCached -> update {
+                it.copy(
+                    areaCache = if (outcome.done == AreaCacher.MONTHS) {
+                        AreaCache.Done
+                    } else {
+                        AreaCache.Stopped(outcome.done, AreaCacher.MONTHS)
+                    },
+                )
+            }
 
             is Outcome.Located -> fixed(outcome.from, outcome.region)
 
@@ -419,6 +456,18 @@ private class Turn(private var game: Game, private val random: Random) {
                 show(if (fresh.progress.tutorialPending) Screen.Tutorial else Screen.Hunt)
             }
         }
+    }
+
+    // One run at a time; a finished report stays until the kid leaves and comes back to the grown-ups page.
+    private fun cacheArea() {
+        val region = game.flags.region ?: return
+        if (game.ui.areaCache is AreaCache.Running) return
+        update { it.copy(areaCache = AreaCache.Running(0, AreaCacher.MONTHS)) }
+        commands += Command.CacheArea(region)
+    }
+
+    private fun idleAreaCache() {
+        if (game.ui.areaCache !is AreaCache.Running) update { it.copy(areaCache = AreaCache.Idle) }
     }
 
     // Opens the next hint for [row], capped at what the plant has and the hint limit.
