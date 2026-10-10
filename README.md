@@ -18,7 +18,6 @@ You need SDKMAN!, the Android SDK, uv, lefthook, ktlint, detekt, actionlint, and
 
 ```sh
 sdk env install
-cp .env.example .env   # local overrides; never committed
 make setup
 make assets   # bundled models and tables; every APK build needs them (first run pulls about 160 MB of pinned files)
 make ai-checks

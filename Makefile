@@ -2,20 +2,9 @@
 
 SHELL := /bin/bash
 
-# Values already in the shell environment win over .env, as with any dotenv loader.
-SHELL_ANDROID_SERIAL := $(ANDROID_SERIAL)
-SHELL_WILDFIND_PACKAGE := $(WILDFIND_PACKAGE)
--include .env
-ANDROID_SERIAL := $(or $(SHELL_ANDROID_SERIAL),$(ANDROID_SERIAL))
-WILDFIND_PACKAGE := $(or $(SHELL_WILDFIND_PACKAGE),$(WILDFIND_PACKAGE),dev.anchildress1.wildfind.debug)
+# App id the device-test, gate-harness, and gate-pull targets use; adb reads ANDROID_SERIAL from the shell.
+WILDFIND_PACKAGE ?= dev.anchildress1.wildfind.debug
 export WILDFIND_PACKAGE
-# adb treats an empty ANDROID_SERIAL as a device named ""; export it only when set.
-ifneq ($(strip $(ANDROID_SERIAL)),)
-export ANDROID_SERIAL
-else
-# make re-exports inherited variables, so an empty one must be dropped explicitly.
-unexport ANDROID_SERIAL
-endif
 
 # Pin JAVA_HOME to the .sdkmanrc JDK; empty in CI where setup-java already exports it.
 SDKMAN_JAVA := $(HOME)/.sdkman/candidates/java/$(shell sed -n 's/^java=//p' .sdkmanrc)
