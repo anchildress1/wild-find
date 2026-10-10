@@ -25,9 +25,21 @@ class PlantArtTest {
     }
 
     @Test
+    fun theTitleArtLoadsWithTransparency() {
+        val title = assets.open("title.webp").use(BitmapFactory::decodeStream)
+        assertEquals(TITLE_SIZE, title.width to title.height)
+        assertTrue(title.hasAlpha())
+    }
+
+    @Test
     fun theFindStarIsASquarePictureWithTransparency() {
         val star = assets.open("star.webp").use(BitmapFactory::decodeStream)
         assertEquals(star.width, star.height)
         assertTrue(star.hasAlpha())
+    }
+
+    private companion object {
+        // TitleArt reserves its box from this shape before the picture decodes.
+        val TITLE_SIZE = 900 to 755
     }
 }

@@ -54,58 +54,30 @@ fun OpenerScreen(replay: Boolean, onDone: () -> Unit) {
             Image(it, contentDescription = null, Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
         }
         Column(Modifier.fillMaxSize().safeDrawingPadding().padding(horizontal = 20.dp)) {
-            Title(Modifier.align(Alignment.CenterHorizontally).padding(top = 8.dp))
-            // The page's own Column, bottom-aligned instead of top: Briar and the steps sit low, on the painting's
-            // ground, and still scroll when 200% font makes them taller than the screen.
+            // The page's own Column, with the title at the top and Briar and the steps low, on the painting's ground;
+            // it all scrolls together when 200% font or a short screen makes it taller than the viewport.
             BoxWithConstraints(Modifier.weight(1f).fillMaxWidth()) {
                 val viewport = maxHeight
                 Column(
                     Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).heightIn(min = viewport)
                         .padding(vertical = 12.dp),
-                    verticalArrangement = Arrangement.Bottom,
+                    verticalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    Briar(
-                        BriarState.OPENER,
-                        briarText(BriarState.OPENER),
-                        Modifier.rise(index = 0).align(Alignment.CenterHorizontally).zIndex(1f),
-                    )
-                    RulePanel(Modifier.overlapUp(BRIAR_OVERLAP))
+                    TitleArt(Modifier.fillMaxWidth(TITLE_WIDTH).align(Alignment.CenterHorizontally).rise(index = 0))
+                    Column(Modifier.padding(top = 12.dp)) {
+                        Briar(
+                            BriarState.OPENER,
+                            briarText(BriarState.OPENER),
+                            Modifier.rise(index = 1).align(Alignment.CenterHorizontally).zIndex(1f),
+                        )
+                        RulePanel(Modifier.overlapUp(BRIAR_OVERLAP))
+                    }
                 }
             }
             Column(Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 16.dp)) {
                 PrimaryButton(stringResource(if (replay) R.string.opener_done else R.string.opener_go), onDone)
             }
         }
-    }
-}
-
-// No pill: a soft Paper glow that is solid under the words and fades to nothing at its edge, so the painting shows
-// around the title.
-@Composable
-private fun Title(modifier: Modifier) {
-    Row(
-        modifier.drawBehind {
-            // A circle squashed to the row's shape, so the glow fades out on all four sides.
-            scale(scaleX = 1f, scaleY = size.height / size.width) {
-                drawCircle(
-                    Brush.radialGradient(
-                        0f to Palette.Paper.copy(alpha = SCRIM),
-                        GLOW_SOLID to Palette.Paper.copy(alpha = SCRIM),
-                        1f to Color.Transparent,
-                    ),
-                    radius = size.width / 2,
-                )
-            }
-        }.padding(horizontal = 44.dp, vertical = 14.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Icon(WildIcons.Sprout, contentDescription = null, Modifier.size(26.dp), tint = Palette.Forest)
-        Text(
-            stringResource(R.string.app_name),
-            Modifier.padding(start = 8.dp),
-            style = MaterialTheme.typography.titleLarge,
-            color = Palette.Forest,
-        )
     }
 }
 
@@ -123,14 +95,14 @@ private fun RulePanel(modifier: Modifier) {
     ) {
         Text(
             stringResource(R.string.opener_intro),
-            Modifier.rise(index = 1).semantics { heading() },
+            Modifier.rise(index = 2).semantics { heading() },
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
             color = Palette.Ink,
         )
         BoxWithConstraints(Modifier.fillMaxWidth()) {
             val style = fitted(steps.map { it.second }, maxWidth - ICON - GAP)
             Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                steps.forEachIndexed { i, (icon, text) -> RuleStep(icon, text, style, Modifier.rise(index = i + 2)) }
+                steps.forEachIndexed { i, (icon, text) -> RuleStep(icon, text, style, Modifier.rise(index = i + 3)) }
             }
         }
     }
@@ -170,11 +142,11 @@ private fun Modifier.overlapUp(by: Dp) = layout { measurable, constraints ->
 private const val BACKGROUND = "opener_background.webp"
 
 // Measured on opener_background.webp: Paper at this alpha holds Ink at 6.96:1 even over pure black, the darkest pixel
-// under the panel, and Forest at 5.65:1 over the darkest pixel behind the title.
+// under the panel.
 private const val SCRIM = 0.7f
 
-// The title glow stays at full scrim out to this share of its radius, past the ends of the words.
-private const val GLOW_SOLID = 0.7f
+// Share of the page width for the title art: 207 dp tall on a 412 x 915 dp screen, which leaves about 48 dp spare.
+private const val TITLE_WIDTH = 0.6f
 
 private const val STEP_SP = 30
 private const val STEP_LINE_SP = 34

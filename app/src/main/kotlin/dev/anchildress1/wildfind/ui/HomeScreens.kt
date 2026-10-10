@@ -24,7 +24,7 @@ import dev.anchildress1.wildfind.core.hunt.PlantType
 import dev.anchildress1.wildfind.core.sprite.BriarState
 import dev.anchildress1.wildfind.ui.theme.Palette
 
-/** No hunt yet: Briar waves, and one button starts a hunt in the saved area. */
+/** No hunt yet: the title art, Briar waves, and one button starts a hunt in the saved area. */
 @Composable
 fun StartScreen(area: String?, onStart: () -> Unit, onGrownUps: () -> Unit) {
     Page(
@@ -34,15 +34,16 @@ fun StartScreen(area: String?, onStart: () -> Unit, onGrownUps: () -> Unit) {
             RuleLine()
         },
     ) {
+        TitleArt(Modifier.fillMaxWidth(START_TITLE_WIDTH).align(Alignment.CenterHorizontally).rise(index = 0))
         Text(
             stringResource(R.string.start_title),
-            Modifier.fillMaxWidth().rise(index = 0),
-            style = MaterialTheme.typography.displayMedium,
+            Modifier.fillMaxWidth().rise(index = 1),
+            style = MaterialTheme.typography.headlineMedium,
             textAlign = TextAlign.Center,
         )
         Text(
             area ?: stringResource(R.string.region_near_you),
-            Modifier.fillMaxWidth().rise(index = 1),
+            Modifier.fillMaxWidth().rise(index = 2),
             style = MaterialTheme.typography.bodyLarge,
             color = Palette.Ink2,
             textAlign = TextAlign.Center,
@@ -118,3 +119,6 @@ fun MenuRow(onGrownUps: () -> Unit) {
         RoundIconButton(WildIcons.More, stringResource(R.string.grown_ups), onGrownUps)
     }
 }
+
+// The title art's share of the page width on Ready to hunt.
+private const val START_TITLE_WIDTH = 0.65f
