@@ -139,3 +139,12 @@ At k = 5:
   - A caraway photo near 60°N, 60°E goes from 158 to 899
 - Every new-set pull names at least one listed hazard, so every photo still had a row that could warn. The case where nothing can warn (outside the box, and no listed hazard in the pull) is covered by core's unit tests, not by this set
 - Gate of record is now rule C, k = 5: Day-1 hazards 48/52 (bar ≥ 48) PASS, Day-1 safe 3/253 (bar ≤ 3) PASS
+
+Two more S24 runs pulled later on Oct 10:
+
+| Run | Sampled | Power | Captures | Camera paused at | Thermal status | Battery temp |
+| --- | --- | --- | --- | --- | --- | --- |
+| 20261010-095652 | 13.1 min | charging the whole time | 0 | 3.1 min | severe at 12.7 min | 28.3 to 38.3 °C |
+| 20261010-103343 | 8.1 min | charging 217 of 239 samples | 0 | 7.3 min | critical from the first sample | 49.8 to 50.7 °C |
+
+Neither run logged a Capture tap, and in both the camera paused partway through (the app left the foreground or the screen locked), so they record heat with the camera off rather than verify cost. The 10:33 run started with the battery already near 50 °C. S05 stays open.
