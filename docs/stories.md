@@ -102,7 +102,7 @@ From the owner's play on the S24, debug and release.
 
 - [ ] **S68 Better target matching** (core) — a capture now checks the whole picture as well as the circle, so more real targets pass: 116 of 198 test photos, up from 97, and still no toxic plant passes (0 of 267). It costs the phone nothing extra (`docs/results/day-5.md`). Ticks after the S05 run on the phone.
 - [x] **S69 Skip targets the app can't confirm** (pipeline + core) — sweetgum, tulip tree, persimmon, and winged sumac passed none of their fresh test photos, so hunts never pick them. They still count when checking other plants, so a look-alike can't pass as them. Listed with reasons in `pipeline/data/no_target.json`. Passed the phone tests Oct 10.
-- [x] **S70 Repeat intro** (core + app) — the grown-ups link reads "Repeat intro" and replays the safety opener and then the grass practice, as on a first launch, keeping the area, cache, and finds. Covered by core tests; the phone tests for it are written and run on the next `make e2e`.
+- [ ] **S70 Repeat intro** (core + app) — the grown-ups link reads "Repeat intro" and replays the safety opener and then the grass practice, as on a first launch, keeping the area, cache, and finds. Covered by core tests; ticks on the next `make e2e` pass, where its phone tests run.
 
 ## Open holes
 
