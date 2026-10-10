@@ -221,6 +221,9 @@ sealed interface GameEvent : GameInput {
     /** Capture tapped. */
     data object Capture : GameEvent
 
+    /** The hazard card's button: the warning clears back to the live camera. */
+    data object DismissHazard : GameEvent
+
     /** Hint tapped on the camera for [row]: opens the next hint it has not shown yet, or the last when all are open. */
     data class RevealHint(val row: Int) : GameEvent
 

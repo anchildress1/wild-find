@@ -15,6 +15,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -29,8 +30,10 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -81,6 +84,7 @@ fun CameraScreen(
     onSkip: () -> Unit,
     onHint: () -> Unit,
     onBack: () -> Unit,
+    onDismissHazard: () -> Unit,
 ) {
     val context = LocalContext.current
     var granted by remember {
@@ -109,7 +113,7 @@ fun CameraScreen(
                 granted && verifier != null -> Live(verifier, executor, camera)
                 denied -> CameraDenied(Modifier.align(Alignment.Center).padding(20.dp))
             }
-            Feedback(target, camera, Modifier.align(Alignment.BottomCenter))
+            Feedback(target, camera, onDismissHazard, Modifier.align(Alignment.BottomCenter))
         }
         AnimatedContent(
             sheet && target.hintsShown > 0,
@@ -201,13 +205,13 @@ private fun Live(verifier: CaptureVerifier, executor: Executor, camera: CameraSt
 }
 
 @Composable
-private fun Feedback(target: CameraTarget, camera: CameraState, modifier: Modifier) {
+private fun Feedback(target: CameraTarget, camera: CameraState, onDismissHazard: () -> Unit, modifier: Modifier) {
     Box(modifier.fillMaxWidth().padding(16.dp), contentAlignment = Alignment.BottomCenter) {
         AnimatedVisibility(
             camera.cue == CaptureCue.HAZARD,
             enter = fadeIn(tween(Motion.QUICK)) + slideInVertically(tween(Motion.MOVE)) { it / 2 },
             exit = fadeOut(tween(Motion.QUICK)),
-        ) { HazardCard(camera.hazardLine) }
+        ) { HazardCard(camera.hazardLine, onDismissHazard) }
         AnimatedContent(
             camera.cue.takeIf { it != CaptureCue.HAZARD && it != CaptureCue.FOUND },
             transitionSpec = { fadeIn(tween(Motion.QUICK)) togetherWith fadeOut(tween(Motion.QUICK)) },
@@ -238,10 +242,28 @@ private fun Pill(cue: CaptureCue, target: String) {
 }
 
 @Composable
-private fun HazardCard(line: String?) {
+private fun HazardCard(line: String?, onDismiss: () -> Unit) {
+    // The card stays until the kid taps its button or captures again; it never times out on its own.
+    Column(
+        Modifier.fillMaxWidth().background(Palette.Hazard, CardShape).padding(horizontal = 18.dp, vertical = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        HazardMessage(line)
+        OutlinedButton(
+            onDismiss,
+            Modifier.fillMaxWidth().heightIn(min = 48.dp),
+            border = BorderStroke(2.dp, Color.White),
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.White),
+        ) {
+            Text(stringResource(R.string.hazard_dismiss), style = MaterialTheme.typography.labelLarge)
+        }
+    }
+}
+
+@Composable
+private fun HazardMessage(line: String?) {
     Row(
-        Modifier.fillMaxWidth().semantics { liveRegion = LiveRegionMode.Assertive }
-            .background(Palette.Hazard, CardShape).padding(horizontal = 18.dp, vertical = 16.dp),
+        Modifier.fillMaxWidth().semantics { liveRegion = LiveRegionMode.Assertive },
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {

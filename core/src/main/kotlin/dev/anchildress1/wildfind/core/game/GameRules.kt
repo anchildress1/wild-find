@@ -246,6 +246,7 @@ private class Turn(private var game: Game, private val random: Random) {
             GameEvent.LoadHunt -> load()
             is GameEvent.OpenCamera -> openCamera(event.row)
             GameEvent.Capture -> capture(screen)
+            GameEvent.DismissHazard -> dismissHazard()
             GameEvent.Next -> next(screen)
             GameEvent.Skip -> skip(screen)
             GameEvent.ToHunt -> toHunt()
@@ -512,6 +513,11 @@ private class Turn(private var game: Game, private val random: Random) {
         val active = game.hunt
         if (active == null || game.rows == null) return
         commands += Command.Capture(camera, game.session + 1, active)
+    }
+
+    private fun dismissHazard() {
+        if (ui.camera.cue != CaptureCue.HAZARD) return
+        update { it.copy(camera = it.camera.copy(cue = null, hazardLine = null)) }
     }
 
     // A refused tap never reports, so it leaves the running session alone.

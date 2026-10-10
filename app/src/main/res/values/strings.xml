@@ -109,6 +109,7 @@
     <string name="cue_keep">Keep looking for %s</string>
     <string name="hazard">That might be a plant we leave extra space around.</string>
     <string name="hazard_detail">Step back and look somewhere else.</string>
+    <string name="hazard_dismiss">Look somewhere else</string>
 
     <string name="found_title">Found it!</string>
     <plurals name="found_progress">

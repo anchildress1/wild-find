@@ -146,6 +146,7 @@ private fun ScreenFor(screen: Screen, state: GameState, vm: GameViewModel) {
             onSkip = { on(GameEvent.Skip) },
             onHint = { screen.row?.let { on(GameEvent.RevealHint(it)) } },
             onBack = { on(GameEvent.Back) },
+            onDismissHazard = { on(GameEvent.DismissHazard) },
         )
 
         is Screen.Found -> FoundScreen(
