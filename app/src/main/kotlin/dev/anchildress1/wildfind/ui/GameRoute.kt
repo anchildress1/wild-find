@@ -193,7 +193,7 @@ private fun cameraTarget(row: Int?, state: GameState): CameraTarget {
         state.stops.size,
         stop.description,
         stop.canSkip,
-        stop.hints.forMonth(LocalDate.now().monthValue),
+        stop.hints.forMonth(LocalDate.now().monthValue, northern = (state.region?.lat ?: 0) >= 0),
         state.hintsShown[row] ?: 0,
     )
 }

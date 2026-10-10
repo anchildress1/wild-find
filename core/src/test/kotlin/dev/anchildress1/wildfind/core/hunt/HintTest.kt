@@ -25,9 +25,28 @@ class HintTest {
     }
 
     @Test
-    fun `a season name parses, and no name means no season`() {
+    fun `a season name parses, and no name or an unknown one means no season`() {
         assertEquals(Season.FALL, Season.named("fall"))
         assertNull(Season.named(null))
+        assertNull(Season.named("monsoon"))
+        assertNull(Season.named("null"))
+    }
+
+    @Test
+    fun `south of the equator the seasons run opposite`() {
+        assertEquals(Season.SPRING, Season.of(10, northern = false))
+        assertEquals(Season.SUMMER, Season.of(1, northern = false))
+        assertEquals(Season.WINTER, Season.of(7, northern = false))
+        assertEquals(Season.FALL, Season.of(4, northern = false))
+    }
+
+    @Test
+    fun `a southern October puts spring hints first and fall ones last`() {
+        val spring = Hint("Look for yellow flowers in spring.", Season.SPRING)
+        val hints = listOf(fall, allYear, spring)
+
+        assertEquals(listOf(spring, allYear, fall), hints.forMonth(10, northern = false))
+        assertEquals(listOf(fall, allYear, spring), hints.forMonth(10))
     }
 
     @Test
