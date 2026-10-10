@@ -30,7 +30,7 @@ The Oct 7 redesign (PRD Redesign) dropped the build-time menu: the old S10–S16
 - [x] **S62 Cache my area** (core + app) — PRD Decisions: Cache my area. The grown-ups page gets a card with instructions and a Cache my area button that pulls all 12 months for the hunting area through `LocalListSource` into the hunt cache, paced 1.5 s apart, with a progress line, a done line naming the area, and a stopped line. `AreaCacherTest` and `GameRulesTest` cover the logic; `GrownUpsTest` checks all 12 months land in the store. Passed `make e2e` on the S24 with signal (`docs/results/day-4/device_tests.log`).
 - [ ] **S59 Description** (pipeline + app) — PRD Decisions: Description. Oct 8 built a USDA-trait sentence; Oct 9 made it generic: the plant type in kid words ("A tree.", "An evergreen.", "A plant." when the type is unknown), so size, color, and season became hints (S56). Ticks when the app's display has a device assertion.
   - [x] **Pipeline:** `make descriptions` writes `pipeline/data/descriptions.json` for every species-table row from `plant_types.json`, never uses a banned kid word, and `make assets` merges it into species_labels.json as `description`; covered by `test_descriptions.py` and `test_assets.py`.
-  - [ ] **App:** the sentence shows under the name on the hunt list, on the camera top bar, and on Found, and TalkBack reads it; no on-device test asserts the text yet (the e2e hunt tests read stop names only).
+  - [ ] **App:** the sentence shows under the name on the hunt list, on the camera top bar, and on Found, and TalkBack reads it. Device assertions written Oct 10: `HuntStartTest` and `CameraTest` (run with `make e2e`, needs signal) and `FoundScreenTest` (`make device-test`); ticks on the owner's logged pass.
 
 ## Game logic · core · Oct 8
 

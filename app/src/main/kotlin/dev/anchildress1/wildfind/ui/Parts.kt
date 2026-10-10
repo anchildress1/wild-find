@@ -201,7 +201,7 @@ fun Star(size: Dp, modifier: Modifier = Modifier) {
 }
 
 /**
- * The line that tells a kid what to look for: the USDA description, else the plant type in sentence case ("A tree");
+ * The line that tells a kid what to look for: the build's description, else the plant type in sentence case ("A tree");
  * nothing when the plant has neither.
  */
 @Composable
