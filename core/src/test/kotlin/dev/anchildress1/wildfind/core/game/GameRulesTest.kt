@@ -146,9 +146,44 @@ class GameRulesTest {
         val twice = started.game.after(GameEvent.CacheArea)
         assertEquals(emptyList<Command>(), twice.commands)
 
-        assertEquals(AreaCache.Running(4, 12), started.game.after(Outcome.AreaProgress(4)).game.ui.areaCache)
-        assertEquals(AreaCache.Done, started.game.after(Outcome.AreaCached(12)).game.ui.areaCache)
-        assertEquals(AreaCache.Stopped(5, 12), started.game.after(Outcome.AreaCached(5)).game.ui.areaCache)
+        assertEquals(
+            AreaCache.Running(4, 12),
+            started.game.after(Outcome.AreaReport(home, 4, finished = false)).game.ui.areaCache,
+        )
+        assertEquals(
+            AreaCache.Done,
+            started.game.after(Outcome.AreaReport(home, 12, finished = true)).game.ui.areaCache,
+        )
+        assertEquals(
+            AreaCache.Stopped(5, 12),
+            started.game.after(Outcome.AreaReport(home, 5, finished = true)).game.ui.areaCache,
+        )
+    }
+
+    @Test
+    fun `a run for an area that is no longer the hunting area is ignored`() {
+        val running = playing(Screen.GrownUps(from = Screen.Hunt)).after(GameEvent.CacheArea).game
+
+        val stale = running.after(
+            Outcome.AreaReport(away, 7, finished = false),
+            Outcome.AreaReport(away, 12, finished = true),
+        ).game
+
+        assertEquals(AreaCache.Running(0, 12), stale.ui.areaCache)
+    }
+
+    @Test
+    fun `changing the hunting area stops a run and clears the card, but leaves a finished report alone`() {
+        val running = playing(Screen.GrownUps(from = Screen.Hunt)).after(GameEvent.CacheArea).game
+        val moved = running.after(GameEvent.PickRegion(away))
+
+        assertEquals(AreaCache.Idle, moved.game.ui.areaCache)
+        assertTrue(Command.CancelCacheArea in moved.commands)
+
+        val finished = running.after(Outcome.AreaReport(home, 12, finished = true)).game
+        val after = finished.after(GameEvent.PickRegion(away))
+        assertEquals(AreaCache.Idle, after.game.ui.areaCache)
+        assertFalse(Command.CancelCacheArea in after.commands)
     }
 
     @Test
@@ -156,7 +191,7 @@ class GameRulesTest {
         val noArea = Game(GameState(screen = Screen.GrownUps(from = Screen.Hunt)), flags(region = null), null, rows)
         assertEquals(emptyList<Command>(), noArea.after(GameEvent.CacheArea).commands)
 
-        val done = playing(Screen.Hunt).after(Outcome.AreaCached(12)).game
+        val done = playing(Screen.Hunt).after(Outcome.AreaReport(home, 12, finished = true)).game
         assertEquals(AreaCache.Idle, done.after(GameEvent.OpenGrownUps).game.ui.areaCache)
     }
 

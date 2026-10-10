@@ -81,18 +81,14 @@ sealed interface Outcome : GameInput {
     data class Pulled(val region: RegionKey, val result: LocalListResult, val offline: Boolean) : Outcome
 
     /**
-     * Months saved so far by a [Command.CacheArea].
+     * Months saved by a [Command.CacheArea], after each month and once more when it ends; ignored when the hunting
+     * area has changed since the run started.
      *
-     * @property done the count after the latest month
+     * @property region the area the run was caching
+     * @property done months saved so far
+     * @property finished the run ended, with all [AreaCacher.MONTHS] saved or stopped short
      */
-    data class AreaProgress(val done: Int) : Outcome
-
-    /**
-     * A [Command.CacheArea] ended.
-     *
-     * @property done months saved, [AreaCacher.MONTHS] when it finished
-     */
-    data class AreaCached(val done: Int) : Outcome
+    data class AreaReport(val region: RegionKey, val done: Int, val finished: Boolean) : Outcome
 
     /**
      * A [Command.Locate] fix.
@@ -149,11 +145,14 @@ sealed interface Command {
     data object ClearHunt : Command
 
     /**
-     * Pull every month for [region] into the cache, reporting [Outcome.AreaProgress] and then [Outcome.AreaCached].
+     * Pull every month for [region] into the cache, reporting [Outcome.AreaReport] after each month and when it ends.
      *
      * @property region the area to save
      */
     data class CacheArea(val region: RegionKey) : Command
+
+    /** Stop the [CacheArea] run still going, because the hunting area it was saving is no longer the area. */
+    data object CancelCacheArea : Command
 
     /**
      * Build the capture loop for a hunt, or drop it.
@@ -276,19 +275,7 @@ private class Turn(private var game: Game, private val random: Random) {
 
             is Outcome.Pulled -> pulled(outcome)
 
-            is Outcome.AreaProgress -> update {
-                it.copy(areaCache = AreaCache.Running(outcome.done, AreaCacher.MONTHS))
-            }
-
-            is Outcome.AreaCached -> update {
-                it.copy(
-                    areaCache = if (outcome.done == AreaCacher.MONTHS) {
-                        AreaCache.Done
-                    } else {
-                        AreaCache.Stopped(outcome.done, AreaCacher.MONTHS)
-                    },
-                )
-            }
+            is Outcome.AreaReport -> if (outcome.region == game.flags.region) areaReported(outcome)
 
             is Outcome.Located -> fixed(outcome.from, outcome.region)
 
@@ -466,6 +453,17 @@ private class Turn(private var game: Game, private val random: Random) {
         commands += Command.CacheArea(region)
     }
 
+    private fun areaReported(report: Outcome.AreaReport) = update {
+        val total = AreaCacher.MONTHS
+        it.copy(
+            areaCache = when {
+                !report.finished -> AreaCache.Running(report.done, total)
+                report.done == total -> AreaCache.Done
+                else -> AreaCache.Stopped(report.done, total)
+            },
+        )
+    }
+
     private fun idleAreaCache() {
         if (game.ui.areaCache !is AreaCache.Running) update { it.copy(areaCache = AreaCache.Idle) }
     }
@@ -613,6 +611,11 @@ private class Turn(private var game: Game, private val random: Random) {
     }
 
     private fun save(updated: AppFlags) {
+        // A run caching the old area would report its months against the new one, so it stops and the card resets.
+        if (updated.region != game.flags.region && game.ui.areaCache != AreaCache.Idle) {
+            if (game.ui.areaCache is AreaCache.Running) commands += Command.CancelCacheArea
+            update { it.copy(areaCache = AreaCache.Idle) }
+        }
         game = game.copy(flags = updated)
         commands += Command.SaveFlags(updated)
     }
