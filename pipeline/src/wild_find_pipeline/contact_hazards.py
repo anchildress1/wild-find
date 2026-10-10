@@ -168,10 +168,12 @@ def issues(verdict: str, kind: str | None, evidence: str, line: str, names: list
 
 
 def status(verdict: str, found: list[str]) -> str:
-    """ "auto" for a hazard that passed every check, "skip" for a no, and "review" for the rest."""
+    """Clean hazards ship, clean negatives skip, and every failed check requires review."""
+    if found:
+        return "review"
     if verdict == "no":
         return "skip"
-    return "auto" if verdict == "hazard" and not found else "review"
+    return "auto" if verdict == "hazard" else "review"
 
 
 def parse(text: str) -> dict:
@@ -180,7 +182,9 @@ def parse(text: str) -> dict:
         data = json.loads(text)
     except json.JSONDecodeError as error:
         raise ValueError(f"unreadable reply: {text[:80]!r}") from error
-    if not isinstance(data, dict) or data.get("verdict") not in VERDICTS or data.get("kind") not in (*KINDS, None):
+    if not isinstance(data, dict) or not all(field in data for field in SCHEMA["required"]):
+        raise ValueError(f"off-schema reply: {text[:80]!r}")
+    if data["verdict"] not in VERDICTS or data["kind"] not in (*KINDS, None):
         raise ValueError(f"off-schema reply: {text[:80]!r}")
     if not isinstance(data.get("evidence"), str) or not isinstance(data.get("line"), str):
         raise ValueError(f"off-schema reply: {text[:80]!r}")
