@@ -104,6 +104,8 @@ From the owner's play on the S24, debug and release.
 - [x] **S69 Skip targets the app can't confirm** (pipeline + core) — sweetgum, tulip tree, persimmon, and winged sumac passed none of their fresh test photos, so hunts never pick them. They still count when checking other plants, so a look-alike can't pass as them. Listed with reasons in `pipeline/data/no_target.json`. Passed the phone tests Oct 10.
 - [ ] **S70 Repeat intro** (core + app) — the grown-ups link reads "Repeat intro" and replays the safety opener and then the grass practice, as on a first launch, keeping the area, cache, and finds. Covered by core tests; ticks on the next `make e2e` pass, where its phone tests run.
 
+- [ ] **S71 Smaller release APK** (app + build) — the arm64 release APK is 151 MB. The models take about 98 MB of it (BioCLIP 47 MB, the TinyCLIP plant gate 34 MB, the species table 17 MB), ONNX Runtime about 33 MB, and Briar's five animations about 16 MB. Measure what each candidate saves, and that verify and the Day-1 parity tests still pass, before shipping any of them: store the species table as fp16 (BioCLIP's own weights stay fp32, since fp16 gave NaN on the phone), a smaller ONNX Runtime build with only the operators the two models use, lower-quality or fewer-frame Briar animations, and an Android App Bundle if the release ever moves past GitHub.
+
 ## Open holes
 
 New holes found while drafting these stories. PRD holes 4, 10, and 19 still stand (19 only until the field test). H-numbers below are this file's own list, separate from PRD hole numbers; H9 was never assigned.
