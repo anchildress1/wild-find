@@ -37,6 +37,20 @@ class ActiveHuntTest {
     }
 
     @Test
+    fun `a saved hunt beside a held-back row still restores, and a planned held-back row does not`() {
+        val withHeld = LocalList(local.eligible + Eligible(4, "persimmon", 30), intArrayOf(3), needsWiden = false)
+        val table = listOf("Quercus", "Liquidambar", "Cercis", "Toxicodendron", "Diospyros").mapIndexed { i, genus ->
+            SpeciesRow("$genus species", genus, hazard = i == 3, toxic = i == 3, target = i != 4)
+        }
+        val hunt = ActiveHunt.start(HuntPick(table).next(withHeld, tutorialDone = true), withHeld, region)
+
+        assertEquals(listOf(0, 1, 2, 4), hunt.eligible)
+        assertTrue(hunt.validFor(region, table))
+        val planned = hunt.copy(progress = hunt.progress.copy(queue = hunt.progress.queue + withHeld.eligible[3]))
+        assertFalse(planned.validFor(region, table))
+    }
+
+    @Test
     fun `targets must be eligible and blockers never are`() {
         val progress = HuntProgress.start(Hunt(false, local.eligible))
 
