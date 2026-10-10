@@ -1,0 +1,6 @@
+--------- beginning of main
+10-10 10:56:10.317  8221  8241 I CameraPanelProbe: width=320 fontScale=2.0 capturePx=1023 checkingPx=1023 delta=0
+10-10 10:56:22.519  8221  8241 I CameraPanelProbe: width=360 fontScale=2.0 capturePx=914 checkingPx=914 delta=0
+10-10 10:56:34.711  8221  8241 I CameraPanelProbe: width=411 fontScale=2.0 capturePx=814 checkingPx=883 delta=69
+10-10 10:56:46.929  8221  8241 I CameraPanelProbe: width=320 fontScale=1.0 capturePx=608 checkingPx=608 delta=0
+10-10 10:56:59.109  8221  8241 I CameraPanelProbe: width=411 fontScale=1.0 capturePx=608 checkingPx=608 delta=0

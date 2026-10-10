@@ -160,3 +160,43 @@ The PR self-review found that R1h averages every row, blockers included, so a to
 | **Guard at 0.034 (shipped)** | 0.034 | 55/99 | 0/194 (+0.0379) | 53/99 | 0/73 (+0.0201) | 1/99 |
 
 Retuning lets the guard's own boundary pull the margin down to 0.011, and 2 fresh toxic photos pass, so the margin stays at R1h's 0.034. The guard there costs 8 finds across both splits (116 to 108 of 198, still up from 97) and widens the closest toxic call from 0.0028 to 0.0201 under the margin. TEST was scored a second time here, so it carries the same small selection effect as the first study.
+
+## Adversarial review fixes · Oct 10
+
+- Worktree `fix/adversarial-review`, based on `feat/contact-hazard-list` at `69415ca`; separate camera, accessibility, and persistence agents, followed by independent reviews.
+- Host: Apple M4 Max, macOS 26.5.2; SDKMAN JDK 25.0.1-tem, Kotlin 2.4.20, AGP 9.4.1, Compose BOM 2026.09.00, CameraX 1.6.2, ONNX Runtime 1.30.0; Python 3.13.14 and pytest 9.1.1.
+- Phone: Samsung Galaxy S24 Ultra (SM-S928U), Android 16; debug app 0.1.0; models and tables rebuilt with `make assets` in the worktree.
+- Regression inputs: verification-only hunt rows; failed/partial cache writes and older disk entries; every hazard verdict with clean or truncated model replies; real animator-setting toggles; actual Briar pixels; 320 dp hints at 200% font; stale camera generations and adjustment futures; stalled capture deadlines and stale outcomes; hazard preservation; real camera hint/Skip journeys.
+- Restore and durable-cache failures reproduced before their fixes; truncated negative hazard replies now require review.
+- Final `make ai-checks` passed: 309 core tests, 258 pipeline tests, formatting, lint, APK/test-APK compilation, coverage gate, and secret scan ([log](day-5/review-fixes/ai-checks.log)).
+- Core line coverage: 99.73% (1,095 covered, 3 missed); ActiveHunt, AreaCacher, and LocalListSource have complete line and branch coverage. Hazard classifier: 45 tests, 99% statement coverage; only the CLI entrypoint line is uncovered.
+- Sonar analyses of nine changed production files: no unresolved issues ([results](day-5/review-fixes/sonar.json)); the camera binding function keeps explicit platform inputs with a function-scoped S107 exception rather than a parameter-count wrapper.
+- Semgrep: 1,277 rules over 103 production files, no scan errors; eight unchanged URL/loopback audit alerts triaged as fixed endpoints and pinned downloads, no actionable changed-source finding; final camera/game incremental scan also clean.
+- First E2E run: 52/53 passed; one hunt-loading assertion timed out at 90 seconds ([log](day-5/review-fixes/e2e-first.log)); the unchanged test passed alone in 9.14 seconds ([retry](day-5/review-fixes/e2e-isolated-retry.log)). Its initial timeout cause is unconfirmed.
+- Final `make device-test`: 55/55 passed, including eight analyzer/watchdog cases, two future-order cases, six accessibility cases, and actual disk failure/restore tests ([log](day-5/review-fixes/device-tests.log)); installs preserved app data.
+- Full E2E repeat: 53/53 passed in 407.379 seconds, using the same installed isolated E2E app and unchanged tests ([log](day-5/review-fixes/e2e-final.log)); all camera, hints, settings, hunt-start, area-selection, persistence, safety, and win-page journeys passed.
+
+## Rebased adversarial re-review · Oct 10
+
+- Rebased `fix/adversarial-review` onto the latest local parent `feat/contact-hazard-list` at `129417e`; the fetched remote parent is an ancestor. The final parent addition contains only documentation and gate-harness records.
+- Five fresh reviewers covered accessibility, security, clean code, design, and camera behavior; uncommitted and new-file fixes were included.
+- Updated two restored test fixtures for the parent's `UseVerifier(ActiveHunt?)` and regional `HazardCheck` contracts.
+- Post-rebase `make ai-checks` passed: 312 core tests, 258 pipeline tests, lint, test APK compilation, coverage gate and secret scan ([log](day-5/review-fixes/rereview-ai-checks.log)). Refreshed core line coverage remains 99.73% (1,095 covered, 3 missed).
+- Post-rebase `make device-test`: 55/55 passed in 20.464 seconds on the same S24 Ultra and toolchain recorded above; installations retained app data ([log](day-5/review-fixes/rereview-device.log)).
+- Separate temporary camera-panel probe: one test passed in 63.85 seconds; no probe remains in app source. At 411 dp width and font scale 2, Capture-to-Checking changes the panel from 814 to 883 pixels, causing a viewport rebind. At 320/360 dp with scale 2 and 320/411 dp with scale 1, the panel height stays unchanged ([measurements](day-5/review-fixes/rereview-camera-geometry.log), [probe](day-5/review-fixes/CameraPanelGeometryProbeTest.txt)).
+- Additional findings: concurrent same-key cache writers share a temporary path outside the serialized dispatcher; a real-filesystem interleaving produced invalid JSON after the first writer's successful rename. A hazard response missing `kind` raises `KeyError` instead of reaching the pipeline review path.
+- Fresh Semgrep: 119 files, 312 executed rules, zero scan errors; nine unchanged audit alerts triaged as non-actionable. Focused Sonar analysis of GameViewModel, GameRules and HazardCheck returned zero issues.
+- No additional accessibility or design finding; the camera layout finding affects large-text accessibility. The three findings above remain open after this review.
+
+## Main-based fixes and verification · Oct 10
+
+- Fetched `origin/main` at `055cf2a` and rebased only `fix/adversarial-review` onto it; squash-merged feature commits were not replayed. All relevant earlier fixes were preserved; main already supplies the held-back-row restore correction and its unit regression.
+- Rebuilt generated assets from main's current data after the parser change: 4,272 species, 85 hazards, 82 hazard card lines, 2,161 toxic rows, and four never-target rows. Host, phone, model pins and toolchain are the same as recorded above.
+- Fixed the three remaining findings: one capture button reserves all action labels' wrapped geometry; store reads, writes and deletion share an instance monitor; malformed model replies validate required fields before indexing and persist for review.
+- Before-fix device regressions reproduced both faults: concurrent cache refresh lost a saved entry; at 411 dp and 200% text the camera panel changed from 1,049 to 949 pixels on readiness. These failures are intentional proof, using freshly built pre-fix APKs ([log](day-5/review-fixes/main-before-regressions.log)).
+- Parser regressions reproduced three pre-fix failures, then all 77 targeted tests passed; malformed verdict/kind types and missing fields for every verdict are covered. Branch-enabled classifier coverage is 99%; only the CLI entrypoint statement is missed.
+- Final `make ai-checks` passed: 314 core tests and 350 pipeline tests, formatting, lint, coverage gate, APK/test-APK compilation and secret scan ([log](day-5/review-fixes/main-ai-checks.log)). Refreshed core line coverage is 99.73% (1,098 covered, three missed).
+- Final `make device-test`: 58/58 passed in 25.881 seconds on the S24 Ultra; includes actual concurrent cache IO, all camera action states with/without hints at large text, selected-label semantics, and stale-frame refusal followed by fresh-frame recovery ([log](day-5/review-fixes/main-device.log)). App data was retained.
+- Final Semgrep: 119 files, 312 executed rules, zero errors, nine unchanged non-actionable audit alerts, no new actionable finding ([report](day-5/review-fixes/main-semgrep.json)). Sonar's tool integration was unavailable for this run; earlier snippet results are not claimed as a main-based scan.
+- Independent accessibility, clean-code/design, and error/coverage reviews found no remaining production defect; the uncovered stale-frame edge now has a passing regression.
+- Full isolated E2E: 53/53 passed in 375.247 seconds on the same phone, covering camera focus/zoom/hints/Skip, settings and twelve-month caching, hint sheets, hunt start, area selection, persistence, safety copy, screen rules and win pages ([log](day-5/review-fixes/main-e2e.log)). No physical field check is claimed.
