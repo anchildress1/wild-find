@@ -5,9 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.Hyphens
@@ -27,7 +24,10 @@ import dev.anchildress1.wildfind.core.game.Stop
 import dev.anchildress1.wildfind.core.sprite.BriarState
 import dev.anchildress1.wildfind.ui.theme.Palette
 
-/** R15: the stars pop in, the hunt's stops show what was found, then Hunt Again or Home; also after Finish hunt. */
+/**
+ * R15: the hunt's stops show what was found, each find wearing its star over the plant, then Hunt Again or Home; also
+ * after Finish hunt. Briar's celebration sits right under the stops, so it shows without scrolling.
+ */
 @Composable
 fun CompleteScreen(stops: List<Stop>, onAgain: () -> Unit, onHome: () -> Unit) {
     val found = stops.count { it.found }
@@ -44,17 +44,6 @@ fun CompleteScreen(stops: List<Stop>, onAgain: () -> Unit, onHome: () -> Unit) {
             style = MaterialTheme.typography.displayLarge,
             textAlign = TextAlign.Center,
         )
-        val stars = pluralStringResource(R.plurals.stars, found, found)
-        Row(
-            Modifier.fillMaxWidth().clearAndSetSemantics { contentDescription = stars },
-            horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            // Only stars earned show: an empty outline on cream read as nothing at all.
-            stops.filter { it.found }.forEachIndexed { i, _ ->
-                Star(if (i == 1) 76.dp else 68.dp, Modifier.pop(i))
-            }
-        }
         Text(
             if (found == stops.size) {
                 pluralStringResource(R.plurals.complete_all, found, found)
@@ -66,7 +55,9 @@ fun CompleteScreen(stops: List<Stop>, onAgain: () -> Unit, onHome: () -> Unit) {
             textAlign = TextAlign.Center,
         )
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            stops.forEach { Finished(it, Modifier.weight(1f)) }
+            stops.forEachIndexed { i, stop ->
+                Finished(stop, starIndex = stops.take(i).count { it.found }, Modifier.weight(1f))
+            }
         }
         Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
             Briar(BriarState.COMPLETE, briarText(BriarState.COMPLETE))
@@ -75,17 +66,21 @@ fun CompleteScreen(stops: List<Stop>, onAgain: () -> Unit, onHome: () -> Unit) {
 }
 
 @Composable
-private fun Finished(stop: Stop, modifier: Modifier) {
+private fun Finished(stop: Stop, starIndex: Int, modifier: Modifier) {
     val status = stringResource(if (stop.found) R.string.found_label else R.string.still_out)
     Column(
         modifier.semantics(mergeDescendants = true) {},
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
-        // Found stops wear their star; the rest fade back, and the status line says it in words.
-        Box {
-            TypeTile(stop.type, 88.dp, Modifier.alpha(if (stop.found) 1f else STILL_OUT_ALPHA))
-            if (stop.found) Star(30.dp, Modifier.align(Alignment.BottomEnd).offset(8.dp, 6.dp))
+        // Found stops wear their star in the middle of the plant: the star takes about a third of the tile's area, the
+        // plant the rest. The others fade back, and the status line says it in words.
+        val star = stringResource(R.string.one_star)
+        Box(contentAlignment = Alignment.Center) {
+            TypeTile(stop.type, TILE, Modifier.alpha(if (stop.found) 1f else STILL_OUT_ALPHA))
+            if (stop.found) {
+                Star(STAR, Modifier.semantics { contentDescription = star }.pop(starIndex))
+            }
         }
         // A long name in a narrow card at 200% font breaks mid-word ("mistflowe/r"); a hyphen keeps it readable.
         Text(
@@ -98,3 +93,7 @@ private fun Finished(stop: Stop, modifier: Modifier) {
 }
 
 private const val STILL_OUT_ALPHA = 0.45f
+private val TILE = 96.dp
+
+// About 59% of the tile's side, a third of its area.
+private val STAR = 57.dp

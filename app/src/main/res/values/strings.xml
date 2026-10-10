@@ -136,10 +136,6 @@
         <item quantity="one">%1$d of %2$d plant found.</item>
         <item quantity="other">%1$d of %2$d plants found.</item>
     </plurals>
-    <plurals name="stars">
-        <item quantity="one">%d star</item>
-        <item quantity="other">%d stars</item>
-    </plurals>
     <string name="found_label">Found</string>
     <string name="still_out">Still out there</string>
     <string name="hunt_again">Hunt again</string>
