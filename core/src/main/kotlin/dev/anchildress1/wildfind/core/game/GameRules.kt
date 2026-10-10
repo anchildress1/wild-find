@@ -355,9 +355,20 @@ private class Turn(private var game: Game, private val random: Random) {
 
     private fun openerDone(screen: Screen) {
         val back = (screen as? Screen.Opener)?.back
-        if (back != null) return show(back)
+        if (back != null) return repeatIntro()
         save(game.flags.copy(openerSeen = true))
         resume()
+    }
+
+    // Repeat intro plays the whole first launch again: the grass practice comes next, in front of the current hunt's
+    // remaining targets, or opening the next hunt when none is running. The area, cache, and finds stay.
+    private fun repeatIntro() {
+        save(game.flags.copy(tutorialDone = false))
+        val active = game.hunt?.takeUnless { it.progress.complete } ?: return show(Screen.Start)
+        val updated = active.copy(progress = active.progress.copy(tutorialPending = true))
+        game = game.copy(hunt = updated)
+        persist(updated)
+        show(Screen.Tutorial)
     }
 
     // From the area choice, a found area starts the hunt and anything else opens the map; on the map, Locate only

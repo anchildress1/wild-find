@@ -14,7 +14,7 @@ sealed interface Screen {
     /**
      * The safety opener (R1).
      *
-     * @property back where Done returns on a replay; null on first launch
+     * @property back where Back returns on a replay, whose Done goes on to the grass practice; null on first launch
      */
     data class Opener(val back: Screen?) : Screen
 
@@ -254,7 +254,7 @@ sealed interface GameEvent : GameInput {
     /** Grown-ups: change the hunting area on the map. */
     data object EditRegion : GameEvent
 
-    /** Grown-ups: replay the opener. */
+    /** Grown-ups: Repeat intro, the opener and then the grass practice, as on a first launch. */
     data object ReplayOpener : GameEvent
 
     /** System back. */

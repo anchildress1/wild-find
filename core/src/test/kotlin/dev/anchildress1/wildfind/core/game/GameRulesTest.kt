@@ -210,11 +210,41 @@ class GameRulesTest : GameFixture() {
     }
 
     @Test
-    fun `a replayed opener's Done returns where it came from and saves nothing`() {
-        val step = playing(Screen.GrownUps(from = Screen.Hunt)).after(GameEvent.ReplayOpener, GameEvent.OpenerDone)
+    fun `Repeat intro plays the opener, then the grass practice in front of the hunt, keeping area and finds`() {
+        val flags = flags().copy(foundSpecies = setOf("Quercus s0"))
+        val grownUps = Screen.GrownUps(from = Screen.Hunt)
+        val opener = playing(grownUps, hunt = hunt(found = setOf(1)), flags = flags).after(GameEvent.ReplayOpener)
+        assertEquals(Screen.Opener(back = grownUps), opener.game.ui.screen)
 
-        assertEquals(Screen.GrownUps(from = Screen.Hunt), step.game.ui.screen)
-        assertEquals(emptyList<Command>(), step.commands)
+        val step = opener.game.after(GameEvent.OpenerDone)
+        val practice = hunt(tutorial = true, found = setOf(1))
+        assertEquals(Screen.Tutorial, step.game.ui.screen)
+        assertEquals(practice, step.game.hunt)
+        assertEquals(flags.copy(tutorialDone = false), step.game.flags)
+        assertEquals(
+            listOf(Command.SaveFlags(flags.copy(tutorialDone = false)), Command.SaveHunt(practice)),
+            step.commands,
+        )
+
+        val camera = Screen.Camera(null)
+        val passed = step.game.after(GameEvent.OpenCamera(null), frame(camera, 0, Verdict.Found))
+        assertTrue(passed.game.flags.tutorialDone)
+        assertEquals(setOf(1), passed.game.hunt!!.progress.found)
+        assertEquals(Screen.Hunt, passed.game.after(GameEvent.Next).game.ui.screen)
+    }
+
+    @Test
+    fun `Repeat intro with no running hunt saves the practice for the next one, and Back leaves the replay`() {
+        val grownUps = Screen.GrownUps(from = Screen.Start)
+        val replay = playing(grownUps, hunt = null).after(GameEvent.ReplayOpener).game
+
+        val done = replay.after(GameEvent.OpenerDone)
+        assertEquals(Screen.Start, done.game.ui.screen)
+        assertEquals(listOf(Command.SaveFlags(flags().copy(tutorialDone = false))), done.commands)
+
+        val left = replay.after(GameEvent.Back)
+        assertEquals(grownUps, left.game.ui.screen)
+        assertEquals(emptyList<Command>(), left.commands)
     }
 
     @Test

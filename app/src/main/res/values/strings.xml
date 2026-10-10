@@ -166,7 +166,7 @@
     </plurals>
     <string name="hunting_area">Hunting area</string>
     <string name="hunting_area_detail">%1$s · change it on the map</string>
-    <string name="replay_opener">Watch the safety intro again</string>
+    <string name="replay_opener">Repeat intro</string>
     <string name="made_with">Made with</string>
     <string name="credits_models">Models on this phone: BioCLIP 2.5 Mobile · TinyCLIP ViT-8M</string>
     <string name="credits_data">Data: iNaturalist · Wikipedia · USDA PLANTS · GBIF · Natural Earth</string>
