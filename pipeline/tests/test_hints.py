@@ -248,7 +248,7 @@ def test_recheck_flags_stored_hints_that_now_fail_and_reranks_without_the_model(
             {"aspect": "size", "text": "It is a tall tree.", "source": "trait", "issues": [], "bucket": "big"},
         ]
     }
-    path = _stored(tmp_path, monkeypatch, {"A a": entry}, done=False)
+    path = _stored(tmp_path, monkeypatch, {"A a": entry}, done=True)
 
     assert h.recheck() == 0
 
@@ -258,6 +258,35 @@ def test_recheck_flags_stored_hints_that_now_fail_and_reranks_without_the_model(
     assert cliff["issues"] == ["height"] and cliff["score"] is None
     # A size bucket every plant in the batch shares tells a kid nothing, so rarity scores it out.
     assert woods["score"] == 3.0 and size["score"] is None
+
+
+def test_recheck_flags_a_repeated_hint_but_keeps_the_first_and_refuses_an_unfinished_file(tmp_path, monkeypatch):
+    twice = [
+        {"aspect": "place", "text": "Look in woods.", "evidence": "a", "source": "model", "issues": []},
+        {"aspect": "ground", "text": "look in woods.", "evidence": "b", "source": "model", "issues": []},
+    ]
+    path = _stored(tmp_path, monkeypatch, {"A a": {"hints": twice}}, done=True)
+
+    assert h.recheck() == 0
+
+    first, second = json.loads(path.read_text())["species"]["A a"]["hints"]
+    assert first["issues"] == [] and second["issues"] == ["repeats an earlier hint"]
+    _stored(tmp_path, monkeypatch, {"A a": {"hints": twice}}, done=False)
+    with pytest.raises(ValueError, match="unfinished"):
+        h.recheck()
+
+
+def test_hints_for_flags_the_same_hint_said_twice_even_under_another_kind(monkeypatch):
+    reply = _reply(
+        place=[{"hint": "Look in moist woods.", "evidence": "It grows in moist woods."}],
+        ground=[{"hint": "Look in moist woods.", "evidence": "It also turns up along fence lines."}],
+    )
+    monkeypatch.setattr(h, "chat", lambda user: {"text": reply, "cut_off": False})
+
+    entry = h.hints_for("Quercus nigra", PAGE, [], None, {})
+
+    place, ground = [x for x in entry["hints"] if x["source"] == "model"]
+    assert place["issues"] == [] and ground["issues"] == ["repeats an earlier hint"]
 
 
 def test_main_resumes_from_a_partial_file_and_finishes_with_ranked_hints(tmp_path, monkeypatch, capsys):

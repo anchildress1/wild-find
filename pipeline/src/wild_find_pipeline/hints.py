@@ -249,6 +249,7 @@ def hints_for(row: str, page: dict | None, aliases: list[str], kind: str | None,
     """Every candidate hint for one row, each with its source and the checks it failed; ranking comes later."""
     names = [row, *aliases]
     found: list[dict] = []
+    said: set[str] = set()
     cut = False
     failed = None
     if page:
@@ -268,6 +269,10 @@ def hints_for(row: str, page: dict | None, aliases: list[str], kind: str | None,
                 if evidence in used:
                     bad.append("repeats an earlier quote")
                 used.append(evidence)
+                if hint.casefold() in said:
+                    bad.append("repeats an earlier hint")
+                if not bad:
+                    said.add(hint.casefold())
                 found.append({"aspect": aspect, "text": hint, "evidence": evidence, "source": "model", "issues": bad})
             if not items and (fill := usda_fill(aspect, names, facts)):
                 found.append({**fill, "source": "usda", "issues": []})
@@ -336,11 +341,17 @@ def save(species: dict, done: bool) -> None:
 
 
 def recheck() -> int:
-    """Re-apply the pattern checks to the stored model hints and re-rank, without calling the model."""
+    """Re-apply the pattern and duplicate checks to the stored model hints and re-rank, without the model.
+
+    Raises on an unfinished checkpoint, since marking it done would ship a file missing most rows.
+    """
     data = json.loads(HINTS.read_text())
+    if not data["done"]:
+        raise ValueError(f"{HINTS.name} is an unfinished checkpoint; finish make hints before --recheck")
     species = data["species"]
     added = 0
     for entry in species.values():
+        said: set[str] = set()
         for hint in entry["hints"]:
             if hint["source"] != "model":
                 continue
@@ -348,6 +359,12 @@ def recheck() -> int:
                 if pattern.search(hint["text"]) and name not in hint["issues"]:
                     hint["issues"].append(name)
                     added += 1
+            key = hint["text"].casefold()
+            if key in said and "repeats an earlier hint" not in hint["issues"]:
+                hint["issues"].append("repeats an earlier hint")
+                added += 1
+            if not hint["issues"] or hint["issues"] == ["repeats an earlier hint"]:
+                said.add(key)
     rank_all(species)
     save(species, done=True)
     print(f"OK: {HINTS}: {added} model hints newly flagged")

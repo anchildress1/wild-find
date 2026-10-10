@@ -304,11 +304,12 @@ def test_with_hints_ships_only_picked_clean_hints_best_first_and_names_the_seaso
         ]
     }
 
-    shipped = with_hints([{"scientific": "Quercus nigra"}], {"done": True, "species": {"Quercus nigra": entry}})
+    label = {"scientific": "Quercus nigra", "toxic": False, "hazard": False}
+    shipped = with_hints([label], {"done": True, "species": {"Quercus nigra": entry}})
 
     assert shipped == [
         {
-            "scientific": "Quercus nigra",
+            **label,
             "hints": [
                 {"text": "It likes moist soil."},
                 {"text": "Look in woods."},
@@ -318,9 +319,28 @@ def test_with_hints_ships_only_picked_clean_hints_best_first_and_names_the_seaso
     ]
 
 
-def test_with_hints_gives_rows_the_file_does_not_cover_none_and_refuses_a_checkpoint():
-    assert with_hints([{"scientific": "Abrus precatorius"}], {"done": True, "species": {}}) == [
-        {"scientific": "Abrus precatorius", "hints": []}
+def test_with_hints_gives_toxic_and_hazard_rows_none_and_refuses_a_checkpoint():
+    toxic = {"scientific": "Conium maculatum", "toxic": True, "hazard": False}
+    hazard = {"scientific": "Toxicodendron radicans", "toxic": True, "hazard": True}
+
+    assert with_hints([toxic, hazard], {"done": True, "species": {}}) == [
+        {**toxic, "hints": []},
+        {**hazard, "hints": []},
     ]
     with pytest.raises(ValueError, match="make hints"):
         with_hints([], {"done": False, "species": {}})
+
+
+def test_with_hints_refuses_a_playable_row_the_file_lacks():
+    row = {"scientific": "Quercus nigra", "toxic": False, "hazard": False}
+
+    with pytest.raises(ValueError, match=r"lacks 1 playable species, e\.g\. \['Quercus nigra'\]"):
+        with_hints([row], {"done": True, "species": {}})
+
+
+def test_with_hints_refuses_a_season_the_app_does_not_know():
+    row = {"scientific": "Quercus nigra", "toxic": False, "hazard": False}
+    odd = {"aspect": "season", "text": "x", "issues": [], "score": 1.0, "bucket": "monsoon"}
+
+    with pytest.raises(ValueError, match="monsoon"):
+        with_hints([row], {"done": True, "species": {"Quercus nigra": {"hints": [odd]}}})

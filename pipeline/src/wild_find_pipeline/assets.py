@@ -20,6 +20,7 @@ from typing import Any
 import numpy as np
 
 from wild_find_pipeline import label_vectors, places, world_map
+from wild_find_pipeline.hint_traits import YEAR
 from wild_find_pipeline.labels import (
     GATE_OTHER,
     GATE_PLANT,
@@ -112,14 +113,21 @@ def with_descriptions(labels: list[dict], found: dict[str, dict]) -> list[dict]:
 def with_hints(labels: list[dict], data: dict) -> list[dict]:
     """Add each row's shipped hints: the picked ones that failed no check, best first, `season` only on season hints.
 
-    Rows hints.json does not cover (toxic or hazard rows) get none; raises when the file is a partial checkpoint.
+    Toxic and hazard rows get none. Raises when the file is a partial checkpoint, when a playable row has no entry, or
+    when a season hint carries a name the app does not know.
     """
     if not data["done"]:
         raise ValueError(f"{HINTS.name} is a partial checkpoint; run make hints to finish it")
     found = data["species"]
+    playable = [e["scientific"] for e in labels if not e["toxic"] and not e["hazard"]]
+    if missing := [row for row in playable if row not in found]:
+        raise ValueError(f"{HINTS.name} lacks {len(missing)} playable species, e.g. {missing[:3]}; run make hints")
     out = []
     for entry in labels:
         picked = [h for h in found.get(entry["scientific"], {}).get("hints", []) if h.get("score") and not h["issues"]]
+        bad = [h["bucket"] for h in picked if h["aspect"] == "season" and h["bucket"] not in YEAR]
+        if bad:
+            raise ValueError(f"{entry['scientific']} has season hints named {bad}, not one of {YEAR}")
         shipped = [
             {"text": h["text"], **({"season": h["bucket"]} if h["aspect"] == "season" else {})}
             for h in sorted(picked, key=lambda h: -h["score"])

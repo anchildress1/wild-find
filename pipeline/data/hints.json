@@ -53595,8 +53595,10 @@
      "text": "Look on coastal sands.",
      "evidence": "It can be found on coastal sands, but is also present on slopes up to an elevation of .",
      "source": "model",
-     "issues": [],
-     "score": 3.0
+     "issues": [
+      "repeats an earlier hint"
+     ],
+     "score": null
     }
    ]
   },
@@ -54869,8 +54871,10 @@
      "text": "Look in dry, sandy places.",
      "evidence": "It grows in dry, sandy places below .",
      "source": "model",
-     "issues": [],
-     "score": 3.0
+     "issues": [
+      "repeats an earlier hint"
+     ],
+     "score": null
     }
    ]
   },
@@ -79740,8 +79744,10 @@
      "text": "Look in sunny, open locations.",
      "evidence": "This plant is used for hedging, boundary definition and groundcover in suitably sunny, open locations.",
      "source": "model",
-     "issues": [],
-     "score": 3.0
+     "issues": [
+      "repeats an earlier hint"
+     ],
+     "score": null
     },
     {
      "aspect": "nearby",
