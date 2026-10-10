@@ -39,6 +39,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntSize
@@ -109,7 +110,7 @@ fun MapScreen(
             RoundIconButton(WildIcons.Back, stringResource(R.string.back), onBack)
             Text(
                 stringResource(R.string.map_title),
-                Modifier.align(Alignment.CenterVertically).padding(start = 4.dp),
+                Modifier.align(Alignment.CenterVertically).padding(start = 4.dp).semantics { heading() },
                 style = MaterialTheme.typography.headlineMedium,
             )
         }
@@ -241,6 +242,7 @@ private fun rememberGlide(current: () -> MapCamera, set: (MapCamera) -> Unit): G
     val reduced = LocalReducedMotion.current
     var job by remember { mutableStateOf<Job?>(null) }
     val cancel: () -> Unit = { job?.cancel() }
+    LaunchedEffect(reduced) { if (reduced) cancel() }
     return Glide(cancel) { target ->
         cancel()
         val start = current()

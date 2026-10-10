@@ -41,6 +41,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
@@ -93,7 +94,7 @@ private fun Header(count: Int, area: String?, onGrownUps: () -> Unit) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 pluralStringResource(R.plurals.hunt_title, count, count),
-                Modifier.weight(1f),
+                Modifier.weight(1f).semantics { heading() },
                 style = MaterialTheme.typography.displayMedium,
             )
             RoundIconButton(WildIcons.More, stringResource(R.string.grown_ups), onGrownUps)

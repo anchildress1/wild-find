@@ -19,6 +19,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import dev.anchildress1.wildfind.R
 import dev.anchildress1.wildfind.ui.theme.Palette
@@ -52,7 +54,14 @@ fun RegionScreen(locating: Boolean, denied: Boolean, onLocation: (granted: Boole
                 .border(1.5.dp, Palette.Line, CircleShape),
             contentAlignment = Alignment.Center,
         ) { Icon(WildIcons.Pin, contentDescription = null, Modifier.size(48.dp), tint = Palette.Forest) }
-        Text(stringResource(R.string.region_title), style = MaterialTheme.typography.displayMedium, color = Palette.Ink)
+        Text(
+            stringResource(R.string.region_title),
+            Modifier.semantics {
+                heading()
+            },
+            style = MaterialTheme.typography.displayMedium,
+            color = Palette.Ink,
+        )
         Text(stringResource(R.string.region_body), style = MaterialTheme.typography.bodyLarge, color = Palette.Ink2)
     }
 }

@@ -16,8 +16,11 @@ import kotlinx.coroutines.delay
 fun Modifier.rise(index: Int = 0): Modifier = composed {
     val reduced = LocalReducedMotion.current
     val progress = remember { Animatable(if (reduced) 1f else 0f) }
-    LaunchedEffect(Unit) {
-        if (reduced) return@LaunchedEffect
+    LaunchedEffect(reduced) {
+        if (reduced) {
+            progress.snapTo(1f)
+            return@LaunchedEffect
+        }
         delay(index * Motion.STAGGER.toLong())
         progress.animateTo(1f, tween(Motion.MOVE, easing = Motion.Decelerate))
     }
@@ -32,8 +35,11 @@ fun Modifier.rise(index: Int = 0): Modifier = composed {
 fun Modifier.pop(index: Int = 0): Modifier = composed {
     val reduced = LocalReducedMotion.current
     val scale = remember { Animatable(if (reduced) 1f else 0f) }
-    LaunchedEffect(Unit) {
-        if (reduced) return@LaunchedEffect
+    LaunchedEffect(reduced) {
+        if (reduced) {
+            scale.snapTo(1f)
+            return@LaunchedEffect
+        }
         delay(index * Motion.STAGGER.toLong())
         scale.animateTo(1f, tween(Motion.BIG, easing = Motion.Overshoot))
     }

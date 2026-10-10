@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -23,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -40,14 +43,14 @@ fun HintPanel(hints: List<Hint>, at: Int, onNext: () -> Unit, onKeepLooking: () 
     Column(
         Modifier.fillMaxWidth().background(Palette.Paper, RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
             .navigationBarsPadding().padding(start = 20.dp, end = 20.dp, top = 18.dp, bottom = 16.dp)
-            .animateContentSize(tween(Motion.MOVE)),
+            .animateContentSize(tween(Motion.MOVE)).verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(WildIcons.Bulb, contentDescription = null, Modifier.size(24.dp), tint = Palette.Forest)
             Text(
                 stringResource(R.string.hint_n_of, at, hints.size),
-                Modifier.padding(start = 10.dp),
+                Modifier.padding(start = 10.dp).semantics { heading() },
                 style = MaterialTheme.typography.titleSmall,
             )
         }

@@ -74,7 +74,9 @@ private fun Clip(
 ) {
     // The size comes from the clip's small JSON, so the box holds its place while frames decode off the main thread.
     val meta = remember(name) { ClipMeta(assets, name) }
-    val drawable by produceState<AnimatedImageDrawable?>(null, name) {
+    val reduced = LocalReducedMotion.current
+    val drawable by produceState<AnimatedImageDrawable?>(null, name, reduced) {
+        value = null
         value = withContext(Dispatchers.IO) {
             ImageDecoder.decodeDrawable(ImageDecoder.createSource(assets, "briar/$name.webp")) as AnimatedImageDrawable
         }
@@ -101,19 +103,22 @@ private fun Clip(
             clip?.callback = null
         }
     }
-    val reduced = LocalReducedMotion.current
     LaunchedEffect(drawable, reduced) {
         val clip = drawable
         if (reduced || clip == null) return@LaunchedEffect
-        if (loop) {
-            clip.repeatCount = AnimatedImageDrawable.REPEAT_INFINITE
-            clip.start()
-            awaitCancellation()
+        try {
+            if (loop) {
+                clip.repeatCount = AnimatedImageDrawable.REPEAT_INFINITE
+                clip.start()
+                awaitCancellation()
+            }
+            clip.repeatCount = 0
+            do {
+                clip.playOnce()
+            } while (rest?.let { delay(it) } != null)
+        } finally {
+            clip.stop()
         }
-        clip.repeatCount = 0
-        do {
-            clip.playOnce()
-        } while (rest?.let { delay(it) } != null)
     }
     val size = meta.drawn(LocalDensity.current, figure)
     val box = with(LocalDensity.current) { DpSize(size.width.toDp(), size.height.toDp()) }
