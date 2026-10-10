@@ -469,7 +469,7 @@ Two questions block the build; two can wait.
 **Non-blocking**
 
 - [x] Hints spot-check: how does a person verify a hint is true? Closed Oct 10: the owner read 50 random shipped Gemma hints beside their quoted sentences (`docs/results/day-4/hints_spotcheck.md`) and graded 37 yes, 3 overreach, 10 no; shipped as fine for now, with the tightening below
-- [ ] Hints tightening: the misses in the Oct 10 spot-check fall into five patterns, each a prompt rule or an automatic check for the next `make hints` run, re-graded on a fresh 50. Oct 10: built and rerun; the fresh 50 waits for the owner's grades (S72, `docs/results/day-5/hints/`):
+- [x] Hints tightening: the misses in the Oct 10 spot-check fall into five patterns, each a prompt rule or an automatic check for the next `make hints` run, re-graded on a fresh 50. Closed Oct 10: built and rerun, and the owner graded a fresh 50 at 3 of 48 off (6%, from 26%) (S72, `docs/results/day-5/hints/`):
   - **Garden or restoration sentences read as habitat.** "Seedlings must always be kept moist" became "Keep the soil moist"; "suitable for a woodland style planting" became a place; "helps restore damp areas" became where it grows. Reject quotes about cultivation, planting, restoration, or care
   - **A rare habitat picked over the main one.** "occasionally in woodland" became "You might find it in woodland". Reject quotes hedged with occasionally, rarely, sometimes, or also
   - **Habitats that don't narrow the search.** Woodlands and pastures fit most plants. Score a hint by how few of the hunt's plants share it, and drop one shared by most
