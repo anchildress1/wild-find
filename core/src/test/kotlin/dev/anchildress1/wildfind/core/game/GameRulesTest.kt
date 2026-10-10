@@ -608,4 +608,20 @@ class GameRulesTest : GameFixture() {
         assertEquals(Screen.GrownUps(from = Screen.Camera(0)), step.game.ui.screen)
         assertEquals(listOf(Command.CancelCapture), step.commands)
     }
+
+    @Test
+    fun `a picked hunt restores finds and retains rows held back from picking`() {
+        val heldBack = rows.mapIndexed { row, species -> species.copy(target = row != 4) }
+        val loading = Game(flags = flags()).after(Outcome.ModelsReady(heldBack)).game
+        val started = loading.after(Outcome.Pulled(home, local(targets + queue), offline = false)).game.hunt!!
+        val saved = started.copy(progress = started.progress.targetFound(started.progress.targets[0].row))
+
+        val resumed = loading.after(Outcome.SavedHunt(saved))
+
+        assertEquals(Screen.Hunt, resumed.game.ui.screen)
+        assertEquals(saved, resumed.game.hunt)
+        assertEquals(listOf(Command.UseVerifier(saved)), resumed.commands)
+        assertEquals(1, resumed.game.ui.stops.count { it.found })
+        assertTrue(resumed.game.ui.stops.none { it.row == 4 })
+    }
 }

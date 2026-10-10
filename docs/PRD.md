@@ -403,6 +403,7 @@ Every failure degrades to a playable hunt or a plain message; none crash or stal
 | iNat unreachable, no matching cache | No hunt; say this place needs signal once |
 | iNat returns 429 | Use the cache at once; no request, the widened query included, goes to iNat until Retry-After passes (60 seconds when it gives none) |
 | Cache entry mismatch (schema, table, region, locale, month, or radius) | Discard the entry and refetch |
+| Cache write fails | A fresh online hunt remains playable; Cache my area counts only months available on disk; same-key reads and writes are serialized |
 | Fewer than 3 eligible genera | Widen the radius to 150 km once, one extra query of up to three requests; still short, show "Not enough plants spotted here yet" |
 | Autofocus reports no focus distance | The capture gives no verdict; the kid sees "Tap the plant to focus" |
 | Camera permission denied | Explain why the game needs it; the hunt can't start |
