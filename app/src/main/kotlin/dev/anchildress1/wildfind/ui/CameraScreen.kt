@@ -169,7 +169,7 @@ private fun TopBar(target: CameraTarget, onBack: () -> Unit) {
         // It runs the bar's full width, so at 200% font it wraps into a few lines, not a narrow column that eats the
         // viewfinder.
         Row(Modifier.padding(start = 12.dp, top = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-            target.type?.let { PlantArt(it, Modifier.size(24.dp)) }
+            PlantArt(target.type, Modifier.size(24.dp))
             PlantLine(
                 target.description,
                 target.type,

@@ -9,17 +9,18 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
-/** Every plant type a target can carry has its picture in the APK, so no tile ever comes up empty. */
+/** Every plant type a target can carry, and none, has its picture in the APK, so no tile ever comes up empty. */
 @RunWith(AndroidJUnit4::class)
 class PlantArtTest {
     private val assets = InstrumentationRegistry.getInstrumentation().targetContext.assets
 
     @Test
-    fun everyPlantTypeHasASquarePictureWithTransparency() {
-        PlantType.entries.forEach { type ->
-            val bitmap = assets.open("plants/${type.key}.webp").use(BitmapFactory::decodeStream)
-            assertEquals(type.key, bitmap.width, bitmap.height)
-            assertTrue(type.key, bitmap.hasAlpha())
+    fun everyPlantTypeAndTheUntypedPlantHaveASquarePictureWithTransparency() {
+        // "plant" is the picture PlantArt draws for a species the build found no type for.
+        (PlantType.entries.map { it.key } + "plant").forEach { key ->
+            val bitmap = assets.open("plants/$key.webp").use(BitmapFactory::decodeStream)
+            assertEquals(key, bitmap.width, bitmap.height)
+            assertTrue(key, bitmap.hasAlpha())
         }
     }
 

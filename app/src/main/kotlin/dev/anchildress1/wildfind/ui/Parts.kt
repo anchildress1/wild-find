@@ -56,19 +56,22 @@ val CardShape = RoundedCornerShape(20.dp)
 /**
  * A screen on Ground: [content] scrolls, so every layout holds at 200% font scale, and [bottom] stays pinned.
  *
+ * @param background the page color; transparent lets art drawn behind the page show through
  * @param top a fixed row above the scrolling content
  * @param centered centers [content] vertically when it is shorter than the screen; it still scrolls when taller
  */
 @Composable
+@Suppress("LongParameterList")
 fun Page(
     modifier: Modifier = Modifier,
+    background: Color = Palette.Ground,
     top: @Composable () -> Unit = {},
     bottom: @Composable ColumnScope.() -> Unit = {},
     centered: Boolean = false,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Column(
-        modifier.fillMaxSize().background(Palette.Ground).safeDrawingPadding().padding(horizontal = 20.dp),
+        modifier.fillMaxSize().background(background).safeDrawingPadding().padding(horizontal = 20.dp),
     ) {
         top()
         if (centered) {
@@ -183,14 +186,14 @@ fun PaperCard(modifier: Modifier = Modifier, content: @Composable ColumnScope.()
 }
 
 /**
- * A plant type's picture standing on its square's bottom edge, with no box around it; no type leaves the square
- * empty (spec: name only).
+ * A plant type's picture standing on its square's bottom edge, with no box around it; no type shows the untyped
+ * picture.
  *
  * @param size the square's side
  */
 @Composable
 fun TypeTile(type: PlantType?, size: Dp, modifier: Modifier = Modifier) {
-    Box(modifier.size(size)) { type?.let { PlantArt(it, Modifier.size(size)) } }
+    Box(modifier.size(size)) { PlantArt(type, Modifier.size(size)) }
 }
 
 /** A find star, the painted art from `assets/star.webp`. */
