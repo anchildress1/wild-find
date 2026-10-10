@@ -1,20 +1,16 @@
 <div align="center">
 
-# 🌿 wild-find
+# 🌿 Wild Find
 
-[![CI](https://img.shields.io/github/actions/workflow/status/anchildress1/wild-find/ci.yml?branch=main&label=CI)](https://github.com/anchildress1/wild-find/actions/workflows/ci.yml)
-[![Pipeline](https://img.shields.io/github/actions/workflow/status/anchildress1/wild-find/pipeline.yml?branch=main&label=pipeline)](https://github.com/anchildress1/wild-find/actions/workflows/pipeline.yml)
-[![CodeQL](https://img.shields.io/github/actions/workflow/status/anchildress1/wild-find/codeql.yml?branch=main&label=CodeQL)](https://github.com/anchildress1/wild-find/actions/workflows/codeql.yml)
-[![License: MIT](https://img.shields.io/badge/license-MIT-2f5d3a)](LICENSE)
-[![Android 11+](https://img.shields.io/badge/Android-11%2B-3ddc84?logo=android&logoColor=white)](docs/PRD.md)
+[![CI](https://img.shields.io/github/actions/workflow/status/anchildress1/wild-find/ci.yml?branch=main&label=CI)](https://github.com/anchildress1/wild-find/actions/workflows/ci.yml) [![Pipeline](https://img.shields.io/github/actions/workflow/status/anchildress1/wild-find/pipeline.yml?branch=main&label=pipeline)](https://github.com/anchildress1/wild-find/actions/workflows/pipeline.yml) [![CodeQL](https://img.shields.io/github/actions/workflow/status/anchildress1/wild-find/codeql.yml?branch=main&label=CodeQL)](https://github.com/anchildress1/wild-find/actions/workflows/codeql.yml) [![License: MIT](https://img.shields.io/badge/license-MIT-2f5d3a)](LICENSE) [![Android 11+](https://img.shields.io/badge/Android-11%2B-3ddc84?logo=android&logoColor=white)](docs/PRD.md)
 
-wild-find sends kids 8 and up outside to find and photograph plants that grow near them. Open-weight models on the phone check each photo. No photo ever leaves the device.
+Wild Find sends kids 8 and up outside to find and photograph plants that grow near them. Open-weight models on the phone check each photo. No photo ever leaves the device.
+
+**Look. Photograph. Leave it where it grows.**
 
 <img src="https://repository-images.githubusercontent.com/1406615924/6bd7eb42-d008-4341-bf42-08963b687ac1" alt="Briar, a big-eared squirrel mascot, waves from a mossy rock in a sunlit forest beside the words &quot;Side quests grow on trees.&quot; and &quot;DEV Challenge, Hacktoberfest 2026&quot;" width="800">
 
 </div>
-
-**Look. Photograph. Leave it where it grows.**
 
 ## Table of contents
 
@@ -203,10 +199,11 @@ make install      # debug APK to a connected phone
 
 ## Credits
 
-- **Models on the phone:** BioCLIP 2.5 Mobile and TinyCLIP ViT-8M/16
-- **Data:** iNaturalist, Wikipedia, USDA PLANTS, GBIF, and Natural Earth
-- **Build-time only:** BioCLIP 2.5 writes the tutorial label vectors on a laptop with OpenCLIP, and Gemma 4 (26b, through Ollama) writes the hints and the contact-hazard list from Wikipedia; none of them runs in the app
-- **Fonts:** Fredoka and Atkinson Hyperlegible, SIL Open Font License 1.1
+- **Challenge:** [DEV](https://dev.to) and [MLH](https://mlh.io) for hosting the [Hacktoberfest 2026 week 1 challenge](https://dev.to/challenges/hacktoberfest-week1-2026-10-05?bb=264648)
+- **Models on the phone:** [BioCLIP 2.5 Mobile](https://huggingface.co/crazedcodernate/bioclip-2.5-mobile-fastvit) and [TinyCLIP ViT-8M/16](https://huggingface.co/wkcn/TinyCLIP-ViT-8M-16-Text-3M-YFCC15M)
+- **Data:** [iNaturalist](https://www.inaturalist.org), [Wikipedia](https://www.wikipedia.org), [USDA PLANTS](https://plants.usda.gov), [GBIF](https://www.gbif.org), and [Natural Earth](https://www.naturalearthdata.com)
+- **Build-time only:** [BioCLIP 2.5](https://huggingface.co/imageomics/bioclip-2.5-vith14) writes the tutorial label vectors on a laptop with [OpenCLIP](https://github.com/mlfoundations/open_clip), and [Gemma 4](https://ai.google.dev/gemma) (26b, through [Ollama](https://ollama.com)) writes the hints and the contact-hazard list from Wikipedia; none of them runs in the app
+- **Fonts:** [Fredoka](https://fonts.google.com/specimen/Fredoka) and [Atkinson Hyperlegible](https://fonts.google.com/specimen/Atkinson+Hyperlegible), SIL Open Font License 1.1
 
 ---
 
