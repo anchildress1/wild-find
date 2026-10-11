@@ -24,6 +24,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import dev.anchildress1.wildfind.R
 import dev.anchildress1.wildfind.core.game.AreaCache
@@ -48,16 +50,13 @@ fun GrownUpsScreen(
     onReplay: () -> Unit,
     onCache: () -> Unit,
 ) {
-    val context = LocalContext.current
-    val version =
-        remember(context) { context.packageManager.getPackageInfo(context.packageName, 0).versionName.orEmpty() }
     Page(
         top = {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 RoundIconButton(WildIcons.Back, stringResource(R.string.back), onBack)
                 Text(
                     stringResource(R.string.grown_ups),
-                    Modifier.padding(start = 8.dp),
+                    Modifier.padding(start = 8.dp).semantics { heading() },
                     style = MaterialTheme.typography.headlineMedium,
                 )
             }
@@ -69,7 +68,7 @@ fun GrownUpsScreen(
                 Icon(WildIcons.Shield, contentDescription = null, Modifier.size(24.dp), tint = Palette.Forest)
                 Text(
                     stringResource(R.string.privacy),
-                    Modifier.padding(start = 10.dp),
+                    Modifier.padding(start = 10.dp).semantics { heading() },
                     style = MaterialTheme.typography.titleSmall,
                 )
             }
@@ -93,24 +92,45 @@ fun GrownUpsScreen(
             Box(Modifier.fillMaxWidth().height(1.5.dp).background(Palette.Line))
             Link(WildIcons.Replay, stringResource(R.string.replay_opener), null, onReplay)
         }
-        Column(Modifier.rise(index = 4), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(stringResource(R.string.made_with), style = MaterialTheme.typography.titleLarge)
-            Text(stringResource(R.string.credits_models), style = MaterialTheme.typography.bodyMedium)
-            Text(stringResource(R.string.credits_data), style = MaterialTheme.typography.bodyMedium)
-            Text(stringResource(R.string.font_credits), style = MaterialTheme.typography.bodyMedium)
-            Text(
-                stringResource(R.string.version, version),
-                style = MaterialTheme.typography.bodyMedium,
-                color = Palette.Ink2,
-            )
-        }
+        Credits(Modifier.rise(index = 4))
+    }
+}
+
+@Composable
+private fun Credits(modifier: Modifier) {
+    val context = LocalContext.current
+    val version =
+        remember(context) { context.packageManager.getPackageInfo(context.packageName, 0).versionName.orEmpty() }
+
+    Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(
+            stringResource(R.string.made_with),
+            Modifier.semantics {
+                heading()
+            },
+            style = MaterialTheme.typography.titleLarge,
+        )
+        Text(stringResource(R.string.credits_models), style = MaterialTheme.typography.bodyMedium)
+        Text(stringResource(R.string.credits_data), style = MaterialTheme.typography.bodyMedium)
+        Text(stringResource(R.string.font_credits), style = MaterialTheme.typography.bodyMedium)
+        Text(
+            stringResource(R.string.version, version),
+            style = MaterialTheme.typography.bodyMedium,
+            color = Palette.Ink2,
+        )
     }
 }
 
 @Composable
 private fun INaturalistCard(modifier: Modifier) {
     PaperCard(modifier) {
-        Text(stringResource(R.string.inat_title), style = MaterialTheme.typography.titleSmall)
+        Text(
+            stringResource(R.string.inat_title),
+            Modifier.semantics {
+                heading()
+            },
+            style = MaterialTheme.typography.titleSmall,
+        )
         INAT_FACTS.forEach { Fact(it) }
     }
 }

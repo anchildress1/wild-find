@@ -1,3 +1,4 @@
+import io
 import json
 
 import pytest
@@ -100,6 +101,8 @@ def test_a_hazard_needs_a_kind_and_a_no_needs_nothing():
         ("hazard", ["line too long"], "review"),
         ("unsure", [], "review"),
         ("no", [], "skip"),
+        ("no", [c.CUT_OFF], "review"),
+        ("no", [c.REPLY_FAILED], "review"),
     ],
 )
 def test_status(verdict, found, expected):
@@ -111,6 +114,51 @@ def test_parse_drops_the_kind_of_a_non_hazard_and_rejects_off_schema_replies():
     for junk in ("not json", "[]", json.dumps({**HAZARD, "verdict": "maybe"}), json.dumps({**HAZARD, "line": 3})):
         with pytest.raises(ValueError):
             c.parse(junk)
+
+
+@pytest.mark.parametrize("field", c.SCHEMA["required"])
+@pytest.mark.parametrize("value", [False, 0, [], {}, None])
+def test_parse_rejects_wrong_field_types(field, value):
+    answer = {**HAZARD, field: value}
+
+    if field == "kind" and value is None:
+        assert c.parse(json.dumps(answer)) == answer
+    else:
+        with pytest.raises(ValueError, match="off-schema reply"):
+            c.parse(json.dumps(answer))
+
+
+@pytest.mark.parametrize("verdict", c.VERDICTS)
+@pytest.mark.parametrize("missing", c.SCHEMA["required"])
+def test_missing_model_fields_go_to_review_and_never_ship(monkeypatch, files, verdict, missing):
+    answer = {**HAZARD, "verdict": verdict}
+    del answer[missing]
+    sent = []
+    reply = {"message": {"content": json.dumps(answer)}, "done_reason": "stop", "prompt_eval_count": 1}
+
+    def respond(request, timeout):
+        sent.append((json.loads(request.data), timeout))
+        return io.BytesIO(json.dumps(reply).encode())
+
+    monkeypatch.setattr(c.gemma.urllib.request, "urlopen", respond)
+
+    entry = c.entry_for("Pastinaca sativa", PAGE)
+    c.save({"Pastinaca sativa": entry}, done=True, digest="test-model")
+    stored, review = files
+    saved = json.loads(stored.read_text())
+    decisions = json.loads(review.read_text())
+
+    assert entry["verdict"] == "unsure"
+    assert entry["status"] == "review"
+    assert entry["issues"] == [c.REPLY_FAILED]
+    assert "off-schema reply" in entry["reason"]
+    assert saved["species"]["Pastinaca sativa"] == entry
+    assert decisions["Pastinaca sativa"]["owner"] is None
+    assert c.listed(saved, decisions) == {}
+    assert len(sent) == 1
+    body, timeout = sent[0]
+    assert body["messages"][-1]["content"] == f"Plant: Pastinaca sativa\n\nArticle sentences:\n{c.excerpt(ARTICLE)}"
+    assert timeout == 900
 
 
 # ---- one row ----
@@ -146,6 +194,44 @@ def test_entry_for_sends_a_made_up_quote_or_a_failed_reply_to_review(monkeypatch
     monkeypatch.setattr(c, "chat", fail)
     entry = c.entry_for("Pastinaca sativa", PAGE)
     assert (entry["status"], entry["issues"]) == ("review", [c.REPLY_FAILED]) and "length" in entry["reason"]
+
+
+@pytest.mark.parametrize("verdict", c.VERDICTS)
+@pytest.mark.parametrize("cut_off", [False, True])
+def test_model_prompt_truncation_requires_review_for_every_verdict(monkeypatch, files, verdict, cut_off):
+    sent = []
+    answer = (
+        HAZARD
+        if verdict == "hazard"
+        else {"verdict": verdict, "kind": None, "evidence": QUOTE if verdict == "unsure" else "", "line": ""}
+    )
+    reply = {
+        "message": {"content": json.dumps(answer)},
+        "done_reason": "stop",
+        "prompt_eval_count": c.NUM_CTX - 8 if cut_off else 1,
+    }
+
+    def respond(request, timeout):
+        sent.append((json.loads(request.data), timeout))
+        return io.BytesIO(json.dumps(reply).encode())
+
+    monkeypatch.setattr(c.gemma.urllib.request, "urlopen", respond)
+    entry = c.entry_for("Pastinaca sativa", PAGE)
+    c.save({"Pastinaca sativa": entry}, done=True, digest="test-model")
+    stored, review = files
+    saved = json.loads(stored.read_text())
+    decisions = json.loads(review.read_text())
+
+    expected = "review" if cut_off or verdict == "unsure" else "auto" if verdict == "hazard" else "skip"
+    assert entry["status"] == expected
+    assert entry["issues"] == ([c.CUT_OFF] if cut_off else [])
+    assert saved["species"]["Pastinaca sativa"] == entry
+    assert ("Pastinaca sativa" in decisions) == (expected == "review")
+    assert c.listed(saved, decisions) == ({"Pastinaca sativa": HAZARD["line"]} if expected == "auto" else {})
+    assert len(sent) == 1
+    body, timeout = sent[0]
+    assert body["messages"][-1]["content"] == f"Plant: Pastinaca sativa\n\nArticle sentences:\n{c.excerpt(ARTICLE)}"
+    assert body["options"]["num_ctx"] == c.NUM_CTX and timeout == 900
 
 
 def test_chat_sends_the_contact_schema_with_thinking_off(monkeypatch):
@@ -284,6 +370,15 @@ def test_recheck_reapplies_checks_without_the_model_and_keeps_the_quote_result(m
         "A a": {"article": "A", **HAZARD, "line": "Its toxic sap burns skin.", "issues": [], "status": "auto"},
         "B b": {"article": "B", **HAZARD, "issues": [c.QUOTE_MISSING], "status": "review"},
         "C c": {"article": None, "verdict": "no", "issues": [], "status": "skip", "reason": "no article"},
+        "D d": {
+            "article": "D",
+            "verdict": "no",
+            "kind": None,
+            "evidence": "",
+            "line": "",
+            "issues": [c.CUT_OFF],
+            "status": "skip",
+        },
     }
     stored.write_text(json.dumps({"done": True, "digest": "48eb98ec778c", "species": species}))
 
@@ -292,7 +387,8 @@ def test_recheck_reapplies_checks_without_the_model_and_keeps_the_quote_result(m
     saved = json.loads(stored.read_text())["species"]
     assert (saved["A a"]["status"], saved["A a"]["issues"]) == ("review", ["line scary word"])
     assert (saved["B b"]["status"], saved["B b"]["issues"]) == ("review", [c.QUOTE_MISSING])
-    assert set(json.loads(review.read_text())) == {"A a", "B b"}
+    assert (saved["D d"]["status"], saved["D d"]["issues"]) == ("review", [c.CUT_OFF])
+    assert set(json.loads(review.read_text())) == {"A a", "B b", "D d"}
 
     stored.write_text(json.dumps({"done": False, "digest": "48eb98ec778c", "species": species}))
     with pytest.raises(ValueError, match="unfinished checkpoint"):

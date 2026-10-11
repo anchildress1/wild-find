@@ -1,0 +1,17 @@
+
+dev.anchildress1.wildfind.ui.AccessibilityTest:
+Error in hazardWarningAndDismissalAreReachableAtDoubleFontSizeOnAShortScreen(dev.anchildress1.wildfind.ui.AccessibilityTest):
+java.lang.AssertionError: Assert failed: The component with Text + InputText + EditableText contains 'Step back and look somewhere else.' (ignoreCase: false) is not displayed!
+	at androidx.compose.ui.test.AssertionsKt.assertIsDisplayed(Assertions.kt:34)
+	at dev.anchildress1.wildfind.ui.AccessibilityTest.hazardWarningAndDismissalAreReachableAtDoubleFontSizeOnAShortScreen(AccessibilityTest.kt:195)
+
+
+Time: 1.435
+There was 1 failure:
+1) hazardWarningAndDismissalAreReachableAtDoubleFontSizeOnAShortScreen(dev.anchildress1.wildfind.ui.AccessibilityTest)
+java.lang.AssertionError: Assert failed: The component with Text + InputText + EditableText contains 'Step back and look somewhere else.' (ignoreCase: false) is not displayed!
+	at androidx.compose.ui.test.AssertionsKt.assertIsDisplayed(Assertions.kt:34)
+	at dev.anchildress1.wildfind.ui.AccessibilityTest.hazardWarningAndDismissalAreReachableAtDoubleFontSizeOnAShortScreen(AccessibilityTest.kt:195)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1

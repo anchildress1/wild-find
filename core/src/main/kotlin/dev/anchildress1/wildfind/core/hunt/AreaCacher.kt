@@ -24,7 +24,8 @@ class AreaCacher(val source: LocalListSource) {
     ): Int {
         var done = 0
         for (month in 1..MONTHS) {
-            if (source.load(tableVersion, region, locale, month) == LocalListResult.NeedsSignal) return done
+            val loaded = source.load(tableVersion, region, locale, month, requireCached = true)
+            if (loaded == LocalListResult.NeedsSignal) return done
             progress(++done)
             if (month < MONTHS) pause()
         }

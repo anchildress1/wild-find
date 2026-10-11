@@ -27,20 +27,28 @@ sealed interface LocalListResult {
  * @param species the eligibility rule
  * @param pull runs one query; null when iNat failed or rate-limited
  * @param cached the sightings cached under exactly this key, or null
- * @param save caches a fresh pull under its key
+ * @param save caches a fresh pull under its key; true only after a successful durable write
  */
 class LocalListSource(
     private val species: LocalSpecies,
     private val pull: (SpeciesCountsQuery) -> List<Sighting>?,
     private val cached: (CacheKey) -> List<Sighting>?,
-    private val save: (CacheKey, List<Sighting>) -> Unit,
+    private val save: (CacheKey, List<Sighting>) -> Boolean,
 ) {
-    /** The local list for [region] in [month], common names in [locale], against table [tableVersion]. */
-    fun load(tableVersion: String, region: RegionKey, locale: String, month: Int): LocalListResult {
+    /** Loads [region]'s list for [month]; [requireCached] accepts only sightings available offline. */
+    fun load(
+        tableVersion: String,
+        region: RegionKey,
+        locale: String,
+        month: Int,
+        requireCached: Boolean = false,
+    ): LocalListResult {
         fun at(radiusKm: Int): LocalList? {
             val key = CacheKey(tableVersion, region, locale, month, radiusKm)
-            val fresh = pull(SpeciesCountsQuery(region, month, locale, radiusKm))?.also { save(key, it) }
-            return (fresh ?: cached(key))?.let(species::of)
+            val fresh = pull(SpeciesCountsQuery(region, month, locale, radiusKm))
+            val saved = fresh?.let { save(key, it) } == true
+            val sightings = if (fresh != null && (!requireCached || saved)) fresh else cached(key)
+            return sightings?.let(species::of)
         }
         val near = at(CacheKey.RADIUS_KM)
         val wide = if (near?.needsWiden == true) at(CacheKey.WIDE_RADIUS_KM) else null

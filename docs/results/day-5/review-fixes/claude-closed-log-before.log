@@ -1,0 +1,39 @@
+
+dev.anchildress1.wildfind.camera.CaptureVerifierTest:
+Error in closedHarnessLogsCannotStrandCaptureOrPublishUnloggedFrames(dev.anchildress1.wildfind.camera.CaptureVerifierTest):
+java.lang.AssertionError: a log failure escaped the capture adapter expected:<null> but was:<java.io.IOException: Stream closed>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at dev.anchildress1.wildfind.camera.CaptureVerifierTest$closedHarnessLogsCannotStrandCaptureOrPublishUnloggedFrames$1.invokeSuspend(CaptureVerifierTest.kt:364)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(dex-id-e2e036f1e56f76a78c34ead2573f6812b1359d6d:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(dex-id-e2e036f1e56f76a78c34ead2573f6812b1359d6d:1)
+	at dev.anchildress1.wildfind.camera.CaptureVerifierTest.closedHarnessLogsCannotStrandCaptureOrPublishUnloggedFrames(CaptureVerifierTest.kt:354)
+
+
+Time: 0.546
+There was 1 failure:
+1) closedHarnessLogsCannotStrandCaptureOrPublishUnloggedFrames(dev.anchildress1.wildfind.camera.CaptureVerifierTest)
+java.lang.AssertionError: a log failure escaped the capture adapter expected:<null> but was:<java.io.IOException: Stream closed>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at dev.anchildress1.wildfind.camera.CaptureVerifierTest$closedHarnessLogsCannotStrandCaptureOrPublishUnloggedFrames$1.invokeSuspend(CaptureVerifierTest.kt:364)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(dex-id-e2e036f1e56f76a78c34ead2573f6812b1359d6d:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(dex-id-e2e036f1e56f76a78c34ead2573f6812b1359d6d:1)
+	at dev.anchildress1.wildfind.camera.CaptureVerifierTest.closedHarnessLogsCannotStrandCaptureOrPublishUnloggedFrames(CaptureVerifierTest.kt:354)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1

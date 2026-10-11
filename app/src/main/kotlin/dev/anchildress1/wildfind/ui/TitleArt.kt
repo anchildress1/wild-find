@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import dev.anchildress1.wildfind.R
 
@@ -18,7 +19,12 @@ import dev.anchildress1.wildfind.R
 @Composable
 fun TitleArt(modifier: Modifier = Modifier) {
     val name = stringResource(R.string.app_name)
-    Box(modifier.aspectRatio(TITLE_ASPECT).semantics { contentDescription = name }) {
+    Box(
+        modifier.aspectRatio(TITLE_ASPECT).semantics {
+            contentDescription = name
+            heading()
+        },
+    ) {
         assetImage("title.webp")?.let { Image(it, contentDescription = null, Modifier.fillMaxSize()) }
     }
 }

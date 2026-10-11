@@ -1,0 +1,52 @@
+
+dev.anchildress1.wildfind.camera.CaptureVerifierTest:
+Error in cancellationWaitsForAnAlreadyDeliveringFrame(dev.anchildress1.wildfind.camera.CaptureVerifierTest):
+java.lang.AssertionError: cancellation returned while its callback was still running
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertFalse(Assert.java:65)
+	at dev.anchildress1.wildfind.camera.CaptureVerifierTest.cancellationWaitsForAnAlreadyDeliveringFrame(CaptureVerifierTest.kt:294)
+.
+Error in harnessRefusalsAndFailuresLeaveCaptureAvailableForRetry(dev.anchildress1.wildfind.camera.CaptureVerifierTest):
+java.lang.AssertionError: a refused capture disabled the harness
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertFalse(Assert.java:65)
+	at dev.anchildress1.wildfind.camera.CaptureVerifierTest$harnessRefusalsAndFailuresLeaveCaptureAvailableForRetry$1.invokeSuspend(CaptureVerifierTest.kt:334)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(dex-id-e2e036f1e56f76a78c34ead2573f6812b1359d6d:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(dex-id-e2e036f1e56f76a78c34ead2573f6812b1359d6d:1)
+	at dev.anchildress1.wildfind.camera.CaptureVerifierTest.harnessRefusalsAndFailuresLeaveCaptureAvailableForRetry(CaptureVerifierTest.kt:327)
+
+
+Time: 0.637
+There were 2 failures:
+1) cancellationWaitsForAnAlreadyDeliveringFrame(dev.anchildress1.wildfind.camera.CaptureVerifierTest)
+java.lang.AssertionError: cancellation returned while its callback was still running
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertFalse(Assert.java:65)
+	at dev.anchildress1.wildfind.camera.CaptureVerifierTest.cancellationWaitsForAnAlreadyDeliveringFrame(CaptureVerifierTest.kt:294)
+2) harnessRefusalsAndFailuresLeaveCaptureAvailableForRetry(dev.anchildress1.wildfind.camera.CaptureVerifierTest)
+java.lang.AssertionError: a refused capture disabled the harness
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertFalse(Assert.java:65)
+	at dev.anchildress1.wildfind.camera.CaptureVerifierTest$harnessRefusalsAndFailuresLeaveCaptureAvailableForRetry$1.invokeSuspend(CaptureVerifierTest.kt:334)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(dex-id-e2e036f1e56f76a78c34ead2573f6812b1359d6d:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(dex-id-e2e036f1e56f76a78c34ead2573f6812b1359d6d:1)
+	at dev.anchildress1.wildfind.camera.CaptureVerifierTest.harnessRefusalsAndFailuresLeaveCaptureAvailableForRetry(CaptureVerifierTest.kt:327)
+
+FAILURES!!!
+Tests run: 3,  Failures: 2

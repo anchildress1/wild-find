@@ -15,6 +15,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.TextAlign
@@ -40,7 +41,7 @@ fun CompleteScreen(stops: List<Stop>, onAgain: () -> Unit, onHome: () -> Unit) {
     ) {
         Text(
             stringResource(R.string.complete_title),
-            Modifier.fillMaxWidth(),
+            Modifier.fillMaxWidth().semantics { heading() },
             style = MaterialTheme.typography.displayLarge,
             textAlign = TextAlign.Center,
         )

@@ -1,0 +1,60 @@
+package dev.anchildress1.wildfind.ui
+
+import android.util.Log
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.test.junit4.v2.createComposeRule
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.dp
+import dev.anchildress1.wildfind.core.game.CameraState
+import dev.anchildress1.wildfind.core.hunt.Hint
+import dev.anchildress1.wildfind.ui.theme.WildFindTheme
+import org.junit.Assert.assertTrue
+import org.junit.Rule
+import org.junit.Test
+
+/** Temporary diagnostic of camera panel geometry across a capture state change. */
+class CameraPanelGeometryProbeTest {
+    @get:Rule val compose = createComposeRule()
+
+    @Test
+    fun logCameraPanelGeometryAcrossChecking() {
+        val camera = mutableStateOf(CameraState(ready = true))
+        val width = mutableStateOf(320)
+        val fontScale = mutableStateOf(2f)
+        var height = 0
+        compose.setContent {
+            WildFindTheme {
+                val density = LocalDensity.current
+                CompositionLocalProvider(LocalDensity provides Density(density.density, fontScale.value)) {
+                    Box(Modifier.size(width.value.dp, 600.dp)) {
+                        CameraPanels(
+                            CameraTarget(1, "Plant", null, 1, 3, hints = listOf(Hint("Look at the leaves."))),
+                            camera.value, true, false, {}, {}, {}, {},
+                            Modifier.onSizeChanged { height = it.height },
+                        )
+                    }
+                }
+            }
+        }
+        listOf(320 to 2f, 360 to 2f, 411 to 2f, 320 to 1f, 411 to 1f).forEach { (w, scale) ->
+            compose.runOnIdle {
+                width.value = w
+                fontScale.value = scale
+                camera.value = CameraState(ready = true)
+            }
+            compose.waitForIdle()
+            val before = compose.runOnIdle { height }
+            compose.runOnIdle { camera.value = CameraState(ready = true, checking = true) }
+            compose.waitForIdle()
+            val after = compose.runOnIdle { height }
+            assertTrue(before > 0 && after > 0)
+            Log.i("CameraPanelProbe", "width=$w fontScale=$scale capturePx=$before checkingPx=$after delta=${after - before}")
+        }
+    }
+}

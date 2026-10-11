@@ -50,6 +50,7 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
     private var models: Models? = null
     private val retry = RetryWindow(SystemClock::elapsedRealtime)
     private var loading: Job? = null
+    private val captureRun = CaptureRun(viewModelScope, ::dispatch)
     private val areaRun = AreaRun()
 
     /** Screen state. */
@@ -104,7 +105,10 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
 
             is Command.UseVerifier -> useVerifier(command.hunt)
 
-            Command.CancelCapture -> verifier?.cancel()
+            Command.CancelCapture -> {
+                captureRun.cancel()
+                verifier?.cancel()
+            }
 
             is Command.Capture -> capture(command)
 
@@ -148,13 +152,7 @@ class GameViewModel(private val graph: Graph) : ViewModel() {
     private fun capture(command: Command.Capture) {
         val models = checkNotNull(models)
         val goal = command.camera.row?.let { command.hunt.goal(models.table, models.genus, it) } ?: models.tutorial
-        val started = verifier?.capture(goal) { frame ->
-            viewModelScope.launch {
-                dispatch(Outcome.Frame(command.camera, command.session, frame.result, frame.verdict))
-            }
-        } ?: false
-        // Frames post to the main thread, so they arrive after this.
-        if (started) dispatch(Outcome.CaptureStarted(command.session))
+        verifier?.let { captureRun.start(it, goal, command.camera, command.session) }
     }
 
     // One pull at a time: a newer pick or retry replaces the older one, whichever would have finished last.

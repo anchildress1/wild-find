@@ -172,4 +172,10 @@
     <string name="credits_data">Data: iNaturalist · Wikipedia · USDA PLANTS · GBIF · Natural Earth</string>
     <string name="font_credits">Fredoka and Atkinson Hyperlegible fonts, SIL Open Font License 1.1</string>
     <string name="version">Wild Find %s · MIT license</string>
+    <string name="focus_circle">Focus circle</string>
+    <string name="zoom_in">Zoom in</string>
+    <string name="zoom_out">Zoom out</string>
+    <string name="camera_control_failed">Camera adjustment failed. Try again.</string>
+    <string name="capture_failed">Camera did not finish checking. Try again.</string>
+    <string name="camera_unavailable">Camera unavailable. Go back and reopen it.</string>
 </resources>

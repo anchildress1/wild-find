@@ -1,0 +1,205 @@
+ktlint --log-level=error
+/Users/anchildress1/.sdkman/candidates/java/25.0.1-tem/bin/java --sun-misc-unsafe-memory-access=allow -jar "/opt/homebrew/Cellar/detekt/1.23.8/libexec/detekt-cli-1.23.8-all.jar" --build-upon-default-config --config detekt.yml --input core/src,app/src
+JAVA_HOME=/Users/anchildress1/.sdkman/candidates/java/25.0.1-tem ./gradlew --console=plain --warning-mode=fail :app:lintDebug
+Reusing configuration cache.
+> Task :app:preBuild UP-TO-DATE
+> Task :core:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :core:processResources UP-TO-DATE
+> Task :app:preDebugAndroidTestBuild SKIPPED
+> Task :app:preDebugUnitTestBuild UP-TO-DATE
+> Task :app:extractProguardFiles UP-TO-DATE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :core:compileKotlin UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :core:compileJava NO-SOURCE
+> Task :core:classes UP-TO-DATE
+> Task :app:extractDeepLinksDebug FROM-CACHE
+> Task :app:createDebugCompatibleScreenManifests
+> Task :core:jar UP-TO-DATE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:processDebugNavigationResources FROM-CACHE
+> Task :app:compileDebugNavigationResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:generateDebugRFile UP-TO-DATE
+> Task :app:processDebugMainManifest FROM-CACHE
+> Task :app:processDebugManifest FROM-CACHE
+> Task :app:processDebugManifestForPackage FROM-CACHE
+> Task :app:processDebugResources FROM-CACHE
+> Task :app:compileDebugKotlin
+> Task :app:compileDebugJavaWithJavac NO-SOURCE
+> Task :app:generateDebugLintReportModel
+> Task :app:bundleDebugClassesToCompileJar
+> Task :app:generateDebugUnitTestLintModel
+> Task :app:generateDebugAndroidTestLintModel
+> Task :app:lintAnalyzeDebugUnitTest
+> Task :app:lintAnalyzeDebugAndroidTest
+> Task :app:lintAnalyzeDebug
+> Task :app:lintReportDebug
+> Task :app:lintDebug
+
+BUILD SUCCESSFUL in 5s
+30 actionable tasks: 11 executed, 6 from cache, 13 up-to-date
+Configuration cache entry reused.
+uv --project pipeline run ruff check pipeline
+All checks passed!
+uv --project pipeline run ruff format --check pipeline
+41 files already formatted
+actionlint
+uv --project pipeline run pytest pipeline/tests
+============================= test session starts ==============================
+platform darwin -- Python 3.13.14, pytest-9.1.1, pluggy-1.6.0
+rootdir: /Users/anchildress1/.codex/worktrees/review-fixes/wild-find/pipeline
+configfile: pyproject.toml
+plugins: anyio-4.15.1
+collected 258 items
+
+pipeline/tests/test_assets.py .......................................... [ 16%]
+.                                                                        [ 16%]
+pipeline/tests/test_contact_hazards.py ................................. [ 29%]
+............                                                             [ 34%]
+pipeline/tests/test_crop_reference.py ....                               [ 35%]
+pipeline/tests/test_descriptions.py ...                                  [ 36%]
+pipeline/tests/test_gate_summary.py ....................                 [ 44%]
+pipeline/tests/test_gbif.py .....                                        [ 46%]
+pipeline/tests/test_hint_rank.py .......                                 [ 49%]
+pipeline/tests/test_hint_traits.py ............                          [ 53%]
+pipeline/tests/test_hints.py ......................                      [ 62%]
+pipeline/tests/test_label_vectors.py ...............                     [ 68%]
+pipeline/tests/test_places.py ....                                       [ 69%]
+pipeline/tests/test_plant_types.py .............                         [ 74%]
+pipeline/tests/test_reference.py ..................                      [ 81%]
+pipeline/tests/test_sprites.py ............                              [ 86%]
+pipeline/tests/test_synonyms.py .........                                [ 89%]
+pipeline/tests/test_toxicity.py .................                        [ 96%]
+pipeline/tests/test_world_map.py .........                               [100%]
+
+============================= 258 passed in 0.83s ==============================
+JAVA_HOME=/Users/anchildress1/.sdkman/candidates/java/25.0.1-tem ./gradlew --console=plain --warning-mode=fail :core:test :core:koverVerify
+Reusing configuration cache.
+> Task :core:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:koverFindJar UP-TO-DATE
+> Task :core:processTestResources UP-TO-DATE
+> Task :core:processResources UP-TO-DATE
+> Task :core:compileKotlin UP-TO-DATE
+> Task :core:compileJava NO-SOURCE
+> Task :core:classes UP-TO-DATE
+> Task :core:jar UP-TO-DATE
+> Task :core:compileTestKotlin
+> Task :core:compileTestJava NO-SOURCE
+> Task :core:testClasses UP-TO-DATE
+> Task :core:test
+> Task :core:koverGenerateArtifactJvm
+> Task :core:koverGenerateArtifact UP-TO-DATE
+> Task :core:koverCachedVerify
+> Task :core:koverVerify
+
+BUILD SUCCESSFUL in 2s
+11 actionable tasks: 5 executed, 6 up-to-date
+Configuration cache entry reused.
+JAVA_HOME=/Users/anchildress1/.sdkman/candidates/java/25.0.1-tem ./gradlew --console=plain --warning-mode=fail :app:assembleDebug :app:assembleDebugAndroidTest
+Calculating task graph as configuration cache cannot be reused because Gradle property 'isolatedE2e' has changed.
+> Task :core:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :app:preBuild UP-TO-DATE
+> Task :app:generateDebugAndroidTestAssets UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :core:processResources UP-TO-DATE
+> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:generateDebugGlobalSynthetics UP-TO-DATE
+> Task :app:desugarDebugFileDependencies UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:mergeDebugJniLibFolders UP-TO-DATE
+> Task :app:validateSigningDebug UP-TO-DATE
+> Task :app:preDebugAndroidTestBuild SKIPPED
+> Task :app:writeDebugAppMetadata UP-TO-DATE
+> Task :core:compileKotlin UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :app:processDebugAndroidTestNavigationResources UP-TO-DATE
+> Task :app:javaPreCompileDebugAndroidTest UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:generateDebugAndroidTestResources UP-TO-DATE
+> Task :app:generateDebugAndroidTestGlobalSynthetics UP-TO-DATE
+> Task :app:writeDebugSigningConfigVersions UP-TO-DATE
+> Task :app:mapDebugAndroidTestSourceSetPaths UP-TO-DATE
+> Task :app:compileDebugAndroidTestNavigationResources UP-TO-DATE
+> Task :app:desugarDebugAndroidTestFileDependencies UP-TO-DATE
+> Task :core:compileJava NO-SOURCE
+> Task :app:mergeDebugAndroidTestJniLibFolders UP-TO-DATE
+> Task :app:validateSigningDebugAndroidTest UP-TO-DATE
+> Task :app:packageDebugAndroidTestResources UP-TO-DATE
+> Task :core:classes UP-TO-DATE
+> Task :app:parseDebugAndroidTestLocalResources UP-TO-DATE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :core:jar UP-TO-DATE
+> Task :app:processDebugNavigationResources UP-TO-DATE
+> Task :app:writeDebugAndroidTestSigningConfigVersions UP-TO-DATE
+> Task :app:generateDebugAndroidTestRFile UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:compileDebugNavigationResources UP-TO-DATE
+> Task :app:generateDebugRFile UP-TO-DATE
+> Task :app:checkBundledAssets
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :app:mergeDebugAndroidTestResources UP-TO-DATE
+> Task :app:checkDebugAndroidTestAarMetadata UP-TO-DATE
+> Task :app:compileDebugKotlin UP-TO-DATE
+> Task :app:compileDebugJavaWithJavac NO-SOURCE
+> Task :app:processDebugJavaRes UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:bundleDebugClassesToCompileJar UP-TO-DATE
+> Task :app:mergeDebugAndroidTestAssets UP-TO-DATE
+> Task :app:mergeDebugAssets UP-TO-DATE
+> Task :app:compressDebugAndroidTestAssets UP-TO-DATE
+> Task :app:compressDebugAssets UP-TO-DATE
+> Task :app:mergeDebugAndroidTestManifest
+> Task :app:processDebugAndroidTestManifest
+> Task :app:checkDebugDuplicateClasses UP-TO-DATE
+> Task :app:mergeLibDexDebug UP-TO-DATE
+> Task :app:checkDebugAndroidTestDuplicateClasses UP-TO-DATE
+> Task :app:mergeLibDexDebugAndroidTest UP-TO-DATE
+> Task :app:mergeDebugNativeLibs UP-TO-DATE
+> Task :app:stripDebugDebugSymbols UP-TO-DATE
+> Task :app:mergeDebugJavaResource UP-TO-DATE
+> Task :app:mergeDebugAndroidTestNativeLibs NO-SOURCE
+> Task :app:stripDebugAndroidTestDebugSymbols NO-SOURCE
+> Task :app:mergeExtDexDebug UP-TO-DATE
+> Task :app:mergeExtDexDebugAndroidTest UP-TO-DATE
+> Task :app:processDebugAndroidTestResources FROM-CACHE
+> Task :app:compileDebugAndroidTestKotlin UP-TO-DATE
+> Task :app:processDebugAndroidTestJavaRes UP-TO-DATE
+> Task :app:compileDebugAndroidTestJavaWithJavac NO-SOURCE
+> Task :app:dexBuilderDebugAndroidTest UP-TO-DATE
+> Task :app:mergeProjectDexDebugAndroidTest UP-TO-DATE
+> Task :app:mergeDebugAndroidTestJavaResource UP-TO-DATE
+> Task :app:packageDebugAndroidTest
+> Task :app:assembleDebugAndroidTest
+> Task :app:createDebugAndroidTestApkListingFileRedirect
+> Task :app:dexBuilderDebug
+> Task :app:mergeProjectDexDebug
+> Task :app:packageDebug
+> Task :app:assembleDebug
+> Task :app:createDebugApkListingFileRedirect
+
+BUILD SUCCESSFUL in 2s
+71 actionable tasks: 9 executed, 1 from cache, 61 up-to-date
+Configuration cache entry stored.
+gitleaks git --redact
+
+    ○
+    │╲
+    │ ○
+    ○ ░
+    ░    gitleaks
+
+10:17AM INF 84 commits scanned.
+10:17AM INF scanned ~23785958 bytes (23.79 MB) in 1.72s
+10:17AM INF no leaks found

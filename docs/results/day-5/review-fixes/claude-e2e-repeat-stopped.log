@@ -1,0 +1,161 @@
+
+dev.anchildress1.wildfind.e2e.CameraTest:..........
+dev.anchildress1.wildfind.e2e.GrownUpsTest:
+Error in cacheMyAreaSavesEveryMonthOfTheHuntingAreaForPlayWithoutSignal(dev.anchildress1.wildfind.e2e.GrownUpsTest):
+java.lang.AssertionError: after 240000ms: nothing on screen matched Text + InputText + EditableText contains 'All 12 months are saved for ' (ignoreCase: false) as substring
+	at dev.anchildress1.wildfind.e2e.E2eTest.waitUntil(E2eTest.kt:118)
+	at dev.anchildress1.wildfind.e2e.E2eTest.waitFor(E2eTest.kt:110)
+	at dev.anchildress1.wildfind.e2e.E2eTest.waitFor$default(E2eTest.kt:109)
+	at dev.anchildress1.wildfind.e2e.GrownUpsTest.cacheMyAreaSavesEveryMonthOfTheHuntingAreaForPlayWithoutSignal(GrownUpsTest.kt:51)
+
+Error in grownUpsListsNoAccountPhotosStayLocalRoughAreaAndNothingDownloads(dev.anchildress1.wildfind.e2e.GrownUpsTest):
+java.lang.IllegalStateException: iNat didn't answer and nothing is cached: the phone needs signal for this test
+	at dev.anchildress1.wildfind.e2e.E2eTest.awaitHunt$lambda$0(E2eTest.kt:210)
+	at dev.anchildress1.wildfind.e2e.E2eTest$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+	at dev.anchildress1.wildfind.e2e.E2eTest.waitUntil(E2eTest.kt:117)
+	at dev.anchildress1.wildfind.e2e.E2eTest.awaitHunt(E2eTest.kt:209)
+	at dev.anchildress1.wildfind.e2e.E2eTest.startFirstHunt(E2eTest.kt:204)
+	at dev.anchildress1.wildfind.e2e.E2eTest.startHuntList(E2eTest.kt:220)
+	at dev.anchildress1.wildfind.e2e.GrownUpsTest.openGrownUps(GrownUpsTest.kt:19)
+	at dev.anchildress1.wildfind.e2e.GrownUpsTest.grownUpsListsNoAccountPhotosStayLocalRoughAreaAndNothingDownloads(GrownUpsTest.kt:26)
+
+Error in thePhonesBackKeyOnARepeatedIntroReturnsToGrownUps(dev.anchildress1.wildfind.e2e.GrownUpsTest):
+java.lang.IllegalStateException: iNat didn't answer and nothing is cached: the phone needs signal for this test
+	at dev.anchildress1.wildfind.e2e.E2eTest.awaitHunt$lambda$0(E2eTest.kt:210)
+	at dev.anchildress1.wildfind.e2e.E2eTest$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+	at dev.anchildress1.wildfind.e2e.E2eTest.waitUntil(E2eTest.kt:117)
+	at dev.anchildress1.wildfind.e2e.E2eTest.awaitHunt(E2eTest.kt:209)
+	at dev.anchildress1.wildfind.e2e.E2eTest.startFirstHunt(E2eTest.kt:204)
+	at dev.anchildress1.wildfind.e2e.E2eTest.startHuntList(E2eTest.kt:220)
+	at dev.anchildress1.wildfind.e2e.GrownUpsTest.openGrownUps(GrownUpsTest.kt:19)
+	at dev.anchildress1.wildfind.e2e.GrownUpsTest.thePhonesBackKeyOnARepeatedIntroReturnsToGrownUps(GrownUpsTest.kt:85)
+
+Error in repeatIntroPlaysTheOpenerThenTheGrassPracticeAndKeepsTheHunt(dev.anchildress1.wildfind.e2e.GrownUpsTest):
+java.lang.IllegalStateException: iNat didn't answer and nothing is cached: the phone needs signal for this test
+	at dev.anchildress1.wildfind.e2e.E2eTest.awaitHunt$lambda$0(E2eTest.kt:210)
+	at dev.anchildress1.wildfind.e2e.E2eTest$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+	at dev.anchildress1.wildfind.e2e.E2eTest.waitUntil(E2eTest.kt:117)
+	at dev.anchildress1.wildfind.e2e.E2eTest.awaitHunt(E2eTest.kt:209)
+	at dev.anchildress1.wildfind.e2e.E2eTest.startFirstHunt(E2eTest.kt:204)
+	at dev.anchildress1.wildfind.e2e.E2eTest.startHuntList(E2eTest.kt:220)
+	at dev.anchildress1.wildfind.e2e.GrownUpsTest.repeatIntroPlaysTheOpenerThenTheGrassPracticeAndKeepsTheHunt(GrownUpsTest.kt:68)
+
+Error in theGrassPracticeAlsoOffersGrownUps(dev.anchildress1.wildfind.e2e.GrownUpsTest):
+java.lang.IllegalStateException: iNat didn't answer and nothing is cached: the phone needs signal for this test
+	at dev.anchildress1.wildfind.e2e.E2eTest.awaitHunt$lambda$0(E2eTest.kt:210)
+	at dev.anchildress1.wildfind.e2e.E2eTest$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+	at dev.anchildress1.wildfind.e2e.E2eTest.waitUntil(E2eTest.kt:117)
+	at dev.anchildress1.wildfind.e2e.E2eTest.awaitHunt(E2eTest.kt:209)
+	at dev.anchildress1.wildfind.e2e.E2eTest.startFirstHunt(E2eTest.kt:204)
+	at dev.anchildress1.wildfind.e2e.GrownUpsTest.theGrassPracticeAlsoOffersGrownUps(GrownUpsTest.kt:110)
+
+Error in huntingAreaOpensTheMapAndBackReturnsToGrownUps(dev.anchildress1.wildfind.e2e.GrownUpsTest):
+java.lang.IllegalStateException: iNat didn't answer and nothing is cached: the phone needs signal for this test
+	at dev.anchildress1.wildfind.e2e.E2eTest.awaitHunt$lambda$0(E2eTest.kt:210)
+	at dev.anchildress1.wildfind.e2e.E2eTest$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+	at dev.anchildress1.wildfind.e2e.E2eTest.waitUntil(E2eTest.kt:117)
+	at dev.anchildress1.wildfind.e2e.E2eTest.awaitHunt(E2eTest.kt:209)
+	at dev.anchildress1.wildfind.e2e.E2eTest.startFirstHunt(E2eTest.kt:204)
+	at dev.anchildress1.wildfind.e2e.E2eTest.startHuntList(E2eTest.kt:220)
+	at dev.anchildress1.wildfind.e2e.GrownUpsTest.openGrownUps(GrownUpsTest.kt:19)
+	at dev.anchildress1.wildfind.e2e.GrownUpsTest.huntingAreaOpensTheMapAndBackReturnsToGrownUps(GrownUpsTest.kt:94)
+
+Error in grownUpsShowsTheHuntingAreaInWholeDegrees(dev.anchildress1.wildfind.e2e.GrownUpsTest):
+java.lang.IllegalStateException: iNat didn't answer and nothing is cached: the phone needs signal for this test
+	at dev.anchildress1.wildfind.e2e.E2eTest.awaitHunt$lambda$0(E2eTest.kt:210)
+	at dev.anchildress1.wildfind.e2e.E2eTest$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+	at dev.anchildress1.wildfind.e2e.E2eTest.waitUntil(E2eTest.kt:117)
+	at dev.anchildress1.wildfind.e2e.E2eTest.awaitHunt(E2eTest.kt:209)
+	at dev.anchildress1.wildfind.e2e.E2eTest.startFirstHunt(E2eTest.kt:204)
+	at dev.anchildress1.wildfind.e2e.E2eTest.startHuntList(E2eTest.kt:220)
+	at dev.anchildress1.wildfind.e2e.GrownUpsTest.openGrownUps(GrownUpsTest.kt:19)
+	at dev.anchildress1.wildfind.e2e.GrownUpsTest.grownUpsShowsTheHuntingAreaInWholeDegrees(GrownUpsTest.kt:61)
+
+Error in grownUpsDisclosesWhatINaturalistSeesAndTheAgeRule(dev.anchildress1.wildfind.e2e.GrownUpsTest):
+java.lang.IllegalStateException: iNat didn't answer and nothing is cached: the phone needs signal for this test
+	at dev.anchildress1.wildfind.e2e.E2eTest.awaitHunt$lambda$0(E2eTest.kt:210)
+	at dev.anchildress1.wildfind.e2e.E2eTest$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+	at dev.anchildress1.wildfind.e2e.E2eTest.waitUntil(E2eTest.kt:117)
+	at dev.anchildress1.wildfind.e2e.E2eTest.awaitHunt(E2eTest.kt:209)
+	at dev.anchildress1.wildfind.e2e.E2eTest.startFirstHunt(E2eTest.kt:204)
+	at dev.anchildress1.wildfind.e2e.E2eTest.startHuntList(E2eTest.kt:220)
+	at dev.anchildress1.wildfind.e2e.GrownUpsTest.openGrownUps(GrownUpsTest.kt:19)
+	at dev.anchildress1.wildfind.e2e.GrownUpsTest.grownUpsDisclosesWhatINaturalistSeesAndTheAgeRule(GrownUpsTest.kt:34)
+
+Error in backFromGrownUpsReturnsToTheHuntList(dev.anchildress1.wildfind.e2e.GrownUpsTest):
+java.lang.IllegalStateException: iNat didn't answer and nothing is cached: the phone needs signal for this test
+	at dev.anchildress1.wildfind.e2e.E2eTest.awaitHunt$lambda$0(E2eTest.kt:210)
+	at dev.anchildress1.wildfind.e2e.E2eTest$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+	at dev.anchildress1.wildfind.e2e.E2eTest.waitUntil(E2eTest.kt:117)
+	at dev.anchildress1.wildfind.e2e.E2eTest.awaitHunt(E2eTest.kt:209)
+	at dev.anchildress1.wildfind.e2e.E2eTest.startFirstHunt(E2eTest.kt:204)
+	at dev.anchildress1.wildfind.e2e.E2eTest.startHuntList(E2eTest.kt:220)
+	at dev.anchildress1.wildfind.e2e.GrownUpsTest.openGrownUps(GrownUpsTest.kt:19)
+	at dev.anchildress1.wildfind.e2e.GrownUpsTest.backFromGrownUpsReturnsToTheHuntList(GrownUpsTest.kt:103)
+
+dev.anchildress1.wildfind.e2e.HintSheetTest:
+Error in hintAgainAfterKeepLookingOpensTheNextHintAndKeepsTheFirstInView(dev.anchildress1.wildfind.e2e.HintSheetTest):
+java.lang.IllegalStateException: iNat didn't answer and nothing is cached: the phone needs signal for this test
+	at dev.anchildress1.wildfind.e2e.E2eTest.awaitHunt$lambda$0(E2eTest.kt:210)
+	at dev.anchildress1.wildfind.e2e.E2eTest$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+	at dev.anchildress1.wildfind.e2e.E2eTest.waitUntil(E2eTest.kt:117)
+	at dev.anchildress1.wildfind.e2e.E2eTest.awaitHunt(E2eTest.kt:209)
+	at dev.anchildress1.wildfind.e2e.E2eTest.startFirstHunt(E2eTest.kt:204)
+	at dev.anchildress1.wildfind.e2e.E2eTest.startHuntList(E2eTest.kt:220)
+	at dev.anchildress1.wildfind.e2e.HintSheetTest.openFirstHint(HintSheetTest.kt:22)
+	at dev.anchildress1.wildfind.e2e.HintSheetTest.hintAgainAfterKeepLookingOpensTheNextHintAndKeepsTheFirstInView(HintSheetTest.kt:41)
+
+Error in theHintButtonOpensHintOneAndKeepLookingReturnsToTheCamera(dev.anchildress1.wildfind.e2e.HintSheetTest):
+java.lang.IllegalStateException: iNat didn't answer and nothing is cached: the phone needs signal for this test
+	at dev.anchildress1.wildfind.e2e.E2eTest.awaitHunt$lambda$0(E2eTest.kt:210)
+	at dev.anchildress1.wildfind.e2e.E2eTest$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+	at dev.anchildress1.wildfind.e2e.E2eTest.waitUntil(E2eTest.kt:117)
+	at dev.anchildress1.wildfind.e2e.E2eTest.awaitHunt(E2eTest.kt:209)
+	at dev.anchildress1.wildfind.e2e.E2eTest.startFirstHunt(E2eTest.kt:204)
+	at dev.anchildress1.wildfind.e2e.E2eTest.startHuntList(E2eTest.kt:220)
+	at dev.anchildress1.wildfind.e2e.HintSheetTest.openFirstHint(HintSheetTest.kt:22)
+	at dev.anchildress1.wildfind.e2e.HintSheetTest.theHintButtonOpensHintOneAndKeepLookingReturnsToTheCamera(HintSheetTest.kt:31)
+
+Error in theHintButtonLabelStaysOnOneLine(dev.anchildress1.wildfind.e2e.HintSheetTest):
+java.lang.IllegalStateException: iNat didn't answer and nothing is cached: the phone needs signal for this test
+	at dev.anchildress1.wildfind.e2e.E2eTest.awaitHunt$lambda$0(E2eTest.kt:210)
+	at dev.anchildress1.wildfind.e2e.E2eTest$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+	at dev.anchildress1.wildfind.e2e.E2eTest.waitUntil(E2eTest.kt:117)
+	at dev.anchildress1.wildfind.e2e.E2eTest.awaitHunt(E2eTest.kt:209)
+	at dev.anchildress1.wildfind.e2e.E2eTest.startFirstHunt(E2eTest.kt:204)
+	at dev.anchildress1.wildfind.e2e.E2eTest.startHuntList(E2eTest.kt:220)
+	at dev.anchildress1.wildfind.e2e.HintSheetTest.theHintButtonLabelStaysOnOneLine(HintSheetTest.kt:52)
+
+Error in nextHintStepsThroughEveryHintAndTheLastHasNoNextButton(dev.anchildress1.wildfind.e2e.HintSheetTest):
+java.lang.IllegalStateException: iNat didn't answer and nothing is cached: the phone needs signal for this test
+	at dev.anchildress1.wildfind.e2e.E2eTest.awaitHunt$lambda$0(E2eTest.kt:210)
+	at dev.anchildress1.wildfind.e2e.E2eTest$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+	at dev.anchildress1.wildfind.e2e.E2eTest.waitUntil(E2eTest.kt:117)
+	at dev.anchildress1.wildfind.e2e.E2eTest.awaitHunt(E2eTest.kt:209)
+	at dev.anchildress1.wildfind.e2e.E2eTest.startFirstHunt(E2eTest.kt:204)
+	at dev.anchildress1.wildfind.e2e.E2eTest.startHuntList(E2eTest.kt:220)
+	at dev.anchildress1.wildfind.e2e.HintSheetTest.openFirstHint(HintSheetTest.kt:22)
+	at dev.anchildress1.wildfind.e2e.HintSheetTest.nextHintStepsThroughEveryHintAndTheLastHasNoNextButton(HintSheetTest.kt:62)
+
+dev.anchildress1.wildfind.e2e.HuntStartTest:
+Error in skipPracticeGoesStraightToAHuntOfThreePlants(dev.anchildress1.wildfind.e2e.HuntStartTest):
+java.lang.IllegalStateException: iNat didn't answer and nothing is cached: the phone needs signal for this test
+	at dev.anchildress1.wildfind.e2e.E2eTest.awaitHunt$lambda$0(E2eTest.kt:210)
+	at dev.anchildress1.wildfind.e2e.E2eTest$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+	at dev.anchildress1.wildfind.e2e.E2eTest.waitUntil(E2eTest.kt:117)
+	at dev.anchildress1.wildfind.e2e.E2eTest.awaitHunt(E2eTest.kt:209)
+	at dev.anchildress1.wildfind.e2e.E2eTest.startFirstHunt(E2eTest.kt:204)
+	at dev.anchildress1.wildfind.e2e.E2eTest.startHuntList(E2eTest.kt:220)
+	at dev.anchildress1.wildfind.e2e.HuntStartTest.skipPracticeGoesStraightToAHuntOfThreePlants(HuntStartTest.kt:42)
+
+Error in theHuntShowsTheAreaTheMonthAndEveryStopNotFoundYet(dev.anchildress1.wildfind.e2e.HuntStartTest):
+java.lang.IllegalStateException: iNat didn't answer and nothing is cached: the phone needs signal for this test
+	at dev.anchildress1.wildfind.e2e.E2eTest.awaitHunt$lambda$0(E2eTest.kt:210)
+	at dev.anchildress1.wildfind.e2e.E2eTest$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+	at dev.anchildress1.wildfind.e2e.E2eTest.waitUntil(E2eTest.kt:117)
+	at dev.anchildress1.wildfind.e2e.E2eTest.awaitHunt(E2eTest.kt:209)
+	at dev.anchildress1.wildfind.e2e.E2eTest.startFirstHunt(E2eTest.kt:204)
+	at dev.anchildress1.wildfind.e2e.E2eTest.startHuntList(E2eTest.kt:220)
+	at dev.anchildress1.wildfind.e2e.HuntStartTest.theHuntShowsTheAreaTheMonthAndEveryStopNotFoundYet(HuntStartTest.kt:77)
+INSTRUMENTATION_RESULT: shortMsg=Process crashed.
+INSTRUMENTATION_CODE: 0

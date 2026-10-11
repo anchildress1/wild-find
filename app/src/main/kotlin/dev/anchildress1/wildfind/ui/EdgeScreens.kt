@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
@@ -52,7 +53,10 @@ fun LoadingScreen() {
         Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) { Briar(null, briarText(null)) }
         Text(
             stringResource(R.string.loading),
-            Modifier.fillMaxWidth().graphicsLayer { alpha = breath }.semantics { liveRegion = LiveRegionMode.Polite },
+            Modifier.fillMaxWidth().graphicsLayer { alpha = breath }.semantics {
+                liveRegion = LiveRegionMode.Polite
+                heading()
+            },
             style = MaterialTheme.typography.titleSmall,
             textAlign = TextAlign.Center,
         )
@@ -109,7 +113,7 @@ private fun TryAgainBriar() {
 private fun MessageCard(icon: ImageVector, title: String, detail: String?, modifier: Modifier = Modifier) {
     PaperCard(modifier) {
         Icon(icon, contentDescription = null, Modifier.size(32.dp), tint = Palette.Forest)
-        Text(title, style = MaterialTheme.typography.titleSmall, color = Palette.Ink)
+        Text(title, Modifier.semantics { heading() }, style = MaterialTheme.typography.titleSmall, color = Palette.Ink)
         detail?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = Palette.Ink2) }
     }
 }

@@ -27,20 +27,22 @@ import java.util.concurrent.Executor
 /**
  * Binds the back camera's preview and analysis to one [view]-sized viewport, so the models read exactly
  * what the kid sees and the ring sits on the scored reticle square (PRD Crops). Replaces any earlier binding; call
- * again with the new size after a resize or rotation, cancelling the [PendingBind] this returned.
+ * again when the view's aspect or rotation changes, cancelling the [PendingBind] this returned.
  *
  * @param view the viewfinder's size and the display's rotation
  * @param executor the analysis thread; [CaptureVerifier.analyze] runs on it
  * @param onSurface receives the preview's surface request
  * @param onBound receives the live camera and the use cases bound for it, on the main thread
  */
+// Keep lifecycle, frame geometry, ownership, and camera callbacks explicit at the platform boundary.
 @OptIn(ExperimentalCamera2Interop::class)
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "kotlin:S107")
 fun bindVerifyCamera(
     context: Context,
     owner: LifecycleOwner,
     view: ViewGeometry,
     verifier: CaptureVerifier,
+    generation: Long,
     executor: Executor,
     onSurface: (SurfaceRequest) -> Unit,
     onBound: (Camera, List<UseCase>) -> Unit,
@@ -49,7 +51,7 @@ fun bindVerifyCamera(
     val future = ProcessCameraProvider.getInstance(context)
     future.addListener({
         // A screen that left, or rebound at a new size, must not bind: unbindAll here would kill the newer binding.
-        if (pending.cancelled) return@addListener
+        if (pending.cancelled || !verifier.ownsCamera(generation)) return@addListener
         val fourByThree = ResolutionSelector.Builder()
             .setAspectRatioStrategy(AspectRatioStrategy.RATIO_4_3_FALLBACK_AUTO_STRATEGY)
             .build()
@@ -78,14 +80,19 @@ fun bindVerifyCamera(
             )
         // Capture results carry the autofocus reading; the verifier pairs them with frames by sensor timestamp.
         Camera2Interop.Extender(analysisBuilder).setSessionCaptureCallback(verifier.captureCallback)
-        val analysis = analysisBuilder.build().apply { setAnalyzer(executor, verifier::analyze) }
+        val analysis = analysisBuilder.build().apply { setAnalyzer(executor) { verifier.analyze(it, generation) } }
         val viewPort = ViewPort.Builder(Rational(view.width, view.height), view.rotation)
             .setScaleType(ViewPort.FILL_CENTER)
             .build()
         val group = UseCaseGroup.Builder().setViewPort(viewPort).addUseCase(preview).addUseCase(analysis).build()
-        val provider = future.get()
-        provider.unbindAll()
-        val camera = provider.bindToLifecycle(owner, CameraSelector.DEFAULT_BACK_CAMERA, group)
+        val camera = try {
+            val provider = future.get()
+            provider.unbindAll()
+            provider.bindToLifecycle(owner, CameraSelector.DEFAULT_BACK_CAMERA, group)
+        } catch (_: Exception) {
+            verifier.unavailable(generation, failure = true)
+            return@addListener
+        }
         verifier.activeArrayWidth = Camera2CameraInfo.from(camera.cameraInfo)
             .getCameraCharacteristic(CameraCharacteristics.SENSOR_INFO_ACTIVE_ARRAY_SIZE)?.width() ?: 0
         onBound(camera, group.useCases)

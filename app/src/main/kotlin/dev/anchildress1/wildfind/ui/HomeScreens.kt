@@ -18,6 +18,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.anchildress1.wildfind.R
@@ -40,7 +42,7 @@ fun StartScreen(area: String?, onStart: () -> Unit, onGrownUps: () -> Unit) {
             TitleArt(Modifier.fillMaxWidth(START_TITLE_WIDTH).align(Alignment.CenterHorizontally).rise(index = 0))
             Text(
                 stringResource(R.string.start_title),
-                Modifier.fillMaxWidth().rise(index = 1),
+                Modifier.fillMaxWidth().rise(index = 1).semantics { heading() },
                 style = MaterialTheme.typography.headlineMedium,
                 textAlign = TextAlign.Center,
             )
@@ -76,7 +78,7 @@ fun TutorialScreen(onTry: () -> Unit, onGrownUps: () -> Unit) {
     ) {
         Text(
             stringResource(R.string.tutorial_title),
-            Modifier.fillMaxWidth().rise(index = 0),
+            Modifier.fillMaxWidth().rise(index = 0).semantics { heading() },
             style = MaterialTheme.typography.displayMedium,
             textAlign = TextAlign.Center,
         )

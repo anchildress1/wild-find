@@ -1,0 +1,43 @@
+{
+  "scope": "current source snippets; not whole project",
+  "results": [
+    {
+      "path": "app/src/main/kotlin/dev/anchildress1/wildfind/camera/CaptureVerifier.kt",
+      "issueCount": 0
+    },
+    {
+      "path": "app/src/main/kotlin/dev/anchildress1/wildfind/store/GameStore.kt",
+      "issueCount": 0
+    },
+    {
+      "path": "core/src/main/kotlin/dev/anchildress1/wildfind/core/hunt/LocalListSource.kt",
+      "issueCount": 0
+    },
+    {
+      "path": "pipeline/src/wild_find_pipeline/contact_hazards.py",
+      "issueCount": 0
+    },
+    {
+      "path": "app/src/main/kotlin/dev/anchildress1/wildfind/camera/CameraAdjustmentRequests.kt",
+      "issueCount": 0
+    },
+    {
+      "path": "app/src/main/kotlin/dev/anchildress1/wildfind/game/CaptureRun.kt",
+      "issueCount": 0
+    },
+    {
+      "path": "app/src/main/kotlin/dev/anchildress1/wildfind/camera/Viewfinder.kt",
+      "issueCount": 0
+    },
+    {
+      "path": "app/src/main/kotlin/dev/anchildress1/wildfind/camera/VerifyCamera.kt",
+      "issueCount": 0,
+      "issues": [],
+      "resolution": "Final MCP reanalysis returned zero issues after function-scoped kotlin:S107 exception; platform inputs remain explicit."
+    },
+    {
+      "path": "app/src/main/kotlin/dev/anchildress1/wildfind/ui/CameraScreen.kt",
+      "issueCount": 0
+    }
+  ]
+}

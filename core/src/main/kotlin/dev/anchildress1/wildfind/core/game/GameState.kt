@@ -101,6 +101,7 @@ data class Stop(
  *
  * @property ready the models are loaded, so Capture works
  * @property checking a capture's frames are being verified
+ * @property failed the last capture ended without a usable camera result
  * @property matched matching frames so far in this capture, for the ring
  * @property cue the last capture's result; stays until the next one
  * @property hazardLine the warning hazard's own kid line under a [CaptureCue.HAZARD] cue, or null for the generic card
@@ -108,6 +109,7 @@ data class Stop(
 data class CameraState(
     val ready: Boolean = false,
     val checking: Boolean = false,
+    val failed: Boolean = false,
     val matched: Int = 0,
     val cue: CaptureCue? = null,
     val hazardLine: String? = null,

@@ -7,7 +7,6 @@ import android.net.Uri
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.core.Camera
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -17,29 +16,29 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -47,17 +46,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.disabled
+import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
-import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Observer
 import androidx.lifecycle.compose.LifecycleResumeEffect
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.anchildress1.wildfind.R
 import dev.anchildress1.wildfind.camera.CaptureVerifier
 import dev.anchildress1.wildfind.camera.Viewfinder
@@ -106,35 +106,45 @@ fun CameraScreen(
         }
         onPauseOrDispose {}
     }
+    // Feedback clears whichever panel shows, while the separately measured actions preserve the camera viewport.
+    var shownHeight by remember { mutableIntStateOf(0) }
+    var actionHeight by remember { mutableIntStateOf(0) }
+    val feedbackPadding = with(LocalDensity.current) { shownHeight.toDp() }
+    val viewportPadding = with(LocalDensity.current) { actionHeight.toDp() }
+    val streaming = verifier?.streaming?.collectAsStateWithLifecycle()?.value == true
+    val cameraFailed = verifier?.cameraFailed?.collectAsStateWithLifecycle()?.value == true
     Column(Modifier.fillMaxSize().background(Palette.Night).container(stopKey(target.row))) {
         TopBar(target, onBack)
-        Box(Modifier.weight(1f).fillMaxWidth()) {
+        BoxWithConstraints(Modifier.weight(1f).fillMaxWidth()) {
             when {
-                granted && verifier != null -> Live(verifier, executor, camera)
+                // A bind before the panel is measured would be thrown away at the padded size.
+                granted && verifier != null && actionHeight > 0 ->
+                    Live(verifier, executor, camera, Modifier.fillMaxSize().padding(bottom = viewportPadding))
+
                 denied -> CameraDenied(Modifier.align(Alignment.Center).padding(20.dp))
             }
-            Feedback(target, camera, onDismissHazard, Modifier.align(Alignment.BottomCenter))
-        }
-        AnimatedContent(
-            sheet && target.hintsShown > 0,
-            transitionSpec = { fadeIn(tween(Motion.QUICK)) togetherWith fadeOut(tween(Motion.QUICK)) },
-            label = "panel",
-        ) { open ->
-            if (open) {
-                HintPanel(target.hints, target.hintsShown, onNext = onHint, onKeepLooking = { sheet = false })
-            } else {
-                BottomPanel(
+            val panelLimit = maxHeight
+            val hazard = camera.cue == CaptureCue.HAZARD
+            if (!hazard) {
+                Feedback(
+                    target,
                     camera,
-                    enabled = granted && camera.ready && verifier != null,
-                    practice = target.number == 0,
-                    canSkip = target.canSkip,
-                    hasHint = target.hints.isNotEmpty(),
-                    onCapture,
-                    onSkip,
-                    onHint = {
-                        onHint()
-                        sheet = true
-                    },
+                    cameraFailed,
+                    onDismissHazard,
+                    Modifier.align(Alignment.BottomCenter).padding(bottom = feedbackPadding),
+                )
+            }
+            // At large text sizes the warning and its actions need one shared viewport, not competing fixed panels.
+            Column(
+                Modifier.align(Alignment.BottomCenter).heightIn(max = panelLimit)
+                    .then(if (hazard) Modifier.verticalScroll(rememberScrollState()) else Modifier),
+            ) {
+                if (hazard) Feedback(target, camera, cameraFailed, onDismissHazard, Modifier.rise())
+                CameraPanels(
+                    target, camera, granted && camera.ready && streaming, sheet,
+                    onCapture, onSkip, onHint, { sheet = it }, { actionHeight = it },
+                    Modifier.heightIn(max = panelLimit).testTag("camera_actions")
+                        .onSizeChanged { shownHeight = it.height },
                 )
             }
         }
@@ -152,7 +162,7 @@ private fun TopBar(target: CameraTarget, onBack: () -> Unit) {
             RoundIconButton(WildIcons.Back, stringResource(R.string.back_to_hunt), onBack, tint = Color.White)
             Text(
                 stringResource(R.string.camera_find, target.name),
-                Modifier.weight(1f).padding(start = 4.dp),
+                Modifier.weight(1f).padding(start = 4.dp).semantics { heading() },
                 style = MaterialTheme.typography.titleLarge,
                 color = Color.White,
             )
@@ -181,52 +191,57 @@ private fun TopBar(target: CameraTarget, onBack: () -> Unit) {
 }
 
 @Composable
-private fun Live(verifier: CaptureVerifier, executor: Executor, camera: CameraState) {
-    var live by remember { mutableStateOf<Camera?>(null) }
-    var zoom by remember { mutableFloatStateOf(1f) }
-    DisposableEffect(live) {
-        val state = live?.cameraInfo?.zoomState
-        val watch = Observer<androidx.camera.core.ZoomState> { zoom = it.zoomRatio }
-        state?.observeForever(watch)
-        onDispose { state?.removeObserver(watch) }
-    }
-    Box(Modifier.fillMaxSize()) {
-        Viewfinder(verifier, executor, Modifier.fillMaxSize(), onCamera = { live = it }) { center, radius ->
-            drawRing(camera, center, radius)
-        }
-        Text(
-            stringResource(R.string.zoom, zoom),
-            Modifier.align(Alignment.TopEnd).padding(16.dp).background(Palette.Scrim, RoundedCornerShape(16.dp))
-                .padding(horizontal = 12.dp, vertical = 4.dp),
-            style = MaterialTheme.typography.labelMedium,
-            color = Color.White,
-        )
+private fun Live(verifier: CaptureVerifier, executor: Executor, camera: CameraState, modifier: Modifier) {
+    Viewfinder(verifier, executor, modifier, controls = true) { center, radius ->
+        drawRing(camera, center, radius)
     }
 }
 
 @Composable
-private fun Feedback(target: CameraTarget, camera: CameraState, onDismissHazard: () -> Unit, modifier: Modifier) {
-    Box(modifier.fillMaxWidth().padding(16.dp), contentAlignment = Alignment.BottomCenter) {
+private fun Feedback(
+    target: CameraTarget,
+    camera: CameraState,
+    cameraFailed: Boolean,
+    onDismissHazard: () -> Unit,
+    modifier: Modifier,
+) {
+    Column(
+        modifier.fillMaxWidth().padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
         AnimatedVisibility(
             camera.cue == CaptureCue.HAZARD,
             enter = fadeIn(tween(Motion.QUICK)) + slideInVertically(tween(Motion.MOVE)) { it / 2 },
             exit = fadeOut(tween(Motion.QUICK)),
         ) { HazardCard(camera.hazardLine, onDismissHazard) }
         AnimatedContent(
-            camera.cue.takeIf { it != CaptureCue.HAZARD && it != CaptureCue.FOUND },
+            if (camera.failed || cameraFailed) {
+                CaptureCue.CAMERA_FAILED
+            } else {
+                camera.cue.takeIf { it != CaptureCue.HAZARD && it != CaptureCue.FOUND }
+            },
             transitionSpec = { fadeIn(tween(Motion.QUICK)) togetherWith fadeOut(tween(Motion.QUICK)) },
             label = "pill",
-        ) { cue -> cue?.let { Pill(it, target.name) } }
+        ) { cue -> cue?.let { Pill(it, target.name, cameraFailed) } }
     }
 }
 
 @Composable
-private fun Pill(cue: CaptureCue, target: String) {
+private fun Pill(cue: CaptureCue, target: String, cameraFailed: Boolean) {
     val (icon, text) = when (cue) {
         CaptureCue.POINT_AT_PLANT -> WildIcons.Aim to stringResource(R.string.cue_point)
+
         CaptureCue.PUT_IN_CIRCLE -> WildIcons.Target to stringResource(R.string.cue_circle)
+
         CaptureCue.TAP_TO_FOCUS -> WildIcons.Focus to stringResource(R.string.cue_focus)
+
+        CaptureCue.CAMERA_FAILED ->
+            WildIcons.Camera to
+                stringResource(if (cameraFailed) R.string.camera_unavailable else R.string.capture_failed)
+
         CaptureCue.GET_CLOSER -> WildIcons.Steps to stringResource(R.string.cue_closer)
+
         else -> WildIcons.Search to stringResource(R.string.cue_keep, target)
     }
     Row(
@@ -272,7 +287,14 @@ private fun HazardMessage(line: String?) {
             // The warning sign stays beside Briar: every cue pairs a symbol with its words.
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Icon(WildIcons.Warning, contentDescription = null, Modifier.size(28.dp), tint = Color.White)
-                Text(stringResource(R.string.hazard), style = MaterialTheme.typography.titleSmall, color = Color.White)
+                Text(
+                    stringResource(R.string.hazard),
+                    Modifier.semantics {
+                        heading()
+                    },
+                    style = MaterialTheme.typography.titleSmall,
+                    color = Color.White,
+                )
             }
             line?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = Color.White) }
             Text(
@@ -285,83 +307,17 @@ private fun HazardMessage(line: String?) {
 }
 
 @Composable
-@Suppress("LongParameterList")
-private fun BottomPanel(
-    camera: CameraState,
-    enabled: Boolean,
-    practice: Boolean,
-    canSkip: Boolean,
-    hasHint: Boolean,
-    onCapture: () -> Unit,
-    onSkip: () -> Unit,
-    onHint: () -> Unit,
-) {
-    Column(
-        Modifier.fillMaxWidth().background(Palette.Paper, RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
-            .navigationBarsPadding().padding(start = 20.dp, end = 20.dp, top = 18.dp, bottom = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(14.dp),
-    ) {
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
-            if (hasHint) {
-                OutlineButton(
-                    stringResource(R.string.hint),
-                    onHint,
-                    Modifier.weight(HINT_SHARE).heightIn(min = 64.dp),
-                    icon = WildIcons.Bulb,
-                )
-            }
-            if (camera.checking) {
-                CheckingButton(Modifier.weight(if (hasHint) CAPTURE_SHARE else 1f))
-            } else {
-                PrimaryButton(
-                    stringResource(if (camera.ready) R.string.capture else R.string.getting_ready),
-                    onCapture,
-                    Modifier.weight(if (hasHint) CAPTURE_SHARE else 1f).heightIn(min = 64.dp),
-                    icon = WildIcons.Camera,
-                    enabled = enabled,
-                )
-            }
-        }
-        // Not every target grows everywhere: a skip swaps in the next plant from the hunt's queue. It always shows, but
-        // with nothing left that fits it would only reopen the same plant, so it's disabled.
-        LinkButton(
-            stringResource(if (practice) R.string.skip_practice else R.string.skip_target),
-            onSkip,
-            enabled = canSkip && !camera.checking,
-        )
-        RuleLine()
-    }
-}
-
-@Composable
-private fun CheckingButton(modifier: Modifier) {
-    Row(
-        modifier.fillMaxWidth().heightIn(min = 64.dp).background(Palette.Husk, RoundedCornerShape(32.dp))
-            .border(2.dp, Palette.Moss, RoundedCornerShape(32.dp))
-            .semantics(mergeDescendants = true) {
-                liveRegion = LiveRegionMode.Polite
-                role = Role.Button
-                disabled()
-            },
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Icon(WildIcons.Dots, contentDescription = null, Modifier.size(26.dp), tint = Palette.Forest)
-        Text(
-            stringResource(R.string.checking),
-            Modifier.padding(start = 12.dp),
-            style = MaterialTheme.typography.titleSmall,
-            color = Palette.Forest,
-        )
-    }
-}
-
-@Composable
 private fun CameraDenied(modifier: Modifier) {
     val context = LocalContext.current
     PaperCard(modifier) {
         Icon(WildIcons.Camera, contentDescription = null, Modifier.size(32.dp), tint = Palette.Forest)
-        Text(stringResource(R.string.camera_needed), style = MaterialTheme.typography.titleSmall)
+        Text(
+            stringResource(R.string.camera_needed),
+            Modifier.semantics {
+                heading()
+            },
+            style = MaterialTheme.typography.titleSmall,
+        )
         Text(
             stringResource(R.string.camera_needed_detail),
             style = MaterialTheme.typography.bodyMedium,
@@ -377,10 +333,6 @@ private fun CameraDenied(modifier: Modifier) {
         }, icon = null)
     }
 }
-
-// Weights are ratios of the row: Hint 45%, Capture 55% (Capture alone fills it). At 35% the "Hint" label wrapped.
-private const val HINT_SHARE = 0.45f
-private const val CAPTURE_SHARE = 0.55f
 
 // Briar fits beside the hazard text without pushing the card over the viewfinder.
 private val WARNING_FIGURE = 88.dp

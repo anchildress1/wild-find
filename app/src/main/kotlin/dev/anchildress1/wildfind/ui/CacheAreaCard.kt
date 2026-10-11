@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -38,7 +39,7 @@ fun CacheAreaCard(cache: AreaCache, area: String, onCache: () -> Unit, modifier:
             Icon(WildIcons.Map, contentDescription = null, Modifier.size(24.dp), tint = Palette.Forest)
             Text(
                 stringResource(R.string.cache_title),
-                Modifier.padding(start = 10.dp),
+                Modifier.padding(start = 10.dp).semantics { heading() },
                 style = MaterialTheme.typography.titleSmall,
             )
         }

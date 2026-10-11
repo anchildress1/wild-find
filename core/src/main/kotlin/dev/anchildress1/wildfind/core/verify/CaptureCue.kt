@@ -22,6 +22,9 @@ enum class CaptureCue {
 
     /** Row 6: "Keep looking for" the target, never naming the plant in view. */
     KEEP_LOOKING,
+
+    /** Camera or inference did not complete a capture. */
+    CAMERA_FAILED,
     ;
 
     /** Maps a verdict. */

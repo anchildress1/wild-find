@@ -34,7 +34,7 @@ class GameStore(private val dir: File) {
         )
     } ?: AppFlags()
 
-    /** Saves [flags]. */
+    /** Saves [flags], returning whether the write succeeded. */
     fun save(flags: AppFlags) = write(
         "flags.json",
         JSONObject()
@@ -62,7 +62,7 @@ class GameStore(private val dir: File) {
         )
     }
 
-    /** Saves [hunt] against [tableVersion]. */
+    /** Saves [hunt] against [tableVersion], returning whether the write succeeded. */
     fun save(hunt: ActiveHunt, tableVersion: String) = write(
         HUNT,
         JSONObject()
@@ -77,6 +77,7 @@ class GameStore(private val dir: File) {
     )
 
     /** Forgets the current hunt, after Hunt Again or Home. */
+    @Synchronized
     fun clearHunt() {
         val file = File(dir, HUNT)
         if (file.exists() && !file.delete()) Log.w(TAG, "can't delete $file")
@@ -85,7 +86,7 @@ class GameStore(private val dir: File) {
     /** The pull cached under exactly [key], or null. */
     fun cached(key: CacheKey): List<Sighting>? = parse(cacheFile(key), ::entry)?.sightingsFor(key)
 
-    /** Caches [sightings] under [key]. */
+    /** Caches [sightings] under [key], returning true only after a successful write. */
     fun cache(key: CacheKey, sightings: List<Sighting>) = write(
         cacheFile(key),
         JSONObject()
@@ -107,6 +108,7 @@ class GameStore(private val dir: File) {
     )
 
     // A corrupt or old-format file reads as missing and is deleted, so the app refetches or starts fresh.
+    @Synchronized
     private fun <T> parse(name: String, decode: (JSONObject) -> T?): T? {
         val file = File(dir, name).takeIf { it.isFile } ?: return null
         return runCatching {
@@ -115,16 +117,20 @@ class GameStore(private val dir: File) {
     }
 
     // A failed save (a full disk) costs only the saved copy, never the hunt in play, so it logs instead of throwing.
-    private fun write(name: String, json: JSONObject) {
+    // Hunt pulls and area caching run on separate IO jobs; the temp file belongs to one writer at a time.
+    @Synchronized
+    private fun write(name: String, json: JSONObject): Boolean {
         val file = File(dir, name)
         val temp = File(file.parentFile, "${file.name}.tmp")
         try {
             file.parentFile?.mkdirs()
             temp.writeText(json.toString())
             if (!temp.renameTo(file)) throw IOException("can't replace $file")
+            return true
         } catch (e: IOException) {
             Log.w(TAG, "can't save $file", e)
             if (temp.exists() && !temp.delete()) Log.w(TAG, "can't remove $temp")
+            return false
         }
     }
 

@@ -42,7 +42,7 @@ fun HarnessScreen(runs: StateFlow<GateRun?>, executor: Executor, onCamera: (Gate
         run?.let { live ->
             Viewfinder(live.verifier, executor, Modifier.fillMaxSize(), onCamera = {
                 onCamera(live, it)
-            }) { center, r ->
+            }, controls = false) { center, r ->
                 drawCircle(Color.Black, r, center, style = Stroke(width = 8.dp.toPx()))
                 drawCircle(Color.White, r, center, style = Stroke(width = 4.dp.toPx()))
             }

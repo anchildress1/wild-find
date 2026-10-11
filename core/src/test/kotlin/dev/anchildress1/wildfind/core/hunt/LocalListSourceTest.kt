@@ -5,6 +5,9 @@ import dev.anchildress1.wildfind.core.inat.SpeciesCountsQuery
 import dev.anchildress1.wildfind.core.region.RegionKey
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 class LocalListSourceTest {
     private val table = listOf("Quercus", "Acer", "Liquidambar", "Magnolia")
@@ -28,7 +31,10 @@ class LocalListSourceTest {
                 pulls[q.radiusKm]
             },
             cached = { key -> cache[key.radiusKm] },
-            save = { key, s -> saved[key] = s },
+            save = { key, s ->
+                saved[key] = s
+                true
+            },
         )
 
     private fun load(source: LocalListSource) = source.load("v1", region, "en", 10)
@@ -71,5 +77,76 @@ class LocalListSourceTest {
             load(source(mapOf(75 to one, 150 to null), mapOf(150 to three))),
         )
         assertEquals(LocalListResult.NeedsSignal, load(source(mapOf(75 to one, 150 to null))))
+    }
+
+    @ParameterizedTest
+    @CsvSource("false,false,true", "true,false,false", "true,true,true")
+    fun `only offline requests require a successful save`(requireCached: Boolean, succeeds: Boolean, ready: Boolean) {
+        val source = LocalListSource(
+            species,
+            pull = { query ->
+                asked += query.radiusKm
+                three
+            },
+            cached = { null },
+            save = { key, sightings ->
+                if (succeeds) saved[key] = sightings
+                succeeds
+            },
+        )
+
+        val result = source.load("v1", region, "en", 10, requireCached)
+
+        assertEquals(if (ready) LocalListResult.Ready(species.of(three)) else LocalListResult.NeedsSignal, result)
+        assertEquals(listOf(75), asked)
+        assertEquals(if (succeeds) 1 else 0, saved.size)
+    }
+
+    @ParameterizedTest
+    @CsvSource("true,true,true", "true,false,false", "false,true,false", "false,false,false")
+    fun `offline widened hunts need both radius entries persisted`(
+        nearSaved: Boolean,
+        wideSaved: Boolean,
+        ready: Boolean,
+    ) {
+        val source = LocalListSource(
+            species,
+            pull = { query ->
+                asked += query.radiusKm
+                if (query.radiusKm == 75) one else three
+            },
+            cached = { null },
+            save = { key, sightings ->
+                val succeeds = if (key.radiusKm == 75) nearSaved else wideSaved
+                if (succeeds) saved[key] = sightings
+                succeeds
+            },
+        )
+
+        val result = source.load("v1", region, "en", 10, requireCached = true)
+
+        assertEquals(if (ready) LocalListResult.Ready(species.of(three)) else LocalListResult.NeedsSignal, result)
+        assertEquals(if (nearSaved) listOf(75, 150) else listOf(75), asked)
+    }
+
+    @Test
+    fun `failed refreshes retain a previously cached offline hunt`() {
+        val source = LocalListSource(
+            species,
+            pull = { one },
+            cached = { key -> three.takeIf { key.radiusKm == 75 } },
+            save = { _, _ -> false },
+        )
+
+        assertEquals(LocalListResult.Ready(species.of(three)), source.load("v1", region, "en", 10, true))
+    }
+
+    @Test
+    fun `unexpected cache failures propagate rather than claim success`() {
+        val source = LocalListSource(species, pull = { three }, cached = { null }, save = { _, _ -> error("broken") })
+
+        val failure = assertThrows<IllegalStateException> { source.load("v1", region, "en", 10, true) }
+
+        assertEquals("broken", failure.message)
     }
 }

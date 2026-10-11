@@ -30,6 +30,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -54,9 +55,16 @@ fun FoundScreen(info: FoundInfo, crop: Pixels?, onNext: () -> Unit, onHunt: () -
     ) {
         if (!info.tutorial) Dots(info.found, info.total)
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(stringResource(R.string.found_title), style = MaterialTheme.typography.displayLarge)
+            Text(
+                stringResource(R.string.found_title),
+                Modifier.semantics {
+                    heading()
+                },
+                style = MaterialTheme.typography.displayLarge,
+            )
             Text(
                 info.name,
+                Modifier.semantics { heading() },
                 style = MaterialTheme.typography.headlineMedium,
                 color = Palette.Forest,
                 textAlign = TextAlign.Center,
