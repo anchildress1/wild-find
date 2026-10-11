@@ -27,7 +27,7 @@ import java.util.concurrent.Executor
 /**
  * Binds the back camera's preview and analysis to one [view]-sized viewport, so the models read exactly
  * what the kid sees and the ring sits on the scored reticle square (PRD Crops). Replaces any earlier binding; call
- * again with the new size after a resize or rotation, cancelling the [PendingBind] this returned.
+ * again when the view's aspect or rotation changes, cancelling the [PendingBind] this returned.
  *
  * @param view the viewfinder's size and the display's rotation
  * @param executor the analysis thread; [CaptureVerifier.analyze] runs on it

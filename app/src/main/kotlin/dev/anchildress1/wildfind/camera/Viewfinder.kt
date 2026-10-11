@@ -1,5 +1,6 @@
 package dev.anchildress1.wildfind.camera
 
+import android.util.Rational
 import androidx.camera.compose.CameraXViewfinder
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraState
@@ -17,11 +18,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -54,6 +55,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.anchildress1.wildfind.R
 import dev.anchildress1.wildfind.core.frame.Crops
+import dev.anchildress1.wildfind.ui.PrimaryButton
 import dev.anchildress1.wildfind.ui.theme.Palette
 import java.util.concurrent.Executor
 
@@ -84,8 +86,10 @@ fun Viewfinder(
     val bound = remember { mutableListOf<UseCase>() }
     val pending = remember { arrayOfNulls<PendingBind>(1) }
     val frame by verifier.frameSize.collectAsStateWithLifecycle()
-    LaunchedEffect(size) {
-        if (size == IntSize.Zero) return@LaunchedEffect
+    // The ViewPort depends only on aspect and rotation; rebinding on any other resize resets zoom and fails a capture.
+    val aspect = if (size.width > 0 && size.height > 0) Rational(size.width, size.height) else null
+    LaunchedEffect(aspect) {
+        if (aspect == null) return@LaunchedEffect
         pending[0]?.cancel()
         pending[0] = bindVerifyCamera(
             context,
@@ -133,11 +137,11 @@ fun Viewfinder(
 private fun CameraLifecycle(camera: Camera?, owner: LifecycleOwner, verifier: CaptureVerifier, generation: Long) {
     DisposableEffect(camera, owner) {
         val live = camera
+        // Routine rebinds also open and close the camera; lifecycle and viewfinder disposal handle ordinary stops.
         val watch = Observer<CameraState> {
-            if (it.type == CameraState.Type.OPEN && it.error == null) {
-                verifier.resume(generation)
-            } else {
-                verifier.unavailable(generation, failure = it.error != null)
+            when {
+                it.error != null -> verifier.unavailable(generation, failure = true)
+                it.type == CameraState.Type.OPEN -> verifier.resume(generation)
             }
         }
         val lifecycleWatch = LifecycleEventObserver { _, event ->
@@ -161,7 +165,6 @@ private fun Preview(request: SurfaceRequest, camera: Camera?, executor: Executor
     val transformer = remember { MutableCoordinateTransformer() }
     var viewSize by remember { mutableStateOf(IntSize.Zero) }
     var zoom by remember(camera) { mutableStateOf<ZoomState?>(null) }
-    var error by remember(camera) { mutableStateOf(false) }
     val focusRequests = remember(camera) { CameraAdjustmentRequests() }
     val zoomRequests = remember(camera) { CameraAdjustmentRequests() }
     var requested by remember(camera) { mutableStateOf<Float?>(null) }
@@ -172,7 +175,6 @@ private fun Preview(request: SurfaceRequest, camera: Camera?, executor: Executor
         onDispose { state?.removeObserver(watch) }
     }
     fun focus(tap: Offset) {
-        error = false
         val live = camera ?: return
         val point = with(transformer) { tap.transform() }
         val factory = SurfaceOrientedMeteringPointFactory(
@@ -182,21 +184,19 @@ private fun Preview(request: SurfaceRequest, camera: Camera?, executor: Executor
         val future = live.cameraControl.startFocusAndMetering(
             FocusMeteringAction.Builder(factory.createPoint(point.x, point.y)).build(),
         )
-        focusRequests.track(future, executor) {
-            error = it.map { result -> !result.isFocusSuccessful }.getOrDefault(true)
-        }
+        // A focus that runs but doesn't lock is ordinary on a moving plant; only a failed request is an error.
+        focusRequests.track(future, executor) {}
     }
-    fun changeZoom(ratio: Float) {
-        error = false
+    fun changeZoom(scale: Float) {
         val live = camera ?: return
         val state = zoom ?: return
-        val value = ratio.coerceIn(state.minZoomRatio, state.maxZoomRatio)
+        // Steps build on the last request, since the zoom state lags behind a pinch.
+        val value = ((requested ?: state.zoomRatio) * scale).coerceIn(state.minZoomRatio, state.maxZoomRatio)
         requested = value
         val future = live.cameraControl.setZoomRatio(value)
         zoomRequests.track(future, executor) { result ->
             if (result.isFailure) {
                 requested = null
-                error = true
             }
         }
     }
@@ -207,19 +207,17 @@ private fun Preview(request: SurfaceRequest, camera: Camera?, executor: Executor
             modifier = Modifier.fillMaxSize().onSizeChanged { viewSize = it }
                 .pointerInput(camera, request) { detectTapGestures { focus(it) } }
                 .pointerInput(camera) {
-                    detectTransformGestures { _, _, scale, _ ->
-                        changeZoom((requested ?: zoom?.zoomRatio ?: 1f) * scale)
-                    }
+                    detectTransformGestures { _, _, scale, _ -> changeZoom(scale) }
                 },
         )
         if (controls) {
             Box(Modifier.align(Alignment.TopCenter)) {
                 CameraControls(
                     zoom,
-                    error,
+                    focusRequests.failed || zoomRequests.failed,
                     camera != null && viewSize != IntSize.Zero,
                     { focus(Offset(viewSize.width / 2f, viewSize.height / 2f)) },
-                    { changeZoom((requested ?: zoom?.zoomRatio ?: 1f) * it) },
+                    ::changeZoom,
                 )
             }
         }
@@ -236,21 +234,23 @@ private fun CameraControls(
 ) {
     Column(Modifier.padding(8.dp)) {
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Button(
-                onFocus,
-                Modifier.heightIn(min = 48.dp),
-                enabled = enabled,
-            ) { Text(stringResource(R.string.focus_circle)) }
-            Button(
+            // Sized to their labels: PrimaryButton fills the width, which would stack them down the viewfinder.
+            val fit = Modifier.width(IntrinsicSize.Max)
+            PrimaryButton(stringResource(R.string.focus_circle), onFocus, fit, icon = null, enabled = enabled)
+            PrimaryButton(
+                stringResource(R.string.zoom_out),
                 { onZoom(1f / ZOOM_STEP) },
-                Modifier.heightIn(min = 48.dp),
+                fit,
+                icon = null,
                 enabled = zoom?.let { it.zoomRatio > it.minZoomRatio } == true,
-            ) { Text(stringResource(R.string.zoom_out)) }
-            Button(
+            )
+            PrimaryButton(
+                stringResource(R.string.zoom_in),
                 { onZoom(ZOOM_STEP) },
-                Modifier.heightIn(min = 48.dp),
+                fit,
+                icon = null,
                 enabled = zoom?.let { it.zoomRatio < it.maxZoomRatio } == true,
-            ) { Text(stringResource(R.string.zoom_in)) }
+            )
         }
         Text(
             stringResource(if (error) R.string.camera_control_failed else R.string.zoom, zoom?.zoomRatio ?: 1f),
