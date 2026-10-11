@@ -81,7 +81,11 @@ class AccessibilityTest {
         compose.runOnIdle { reduced.value = false }
         compose.waitUntil(TIMEOUT_MS) { !pixels().contentEquals(first) }
         compose.runOnIdle { reduced.value = true }
-        compose.waitUntil(TIMEOUT_MS) { pixels().contentEquals(first) }
+        compose.waitUntil(TIMEOUT_MS) {
+            val shown = pixels()
+            assertTrue("Briar went blank while resetting reduced motion", shown.distinct().size > 2)
+            shown.contentEquals(first)
+        }
         repeat(3) {
             Thread.sleep(FRAME_WAIT_MS)
             org.junit.Assert.assertArrayEquals(first, pixels())

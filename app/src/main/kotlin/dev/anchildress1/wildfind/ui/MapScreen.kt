@@ -241,14 +241,22 @@ private fun rememberGlide(current: () -> MapCamera, set: (MapCamera) -> Unit): G
     val scope = rememberCoroutineScope()
     val reduced = LocalReducedMotion.current
     var job by remember { mutableStateOf<Job?>(null) }
+    var goal by remember { mutableStateOf<MapCamera?>(null) }
     val cancel: () -> Unit = { job?.cancel() }
-    LaunchedEffect(reduced) { if (reduced) cancel() }
+    LaunchedEffect(reduced) {
+        // A glide still running lands on its target; a finger already cancelled any other, so it stays put.
+        if (reduced && job?.isActive == true) {
+            cancel()
+            goal?.let(set)
+        }
+    }
     return Glide(cancel) { target ->
         cancel()
         val start = current()
         if (reduced) {
             set(target)
         } else {
+            goal = target
             val duration = if (target.span != start.span) Motion.MOVE else Motion.QUICK
             job = scope.launch {
                 animate(0f, 1f, animationSpec = tween(duration, easing = Motion.Decelerate)) { t, _ ->

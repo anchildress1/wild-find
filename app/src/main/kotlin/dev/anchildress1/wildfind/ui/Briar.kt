@@ -75,8 +75,9 @@ private fun Clip(
     // The size comes from the clip's small JSON, so the box holds its place while frames decode off the main thread.
     val meta = remember(name) { ClipMeta(assets, name) }
     val reduced = LocalReducedMotion.current
+    // Keep the stopped frame visible until its replacement restores frame zero, without a blank canvas.
     val drawable by produceState<AnimatedImageDrawable?>(null, name, reduced) {
-        value = null
+        value?.stop()
         value = withContext(Dispatchers.IO) {
             ImageDecoder.decodeDrawable(ImageDecoder.createSource(assets, "briar/$name.webp")) as AnimatedImageDrawable
         }
@@ -105,7 +106,11 @@ private fun Clip(
     }
     LaunchedEffect(drawable, reduced) {
         val clip = drawable
-        if (reduced || clip == null) return@LaunchedEffect
+        if (clip == null) return@LaunchedEffect
+        if (reduced) {
+            clip.stop()
+            return@LaunchedEffect
+        }
         try {
             if (loop) {
                 clip.repeatCount = AnimatedImageDrawable.REPEAT_INFINITE
