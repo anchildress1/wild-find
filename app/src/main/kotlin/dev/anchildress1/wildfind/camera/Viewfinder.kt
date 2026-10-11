@@ -73,7 +73,7 @@ fun Viewfinder(
     executor: Executor,
     modifier: Modifier = Modifier,
     onCamera: (Camera) -> Unit = {},
-    controls: Boolean = false,
+    controls: Boolean,
     ring: DrawScope.(center: Offset, radius: Float) -> Unit,
 ) {
     val generation = remember(verifier) { verifier.attachCamera() }
@@ -165,8 +165,8 @@ private fun Preview(request: SurfaceRequest, camera: Camera?, executor: Executor
     val transformer = remember { MutableCoordinateTransformer() }
     var viewSize by remember { mutableStateOf(IntSize.Zero) }
     var zoom by remember(camera) { mutableStateOf<ZoomState?>(null) }
-    val focusRequests = remember(camera) { CameraAdjustmentRequests() }
-    val zoomRequests = remember(camera) { CameraAdjustmentRequests() }
+    // One sequence for focus and zoom: only the newest adjustment of either kind may show or clear the error.
+    val adjustments = remember(camera) { CameraAdjustmentRequests(executor) }
     var requested by remember(camera) { mutableStateOf<Float?>(null) }
     DisposableEffect(camera) {
         val state = camera?.cameraInfo?.zoomState
@@ -185,7 +185,7 @@ private fun Preview(request: SurfaceRequest, camera: Camera?, executor: Executor
             FocusMeteringAction.Builder(factory.createPoint(point.x, point.y)).build(),
         )
         // A focus that runs but doesn't lock is ordinary on a moving plant; only a failed request is an error.
-        focusRequests.track(future, executor) {}
+        adjustments.track(future)
     }
     fun changeZoom(scale: Float) {
         val live = camera ?: return
@@ -194,11 +194,7 @@ private fun Preview(request: SurfaceRequest, camera: Camera?, executor: Executor
         val value = ((requested ?: state.zoomRatio) * scale).coerceIn(state.minZoomRatio, state.maxZoomRatio)
         requested = value
         val future = live.cameraControl.setZoomRatio(value)
-        zoomRequests.track(future, executor) { result ->
-            if (result.isFailure) {
-                requested = null
-            }
-        }
+        adjustments.trackZoom(future) { requested = null }
     }
     Box(Modifier.fillMaxSize()) {
         CameraXViewfinder(
@@ -214,7 +210,7 @@ private fun Preview(request: SurfaceRequest, camera: Camera?, executor: Executor
             Box(Modifier.align(Alignment.TopCenter)) {
                 CameraControls(
                     zoom,
-                    focusRequests.failed || zoomRequests.failed,
+                    adjustments.failed,
                     camera != null && viewSize != IntSize.Zero,
                     { focus(Offset(viewSize.width / 2f, viewSize.height / 2f)) },
                     ::changeZoom,
