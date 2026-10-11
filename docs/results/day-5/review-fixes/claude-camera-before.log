@@ -50,5 +50,3 @@ java.lang.AssertionError: a refused capture disabled the harness
 
 FAILURES!!!
 Tests run: 3,  Failures: 2
-
-

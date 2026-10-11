@@ -15,5 +15,3 @@ java.lang.AssertionError: Assert failed: The component with Text + InputText + E
 
 FAILURES!!!
 Tests run: 1,  Failures: 1
-
-

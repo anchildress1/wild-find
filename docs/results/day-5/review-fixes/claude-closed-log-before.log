@@ -37,5 +37,3 @@ java.lang.AssertionError: a log failure escaped the capture adapter expected:<nu
 
 FAILURES!!!
 Tests run: 1,  Failures: 1
-
-
