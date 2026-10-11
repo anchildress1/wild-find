@@ -8,6 +8,7 @@ import android.os.BatteryManager
 import android.os.Debug
 import android.os.PowerManager
 import android.os.SystemClock
+import android.util.Log
 import dev.anchildress1.wildfind.Models
 import dev.anchildress1.wildfind.camera.CapturedFrame
 import dev.anchildress1.wildfind.core.hunt.LocalSpecies
@@ -22,6 +23,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.io.Closeable
+import java.io.IOException
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
@@ -119,8 +121,15 @@ class GateRun(private val context: Context, models: Models, private val target: 
         // analyzer already finished it and disable the button for the rest of the run.
         if (verifier.capturing) return
         state.update { it.copy(capturing = true) }
-        log.event(now(), "capture", target)
-        verifier.capture(goal, ::record)
+        if (!writeLog { event(now(), "capture", target) }) return
+        val accepted = verifier.capture(goal, ::record) {
+            state.update { it.copy(capturing = false) }
+            writeLog { event(now(), "capture_error", target) }
+        }
+        if (!accepted) {
+            state.update { it.copy(capturing = false) }
+            writeLog { event(now(), "capture_refused", target) }
+        }
     }
 
     private fun record(frame: CapturedFrame) {
@@ -140,16 +149,22 @@ class GateRun(private val context: Context, models: Models, private val target: 
         val reticleRank = result.reticleRanking
         val fullRank = result.fullRanking
         val upright = verifier.frameSize.value
-        log.frame(
-            frame.receivedNs, frame.sensorNs, gapMs, upright?.width, upright?.height, frame.rotation, name(verdict),
-            streakFrames, result.reticleShare, result.fullShare, reticleRank?.hazardRank, fullRank?.hazardRank,
-            reticleRank?.let { species[it.topRow] }, reticleRank?.hazardRow?.let { species[it] },
-            fullRank?.let { species[it.topRow] }, fullRank?.hazardRow?.let { species[it] },
-            result.goal?.score, result.goal?.rank,
-            reading?.afState, reading?.diopters, reading?.zoomRatio, reading != null,
-            ms(times.crop), ms(times.resize), ms(times.plantGate), ms(times.bioclip), ms(times.hazard), ms(times.goal),
-            ms(times.total), frameMs,
-        )
+        val recorded = writeLog {
+            frame(
+                frame.receivedNs, frame.sensorNs, gapMs,
+                upright?.width, upright?.height, frame.rotation, name(verdict),
+                streakFrames, result.reticleShare, result.fullShare,
+                reticleRank?.hazardRank, fullRank?.hazardRank,
+                reticleRank?.let { species[it.topRow] }, reticleRank?.hazardRow?.let { species[it] },
+                fullRank?.let { species[it.topRow] }, fullRank?.hazardRow?.let { species[it] },
+                result.goal?.score, result.goal?.rank,
+                reading?.afState, reading?.diopters, reading?.zoomRatio, reading != null,
+                ms(times.crop), ms(times.resize), ms(times.plantGate),
+                ms(times.bioclip), ms(times.hazard), ms(times.goal), ms(times.total), frameMs,
+            )
+        }
+        if (!recorded) return
+
         state.update {
             it.copy(
                 verdict = verdict,
@@ -166,10 +181,20 @@ class GateRun(private val context: Context, models: Models, private val target: 
         sampler.shutdown()
         // A sample stuck under heat can outlast the wait; the log says so instead of hiding it.
         val drained = sampler.awaitTermination(CLOSE_WAIT_S, TimeUnit.SECONDS)
-        log.event(now(), if (drained) "stop" else "stop_timeout", target)
+        writeLog { event(now(), if (drained) "stop" else "stop_timeout", target) }
         // A thread still running would write to a closed log and crash; every row is already flushed, so leaving the
         // files open loses nothing.
         if (drained) log.close()
+    }
+
+    private fun writeLog(write: GateLog.() -> Unit): Boolean = try {
+        log.write()
+        true
+    } catch (error: IOException) {
+        verifier.cancel()
+        state.update { it.copy(capturing = false) }
+        Log.e("GateRun", "Gate measurements could not be saved", error)
+        false
     }
 
     // scheduleWithFixedDelay cancels the schedule on the first uncaught exception without a trace, which would
@@ -179,7 +204,7 @@ class GateRun(private val context: Context, models: Models, private val target: 
         try {
             sampleOnce()
         } catch (e: Exception) {
-            log.event(now(), "sample_error", e.toString())
+            writeLog { event(now(), "sample_error", e.toString()) }
         }
     }
 

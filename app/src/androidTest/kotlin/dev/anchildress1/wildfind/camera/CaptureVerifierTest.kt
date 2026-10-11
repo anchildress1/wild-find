@@ -4,6 +4,8 @@ import android.graphics.Rect
 import androidx.camera.core.ImageInfo
 import androidx.camera.core.ImageProxy
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import dev.anchildress1.wildfind.WildFindApp
 import dev.anchildress1.wildfind.core.game.Outcome
 import dev.anchildress1.wildfind.core.game.Screen
 import dev.anchildress1.wildfind.core.region.RegionKey
@@ -13,6 +15,8 @@ import dev.anchildress1.wildfind.core.verify.HazardCheck
 import dev.anchildress1.wildfind.core.verify.PlantGate
 import dev.anchildress1.wildfind.core.verify.TutorialGoal
 import dev.anchildress1.wildfind.game.CaptureRun
+import dev.anchildress1.wildfind.harness.GateLog
+import dev.anchildress1.wildfind.harness.GateRun
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.asCoroutineDispatcher
@@ -27,6 +31,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import java.lang.reflect.Proxy
 import java.nio.ByteBuffer
+import java.nio.file.Files
 import java.util.Collections
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
@@ -60,12 +65,12 @@ class CaptureVerifierTest {
         assertTrue(stopped.closed)
         assertFalse(verifier.streaming.value)
         assertFalse(verifier.capturing)
-        assertFalse(verifier.capture(goal) { frames++ })
+        assertFalse(verifier.capture(goal, { frames++ }, {}))
         assertEquals(0, frames)
         assertEquals(1, failures)
         verifier.resume()
         verifier.analyze(Frame().proxy)
-        assertTrue(verifier.capture(goal) { frames++ })
+        assertTrue(verifier.capture(goal, { frames++ }, {}))
     }
 
     @Test
@@ -112,7 +117,7 @@ class CaptureVerifierTest {
         assertFalse(verifier.capturing)
         assertEquals(listOf(Outcome.CaptureStarted(7), Outcome.CaptureFailed(7)), outcomes)
         verifier.analyze(Frame().proxy)
-        assertTrue(verifier.capture(goal) {})
+        assertTrue(verifier.capture(goal, {}, {}))
         verifier.cancel()
     }
 
@@ -187,7 +192,7 @@ class CaptureVerifierTest {
         verifier.resume(old)
 
         assertTrue(verifier.streaming.value)
-        assertTrue(verifier.capture(goal) {})
+        assertTrue(verifier.capture(goal, {}, {}))
         verifier.unavailable(replacement)
         assertFalse(verifier.streaming.value)
         assertFalse(verifier.capturing)
@@ -266,6 +271,114 @@ class CaptureVerifierTest {
         verifier.cancel()
     }
 
+    @Test
+    fun cancellationWaitsForAnAlreadyDeliveringFrame() {
+        val entered = CountDownLatch(1)
+        val release = CountDownLatch(1)
+        val cancelled = CountDownLatch(1)
+        val verifier = verifier { floatArrayOf(0f, 1f) }
+        verifier.analyze(Frame().proxy)
+        assertTrue(
+            verifier.capture(goal, {
+                entered.countDown()
+                check(release.await(5, TimeUnit.SECONDS))
+            }, {}),
+        )
+        val analyzer = thread { verifier.analyze(Frame().proxy) }
+        assertTrue(entered.await(5, TimeUnit.SECONDS))
+        val canceller = thread {
+            verifier.cancel()
+            cancelled.countDown()
+        }
+        try {
+            assertFalse(
+                "cancellation returned while its callback was still running",
+                cancelled.await(200, TimeUnit.MILLISECONDS),
+            )
+        } finally {
+            release.countDown()
+            analyzer.join(5_000)
+            canceller.join(5_000)
+        }
+        assertFalse(analyzer.isAlive)
+        assertFalse(canceller.isAlive)
+        assertFalse(verifier.capturing)
+    }
+
+    @Test
+    fun terminalCallbackCanStartItsReplacementCapture() {
+        val verifier = verifier { floatArrayOf(0f, 1f) }
+        verifier.analyze(Frame().proxy)
+        var restarted = false
+        assertTrue(
+            verifier.capture(goal, {
+                restarted = verifier.capture(goal, {}, {})
+            }, {}),
+        )
+
+        verifier.analyze(Frame().proxy)
+
+        assertTrue(restarted)
+        assertTrue(verifier.capturing)
+        verifier.cancel()
+    }
+
+    @Test
+    fun harnessRefusalsAndFailuresLeaveCaptureAvailableForRetry() = runBlocking {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val models = (context.applicationContext as WildFindApp).graph.models.await()
+        val directory = Files.createTempDirectory(context.cacheDir.toPath(), "gate-capture-test-").toFile()
+        val run = GateRun(context, models, GateRun.TUTORIAL, GateLog(directory))
+        try {
+            run.requestCapture()
+            assertFalse("a refused capture disabled the harness", run.status.value.capturing)
+            for (stop in listOf<() -> Unit>(
+                { run.verifier.unavailable() },
+                { run.verifier.analyze(Frame(pixelStride = 1).proxy) },
+            )) {
+                run.verifier.resume()
+                run.verifier.analyze(Frame().proxy)
+                run.requestCapture()
+                assertTrue(run.status.value.capturing)
+                stop()
+                assertFalse("a failed capture disabled the harness", run.status.value.capturing)
+                assertFalse(run.verifier.capturing)
+            }
+        } finally {
+            run.close()
+            directory.deleteRecursively()
+        }
+    }
+
+    @Test
+    fun closedHarnessLogsCannotStrandCaptureOrPublishUnloggedFrames() = runBlocking {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val models = (context.applicationContext as WildFindApp).graph.models.await()
+        for (closeBeforeRequest in listOf(true, false)) {
+            val directory = Files.createTempDirectory(context.cacheDir.toPath(), "gate-closed-log-test-").toFile()
+            val run = GateRun(context, models, GateRun.TUTORIAL, GateLog(directory))
+            try {
+                run.verifier.analyze(Frame().proxy)
+                if (closeBeforeRequest) run.close()
+                val failure = runCatching { run.requestCapture() }.exceptionOrNull()
+                assertEquals("a log failure escaped the capture adapter", null, failure)
+                if (!closeBeforeRequest) {
+                    assertTrue(run.status.value.capturing)
+                    run.close()
+                    run.verifier.analyze(Frame().proxy)
+                }
+                assertFalse("log failure stranded the capture button", run.status.value.capturing)
+                assertFalse(run.verifier.capturing)
+                assertEquals(null, run.status.value.verdict)
+                assertEquals(0, run.status.value.found)
+            } finally {
+                run.verifier.cancel()
+                run.log.close()
+                directory.deleteRecursively()
+            }
+        }
+    }
+
     private fun verifier(encode: () -> FloatArray) = CaptureVerifier(
         FrameVerifier(
             PlantGate(
@@ -284,11 +397,11 @@ class CaptureVerifierTest {
         ),
     )
 
-    private class Frame {
+    private class Frame(private val pixelStride: Int = 4) {
         var closed = false
         private val plane = boundary<ImageProxy.PlaneProxy> {
             when (it) {
-                "getPixelStride" -> 4
+                "getPixelStride" -> pixelStride
                 "getRowStride" -> 16
                 "getBuffer" -> ByteBuffer.allocateDirect(64)
                 else -> error(it)

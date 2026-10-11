@@ -143,12 +143,9 @@ class CaptureVerifier(private val verifier: FrameVerifier) {
     }
 
     /**
-     * Starts one capture for [goal]; [onFrame] gets each verified frame on the analysis thread. False, and nothing
-     * starts, while another capture is still running.
+     * Starts one capture for [goal]; [onFrame] gets each verified frame on the analysis thread and [onFailure] a camera
+     * or inference failure. False, and nothing starts, while another capture is still running or frames are stale.
      */
-    fun capture(goal: Goal, onFrame: (CapturedFrame) -> Unit): Boolean = capture(goal, onFrame, {})
-
-    /** Starts a capture and reports camera or inference failure through [onFailure]. */
     @Synchronized
     fun capture(goal: Goal, onFrame: (CapturedFrame) -> Unit, onFailure: () -> Unit): Boolean {
         if (!available.value || SystemClock.elapsedRealtimeNanos() - lastFrameNs > FRAME_FRESH_NS) {
@@ -159,6 +156,7 @@ class CaptureVerifier(private val verifier: FrameVerifier) {
     }
 
     /** Drops a running capture, e.g. when its screen leaves; cancelled frames never report. */
+    @Synchronized
     fun cancel() {
         pending.set(null)
     }
@@ -169,7 +167,9 @@ class CaptureVerifier(private val verifier: FrameVerifier) {
         try {
             analyzeFrame(proxy, capture, generation)
         } catch (_: Exception) {
-            if (capture != null && pending.compareAndSet(capture, null)) capture.onFailure()
+            synchronized(this) {
+                if (capture != null && pending.compareAndSet(capture, null)) capture.onFailure()
+            }
         }
     }
 
@@ -189,13 +189,19 @@ class CaptureVerifier(private val verifier: FrameVerifier) {
         val result = verifier.analyze(frame, capture.goal) { focus.at(sensorNs) }
         val verdict = capture.streak.next(result.evidence)
         capture.left = if (verdict is Verdict.Matching) capture.left - 1 else 0
-        // Cleared before the callback, so a listener may start the next capture at once. Only this capture: a cancel
-        // while its frame was in flight may already have let a new one start.
-        if (pending.get() !== capture) return@use
-        if (capture.left == 0) pending.compareAndSet(capture, null)
-        capture.onFrame(
+        deliver(
+            capture,
             CapturedFrame(result, verdict, first, rotation, sensorNs, received, SystemClock.elapsedRealtimeNanos()),
         )
+    }
+
+    // Cancellation must finish either before delivery starts or after its callback returns, never between them.
+    @Synchronized
+    private fun deliver(capture: Pending, frame: CapturedFrame) {
+        if (pending.get() !== capture) return
+        // Cleared before the callback so a listener may start the next capture on the same reentrant monitor.
+        if (capture.left == 0) pending.set(null)
+        capture.onFrame(frame)
     }
 
     @Synchronized
