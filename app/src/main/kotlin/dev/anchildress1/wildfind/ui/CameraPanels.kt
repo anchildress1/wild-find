@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -39,7 +40,11 @@ import dev.anchildress1.wildfind.core.game.CameraState
 import dev.anchildress1.wildfind.ui.theme.Motion
 import dev.anchildress1.wildfind.ui.theme.Palette
 
-/** The camera action panel and its bounded hint sheet. */
+/**
+ * The camera action panel and its bounded hint sheet; [modifier] applies to whichever is showing.
+ *
+ * @param onActionHeight receives the action panel's height in pixels whenever it is measured
+ */
 @Composable
 @Suppress("LongParameterList")
 internal fun CameraPanels(
@@ -51,16 +56,17 @@ internal fun CameraPanels(
     onSkip: () -> Unit,
     onHint: () -> Unit,
     onSheet: (Boolean) -> Unit,
+    onActionHeight: (Int) -> Unit,
     modifier: Modifier,
 ) {
     AnimatedContent(
         sheet && target.hintsShown > 0,
+        modifier,
         transitionSpec = { fadeIn(tween(Motion.QUICK)) togetherWith fadeOut(tween(Motion.QUICK)) },
         label = "panel",
     ) { open ->
-        if (open) {
-            HintPanel(target.hints, target.hintsShown, onNext = onHint, onKeepLooking = { onSheet(false) })
-        } else {
+        // Measure actions even for a restored open sheet: closing it must not change the camera viewport.
+        Layout(content = {
             BottomPanel(
                 camera,
                 enabled = enabled,
@@ -69,12 +75,20 @@ internal fun CameraPanels(
                 hasHint = target.hints.isNotEmpty(),
                 onCapture,
                 onSkip,
-                modifier = modifier,
+                modifier = if (open) Modifier.clearAndSetSemantics {} else Modifier,
                 onHint = {
                     onHint()
                     onSheet(true)
                 },
             )
+            if (open) {
+                HintPanel(target.hints, target.hintsShown, onNext = onHint, onKeepLooking = { onSheet(false) })
+            }
+        }) { panels, constraints ->
+            val action = panels[0].measure(constraints)
+            onActionHeight(action.height)
+            val shown = if (open) panels[1].measure(constraints) else action
+            layout(shown.width, shown.height) { shown.placeRelative(0, 0) }
         }
     }
 }

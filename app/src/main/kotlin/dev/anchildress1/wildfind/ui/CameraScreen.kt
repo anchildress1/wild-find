@@ -27,7 +27,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -47,6 +49,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.heading
@@ -103,31 +106,45 @@ fun CameraScreen(
         }
         onPauseOrDispose {}
     }
-    var panelHeight by remember { mutableIntStateOf(0) }
-    val panelPadding = with(LocalDensity.current) { panelHeight.toDp() }
+    // Feedback clears whichever panel shows, while the separately measured actions preserve the camera viewport.
+    var shownHeight by remember { mutableIntStateOf(0) }
+    var actionHeight by remember { mutableIntStateOf(0) }
+    val feedbackPadding = with(LocalDensity.current) { shownHeight.toDp() }
+    val viewportPadding = with(LocalDensity.current) { actionHeight.toDp() }
     val streaming = verifier?.streaming?.collectAsStateWithLifecycle()?.value == true
     val cameraFailed = verifier?.cameraFailed?.collectAsStateWithLifecycle()?.value == true
     Column(Modifier.fillMaxSize().background(Palette.Night).container(stopKey(target.row))) {
         TopBar(target, onBack)
         BoxWithConstraints(Modifier.weight(1f).fillMaxWidth()) {
             when {
-                granted && verifier != null && panelHeight > 0 ->
-                    Live(verifier, executor, camera, Modifier.fillMaxSize().padding(bottom = panelPadding))
+                // A bind before the panel is measured would be thrown away at the padded size.
+                granted && verifier != null && actionHeight > 0 ->
+                    Live(verifier, executor, camera, Modifier.fillMaxSize().padding(bottom = viewportPadding))
 
                 denied -> CameraDenied(Modifier.align(Alignment.Center).padding(20.dp))
             }
-            Feedback(
-                target,
-                camera,
-                cameraFailed,
-                onDismissHazard,
-                Modifier.align(Alignment.BottomCenter).padding(bottom = panelPadding),
-            )
-            Column(Modifier.align(Alignment.BottomCenter).heightIn(max = maxHeight)) {
+            val panelLimit = maxHeight
+            val hazard = camera.cue == CaptureCue.HAZARD
+            if (!hazard) {
+                Feedback(
+                    target,
+                    camera,
+                    cameraFailed,
+                    onDismissHazard,
+                    Modifier.align(Alignment.BottomCenter).padding(bottom = feedbackPadding),
+                )
+            }
+            // At large text sizes the warning and its actions need one shared viewport, not competing fixed panels.
+            Column(
+                Modifier.align(Alignment.BottomCenter).heightIn(max = panelLimit)
+                    .then(if (hazard) Modifier.verticalScroll(rememberScrollState()) else Modifier),
+            ) {
+                if (hazard) Feedback(target, camera, cameraFailed, onDismissHazard, Modifier.rise())
                 CameraPanels(
                     target, camera, granted && camera.ready && streaming, sheet,
-                    onCapture, onSkip, onHint, { sheet = it },
-                    Modifier.onSizeChanged { panelHeight = it.height },
+                    onCapture, onSkip, onHint, { sheet = it }, { actionHeight = it },
+                    Modifier.heightIn(max = panelLimit).testTag("camera_actions")
+                        .onSizeChanged { shownHeight = it.height },
                 )
             }
         }

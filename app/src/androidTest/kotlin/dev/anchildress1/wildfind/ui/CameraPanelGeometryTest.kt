@@ -36,6 +36,7 @@ class CameraPanelGeometryTest {
         val scale = mutableStateOf(2f)
         val hints = mutableStateOf(true)
         var height = 0
+        var action = 0
         var captures = 0
         compose.setContent {
             WildFindTheme {
@@ -51,7 +52,7 @@ class CameraPanelGeometryTest {
                                 3,
                                 hints = if (hints.value) listOf(Hint("Look at the leaves.")) else emptyList(),
                             ),
-                            camera.value, camera.value.ready, false, { captures++ }, {}, {}, {},
+                            camera.value, camera.value.ready, false, { captures++ }, {}, {}, {}, { action = it },
                             Modifier.onSizeChanged { height = it.height },
                         )
                     }
@@ -77,12 +78,60 @@ class CameraPanelGeometryTest {
                         compose.waitForIdle()
                         compose.runOnIdle {
                             assertEquals("width=$size scale=$fontScale hints=$hasHints", reserved, height)
+                            assertEquals(reserved, action)
                         }
                         assertCurrentAction(state)
                     }
                 compose.onNodeWithText(context.getString(R.string.capture)).performClick()
             }
         compose.runOnIdle { assertEquals(4, captures) }
+    }
+
+    @Test
+    fun aRestoredOpenSheetReservesActionsWithoutExposingThemAndKeepsTheReservationOnClose() {
+        val sheet = mutableStateOf(true)
+        var shown = 0
+        var action = 0
+        compose.setContent {
+            WildFindTheme {
+                val density = LocalDensity.current
+                // 200% text makes the sheet taller than the action panel, so the two heights can't be confused.
+                CompositionLocalProvider(LocalDensity provides Density(density.density, 2f)) {
+                    Box(Modifier.requiredSize(411.dp, 800.dp)) {
+                        CameraPanels(
+                            CameraTarget(
+                                1,
+                                "Plant",
+                                null,
+                                1,
+                                3,
+                                hints = List(3) { Hint("Look closely at the leaves and the stem, hint ${it + 1}.") },
+                                hintsShown = 3,
+                            ),
+                            CameraState(ready = true), true, sheet.value, {}, {}, {}, { sheet.value = it },
+                            { action = it },
+                            Modifier.onSizeChanged { shown = it.height },
+                        )
+                    }
+                }
+            }
+        }
+        compose.waitForIdle()
+        val open = compose.runOnIdle { shown }
+        assertTrue(open > 0)
+        val reserved = compose.runOnIdle { action }
+        assertTrue(reserved > 0)
+        assertTrue("sheet=$open action=$reserved", open > reserved)
+        listOf(R.string.capture, R.string.hint, R.string.skip_target).forEach { label ->
+            compose.onNodeWithText(context.getString(label)).assertDoesNotExist()
+        }
+
+        compose.onNodeWithText(context.getString(R.string.keep_looking)).performClick()
+        compose.waitForIdle()
+        compose.runOnIdle {
+            assertEquals(reserved, action)
+            assertEquals(reserved, shown)
+        }
     }
 
     private fun assertCurrentAction(state: CameraState) {

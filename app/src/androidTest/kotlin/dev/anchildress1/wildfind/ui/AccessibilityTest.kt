@@ -4,6 +4,7 @@ import android.Manifest
 import android.graphics.Bitmap
 import android.provider.Settings
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.CompositionLocalProvider
@@ -15,6 +16,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertHeightIsAtLeast
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
@@ -28,9 +30,12 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.rule.GrantPermissionRule
 import dev.anchildress1.wildfind.R
 import dev.anchildress1.wildfind.core.game.AreaCache
+import dev.anchildress1.wildfind.core.game.CameraState
 import dev.anchildress1.wildfind.core.hunt.Hint
+import dev.anchildress1.wildfind.core.verify.CaptureCue
 import dev.anchildress1.wildfind.ui.theme.LocalReducedMotion
 import dev.anchildress1.wildfind.ui.theme.WildFindTheme
 import org.junit.Assert.assertEquals
@@ -38,12 +43,16 @@ import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.concurrent.Executor
 
 /** Regression coverage for motion preference changes, heading navigation, and large-text hint access. */
 @RunWith(AndroidJUnit4::class)
 class AccessibilityTest {
     @get:Rule
     val compose: ComposeContentTestRule = createComposeRule()
+
+    @get:Rule
+    val permissions: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
 
     private val instrumentation = InstrumentationRegistry.getInstrumentation()
     private val context = instrumentation.targetContext
@@ -155,6 +164,45 @@ class AccessibilityTest {
             assertEquals(1, next)
             assertEquals(1, close)
         }
+    }
+
+    @Test
+    fun hazardWarningAndDismissalAreReachableAtDoubleFontSizeOnAShortScreen() {
+        var dismissed = 0
+        val camera = mutableStateOf(CameraState(ready = true))
+        compose.setContent {
+            WildFindTheme {
+                val density = LocalDensity.current
+                CompositionLocalProvider(LocalDensity provides Density(density.density, fontScale = 2f)) {
+                    Box(Modifier.requiredSize(width = 320.dp, height = 600.dp)) {
+                        CameraScreen(
+                            CameraTarget(null, "Grass", null, 0, 0),
+                            camera.value,
+                            null, Executor { it.run() }, {}, {}, {}, {}, { dismissed++ },
+                        )
+                    }
+                }
+            }
+        }
+        val reserved = compose.onNodeWithTag("camera_actions").fetchSemanticsNode().size.height
+        compose.runOnIdle {
+            camera.value = camera.value.copy(
+                cue = CaptureCue.HAZARD,
+                hazardLine = "Tiny bits on the leaves and stems can prick and make your skin sting.",
+            )
+        }
+        compose.waitForIdle()
+        assertEquals(reserved, compose.onNodeWithTag("camera_actions").fetchSemanticsNode().size.height)
+        val scrollable = compose.onAllNodes(SemanticsMatcher.keyIsDefined(SemanticsProperties.VerticalScrollAxisRange))
+            .fetchSemanticsNodes().isNotEmpty()
+        val detail = compose.onNodeWithText(context.getString(R.string.hazard_detail))
+        val dismiss = compose.onNodeWithText(context.getString(R.string.hazard_dismiss))
+        if (scrollable) detail.performScrollTo()
+        detail.assertIsDisplayed()
+        if (scrollable) dismiss.performScrollTo()
+        dismiss.assertIsDisplayed().assertHeightIsAtLeast(48.dp).performClick()
+        compose.onNodeWithText(context.getString(R.string.capture)).performScrollTo().assertIsDisplayed()
+        compose.runOnIdle { assertEquals(1, dismissed) }
     }
 
     private fun withAnimationScale(scale: Float, test: () -> Unit) {

@@ -171,7 +171,7 @@ Day-1 and Day-2 measurements on the test phone are in hole 4 and `docs/results/d
 | Memory | About 3 GB PSS was Gemma; without it the app holds the two ONNX models and the species table; RAM recorded by the harness | Gate harness (S05) |
 | Heat and battery | A 20-minute capture-mode session stays below moderate thermal status; continuous verify reached severe in 36 minutes on Oct 7 | Gate harness (S05) |
 | Sunlight | High-contrast, large type that reads in direct sun | Field test |
-| Accessibility | 48 dp touch targets; labeled actions and headings for TalkBack, Voice Access, Switch Access, and keyboard navigation; no color-only signals; live system reduced-motion changes stop custom animation; hints remain scrollable at 200% text size | Accessibility Scanner and automated semantics, motion, and large-font tests |
+| Accessibility | 48 dp touch targets; labeled actions and headings for TalkBack, Voice Access, Switch Access, and keyboard navigation; no color-only signals; live system reduced-motion changes stop custom animation; hints and hazard warnings remain scrollable with their actions at 200% text size | Accessibility Scanner and automated semantics, motion, and large-font tests |
 | Reading level | All kid-facing text at an age-8 level | Review |
 | iNat etiquette | One query per hunt, requiring at most three paginated HTTP requests, plus one widened query only when fewer than 3 genera are eligible; a User-Agent that names the app | Code review |
 
