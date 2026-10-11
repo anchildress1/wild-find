@@ -34,7 +34,7 @@ Wild Find sends kids 8 and up outside to find and photograph plants that grow ne
 
 Wild Find is an Android scavenger hunt for kids, played with a parent. Each hunt picks three plants that people have actually recorded nearby this month on iNaturalist. The kid finds each one, points the camera, and taps Capture. Models on the phone check the photo, so it never leaves the device, and the app warns when a plant might hurt to touch.
 
-It's built for the DEV [Hacktoberfest 2026 "Touch Grass" challenge](https://dev.to/devteam/join-the-hacktoberfest-open-source-ai-challenge-week-1-touch-grass-2450-in-prizes-across-17-4pom). The full spec is [docs/PRD.md](docs/PRD.md), the work queue is [docs/stories.md](docs/stories.md), and every number below comes from a dated write-up in [docs/results/](docs/results/).
+It's built for the DEV [Hacktoberfest 2026 "Touch Grass" challenge](https://dev.to/devteam/join-the-hacktoberfest-open-source-ai-challenge-week-1-touch-grass-2450-in-prizes-across-17-4pom). Ashley's challenge entry, [Side Quests Grow on Trees (Leave Them Where They Grow)](https://dev.to/anchildress1/side-quests-grow-on-trees-leave-them-where-they-grow-84e), tells how it was built. The full spec is [docs/PRD.md](docs/PRD.md), the work queue is [docs/stories.md](docs/stories.md), and every number below comes from a dated write-up in [docs/results/](docs/results/).
 
 ---
 
@@ -185,7 +185,6 @@ make install      # debug APK to a connected phone
 ## What's next
 
 - **A smaller APK** (S71): store the species table at half precision, trim ONNX Runtime to the operators the models use, and lighten Briar's animations.
-- **The GitHub Release** (S53): both APKs on a v0.1.0 release.
 - **Hazards per continent:** the poison ivy family warns unseen only inside a North America box today; other continents rely on what iNaturalist has seen nearby.
 - **Read-aloud hints:** the speaker button in the hint design waits on a decision.
 
